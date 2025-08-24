@@ -1,0 +1,3038 @@
+// Arabic Satellite TV Channels Application
+class ArabicTVApp {
+    constructor() {
+        this.channels = [
+            // News Channels
+            {
+                id: 1,
+                name: "الجزيرة",
+                logo: "https://i.imgur.com/7bRVpnu.png",
+                url: "https://live-hls-web-aje.getaj.net/AJE/01.m3u8",
+                category: "news",
+                country: "قطر"
+            },
+            {
+                id: 2,
+                name: "العربية",
+                logo: "https://i.imgur.com/Dj16oKL.png",
+                url: "https://live.alarabiya.net/alarabiapublish/alarabiya.smil/playlist.m3u8",
+                category: "news",
+                country: "الإمارات"
+            },
+            {
+                id: 3,
+                name: "سكاي نيوز عربية",
+                logo: "https://i.imgur.com/McQv1xE.png",
+                url: "https://stream.skynewsarabia.com/hls/sna.m3u8",
+                category: "news",
+                country: "الإمارات"
+            },
+            {
+                id: 4,
+                name: "BBC عربي",
+                logo: "https://i.imgur.com/2P4m5Eb.png",
+                url: "https://vs-cmaf-pushb-ww-live.akamaized.net/x=3/i=urn:bbc:pips:service:bbc_arabic_tv/iptv_hd_abr_v1.m3u8",
+                category: "news",
+                country: "بريطانيا"
+            },
+            {
+                id: 5,
+                name: "الحدث",
+                logo: "https://i.imgur.com/8dUS3Ih.png",
+                url: "https://av.alarabiya.net/alarabiapublish/alhadath.smil/playlist.m3u8",
+                category: "news",
+                country: "الإمارات"
+            },
+            
+            // Entertainment Channels
+            {
+                id: 6,
+                name: "MBC 1",
+                logo: "https://i.imgur.com/eKKOX8x.png",
+                url: "https://mbc1-enc.edgenextcdn.net/out/v1/84ab37e99d6e4b16b33c6600ace5daa6/index.m3u8",
+                category: "entertainment",
+                country: "الإمارات"
+            },
+            {
+                id: 7,
+                name: "MBC 4",
+                logo: "https://i.imgur.com/pfF61uH.png",
+                url: "https://mbc4-prod-dub-ak.akamaized.net/out/v1/c08681f81775496ab4afa2ee7ef2a4a6/index.m3u8",
+                category: "entertainment",
+                country: "الإمارات"
+            },
+            {
+                id: 8,
+                name: "روتانا سينما",
+                logo: "https://i.imgur.com/X1h2ML8.png",
+                url: "https://rotana-cinema.hibridmedia.com/live/rotana-cinema/playlist.m3u8",
+                category: "entertainment",
+                country: "السعودية"
+            },
+            {
+                id: 9,
+                name: "أبو ظبي الأولى",
+                logo: "https://i.imgur.com/5XV8bXB.png",
+                url: "https://vo-live.cdb.cdn.orange.com/Content/Channel/AbuDhabiChannel/HLS/index.m3u8",
+                category: "entertainment",
+                country: "الإمارات"
+            },
+            {
+                id: 10,
+                name: "دبي",
+                logo: "https://i.imgur.com/H1PfYOY.png",
+                url: "https://dmisxthvll.cdn.mangomolo.com/dubaitv/smil:dubaitv.stream.smil/playlist.m3u8",
+                category: "entertainment",
+                country: "الإمارات"
+            },
+            
+            // Sports Channels
+            {
+                id: 11,
+                name: "بي إن سبورت 1",
+                logo: "https://i.imgur.com/6BVWk8z.png",
+                url: "https://webhdrus.onlinehdhls.ru/lb/premium132/index.m3u8",
+                category: "sports",
+                country: "قطر"
+            },
+            {
+                id: 12,
+                name: "بي إن سبورت 2",
+                logo: "https://i.imgur.com/JkbAMnU.png",
+                url: "https://webhdrus.onlinehdhls.ru/lb/premium133/index.m3u8",
+                category: "sports",
+                country: "قطر"
+            },
+            {
+                id: 13,
+                name: "أبو ظبي الرياضية",
+                logo: "https://i.imgur.com/ooyKqbW.png",
+                url: "https://vo-live.cdb.cdn.orange.com/Content/Channel/AbuDhabiSportsChannel/HLS/index.m3u8",
+                category: "sports",
+                country: "الإمارات"
+            },
+            {
+                id: 14,
+                name: "دبي الرياضية",
+                logo: "https://i.imgur.com/UdxqMQh.png",
+                url: "https://dmithrvll.cdn.mangomolo.com/dubaisports/smil:dubaisports.stream.smil/playlist.m3u8",
+                category: "sports",
+                country: "الإمارات"
+            },
+            
+            // Religious Channels
+            {
+                id: 15,
+                name: "المجد للقرآن الكريم",
+                logo: "https://i.imgur.com/fNA3O4y.png",
+                url: "https://live.al-majd.net/live/MajdQuraan/chunklist.m3u8",
+                category: "religious",
+                country: "السعودية"
+            },
+            {
+                id: 16,
+                name: "قناة السنة النبوية",
+                logo: "https://i.imgur.com/GF9Nq2x.png",
+                url: "https://svs.itworkscdn.net/sunnah/sunnah/chunklist.m3u8",
+                category: "religious",
+                country: "السعودية"
+            },
+            {
+                id: 17,
+                name: "الرسالة",
+                logo: "https://i.imgur.com/8gJ4KhP.png",
+                url: "https://live.al-resalah.net/live/alresalah/chunklist.m3u8",
+                category: "religious",
+                country: "لبنان"
+            },
+            
+            // Music Channels
+            {
+                id: 18,
+                name: "روتانا موسيقى",
+                logo: "https://i.imgur.com/WaFdYon.png",
+                url: "https://rotana-music.hibridmedia.com/live/rotana-music/playlist.m3u8",
+                category: "music",
+                country: "السعودية"
+            },
+            {
+                id: 19,
+                name: "نغم",
+                logo: "https://i.imgur.com/T4Q6XLV.png",
+                url: "https://f24hls-i.akamaihd.net/hls/live/221147/NAGH/playlist.m3u8",
+                category: "music",
+                country: "لبنان"
+            },
+            {
+                id: 20,
+                name: "MTV لبنان",
+                logo: "https://i.imgur.com/5Q8zBUN.png",
+                url: "https://live.mtv.com.lb/hls/live/578407/Live/playlist.m3u8",
+                category: "music",
+                country: "لبنان"
+            }
+        ];
+
+        this.currentChannel = null;
+        this.hls = null;
+        this.settings = {
+            autoQuality: true,
+            autoplay: true,
+            volume: 80,
+            theme: 'dark',
+            showNewsTicker: false,
+            showCustomControls: true
+        };
+        this.filteredChannels = [...this.channels];
+        this.currentCategory = 'all';
+        this.editingChannelId = null; // Track which channel is being edited
+        this.notificationQueue = []; // Queue for notifications
+        this.activeNotifications = new Set(); // Track active notifications
+        this.originalOrder = [...this.channels]; // Track original order for comparison
+        this.hasOrderChanged = false; // Track if order has been modified
+        this.isMobileSidebarOpen = false; // Track mobile sidebar state
+        this.favorites = new Set(); // Track favorite channels
+        this.currentCountryFilter = 'all'; // Track country filter
+        this.showFavoritesOnly = false; // Track favorites filter
+        this.categories = this.getDefaultCategories(); // Track categories
+
+        this.init();
+    }
+
+    init() {
+        this.testLocalStorage(); // Test if localStorage is working
+        this.loadChannelsFromStorage(); // Load saved channels first
+        this.loadFavorites(); // Load saved favorites
+        this.filteredChannels = [...this.channels]; // Ensure filtered channels match loaded channels
+        this.loadSettings();
+        this.renderChannels();
+        this.bindEvents();
+        this.setupMobileSearch();
+        this.syncMobileNavTabs();
+        this.initializeNewFeatures(); // Initialize new navigation features
+        this.updateChannelStats(); // Update channel statistics
+        this.hideLoading();
+        
+        // تشخيص أولي
+        console.log('تم تهيئة التطبيق مع', this.channels.length, 'قناة');
+    }
+
+    testLocalStorage() {
+        try {
+            const testKey = 'test-storage';
+            const testValue = 'test-value';
+            localStorage.setItem(testKey, testValue);
+            const retrieved = localStorage.getItem(testKey);
+            localStorage.removeItem(testKey);
+            
+            if (retrieved === testValue) {
+                console.log('✅ Local Storage يعمل بشكل صحيح');
+                return true;
+            } else {
+                console.error('❌ Local Storage لا يعمل بشكل صحيح');
+                return false;
+            }
+        } catch (error) {
+            console.error('❌ خطأ في Local Storage:', error);
+            alert('تحذير: لا يمكن حفظ الإعدادات! قد يكون المتصفح في وضع الخصوصية أو مساحة التخزين ممتلئة.');
+            return false;
+        }
+    }
+
+    loadSettings() {
+        try {
+            const savedSettings = localStorage.getItem('arabicTVSettings');
+            if (savedSettings) {
+                const parsedSettings = JSON.parse(savedSettings);
+                this.settings = { ...this.settings, ...parsedSettings };
+                console.log('تم تحميل الإعدادات المحفوظة:', this.settings);
+            } else {
+                console.log('لا توجد إعدادات محفوظة، سيتم استخدام الإعدادات الافتراضية');
+                // Save default settings
+                this.saveSettings();
+            }
+        } catch (error) {
+            console.error('خطأ في تحميل الإعدادات:', error);
+            console.log('سيتم استخدام الإعدادات الافتراضية');
+        }
+        this.applySettings();
+    }
+
+    saveSettings() {
+        try {
+            const settingsJson = JSON.stringify(this.settings);
+            localStorage.setItem('arabicTVSettings', settingsJson);
+            console.log('تم حفظ الإعدادات:', this.settings);
+            
+            // Verify save was successful
+            const verifySettings = localStorage.getItem('arabicTVSettings');
+            if (verifySettings === settingsJson) {
+                console.log('✅ تأكيد حفظ الإعدادات بنجاح');
+            } else {
+                console.error('❌ فشل في حفظ الإعدادات');
+            }
+        } catch (error) {
+            console.error('خطأ في حفظ الإعدادات:', error);
+            this.notifyError('خطأ في حفظ الإعدادات! قد تكون مساحة التخزين ممتلئة.');
+        }
+    }
+
+    applySettings() {
+        // Apply theme first
+        this.applyTheme();
+        
+        // Apply settings to controls with detailed error handling
+        console.log('تطبيق الإعدادات:', this.settings);
+        
+        try {
+            const autoQualityEl = document.getElementById('autoQuality');
+            if (autoQualityEl) {
+                autoQualityEl.checked = this.settings.autoQuality;
+                console.log('جودة تلقائية:', this.settings.autoQuality);
+            }
+            
+            const autoplayEl = document.getElementById('autoplay');
+            if (autoplayEl) {
+                autoplayEl.checked = this.settings.autoplay;
+                console.log('تشغيل تلقائي:', this.settings.autoplay);
+            }
+            
+            const volumeEl = document.getElementById('volume');
+            if (volumeEl) {
+                volumeEl.value = this.settings.volume;
+                console.log('مستوى الصوت:', this.settings.volume);
+            }
+            
+            const themeEl = document.getElementById('theme');
+            if (themeEl) {
+                themeEl.value = this.settings.theme;
+                console.log('النمط:', this.settings.theme);
+            }
+            
+            const customControlsEl = document.getElementById('showCustomControls');
+            if (customControlsEl) {
+                customControlsEl.checked = this.settings.showCustomControls;
+                console.log('أزرار التحكم المخصصة:', this.settings.showCustomControls);
+            }
+            
+            console.log('✅ تم تطبيق جميع الإعدادات بنجاح');
+            
+        } catch (error) {
+            console.error('خطأ في تطبيق الإعدادات:', error);
+        }
+    }
+
+    applyTheme() {
+        // Apply theme to body
+        document.body.setAttribute('data-theme', this.settings.theme);
+        
+        // Handle auto theme based on system preference
+        if (this.settings.theme === 'auto') {
+            const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.body.setAttribute('data-theme', 'auto');
+            console.log('نمط تلقائي:', isDarkMode ? 'داكن' : 'فاتح');
+        }
+        
+        console.log('تم تطبيق النمط:', this.settings.theme);
+    }
+
+    bindEvents() {
+        // Navigation tabs
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                this.filterChannels(e.target.dataset.category);
+            });
+        });
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            this.searchChannels(e.target.value);
+        });
+
+        // Settings controls with enhanced saving
+        document.getElementById('autoQuality').addEventListener('change', (e) => {
+            this.settings.autoQuality = e.target.checked;
+            this.saveSettings();
+            console.log('تم تغيير الجودة التلقائية إلى:', e.target.checked);
+        });
+
+        document.getElementById('autoplay').addEventListener('change', (e) => {
+            this.settings.autoplay = e.target.checked;
+            this.saveSettings();
+            console.log('تم تغيير التشغيل التلقائي إلى:', e.target.checked);
+        });
+
+        document.getElementById('volume').addEventListener('input', (e) => {
+            this.settings.volume = parseInt(e.target.value);
+            this.saveSettings();
+            if (this.currentChannel) {
+                document.getElementById('videoPlayer').volume = e.target.value / 100;
+            }
+            console.log('تم تغيير مستوى الصوت إلى:', e.target.value);
+        });
+
+        document.getElementById('theme').addEventListener('change', (e) => {
+            this.settings.theme = e.target.value;
+            this.saveSettings();
+            this.applyTheme(); // Apply theme immediately
+            console.log('تم تغيير النمط إلى:', e.target.value);
+        });
+
+        document.getElementById('showCustomControls').addEventListener('change', (e) => {
+            this.settings.showCustomControls = e.target.checked;
+            this.saveSettings();
+            this.toggleCustomControls();
+            console.log('تم تغيير أزرار التحكم المخصصة إلى:', e.target.checked);
+        });
+
+        // Admin panel events
+        this.bindAdminEvents();
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.closeModal();
+                this.closeSettings();
+                this.closeAdminPanel();
+            }
+        });
+    }
+
+    bindAdminEvents() {
+        // Admin tabs
+        document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                this.switchAdminTab(e.target.dataset.tab);
+            });
+        });
+
+        // Add channel form
+        document.getElementById('addChannelForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (this.editingChannelId) {
+                this.updateChannel(this.editingChannelId);
+            } else {
+                this.addChannel();
+            }
+        });
+
+        // Admin search
+                    document.getElementById('adminSearchInput').addEventListener('input', (e) => {
+                this.filterAdminChannels(e.target.value);
+            });
+
+            // Close mobile menu on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && this.isMobileSidebarOpen) {
+                    this.closeMobileMenu();
+                }
+            });
+    }
+
+    renderChannels() {
+        const grid = document.getElementById('channelsGrid');
+        grid.innerHTML = '';
+
+        this.filteredChannels.forEach(channel => {
+            const channelCard = this.createChannelCard(channel);
+            grid.appendChild(channelCard);
+        });
+    }
+
+    createChannelCard(channel) {
+        const card = document.createElement('div');
+        card.className = 'channel-card';
+        
+        // إنشاء placeholder محسن للشعار
+        const logoPlaceholder = this.createLogoPlaceholder(channel);
+        
+        card.innerHTML = `
+            <img src="${channel.logo}" alt="${channel.name}" class="channel-logo" 
+                 onerror="this.src='${logoPlaceholder}'; this.classList.add('placeholder-logo');">
+            <div class="channel-info">
+                <h3 class="channel-name">${channel.name}</h3>
+                <div class="channel-meta">
+                    <span class="channel-country">${channel.country}</span>
+                    <span class="channel-category">${this.getCategoryName(channel.category)}</span>
+                </div>
+            </div>
+            <div class="play-overlay">
+                <button class="play-btn">
+                    <i class="fas fa-play"></i>
+                </button>
+            </div>
+        `;
+
+        card.addEventListener('click', () => this.playChannel(channel));
+        return card;
+    }
+
+    createLogoPlaceholder(channel) {
+        // إنشاء أيقونة SVG محسنة للقناة
+        const categoryIcons = {
+            'news': '📰',
+            'entertainment': '🎬',
+            'sports': '⚽',
+            'religious': '🕌',
+            'music': '🎵'
+        };
+        
+        const icon = categoryIcons[channel.category] || '📺';
+        const shortName = this.getShortChannelName(channel.name);
+        
+        // تحديد الألوان حسب النمط الحالي
+        const isLightTheme = document.body.getAttribute('data-theme') === 'light';
+        const bgColors = isLightTheme 
+            ? { start: '#f8fafc', end: '#3b82f6' }
+            : { start: '#1a1a2e', end: '#0f3460' };
+        const textColor = isLightTheme ? '#1e293b' : '#ffffff';
+        const accentColor = isLightTheme ? '#3b82f6' : '#e94560';
+        const secondaryColor = isLightTheme ? '#64748b' : '#b8b8b8';
+        
+        // إنشاء Data URL لصورة SVG مخصصة
+        const svg = `
+            <svg width="200" height="120" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:${bgColors.start};stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:${bgColors.end};stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <rect width="200" height="120" fill="url(#bg)" rx="8"/>
+                <text x="100" y="40" font-family="Arial, sans-serif" font-size="20" 
+                      text-anchor="middle" fill="${textColor}" font-weight="bold">${shortName}</text>
+                <text x="100" y="68" font-family="Arial, sans-serif" font-size="24" 
+                      text-anchor="middle" fill="${accentColor}">${icon}</text>
+                <text x="100" y="95" font-family="Arial, sans-serif" font-size="11" 
+                      text-anchor="middle" fill="${secondaryColor}">${channel.country}</text>
+            </svg>
+        `;
+        
+        return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    }
+
+    getShortChannelName(name) {
+        // اختصار اسم القناة للعرض في الأيقونة
+        if (name.length <= 8) return name;
+        
+        const words = name.split(' ');
+        if (words.length === 1) {
+            return name.substring(0, 6) + '..';
+        } else if (words.length === 2) {
+            return words[0].substring(0, 3) + ' ' + words[1].substring(0, 3);
+        } else {
+            return words[0].substring(0, 3) + ' ' + words[1].substring(0, 2);
+        }
+    }
+
+    createAdminLogoPlaceholder(channel) {
+        // إنشاء أيقونة SVG مصغرة للوحة التحكم
+        const categoryIcons = {
+            'news': '📰',
+            'entertainment': '🎬',
+            'sports': '⚽',
+            'religious': '🕌',
+            'music': '🎵'
+        };
+        
+        const icon = categoryIcons[channel.category] || '📺';
+        const firstLetter = channel.name.charAt(0);
+        
+        // تحديد الألوان حسب النمط الحالي للوحة التحكم
+        const isLightTheme = document.body.getAttribute('data-theme') === 'light';
+        const adminBgColors = isLightTheme 
+            ? { start: '#3b82f6', end: '#1d4ed8' }
+            : { start: '#e94560', end: '#0f3460' };
+        
+        const svg = `
+            <svg width="45" height="45" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="adminBg" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:${adminBgColors.start};stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:${adminBgColors.end};stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <rect width="45" height="45" fill="url(#adminBg)" rx="6"/>
+                <text x="22.5" y="18" font-family="Arial, sans-serif" font-size="11" 
+                      text-anchor="middle" fill="white" font-weight="bold">${firstLetter}</text>
+                <text x="22.5" y="34" font-family="Arial, sans-serif" font-size="14" 
+                      text-anchor="middle" fill="white">${icon}</text>
+            </svg>
+        `;
+        
+        return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    }
+
+    getCategoryName(category) {
+        const categories = {
+            'news': 'الأخبار',
+            'entertainment': 'الترفيه',
+            'sports': 'الرياضة',
+            'religious': 'الدينية',
+            'music': 'الموسيقى'
+        };
+        return categories[category] || category;
+    }
+
+    filterChannels(category) {
+        this.currentCategory = category;
+        
+        // Update active tab
+        document.querySelectorAll('.nav-tab, .mobile-nav-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.querySelectorAll(`[data-category="${category}"]`).forEach(tab => {
+            tab.classList.add('active');
+        });
+
+        // Use the new unified filter system
+        this.applyAllFilters();
+    }
+
+    searchChannels(query) {
+        // Use the new unified filter system
+        this.applyAllFilters();
+    }
+
+    async playChannel(channel) {
+        this.currentChannel = channel;
+        this.showVideoModal(channel);
+        await this.loadVideoStream(channel.url);
+    }
+
+    showVideoModal(channel) {
+        const modal = document.getElementById('videoModal');
+        const title = document.getElementById('channelTitle');
+        
+        title.textContent = channel.name;
+        // Channel logo overlay is now hidden
+        
+        modal.classList.add('active');
+        
+        // Show video loading
+        document.getElementById('videoLoading').style.display = 'flex';
+        
+        // News ticker is now disabled by default
+        // if (this.settings.showNewsTicker) {
+        //     this.startNewsTicker();
+        // }
+        
+        // Time display is now disabled
+        // if (channel.category === 'news') {
+        //     this.showTimeDisplay();
+        // }
+        
+        // Initialize custom video controls if enabled
+        if (this.settings.showCustomControls) {
+            this.initVideoControls();
+        } else {
+            // Use default video controls
+            document.getElementById('videoPlayer').controls = true;
+            document.getElementById('videoControls').style.display = 'none';
+        }
+    }
+
+    async loadVideoStream(url) {
+        const video = document.getElementById('videoPlayer');
+        const source = document.getElementById('videoSource');
+        const loading = document.getElementById('videoLoading');
+
+        try {
+            if (Hls.isSupported()) {
+                if (this.hls) {
+                    this.hls.destroy();
+                }
+
+                this.hls = new Hls({
+                    enableWorker: true,
+                    lowLatencyMode: true,
+                    backBufferLength: 90,
+                    maxBufferLength: 0,
+                    maxMaxBufferLength: 600,
+                    maxBufferSize: 60 * 1000 * 1000,
+                    maxBufferHole: 0.5,
+                    highBufferWatchdogPeriod: 2,
+                    nudgeOffset: 0.1,
+                    nudgeMaxRetry: 3,
+                    maxFragLookUpTolerance: 0.20,
+                    liveSyncDurationCount: 3,
+                    liveMaxLatencyDurationCount: Infinity,
+                    liveDurationInfinity: true,
+                    enableSoftwareAES: true,
+                    manifestLoadingTimeOut: 10000,
+                    manifestLoadingMaxRetry: 1,
+                    manifestLoadingRetryDelay: 1000,
+                    fragLoadingTimeOut: 20000,
+                    fragLoadingMaxRetry: 6,
+                    fragLoadingRetryDelay: 1000,
+                    startFragPrefetch: true
+                });
+
+                this.hls.loadSource(url);
+                this.hls.attachMedia(video);
+
+                this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    loading.style.display = 'none';
+                    if (this.settings.autoplay) {
+                        video.play().catch(console.error);
+                    }
+                });
+
+                this.hls.on(Hls.Events.ERROR, (event, data) => {
+                    console.error('HLS Error:', data);
+                    if (data.fatal) {
+                        this.handleVideoError();
+                    }
+                });
+
+                // Auto quality selection
+                if (this.settings.autoQuality) {
+                    this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                        this.hls.startLevel = -1; // Auto quality
+                    });
+                }
+
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // Native HLS support (Safari)
+                source.src = url;
+                video.load();
+                loading.style.display = 'none';
+                
+                if (this.settings.autoplay) {
+                    video.play().catch(console.error);
+                }
+            } else {
+                throw new Error('HLS not supported');
+            }
+
+            // Set volume
+            video.volume = this.settings.volume / 100;
+
+        } catch (error) {
+            console.error('Error loading video:', error);
+            this.handleVideoError();
+        }
+    }
+
+    handleVideoError() {
+        const loading = document.getElementById('videoLoading');
+        loading.innerHTML = `
+            <div class="spinner" style="border-top-color: #e94560;"></div>
+            <p style="color: #e94560;">خطأ في تحميل البث - جارٍ المحاولة مرة أخرى...</p>
+        `;
+        
+        // Retry after 3 seconds
+        setTimeout(() => {
+            if (this.currentChannel) {
+                this.loadVideoStream(this.currentChannel.url);
+            }
+        }, 3000);
+    }
+
+    closeModal() {
+        const modal = document.getElementById('videoModal');
+        modal.classList.remove('active');
+        
+        if (this.hls) {
+            this.hls.destroy();
+            this.hls = null;
+        }
+        
+        const video = document.getElementById('videoPlayer');
+        video.pause();
+        video.src = '';
+        
+        // Ensure news ticker is stopped and hidden
+        this.stopNewsTicker();
+        const newsTicker = document.getElementById('newsTicker');
+        if (newsTicker) {
+            newsTicker.style.display = 'none';
+        }
+        
+        // Ensure time display is hidden
+        this.hideTimeDisplay();
+        const timeDisplay = document.getElementById('timeDisplay');
+        if (timeDisplay) {
+            timeDisplay.style.display = 'none';
+            timeDisplay.remove(); // Remove completely
+        }
+        
+        this.currentChannel = null;
+    }
+
+    toggleQuality() {
+        if (!this.hls) return;
+
+        const qualityBtn = document.getElementById('qualityText');
+        const levels = this.hls.levels;
+        
+        if (this.hls.currentLevel === -1) {
+            // Switch to highest quality
+            this.hls.currentLevel = levels.length - 1;
+            qualityBtn.textContent = `${levels[levels.length - 1].height}p`;
+        } else {
+            // Switch to auto
+            this.hls.currentLevel = -1;
+            qualityBtn.textContent = 'تلقائي';
+        }
+    }
+
+    toggleFullscreen() {
+        const video = document.getElementById('videoPlayer');
+        
+        if (!document.fullscreenElement) {
+            video.requestFullscreen().catch(console.error);
+        } else {
+            document.exitFullscreen().catch(console.error);
+        }
+    }
+
+    openSettings() {
+        document.getElementById('settingsModal').classList.add('active');
+        // Reload and apply settings when opening settings modal
+        this.applySettings();
+        console.log('فتح لوحة الإعدادات وإعادة تطبيق الإعدادات');
+    }
+
+    closeSettings() {
+        document.getElementById('settingsModal').classList.remove('active');
+    }
+
+    openAdminPanel() {
+        document.getElementById('adminModal').classList.add('active');
+        this.renderAdminChannels();
+    }
+
+    closeAdminPanel() {
+        document.getElementById('adminModal').classList.remove('active');
+    }
+
+    switchAdminTab(tab) {
+        // Update active tab
+        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+        document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+
+        // Show tab content
+        document.querySelectorAll('.admin-tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        document.getElementById(`${tab}Tab`).classList.add('active');
+
+        // Reset form when switching to add tab (unless we're editing)
+        if (tab === 'add' && !this.editingChannelId) {
+            this.resetAddChannelForm();
+        }
+
+        // Load categories when switching to categories tab
+        if (tab === 'categories') {
+            this.renderCategories();
+        }
+    }
+
+    renderAdminChannels() {
+        const list = document.getElementById('adminChannelsList');
+        list.innerHTML = '';
+
+        this.channels.forEach((channel, index) => {
+            const item = document.createElement('div');
+            item.className = 'admin-channel-item';
+            item.draggable = true;
+            item.dataset.channelId = channel.id;
+            item.dataset.index = index;
+            
+            // إنشاء placeholder مصغر للوحة التحكم
+            const adminPlaceholder = this.createAdminLogoPlaceholder(channel);
+            
+            item.innerHTML = `
+                <div class="admin-channel-info">
+                    <i class="fas fa-grip-vertical drag-handle"></i>
+                    <img src="${channel.logo}" alt="${channel.name}" class="admin-channel-logo"
+                         onerror="this.src='${adminPlaceholder}'; this.classList.add('admin-placeholder-logo');">
+                    <div>
+                        <h4>${channel.name}</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">${this.getCategoryName(channel.category)} • ${channel.country}</p>
+                    </div>
+                </div>
+                <div class="admin-channel-actions">
+                    <div class="move-buttons">
+                        <button class="move-btn" onclick="app.moveChannelUp(${index})" ${index === 0 ? 'disabled' : ''}>
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                        <button class="move-btn" onclick="app.moveChannelDown(${index})" ${index === this.channels.length - 1 ? 'disabled' : ''}>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <button class="edit-btn" onclick="app.editChannel(${channel.id})">
+                        <i class="fas fa-edit"></i> تعديل
+                    </button>
+                    <button class="delete-btn" onclick="app.deleteChannel(${channel.id})">
+                        <i class="fas fa-trash"></i> حذف
+                    </button>
+                </div>
+            `;
+            
+            // إضافة event listeners للسحب والإفلات
+            this.addDragListeners(item);
+            
+            list.appendChild(item);
+        });
+        
+        // إظهار أو إخفاء زر حفظ الترتيب
+        this.updateSaveOrderButton();
+    }
+
+    filterAdminChannels(query) {
+        const searchTerm = query.toLowerCase().trim();
+        const items = document.querySelectorAll('.admin-channel-item');
+
+        items.forEach(item => {
+            const name = item.querySelector('h4').textContent.toLowerCase();
+            const shouldShow = name.includes(searchTerm);
+            item.style.display = shouldShow ? 'flex' : 'none';
+        });
+    }
+
+    addChannel() {
+        // Get form values
+        const name = document.getElementById('channelName').value.trim();
+        const url = document.getElementById('channelUrl').value.trim();
+        const logo = document.getElementById('channelLogo').value.trim();
+        const category = document.getElementById('channelCategory').value;
+        const country = document.getElementById('channelCountry').value.trim();
+
+        // Validate required fields
+        if (!name || !url || !logo || !category || !country) {
+            this.notifyWarning('يرجى ملء جميع الحقول المطلوبة!');
+            return;
+        }
+
+        const newChannel = {
+            id: Math.max(...this.channels.map(c => c.id), 0) + 1, // Generate proper unique ID
+            name: name,
+            url: url,
+            logo: logo,
+            category: category,
+            country: country
+        };
+
+        this.channels.push(newChannel);
+        this.saveChannelsToStorage();
+        this.filteredChannels = [...this.channels]; // Update filtered channels too
+        this.renderChannels();
+        this.renderAdminChannels();
+        
+        this.resetAddChannelForm();
+        this.notifySuccess('تم إضافة القناة بنجاح وحفظها!');
+    }
+
+    resetAddChannelForm() {
+        // Clear editing state
+        this.editingChannelId = null;
+        
+        // Reset form
+        document.getElementById('addChannelForm').reset();
+        
+        // Reset button text
+        document.querySelector('.add-btn').textContent = 'إضافة القناة';
+    }
+
+    editChannel(id) {
+        const channel = this.channels.find(c => c.id === id);
+        if (!channel) return;
+
+        // Set editing mode
+        this.editingChannelId = id;
+
+        // Switch to add tab and populate with channel data
+        this.switchAdminTab('add');
+        
+        document.getElementById('channelName').value = channel.name;
+        document.getElementById('channelUrl').value = channel.url;
+        document.getElementById('channelLogo').value = channel.logo;
+        document.getElementById('channelCategory').value = channel.category;
+        document.getElementById('channelCountry').value = channel.country;
+
+        // Update button text to indicate editing mode
+        document.querySelector('.add-btn').textContent = 'تحديث القناة';
+    }
+
+    updateChannel(id) {
+        const channelIndex = this.channels.findIndex(c => c.id === id);
+        if (channelIndex === -1) {
+            this.notifyError('لم يتم العثور على القناة المطلوبة!');
+            return;
+        }
+
+        // Get form values
+        const name = document.getElementById('channelName').value.trim();
+        const url = document.getElementById('channelUrl').value.trim();
+        const logo = document.getElementById('channelLogo').value.trim();
+        const category = document.getElementById('channelCategory').value;
+        const country = document.getElementById('channelCountry').value.trim();
+
+        // Validate required fields
+        if (!name || !url || !logo || !category || !country) {
+            this.notifyWarning('يرجى ملء جميع الحقول المطلوبة!');
+            return;
+        }
+
+        // Update the channel
+        this.channels[channelIndex] = {
+            ...this.channels[channelIndex],
+            name: name,
+            url: url,
+            logo: logo,
+            category: category,
+            country: country
+        };
+
+        // Save and refresh
+        this.saveChannelsToStorage();
+        this.filteredChannels = [...this.channels]; // Update filtered channels too
+        this.renderChannels();
+        this.renderAdminChannels();
+        
+        // Reset editing state and form
+        this.resetAddChannelForm();
+        
+        this.notifySuccess('تم تحديث القناة وحفظ التغييرات بنجاح!');
+        
+        // Switch back to channels list tab
+        this.switchAdminTab('channels');
+    }
+
+    deleteChannel(id) {
+        if (confirm('هل أنت متأكد من حذف هذه القناة؟')) {
+            this.channels = this.channels.filter(c => c.id !== id);
+            this.saveChannelsToStorage();
+            this.filteredChannels = [...this.channels]; // Update filtered channels too
+            this.renderChannels();
+            this.renderAdminChannels();
+            this.notifySuccess('تم حذف القناة بنجاح!');
+        }
+    }
+
+    saveChannelsToStorage() {
+        try {
+            const channelsData = JSON.stringify(this.channels);
+            localStorage.setItem('arabicTVChannels', channelsData);
+            console.log('تم حفظ القنوات بنجاح:', this.channels.length, 'قناة');
+            console.log('بيانات القنوات المحفوظة:', this.channels);
+            
+            // تحقق من نجاح الحفظ
+            const verifyChannels = localStorage.getItem('arabicTVChannels');
+            if (verifyChannels === channelsData) {
+                console.log('✅ تأكيد حفظ القنوات بنجاح');
+            } else {
+                console.error('❌ فشل في حفظ القنوات');
+                this.notifyError('فشل في حفظ القنوات! يرجى المحاولة مرة أخرى.');
+            }
+        } catch (error) {
+            console.error('خطأ في حفظ القنوات:', error);
+            this.notifyError('خطأ في حفظ القنوات! يرجى المحاولة مرة أخرى.');
+        }
+    }
+
+    loadChannelsFromStorage() {
+        try {
+            const savedChannels = localStorage.getItem('arabicTVChannels');
+            if (savedChannels) {
+                const parsedChannels = JSON.parse(savedChannels);
+                if (parsedChannels && parsedChannels.length > 0) {
+                    this.channels = parsedChannels;
+                    console.log('تم تحميل القنوات المحفوظة:', this.channels.length, 'قناة');
+                    return;
+                }
+            }
+            
+            // إذا لم توجد قنوات محفوظة أو كانت فارغة، احفظ القنوات الافتراضية
+            console.log('لا توجد قنوات محفوظة، سيتم حفظ القنوات الافتراضية');
+            this.saveChannelsToStorage();
+        
+        } catch (error) {
+            console.error('خطأ في تحميل القنوات المحفوظة:', error);
+            console.log('سيتم استخدام القنوات الافتراضية وحفظها');
+            this.saveChannelsToStorage();
+        }
+        
+        // تحديث الترتيب الأصلي في جميع الحالات
+        this.originalOrder = [...this.channels];
+        this.hasOrderChanged = false;
+    }
+
+    saveGeneralSettings() {
+        const appTitle = document.getElementById('appTitle').value;
+        const maxChannels = document.getElementById('maxChannels').value;
+        const enableAnalytics = document.getElementById('enableAnalytics').checked;
+
+        // Update page title
+        document.title = appTitle;
+        document.querySelector('.logo h1').textContent = appTitle;
+
+        const generalSettings = {
+            appTitle,
+            maxChannels: parseInt(maxChannels),
+            enableAnalytics
+        };
+
+        localStorage.setItem('arabicTVGeneralSettings', JSON.stringify(generalSettings));
+        this.notifySuccess('تم حفظ الإعدادات العامة بنجاح!');
+    }
+
+    // وظيفة تشخيصية لتصدير القنوات
+    exportChannels() {
+        try {
+            const channelsData = JSON.stringify(this.channels, null, 2);
+            const blob = new Blob([channelsData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'channels-backup.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            console.log('تم تصدير القنوات بنجاح');
+            this.notifySuccess('تم تصدير القنوات كملف نسخ احتياطي بنجاح!');
+        } catch (error) {
+            console.error('خطأ في تصدير القنوات:', error);
+            this.notifyError('فشل في تصدير القنوات. يرجى المحاولة مرة أخرى.');
+        }
+    }
+
+    importChannels() {
+        const fileInput = document.getElementById('importFileInput');
+        
+        // Set up file input event listener
+        fileInput.onchange = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+                this.notifyError('يرجى اختيار ملف JSON صحيح');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    // Validate imported data
+                    if (!Array.isArray(importedData)) {
+                        this.notifyError('تنسيق الملف غير صحيح - يجب أن يكون مصفوفة من القنوات');
+                        return;
+                    }
+                    
+                    // Validate each channel has required properties
+                    const isValidChannels = importedData.every(channel => 
+                        channel.id && channel.name && channel.url && channel.category
+                    );
+                    
+                    if (!isValidChannels) {
+                        this.notifyError('بعض القنوات في الملف لا تحتوي على البيانات المطلوبة');
+                        return;
+                    }
+                    
+                    // Show confirmation dialog
+                    this.showImportConfirmation(importedData);
+                    
+                } catch (error) {
+                    console.error('خطأ في قراءة ملف الاستيراد:', error);
+                    this.notifyError('فشل في قراءة الملف - تأكد من أنه ملف JSON صحيح');
+                }
+            };
+            
+            reader.readAsText(file);
+            // Reset file input
+            fileInput.value = '';
+        };
+        
+        // Trigger file selection
+        fileInput.click();
+    }
+
+    showImportConfirmation(importedChannels) {
+        // Create confirmation notification
+        const notification = this.showNotification(
+            'تأكيد الاستيراد', 
+            `هل تريد استيراد ${importedChannels.length} قناة؟\n\nتحذير: سيتم استبدال ${this.channels.length} قناة موجودة!`,
+            'warning',
+            0 // Don't auto-close
+        );
+        
+        // Add custom buttons to notification
+        setTimeout(() => {
+            const notificationElement = Array.from(document.querySelectorAll('.notification')).find(el => 
+                el.querySelector('.notification-title')?.textContent === 'تأكيد الاستيراد'
+            );
+            
+            if (notificationElement) {
+                // Remove default close button
+                const defaultCloseBtn = notificationElement.querySelector('.notification-close');
+                if (defaultCloseBtn) defaultCloseBtn.remove();
+                
+                // Add custom buttons
+                const buttonsContainer = document.createElement('div');
+                buttonsContainer.style.cssText = 'display: flex; gap: 10px; margin-top: 15px; justify-content: flex-end;';
+                
+                const confirmBtn = document.createElement('button');
+                confirmBtn.textContent = 'تأكيد الاستيراد';
+                confirmBtn.style.cssText = 'background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.9rem;';
+                confirmBtn.onclick = () => {
+                    this.performImport(importedChannels);
+                    this.closeNotification(notification);
+                };
+                
+                const cancelBtn = document.createElement('button');
+                cancelBtn.textContent = 'إلغاء';
+                cancelBtn.style.cssText = 'background: #6b7280; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.9rem;';
+                cancelBtn.onclick = () => {
+                    this.closeNotification(notification);
+                    this.notifyInfo('تم إلغاء عملية الاستيراد');
+                };
+                
+                buttonsContainer.appendChild(confirmBtn);
+                buttonsContainer.appendChild(cancelBtn);
+                notificationElement.querySelector('.notification-content').appendChild(buttonsContainer);
+            }
+        }, 100);
+    }
+
+    performImport(importedChannels) {
+        try {
+            // Replace channels with imported ones
+            this.channels = importedChannels.map(channel => ({
+                ...channel,
+                id: channel.id || Date.now() + Math.random() // Ensure unique IDs
+            }));
+            
+            // Update filtered channels
+            this.filteredChannels = [...this.channels];
+            
+            // Save to storage
+            this.saveChannelsToStorage();
+            
+            // Update original order tracking
+            this.originalOrder = [...this.channels];
+            this.hasOrderChanged = false;
+            
+            // Re-render everything
+            this.renderChannels();
+            this.renderAdminChannels();
+            
+            // Reset current category
+            this.currentCategory = 'all';
+            
+            // Update nav tabs
+            const navTabs = document.querySelectorAll('.nav-tab, .mobile-nav-tab');
+            navTabs.forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.dataset.category === 'all') {
+                    tab.classList.add('active');
+                }
+            });
+            
+            this.notifySuccess(`تم استيراد ${importedChannels.length} قناة بنجاح!`);
+            
+        } catch (error) {
+            console.error('خطأ في استيراد القنوات:', error);
+            this.notifyError('فشل في استيراد القنوات');
+        }
+    }
+
+    // وظيفة تشخيصية لعرض حالة التخزين
+    debugStorage() {
+        this.openDiagnosticModal();
+    }
+
+    openDiagnosticModal() {
+        // Log to console for developers
+        console.log('=== تشخيص التخزين ===');
+        console.log('القنوات الحالية:', this.channels.length);
+        console.log('القنوات في الذاكرة:', this.channels);
+        
+        const modal = document.getElementById('diagnosticModal');
+        modal.style.display = 'block';
+        
+        // Populate modal with diagnostic data
+        this.updateDiagnosticData();
+    }
+
+    updateDiagnosticData() {
+        // Memory state
+        document.getElementById('memoryChannelsCount').textContent = this.channels.length;
+        document.getElementById('activeCategory').textContent = this.getCategoryName(this.currentCategory);
+        document.getElementById('filteredChannelsCount').textContent = this.filteredChannels.length;
+        
+        // Storage state
+        const savedChannels = localStorage.getItem('arabicTVChannels');
+        let savedCount = 0;
+        let storageStatus = 'غير متوفر';
+        let syncStatus = '';
+        
+        if (savedChannels) {
+            try {
+                const parsedChannels = JSON.parse(savedChannels);
+                savedCount = parsedChannels.length;
+                storageStatus = savedCount.toString();
+                console.log('القنوات المحفوظة:', parsedChannels.length);
+                console.log('القنوات المحفوظة في Local Storage:', parsedChannels);
+            } catch (error) {
+                storageStatus = 'خطأ في القراءة';
+                console.error('خطأ في تحليل البيانات المحفوظة:', error);
+            }
+        } else {
+            console.log('لا توجد قنوات محفوظة في Local Storage');
+        }
+        
+        // Sync status
+        if (this.channels.length === savedCount) {
+            syncStatus = '✅ متزامن';
+            document.getElementById('syncStatus').className = 'diagnostic-value status-ok';
+        } else {
+            syncStatus = '⚠️ غير متزامن';
+            document.getElementById('syncStatus').className = 'diagnostic-value status-warning';
+        }
+        
+        document.getElementById('savedChannelsCount').textContent = storageStatus;
+        document.getElementById('syncStatus').textContent = syncStatus;
+        
+        // Data size
+        const dataSize = (new Blob([savedChannels || '']).size / 1024).toFixed(2);
+        document.getElementById('dataSize').textContent = `${dataSize} KB`;
+        console.log('حجم البيانات المحفوظة:', dataSize, 'KB');
+        
+        // System information
+        const isLocalStorageAvailable = this.testLocalStorageAvailability();
+        document.getElementById('localStorageAvailable').textContent = isLocalStorageAvailable ? '✅ متاح' : '❌ غير متاح';
+        document.getElementById('localStorageAvailable').className = `diagnostic-value ${isLocalStorageAvailable ? 'status-ok' : 'status-error'}`;
+        
+        // Storage usage (rough estimate)
+        const totalStorage = this.estimateStorageUsage();
+        document.getElementById('storageUsage').textContent = `${totalStorage} KB`;
+        
+        // Last saved time
+        const lastSaved = localStorage.getItem('arabicTVChannels_timestamp');
+        if (lastSaved) {
+            const date = new Date(parseInt(lastSaved));
+            document.getElementById('lastSaved').textContent = date.toLocaleString('ar-SA');
+        } else {
+            document.getElementById('lastSaved').textContent = 'غير محدد';
+        }
+    }
+
+    getCategoryName(category) {
+        const categoryNames = {
+            'all': 'جميع القنوات',
+            'news': 'الأخبار',
+            'entertainment': 'الترفيه',
+            'sports': 'الرياضة',
+            'religious': 'الدينية',
+            'music': 'الموسيقى'
+        };
+        return categoryNames[category] || category;
+    }
+
+    testLocalStorageAvailability() {
+        try {
+            const test = 'test';
+            localStorage.setItem(test, test);
+            localStorage.removeItem(test);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    estimateStorageUsage() {
+        let total = 0;
+        for (let key in localStorage) {
+            if (localStorage.hasOwnProperty(key)) {
+                total += localStorage[key].length;
+            }
+        }
+        return (total / 1024).toFixed(2);
+    }
+
+    closeDiagnosticModal() {
+        const modal = document.getElementById('diagnosticModal');
+        modal.style.display = 'none';
+    }
+
+    // نظام الإشعارات الجميل
+    showNotification(title, message, type = 'info', duration = 4000) {
+        const container = document.getElementById('notificationsContainer');
+        if (!container) return;
+
+        // إنشاء الإشعار
+        const notification = document.createElement('div');
+        notification.className = 'notification entering';
+        
+        const notificationId = Date.now() + Math.random();
+        notification.dataset.id = notificationId;
+
+        // تحديد الأيقونة حسب النوع
+        const icons = {
+            success: '✓',
+            error: '✕',
+            warning: '⚠',
+            info: 'ℹ'
+        };
+
+        notification.innerHTML = `
+            <div class="notification-icon ${type}">
+                ${icons[type] || icons.info}
+            </div>
+            <div class="notification-content">
+                <div class="notification-title">${title}</div>
+                <div class="notification-message">${message}</div>
+            </div>
+            <button class="notification-close" onclick="app.closeNotification('${notificationId}')">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+
+        // إضافة الإشعار للحاوية
+        container.appendChild(notification);
+        this.activeNotifications.add(notificationId);
+
+        // إظهار الإشعار بعد إضافته للـ DOM
+        setTimeout(() => {
+            notification.classList.remove('entering');
+            notification.classList.add('show');
+        }, 50);
+
+        // إخفاء الإشعار تلقائياً
+        if (duration > 0) {
+            setTimeout(() => {
+                this.closeNotification(notificationId);
+            }, duration);
+        }
+
+        // التحكم في عدد الإشعارات المعروضة
+        this.limitNotifications();
+
+        return notificationId;
+    }
+
+    closeNotification(notificationId) {
+        const notification = document.querySelector(`[data-id="${notificationId}"]`);
+        if (!notification) return;
+
+        notification.classList.remove('show');
+        notification.classList.add('hide');
+        
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+            this.activeNotifications.delete(notificationId);
+        }, 300);
+    }
+
+    limitNotifications() {
+        const container = document.getElementById('notificationsContainer');
+        const notifications = container.querySelectorAll('.notification');
+        
+        // الحد الأقصى 5 إشعارات
+        if (notifications.length > 5) {
+            const oldestNotification = notifications[0];
+            const oldestId = oldestNotification.dataset.id;
+            this.closeNotification(oldestId);
+        }
+    }
+
+    // إشعارات مخصصة للتطبيق
+    notifySuccess(message, title = 'نجح!') {
+        return this.showNotification(title, message, 'success');
+    }
+
+    notifyError(message, title = 'خطأ!') {
+        return this.showNotification(title, message, 'error');
+    }
+
+    notifyWarning(message, title = 'تحذير!') {
+        return this.showNotification(title, message, 'warning');
+    }
+
+    notifyInfo(message, title = 'معلومة') {
+        return this.showNotification(title, message, 'info');
+    }
+
+    // وظائف ترتيب القنوات
+    addDragListeners(item) {
+        item.addEventListener('dragstart', (e) => {
+            e.target.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', e.target.dataset.index);
+        });
+
+        item.addEventListener('dragend', (e) => {
+            e.target.classList.remove('dragging');
+        });
+
+        item.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.target.closest('.admin-channel-item')?.classList.add('drag-over');
+        });
+
+        item.addEventListener('dragleave', (e) => {
+            e.target.closest('.admin-channel-item')?.classList.remove('drag-over');
+        });
+
+        item.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const draggedIndex = parseInt(e.dataTransfer.getData('text/plain'));
+            const targetItem = e.target.closest('.admin-channel-item');
+            
+            if (targetItem) {
+                const targetIndex = parseInt(targetItem.dataset.index);
+                this.moveChannel(draggedIndex, targetIndex);
+                targetItem.classList.remove('drag-over');
+            }
+        });
+    }
+
+    moveChannelUp(index) {
+        if (index > 0) {
+            this.moveChannel(index, index - 1);
+        }
+    }
+
+    moveChannelDown(index) {
+        if (index < this.channels.length - 1) {
+            this.moveChannel(index, index + 1);
+        }
+    }
+
+    moveChannel(fromIndex, toIndex) {
+        if (fromIndex === toIndex) return;
+
+        // نقل القناة في المصفوفة
+        const [movedChannel] = this.channels.splice(fromIndex, 1);
+        this.channels.splice(toIndex, 0, movedChannel);
+
+        // تحديث القنوات المفلترة
+        this.filteredChannels = [...this.channels];
+
+        // تسجيل أن الترتيب تغير
+        this.hasOrderChanged = true;
+
+        // إعادة رسم القائمة
+        this.renderAdminChannels();
+        this.renderChannels(); // تحديث العرض الرئيسي أيضاً
+
+        this.notifyInfo(`تم نقل "${movedChannel.name}" إلى الموضع الجديد`);
+    }
+
+    updateSaveOrderButton() {
+        const container = document.getElementById('saveOrderContainer');
+        const button = document.getElementById('saveOrderBtn');
+        
+        if (this.hasOrderChanged) {
+            container.style.display = 'block';
+            button.disabled = false;
+        } else {
+            container.style.display = 'none';
+            button.disabled = true;
+        }
+    }
+
+    saveChannelsOrder() {
+        if (!this.hasOrderChanged) {
+            this.notifyWarning('لم يتم تغيير ترتيب القنوات');
+            return;
+        }
+
+        try {
+            // حفظ الترتيب الجديد
+            this.saveChannelsToStorage();
+            
+            // تحديث الترتيب الأصلي المحفوظ
+            this.originalOrder = [...this.channels];
+            this.hasOrderChanged = false;
+            
+            // تحديث زر الحفظ
+            this.updateSaveOrderButton();
+            
+            this.notifySuccess('تم حفظ الترتيب الجديد للقنوات بنجاح!');
+            
+        } catch (error) {
+            console.error('خطأ في حفظ ترتيب القنوات:', error);
+            this.notifyError('فشل في حفظ ترتيب القنوات');
+        }
+    }
+
+    resetChannelsOrder() {
+        if (!this.hasOrderChanged) return;
+
+        this.channels = [...this.originalOrder];
+        this.filteredChannels = [...this.channels];
+        this.hasOrderChanged = false;
+        
+        this.renderAdminChannels();
+        this.renderChannels();
+        
+        this.notifyInfo('تم إعادة تعيين ترتيب القنوات');
+    }
+
+    // Mobile Sidebar Functions
+    toggleMobileMenu() {
+        this.isMobileSidebarOpen = !this.isMobileSidebarOpen;
+        const sidebar = document.getElementById('mobileSidebar');
+        const overlay = document.getElementById('mobileSidebarOverlay');
+        
+        if (this.isMobileSidebarOpen) {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        } else {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+    }
+
+    closeMobileMenu() {
+        if (this.isMobileSidebarOpen) {
+            this.toggleMobileMenu();
+        }
+    }
+
+    // Sync mobile nav tabs with desktop nav tabs
+    syncMobileNavTabs() {
+        const mobileNavTabs = document.querySelectorAll('.mobile-nav-tab');
+        const desktopNavTabs = document.querySelectorAll('.nav-tab');
+        
+        mobileNavTabs.forEach((mobileTab, index) => {
+            mobileTab.addEventListener('click', () => {
+                // Remove active class from all mobile tabs
+                mobileNavTabs.forEach(tab => tab.classList.remove('active'));
+                // Add active class to clicked mobile tab
+                mobileTab.classList.add('active');
+                
+                // Sync with desktop tabs
+                desktopNavTabs.forEach(tab => tab.classList.remove('active'));
+                if (desktopNavTabs[index]) {
+                    desktopNavTabs[index].classList.add('active');
+                }
+                
+                // Get category from clicked tab
+                const category = mobileTab.dataset.category;
+                this.currentCategory = category;
+                this.filterChannels(category);
+                
+                // Close mobile menu after selection
+                this.closeMobileMenu();
+            });
+        });
+    }
+
+    // Sync mobile search with desktop search
+    setupMobileSearch() {
+        const mobileSearchInput = document.getElementById('mobileSearchInput');
+        const desktopSearchInput = document.getElementById('searchInput');
+        
+        if (mobileSearchInput) {
+            mobileSearchInput.addEventListener('input', (e) => {
+                const query = e.target.value;
+                // Sync with desktop search
+                if (desktopSearchInput) {
+                    desktopSearchInput.value = query;
+                }
+                this.searchChannels(query);
+            });
+        }
+    }
+
+    hideLoading() {
+        const loading = document.getElementById('loading');
+        setTimeout(() => {
+            loading.style.display = 'none';
+        }, 1000);
+    }
+
+    // Connection quality detection
+    detectConnectionQuality() {
+        if (navigator.connection) {
+            const connection = navigator.connection;
+            const downlink = connection.downlink;
+            
+            if (downlink >= 10) {
+                return 'high'; // 1080p
+            } else if (downlink >= 5) {
+                return 'medium'; // 720p
+            } else {
+                return 'low'; // 480p
+            }
+        }
+        return 'auto';
+    }
+
+    // News ticker functionality
+    startNewsTicker() {
+        const newsTickerText = document.getElementById('newsTickerText');
+        const newsTicker = document.getElementById('newsTicker');
+        
+        // Show news ticker
+        newsTicker.style.display = 'flex';
+        
+        // Restart animation
+        newsTickerText.style.animation = 'none';
+        setTimeout(() => {
+            newsTickerText.style.animation = 'tickerMove 60s linear infinite';
+        }, 100);
+        
+        // Update news content periodically
+        this.newsUpdateInterval = setInterval(() => {
+            this.updateNewsContent();
+        }, 300000); // Update every 5 minutes
+    }
+
+    stopNewsTicker() {
+        const newsTicker = document.getElementById('newsTicker');
+        newsTicker.style.display = 'none';
+        
+        if (this.newsUpdateInterval) {
+            clearInterval(this.newsUpdateInterval);
+            this.newsUpdateInterval = null;
+        }
+    }
+
+    updateNewsContent() {
+        const newsItems = [
+            'عاجل: القمة العربية تناقش أهم القضايا الإقليمية والدولية',
+            'مؤتمر دولي حول التغيرات المناخية يبدأ أعماله في دبي',
+            'ارتفاع أسعار النفط في الأسواق العالمية',
+            'منتخب مصر يحقق فوزاً مهماً في تصفيات كأس العالم',
+            'افتتاح معرض الكتاب الدولي في الرياض',
+            'إنجازات جديدة في مجال الطاقة المتجددة بدول الخليج',
+            'توقيع اتفاقيات تجارية جديدة بين الدول العربية',
+            'إطلاق مشاريع تنموية ضخمة في منطقة الشرق الأوسط',
+            'مؤتمر صحفي مهم للرئاسة حول آخر التطورات',
+            'انطلاق فعاليات ثقافية كبرى في العاصمة',
+            'تطورات جديدة في مجال التكنولوجيا والذكاء الاصطناعي',
+            'أخبار اقتصادية مهمة تؤثر على الأسواق العربية'
+        ];
+        
+        // Shuffle news items
+        const shuffledNews = newsItems.sort(() => Math.random() - 0.5);
+        const newsText = shuffledNews.join(' • • • ');
+        
+        const newsTickerText = document.getElementById('newsTickerText');
+        newsTickerText.textContent = newsText;
+    }
+
+    // Time display functionality
+    showTimeDisplay() {
+        // Create time display if it doesn't exist
+        let timeDisplay = document.getElementById('timeDisplay');
+        if (!timeDisplay) {
+            timeDisplay = document.createElement('div');
+            timeDisplay.id = 'timeDisplay';
+            timeDisplay.className = 'time-display';
+            document.querySelector('.video-container').appendChild(timeDisplay);
+        }
+        
+        timeDisplay.style.display = 'block';
+        this.updateTime();
+        
+        // Update time every second
+        this.timeUpdateInterval = setInterval(() => {
+            this.updateTime();
+        }, 1000);
+    }
+
+    hideTimeDisplay() {
+        const timeDisplay = document.getElementById('timeDisplay');
+        if (timeDisplay) {
+            timeDisplay.style.display = 'none';
+        }
+        
+        if (this.timeUpdateInterval) {
+            clearInterval(this.timeUpdateInterval);
+            this.timeUpdateInterval = null;
+        }
+    }
+
+    updateTime() {
+        const timeDisplay = document.getElementById('timeDisplay');
+        if (!timeDisplay) return;
+        
+        const now = new Date();
+        const options = {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+            timeZone: 'Asia/Riyadh'
+        };
+        
+        const timeString = now.toLocaleTimeString('ar-SA', options);
+        const dateString = now.toLocaleDateString('ar-SA', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        
+        timeDisplay.innerHTML = `
+            <div style="font-size: 1rem; font-weight: 600;">${timeString}</div>
+            <div style="font-size: 0.8rem; opacity: 0.8;">${dateString}</div>
+        `;
+    }
+
+    // Enhanced channel info display (disabled)
+    updateChannelInfo(channel) {
+        // Channel logo overlay is now hidden
+    }
+
+    // Initialize custom video controls
+    initVideoControls() {
+        const video = document.getElementById('videoPlayer');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const muteBtn = document.getElementById('muteBtn');
+        const volumeSlider = document.getElementById('volumeSliderControl');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const currentTimeSpan = document.getElementById('currentTime');
+        const qualityBtn = document.getElementById('qualityControlBtn');
+        const fullscreenBtn = document.getElementById('fullscreenControlBtn');
+        const videoControls = document.getElementById('videoControls');
+
+        // Show custom controls and hide default controls
+        video.controls = false;
+        videoControls.style.display = 'flex';
+
+        // Set initial volume
+        volumeSlider.value = this.settings.volume;
+        video.volume = this.settings.volume / 100;
+
+        // Play/Pause functionality
+        playPauseBtn.addEventListener('click', () => {
+            if (video.paused) {
+                video.play();
+                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                video.pause();
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            }
+        });
+
+        // Mute functionality
+        muteBtn.addEventListener('click', () => {
+            if (video.muted) {
+                video.muted = false;
+                muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                volumeSlider.value = this.settings.volume;
+            } else {
+                video.muted = true;
+                muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                volumeSlider.value = 0;
+            }
+        });
+
+        // Volume control
+        volumeSlider.addEventListener('input', (e) => {
+            const volume = e.target.value / 100;
+            video.volume = volume;
+            video.muted = false;
+            
+            if (volume === 0) {
+                muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else if (volume < 0.5) {
+                muteBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
+            } else {
+                muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+            }
+            
+            // Save volume setting
+            this.settings.volume = e.target.value;
+            this.saveSettings();
+        });
+
+        // Progress bar (for live streams, this will be minimal)
+        video.addEventListener('timeupdate', () => {
+            if (video.duration && !isNaN(video.duration) && video.duration !== Infinity) {
+                const progress = (video.currentTime / video.duration) * 100;
+                progressBar.style.width = progress + '%';
+                
+                const currentMinutes = Math.floor(video.currentTime / 60);
+                const currentSeconds = Math.floor(video.currentTime % 60);
+                currentTimeSpan.textContent = `${currentMinutes.toString().padStart(2, '0')}:${currentSeconds.toString().padStart(2, '0')}`;
+            } else {
+                // Live stream
+                progressBar.style.width = '100%';
+                currentTimeSpan.textContent = '';
+            }
+        });
+
+        // Quality control
+        qualityBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.toggleQualityMenu();
+        });
+
+        // Quality menu options
+        this.initQualityMenu();
+
+        // Fullscreen control
+        fullscreenBtn.addEventListener('click', () => {
+            this.toggleFullscreen();
+        });
+
+        // Video events
+        video.addEventListener('play', () => {
+            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        });
+
+        video.addEventListener('pause', () => {
+            playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+        });
+
+        video.addEventListener('loadstart', () => {
+            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        });
+
+        // Auto-hide controls after 3 seconds of no movement (desktop only)
+        let controlsTimeout;
+        const videoContainer = document.querySelector('.video-container');
+        
+        const showControls = () => {
+            videoControls.style.opacity = '1';
+            clearTimeout(controlsTimeout);
+            
+            // Don't auto-hide on mobile
+            if (window.innerWidth > 768) {
+                controlsTimeout = setTimeout(() => {
+                    if (!videoContainer.matches(':hover')) {
+                        videoControls.style.opacity = '0';
+                    }
+                }, 3000);
+            }
+        };
+
+        // Only add auto-hide on desktop
+        if (window.innerWidth > 768) {
+            videoContainer.addEventListener('mousemove', showControls);
+            videoContainer.addEventListener('mouseenter', () => {
+                clearTimeout(controlsTimeout);
+                videoControls.style.opacity = '1';
+            });
+            videoContainer.addEventListener('mouseleave', () => {
+                controlsTimeout = setTimeout(() => {
+                    videoControls.style.opacity = '0';
+                }, 3000);
+            });
+        } else {
+            // Always visible on mobile
+            videoControls.style.opacity = '1';
+        }
+        
+        // Touch events for mobile
+        videoContainer.addEventListener('touchstart', showControls);
+    }
+
+    // Toggle custom controls
+    toggleCustomControls() {
+        const video = document.getElementById('videoPlayer');
+        const customControls = document.getElementById('videoControls');
+        
+        if (this.settings.showCustomControls) {
+            video.controls = false;
+            customControls.style.display = 'flex';
+            if (this.currentChannel) {
+                this.initVideoControls();
+            }
+        } else {
+            video.controls = true;
+            customControls.style.display = 'none';
+        }
+    }
+
+    // Initialize quality menu
+    initQualityMenu() {
+        const qualityOptions = document.querySelectorAll('.quality-option');
+        
+        qualityOptions.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const quality = option.dataset.quality;
+                this.setVideoQuality(quality);
+                this.hideQualityMenu();
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', () => {
+            this.hideQualityMenu();
+        });
+    }
+
+    // Toggle quality menu
+    toggleQualityMenu() {
+        const qualityMenu = document.getElementById('qualityMenu');
+        const isVisible = qualityMenu.classList.contains('show');
+        
+        if (isVisible) {
+            this.hideQualityMenu();
+        } else {
+            this.showQualityMenu();
+        }
+    }
+
+    // Show quality menu
+    showQualityMenu() {
+        const qualityMenu = document.getElementById('qualityMenu');
+        qualityMenu.classList.add('show');
+        
+        // Update available qualities based on current stream
+        this.updateAvailableQualities();
+    }
+
+    // Hide quality menu
+    hideQualityMenu() {
+        const qualityMenu = document.getElementById('qualityMenu');
+        qualityMenu.classList.remove('show');
+    }
+
+    // Set video quality
+    setVideoQuality(quality) {
+        if (!this.hls) return;
+
+        // Remove active class from all options
+        document.querySelectorAll('.quality-option').forEach(option => {
+            option.classList.remove('active');
+        });
+
+        // Add active class to selected option
+        const selectedOption = document.querySelector(`[data-quality="${quality}"]`);
+        if (selectedOption) {
+            selectedOption.classList.add('active');
+        }
+
+        // Apply quality setting
+        if (quality === 'auto') {
+            this.hls.currentLevel = -1; // Auto quality
+            console.log('Quality set to: Auto');
+        } else {
+            const levels = this.hls.levels;
+            const targetHeight = parseInt(quality);
+            
+            // Find the level closest to target height
+            let bestLevel = -1;
+            let bestMatch = Infinity;
+            
+            levels.forEach((level, index) => {
+                const heightDiff = Math.abs(level.height - targetHeight);
+                if (heightDiff < bestMatch) {
+                    bestMatch = heightDiff;
+                    bestLevel = index;
+                }
+            });
+            
+            if (bestLevel !== -1) {
+                this.hls.currentLevel = bestLevel;
+                console.log(`Quality set to: ${levels[bestLevel].height}p`);
+            }
+        }
+
+        // Update quality text in header
+        const qualityText = document.getElementById('qualityText');
+        if (qualityText) {
+            if (quality === 'auto') {
+                qualityText.textContent = 'تلقائي';
+            } else {
+                qualityText.textContent = `${quality}p`;
+            }
+        }
+    }
+
+    // Update available qualities based on stream
+    updateAvailableQualities() {
+        if (!this.hls || !this.hls.levels) return;
+
+        const levels = this.hls.levels;
+        const qualityOptions = document.querySelectorAll('.quality-option');
+        
+        qualityOptions.forEach(option => {
+            const quality = option.dataset.quality;
+            
+            if (quality === 'auto') {
+                // Auto is always available
+                option.style.display = 'flex';
+                return;
+            }
+            
+            const targetHeight = parseInt(quality);
+            const hasQuality = levels.some(level => 
+                Math.abs(level.height - targetHeight) <= 50
+            );
+            
+            // Show/hide option based on availability
+            option.style.display = hasQuality ? 'flex' : 'none';
+        });
+    }
+
+    // New Navigation Features Implementation
+    
+    initializeNewFeatures() {
+        this.bindNewNavigationEvents();
+        this.updateFavoritesCount();
+        this.setupFilterDropdowns();
+        this.loadCategories();
+    }
+
+    bindNewNavigationEvents() {
+
+
+        // Header filter buttons
+        const countryFilterBtn = document.getElementById('countryFilterBtn');
+        const favoritesFilterBtn = document.getElementById('favoritesFilterBtn');
+
+        if (countryFilterBtn) {
+            countryFilterBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.toggleFilterDropdown('country');
+            });
+        }
+
+
+
+        if (favoritesFilterBtn) {
+            favoritesFilterBtn.addEventListener('click', () => {
+                this.toggleFavoritesFilter();
+            });
+        }
+
+        // Breadcrumb navigation
+        const breadcrumbHome = document.querySelector('.breadcrumb-item[data-category="all"]');
+        if (breadcrumbHome) {
+            breadcrumbHome.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.resetAllFilters();
+            });
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', () => {
+            this.closeAllFilterDropdowns();
+        });
+
+        // Reposition dropdowns on window resize
+        window.addEventListener('resize', () => {
+            this.closeAllFilterDropdowns();
+        });
+
+        // Mobile main filter buttons (outside sidebar)
+        const mobileMainCountryFilter = document.getElementById('mobileMainCountryFilter');
+        const mobileMainFavoritesFilter = document.getElementById('mobileMainFavoritesFilter');
+        const mobileMainSearchInput = document.getElementById('mobileMainSearchInput');
+
+        if (mobileMainCountryFilter) {
+            mobileMainCountryFilter.addEventListener('click', () => {
+                this.toggleMobileCountryDropdown();
+            });
+        }
+
+        if (mobileMainFavoritesFilter) {
+            mobileMainFavoritesFilter.addEventListener('click', () => {
+                this.toggleFavoritesFilter();
+                this.updateMobileFavoritesButton();
+            });
+        }
+
+        if (mobileMainSearchInput) {
+            mobileMainSearchInput.addEventListener('input', (e) => {
+                // Sync with desktop search
+                const desktopSearchInput = document.getElementById('searchInput');
+                if (desktopSearchInput) {
+                    desktopSearchInput.value = e.target.value;
+                }
+                this.applyAllFilters();
+            });
+        }
+
+
+
+        // Setup mobile filter dropdown
+        this.setupMobileFilterDropdown();
+    }
+
+    setupFilterDropdowns() {
+        // Country filter options
+        const countryOptions = document.querySelectorAll('#countryDropdown .filter-option');
+        countryOptions.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const country = option.dataset.country;
+                this.setCountryFilter(country);
+                this.closeAllFilterDropdowns();
+            });
+        });
+
+
+    }
+
+    setupMobileFilterDropdown() {
+        // Mobile country filter options
+        const mobileCountryOptions = document.querySelectorAll('#mobileCountryDropdown .mobile-filter-option');
+        mobileCountryOptions.forEach(option => {
+            option.addEventListener('click', (e) => {
+                const country = e.target.dataset.country;
+                this.setCountryFilter(country);
+                this.closeMobileCountryDropdown();
+                this.updateMobileCountryButton();
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const mobileCountryDropdown = document.getElementById('mobileCountryDropdown');
+            const mobileMainCountryFilter = document.getElementById('mobileMainCountryFilter');
+            
+            if (mobileCountryDropdown && 
+                !mobileCountryDropdown.contains(e.target) && 
+                !mobileMainCountryFilter.contains(e.target)) {
+                this.closeMobileCountryDropdown();
+            }
+        });
+    }
+
+    // Favorites Management
+    loadFavorites() {
+        try {
+            const savedFavorites = localStorage.getItem('arabicTVFavorites');
+            if (savedFavorites) {
+                this.favorites = new Set(JSON.parse(savedFavorites));
+                console.log('تم تحميل المفضلة:', this.favorites.size, 'قناة');
+            }
+        } catch (error) {
+            console.error('خطأ في تحميل المفضلة:', error);
+            this.favorites = new Set();
+        }
+    }
+
+    saveFavorites() {
+        try {
+            const favoritesArray = Array.from(this.favorites);
+            localStorage.setItem('arabicTVFavorites', JSON.stringify(favoritesArray));
+            console.log('تم حفظ المفضلة:', favoritesArray.length, 'قناة');
+        } catch (error) {
+            console.error('خطأ في حفظ المفضلة:', error);
+        }
+    }
+
+    toggleFavorite(channelId, event) {
+        if (event) {
+            event.stopPropagation();
+        }
+
+        if (this.favorites.has(channelId)) {
+            this.favorites.delete(channelId);
+            this.notifyInfo('تم إزالة القناة من المفضلة');
+        } else {
+            this.favorites.add(channelId);
+            this.notifySuccess('تم إضافة القناة للمفضلة');
+        }
+
+        this.saveFavorites();
+        this.updateFavoritesCount();
+        this.renderChannels(); // Re-render to update favorite buttons
+        
+        // Update filters if showing favorites only
+        if (this.showFavoritesOnly) {
+            this.applyAllFilters();
+        }
+    }
+
+    updateFavoritesCount() {
+        const mobileMainFavoritesCountElement = document.getElementById('mobileMainFavoritesCount');
+        
+        const count = this.favorites.size;
+        
+        if (mobileMainFavoritesCountElement) {
+            mobileMainFavoritesCountElement.textContent = count;
+            
+            if (count > 0) {
+                mobileMainFavoritesCountElement.classList.add('show');
+            } else {
+                mobileMainFavoritesCountElement.classList.remove('show');
+            }
+        }
+    }
+
+    toggleFavoritesFilter() {
+        this.showFavoritesOnly = !this.showFavoritesOnly;
+        
+        const favoritesFilterBtn = document.getElementById('favoritesFilterBtn');
+        
+        if (favoritesFilterBtn) {
+            if (this.showFavoritesOnly) {
+                favoritesFilterBtn.classList.add('active');
+                this.notifyInfo('عرض المفضلة فقط');
+            } else {
+                favoritesFilterBtn.classList.remove('active');
+                this.notifyInfo('عرض جميع القنوات');
+            }
+        }
+
+        this.applyAllFilters();
+        this.updateBreadcrumbs();
+    }
+
+    // Filter Management
+    toggleFilterDropdown(filterType) {
+        const dropdown = document.getElementById(`${filterType}Dropdown`);
+        const button = document.getElementById(`${filterType}FilterBtn`);
+        
+        if (!dropdown || !button) return;
+
+        // Close other dropdowns first
+        this.closeAllFilterDropdowns();
+
+        // Toggle current dropdown
+        const isVisible = dropdown.classList.contains('show');
+        
+        if (!isVisible) {
+            // Position dropdown relative to button
+            const buttonRect = button.getBoundingClientRect();
+            const dropdownWidth = 200; // min-width from CSS
+            
+            // Calculate position
+            let leftPosition = buttonRect.left + (buttonRect.width / 2) - (dropdownWidth / 2);
+            
+            // Keep dropdown within viewport
+            const viewportWidth = window.innerWidth;
+            const padding = 20;
+            
+            if (leftPosition < padding) {
+                leftPosition = padding;
+            } else if (leftPosition + dropdownWidth > viewportWidth - padding) {
+                leftPosition = viewportWidth - dropdownWidth - padding;
+            }
+            
+            // Set position
+            dropdown.style.left = leftPosition + 'px';
+            dropdown.style.top = (buttonRect.bottom + 10) + 'px';
+            
+            // Position the arrow relative to the button
+            const arrowPosition = buttonRect.left + (buttonRect.width / 2) - leftPosition;
+            dropdown.style.setProperty('--arrow-position', arrowPosition + 'px');
+            
+            dropdown.classList.add('show');
+            button.classList.add('open');
+        }
+    }
+
+    closeAllFilterDropdowns() {
+        const dropdowns = document.querySelectorAll('.filter-dropdown, .header-filter-dropdown');
+        const buttons = document.querySelectorAll('.filter-btn, .header-filter-btn');
+        
+        dropdowns.forEach(dropdown => dropdown.classList.remove('show'));
+        buttons.forEach(button => button.classList.remove('open'));
+    }
+
+    setCountryFilter(country) {
+        this.currentCountryFilter = country;
+        
+        // Update button text
+        const countryBtn = document.getElementById('countryFilterBtn');
+        if (countryBtn) {
+            const span = countryBtn.querySelector('span');
+            if (country === 'all') {
+                span.textContent = 'البلد';
+                countryBtn.classList.remove('active');
+            } else {
+                span.textContent = country;
+                countryBtn.classList.add('active');
+            }
+        }
+
+        // Update dropdown active state
+        const countryOptions = document.querySelectorAll('#countryDropdown .filter-option');
+        countryOptions.forEach(option => {
+            option.classList.remove('active');
+            if (option.dataset.country === country) {
+                option.classList.add('active');
+            }
+        });
+
+        // Update mobile button text
+        this.updateMobileCountryButton();
+
+        this.applyAllFilters();
+        this.updateBreadcrumbs();
+    }
+
+
+
+    applyAllFilters() {
+        let filtered = [...this.channels];
+
+        // Apply category filter
+        if (this.currentCategory !== 'all') {
+            filtered = filtered.filter(channel => channel.category === this.currentCategory);
+        }
+
+        // Apply country filter
+        if (this.currentCountryFilter !== 'all') {
+            filtered = filtered.filter(channel => channel.country === this.currentCountryFilter);
+        }
+
+
+
+        // Apply favorites filter
+        if (this.showFavoritesOnly) {
+            filtered = filtered.filter(channel => this.favorites.has(channel.id));
+        }
+
+        // Apply search filter
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput && searchInput.value.trim()) {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            filtered = filtered.filter(channel => {
+                return channel.name.toLowerCase().includes(searchTerm) ||
+                       channel.country.toLowerCase().includes(searchTerm);
+            });
+        }
+
+        this.filteredChannels = filtered;
+        this.renderChannels();
+        this.updateChannelStats();
+    }
+
+    resetAllFilters() {
+        this.currentCategory = 'all';
+        this.currentCountryFilter = 'all';
+        this.showFavoritesOnly = false;
+
+        // Reset UI elements
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.classList.remove('active');
+            if (tab.dataset.category === 'all') {
+                tab.classList.add('active');
+            }
+        });
+
+        // Reset filter buttons
+        const countryBtn = document.getElementById('countryFilterBtn');
+        if (countryBtn) {
+            countryBtn.querySelector('span').textContent = 'البلد';
+            countryBtn.classList.remove('active');
+        }
+
+
+
+        const favoritesFilterBtn = document.getElementById('favoritesFilterBtn');
+        
+        if (favoritesFilterBtn) {
+            favoritesFilterBtn.classList.remove('active');
+        }
+
+        // Clear search
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.value = '';
+        }
+
+        this.applyAllFilters();
+        this.updateBreadcrumbs();
+        this.notifyInfo('تم إعادة تعيين جميع الفلاتر');
+    }
+
+    // Quick Actions
+    playRandomChannel() {
+        if (this.filteredChannels.length === 0) {
+            this.notifyWarning('لا توجد قنوات متاحة للعرض العشوائي');
+            return;
+        }
+
+        const randomIndex = Math.floor(Math.random() * this.filteredChannels.length);
+        const randomChannel = this.filteredChannels[randomIndex];
+        
+        this.playChannel(randomChannel);
+        this.notifySuccess(`تم اختيار قناة "${randomChannel.name}" عشوائياً`);
+    }
+
+    refreshChannels() {
+        const refreshBtn = document.getElementById('refreshChannelsBtn');
+        if (refreshBtn) {
+            refreshBtn.classList.add('spinning');
+            const icon = refreshBtn.querySelector('i');
+            icon.style.animation = 'spin 1s linear infinite';
+        }
+
+        // Simulate refresh delay
+        setTimeout(() => {
+            this.applyAllFilters();
+            this.updateChannelStats();
+            
+            if (refreshBtn) {
+                refreshBtn.classList.remove('spinning');
+                const icon = refreshBtn.querySelector('i');
+                icon.style.animation = '';
+            }
+            
+            this.notifySuccess('تم تحديث القنوات بنجاح');
+        }, 1000);
+    }
+
+    // Breadcrumbs and Stats
+    updateBreadcrumbs() {
+        const currentBreadcrumb = document.getElementById('currentBreadcrumb');
+        if (!currentBreadcrumb) return;
+
+        let breadcrumbText = this.getCategoryName(this.currentCategory);
+        
+        // Add additional filters to breadcrumb
+        const activeFilters = [];
+        
+        if (this.currentCountryFilter !== 'all') {
+            activeFilters.push(this.currentCountryFilter);
+        }
+        
+        if (this.currentQualityFilter !== 'all') {
+            activeFilters.push(this.currentQualityFilter);
+        }
+        
+        if (this.showFavoritesOnly) {
+            activeFilters.push('المفضلة');
+        }
+
+        if (activeFilters.length > 0) {
+            breadcrumbText += ' • ' + activeFilters.join(' • ');
+        }
+
+        currentBreadcrumb.textContent = breadcrumbText;
+    }
+
+    updateChannelStats() {
+        const channelCountElement = document.getElementById('channelCount');
+        if (channelCountElement) {
+            channelCountElement.textContent = this.filteredChannels.length;
+        }
+        
+        this.updateBreadcrumbs();
+    }
+
+    // Enhanced Channel Card Creation (Override existing method)
+    createChannelCard(channel) {
+        const card = document.createElement('div');
+        card.className = 'channel-card';
+        
+        // إنشاء placeholder محسن للشعار
+        const logoPlaceholder = this.createLogoPlaceholder(channel);
+        
+        // Check if channel is favorited
+        const isFavorited = this.favorites.has(channel.id);
+        const heartClass = isFavorited ? 'fas fa-heart' : 'far fa-heart';
+        const favoritedClass = isFavorited ? 'favorited' : '';
+        
+        card.innerHTML = `
+            <img src="${channel.logo}" alt="${channel.name}" class="channel-logo" 
+                 onerror="this.src='${logoPlaceholder}'; this.classList.add('placeholder-logo');">
+            <div class="channel-info">
+                <h3 class="channel-name">${channel.name}</h3>
+                <div class="channel-meta">
+                    <span class="channel-country">${channel.country}</span>
+                    <span class="channel-category">${this.getCategoryName(channel.category)}</span>
+                </div>
+            </div>
+            <div class="play-overlay">
+                <button class="play-btn">
+                    <i class="fas fa-play"></i>
+                </button>
+            </div>
+            <button class="favorite-btn ${favoritedClass}" onclick="app.toggleFavorite(${channel.id}, event)">
+                <i class="${heartClass}"></i>
+            </button>
+        `;
+
+        card.addEventListener('click', () => this.playChannel(channel));
+        return card;
+    }
+
+    // Mobile Dropdown Functions
+    toggleMobileCountryDropdown() {
+        const mobileCountryDropdown = document.getElementById('mobileCountryDropdown');
+        const mobileMainCountryFilter = document.getElementById('mobileMainCountryFilter');
+        
+        if (mobileCountryDropdown) {
+            const isOpen = mobileCountryDropdown.classList.contains('show');
+            
+            if (isOpen) {
+                this.closeMobileCountryDropdown();
+            } else {
+                this.openMobileCountryDropdown();
+            }
+            
+            // Toggle button state
+            if (mobileMainCountryFilter) {
+                mobileMainCountryFilter.classList.toggle('open', !isOpen);
+            }
+        }
+    }
+
+    openMobileCountryDropdown() {
+        const mobileCountryDropdown = document.getElementById('mobileCountryDropdown');
+        if (mobileCountryDropdown) {
+            mobileCountryDropdown.classList.add('show');
+            this.updateMobileCountryDropdownSelection();
+        }
+    }
+
+    closeMobileCountryDropdown() {
+        const mobileCountryDropdown = document.getElementById('mobileCountryDropdown');
+        const mobileMainCountryFilter = document.getElementById('mobileMainCountryFilter');
+        
+        if (mobileCountryDropdown) {
+            mobileCountryDropdown.classList.remove('show');
+        }
+        
+        if (mobileMainCountryFilter) {
+            mobileMainCountryFilter.classList.remove('open');
+        }
+    }
+
+    updateMobileCountryDropdownSelection() {
+        const mobileCountryOptions = document.querySelectorAll('#mobileCountryDropdown .mobile-filter-option');
+        mobileCountryOptions.forEach(option => {
+            option.classList.remove('selected');
+            if (option.dataset.country === this.currentCountryFilter) {
+                option.classList.add('selected');
+            }
+        });
+    }
+
+    updateMobileCountryButton() {
+        const mobileMainCountryFilter = document.getElementById('mobileMainCountryFilter');
+        if (mobileMainCountryFilter) {
+            const span = mobileMainCountryFilter.querySelector('span');
+            const displayText = this.currentCountryFilter === 'all' ? 'الكل' : this.currentCountryFilter;
+            span.textContent = `البلد: ${displayText}`;
+            
+            if (this.currentCountryFilter === 'all') {
+                mobileMainCountryFilter.classList.remove('active');
+            } else {
+                mobileMainCountryFilter.classList.add('active');
+            }
+        }
+    }
+
+    // Mobile-specific functions
+    toggleMobileCountryFilter() {
+        const countries = ['الكل', 'قطر', 'الإمارات', 'السعودية', 'لبنان', 'مصر', 'بريطانيا'];
+        const currentIndex = countries.indexOf(this.currentCountryFilter === 'all' ? 'الكل' : this.currentCountryFilter);
+        const nextIndex = (currentIndex + 1) % countries.length;
+        const nextCountry = countries[nextIndex];
+        
+        const countryValue = nextCountry === 'الكل' ? 'all' : nextCountry;
+        this.setCountryFilter(countryValue);
+        
+        // Update mobile main button text
+        const mobileMainCountryFilter = document.getElementById('mobileMainCountryFilter');
+        if (mobileMainCountryFilter) {
+            const span = mobileMainCountryFilter.querySelector('span');
+            span.textContent = `البلد: ${nextCountry}`;
+            
+            if (countryValue === 'all') {
+                mobileMainCountryFilter.classList.remove('active');
+            } else {
+                mobileMainCountryFilter.classList.add('active');
+            }
+        }
+    }
+
+    updateMobileFavoritesButton() {
+        const mobileMainFavoritesFilter = document.getElementById('mobileMainFavoritesFilter');
+        if (mobileMainFavoritesFilter) {
+            if (this.showFavoritesOnly) {
+                mobileMainFavoritesFilter.classList.add('active');
+            } else {
+                mobileMainFavoritesFilter.classList.remove('active');
+            }
+        }
+    }
+
+    // Categories Management
+    getDefaultCategories() {
+        return [
+            { key: 'all', name: 'جميع القنوات', icon: 'fas fa-th' },
+            { key: 'news', name: 'الأخبار', icon: 'fas fa-newspaper' },
+            { key: 'entertainment', name: 'الترفيه', icon: 'fas fa-tv' },
+            { key: 'sports', name: 'الرياضة', icon: 'fas fa-futbol' },
+            { key: 'religious', name: 'الدينية', icon: 'fas fa-pray' },
+            { key: 'music', name: 'الموسيقى', icon: 'fas fa-music' }
+        ];
+    }
+
+    loadCategories() {
+        try {
+            const savedCategories = localStorage.getItem('arabicTVCategories');
+            if (savedCategories) {
+                this.categories = JSON.parse(savedCategories);
+                console.log('تم تحميل الفئات:', this.categories.length, 'فئة');
+            } else {
+                this.categories = this.getDefaultCategories();
+                this.saveCategories();
+            }
+        } catch (error) {
+            console.error('خطأ في تحميل الفئات:', error);
+            this.categories = this.getDefaultCategories();
+        }
+    }
+
+    saveCategories() {
+        try {
+            localStorage.setItem('arabicTVCategories', JSON.stringify(this.categories));
+            console.log('تم حفظ الفئات بنجاح');
+        } catch (error) {
+            console.error('خطأ في حفظ الفئات:', error);
+            this.notifyError('فشل في حفظ الفئات');
+        }
+    }
+
+    renderCategories() {
+        const categoriesList = document.getElementById('categoriesList');
+        if (!categoriesList) return;
+
+        categoriesList.innerHTML = '';
+
+        // Skip 'all' category as it's not editable
+        const editableCategories = this.categories.filter(cat => cat.key !== 'all');
+
+        editableCategories.forEach((category, index) => {
+            const categoryItem = document.createElement('div');
+            categoryItem.className = 'category-item';
+            categoryItem.innerHTML = `
+                <div class="category-info">
+                    <i class="${category.icon} category-icon"></i>
+                    <div class="category-details">
+                        <h6>${category.name}</h6>
+                        <p>المفتاح: ${category.key}</p>
+                    </div>
+                </div>
+                <div class="category-actions">
+                    <button class="edit-category-btn" onclick="editCategory(${index + 1})">
+                        <i class="fas fa-edit"></i>
+                        تعديل
+                    </button>
+                    <button class="delete-category-btn" onclick="deleteCategory(${index + 1})">
+                        <i class="fas fa-trash"></i>
+                        حذف
+                    </button>
+                </div>
+            `;
+            categoriesList.appendChild(categoryItem);
+        });
+    }
+
+    addCategory(categoryData) {
+        // Check if category key already exists
+        const existingCategory = this.categories.find(cat => cat.key === categoryData.key);
+        if (existingCategory) {
+            this.notifyError('مفتاح الفئة موجود بالفعل');
+            return false;
+        }
+
+        this.categories.push(categoryData);
+        this.saveCategories();
+        this.renderCategories();
+        this.updateNavigationTabs();
+        this.updateChannelCategoryOptions();
+        this.notifySuccess('تم إضافة الفئة بنجاح');
+        return true;
+    }
+
+    updateCategory(index, categoryData) {
+        if (index < 0 || index >= this.categories.length) return false;
+
+        // Don't allow editing the 'all' category
+        if (this.categories[index].key === 'all') {
+            this.notifyError('لا يمكن تعديل فئة "جميع القنوات"');
+            return false;
+        }
+
+        // Check if new key conflicts with existing categories (except current one)
+        const existingCategory = this.categories.find((cat, i) => 
+            cat.key === categoryData.key && i !== index
+        );
+        if (existingCategory) {
+            this.notifyError('مفتاح الفئة موجود بالفعل');
+            return false;
+        }
+
+        this.categories[index] = categoryData;
+        this.saveCategories();
+        this.renderCategories();
+        this.updateNavigationTabs();
+        this.updateChannelCategoryOptions();
+        this.notifySuccess('تم تحديث الفئة بنجاح');
+        return true;
+    }
+
+    deleteCategory(index) {
+        if (index < 0 || index >= this.categories.length) return false;
+
+        const category = this.categories[index];
+        
+        // Don't allow deleting the 'all' category
+        if (category.key === 'all') {
+            this.notifyError('لا يمكن حذف فئة "جميع القنوات"');
+            return false;
+        }
+
+        // Check if there are channels using this category
+        const channelsUsingCategory = this.channels.filter(channel => channel.category === category.key);
+        if (channelsUsingCategory.length > 0) {
+            const confirmDelete = confirm(
+                `هناك ${channelsUsingCategory.length} قناة تستخدم هذه الفئة. هل تريد حذف الفئة وتحويل القنوات إلى فئة "الترفيه"؟`
+            );
+            
+            if (confirmDelete) {
+                // Move channels to entertainment category
+                channelsUsingCategory.forEach(channel => {
+                    channel.category = 'entertainment';
+                });
+                this.saveChannels();
+            } else {
+                return false;
+            }
+        }
+
+        this.categories.splice(index, 1);
+        this.saveCategories();
+        this.renderCategories();
+        this.updateNavigationTabs();
+        this.updateChannelCategoryOptions();
+        this.notifySuccess('تم حذف الفئة بنجاح');
+        return true;
+    }
+
+    updateNavigationTabs() {
+        // Update desktop navigation
+        const navTabs = document.querySelector('.nav-tabs');
+        if (navTabs) {
+            navTabs.innerHTML = '';
+            this.categories.forEach(category => {
+                const tab = document.createElement('button');
+                tab.className = 'nav-tab';
+                tab.dataset.category = category.key;
+                if (category.key === 'all') {
+                    tab.classList.add('active');
+                }
+                tab.innerHTML = `<i class="${category.icon}"></i> ${category.name}`;
+                tab.addEventListener('click', () => this.filterChannels(category.key));
+                navTabs.appendChild(tab);
+            });
+        }
+
+        // Update mobile navigation
+        const mobileNavTabs = document.querySelector('.mobile-nav-tabs');
+        if (mobileNavTabs) {
+            mobileNavTabs.innerHTML = '';
+            this.categories.forEach(category => {
+                const tab = document.createElement('button');
+                tab.className = 'mobile-nav-tab';
+                tab.dataset.category = category.key;
+                if (category.key === 'all') {
+                    tab.classList.add('active');
+                }
+                tab.innerHTML = `<i class="${category.icon}"></i> ${category.name}`;
+                tab.addEventListener('click', () => {
+                    this.filterChannels(category.key);
+                    this.closeMobileMenu();
+                });
+                mobileNavTabs.appendChild(tab);
+            });
+        }
+    }
+
+    updateChannelCategoryOptions() {
+        const categorySelect = document.getElementById('channelCategory');
+        if (categorySelect) {
+            categorySelect.innerHTML = '';
+            // Skip 'all' category for channel assignment
+            const assignableCategories = this.categories.filter(cat => cat.key !== 'all');
+            assignableCategories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.key;
+                option.textContent = category.name;
+                categorySelect.appendChild(option);
+            });
+        }
+    }
+}
+
+// Global functions for inline event handlers
+function openSettings() {
+    app.openSettings();
+}
+
+function closeSettings() {
+    app.closeSettings();
+}
+
+function openAdminPanel() {
+    app.openAdminPanel();
+}
+
+function closeAdminPanel() {
+    app.closeAdminPanel();
+}
+
+function closeModal() {
+    app.closeModal();
+}
+
+function toggleQuality() {
+    app.toggleQuality();
+}
+
+function toggleFullscreen() {
+    app.toggleFullscreen();
+}
+
+function saveGeneralSettings() {
+    app.saveGeneralSettings();
+}
+
+function debugStorage() {
+    app.debugStorage();
+}
+
+function closeDiagnosticModal() {
+    app.closeDiagnosticModal();
+}
+
+function refreshDiagnostic() {
+    app.updateDiagnosticData();
+}
+
+function openConsoleInfo() {
+    console.log('=== تفاصيل تشخيص التخزين ===');
+    console.log('القنوات المحملة:', app.channels);
+    console.log('القنوات المفلترة:', app.filteredChannels);
+    console.log('الإعدادات:', app.settings);
+    console.log('Local Storage:', localStorage);
+    app.notifyInfo('تم عرض التفاصيل الكاملة في Console (F12)', 'معلومات المطور');
+}
+
+// Categories Management Functions
+function showAddCategoryForm() {
+    const container = document.getElementById('categoryFormContainer');
+    const form = document.getElementById('categoryForm');
+    const title = document.getElementById('categoryFormTitle');
+    const editingIndex = document.getElementById('editingCategoryIndex');
+    
+    // Reset form
+    form.reset();
+    editingIndex.value = '-1';
+    title.textContent = 'إضافة فئة جديدة';
+    
+    // Show form
+    container.style.display = 'block';
+    container.scrollIntoView({ behavior: 'smooth' });
+    
+    // Focus on first input
+    document.getElementById('categoryKey').focus();
+}
+
+function hideCategoryForm() {
+    const container = document.getElementById('categoryFormContainer');
+    container.style.display = 'none';
+}
+
+function editCategory(index) {
+    const category = app.categories[index];
+    if (!category || category.key === 'all') return;
+    
+    const container = document.getElementById('categoryFormContainer');
+    const form = document.getElementById('categoryForm');
+    const title = document.getElementById('categoryFormTitle');
+    const editingIndex = document.getElementById('editingCategoryIndex');
+    
+    // Fill form with category data
+    document.getElementById('categoryKey').value = category.key;
+    document.getElementById('categoryName').value = category.name;
+    document.getElementById('categoryIcon').value = category.icon;
+    
+    // Set editing mode
+    editingIndex.value = index.toString();
+    title.textContent = `تعديل فئة: ${category.name}`;
+    
+    // Show form
+    container.style.display = 'block';
+    container.scrollIntoView({ behavior: 'smooth' });
+    
+    // Focus on first input
+    document.getElementById('categoryKey').focus();
+}
+
+function deleteCategory(index) {
+    const category = app.categories[index];
+    if (!category || category.key === 'all') return;
+    
+    const confirmDelete = confirm(`هل أنت متأكد من حذف فئة "${category.name}"؟`);
+    if (confirmDelete) {
+        app.deleteCategory(index);
+    }
+}
+
+// Handle category form submission
+document.addEventListener('DOMContentLoaded', function() {
+    const categoryForm = document.getElementById('categoryForm');
+    if (categoryForm) {
+        categoryForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const key = document.getElementById('categoryKey').value.trim().toLowerCase();
+            const name = document.getElementById('categoryName').value.trim();
+            const icon = document.getElementById('categoryIcon').value;
+            const editingIndex = parseInt(document.getElementById('editingCategoryIndex').value);
+            
+            // Validate input
+            if (!key || !name || !icon) {
+                app.notifyError('يرجى ملء جميع الحقول المطلوبة');
+                return;
+            }
+            
+            // Validate key format (English letters and numbers only, no spaces)
+            if (!/^[a-z0-9_]+$/.test(key)) {
+                app.notifyError('مفتاح الفئة يجب أن يحتوي على أحرف إنجليزية وأرقام فقط، بدون مسافات');
+                return;
+            }
+            
+            const categoryData = { key, name, icon };
+            
+            let success = false;
+            if (editingIndex === -1) {
+                // Add new category
+                success = app.addCategory(categoryData);
+            } else {
+                // Update existing category
+                success = app.updateCategory(editingIndex, categoryData);
+            }
+            
+            if (success) {
+                hideCategoryForm();
+            }
+        });
+    }
+});
+
+// Initialize app when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.app = new ArabicTVApp();
+});
+
+// Service Worker for offline functionality
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+            .then(registration => {
+                console.log('SW registered: ', registration);
+            })
+            .catch(registrationError => {
+                console.log('SW registration failed: ', registrationError);
+            });
+    });
+}
