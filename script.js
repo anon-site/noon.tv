@@ -195,19 +195,38 @@ class ArabicTVApp {
         this.currentCountryFilter = 'all'; // Track country filter
         this.showFavoritesOnly = false; // Track favorites filter
         this.categories = this.getDefaultCategories(); // Track categories
+        
+        // Remote Storage Configuration
+        this.remoteStorage = {
+            enabled: false,
+            provider: 'github', // 'github' or 'gitlab'
+            repository: '',
+            token: '',
+            branch: 'main',
+            filename: 'channels.json',
+            lastSync: null,
+            autoSync: true
+        };
 
         this.init();
     }
 
     init() {
         this.testLocalStorage(); // Test if localStorage is working
+        this.loadRemoteStorageSettings(); // Load remote storage configuration
         this.loadChannelsFromStorage(); // Load saved channels first
         this.loadFavorites(); // Load saved favorites
         this.filteredChannels = [...this.channels]; // Ensure filtered channels match loaded channels
         this.loadSettings();
         this.renderChannels();
         this.bindEvents();
+        this.bindRemoteStorageEvents();
         this.setupMobileSearch();
+        
+        // Attempt auto-sync if enabled
+        if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
+            this.syncFromRemote();
+        }
         this.syncMobileNavTabs();
         this.initializeNewFeatures(); // Initialize new navigation features
         this.updateChannelStats(); // Update channel statistics
@@ -1023,6 +1042,16 @@ class ArabicTVApp {
             const verifyChannels = localStorage.getItem('arabicTVChannels');
             if (verifyChannels === channelsData) {
                 console.log('✅ تأكيد حفظ القنوات بنجاح');
+                
+                // Save last modified time
+                localStorage.setItem('arabicTVLastSaved', new Date().toISOString());
+                
+                // Auto-sync to remote if enabled
+                if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
+                    this.syncToRemote().catch(error => {
+                        console.error('فشل في المزامنة التلقائية:', error);
+                    });
+                }
             } else {
                 console.error('❌ فشل في حفظ القنوات');
                 this.notifyError('فشل في حفظ القنوات! يرجى المحاولة مرة أخرى.');
@@ -1077,6 +1106,763 @@ class ArabicTVApp {
 
         localStorage.setItem('arabicTVGeneralSettings', JSON.stringify(generalSettings));
         this.notifySuccess('تم حفظ الإعدادات العامة بنجاح!');
+    }
+
+    // ===== Remote Storage Management =====
+    
+    loadRemoteStorageSettings() {
+        try {
+            const savedRemoteStorage = localStorage.getItem('arabicTVRemoteStorage');
+            if (savedRemoteStorage) {
+                const parsed = JSON.parse(savedRemoteStorage);
+                this.remoteStorage = { ...this.remoteStorage, ...parsed };
+                console.log('تم تحميل إعدادات التخزين السحابي:', this.remoteStorage);
+            }
+        } catch (error) {
+            console.error('خطأ في تحميل إعدادات التخزين السحابي:', error);
+        }
+    }
+
+    saveRemoteStorageSettings() {
+        try {
+            localStorage.setItem('arabicTVRemoteStorage', JSON.stringify(this.remoteStorage));
+            console.log('تم حفظ إعدادات التخزين السحابي');
+        } catch (error) {
+            console.error('خطأ في حفظ إعدادات التخزين السحابي:', error);
+        }
+    }
+
+    async syncToRemote() {
+        if (!this.remoteStorage.enabled || !this.remoteStorage.repository || !this.remoteStorage.token) {
+            this.notifyError('يجب تكوين إعدادات التخزين السحابي أولاً');
+            return false;
+        }
+
+        try {
+            this.notifyInfo('جارٍ رفع البيانات إلى المستودع...');
+            
+            const data = {
+                channels: this.channels,
+                favorites: Array.from(this.favorites),
+                settings: this.settings,
+                categories: this.categories,
+                lastModified: new Date().toISOString(),
+                version: '1.0'
+            };
+
+            const success = await this.uploadToRepository(data);
+            
+            if (success) {
+                this.remoteStorage.lastSync = new Date().toISOString();
+                this.saveRemoteStorageSettings();
+                this.notifySuccess('تم رفع البيانات إلى المستودع بنجاح!');
+                return true;
+            } else {
+                this.notifyError('فشل في رفع البيانات إلى المستودع');
+                return false;
+            }
+        } catch (error) {
+            console.error('خطأ في المزامنة إلى المستودع:', error);
+            this.notifyError('خطأ في المزامنة: ' + error.message);
+            return false;
+        }
+    }
+
+    async syncFromRemote() {
+        if (!this.remoteStorage.enabled || !this.remoteStorage.repository || !this.remoteStorage.token) {
+            console.log('التخزين السحابي غير مُعدّ، تخطي المزامنة');
+            return false;
+        }
+
+        try {
+            this.notifyInfo('جارٍ تحميل البيانات من المستودع...');
+            
+            const data = await this.downloadFromRepository();
+            
+            if (data) {
+                // Compare versions and merge data
+                const shouldUpdate = this.shouldUpdateFromRemote(data);
+                
+                if (shouldUpdate) {
+                    await this.mergeRemoteData(data);
+                    this.remoteStorage.lastSync = new Date().toISOString();
+                    this.saveRemoteStorageSettings();
+                    this.notifySuccess('تم تحديث البيانات من المستودع!');
+                    return true;
+                } else {
+                    console.log('البيانات المحلية أحدث من المستودع');
+                    this.notifyInfo('البيانات المحلية محدثة');
+                    return false;
+                }
+            } else {
+                console.log('لم يتم العثور على بيانات في المستودع');
+                this.notifyInfo('لم يتم العثور على بيانات محفوظة في المستودع');
+                return false;
+            }
+        } catch (error) {
+            console.error('خطأ في المزامنة من المستودع:', error);
+            this.notifyError('خطأ في تحميل البيانات: ' + error.message);
+            return false;
+        }
+    }
+
+    async uploadToRepository(data) {
+        const { provider, repository, token, branch, filename } = this.remoteStorage;
+        
+        try {
+            if (provider === 'github') {
+                return await this.uploadToGitHub(data, repository, token, branch, filename);
+            } else if (provider === 'gitlab') {
+                return await this.uploadToGitLab(data, repository, token, branch, filename);
+            }
+        } catch (error) {
+            console.error('خطأ في رفع البيانات:', error);
+            throw error;
+        }
+    }
+
+    async downloadFromRepository() {
+        const { provider, repository, token, branch, filename } = this.remoteStorage;
+        
+        try {
+            if (provider === 'github') {
+                return await this.downloadFromGitHub(repository, token, branch, filename);
+            } else if (provider === 'gitlab') {
+                return await this.downloadFromGitLab(repository, token, branch, filename);
+            }
+        } catch (error) {
+            console.error('خطأ في تحميل البيانات:', error);
+            throw error;
+        }
+    }
+
+    async uploadToGitHub(data, repository, token, branch, filename) {
+        const url = `https://api.github.com/repos/${repository}/contents/${filename}`;
+        
+        // First, try to get the current file SHA
+        let sha = null;
+        try {
+            const getResponse = await fetch(url, {
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+            
+            if (getResponse.ok) {
+                const fileData = await getResponse.json();
+                sha = fileData.sha;
+            }
+        } catch (error) {
+            console.log('الملف غير موجود، سيتم إنشاؤه');
+        }
+
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+        
+        const body = {
+            message: `تحديث قنوات التلفزيون - ${new Date().toLocaleString('ar')}`,
+            content: content,
+            branch: branch
+        };
+
+        if (sha) {
+            body.sha = sha;
+        }
+
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${token}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(`GitHub API Error: ${response.status} - ${error}`);
+        }
+
+        return true;
+    }
+
+    async downloadFromGitHub(repository, token, branch, filename) {
+        const url = `https://api.github.com/repos/${repository}/contents/${filename}?ref=${branch}`;
+        
+        const response = await fetch(url, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Accept': 'application/vnd.github.v3+json'
+            }
+        });
+
+        if (response.status === 404) {
+            return null; // File doesn't exist
+        }
+
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(`GitHub API Error: ${response.status} - ${error}`);
+        }
+
+        const fileData = await response.json();
+        const content = decodeURIComponent(escape(atob(fileData.content)));
+        return JSON.parse(content);
+    }
+
+    async uploadToGitLab(data, repository, token, branch, filename) {
+        const encodedPath = encodeURIComponent(filename);
+        const url = `https://gitlab.com/api/v4/projects/${encodeURIComponent(repository)}/repository/files/${encodedPath}`;
+        
+        const content = JSON.stringify(data, null, 2);
+        
+        // Try to update first
+        try {
+            const updateResponse = await fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'PRIVATE-TOKEN': token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    branch: branch,
+                    content: content,
+                    commit_message: `تحديث قنوات التلفزيون - ${new Date().toLocaleString('ar')}`
+                })
+            });
+
+            if (updateResponse.ok) {
+                return true;
+            }
+        } catch (error) {
+            console.log('فشل التحديث، جارٍ المحاولة لإنشاء ملف جديد');
+        }
+
+        // If update failed, try to create
+        const createResponse = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'PRIVATE-TOKEN': token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                branch: branch,
+                content: content,
+                commit_message: `إنشاء ملف قنوات التلفزيون - ${new Date().toLocaleString('ar')}`
+            })
+        });
+
+        if (!createResponse.ok) {
+            const error = await createResponse.text();
+            throw new Error(`GitLab API Error: ${createResponse.status} - ${error}`);
+        }
+
+        return true;
+    }
+
+    async downloadFromGitLab(repository, token, branch, filename) {
+        const encodedPath = encodeURIComponent(filename);
+        const url = `https://gitlab.com/api/v4/projects/${encodeURIComponent(repository)}/repository/files/${encodedPath}?ref=${branch}`;
+        
+        const response = await fetch(url, {
+            headers: {
+                'PRIVATE-TOKEN': token
+            }
+        });
+
+        if (response.status === 404) {
+            return null; // File doesn't exist
+        }
+
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(`GitLab API Error: ${response.status} - ${error}`);
+        }
+
+        const fileData = await response.json();
+        const content = decodeURIComponent(escape(atob(fileData.content)));
+        return JSON.parse(content);
+    }
+
+    shouldUpdateFromRemote(remoteData) {
+        if (!remoteData.lastModified) {
+            return true; // No timestamp, assume we should update
+        }
+
+        const remoteTime = new Date(remoteData.lastModified);
+        const localTime = this.remoteStorage.lastSync ? new Date(this.remoteStorage.lastSync) : new Date(0);
+        
+        return remoteTime > localTime;
+    }
+
+    async mergeRemoteData(remoteData) {
+        // Check for conflicts
+        const hasConflicts = await this.detectConflicts(remoteData);
+        
+        if (hasConflicts) {
+            return await this.resolveConflicts(remoteData);
+        }
+
+        // Backup current data
+        const backup = {
+            channels: [...this.channels],
+            favorites: new Set(this.favorites),
+            settings: { ...this.settings }
+        };
+
+        try {
+            // Update channels
+            if (remoteData.channels && Array.isArray(remoteData.channels)) {
+                this.channels = remoteData.channels;
+                this.filteredChannels = [...this.channels];
+                this.saveChannelsToStorage();
+            }
+
+            // Update favorites
+            if (remoteData.favorites && Array.isArray(remoteData.favorites)) {
+                this.favorites = new Set(remoteData.favorites);
+                this.saveFavorites();
+            }
+
+            // Update settings
+            if (remoteData.settings && typeof remoteData.settings === 'object') {
+                this.settings = { ...this.settings, ...remoteData.settings };
+                this.saveSettings();
+                this.applySettings();
+            }
+
+            // Update categories
+            if (remoteData.categories && Array.isArray(remoteData.categories)) {
+                this.categories = remoteData.categories;
+            }
+
+            // Re-render everything
+            this.renderChannels();
+            this.renderAdminChannels();
+            this.updateFavoritesCount();
+            
+        } catch (error) {
+            console.error('خطأ في دمج البيانات، استعادة النسخة الاحتياطية:', error);
+            
+            // Restore backup
+            this.channels = backup.channels;
+            this.favorites = backup.favorites;
+            this.settings = backup.settings;
+            
+            throw error;
+        }
+    }
+
+    async detectConflicts(remoteData) {
+        // Check if there are significant differences
+        const localChannelsCount = this.channels.length;
+        const remoteChannelsCount = remoteData.channels ? remoteData.channels.length : 0;
+        
+        // Consider it a conflict if:
+        // 1. Channel counts differ significantly (more than 10% difference)
+        // 2. Both local and remote have been modified recently
+        const countDifference = Math.abs(localChannelsCount - remoteChannelsCount);
+        const significantDifference = countDifference > Math.max(localChannelsCount, remoteChannelsCount) * 0.1;
+        
+        const localLastModified = this.getLocalLastModified();
+        const remoteLastModified = new Date(remoteData.lastModified || 0);
+        const timeDifference = Math.abs(localLastModified - remoteLastModified);
+        
+        // Consider conflict if both were modified within the last hour and have significant differences
+        return significantDifference && timeDifference < 3600000; // 1 hour in milliseconds
+    }
+
+    getLocalLastModified() {
+        // Get the last modified time from localStorage or current time
+        const lastSaved = localStorage.getItem('arabicTVLastSaved');
+        return lastSaved ? new Date(lastSaved) : new Date();
+    }
+
+    async resolveConflicts(remoteData) {
+        return new Promise((resolve) => {
+            const conflictModal = this.createConflictResolutionModal(remoteData);
+            document.body.appendChild(conflictModal);
+            
+            conflictModal.querySelector('.use-local-btn').addEventListener('click', () => {
+                this.notifyInfo('تم الاحتفاظ بالبيانات المحلية');
+                document.body.removeChild(conflictModal);
+                resolve(false); // Don't merge
+            });
+            
+            conflictModal.querySelector('.use-remote-btn').addEventListener('click', async () => {
+                try {
+                    await this.forceOverwriteWithRemote(remoteData);
+                    this.notifySuccess('تم استخدام البيانات السحابية');
+                    document.body.removeChild(conflictModal);
+                    resolve(true);
+                } catch (error) {
+                    this.notifyError('فشل في تطبيق البيانات السحابية');
+                    document.body.removeChild(conflictModal);
+                    resolve(false);
+                }
+            });
+            
+            conflictModal.querySelector('.merge-btn').addEventListener('click', async () => {
+                try {
+                    await this.smartMerge(remoteData);
+                    this.notifySuccess('تم دمج البيانات بذكاء');
+                    document.body.removeChild(conflictModal);
+                    resolve(true);
+                } catch (error) {
+                    this.notifyError('فشل في دمج البيانات');
+                    document.body.removeChild(conflictModal);
+                    resolve(false);
+                }
+            });
+        });
+    }
+
+    createConflictResolutionModal(remoteData) {
+        const modal = document.createElement('div');
+        modal.className = 'modal active';
+        modal.innerHTML = `
+            <div class="modal-content conflict-resolution-modal">
+                <div class="modal-header">
+                    <h3>⚠️ تضارب في البيانات</h3>
+                </div>
+                <div class="conflict-details">
+                    <p>تم اكتشاف تضارب بين البيانات المحلية والبيانات السحابية. يرجى اختيار كيفية التعامل مع هذا التضارب:</p>
+                    
+                    <div class="conflict-comparison">
+                        <div class="local-data">
+                            <h4>البيانات المحلية</h4>
+                            <p>عدد القنوات: <strong>${this.channels.length}</strong></p>
+                            <p>عدد المفضلة: <strong>${this.favorites.size}</strong></p>
+                            <p>آخر تعديل: <strong>${this.getLocalLastModified().toLocaleString('ar')}</strong></p>
+                        </div>
+                        
+                        <div class="remote-data">
+                            <h4>البيانات السحابية</h4>
+                            <p>عدد القنوات: <strong>${remoteData.channels ? remoteData.channels.length : 0}</strong></p>
+                            <p>عدد المفضلة: <strong>${remoteData.favorites ? remoteData.favorites.length : 0}</strong></p>
+                            <p>آخر تعديل: <strong>${new Date(remoteData.lastModified || 0).toLocaleString('ar')}</strong></p>
+                        </div>
+                    </div>
+                    
+                    <div class="conflict-actions">
+                        <button class="conflict-btn use-local-btn">
+                            <i class="fas fa-laptop"></i>
+                            استخدام البيانات المحلية
+                        </button>
+                        <button class="conflict-btn use-remote-btn">
+                            <i class="fas fa-cloud"></i>
+                            استخدام البيانات السحابية
+                        </button>
+                        <button class="conflict-btn merge-btn">
+                            <i class="fas fa-code-branch"></i>
+                            دمج ذكي للبيانات
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-overlay"></div>
+        `;
+        return modal;
+    }
+
+    async forceOverwriteWithRemote(remoteData) {
+        // Simply overwrite everything with remote data
+        if (remoteData.channels && Array.isArray(remoteData.channels)) {
+            this.channels = remoteData.channels;
+            this.filteredChannels = [...this.channels];
+            this.saveChannelsToStorage();
+        }
+
+        if (remoteData.favorites && Array.isArray(remoteData.favorites)) {
+            this.favorites = new Set(remoteData.favorites);
+            this.saveFavorites();
+        }
+
+        if (remoteData.settings && typeof remoteData.settings === 'object') {
+            this.settings = { ...this.settings, ...remoteData.settings };
+            this.saveSettings();
+            this.applySettings();
+        }
+
+        if (remoteData.categories && Array.isArray(remoteData.categories)) {
+            this.categories = remoteData.categories;
+        }
+
+        this.renderChannels();
+        this.renderAdminChannels();
+        this.updateFavoritesCount();
+    }
+
+    async smartMerge(remoteData) {
+        // Smart merge logic
+        const mergedChannels = this.mergeChannels(this.channels, remoteData.channels || []);
+        const mergedFavorites = this.mergeFavorites(this.favorites, new Set(remoteData.favorites || []));
+        const mergedSettings = { ...this.settings, ...remoteData.settings };
+
+        this.channels = mergedChannels;
+        this.filteredChannels = [...this.channels];
+        this.favorites = mergedFavorites;
+        this.settings = mergedSettings;
+
+        if (remoteData.categories && Array.isArray(remoteData.categories)) {
+            this.categories = this.mergeCategories(this.categories, remoteData.categories);
+        }
+
+        this.saveChannelsToStorage();
+        this.saveFavorites();
+        this.saveSettings();
+        this.applySettings();
+        this.renderChannels();
+        this.renderAdminChannels();
+        this.updateFavoritesCount();
+    }
+
+    mergeChannels(localChannels, remoteChannels) {
+        const merged = [...localChannels];
+        const localIds = new Set(localChannels.map(ch => ch.id));
+
+        // Add remote channels that don't exist locally
+        remoteChannels.forEach(remoteChannel => {
+            if (!localIds.has(remoteChannel.id)) {
+                merged.push(remoteChannel);
+            }
+        });
+
+        return merged;
+    }
+
+    mergeFavorites(localFavorites, remoteFavorites) {
+        // Combine all favorites
+        return new Set([...localFavorites, ...remoteFavorites]);
+    }
+
+    mergeCategories(localCategories, remoteCategories) {
+        const merged = [...localCategories];
+        const localKeys = new Set(localCategories.map(cat => cat.key));
+
+        remoteCategories.forEach(remoteCategory => {
+            if (!localKeys.has(remoteCategory.key)) {
+                merged.push(remoteCategory);
+            }
+        });
+
+        return merged;
+    }
+
+    async testConnection() {
+        const { provider, repository, token } = this.remoteStorage;
+        
+        if (!repository || !token) {
+            this.notifyError('يرجى ملء جميع الحقول المطلوبة');
+            return false;
+        }
+
+        try {
+            let url;
+            let headers;
+
+            if (provider === 'github') {
+                url = `https://api.github.com/repos/${repository}`;
+                headers = {
+                    'Authorization': `token ${token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                };
+            } else if (provider === 'gitlab') {
+                url = `https://gitlab.com/api/v4/projects/${encodeURIComponent(repository)}`;
+                headers = {
+                    'PRIVATE-TOKEN': token
+                };
+            }
+
+            const response = await fetch(url, { headers });
+            
+            if (response.ok) {
+                this.notifySuccess('تم الاتصال بالمستودع بنجاح!');
+                return true;
+            } else {
+                this.notifyError(`فشل الاتصال: ${response.status} - ${response.statusText}`);
+                return false;
+            }
+        } catch (error) {
+            console.error('خطأ في اختبار الاتصال:', error);
+            this.notifyError('خطأ في الاتصال: ' + error.message);
+            return false;
+        }
+    }
+
+    // Remote Storage UI Management
+    bindRemoteStorageEvents() {
+        // Enable/disable remote storage
+        const enableRemoteStorageCheckbox = document.getElementById('enableRemoteStorage');
+        if (enableRemoteStorageCheckbox) {
+            enableRemoteStorageCheckbox.addEventListener('change', (e) => {
+                this.remoteStorage.enabled = e.target.checked;
+                this.toggleRemoteStorageConfig(e.target.checked);
+                this.saveRemoteStorageSettings();
+                this.updateSyncStatus();
+            });
+        }
+
+        // Provider selection
+        const storageProviderSelect = document.getElementById('storageProvider');
+        if (storageProviderSelect) {
+            storageProviderSelect.addEventListener('change', (e) => {
+                this.remoteStorage.provider = e.target.value;
+                this.saveRemoteStorageSettings();
+            });
+        }
+
+        // Repository URL
+        const repositoryUrlInput = document.getElementById('repositoryUrl');
+        if (repositoryUrlInput) {
+            repositoryUrlInput.addEventListener('blur', (e) => {
+                this.remoteStorage.repository = e.target.value.trim();
+                this.saveRemoteStorageSettings();
+            });
+        }
+
+        // Access Token
+        const accessTokenInput = document.getElementById('accessToken');
+        if (accessTokenInput) {
+            accessTokenInput.addEventListener('blur', (e) => {
+                this.remoteStorage.token = e.target.value.trim();
+                this.saveRemoteStorageSettings();
+            });
+        }
+
+        // Branch Name
+        const branchNameInput = document.getElementById('branchName');
+        if (branchNameInput) {
+            branchNameInput.addEventListener('blur', (e) => {
+                this.remoteStorage.branch = e.target.value.trim() || 'main';
+                this.saveRemoteStorageSettings();
+            });
+        }
+
+        // Auto Sync
+        const autoSyncCheckbox = document.getElementById('autoSync');
+        if (autoSyncCheckbox) {
+            autoSyncCheckbox.addEventListener('change', (e) => {
+                this.remoteStorage.autoSync = e.target.checked;
+                this.saveRemoteStorageSettings();
+            });
+        }
+
+        // Load existing settings
+        this.loadRemoteStorageUI();
+    }
+
+    loadRemoteStorageUI() {
+        const enableCheckbox = document.getElementById('enableRemoteStorage');
+        const providerSelect = document.getElementById('storageProvider');
+        const repositoryInput = document.getElementById('repositoryUrl');
+        const tokenInput = document.getElementById('accessToken');
+        const branchInput = document.getElementById('branchName');
+        const autoSyncCheckbox = document.getElementById('autoSync');
+
+        if (enableCheckbox) {
+            enableCheckbox.checked = this.remoteStorage.enabled;
+            this.toggleRemoteStorageConfig(this.remoteStorage.enabled);
+        }
+
+        if (providerSelect) {
+            providerSelect.value = this.remoteStorage.provider;
+        }
+
+        if (repositoryInput) {
+            repositoryInput.value = this.remoteStorage.repository;
+        }
+
+        if (tokenInput) {
+            tokenInput.value = this.remoteStorage.token;
+        }
+
+        if (branchInput) {
+            branchInput.value = this.remoteStorage.branch;
+        }
+
+        if (autoSyncCheckbox) {
+            autoSyncCheckbox.checked = this.remoteStorage.autoSync;
+        }
+
+        this.updateSyncStatus();
+    }
+
+    toggleRemoteStorageConfig(enabled) {
+        const configDiv = document.getElementById('remoteStorageConfig');
+        if (configDiv) {
+            configDiv.style.display = enabled ? 'block' : 'none';
+        }
+    }
+
+    updateSyncStatus() {
+        const syncStatusText = document.getElementById('syncStatusText');
+        const lastSyncTime = document.getElementById('lastSyncTime');
+
+        if (syncStatusText) {
+            if (this.remoteStorage.enabled) {
+                if (this.remoteStorage.repository && this.remoteStorage.token) {
+                    syncStatusText.textContent = 'جاهز للمزامنة';
+                    syncStatusText.style.color = 'var(--highlight-color)';
+                } else {
+                    syncStatusText.textContent = 'يتطلب إعداد';
+                    syncStatusText.style.color = '#f59e0b';
+                }
+            } else {
+                syncStatusText.textContent = 'معطل';
+                syncStatusText.style.color = 'var(--text-secondary)';
+            }
+        }
+
+        if (lastSyncTime) {
+            if (this.remoteStorage.lastSync) {
+                const syncDate = new Date(this.remoteStorage.lastSync);
+                lastSyncTime.textContent = syncDate.toLocaleString('ar');
+            } else {
+                lastSyncTime.textContent = 'لم يتم';
+            }
+        }
+    }
+
+    saveRemoteStorageSettingsUI() {
+        this.saveRemoteStorageSettings();
+        this.notifySuccess('تم حفظ إعدادات التخزين السحابي!');
+        this.updateSyncStatus();
+    }
+
+    async manualSync() {
+        if (!this.remoteStorage.enabled) {
+            this.notifyError('التخزين السحابي غير مُفعّل');
+            return;
+        }
+
+        const button = document.querySelector('.sync-now-btn');
+        const originalText = button.innerHTML;
+        
+        try {
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جارٍ المزامنة...';
+            button.disabled = true;
+
+            // Try to sync from remote first
+            const downloadSuccess = await this.syncFromRemote();
+            
+            // Then sync to remote
+            const uploadSuccess = await this.syncToRemote();
+
+            if (downloadSuccess || uploadSuccess) {
+                this.updateSyncStatus();
+                this.notifySuccess('تمت المزامنة بنجاح!');
+            } else {
+                this.notifyInfo('لا توجد تغييرات للمزامنة');
+            }
+        } catch (error) {
+            console.error('خطأ في المزامنة اليدوية:', error);
+            this.notifyError('فشل في المزامنة: ' + error.message);
+        } finally {
+            button.innerHTML = originalText;
+            button.disabled = false;
+        }
     }
 
     // وظيفة تشخيصية لتصدير القنوات

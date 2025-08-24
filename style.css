@@ -3424,6 +3424,403 @@ body[data-theme="light"] .diagnostic-tool-btn.import-btn:hover {
     background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.05));
 }
 
+/* Remote Storage Styles */
+.remote-storage-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.remote-storage-title {
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.remote-storage-title::before {
+    content: "☁️";
+    font-size: 1.2rem;
+}
+
+.remote-storage-container {
+    background: var(--background-light);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.remote-storage-config {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-setting-item small {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    line-height: 1.3;
+}
+
+.remote-storage-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.test-connection-btn,
+.save-remote-settings-btn,
+.sync-now-btn {
+    background: var(--background-light);
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    min-width: 140px;
+    justify-content: center;
+}
+
+.test-connection-btn {
+    border-color: #3b82f6;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.05));
+}
+
+.test-connection-btn:hover {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.save-remote-settings-btn {
+    border-color: #10b981;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+}
+
+.save-remote-settings-btn:hover {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.sync-now-btn {
+    border-color: var(--highlight-color);
+    background: linear-gradient(135deg, rgba(233, 69, 96, 0.1), rgba(255, 107, 107, 0.05));
+}
+
+.sync-now-btn:hover {
+    background: linear-gradient(135deg, var(--highlight-color), #ff6b6b);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
+}
+
+.sync-status {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sync-status p {
+    margin: 0.5rem 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.sync-status strong {
+    color: var(--text-primary);
+}
+
+#syncStatusText {
+    color: var(--highlight-color);
+    font-weight: 600;
+}
+
+#lastSyncTime {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* Light Theme for Remote Storage */
+body[data-theme="light"] .remote-storage-section {
+    border-top-color: #e2e8f0;
+}
+
+body[data-theme="light"] .remote-storage-title {
+    color: #1e293b;
+}
+
+body[data-theme="light"] .remote-storage-container {
+    background: #ffffff;
+    border-color: #e2e8f0;
+}
+
+body[data-theme="light"] .remote-storage-config {
+    border-top-color: #f1f5f9;
+}
+
+body[data-theme="light"] .admin-setting-item small {
+    color: #64748b;
+}
+
+body[data-theme="light"] .test-connection-btn,
+body[data-theme="light"] .save-remote-settings-btn,
+body[data-theme="light"] .sync-now-btn {
+    background: #ffffff;
+    border-color: #e2e8f0;
+    color: #1e293b;
+}
+
+body[data-theme="light"] .test-connection-btn {
+    border-color: #3b82f6;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(37, 99, 235, 0.02));
+}
+
+body[data-theme="light"] .save-remote-settings-btn {
+    border-color: #10b981;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(5, 150, 105, 0.02));
+}
+
+body[data-theme="light"] .sync-now-btn {
+    border-color: #3b82f6;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(37, 99, 235, 0.02));
+}
+
+body[data-theme="light"] .sync-status {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+}
+
+body[data-theme="light"] .sync-status p {
+    color: #64748b;
+}
+
+body[data-theme="light"] .sync-status strong {
+    color: #1e293b;
+}
+
+body[data-theme="light"] #syncStatusText {
+    color: #3b82f6;
+}
+
+body[data-theme="light"] #lastSyncTime {
+    color: #1e293b;
+}
+
+/* Conflict Resolution Modal */
+.conflict-resolution-modal {
+    max-width: 600px;
+    width: 90vw;
+}
+
+.conflict-details {
+    padding: 2rem;
+}
+
+.conflict-details p {
+    margin-bottom: 1.5rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    text-align: center;
+}
+
+.conflict-comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.local-data,
+.remote-data {
+    background: var(--background-light);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.local-data h4,
+.remote-data h4 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.local-data h4::before {
+    content: "💻";
+}
+
+.remote-data h4::before {
+    content: "☁️";
+}
+
+.local-data p,
+.remote-data p {
+    margin: 0.5rem 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.local-data strong,
+.remote-data strong {
+    color: var(--text-primary);
+}
+
+.conflict-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.conflict-btn {
+    background: var(--background-light);
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    min-width: 160px;
+    justify-content: center;
+    flex: 1;
+    max-width: 180px;
+}
+
+.conflict-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.use-local-btn {
+    border-color: #3b82f6;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.05));
+}
+
+.use-local-btn:hover {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.use-remote-btn {
+    border-color: #10b981;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+}
+
+.use-remote-btn:hover {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.merge-btn {
+    border-color: var(--highlight-color);
+    background: linear-gradient(135deg, rgba(233, 69, 96, 0.1), rgba(255, 107, 107, 0.05));
+}
+
+.merge-btn:hover {
+    background: linear-gradient(135deg, var(--highlight-color), #ff6b6b);
+    color: white;
+    box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
+}
+
+/* Light theme for conflict resolution */
+body[data-theme="light"] .conflict-details p {
+    color: #64748b;
+}
+
+body[data-theme="light"] .local-data,
+body[data-theme="light"] .remote-data {
+    background: #ffffff;
+    border-color: #e2e8f0;
+}
+
+body[data-theme="light"] .local-data h4,
+body[data-theme="light"] .remote-data h4 {
+    color: #1e293b;
+}
+
+body[data-theme="light"] .local-data p,
+body[data-theme="light"] .remote-data p {
+    color: #64748b;
+}
+
+body[data-theme="light"] .local-data strong,
+body[data-theme="light"] .remote-data strong {
+    color: #1e293b;
+}
+
+body[data-theme="light"] .conflict-btn {
+    background: #ffffff;
+    border-color: #e2e8f0;
+    color: #1e293b;
+}
+
+body[data-theme="light"] .use-local-btn {
+    border-color: #3b82f6;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(37, 99, 235, 0.02));
+}
+
+body[data-theme="light"] .use-remote-btn {
+    border-color: #10b981;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(5, 150, 105, 0.02));
+}
+
+body[data-theme="light"] .merge-btn {
+    border-color: #3b82f6;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(37, 99, 235, 0.02));
+}
+
+/* Responsive conflict modal */
+@media (max-width: 768px) {
+    .conflict-comparison {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .conflict-actions {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .conflict-btn {
+        max-width: none;
+        width: 100%;
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {

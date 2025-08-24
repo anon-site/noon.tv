@@ -511,6 +511,76 @@
                         </label>
                     </div>
                     <button class="save-settings-btn" onclick="saveGeneralSettings()">حفظ الإعدادات</button>
+                    
+                    <!-- Remote Storage Settings -->
+                    <div class="remote-storage-section">
+                        <h4 class="remote-storage-title">التخزين السحابي</h4>
+                        <div class="remote-storage-container">
+                            <div class="admin-setting-item">
+                                <label for="enableRemoteStorage">تفعيل التخزين السحابي</label>
+                                <label class="switch">
+                                    <input type="checkbox" id="enableRemoteStorage">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="remote-storage-config" id="remoteStorageConfig" style="display: none;">
+                                <div class="admin-setting-item">
+                                    <label for="storageProvider">مزود الخدمة</label>
+                                    <select id="storageProvider">
+                                        <option value="github">GitHub</option>
+                                        <option value="gitlab">GitLab</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="admin-setting-item">
+                                    <label for="repositoryUrl">رابط المستودع</label>
+                                    <input type="text" id="repositoryUrl" placeholder="مثل: username/repository-name">
+                                    <small>للمستودع الخاص، أدخل اسم المستخدم/اسم المستودع</small>
+                                </div>
+                                
+                                <div class="admin-setting-item">
+                                    <label for="accessToken">رمز الوصول (Token)</label>
+                                    <input type="password" id="accessToken" placeholder="أدخل رمز الوصول الشخصي">
+                                    <small>يمكنك إنشاء رمز وصول من إعدادات حسابك في GitHub/GitLab</small>
+                                </div>
+                                
+                                <div class="admin-setting-item">
+                                    <label for="branchName">اسم الفرع</label>
+                                    <input type="text" id="branchName" value="main" placeholder="main">
+                                </div>
+                                
+                                <div class="admin-setting-item">
+                                    <label for="autoSync">مزامنة تلقائية</label>
+                                    <label class="switch">
+                                        <input type="checkbox" id="autoSync" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                
+                                <div class="remote-storage-actions">
+                                    <button class="test-connection-btn" onclick="app.testConnection()">
+                                        <i class="fas fa-link"></i>
+                                        اختبار الاتصال
+                                    </button>
+                                    <button class="save-remote-settings-btn" onclick="app.saveRemoteStorageSettingsUI()">
+                                        <i class="fas fa-save"></i>
+                                        حفظ الإعدادات
+                                    </button>
+                                    <button class="sync-now-btn" onclick="app.manualSync()">
+                                        <i class="fas fa-sync-alt"></i>
+                                        مزامنة الآن
+                                    </button>
+                                </div>
+                                
+                                <div class="sync-status" id="syncStatus">
+                                    <p><strong>حالة المزامنة:</strong> <span id="syncStatusText">غير محدد</span></p>
+                                    <p><strong>آخر مزامنة:</strong> <span id="lastSyncTime">لم يتم</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="diagnostic-tools-section">
                         <h4 class="diagnostic-tools-title">أدوات التشخيص</h4>
                         <div class="diagnostic-tools-grid">
