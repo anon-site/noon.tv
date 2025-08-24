@@ -361,6 +361,96 @@
                         <option value="auto">تلقائي</option>
                     </select>
                 </div>
+                
+                <!-- Appearance Customization Section -->
+                <div class="settings-section">
+                    <h4 class="settings-section-title">🎨 تخصيص المظهر</h4>
+                    
+                    <div class="setting-item">
+                        <label for="zoomLevel">حجم المحتوى</label>
+                        <div class="zoom-control">
+                            <input type="range" id="zoomLevel" min="75" max="150" value="100" step="5" class="zoom-slider">
+                            <span id="zoomValue" class="zoom-value">100%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="colorTheme">نظام الألوان</label>
+                        <select id="colorTheme" class="color-theme-select">
+                            <option value="default">الافتراضي</option>
+                            <option value="blue">أزرق</option>
+                            <option value="green">أخضر</option>
+                            <option value="purple">بنفسجي</option>
+                            <option value="orange">برتقالي</option>
+                            <option value="red">أحمر</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="fontSize">حجم النص</label>
+                        <select id="fontSize" class="font-size-select">
+                            <option value="small">صغير</option>
+                            <option value="medium">متوسط</option>
+                            <option value="large">كبير</option>
+                            <option value="xlarge">كبير جداً</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="borderRadius">شكل الحواف</label>
+                        <select id="borderRadius" class="border-radius-select">
+                            <option value="minimal">مربع</option>
+                            <option value="normal">عادي</option>
+                            <option value="rounded">مدور</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Layout and Behavior Section -->
+                <div class="settings-section">
+                    <h4 class="settings-section-title">📐 التخطيط والسلوك</h4>
+                    
+                    <div class="setting-item">
+                        <label for="layoutMode">نمط العرض</label>
+                        <select id="layoutMode" class="layout-mode-select">
+                            <option value="grid">شبكة</option>
+                            <option value="list">قائمة</option>
+                            <option value="compact">مضغوط</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="compactMode">الوضع المضغوط</label>
+                        <label class="switch">
+                            <input type="checkbox" id="compactMode">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="animationsEnabled">تفعيل الرسوم المتحركة</label>
+                        <label class="switch">
+                            <input type="checkbox" id="animationsEnabled" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="highContrast">التباين العالي</label>
+                        <label class="switch">
+                            <input type="checkbox" id="highContrast">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="settings-actions">
+                    <button class="reset-settings-btn" onclick="app.resetCustomizations()">
+                        <i class="fas fa-undo"></i>
+                        إعادة تعيين التخصيصات
+                    </button>
+                </div>
             </div>
         </div>
         <div class="modal-overlay"></div>

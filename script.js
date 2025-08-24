@@ -181,7 +181,16 @@ class ArabicTVApp {
             volume: 80,
             theme: 'dark',
             showNewsTicker: false,
-            showCustomControls: true
+            showCustomControls: true,
+            // New customization settings
+            zoomLevel: 100, // 75% to 150%
+            colorTheme: 'default', // default, blue, green, purple, orange, red
+            layoutMode: 'grid', // grid, list, compact
+            fontSize: 'medium', // small, medium, large, xlarge
+            animationsEnabled: true,
+            compactMode: false,
+            highContrast: false,
+            borderRadius: 'normal' // minimal, normal, rounded
         };
         this.filteredChannels = [...this.channels];
         this.currentCategory = 'all';
@@ -333,6 +342,16 @@ class ArabicTVApp {
                 customControlsEl.checked = this.settings.showCustomControls;
                 console.log('أزرار التحكم المخصصة:', this.settings.showCustomControls);
             }
+
+            // Apply new customization settings
+            this.applyZoomLevel();
+            this.applyColorTheme();
+            this.applyLayoutMode();
+            this.applyFontSize();
+            this.applyAnimations();
+            this.applyCompactMode();
+            this.applyHighContrast();
+            this.applyBorderRadius();
             
             console.log('✅ تم تطبيق جميع الإعدادات بنجاح');
             
@@ -353,6 +372,93 @@ class ArabicTVApp {
         }
         
         console.log('تم تطبيق النمط:', this.settings.theme);
+    }
+
+    applyZoomLevel() {
+        const zoomLevel = this.settings.zoomLevel;
+        document.documentElement.style.setProperty('--zoom-level', `${zoomLevel}%`);
+        document.body.style.zoom = `${zoomLevel}%`;
+        
+        if (document.getElementById('zoomLevel')) {
+            document.getElementById('zoomLevel').value = zoomLevel;
+        }
+        if (document.getElementById('zoomValue')) {
+            document.getElementById('zoomValue').textContent = `${zoomLevel}%`;
+        }
+    }
+
+    applyColorTheme() {
+        const colorTheme = this.settings.colorTheme;
+        document.body.setAttribute('data-color-theme', colorTheme);
+        
+        if (document.getElementById('colorTheme')) {
+            document.getElementById('colorTheme').value = colorTheme;
+        }
+    }
+
+    applyLayoutMode() {
+        const layoutMode = this.settings.layoutMode;
+        document.body.setAttribute('data-layout', layoutMode);
+        
+        if (document.getElementById('layoutMode')) {
+            document.getElementById('layoutMode').value = layoutMode;
+        }
+        
+        // Update grid classes
+        const channelsGrid = document.getElementById('channelsGrid');
+        if (channelsGrid) {
+            channelsGrid.className = 'channels-grid';
+            if (layoutMode === 'list') {
+                channelsGrid.classList.add('list-layout');
+            } else if (layoutMode === 'compact') {
+                channelsGrid.classList.add('compact-layout');
+            }
+        }
+    }
+
+    applyFontSize() {
+        const fontSize = this.settings.fontSize;
+        document.body.setAttribute('data-font-size', fontSize);
+        
+        if (document.getElementById('fontSize')) {
+            document.getElementById('fontSize').value = fontSize;
+        }
+    }
+
+    applyAnimations() {
+        const animationsEnabled = this.settings.animationsEnabled;
+        document.body.classList.toggle('animations-disabled', !animationsEnabled);
+        
+        if (document.getElementById('animationsEnabled')) {
+            document.getElementById('animationsEnabled').checked = animationsEnabled;
+        }
+    }
+
+    applyCompactMode() {
+        const compactMode = this.settings.compactMode;
+        document.body.classList.toggle('compact-mode', compactMode);
+        
+        if (document.getElementById('compactMode')) {
+            document.getElementById('compactMode').checked = compactMode;
+        }
+    }
+
+    applyHighContrast() {
+        const highContrast = this.settings.highContrast;
+        document.body.classList.toggle('high-contrast', highContrast);
+        
+        if (document.getElementById('highContrast')) {
+            document.getElementById('highContrast').checked = highContrast;
+        }
+    }
+
+    applyBorderRadius() {
+        const borderRadius = this.settings.borderRadius;
+        document.body.setAttribute('data-border-radius', borderRadius);
+        
+        if (document.getElementById('borderRadius')) {
+            document.getElementById('borderRadius').value = borderRadius;
+        }
     }
 
     bindEvents() {
@@ -403,6 +509,79 @@ class ArabicTVApp {
             this.toggleCustomControls();
             console.log('تم تغيير أزرار التحكم المخصصة إلى:', e.target.checked);
         });
+
+        // New customization controls
+        const zoomLevelSlider = document.getElementById('zoomLevel');
+        if (zoomLevelSlider) {
+            zoomLevelSlider.addEventListener('input', (e) => {
+                this.settings.zoomLevel = parseInt(e.target.value);
+                this.saveSettings();
+                this.applyZoomLevel();
+            });
+        }
+
+        const colorThemeSelect = document.getElementById('colorTheme');
+        if (colorThemeSelect) {
+            colorThemeSelect.addEventListener('change', (e) => {
+                this.settings.colorTheme = e.target.value;
+                this.saveSettings();
+                this.applyColorTheme();
+            });
+        }
+
+        const layoutModeSelect = document.getElementById('layoutMode');
+        if (layoutModeSelect) {
+            layoutModeSelect.addEventListener('change', (e) => {
+                this.settings.layoutMode = e.target.value;
+                this.saveSettings();
+                this.applyLayoutMode();
+            });
+        }
+
+        const fontSizeSelect = document.getElementById('fontSize');
+        if (fontSizeSelect) {
+            fontSizeSelect.addEventListener('change', (e) => {
+                this.settings.fontSize = e.target.value;
+                this.saveSettings();
+                this.applyFontSize();
+            });
+        }
+
+        const animationsCheckbox = document.getElementById('animationsEnabled');
+        if (animationsCheckbox) {
+            animationsCheckbox.addEventListener('change', (e) => {
+                this.settings.animationsEnabled = e.target.checked;
+                this.saveSettings();
+                this.applyAnimations();
+            });
+        }
+
+        const compactModeCheckbox = document.getElementById('compactMode');
+        if (compactModeCheckbox) {
+            compactModeCheckbox.addEventListener('change', (e) => {
+                this.settings.compactMode = e.target.checked;
+                this.saveSettings();
+                this.applyCompactMode();
+            });
+        }
+
+        const highContrastCheckbox = document.getElementById('highContrast');
+        if (highContrastCheckbox) {
+            highContrastCheckbox.addEventListener('change', (e) => {
+                this.settings.highContrast = e.target.checked;
+                this.saveSettings();
+                this.applyHighContrast();
+            });
+        }
+
+        const borderRadiusSelect = document.getElementById('borderRadius');
+        if (borderRadiusSelect) {
+            borderRadiusSelect.addEventListener('change', (e) => {
+                this.settings.borderRadius = e.target.value;
+                this.saveSettings();
+                this.applyBorderRadius();
+            });
+        }
 
         // Admin panel events
         this.bindAdminEvents();
@@ -1689,6 +1868,24 @@ class ArabicTVApp {
             this.notifyError('خطأ في الاتصال: ' + error.message);
             return false;
         }
+    }
+
+    resetCustomizations() {
+        // Reset customization settings to defaults
+        this.settings.zoomLevel = 100;
+        this.settings.colorTheme = 'default';
+        this.settings.layoutMode = 'grid';
+        this.settings.fontSize = 'medium';
+        this.settings.animationsEnabled = true;
+        this.settings.compactMode = false;
+        this.settings.highContrast = false;
+        this.settings.borderRadius = 'normal';
+        
+        // Save and apply
+        this.saveSettings();
+        this.applySettings();
+        
+        this.notifySuccess('تم إعادة تعيين جميع التخصيصات!');
     }
 
     // Remote Storage UI Management
