@@ -1130,8 +1130,18 @@ class ArabicTVApp {
         // Reset form
         document.getElementById('addChannelForm').reset();
         
-        // Reset button text
-        document.querySelector('.add-btn').textContent = 'إضافة القناة';
+        // Reset button text and class
+        const submitBtn = document.querySelector('#addChannelForm button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.textContent = 'إضافة القناة';
+            submitBtn.className = 'add-btn';
+        }
+        
+        // Reset form title if it exists
+        const formTitle = document.querySelector('#addTab h5, #addTab .form-title');
+        if (formTitle) {
+            formTitle.textContent = 'إضافة قناة جديدة';
+        }
     }
 
     editChannel(id) {
@@ -3527,10 +3537,102 @@ class ArabicTVApp {
             <button class="favorite-btn ${favoritedClass}" onclick="app.toggleFavorite(${channel.id}, event)">
                 <i class="${heartClass}"></i>
             </button>
+            <div class="channel-actions">
+                <button class="channel-edit-btn" onclick="app.editChannel(${channel.id}, event)" title="تعديل القناة">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="channel-delete-btn" onclick="app.deleteChannel(${channel.id}, event)" title="حذف القناة">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
         `;
 
         card.addEventListener('click', () => this.playChannel(channel));
         return card;
+    }
+
+    // Edit Channel Function
+    editChannel(channelId, event) {
+        event.stopPropagation(); // Prevent triggering the card click
+        
+        const channel = this.channels.find(c => c.id === channelId);
+        if (!channel) return;
+        
+        // Open admin panel and switch to add channel tab
+        this.openAdminPanel();
+        
+        // Switch to add channel tab
+        setTimeout(() => {
+            const addTab = document.querySelector('[data-tab="add"]');
+            if (addTab) {
+                addTab.click();
+            }
+            
+            // Fill the form with channel data
+            document.getElementById('channelName').value = channel.name;
+            document.getElementById('channelUrl').value = channel.url;
+            document.getElementById('channelLogo').value = channel.logo;
+            document.getElementById('channelCategory').value = channel.category;
+            document.getElementById('channelCountry').value = channel.country;
+            
+            // Change form title and button text
+            const formTitle = document.querySelector('#addTab h5, #addTab .form-title');
+            if (formTitle) {
+                formTitle.textContent = 'تعديل القناة';
+            }
+            
+            const submitBtn = document.querySelector('#addChannelForm button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.textContent = 'حفظ التعديلات';
+                submitBtn.className = 'add-btn edit-mode';
+            }
+            
+            // Store the channel ID for editing
+            this.editingChannelId = channelId;
+            
+            // Show notification
+            this.showNotification('success', 'تم فتح نموذج التعديل', 'يمكنك الآن تعديل بيانات القناة');
+        }, 100);
+    }
+
+    // Delete Channel Function
+    deleteChannel(channelId, event) {
+        event.stopPropagation(); // Prevent triggering the card click
+        
+        const channel = this.channels.find(c => c.id === channelId);
+        if (!channel) return;
+        
+        // Show confirmation dialog
+        if (confirm(`هل أنت متأكد من حذف قناة "${channel.name}"؟\n\nهذا الإجراء لا يمكن التراجع عنه.`)) {
+            // Remove from favorites if favorited
+            if (this.favorites.has(channelId)) {
+                this.favorites.delete(channelId);
+                this.saveFavorites();
+            }
+            
+            // Remove from channels array
+            const channelIndex = this.channels.findIndex(c => c.id === channelId);
+            if (channelIndex !== -1) {
+                this.channels.splice(channelIndex, 1);
+            }
+            
+            // Update filtered channels
+            this.filteredChannels = this.channels.filter(channel => {
+                return this.matchesCurrentFilter(channel);
+            });
+            
+            // Save to localStorage
+            this.saveChannels();
+            
+            // Re-render channels
+            this.renderChannels();
+            
+            // Update channel count
+            this.updateChannelCount();
+            
+            // Show success notification
+            this.showNotification('success', 'تم حذف القناة', `تم حذف قناة "${channel.name}" بنجاح`);
+        }
     }
 
     // Mobile Dropdown Functions
