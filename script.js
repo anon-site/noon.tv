@@ -175,6 +175,7 @@ class ArabicTVApp {
 
         this.currentChannel = null;
         this.hls = null;
+        this.isPictureInPicture = false;
         this.settings = {
             autoQuality: true,
             autoplay: true,
@@ -231,6 +232,8 @@ class ArabicTVApp {
         this.bindEvents();
         this.bindRemoteStorageEvents();
         this.setupMobileSearch();
+        this.setupPictureInPictureEvents();
+        this.checkAndSetupPictureInPicture();
         
         // Attempt auto-sync if enabled
         if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
@@ -3617,21 +3620,181 @@ class ArabicTVApp {
             }
             
             // Update filtered channels
-            this.filteredChannels = this.channels.filter(channel => {
-                return this.matchesCurrentFilter(channel);
-            });
+            this.filteredChannels = [...this.channels];
             
             // Save to localStorage
-            this.saveChannels();
+            this.saveChannelsToStorage();
             
             // Re-render channels
             this.renderChannels();
-            
-            // Update channel count
-            this.updateChannelCount();
+            this.renderAdminChannels();
             
             // Show success notification
             this.showNotification('success', 'تم حذف القناة', `تم حذف قناة "${channel.name}" بنجاح`);
+        }
+    }
+
+    // Picture-in-Picture Functions
+    async togglePictureInPicture() {
+        const video = document.getElementById('videoPlayer');
+        if (!video) return;
+
+        // Check if Picture-in-Picture is supported
+        if (!this.checkPictureInPictureSupport()) {
+            this.showNotification('warning', 'غير مدعوم', 
+                'المتصفح الحالي لا يدعم خاصية Picture-in-Picture');
+            return;
+        }
+
+        try {
+            if (this.isPictureInPicture) {
+                // Exit Picture-in-Picture
+                await document.exitPictureInPicture();
+            } else {
+                // Check if video is playing
+                if (video.paused) {
+                    this.showNotification('info', 'ابدأ التشغيل أولاً', 
+                        'يجب تشغيل الفيديو قبل إخراجه خارج المتصفح');
+                    return;
+                }
+                
+                // Enter Picture-in-Picture
+                await video.requestPictureInPicture();
+            }
+        } catch (error) {
+            console.error('Picture-in-Picture error:', error);
+            
+            // Handle specific error cases
+            if (error.name === 'NotAllowedError') {
+                this.showNotification('error', 'تم رفض الطلب', 
+                    'يرجى السماح للموقع بإخراج الفيديو خارج المتصفح');
+            } else if (error.name === 'NotSupportedError') {
+                this.showNotification('error', 'غير مدعوم', 
+                    'المتصفح لا يدعم هذه الميزة');
+            } else {
+                this.showNotification('error', 'خطأ في Picture-in-Picture', 
+                    'حدث خطأ أثناء التفعيل: ' + error.message);
+            }
+        }
+    }
+
+    // Handle Picture-in-Picture events
+    setupPictureInPictureEvents() {
+        const video = document.getElementById('videoPlayer');
+        if (!video) return;
+
+        // Listen for Picture-in-Picture enter event
+        video.addEventListener('enterpictureinpicture', () => {
+            this.isPictureInPicture = true;
+            this.updatePictureInPictureButtons();
+            this.showNotification('success', 'تم تفعيل Picture-in-Picture', 
+                'يمكنك الآن مشاهدة الفيديو خارج المتصفح');
+            
+            // Optional: Keep modal open or close it based on user preference
+            // Uncomment the next line if you want to close the modal when entering PiP
+            // this.closeModal();
+        });
+
+        // Listen for Picture-in-Picture leave event
+        video.addEventListener('leavepictureinpicture', () => {
+            this.isPictureInPicture = false;
+            this.updatePictureInPictureButtons();
+            this.showNotification('info', 'تم إلغاء Picture-in-Picture', 
+                'تم إرجاع الفيديو إلى المتصفح');
+        });
+
+        // Listen for Picture-in-Picture error event
+        video.addEventListener('error', (event) => {
+            if (this.isPictureInPicture) {
+                console.error('Video error in Picture-in-Picture mode:', event);
+                this.showNotification('error', 'خطأ في الفيديو', 
+                    'حدث خطأ أثناء تشغيل الفيديو في وضع Picture-in-Picture');
+            }
+        });
+
+        // Listen for Picture-in-Picture change event (when window is resized)
+        video.addEventListener('resize', () => {
+            if (this.isPictureInPicture) {
+                console.log('Picture-in-Picture window resized');
+            }
+        });
+
+        // Listen for page visibility change (when user switches tabs)
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && this.isPictureInPicture) {
+                console.log('Page hidden while in Picture-in-Picture mode');
+            } else if (!document.hidden && this.isPictureInPicture) {
+                console.log('Page visible while in Picture-in-Picture mode');
+            }
+        });
+
+        // Listen for beforeunload event to handle cleanup
+        window.addEventListener('beforeunload', () => {
+            if (this.isPictureInPicture) {
+                // Try to exit Picture-in-Picture before page unload
+                if (document.pictureInPictureElement) {
+                    document.exitPictureInPicture().catch(console.error);
+                }
+            }
+        });
+
+        // Listen for focus events to handle Picture-in-Picture state
+        window.addEventListener('focus', () => {
+            if (this.isPictureInPicture) {
+                console.log('Window focused while in Picture-in-Picture mode');
+            }
+        });
+
+        window.addEventListener('blur', () => {
+            if (this.isPictureInPicture) {
+                console.log('Window blurred while in Picture-in-Picture mode');
+            }
+        });
+    }
+
+    // Update Picture-in-Picture button states
+    updatePictureInPictureButtons() {
+        const pipHeaderBtn = document.querySelector('.pip-btn');
+        
+        if (pipHeaderBtn) {
+            pipHeaderBtn.classList.toggle('pip-active', this.isPictureInPicture);
+        }
+    }
+
+    // Check Picture-in-Picture support
+    checkPictureInPictureSupport() {
+        const video = document.getElementById('videoPlayer');
+        if (!video) return false;
+
+        // Check for Picture-in-Picture API support
+        return (
+            'pictureInPictureEnabled' in document || 
+            'requestPictureInPicture' in video ||
+            (document.pictureInPictureElement !== undefined)
+        );
+    }
+
+    // Check and setup Picture-in-Picture support
+    checkAndSetupPictureInPicture() {
+        const isSupported = this.checkPictureInPictureSupport();
+        
+        if (!isSupported) {
+            // Hide Picture-in-Picture buttons if not supported
+            const pipHeaderBtn = document.querySelector('.pip-btn');
+            
+            if (pipHeaderBtn) {
+                pipHeaderBtn.style.display = 'none';
+            }
+            
+            console.log('Picture-in-Picture is not supported in this browser');
+            
+            // Show a helpful message for unsupported browsers
+            setTimeout(() => {
+                this.showNotification('info', 'ميزة غير مدعومة', 
+                    'Picture-in-Picture غير مدعوم في هذا المتصفح. يرجى استخدام Chrome, Firefox, أو Edge الحديث');
+            }, 3000);
+        } else {
+            console.log('Picture-in-Picture is supported in this browser');
         }
     }
 
@@ -3974,6 +4137,10 @@ function toggleQuality() {
 
 function toggleFullscreen() {
     app.toggleFullscreen();
+}
+
+function togglePictureInPicture() {
+    app.togglePictureInPicture();
 }
 
 function saveGeneralSettings() {

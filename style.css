@@ -1169,7 +1169,7 @@ body[data-theme="light"] .logo h1 {
     gap: 8px;
 }
 
-.quality-btn, .fullscreen-btn, .close-btn {
+.quality-btn, .pip-btn, .fullscreen-btn, .close-btn {
     background: transparent;
     color: var(--text-primary);
     border: 1px solid var(--border-color);
@@ -1183,9 +1183,28 @@ body[data-theme="light"] .logo h1 {
     font-family: inherit;
 }
 
-.quality-btn:hover, .fullscreen-btn:hover, .close-btn:hover {
+.quality-btn:hover, .pip-btn:hover, .fullscreen-btn:hover, .close-btn:hover {
     background: var(--highlight-color);
     border-color: var(--highlight-color);
+}
+
+/* Picture-in-Picture Button Specific Styles */
+.pip-btn {
+    position: relative;
+}
+
+.pip-btn.pip-active {
+    background: var(--highlight-color);
+    border-color: var(--highlight-color);
+    color: white;
+}
+
+.pip-btn.pip-active i::before {
+    content: "\f422"; /* fas fa-compress-arrows-alt */
+}
+
+.pip-btn:not(.pip-active) i::before {
+    content: "\f35d"; /* fas fa-external-link-alt */
 }
 
 /* Video Player Styles */
@@ -1263,6 +1282,7 @@ body[data-theme="light"] .logo h1 {
     position: relative;
     overflow: hidden;
 }
+
 
 .control-btn:hover {
     background: linear-gradient(135deg, var(--highlight-color), #ff6b6b);
@@ -2634,6 +2654,25 @@ body[data-theme="light"] .favorite-btn.favorited {
     color: white;
 }
 
+/* Light theme for Picture-in-Picture buttons */
+body[data-theme="light"] .pip-btn {
+    background: transparent;
+    color: #64748b;
+    border-color: #e2e8f0;
+}
+
+body[data-theme="light"] .pip-btn:hover {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+}
+
+body[data-theme="light"] .pip-btn.pip-active {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+}
+
 /* Light theme for channel actions */
 body[data-theme="light"] .channel-edit-btn,
 body[data-theme="light"] .channel-delete-btn {
@@ -2653,6 +2692,7 @@ body[data-theme="light"] .channel-delete-btn:hover {
     color: white;
     box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
+
 
 /* Light Theme for Header Elements */
 body[data-theme="light"] .header-search-input {
