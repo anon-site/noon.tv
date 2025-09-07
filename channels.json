@@ -239,6 +239,14 @@
       "logo": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-5/ee6b000cee0629411b666ab26cb13e9b/index.m3u8",
       "category": "entertainment",
       "country": "السعودية"
+    },
+    {
+      "id": 39,
+      "name": "MBC Action",
+      "url": "http://213.57.91.138:8000/play/a05l",
+      "logo": "http://213.57.91.138:8000/play/a05l",
+      "category": "entertainment",
+      "country": "السعودية"
     }
   ],
   "favorites": [],
@@ -295,6 +303,6 @@
       "icon": "fas fa-newspaper"
     }
   ],
-  "lastModified": "2025-09-07T18:49:42.556Z",
+  "lastModified": "2025-09-07T18:50:07.153Z",
   "version": "1.0"
 }
