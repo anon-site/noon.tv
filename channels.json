@@ -240,10 +240,10 @@
     "compactMode": true,
     "highContrast": false,
     "borderRadius": "rounded",
+    "showCustomControls": true,
     "notifications": false,
     "notificationSound": false,
-    "notificationDuration": 3,
-    "showCustomControls": true
+    "notificationDuration": 3
   },
   "categories": [
     {
@@ -275,13 +275,8 @@
       "key": "music",
       "name": "الموسيقى",
       "icon": "fas fa-music"
-    },
-    {
-      "key": "documentary",
-      "name": "الوثائقية",
-      "icon": "fas fa-newspaper"
     }
   ],
-  "lastModified": "2025-09-08T05:19:35.171Z",
+  "lastModified": "2025-09-08T06:43:56.211Z",
   "version": "1.0"
 }
