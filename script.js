@@ -866,6 +866,9 @@ class ArabicTVApp {
                     if (this.settings.autoplay) {
                         video.play().catch(console.error);
                     }
+                    
+                    // Initialize quality display
+                    this.updateQualityDisplayFromHLS();
                 });
 
                 this.hls.on(Hls.Events.ERROR, (event, data) => {
@@ -881,6 +884,11 @@ class ArabicTVApp {
                         this.hls.startLevel = -1; // Auto quality
                     });
                 }
+
+                // Listen for level changes to update quality display
+                this.hls.on(Hls.Events.LEVEL_SWITCHED, () => {
+                    this.updateQualityDisplayFromHLS();
+                });
 
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 // Native HLS support (Safari)
@@ -961,11 +969,13 @@ class ArabicTVApp {
             this.hls.currentLevel = levels.length - 1;
             qualityBtn.textContent = 'جودة البث';
             qualityBtn.title = `${levels[levels.length - 1].height}p`;
+            this.updateQualityDisplay(levels[levels.length - 1].height.toString());
         } else {
             // Switch to auto
             this.hls.currentLevel = -1;
             qualityBtn.textContent = 'جودة البث';
             qualityBtn.title = 'تلقائي';
+            this.updateQualityDisplay('auto');
         }
     }
 
@@ -3736,6 +3746,43 @@ class ArabicTVApp {
             // Keep the button text as "جودة البث" and show current quality in a tooltip or separate element
             qualityText.textContent = 'جودة البث';
             qualityText.title = quality === 'auto' ? 'تلقائي' : `${quality}p`;
+        }
+
+        // Update quality display in video player
+        this.updateQualityDisplay(quality);
+    }
+
+    // Update quality display in video player
+    updateQualityDisplay(quality) {
+        const qualityDisplay = document.getElementById('qualityDisplay');
+        const currentQualityText = document.getElementById('currentQualityText');
+        
+        if (qualityDisplay && currentQualityText) {
+            if (quality === 'auto') {
+                currentQualityText.textContent = 'تلقائي';
+            } else {
+                currentQualityText.textContent = `${quality}p`;
+            }
+            
+            // Show the quality display
+            qualityDisplay.style.display = 'flex';
+        }
+    }
+
+    // Update quality display based on current HLS level
+    updateQualityDisplayFromHLS() {
+        if (!this.hls || !this.hls.levels) return;
+        
+        const currentLevel = this.hls.currentLevel;
+        const levels = this.hls.levels;
+        
+        if (currentLevel === -1) {
+            // Auto quality
+            this.updateQualityDisplay('auto');
+        } else if (currentLevel >= 0 && currentLevel < levels.length) {
+            // Specific quality
+            const height = levels[currentLevel].height;
+            this.updateQualityDisplay(height.toString());
         }
     }
 
