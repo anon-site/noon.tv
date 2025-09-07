@@ -957,11 +957,13 @@ class ArabicTVApp {
         if (this.hls.currentLevel === -1) {
             // Switch to highest quality
             this.hls.currentLevel = levels.length - 1;
-            qualityBtn.textContent = `${levels[levels.length - 1].height}p`;
+            qualityBtn.textContent = 'جودة البث';
+            qualityBtn.title = `${levels[levels.length - 1].height}p`;
         } else {
             // Switch to auto
             this.hls.currentLevel = -1;
-            qualityBtn.textContent = 'تلقائي';
+            qualityBtn.textContent = 'جودة البث';
+            qualityBtn.title = 'تلقائي';
         }
     }
 
@@ -2864,11 +2866,9 @@ class ArabicTVApp {
         // Update quality text in header
         const qualityText = document.getElementById('qualityText');
         if (qualityText) {
-            if (quality === 'auto') {
-                qualityText.textContent = 'تلقائي';
-            } else {
-                qualityText.textContent = `${quality}p`;
-            }
+            // Keep the button text as "جودة البث" and show current quality in a tooltip or separate element
+            qualityText.textContent = 'جودة البث';
+            qualityText.title = quality === 'auto' ? 'تلقائي' : `${quality}p`;
         }
     }
 
@@ -4109,6 +4109,10 @@ document.addEventListener('DOMContentLoaded', function() {
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new ArabicTVApp();
+    // Initialize quality menu
+    if (window.app && window.app.initQualityMenu) {
+        window.app.initQualityMenu();
+    }
 });
 
 // Service Worker for offline functionality

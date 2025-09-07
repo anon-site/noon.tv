@@ -1475,8 +1475,25 @@ body[data-theme="light"] .logo h1 {
 
 /* Settings Modal */
 .settings-content {
-    width: 500px;
-    max-height: 600px;
+    width: 700px;
+    max-height: 750px;
+    box-shadow: none !important;
+    animation: none !important;
+    transition: none !important;
+}
+
+/* Remove effects from settings modal overlay */
+#settingsModal .modal-overlay {
+    backdrop-filter: none !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Remove effects from settings modal content */
+#settingsModal .modal-content {
+    box-shadow: none !important;
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
 }
 
 .settings-body {
@@ -4203,6 +4220,7 @@ body[data-theme="light"].high-contrast {
     
     .settings-content {
         width: 95vw;
+        max-width: 600px;
     }
     
     .admin-content {
