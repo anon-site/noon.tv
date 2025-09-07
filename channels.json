@@ -225,14 +225,6 @@
       "country": "السعودية"
     },
     {
-      "id": 42,
-      "name": "National Geographic",
-      "url": "http://213.57.91.138:8000/play/a05a",
-      "logo": "http://213.57.91.138:8000/play/a05a",
-      "category": "documentary",
-      "country": "الإمارات"
-    },
-    {
       "id": 43,
       "name": "الإستقامة",
       "url": "https://jmc-live.ercdn.net/alistiqama/alistiqama.m3u8",
@@ -293,6 +285,6 @@
       "icon": "fas fa-music"
     }
   ],
-  "lastModified": "2025-09-07T21:16:53.669Z",
+  "lastModified": "2025-09-07T21:17:04.905Z",
   "version": "1.0"
 }
