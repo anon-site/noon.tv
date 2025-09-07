@@ -211,7 +211,7 @@
     {
       "id": 44,
       "name": "تجرية",
-      "url": "https://cdn-globecast.akamaized.net/live/eds/saudi_quran/hls_roku/index.m3u8",
+      "url": "https://streamer3.premio.link/alqamar/playlist.m3u8",
       "logo": "https://cdn-globecast.akamaized.net/live/eds/2m_monde/hls_video_ts_tuhawxpiemz257adfc/2m_monde.m3u8",
       "category": "news",
       "country": "العراق"
@@ -274,6 +274,6 @@
       "icon": "fas fa-newspaper"
     }
   ],
-  "lastModified": "2025-09-08T05:10:38.826Z",
+  "lastModified": "2025-09-08T05:11:04.329Z",
   "version": "1.0"
 }
