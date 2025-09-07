@@ -183,6 +183,14 @@
       "logo": "https://upload.wikimedia.org/wikipedia/ar/thumb/b/bb/AlsumariatvLogo.jpg/330px-AlsumariatvLogo.jpg",
       "category": "entertainment",
       "country": "العراق"
+    },
+    {
+      "id": 32,
+      "name": "السنة النبوية",
+      "url": "https://cdn-globecast.akamaized.net/live/eds/saudi_sunnah/hls_roku/index.m3u8",
+      "logo": "https://pbs.twimg.com/media/EmmsIRzXMAEVNSi.jpg",
+      "category": "religious",
+      "country": "السعودية"
     }
   ],
   "favorites": [],
@@ -239,6 +247,6 @@
       "icon": "fas fa-newspaper"
     }
   ],
-  "lastModified": "2025-09-07T18:33:31.037Z",
+  "lastModified": "2025-09-07T18:41:01.974Z",
   "version": "1.0"
 }
