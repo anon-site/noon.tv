@@ -209,14 +209,6 @@
       "country": "السعودية"
     },
     {
-      "id": 40,
-      "name": "MBC Iraq",
-      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-iraq/e38c44b1b43474e1c39cb5b90203691e/index.m3u8",
-      "logo": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-iraq/e38c44b1b43474e1c39cb5b90203691e/index.m3u8",
-      "category": "entertainment",
-      "country": "السعودية"
-    },
-    {
       "id": 43,
       "name": "الإستقامة",
       "url": "https://jmc-live.ercdn.net/alistiqama/alistiqama.m3u8",
@@ -277,6 +269,6 @@
       "icon": "fas fa-music"
     }
   ],
-  "lastModified": "2025-09-07T21:17:10.365Z",
+  "lastModified": "2025-09-07T21:17:12.677Z",
   "version": "1.0"
 }
