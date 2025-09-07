@@ -145,14 +145,6 @@
       "country": "سورية"
     },
     {
-      "id": 27,
-      "name": "لنا سورية",
-      "url": "https://games1.elahmad.xyz/tv753_www.elahmad.com_lana_syria/index.m3u8?token=5e517282c3f486d7f8c8bdb17f69720f24924f26-a91ee178003a980893fb92ca16995011-1757190041-1757179241",
-      "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGIFIP3-1NLtmkesGoujJ1fpfVzVJ9Og622Q&s",
-      "category": "entertainment",
-      "country": "سورية"
-    },
-    {
       "id": 28,
       "name": "فلسطين",
       "url": "https://pbc.furrera.ps/palestinehd/index.m3u8?v=6db2fbd3",
@@ -207,70 +199,6 @@
       "logo": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv2/playlist.m3u8",
       "category": "religious",
       "country": "السعودية"
-    },
-    {
-      "id": 35,
-      "name": "MBC 1",
-      "url": "https://mbc1-enc.edgenextcdn.net/out/v1/0965e4d7deae49179172426cbfb3bc5e/index.m3u8",
-      "logo": "https://mbc1-enc.edgenextcdn.net/out/v1/0965e4d7deae49179172426cbfb3bc5e/index.m3u8",
-      "category": "entertainment",
-      "country": "السعودية"
-    },
-    {
-      "id": 36,
-      "name": "MBC 2",
-      "url": "http://213.57.91.138:8000/play/a05k",
-      "logo": "http://213.57.91.138:8000/play/a05k",
-      "category": "entertainment",
-      "country": "السعودية"
-    },
-    {
-      "id": 37,
-      "name": "MBC 4",
-      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-4/24f134f1cd63db9346439e96b86ca6ed/index.m3u8",
-      "logo": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-4/24f134f1cd63db9346439e96b86ca6ed/index.m3u8",
-      "category": "entertainment",
-      "country": "السعودية"
-    },
-    {
-      "id": 38,
-      "name": "MBC 5",
-      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-5/ee6b000cee0629411b666ab26cb13e9b/index.m3u8",
-      "logo": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-5/ee6b000cee0629411b666ab26cb13e9b/index.m3u8",
-      "category": "entertainment",
-      "country": "السعودية"
-    },
-    {
-      "id": 39,
-      "name": "MBC Action",
-      "url": "http://213.57.91.138:8000/play/a05l",
-      "logo": "http://213.57.91.138:8000/play/a05l",
-      "category": "entertainment",
-      "country": "السعودية"
-    },
-    {
-      "id": 40,
-      "name": "MBC Iraq",
-      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-iraq/e38c44b1b43474e1c39cb5b90203691e/index.m3u8",
-      "logo": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-iraq/e38c44b1b43474e1c39cb5b90203691e/index.m3u8",
-      "category": "entertainment",
-      "country": "السعودية"
-    },
-    {
-      "id": 41,
-      "name": "MBC+ Drama",
-      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-plus-drama/e37251ec2aac8f6c98f75cd0fa37cd28/index.m3u8",
-      "logo": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-plus-drama/e37251ec2aac8f6c98f75cd0fa37cd28/index.m3u8",
-      "category": "entertainment",
-      "country": "السعودية"
-    },
-    {
-      "id": 42,
-      "name": "National Geographic",
-      "url": "http://213.57.91.138:8000/play/a05a",
-      "logo": "http://213.57.91.138:8000/play/a05a",
-      "category": "documentary",
-      "country": "الإمارات"
     },
     {
       "id": 43,
@@ -330,6 +258,6 @@
       "icon": "fas fa-music"
     }
   ],
-  "lastModified": "2025-09-08T04:30:32.776Z",
+  "lastModified": "2025-09-08T04:31:03.455Z",
   "version": "1.0"
 }
