@@ -70,7 +70,7 @@
       "url": "https://alarabyta.cdn.octivid.com/alaraby/smil:alaraby.stream.smil/chunklist.m3u8",
       "logo": "https://www.alaraby.com/themes/custom/arabytv/logo.png",
       "category": "news",
-      "country": "Qatar"
+      "country": "قطر"
     },
     {
       "id": 15,
@@ -78,12 +78,12 @@
       "url": "https://alarabyta.cdn.octivid.com/alaraby2n/smil:alaraby2n.stream.smil/chunklist.m3u8",
       "logo": "https://media0084.elcinema.com/tvguide/1382_1.png",
       "category": "entertainment",
-      "country": "Qatar"
+      "country": "قطر"
     },
     {
       "id": 16,
       "name": "Al Jadeed",
-      "url": "http://185.9.2.18/chid_391/mono.m3u8",
+      "url": "https://185.9.2.18/chid_391/mono.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Al_Jadeed_TV_LOGO_2018.jpg",
       "category": "entertainment",
       "country": "لبنان"
@@ -145,14 +145,6 @@
       "country": "سورية"
     },
     {
-      "id": 27,
-      "name": "لنا سورية",
-      "url": "https://games1.elahmad.xyz/tv753_www.elahmad.com_lana_syria/index.m3u8?token=5e517282c3f486d7f8c8bdb17f69720f24924f26-a91ee178003a980893fb92ca16995011-1757190041-1757179241",
-      "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGIFIP3-1NLtmkesGoujJ1fpfVzVJ9Og622Q&s",
-      "category": "entertainment",
-      "country": "سورية"
-    },
-    {
       "id": 28,
       "name": "فلسطين",
       "url": "https://pbc.furrera.ps/palestinehd/index.m3u8?v=6db2fbd3",
@@ -163,7 +155,7 @@
     {
       "id": 29,
       "name": "الأقصى",
-      "url": "http://167.172.161.13/hls/feedspare/6udfi7v8a3eof6nlps6e9ovfrs65c7l7.m3u8",
+      "url": "https://167.172.161.13/hls/feedspare/6udfi7v8a3eof6nlps6e9ovfrs65c7l7.m3u8",
       "logo": "https://felesteen.news/thumb/w920/uploads/images/2021/05/ldelg.png",
       "category": "news",
       "country": "فلسطين"
@@ -196,7 +188,7 @@
       "id": 33,
       "name": "إقرأ",
       "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv3/playlist.m3u8",
-      "logo": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv3/playlist.m3u8",
+      "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcF88fNlvQcVAGMTDMw4rpE3_ov4mD_QM2AUQtoImvIvQmvjmcYVMr8x-0du56pZZw158&usqp=CAU",
       "category": "religious",
       "country": "السعودية"
     },
@@ -204,7 +196,7 @@
       "id": 34,
       "name": "إقرأ قرآن",
       "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv2/playlist.m3u8",
-      "logo": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv2/playlist.m3u8",
+      "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSN2OWFmtKMWWlavNdQD0SJkpXJ5pp8E9hu3A&s",
       "category": "religious",
       "country": "السعودية"
     },
@@ -215,14 +207,6 @@
       "logo": "https://www.istiqama.tv/wp-content/uploads/2024/05/Logo-e1715111491262.png",
       "category": "religious",
       "country": "عُمان"
-    },
-    {
-      "id": 44,
-      "name": "القرآن الكريم",
-      "url": "https://ktvlive.online/stream/hls/ch1.m3u8",
-      "logo": "https://ktvlive.online/stream/hls/ch1.m3u8",
-      "category": "religious",
-      "country": "العراق"
     }
   ],
   "favorites": [],
@@ -282,6 +266,6 @@
       "icon": "fas fa-newspaper"
     }
   ],
-  "lastModified": "2025-09-07T21:22:26.591Z",
+  "lastModified": "2025-09-07T21:25:46.501Z",
   "version": "1.0"
 }
