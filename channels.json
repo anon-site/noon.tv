@@ -145,14 +145,6 @@
       "country": "سورية"
     },
     {
-      "id": 27,
-      "name": "لنا سورية",
-      "url": "https://games1.elahmad.xyz/tv753_www.elahmad.com_lana_syria/index.m3u8?token=5e517282c3f486d7f8c8bdb17f69720f24924f26-a91ee178003a980893fb92ca16995011-1757190041-1757179241",
-      "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGIFIP3-1NLtmkesGoujJ1fpfVzVJ9Og622Q&s",
-      "category": "entertainment",
-      "country": "سورية"
-    },
-    {
       "id": 28,
       "name": "فلسطين",
       "url": "https://pbc.furrera.ps/palestinehd/index.m3u8?v=6db2fbd3",
@@ -282,6 +274,6 @@
       "icon": "fas fa-newspaper"
     }
   ],
-  "lastModified": "2025-09-07T21:23:02.698Z",
+  "lastModified": "2025-09-07T21:25:46.501Z",
   "version": "1.0"
 }
