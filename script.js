@@ -182,7 +182,6 @@ class ArabicTVApp {
             volume: 80,
             theme: 'dark',
             showNewsTicker: false,
-            showCustomControls: true,
             // New customization settings
             zoomLevel: 100, // 75% to 150%
             colorTheme: 'default', // default, blue, green, purple, orange, red
@@ -506,12 +505,6 @@ class ArabicTVApp {
             console.log('تم تغيير النمط إلى:', e.target.value);
         });
 
-        document.getElementById('showCustomControls').addEventListener('change', (e) => {
-            this.settings.showCustomControls = e.target.checked;
-            this.saveSettings();
-            this.toggleCustomControls();
-            console.log('تم تغيير أزرار التحكم المخصصة إلى:', e.target.checked);
-        });
 
         // New customization controls
         const zoomLevelSlider = document.getElementById('zoomLevel');
@@ -823,14 +816,8 @@ class ArabicTVApp {
         //     this.showTimeDisplay();
         // }
         
-        // Initialize custom video controls if enabled
-        if (this.settings.showCustomControls) {
-            this.initVideoControls();
-        } else {
-            // Use default video controls
-            document.getElementById('videoPlayer').controls = true;
-            document.getElementById('videoControls').style.display = 'none';
-        }
+        // Use default video controls
+        document.getElementById('videoPlayer').controls = true;
     }
 
     async loadVideoStream(url) {
@@ -2780,168 +2767,6 @@ class ArabicTVApp {
         // Channel logo overlay is now hidden
     }
 
-    // Initialize custom video controls
-    initVideoControls() {
-        const video = document.getElementById('videoPlayer');
-        const playPauseBtn = document.getElementById('playPauseBtn');
-        const muteBtn = document.getElementById('muteBtn');
-        const volumeSlider = document.getElementById('volumeSliderControl');
-        const progressContainer = document.getElementById('progressContainer');
-        const progressBar = document.getElementById('progressBar');
-        const currentTimeSpan = document.getElementById('currentTime');
-        const qualityBtn = document.getElementById('qualityControlBtn');
-        const fullscreenBtn = document.getElementById('fullscreenControlBtn');
-        const videoControls = document.getElementById('videoControls');
-
-        // Show custom controls and hide default controls
-        video.controls = false;
-        videoControls.style.display = 'flex';
-
-        // Set initial volume
-        volumeSlider.value = this.settings.volume;
-        video.volume = this.settings.volume / 100;
-
-        // Play/Pause functionality
-        playPauseBtn.addEventListener('click', () => {
-            if (video.paused) {
-                video.play();
-                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-            } else {
-                video.pause();
-                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-            }
-        });
-
-        // Mute functionality
-        muteBtn.addEventListener('click', () => {
-            if (video.muted) {
-                video.muted = false;
-                muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-                volumeSlider.value = this.settings.volume;
-            } else {
-                video.muted = true;
-                muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-                volumeSlider.value = 0;
-            }
-        });
-
-        // Volume control
-        volumeSlider.addEventListener('input', (e) => {
-            const volume = e.target.value / 100;
-            video.volume = volume;
-            video.muted = false;
-            
-            if (volume === 0) {
-                muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-            } else if (volume < 0.5) {
-                muteBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
-            } else {
-                muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-            }
-            
-            // Save volume setting
-            this.settings.volume = e.target.value;
-            this.saveSettings();
-        });
-
-        // Progress bar (for live streams, this will be minimal)
-        video.addEventListener('timeupdate', () => {
-            if (video.duration && !isNaN(video.duration) && video.duration !== Infinity) {
-                const progress = (video.currentTime / video.duration) * 100;
-                progressBar.style.width = progress + '%';
-                
-                const currentMinutes = Math.floor(video.currentTime / 60);
-                const currentSeconds = Math.floor(video.currentTime % 60);
-                currentTimeSpan.textContent = `${currentMinutes.toString().padStart(2, '0')}:${currentSeconds.toString().padStart(2, '0')}`;
-            } else {
-                // Live stream
-                progressBar.style.width = '100%';
-                currentTimeSpan.textContent = '';
-            }
-        });
-
-        // Quality control
-        qualityBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.toggleQualityMenu();
-        });
-
-        // Quality menu options
-        this.initQualityMenu();
-
-        // Fullscreen control
-        fullscreenBtn.addEventListener('click', () => {
-            this.toggleFullscreen();
-        });
-
-        // Video events
-        video.addEventListener('play', () => {
-            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-        });
-
-        video.addEventListener('pause', () => {
-            playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-        });
-
-        video.addEventListener('loadstart', () => {
-            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-        });
-
-        // Auto-hide controls after 3 seconds of no movement (desktop only)
-        let controlsTimeout;
-        const videoContainer = document.querySelector('.video-container');
-        
-        const showControls = () => {
-            videoControls.style.opacity = '1';
-            clearTimeout(controlsTimeout);
-            
-            // Don't auto-hide on mobile
-            if (window.innerWidth > 768) {
-                controlsTimeout = setTimeout(() => {
-                    if (!videoContainer.matches(':hover')) {
-                        videoControls.style.opacity = '0';
-                    }
-                }, 3000);
-            }
-        };
-
-        // Only add auto-hide on desktop
-        if (window.innerWidth > 768) {
-            videoContainer.addEventListener('mousemove', showControls);
-            videoContainer.addEventListener('mouseenter', () => {
-                clearTimeout(controlsTimeout);
-                videoControls.style.opacity = '1';
-            });
-            videoContainer.addEventListener('mouseleave', () => {
-                controlsTimeout = setTimeout(() => {
-                    videoControls.style.opacity = '0';
-                }, 3000);
-            });
-        } else {
-            // Always visible on mobile
-            videoControls.style.opacity = '1';
-        }
-        
-        // Touch events for mobile
-        videoContainer.addEventListener('touchstart', showControls);
-    }
-
-    // Toggle custom controls
-    toggleCustomControls() {
-        const video = document.getElementById('videoPlayer');
-        const customControls = document.getElementById('videoControls');
-        
-        if (this.settings.showCustomControls) {
-            video.controls = false;
-            customControls.style.display = 'flex';
-            if (this.currentChannel) {
-                this.initVideoControls();
-            }
-        } else {
-            video.controls = true;
-            customControls.style.display = 'none';
-        }
-    }
 
     // Initialize quality menu
     initQualityMenu() {
@@ -2957,8 +2782,10 @@ class ArabicTVApp {
         });
 
         // Close menu when clicking outside
-        document.addEventListener('click', () => {
-            this.hideQualityMenu();
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.quality-control-container')) {
+                this.hideQualityMenu();
+            }
         });
     }
 
@@ -2977,7 +2804,9 @@ class ArabicTVApp {
     // Show quality menu
     showQualityMenu() {
         const qualityMenu = document.getElementById('qualityMenu');
+        const qualityBtn = document.querySelector('.quality-btn');
         qualityMenu.classList.add('show');
+        qualityBtn.classList.add('open');
         
         // Update available qualities based on current stream
         this.updateAvailableQualities();
@@ -2986,7 +2815,9 @@ class ArabicTVApp {
     // Hide quality menu
     hideQualityMenu() {
         const qualityMenu = document.getElementById('qualityMenu');
+        const qualityBtn = document.querySelector('.quality-btn');
         qualityMenu.classList.remove('show');
+        qualityBtn.classList.remove('open');
     }
 
     // Set video quality
@@ -4133,6 +3964,10 @@ function closeModal() {
 
 function toggleQuality() {
     app.toggleQuality();
+}
+
+function toggleQualityMenu() {
+    app.toggleQualityMenu();
 }
 
 function toggleFullscreen() {

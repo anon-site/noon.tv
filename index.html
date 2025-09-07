@@ -217,50 +217,11 @@
             <div class="modal-header">
                 <h3 id="channelTitle">قناة</h3>
                 <div class="modal-controls">
-                    <button class="quality-btn" onclick="toggleQuality()">
-                        <i class="fas fa-video"></i>
-                        <span id="qualityText">تلقائي</span>
-                    </button>
-                    <button class="pip-btn" onclick="togglePictureInPicture()" title="إخراج الشاشة خارج المتصفح">
-                        <i class="fas fa-external-link-alt"></i>
-                    </button>
-                    <button class="fullscreen-btn" onclick="toggleFullscreen()">
-                        <i class="fas fa-expand"></i>
-                    </button>
-                    <button class="close-btn" onclick="closeModal()">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="video-container">
-                <video id="videoPlayer" controls autoplay>
-                    <source id="videoSource" src="" type="application/x-mpegURL">
-                    متصفحك لا يدعم تشغيل الفيديو
-                </video>
-                <div class="video-loading" id="videoLoading">
-                    <div class="spinner"></div>
-                    <p>جارٍ تحميل البث...</p>
-                </div>
-                <!-- Custom Video Controls -->
-                <div class="video-controls-overlay" id="videoControls">
-                    <button class="control-btn play-pause" id="playPauseBtn">
-                        <i class="fas fa-pause"></i>
-                    </button>
-                    <button class="control-btn" id="muteBtn">
-                        <i class="fas fa-volume-up"></i>
-                    </button>
-                    <div class="volume-container">
-                        <input type="range" class="volume-slider-control" id="volumeSliderControl" min="0" max="100" value="80">
-                    </div>
-                    <div class="progress-container" id="progressContainer">
-                        <div class="progress-bar" id="progressBar"></div>
-                    </div>
-                    <div class="time-info" id="timeInfo" style="display: none;">
-                        <span id="currentTime">00:00</span> / <span id="duration"></span>
-                    </div>
                     <div class="quality-control-container">
-                        <button class="control-btn" id="qualityControlBtn">
-                            <i class="fas fa-cog"></i>
+                        <button class="quality-btn" onclick="toggleQualityMenu()">
+                            <i class="fas fa-video"></i>
+                            <span id="qualityText">تلقائي</span>
+                            <i class="fas fa-chevron-down"></i>
                         </button>
                         <div class="quality-menu" id="qualityMenu">
                             <div class="quality-option active" data-quality="auto">
@@ -290,9 +251,25 @@
                             </div>
                         </div>
                     </div>
-                    <button class="control-btn" id="fullscreenControlBtn">
+                    <button class="pip-btn" onclick="togglePictureInPicture()" title="إخراج الشاشة خارج المتصفح">
+                        <i class="fas fa-external-link-alt"></i>
+                    </button>
+                    <button class="fullscreen-btn" onclick="toggleFullscreen()">
                         <i class="fas fa-expand"></i>
                     </button>
+                    <button class="close-btn" onclick="closeModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="video-container">
+                <video id="videoPlayer" controls autoplay>
+                    <source id="videoSource" src="" type="application/x-mpegURL">
+                    متصفحك لا يدعم تشغيل الفيديو
+                </video>
+                <div class="video-loading" id="videoLoading">
+                    <div class="spinner"></div>
+                    <p>جارٍ تحميل البث...</p>
                 </div>
                 <!-- News Ticker -->
                 <div class="news-ticker" id="newsTicker">
@@ -345,13 +322,6 @@
                     </label>
                 </div>
 
-                <div class="setting-item">
-                    <label for="showCustomControls">أزرار التحكم المخصصة</label>
-                    <label class="switch">
-                        <input type="checkbox" id="showCustomControls" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
                 <div class="setting-item">
                     <label for="volume">مستوى الصوت</label>
                     <input type="range" id="volume" min="0" max="100" value="80" class="volume-slider">
@@ -760,3 +730,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+
