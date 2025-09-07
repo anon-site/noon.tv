@@ -1135,8 +1135,12 @@ class ArabicTVApp {
         // Clear editing state
         this.editingChannelId = null;
         
-        // Reset form
-        document.getElementById('addChannelForm').reset();
+        // Clear all form fields manually instead of using reset()
+        document.getElementById('channelName').value = '';
+        document.getElementById('channelUrl').value = '';
+        document.getElementById('channelLogo').value = '';
+        document.getElementById('channelCategory').value = '';
+        document.getElementById('channelCountry').value = '';
         
         // Reset button text and class
         const submitBtn = document.querySelector('#addChannelForm button[type="submit"]');
