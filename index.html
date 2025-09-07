@@ -217,6 +217,11 @@
             <div class="modal-header">
                 <h3 id="channelTitle">قناة</h3>
                 <div class="modal-controls">
+                    <!-- Quality Display -->
+                    <div class="quality-display" id="qualityDisplay">
+                        <i class="fas fa-video"></i>
+                        <span id="currentQualityText">تلقائي</span>
+                    </div>
                     <div class="quality-control-container">
                         <button class="quality-btn" onclick="toggleQualityMenu()">
                             <i class="fas fa-video"></i>
@@ -291,11 +296,6 @@
                 <div class="live-indicator">
                     <span class="live-dot"></span>
                     مباشر
-                </div>
-                <!-- Quality Display -->
-                <div class="quality-display" id="qualityDisplay">
-                    <i class="fas fa-video"></i>
-                    <span id="currentQualityText">تلقائي</span>
                 </div>
             </div>
         </div>
