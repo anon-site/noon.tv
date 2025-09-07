@@ -271,6 +271,14 @@
       "logo": "http://213.57.91.138:8000/play/a05a",
       "category": "documentary",
       "country": "الإمارات"
+    },
+    {
+      "id": 43,
+      "name": "الإستقامة",
+      "url": "https://jmc-live.ercdn.net/alistiqama/alistiqama_576p.m3u8",
+      "logo": "https://jmc-live.ercdn.net/alistiqama/alistiqama_576p.m3u8",
+      "category": "religious",
+      "country": "عُمان"
     }
   ],
   "favorites": [],
@@ -323,13 +331,8 @@
       "key": "music",
       "name": "الموسيقى",
       "icon": "fas fa-music"
-    },
-    {
-      "key": "documentary",
-      "name": "الوثائقية",
-      "icon": "fas fa-newspaper"
     }
   ],
-  "lastModified": "2025-09-07T21:04:15.749Z",
+  "lastModified": "2025-09-07T21:12:01.487Z",
   "version": "1.0"
 }
