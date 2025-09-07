@@ -255,6 +255,14 @@
       "logo": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-iraq/e38c44b1b43474e1c39cb5b90203691e/index.m3u8",
       "category": "entertainment",
       "country": "السعودية"
+    },
+    {
+      "id": 41,
+      "name": "MBC+ Drama",
+      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-plus-drama/e37251ec2aac8f6c98f75cd0fa37cd28/index.m3u8",
+      "logo": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-plus-drama/e37251ec2aac8f6c98f75cd0fa37cd28/index.m3u8",
+      "category": "entertainment",
+      "country": "السعودية"
     }
   ],
   "favorites": [],
@@ -311,6 +319,6 @@
       "icon": "fas fa-newspaper"
     }
   ],
-  "lastModified": "2025-09-07T18:51:27.359Z",
+  "lastModified": "2025-09-07T18:52:01.853Z",
   "version": "1.0"
 }
