@@ -1274,7 +1274,6 @@ class ArabicTVApp {
     saveGeneralSettings() {
         const appTitle = document.getElementById('appTitle').value;
         const maxChannels = document.getElementById('maxChannels').value;
-        const enableAnalytics = document.getElementById('enableAnalytics').checked;
 
         // Update page title
         document.title = appTitle;
@@ -1282,8 +1281,7 @@ class ArabicTVApp {
 
         const generalSettings = {
             appTitle,
-            maxChannels: parseInt(maxChannels),
-            enableAnalytics
+            maxChannels: parseInt(maxChannels)
         };
 
         localStorage.setItem('arabicTVGeneralSettings', JSON.stringify(generalSettings));
