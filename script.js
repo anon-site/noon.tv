@@ -185,12 +185,12 @@ class ArabicTVApp {
             // New customization settings
             zoomLevel: 100, // 75% to 150%
             colorTheme: 'default', // default, blue, green, purple, orange, red
-            layoutMode: 'grid', // grid, list, compact
-            fontSize: 'medium', // small, medium, large, xlarge
+            layoutMode: 'compact', // grid, list, compact
+            fontSize: 'small', // small, medium, large, xlarge
             animationsEnabled: true,
-            compactMode: false,
+            compactMode: true,
             highContrast: false,
-            borderRadius: 'normal' // minimal, normal, rounded
+            borderRadius: 'rounded' // minimal, normal, rounded
         };
         this.filteredChannels = [...this.channels];
         this.currentCategory = 'all';
@@ -1876,12 +1876,12 @@ class ArabicTVApp {
         // Reset customization settings to defaults
         this.settings.zoomLevel = 100;
         this.settings.colorTheme = 'default';
-        this.settings.layoutMode = 'grid';
-        this.settings.fontSize = 'medium';
+        this.settings.layoutMode = 'compact';
+        this.settings.fontSize = 'small';
         this.settings.animationsEnabled = true;
-        this.settings.compactMode = false;
+        this.settings.compactMode = true;
         this.settings.highContrast = false;
-        this.settings.borderRadius = 'normal';
+        this.settings.borderRadius = 'rounded';
         
         // Save and apply
         this.saveSettings();
