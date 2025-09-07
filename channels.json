@@ -1,6 +1,4 @@
 {
-  "version": "1.0",
-  "timestamp": "2025-09-08T05:17:19.934Z",
   "channels": [
     {
       "id": 3,
@@ -284,18 +282,6 @@
       "icon": "fas fa-newspaper"
     }
   ],
-  "remoteStorage": {
-    "enabled": true,
-    "provider": "github",
-    "repository": "anon-site/TV-AR",
-    "branch": "main",
-    "filename": "channels.json",
-    "autoSync": true,
-    "lastSync": "2025-09-08T05:17:02.418Z"
-  },
-  "generalSettings": {
-    "appTitle": "القنوات الفضائية العربية",
-    "maxChannels": 100,
-    "enableAnalytics": false
-  }
+  "lastModified": "2025-09-08T05:19:35.171Z",
+  "version": "1.0"
 }
