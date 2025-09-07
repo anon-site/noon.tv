@@ -211,7 +211,7 @@
     {
       "id": 44,
       "name": "تجرية",
-      "url": "https://cdn.live.easybroadcast.io/abr_corp/73_almaghribia_83tz85q/corp/73_almaghribia_83tz85q_480p/chunks_dvr.m3u8",
+      "url": "https://streaming.zaytonatube.com:8081/AlMadinatv/almadina21/index.m3u8",
       "logo": "https://cdn-globecast.akamaized.net/live/eds/2m_monde/hls_video_ts_tuhawxpiemz257adfc/2m_monde.m3u8",
       "category": "news",
       "country": "العراق"
@@ -274,6 +274,6 @@
       "icon": "fas fa-newspaper"
     }
   ],
-  "lastModified": "2025-09-08T05:11:44.409Z",
+  "lastModified": "2025-09-08T05:12:04.673Z",
   "version": "1.0"
 }
