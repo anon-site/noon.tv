@@ -163,7 +163,7 @@
     {
       "id": 29,
       "name": "الأقصى",
-      "url": "https://64c53df624b1b.servers.dvcloud.tv/hls/feedspare/6udfi7v8a3eof6nlps6e9ovfrs65c7l7.m3u8",
+      "url": "http://167.172.161.13/hls/feedspare/6udfi7v8a3eof6nlps6e9ovfrs65c7l7.m3u8",
       "logo": "https://felesteen.news/thumb/w920/uploads/images/2021/05/ldelg.png",
       "category": "news",
       "country": "فلسطين"
@@ -239,6 +239,6 @@
       "icon": "fas fa-newspaper"
     }
   ],
-  "lastModified": "2025-09-07T18:31:23.922Z",
+  "lastModified": "2025-09-07T18:32:03.653Z",
   "version": "1.0"
 }
