@@ -1436,11 +1436,18 @@ class ArabicTVApp {
     async uploadToRepository(data) {
         const { provider, repository, token, branch, filename } = this.remoteStorage;
         
+        // Validate required parameters
+        if (!provider || !repository || !token || !filename) {
+            throw new Error('معلومات التخزين السحابي غير مكتملة');
+        }
+        
         try {
             if (provider === 'github') {
-                return await this.uploadToGitHub(data, repository, token, branch, filename);
+                return await this.uploadToGitHub(data, repository, token, branch || 'main', filename);
             } else if (provider === 'gitlab') {
-                return await this.uploadToGitLab(data, repository, token, branch, filename);
+                return await this.uploadToGitLab(data, repository, token, branch || 'main', filename);
+            } else {
+                throw new Error('مزود التخزين غير مدعوم');
             }
         } catch (error) {
             console.error('خطأ في رفع البيانات:', error);
@@ -1451,11 +1458,18 @@ class ArabicTVApp {
     async downloadFromRepository() {
         const { provider, repository, token, branch, filename } = this.remoteStorage;
         
+        // Validate required parameters
+        if (!provider || !repository || !token || !filename) {
+            throw new Error('معلومات التخزين السحابي غير مكتملة');
+        }
+        
         try {
             if (provider === 'github') {
-                return await this.downloadFromGitHub(repository, token, branch, filename);
+                return await this.downloadFromGitHub(repository, token, branch || 'main', filename);
             } else if (provider === 'gitlab') {
-                return await this.downloadFromGitLab(repository, token, branch, filename);
+                return await this.downloadFromGitLab(repository, token, branch || 'main', filename);
+            } else {
+                throw new Error('مزود التخزين غير مدعوم');
             }
         } catch (error) {
             console.error('خطأ في تحميل البيانات:', error);
@@ -2793,9 +2807,16 @@ class ArabicTVApp {
             return;
         }
         
+        // Ensure filename is set
+        if (!this.remoteStorage.filename) {
+            this.remoteStorage.filename = 'backup.json';
+            this.saveRemoteStorageSettings();
+        }
+        
         try {
             this.notifyInfo('جاري رفع النسخة الاحتياطية للسحابة...');
             
+            // Create backup data without sensitive information
             const backupData = {
                 version: '1.0',
                 timestamp: new Date().toISOString(),
@@ -2803,18 +2824,32 @@ class ArabicTVApp {
                 favorites: Array.from(this.favorites),
                 settings: this.settings,
                 categories: this.categories,
-                remoteStorage: this.remoteStorage,
+                // Exclude sensitive remote storage data
+                remoteStorage: {
+                    enabled: this.remoteStorage.enabled,
+                    provider: this.remoteStorage.provider,
+                    repository: this.remoteStorage.repository,
+                    branch: this.remoteStorage.branch,
+                    filename: this.remoteStorage.filename,
+                    autoSync: this.remoteStorage.autoSync,
+                    lastSync: this.remoteStorage.lastSync
+                    // Note: token is excluded for security
+                },
                 generalSettings: JSON.parse(localStorage.getItem('arabicTVGeneralSettings') || '{}')
             };
             
             // Upload backup to cloud
-            await this.uploadToRepository(backupData);
+            const success = await this.uploadToRepository(backupData);
             
-            this.notifySuccess('تم رفع النسخة الاحتياطية للسحابة بنجاح!');
+            if (success) {
+                this.notifySuccess('تم رفع النسخة الاحتياطية للسحابة بنجاح!');
+            } else {
+                this.notifyError('فشل في رفع النسخة الاحتياطية للسحابة');
+            }
             
         } catch (error) {
             console.error('Cloud backup failed:', error);
-            this.notifyError('فشل في رفع النسخة الاحتياطية للسحابة');
+            this.notifyError(`فشل في رفع النسخة الاحتياطية للسحابة: ${error.message}`);
         }
     }
 
@@ -2822,6 +2857,12 @@ class ArabicTVApp {
         if (!this.remoteStorage.enabled || !this.remoteStorage.repository || !this.remoteStorage.token) {
             this.notifyError('يرجى إعداد التخزين السحابي أولاً');
             return;
+        }
+        
+        // Ensure filename is set
+        if (!this.remoteStorage.filename) {
+            this.remoteStorage.filename = 'backup.json';
+            this.saveRemoteStorageSettings();
         }
         
         try {
@@ -2838,7 +2879,7 @@ class ArabicTVApp {
             
         } catch (error) {
             console.error('Cloud backup download failed:', error);
-            this.notifyError('فشل في تحميل النسخة الاحتياطية من السحابة');
+            this.notifyError(`فشل في تحميل النسخة الاحتياطية من السحابة: ${error.message}`);
         }
     }
 
