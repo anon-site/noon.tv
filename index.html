@@ -564,66 +564,112 @@
                 
                 <!-- General Settings Tab -->
                 <div class="admin-tab-content" id="settingsTab">
-                    <div class="admin-setting-item">
-                        <label for="appTitle">عنوان التطبيق</label>
-                        <input type="text" id="appTitle" value="القنوات الفضائية العربية">
+                    <!-- Basic Settings Section -->
+                    <div class="settings-section-card">
+                        <div class="settings-section-header">
+                            <i class="fas fa-cog"></i>
+                            <h3>الإعدادات الأساسية</h3>
+                        </div>
+                        <div class="settings-section-content">
+                            <div class="enhanced-setting-item">
+                                <div class="setting-label-group">
+                                    <label for="appTitle">عنوان التطبيق</label>
+                                    <small>العنوان الذي سيظهر في شريط العنوان</small>
+                                </div>
+                                <input type="text" id="appTitle" value="القنوات الفضائية العربية" class="enhanced-input">
+                            </div>
+                            
+                            <div class="enhanced-setting-item">
+                                <div class="setting-label-group">
+                                    <label for="maxChannels">الحد الأقصى للقنوات</label>
+                                    <small>عدد القنوات المسموح بإضافتها</small>
+                                </div>
+                                <input type="number" id="maxChannels" value="100" class="enhanced-input" min="10" max="1000">
+                            </div>
+                            
+                            <div class="enhanced-setting-item">
+                                <div class="setting-label-group">
+                                    <label for="enableAnalytics">تفعيل الإحصائيات</label>
+                                    <small>جمع بيانات الاستخدام لتحسين التطبيق</small>
+                                </div>
+                                <label class="enhanced-switch">
+                                    <input type="checkbox" id="enableAnalytics">
+                                    <span class="enhanced-slider"></span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="admin-setting-item">
-                        <label for="maxChannels">الحد الأقصى للقنوات</label>
-                        <input type="number" id="maxChannels" value="100">
+                    
+                    <!-- Save Button -->
+                    <div class="settings-save-section">
+                        <button class="enhanced-save-btn" onclick="saveGeneralSettings()">
+                            <i class="fas fa-save"></i>
+                            <span>حفظ الإعدادات</span>
+                        </button>
                     </div>
-                    <div class="admin-setting-item">
-                        <label for="enableAnalytics">تفعيل الإحصائيات</label>
-                        <label class="switch">
-                            <input type="checkbox" id="enableAnalytics">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <button class="save-settings-btn" onclick="saveGeneralSettings()">حفظ الإعدادات</button>
                     
                     <!-- Remote Storage Settings -->
-                    <div class="remote-storage-section">
-                        <h4 class="remote-storage-title">التخزين السحابي</h4>
-                        <div class="remote-storage-container">
-                            <div class="admin-setting-item">
-                                <label for="enableRemoteStorage">تفعيل التخزين السحابي</label>
-                                <label class="switch">
+                    <div class="settings-section-card">
+                        <div class="settings-section-header">
+                            <i class="fas fa-cloud"></i>
+                            <h3>التخزين السحابي</h3>
+                        </div>
+                        <div class="settings-section-content">
+                            <div class="enhanced-setting-item">
+                                <div class="setting-label-group">
+                                    <label for="enableRemoteStorage">تفعيل التخزين السحابي</label>
+                                    <small>مزامنة البيانات مع GitHub أو GitLab</small>
+                                </div>
+                                <label class="enhanced-switch">
                                     <input type="checkbox" id="enableRemoteStorage">
-                                    <span class="slider"></span>
+                                    <span class="enhanced-slider"></span>
                                 </label>
                             </div>
                             
                             <div class="remote-storage-config" id="remoteStorageConfig" style="display: none;">
-                                <div class="admin-setting-item">
-                                    <label for="storageProvider">مزود الخدمة</label>
-                                    <select id="storageProvider">
+                                <div class="enhanced-setting-item">
+                                    <div class="setting-label-group">
+                                        <label for="storageProvider">مزود الخدمة</label>
+                                        <small>اختر منصة التخزين السحابي</small>
+                                    </div>
+                                    <select id="storageProvider" class="enhanced-select">
                                         <option value="github">GitHub</option>
                                         <option value="gitlab">GitLab</option>
                                     </select>
                                 </div>
                                 
-                                <div class="admin-setting-item">
-                                    <label for="repositoryUrl">رابط المستودع</label>
-                                    <input type="text" id="repositoryUrl" placeholder="مثل: username/repository-name">
-                                    <small>للمستودع الخاص، أدخل اسم المستخدم/اسم المستودع</small>
+                                <div class="enhanced-setting-item">
+                                    <div class="setting-label-group">
+                                        <label for="repositoryUrl">رابط المستودع</label>
+                                        <small>مثل: username/repository-name</small>
+                                    </div>
+                                    <input type="text" id="repositoryUrl" placeholder="username/repository-name" class="enhanced-input">
                                 </div>
                                 
-                                <div class="admin-setting-item">
-                                    <label for="accessToken">رمز الوصول (Token)</label>
-                                    <input type="password" id="accessToken" placeholder="أدخل رمز الوصول الشخصي">
-                                    <small>يمكنك إنشاء رمز وصول من إعدادات حسابك في GitHub/GitLab</small>
+                                <div class="enhanced-setting-item">
+                                    <div class="setting-label-group">
+                                        <label for="accessToken">رمز الوصول (Token)</label>
+                                        <small>يمكنك إنشاء رمز وصول من إعدادات حسابك</small>
+                                    </div>
+                                    <input type="password" id="accessToken" placeholder="أدخل رمز الوصول الشخصي" class="enhanced-input">
                                 </div>
                                 
-                                <div class="admin-setting-item">
-                                    <label for="branchName">اسم الفرع</label>
-                                    <input type="text" id="branchName" value="main" placeholder="main">
+                                <div class="enhanced-setting-item">
+                                    <div class="setting-label-group">
+                                        <label for="branchName">اسم الفرع</label>
+                                        <small>اسم الفرع في المستودع</small>
+                                    </div>
+                                    <input type="text" id="branchName" value="main" placeholder="main" class="enhanced-input">
                                 </div>
                                 
-                                <div class="admin-setting-item">
-                                    <label for="autoSync">مزامنة تلقائية</label>
-                                    <label class="switch">
+                                <div class="enhanced-setting-item">
+                                    <div class="setting-label-group">
+                                        <label for="autoSync">مزامنة تلقائية</label>
+                                        <small>مزامنة البيانات تلقائياً عند التغيير</small>
+                                    </div>
+                                    <label class="enhanced-switch">
                                         <input type="checkbox" id="autoSync" checked>
-                                        <span class="slider"></span>
+                                        <span class="enhanced-slider"></span>
                                     </label>
                                 </div>
                                 
@@ -650,21 +696,30 @@
                         </div>
                     </div>
                     
-                    <div class="diagnostic-tools-section">
-                        <h4 class="diagnostic-tools-title">أدوات التشخيص</h4>
-                        <div class="diagnostic-tools-grid">
-                            <button class="diagnostic-tool-btn diagnostic-btn" onclick="debugStorage()">
-                                <i class="fas fa-stethoscope"></i>
-                                <span>تشخيص التخزين</span>
-                            </button>
-                            <button class="diagnostic-tool-btn export-btn" onclick="app.exportChannels()">
-                                <i class="fas fa-download"></i>
-                                <span>تصدير القنوات</span>
-                            </button>
-                            <button class="diagnostic-tool-btn import-btn" onclick="app.importChannels()">
-                                <i class="fas fa-upload"></i>
-                                <span>استيراد القنوات</span>
-                            </button>
+                    <!-- Diagnostic Tools Section -->
+                    <div class="settings-section-card">
+                        <div class="settings-section-header">
+                            <i class="fas fa-tools"></i>
+                            <h3>أدوات التشخيص</h3>
+                        </div>
+                        <div class="settings-section-content">
+                            <div class="diagnostic-tools-grid">
+                                <button class="enhanced-diagnostic-btn diagnostic-btn" onclick="debugStorage()">
+                                    <i class="fas fa-stethoscope"></i>
+                                    <span>تشخيص التخزين</span>
+                                    <small>فحص حالة البيانات المحفوظة</small>
+                                </button>
+                                <button class="enhanced-diagnostic-btn export-btn" onclick="app.exportChannels()">
+                                    <i class="fas fa-download"></i>
+                                    <span>تصدير القنوات</span>
+                                    <small>حفظ نسخة احتياطية</small>
+                                </button>
+                                <button class="enhanced-diagnostic-btn import-btn" onclick="app.importChannels()">
+                                    <i class="fas fa-upload"></i>
+                                    <span>استيراد القنوات</span>
+                                    <small>استعادة من النسخة الاحتياطية</small>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <input type="file" id="importFileInput" accept=".json" style="display: none;" />
