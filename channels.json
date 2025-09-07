@@ -209,14 +209,6 @@
       "country": "السعودية"
     },
     {
-      "id": 35,
-      "name": "MBC 1",
-      "url": "https://mbc1-enc.edgenextcdn.net/out/v1/0965e4d7deae49179172426cbfb3bc5e/index.m3u8",
-      "logo": "https://mbc1-enc.edgenextcdn.net/out/v1/0965e4d7deae49179172426cbfb3bc5e/index.m3u8",
-      "category": "entertainment",
-      "country": "السعودية"
-    },
-    {
       "id": 36,
       "name": "MBC 2",
       "url": "http://213.57.91.138:8000/play/a05k",
@@ -325,6 +317,6 @@
       "icon": "fas fa-music"
     }
   ],
-  "lastModified": "2025-09-07T21:16:42.140Z",
+  "lastModified": "2025-09-07T21:16:45.841Z",
   "version": "1.0"
 }
