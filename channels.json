@@ -223,6 +223,14 @@
       "logo": "http://213.57.91.138:8000/play/a05k",
       "category": "entertainment",
       "country": "السعودية"
+    },
+    {
+      "id": 37,
+      "name": "MBC 4",
+      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-4/24f134f1cd63db9346439e96b86ca6ed/index.m3u8",
+      "logo": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-4/24f134f1cd63db9346439e96b86ca6ed/index.m3u8",
+      "category": "entertainment",
+      "country": "السعودية"
     }
   ],
   "favorites": [],
@@ -279,6 +287,6 @@
       "icon": "fas fa-newspaper"
     }
   ],
-  "lastModified": "2025-09-07T18:48:36.406Z",
+  "lastModified": "2025-09-07T18:49:04.803Z",
   "version": "1.0"
 }
