@@ -231,6 +231,7 @@ class ArabicTVApp {
         this.bindEvents();
         this.bindRemoteStorageEvents();
         this.setupMobileSearch();
+        this.setupRepositoryAutoSuggest();
         this.setupPictureInPictureEvents();
         this.checkAndSetupPictureInPicture();
         
@@ -2020,6 +2021,778 @@ class ArabicTVApp {
             } else {
                 lastSyncTime.textContent = 'لم يتم';
             }
+        }
+    }
+
+    // ===== Setup Wizard Functions =====
+    
+    openRepositoryCreation(provider) {
+        let url;
+        if (provider === 'github') {
+            url = 'https://github.com/new';
+        } else if (provider === 'gitlab') {
+            url = 'https://gitlab.com/projects/new';
+        }
+        
+        if (url) {
+            window.open(url, '_blank');
+            this.notifyInfo(`تم فتح صفحة إنشاء مستودع جديد على ${provider === 'github' ? 'GitHub' : 'GitLab'}`);
+            
+            // Mark step as completed and move to next
+            this.markStepCompleted(1);
+            this.activateStep(2);
+        }
+    }
+
+    openTokenCreation() {
+        const provider = document.getElementById('storageProvider')?.value || 'github';
+        let url;
+        
+        if (provider === 'github') {
+            url = 'https://github.com/settings/tokens/new';
+        } else if (provider === 'gitlab') {
+            url = 'https://gitlab.com/-/profile/personal_access_tokens';
+        }
+        
+        if (url) {
+            window.open(url, '_blank');
+            this.notifyInfo(`تم فتح صفحة إنشاء رمز الوصول على ${provider === 'github' ? 'GitHub' : 'GitLab'}`);
+            
+            // Mark step as completed and move to next
+            this.markStepCompleted(2);
+            this.activateStep(3);
+        }
+    }
+
+    showAdvancedConfig() {
+        const quickSetupSection = document.querySelector('.quick-setup-section');
+        const advancedConfigSection = document.getElementById('advancedConfigSection');
+        
+        if (quickSetupSection && advancedConfigSection) {
+            quickSetupSection.style.display = 'none';
+            advancedConfigSection.style.display = 'block';
+            
+            // Enable remote storage checkbox
+            const enableCheckbox = document.getElementById('enableRemoteStorage');
+            if (enableCheckbox) {
+                enableCheckbox.checked = true;
+                this.remoteStorage.enabled = true;
+                this.toggleRemoteStorageConfig(true);
+                this.saveRemoteStorageSettings();
+            }
+            
+            this.notifyInfo('تم فتح الإعدادات المتقدمة');
+        }
+    }
+
+    showSimpleConfig() {
+        const quickSetupSection = document.querySelector('.quick-setup-section');
+        const advancedConfigSection = document.getElementById('advancedConfigSection');
+        
+        if (quickSetupSection && advancedConfigSection) {
+            quickSetupSection.style.display = 'block';
+            advancedConfigSection.style.display = 'none';
+        }
+    }
+
+    showSetupHelp() {
+        const modal = document.getElementById('setupHelpModal');
+        if (modal) {
+            modal.style.display = 'flex';
+            
+            // Bind help tab events
+            this.bindHelpTabEvents();
+        }
+    }
+
+    bindHelpTabEvents() {
+        const helpTabs = document.querySelectorAll('.help-tab');
+        const helpContents = document.querySelectorAll('.help-tab-content');
+        
+        helpTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.dataset.tab;
+                
+                // Remove active class from all tabs and contents
+                helpTabs.forEach(t => t.classList.remove('active'));
+                helpContents.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                const targetContent = document.getElementById(`${targetTab}Help`);
+                if (targetContent) {
+                    targetContent.classList.add('active');
+                }
+            });
+        });
+    }
+
+    markStepCompleted(stepNumber) {
+        const step = document.querySelector(`[data-step="${stepNumber}"]`);
+        if (step) {
+            step.classList.add('completed');
+            step.classList.remove('active');
+            
+            // Add checkmark
+            const stepNumberEl = step.querySelector('.step-number');
+            if (stepNumberEl) {
+                stepNumberEl.innerHTML = '<i class="fas fa-check"></i>';
+                stepNumberEl.style.background = '#10b981';
+            }
+        }
+    }
+
+    activateStep(stepNumber) {
+        const step = document.querySelector(`[data-step="${stepNumber}"]`);
+        if (step) {
+            step.classList.add('active');
+        }
+    }
+
+    // Enhanced error handling for beginners
+    async testConnection() {
+        if (!this.remoteStorage.repository || !this.remoteStorage.token) {
+            this.notifyError('يرجى إدخال رابط المستودع ورمز الوصول أولاً');
+            return;
+        }
+
+        try {
+            this.notifyInfo('جاري اختبار الاتصال...');
+            
+            // Test by trying to fetch repository info
+            const testData = await this.downloadFromRepository();
+            
+            if (testData) {
+                this.notifySuccess('تم اختبار الاتصال بنجاح! يمكنك الآن المزامنة');
+                this.updateSyncStatus();
+            } else {
+                this.notifyError('فشل في الاتصال. تحقق من البيانات المدخلة');
+            }
+        } catch (error) {
+            console.error('Connection test failed:', error);
+            
+            // Provide user-friendly error messages
+            let errorMessage = 'فشل في الاتصال. ';
+            
+            if (error.message.includes('401') || error.message.includes('403')) {
+                errorMessage += 'رمز الوصول غير صحيح أو منتهي الصلاحية';
+            } else if (error.message.includes('404')) {
+                errorMessage += 'المستودع غير موجود أو غير متاح';
+            } else if (error.message.includes('network')) {
+                errorMessage += 'مشكلة في الاتصال بالإنترنت';
+            } else {
+                errorMessage += 'تحقق من صحة البيانات المدخلة';
+            }
+            
+            this.notifyError(errorMessage);
+        }
+    }
+
+    // Enhanced manual sync with better error handling
+    async manualSync() {
+        if (!this.remoteStorage.enabled) {
+            this.notifyError('يرجى تفعيل التخزين السحابي أولاً');
+            return;
+        }
+
+        if (!this.remoteStorage.repository || !this.remoteStorage.token) {
+            this.notifyError('يرجى إدخال رابط المستودع ورمز الوصول أولاً');
+            return;
+        }
+
+        try {
+            this.notifyInfo('جاري المزامنة...');
+            
+            // First try to sync from remote
+            await this.syncFromRemote();
+            
+            // Then sync to remote
+            await this.syncToRemote();
+            
+            this.notifySuccess('تمت المزامنة بنجاح!');
+            this.updateSyncStatus();
+            
+        } catch (error) {
+            console.error('Manual sync failed:', error);
+            
+            let errorMessage = 'فشلت المزامنة. ';
+            
+            if (error.message.includes('401') || error.message.includes('403')) {
+                errorMessage += 'رمز الوصول غير صحيح';
+            } else if (error.message.includes('404')) {
+                errorMessage += 'المستودع غير موجود';
+            } else if (error.message.includes('network')) {
+                errorMessage += 'مشكلة في الاتصال';
+            } else {
+                errorMessage += 'حدث خطأ غير متوقع';
+            }
+            
+            this.notifyError(errorMessage);
+        }
+    }
+
+    // ===== Auto Detection Functions =====
+    
+    showAutoDetect() {
+        const modal = document.getElementById('autoDetectModal');
+        if (modal) {
+            modal.style.display = 'flex';
+            
+            // Reset form
+            document.getElementById('detectProvider').value = 'github';
+            document.getElementById('detectUsername').value = '';
+            document.getElementById('detectToken').value = '';
+            
+            // Hide results and loading
+            document.getElementById('detectResults').style.display = 'none';
+            document.getElementById('detectLoading').style.display = 'none';
+        }
+    }
+
+    async detectRepositories() {
+        const provider = document.getElementById('detectProvider').value;
+        const username = document.getElementById('detectUsername').value.trim();
+        const token = document.getElementById('detectToken').value.trim();
+        
+        if (!username) {
+            this.notifyError('يرجى إدخال اسم المستخدم');
+            return;
+        }
+        
+        const loadingEl = document.getElementById('detectLoading');
+        const resultsEl = document.getElementById('detectResults');
+        const repositoriesListEl = document.getElementById('repositoriesList');
+        
+        try {
+            // Show loading
+            loadingEl.style.display = 'block';
+            resultsEl.style.display = 'none';
+            
+            let repositories = [];
+            
+            if (provider === 'github') {
+                repositories = await this.fetchGitHubRepositories(username, token);
+            } else if (provider === 'gitlab') {
+                repositories = await this.fetchGitLabRepositories(username, token);
+            }
+            
+            // Hide loading
+            loadingEl.style.display = 'none';
+            
+            if (repositories.length === 0) {
+                this.notifyInfo('لم يتم العثور على أي مستودعات');
+                return;
+            }
+            
+            // Display results
+            this.displayRepositories(repositories, provider);
+            resultsEl.style.display = 'block';
+            
+            this.notifySuccess(`تم العثور على ${repositories.length} مستودع`);
+            
+        } catch (error) {
+            console.error('Repository detection failed:', error);
+            
+            loadingEl.style.display = 'none';
+            
+            let errorMessage = 'فشل في البحث عن المستودعات. ';
+            
+            if (error.message.includes('401') || error.message.includes('403')) {
+                errorMessage += 'رمز الوصول غير صحيح أو منتهي الصلاحية';
+            } else if (error.message.includes('404')) {
+                errorMessage += 'اسم المستخدم غير موجود';
+            } else if (error.message.includes('network')) {
+                errorMessage += 'مشكلة في الاتصال بالإنترنت';
+            } else {
+                errorMessage += 'حدث خطأ غير متوقع';
+            }
+            
+            this.notifyError(errorMessage);
+        }
+    }
+
+    async fetchGitHubRepositories(username, token) {
+        const url = `https://api.github.com/users/${username}/repos?sort=updated&per_page=50`;
+        const headers = {
+            'Accept': 'application/vnd.github.v3+json'
+        };
+        
+        if (token) {
+            headers['Authorization'] = `token ${token}`;
+        }
+        
+        const response = await fetch(url, { headers });
+        
+        if (!response.ok) {
+            throw new Error(`GitHub API Error: ${response.status}`);
+        }
+        
+        const repos = await response.json();
+        
+        return repos.map(repo => ({
+            name: repo.name,
+            fullName: repo.full_name,
+            description: repo.description || 'لا يوجد وصف',
+            visibility: repo.private ? 'private' : 'public',
+            updatedAt: repo.updated_at,
+            url: repo.html_url
+        }));
+    }
+
+    async fetchGitLabRepositories(username, token) {
+        const url = `https://gitlab.com/api/v4/users/${username}/projects?order_by=last_activity_at&per_page=50`;
+        const headers = {
+            'Accept': 'application/json'
+        };
+        
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+        
+        const response = await fetch(url, { headers });
+        
+        if (!response.ok) {
+            throw new Error(`GitLab API Error: ${response.status}`);
+        }
+        
+        const repos = await response.json();
+        
+        return repos.map(repo => ({
+            name: repo.name,
+            fullName: repo.path_with_namespace,
+            description: repo.description || 'لا يوجد وصف',
+            visibility: repo.visibility,
+            updatedAt: repo.last_activity_at,
+            url: repo.web_url
+        }));
+    }
+
+    displayRepositories(repositories, provider) {
+        const repositoriesListEl = document.getElementById('repositoriesList');
+        
+        repositoriesListEl.innerHTML = repositories.map(repo => `
+            <div class="repository-item">
+                <div class="repository-info">
+                    <div class="repository-name">${repo.name}</div>
+                    <div class="repository-description">${repo.description}</div>
+                </div>
+                <div class="repository-visibility ${repo.visibility}">
+                    ${repo.visibility === 'public' ? 'عام' : 'خاص'}
+                </div>
+                <button class="use-repository-btn" onclick="app.useRepository('${repo.fullName}', '${provider}')">
+                    <i class="fas fa-check"></i>
+                    استخدام
+                </button>
+            </div>
+        `).join('');
+    }
+
+    useRepository(repositoryName, provider) {
+        // Set the provider
+        const providerSelect = document.getElementById('storageProvider');
+        if (providerSelect) {
+            providerSelect.value = provider;
+            this.remoteStorage.provider = provider;
+        }
+        
+        // Set the repository
+        const repositoryInput = document.getElementById('repositoryUrl');
+        if (repositoryInput) {
+            repositoryInput.value = repositoryName;
+            this.remoteStorage.repository = repositoryName;
+        }
+        
+        // Save settings
+        this.saveRemoteStorageSettings();
+        
+        // Close modal
+        closeAutoDetect();
+        
+        // Show advanced config
+        this.showAdvancedConfig();
+        
+        this.notifySuccess(`تم تحديد المستودع: ${repositoryName}`);
+    }
+
+    // ===== Smart Repository & Token Functions =====
+    
+    async fetchUserRepositories() {
+        const repositoryInput = document.getElementById('repositoryUrl');
+        const tokenInput = document.getElementById('accessToken');
+        const provider = document.getElementById('storageProvider')?.value || 'github';
+        
+        if (!repositoryInput.value.trim()) {
+            this.notifyError('يرجى إدخال اسم المستخدم أولاً (مثل: username)');
+            return;
+        }
+        
+        const username = repositoryInput.value.trim().split('/')[0]; // Extract username from input
+        const token = tokenInput.value.trim();
+        
+        if (!token) {
+            this.notifyError('يرجى إدخال رمز الوصول أولاً للوصول للمستودعات الخاصة');
+            return;
+        }
+        
+        try {
+            this.notifyInfo('جاري البحث عن المستودعات...');
+            
+            let repositories = [];
+            if (provider === 'github') {
+                repositories = await this.fetchGitHubRepositories(username, token);
+            } else if (provider === 'gitlab') {
+                repositories = await this.fetchGitLabRepositories(username, token);
+            }
+            
+            if (repositories.length === 0) {
+                this.notifyInfo('لم يتم العثور على أي مستودعات');
+                return;
+            }
+            
+            this.displayRepositorySuggestions(repositories);
+            this.notifySuccess(`تم العثور على ${repositories.length} مستودع`);
+            
+        } catch (error) {
+            console.error('Repository fetch failed:', error);
+            this.notifyError('فشل في جلب المستودعات. تحقق من اسم المستخدم ورمز الوصول');
+        }
+    }
+
+    displayRepositorySuggestions(repositories) {
+        const suggestionsContainer = document.getElementById('repoSuggestions');
+        
+        if (repositories.length === 0) {
+            suggestionsContainer.style.display = 'none';
+            return;
+        }
+        
+        suggestionsContainer.innerHTML = repositories.map(repo => `
+            <div class="repo-suggestion-item" onclick="app.selectRepository('${repo.fullName}')">
+                <div class="repo-suggestion-info">
+                    <div class="repo-suggestion-name">${repo.name}</div>
+                    <div class="repo-suggestion-description">${repo.description}</div>
+                </div>
+                <div class="repo-suggestion-visibility ${repo.visibility}">
+                    ${repo.visibility === 'public' ? 'عام' : 'خاص'}
+                </div>
+            </div>
+        `).join('');
+        
+        suggestionsContainer.style.display = 'block';
+    }
+
+    selectRepository(repositoryName) {
+        const repositoryInput = document.getElementById('repositoryUrl');
+        const suggestionsContainer = document.getElementById('repoSuggestions');
+        
+        repositoryInput.value = repositoryName;
+        suggestionsContainer.style.display = 'none';
+        
+        this.remoteStorage.repository = repositoryName;
+        this.saveRemoteStorageSettings();
+        
+        this.notifySuccess(`تم تحديد المستودع: ${repositoryName}`);
+    }
+
+    async validateToken() {
+        const tokenInput = document.getElementById('accessToken');
+        const provider = document.getElementById('storageProvider')?.value || 'github';
+        const tokenStatus = document.getElementById('tokenStatus');
+        
+        if (!tokenInput.value.trim()) {
+            this.notifyError('يرجى إدخال رمز الوصول أولاً');
+            return;
+        }
+        
+        const token = tokenInput.value.trim();
+        
+        try {
+            // Show validating status
+            tokenStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحقق من الرمز...';
+            tokenStatus.className = 'token-status validating';
+            tokenStatus.style.display = 'flex';
+            
+            let isValid = false;
+            let userInfo = null;
+            
+            if (provider === 'github') {
+                const response = await fetch('https://api.github.com/user', {
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                
+                if (response.ok) {
+                    userInfo = await response.json();
+                    isValid = true;
+                }
+            } else if (provider === 'gitlab') {
+                const response = await fetch('https://gitlab.com/api/v4/user', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    userInfo = await response.json();
+                    isValid = true;
+                }
+            }
+            
+            if (isValid && userInfo) {
+                tokenStatus.innerHTML = `<i class="fas fa-check-circle"></i> الرمز صحيح - المستخدم: ${userInfo.login || userInfo.username}`;
+                tokenStatus.className = 'token-status valid';
+                
+                this.remoteStorage.token = token;
+                this.saveRemoteStorageSettings();
+                
+                this.notifySuccess('رمز الوصول صحيح!');
+            } else {
+                tokenStatus.innerHTML = '<i class="fas fa-times-circle"></i> الرمز غير صحيح أو منتهي الصلاحية';
+                tokenStatus.className = 'token-status invalid';
+                this.notifyError('رمز الوصول غير صحيح');
+            }
+            
+        } catch (error) {
+            console.error('Token validation failed:', error);
+            tokenStatus.innerHTML = '<i class="fas fa-times-circle"></i> فشل في التحقق من الرمز';
+            tokenStatus.className = 'token-status invalid';
+            this.notifyError('فشل في التحقق من رمز الوصول');
+        }
+    }
+
+    toggleTokenVisibility() {
+        const tokenInput = document.getElementById('accessToken');
+        const toggleBtn = document.querySelector('.toggle-token-visibility i');
+        
+        if (tokenInput.type === 'password') {
+            tokenInput.type = 'text';
+            toggleBtn.className = 'fas fa-eye-slash';
+        } else {
+            tokenInput.type = 'password';
+            toggleBtn.className = 'fas fa-eye';
+        }
+    }
+
+    // Auto-suggest repositories when typing
+    setupRepositoryAutoSuggest() {
+        const repositoryInput = document.getElementById('repositoryUrl');
+        if (repositoryInput) {
+            let timeoutId;
+            repositoryInput.addEventListener('input', (e) => {
+                clearTimeout(timeoutId);
+                const value = e.target.value.trim();
+                
+                // If user types just a username (no slash), suggest fetching repos
+                if (value && !value.includes('/') && value.length > 2) {
+                    timeoutId = setTimeout(() => {
+                        this.showRepositoryFetchHint(value);
+                    }, 1000);
+                } else {
+                    this.hideRepositoryFetchHint();
+                }
+            });
+        }
+    }
+
+    showRepositoryFetchHint(username) {
+        const repositoryInput = document.getElementById('repositoryUrl');
+        const hintDiv = document.createElement('div');
+        hintDiv.className = 'repo-fetch-hint';
+        hintDiv.innerHTML = `
+            <div class="hint-content">
+                <i class="fas fa-lightbulb"></i>
+                <span>يبدو أنك أدخلت اسم مستخدم. هل تريد جلب المستودعات الخاصة به؟</span>
+                <button class="hint-btn" onclick="app.fetchUserRepositories()">
+                    <i class="fas fa-search"></i> جلب المستودعات
+                </button>
+            </div>
+        `;
+        
+        // Remove existing hint
+        this.hideRepositoryFetchHint();
+        
+        // Add hint after input
+        repositoryInput.parentNode.appendChild(hintDiv);
+    }
+
+    hideRepositoryFetchHint() {
+        const existingHint = document.querySelector('.repo-fetch-hint');
+        if (existingHint) {
+            existingHint.remove();
+        }
+    }
+
+    // ===== Enhanced Backup & Restore Functions =====
+    
+    createFullBackup() {
+        try {
+            const backupData = {
+                version: '1.0',
+                timestamp: new Date().toISOString(),
+                channels: this.channels,
+                favorites: Array.from(this.favorites),
+                settings: this.settings,
+                categories: this.categories,
+                remoteStorage: this.remoteStorage,
+                generalSettings: JSON.parse(localStorage.getItem('arabicTVGeneralSettings') || '{}')
+            };
+            
+            const dataStr = JSON.stringify(backupData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `tv-channels-backup-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            this.notifySuccess('تم إنشاء النسخة الاحتياطية بنجاح!');
+            
+        } catch (error) {
+            console.error('Backup creation failed:', error);
+            this.notifyError('فشل في إنشاء النسخة الاحتياطية');
+        }
+    }
+
+    restoreFromBackup() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const backupData = JSON.parse(e.target.result);
+                        this.processBackupData(backupData);
+                    } catch (error) {
+                        console.error('Backup restore failed:', error);
+                        this.notifyError('ملف النسخة الاحتياطية غير صحيح');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        };
+        input.click();
+    }
+
+    processBackupData(backupData) {
+        if (!backupData.version || !backupData.channels) {
+            this.notifyError('ملف النسخة الاحتياطية غير صحيح أو قديم');
+            return;
+        }
+        
+        // Show confirmation dialog
+        const confirmed = confirm(
+            'هل أنت متأكد من استعادة النسخة الاحتياطية؟\n' +
+            'سيتم استبدال جميع البيانات الحالية بالبيانات من النسخة الاحتياطية.\n' +
+            'تاريخ النسخة: ' + new Date(backupData.timestamp).toLocaleString('ar')
+        );
+        
+        if (!confirmed) return;
+        
+        try {
+            // Restore channels
+            if (backupData.channels && Array.isArray(backupData.channels)) {
+                this.channels = backupData.channels;
+                this.saveChannelsToStorage();
+            }
+            
+            // Restore favorites
+            if (backupData.favorites && Array.isArray(backupData.favorites)) {
+                this.favorites = new Set(backupData.favorites);
+            }
+            
+            // Restore settings
+            if (backupData.settings && typeof backupData.settings === 'object') {
+                this.settings = { ...this.settings, ...backupData.settings };
+                this.saveSettings();
+            }
+            
+            // Restore categories
+            if (backupData.categories && Array.isArray(backupData.categories)) {
+                this.categories = backupData.categories;
+            }
+            
+            // Restore remote storage settings
+            if (backupData.remoteStorage && typeof backupData.remoteStorage === 'object') {
+                this.remoteStorage = { ...this.remoteStorage, ...backupData.remoteStorage };
+                this.saveRemoteStorageSettings();
+            }
+            
+            // Restore general settings
+            if (backupData.generalSettings && typeof backupData.generalSettings === 'object') {
+                localStorage.setItem('arabicTVGeneralSettings', JSON.stringify(backupData.generalSettings));
+            }
+            
+            // Refresh UI
+            this.loadRemoteStorageUI();
+            this.renderChannels();
+            this.updateChannelCount();
+            
+            this.notifySuccess('تم استعادة النسخة الاحتياطية بنجاح!');
+            
+        } catch (error) {
+            console.error('Backup restore failed:', error);
+            this.notifyError('فشل في استعادة النسخة الاحتياطية');
+        }
+    }
+
+    async syncToCloudBackup() {
+        if (!this.remoteStorage.enabled || !this.remoteStorage.repository || !this.remoteStorage.token) {
+            this.notifyError('يرجى إعداد التخزين السحابي أولاً');
+            return;
+        }
+        
+        try {
+            this.notifyInfo('جاري رفع النسخة الاحتياطية للسحابة...');
+            
+            const backupData = {
+                version: '1.0',
+                timestamp: new Date().toISOString(),
+                channels: this.channels,
+                favorites: Array.from(this.favorites),
+                settings: this.settings,
+                categories: this.categories,
+                remoteStorage: this.remoteStorage,
+                generalSettings: JSON.parse(localStorage.getItem('arabicTVGeneralSettings') || '{}')
+            };
+            
+            // Upload backup to cloud
+            await this.uploadToRepository(backupData);
+            
+            this.notifySuccess('تم رفع النسخة الاحتياطية للسحابة بنجاح!');
+            
+        } catch (error) {
+            console.error('Cloud backup failed:', error);
+            this.notifyError('فشل في رفع النسخة الاحتياطية للسحابة');
+        }
+    }
+
+    async downloadCloudBackup() {
+        if (!this.remoteStorage.enabled || !this.remoteStorage.repository || !this.remoteStorage.token) {
+            this.notifyError('يرجى إعداد التخزين السحابي أولاً');
+            return;
+        }
+        
+        try {
+            this.notifyInfo('جاري تحميل النسخة الاحتياطية من السحابة...');
+            
+            // Download backup from cloud
+            const backupData = await this.downloadFromRepository();
+            
+            if (backupData) {
+                this.processBackupData(backupData);
+            } else {
+                this.notifyError('لم يتم العثور على نسخة احتياطية في السحابة');
+            }
+            
+        } catch (error) {
+            console.error('Cloud backup download failed:', error);
+            this.notifyError('فشل في تحميل النسخة الاحتياطية من السحابة');
         }
     }
 
@@ -3963,6 +4736,20 @@ function closeAdminPanel() {
 
 function closeModal() {
     app.closeModal();
+}
+
+function closeSetupHelp() {
+    const modal = document.getElementById('setupHelpModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+function closeAutoDetect() {
+    const modal = document.getElementById('autoDetectModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
 }
 
 function toggleQuality() {

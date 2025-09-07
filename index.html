@@ -605,83 +605,237 @@
                             <h3>التخزين السحابي</h3>
                         </div>
                         <div class="settings-section-content">
-                            <div class="enhanced-setting-item">
-                                <div class="setting-label-group">
-                                    <label for="enableRemoteStorage">تفعيل التخزين السحابي</label>
-                                    <small>مزامنة البيانات مع GitHub أو GitLab</small>
+                            <!-- Quick Setup Section -->
+                            <div class="quick-setup-section">
+                                <div class="setup-wizard-header">
+                                    <h4><i class="fas fa-magic"></i> الإعداد السريع للمبتدئين</h4>
+                                    <p>دعنا نساعدك في إعداد التخزين السحابي خطوة بخطوة</p>
                                 </div>
-                                <label class="enhanced-switch">
-                                    <input type="checkbox" id="enableRemoteStorage">
-                                    <span class="enhanced-slider"></span>
-                                </label>
+                                
+                                <div class="setup-steps">
+                                    <div class="setup-step active" data-step="1">
+                                        <div class="step-number">1</div>
+                                        <div class="step-content">
+                                            <h5>إنشاء مستودع جديد</h5>
+                                            <p>أنشئ مستودعاً جديداً على GitHub أو GitLab</p>
+                                            <div class="step-actions">
+                                                <button class="step-btn github-btn" onclick="app.openRepositoryCreation('github')">
+                                                    <i class="fab fa-github"></i>
+                                                    إنشاء على GitHub
+                                                </button>
+                                                <button class="step-btn gitlab-btn" onclick="app.openRepositoryCreation('gitlab')">
+                                                    <i class="fab fa-gitlab"></i>
+                                                    إنشاء على GitLab
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="setup-step" data-step="2">
+                                        <div class="step-number">2</div>
+                                        <div class="step-content">
+                                            <h5>إنشاء رمز الوصول</h5>
+                                            <p>أنشئ رمز وصول شخصي للاتصال بالمستودع</p>
+                                            <div class="step-actions">
+                                                <button class="step-btn token-btn" onclick="app.openTokenCreation()">
+                                                    <i class="fas fa-key"></i>
+                                                    إنشاء رمز الوصول
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="setup-step" data-step="3">
+                                        <div class="step-number">3</div>
+                                        <div class="step-content">
+                                            <h5>إدخال البيانات</h5>
+                                            <p>أدخل معلومات المستودع ورمز الوصول</p>
+                                            <div class="step-actions">
+                                                <button class="step-btn config-btn" onclick="app.showAdvancedConfig()">
+                                                    <i class="fas fa-cog"></i>
+                                                    إدخال البيانات
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="setup-help">
+                                    <button class="help-btn" onclick="app.showSetupHelp()">
+                                        <i class="fas fa-question-circle"></i>
+                                        أحتاج مساعدة في الإعداد
+                                    </button>
+                                    <button class="help-btn auto-detect-btn" onclick="app.showAutoDetect()">
+                                        <i class="fas fa-search"></i>
+                                        البحث عن مستودعات موجودة
+                                    </button>
+                                </div>
                             </div>
                             
-                            <div class="remote-storage-config" id="remoteStorageConfig" style="display: none;">
-                                <div class="enhanced-setting-item">
-                                    <div class="setting-label-group">
-                                        <label for="storageProvider">مزود الخدمة</label>
-                                        <small>اختر منصة التخزين السحابي</small>
-                                    </div>
-                                    <select id="storageProvider" class="enhanced-select">
-                                        <option value="github">GitHub</option>
-                                        <option value="gitlab">GitLab</option>
-                                    </select>
+                            <!-- Advanced Configuration (Hidden by default) -->
+                            <div class="advanced-config-section" id="advancedConfigSection" style="display: none;">
+                                <div class="config-header">
+                                    <h4><i class="fas fa-cogs"></i> الإعدادات المتقدمة</h4>
+                                    <button class="toggle-simple-btn" onclick="app.showSimpleConfig()">
+                                        <i class="fas fa-arrow-up"></i>
+                                        العودة للإعداد السريع
+                                    </button>
                                 </div>
                                 
                                 <div class="enhanced-setting-item">
                                     <div class="setting-label-group">
-                                        <label for="repositoryUrl">رابط المستودع</label>
-                                        <small>مثل: username/repository-name</small>
-                                    </div>
-                                    <input type="text" id="repositoryUrl" placeholder="username/repository-name" class="enhanced-input">
-                                </div>
-                                
-                                <div class="enhanced-setting-item">
-                                    <div class="setting-label-group">
-                                        <label for="accessToken">رمز الوصول (Token)</label>
-                                        <small>يمكنك إنشاء رمز وصول من إعدادات حسابك</small>
-                                    </div>
-                                    <input type="password" id="accessToken" placeholder="أدخل رمز الوصول الشخصي" class="enhanced-input">
-                                </div>
-                                
-                                <div class="enhanced-setting-item">
-                                    <div class="setting-label-group">
-                                        <label for="branchName">اسم الفرع</label>
-                                        <small>اسم الفرع في المستودع</small>
-                                    </div>
-                                    <input type="text" id="branchName" value="main" placeholder="main" class="enhanced-input">
-                                </div>
-                                
-                                <div class="enhanced-setting-item">
-                                    <div class="setting-label-group">
-                                        <label for="autoSync">مزامنة تلقائية</label>
-                                        <small>مزامنة البيانات تلقائياً عند التغيير</small>
+                                        <label for="enableRemoteStorage">تفعيل التخزين السحابي</label>
+                                        <small>مزامنة البيانات مع GitHub أو GitLab</small>
                                     </div>
                                     <label class="enhanced-switch">
-                                        <input type="checkbox" id="autoSync" checked>
+                                        <input type="checkbox" id="enableRemoteStorage">
                                         <span class="enhanced-slider"></span>
                                     </label>
                                 </div>
                                 
-                                <div class="remote-storage-actions">
-                                    <button class="test-connection-btn" onclick="app.testConnection()">
-                                        <i class="fas fa-link"></i>
-                                        اختبار الاتصال
-                                    </button>
-                                    <button class="save-remote-settings-btn" onclick="app.saveRemoteStorageSettingsUI()">
-                                        <i class="fas fa-save"></i>
-                                        حفظ الإعدادات
-                                    </button>
-                                    <button class="sync-now-btn" onclick="app.manualSync()">
-                                        <i class="fas fa-sync-alt"></i>
-                                        مزامنة الآن
-                                    </button>
+                                <div class="remote-storage-config" id="remoteStorageConfig" style="display: none;">
+                                    <div class="enhanced-setting-item">
+                                        <div class="setting-label-group">
+                                            <label for="storageProvider">مزود الخدمة</label>
+                                            <small>اختر منصة التخزين السحابي</small>
+                                        </div>
+                                        <select id="storageProvider" class="enhanced-select">
+                                            <option value="github">GitHub</option>
+                                            <option value="gitlab">GitLab</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="enhanced-setting-item">
+                                        <div class="setting-label-group">
+                                            <label for="repositoryUrl">رابط المستودع</label>
+                                            <small>مثل: username/repository-name</small>
+                                        </div>
+                                        <div class="repository-input-container">
+                                            <input type="text" id="repositoryUrl" placeholder="username/repository-name" class="enhanced-input">
+                                            <button class="fetch-repo-btn" onclick="app.fetchUserRepositories()" title="جلب المستودعات من اسم المستخدم">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                        <div class="input-help">
+                                            <i class="fas fa-info-circle"></i>
+                                            مثال: myusername/tv-channels أو استخدم زر البحث لجلب المستودعات
+                                        </div>
+                                        <div class="repo-suggestions" id="repoSuggestions" style="display: none;">
+                                            <!-- Repository suggestions will appear here -->
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="enhanced-setting-item">
+                                        <div class="setting-label-group">
+                                            <label for="accessToken">رمز الوصول (Token)</label>
+                                            <small>يمكنك إنشاء رمز وصول من إعدادات حسابك</small>
+                                        </div>
+                                        <div class="token-input-container">
+                                            <input type="password" id="accessToken" placeholder="أدخل رمز الوصول الشخصي" class="enhanced-input">
+                                            <button class="validate-token-btn" onclick="app.validateToken()" title="التحقق من صحة الرمز">
+                                                <i class="fas fa-check-circle"></i>
+                                            </button>
+                                            <button class="toggle-token-visibility" onclick="app.toggleTokenVisibility()" title="إظهار/إخفاء الرمز">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                        <div class="input-help">
+                                            <i class="fas fa-shield-alt"></i>
+                                            هذا الرمز آمن ويُحفظ محلياً فقط
+                                        </div>
+                                        <div class="token-status" id="tokenStatus" style="display: none;">
+                                            <!-- Token validation status will appear here -->
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="enhanced-setting-item">
+                                        <div class="setting-label-group">
+                                            <label for="branchName">اسم الفرع</label>
+                                            <small>اسم الفرع في المستودع</small>
+                                        </div>
+                                        <input type="text" id="branchName" value="main" placeholder="main" class="enhanced-input">
+                                    </div>
+                                    
+                                    <div class="enhanced-setting-item">
+                                        <div class="setting-label-group">
+                                            <label for="autoSync">مزامنة تلقائية</label>
+                                            <small>مزامنة البيانات تلقائياً عند التغيير</small>
+                                        </div>
+                                        <label class="enhanced-switch">
+                                            <input type="checkbox" id="autoSync" checked>
+                                            <span class="enhanced-slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="remote-storage-actions">
+                                        <button class="test-connection-btn" onclick="app.testConnection()">
+                                            <i class="fas fa-link"></i>
+                                            اختبار الاتصال
+                                        </button>
+                                        <button class="save-remote-settings-btn" onclick="app.saveRemoteStorageSettingsUI()">
+                                            <i class="fas fa-save"></i>
+                                            حفظ الإعدادات
+                                        </button>
+                                        <button class="sync-now-btn" onclick="app.manualSync()">
+                                            <i class="fas fa-sync-alt"></i>
+                                            مزامنة الآن
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="sync-status" id="syncStatus">
+                                        <p><strong>حالة المزامنة:</strong> <span id="syncStatusText">غير محدد</span></p>
+                                        <p><strong>آخر مزامنة:</strong> <span id="lastSyncTime">لم يتم</span></p>
+                                    </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Backup & Restore Section -->
+                    <div class="settings-section-card">
+                        <div class="settings-section-header">
+                            <i class="fas fa-shield-alt"></i>
+                            <h3>النسخ الاحتياطي والاستعادة</h3>
+                        </div>
+                        <div class="settings-section-content">
+                            <div class="backup-intro">
+                                <p>احفظ نسخة احتياطية من جميع بياناتك أو استعدها من نسخة سابقة</p>
+                            </div>
+                            
+                            <div class="backup-actions-grid">
+                                <button class="enhanced-backup-btn export-btn" onclick="app.createFullBackup()">
+                                    <i class="fas fa-download"></i>
+                                    <span>إنشاء نسخة احتياطية كاملة</span>
+                                    <small>حفظ جميع القنوات والإعدادات</small>
+                                </button>
                                 
-                                <div class="sync-status" id="syncStatus">
-                                    <p><strong>حالة المزامنة:</strong> <span id="syncStatusText">غير محدد</span></p>
-                                    <p><strong>آخر مزامنة:</strong> <span id="lastSyncTime">لم يتم</span></p>
-                                </div>
+                                <button class="enhanced-backup-btn import-btn" onclick="app.restoreFromBackup()">
+                                    <i class="fas fa-upload"></i>
+                                    <span>استعادة من النسخة الاحتياطية</span>
+                                    <small>استعادة البيانات من ملف</small>
+                                </button>
+                                
+                                <button class="enhanced-backup-btn sync-backup-btn" onclick="app.syncToCloudBackup()">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span>رفع النسخة الاحتياطية للسحابة</span>
+                                    <small>حفظ النسخة الاحتياطية في المستودع</small>
+                                </button>
+                                
+                                <button class="enhanced-backup-btn download-backup-btn" onclick="app.downloadCloudBackup()">
+                                    <i class="fas fa-cloud-download-alt"></i>
+                                    <span>تحميل النسخة الاحتياطية من السحابة</span>
+                                    <small>استعادة من النسخة السحابية</small>
+                                </button>
+                            </div>
+                            
+                            <div class="backup-info">
+                                <h5><i class="fas fa-info-circle"></i> معلومات النسخ الاحتياطي:</h5>
+                                <ul>
+                                    <li>النسخة الاحتياطية تحتوي على جميع القنوات والإعدادات والمفضلة</li>
+                                    <li>يمكنك إنشاء نسخ احتياطية متعددة في أوقات مختلفة</li>
+                                    <li>النسخ السحابية تُحفظ تلقائياً في المستودع المحدد</li>
+                                    <li>يمكن استعادة البيانات على أي جهاز آخر</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -701,13 +855,13 @@
                                 </button>
                                 <button class="enhanced-diagnostic-btn export-btn" onclick="app.exportChannels()">
                                     <i class="fas fa-download"></i>
-                                    <span>تصدير القنوات</span>
-                                    <small>حفظ نسخة احتياطية</small>
+                                    <span>تصدير القنوات فقط</span>
+                                    <small>حفظ القنوات فقط</small>
                                 </button>
                                 <button class="enhanced-diagnostic-btn import-btn" onclick="app.importChannels()">
                                     <i class="fas fa-upload"></i>
-                                    <span>استيراد القنوات</span>
-                                    <small>استعادة من النسخة الاحتياطية</small>
+                                    <span>استيراد القنوات فقط</span>
+                                    <small>استعادة القنوات فقط</small>
                                 </button>
                             </div>
                         </div>
@@ -767,6 +921,175 @@
                     <button class="diagnostic-btn console-btn" onclick="openConsoleInfo()">
                         <i class="fas fa-terminal"></i> Console
                     </button>
+                </div>
+            </div>
+        </div>
+        <div class="modal-overlay"></div>
+    </div>
+
+    <!-- Auto Detect Modal -->
+    <div class="modal" id="autoDetectModal">
+        <div class="modal-content auto-detect-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-search"></i> البحث عن المستودعات</h3>
+                <button class="close-btn" onclick="closeAutoDetect()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="auto-detect-body">
+                <div class="detect-intro">
+                    <p>يمكننا مساعدتك في العثور على المستودعات الموجودة في حسابك</p>
+                </div>
+                
+                <div class="detect-form">
+                    <div class="form-group">
+                        <label for="detectProvider">اختر المنصة</label>
+                        <select id="detectProvider" class="enhanced-select">
+                            <option value="github">GitHub</option>
+                            <option value="gitlab">GitLab</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="detectUsername">اسم المستخدم</label>
+                        <input type="text" id="detectUsername" placeholder="أدخل اسم المستخدم" class="enhanced-input">
+                        <div class="input-help">
+                            <i class="fas fa-info-circle"></i>
+                            اسم المستخدم في GitHub أو GitLab
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="detectToken">رمز الوصول (اختياري)</label>
+                        <input type="password" id="detectToken" placeholder="رمز الوصول للوصول للمستودعات الخاصة" class="enhanced-input">
+                        <div class="input-help">
+                            <i class="fas fa-shield-alt"></i>
+                            بدون رمز الوصول، ستظهر المستودعات العامة فقط
+                        </div>
+                    </div>
+                    
+                    <button class="detect-btn" onclick="app.detectRepositories()">
+                        <i class="fas fa-search"></i>
+                        البحث عن المستودعات
+                    </button>
+                </div>
+                
+                <div class="detect-results" id="detectResults" style="display: none;">
+                    <h4>المستودعات الموجودة:</h4>
+                    <div class="repositories-list" id="repositoriesList">
+                        <!-- Results will be populated here -->
+                    </div>
+                </div>
+                
+                <div class="detect-loading" id="detectLoading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>جاري البحث عن المستودعات...</p>
+                </div>
+            </div>
+        </div>
+        <div class="modal-overlay"></div>
+    </div>
+
+    <!-- Setup Help Modal -->
+    <div class="modal" id="setupHelpModal">
+        <div class="modal-content setup-help-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-graduation-cap"></i> دليل الإعداد السحابي</h3>
+                <button class="close-btn" onclick="closeSetupHelp()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="setup-help-body">
+                <div class="help-tabs">
+                    <button class="help-tab active" data-tab="github">GitHub</button>
+                    <button class="help-tab" data-tab="gitlab">GitLab</button>
+                </div>
+                
+                <div class="help-content">
+                    <!-- GitHub Help -->
+                    <div class="help-tab-content active" id="githubHelp">
+                        <div class="help-step">
+                            <h4><span class="step-number">1</span> إنشاء مستودع جديد</h4>
+                            <div class="step-details">
+                                <p>1. اذهب إلى <a href="https://github.com/new" target="_blank">GitHub</a></p>
+                                <p>2. انقر على "New repository"</p>
+                                <p>3. أدخل اسم المستودع (مثل: tv-channels)</p>
+                                <p>4. اختر "Public" أو "Private"</p>
+                                <p>5. انقر "Create repository"</p>
+                            </div>
+                        </div>
+                        
+                        <div class="help-step">
+                            <h4><span class="step-number">2</span> إنشاء رمز الوصول</h4>
+                            <div class="step-details">
+                                <p>1. اذهب إلى Settings → Developer settings</p>
+                                <p>2. انقر "Personal access tokens" → "Tokens (classic)"</p>
+                                <p>3. انقر "Generate new token (classic)"</p>
+                                <p>4. اختر الصلاحيات: <code>repo</code> (للمستودعات الخاصة) أو <code>public_repo</code> (للمستودعات العامة)</p>
+                                <p>5. انقر "Generate token"</p>
+                                <p>6. انسخ الرمز واحفظه بأمان</p>
+                            </div>
+                        </div>
+                        
+                        <div class="help-step">
+                            <h4><span class="step-number">3</span> إدخال البيانات في التطبيق</h4>
+                            <div class="step-details">
+                                <p>1. اختر "GitHub" كمزود الخدمة</p>
+                                <p>2. أدخل رابط المستودع: <code>username/repository-name</code></p>
+                                <p>3. أدخل رمز الوصول الذي أنشأته</p>
+                                <p>4. انقر "اختبار الاتصال" للتأكد</p>
+                                <p>5. انقر "حفظ الإعدادات"</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- GitLab Help -->
+                    <div class="help-tab-content" id="gitlabHelp">
+                        <div class="help-step">
+                            <h4><span class="step-number">1</span> إنشاء مشروع جديد</h4>
+                            <div class="step-details">
+                                <p>1. اذهب إلى <a href="https://gitlab.com/projects/new" target="_blank">GitLab</a></p>
+                                <p>2. انقر "Create blank project"</p>
+                                <p>3. أدخل اسم المشروع (مثل: tv-channels)</p>
+                                <p>4. اختر مستوى الخصوصية</p>
+                                <p>5. انقر "Create project"</p>
+                            </div>
+                        </div>
+                        
+                        <div class="help-step">
+                            <h4><span class="step-number">2</span> إنشاء رمز الوصول</h4>
+                            <div class="step-details">
+                                <p>1. اذهب إلى User Settings → Access Tokens</p>
+                                <p>2. أدخل اسم للرمز (مثل: TV App)</p>
+                                <p>3. اختر الصلاحيات: <code>api</code> و <code>write_repository</code></p>
+                                <p>4. انقر "Create personal access token"</p>
+                                <p>5. انسخ الرمز واحفظه بأمان</p>
+                            </div>
+                        </div>
+                        
+                        <div class="help-step">
+                            <h4><span class="step-number">3</span> إدخال البيانات في التطبيق</h4>
+                            <div class="step-details">
+                                <p>1. اختر "GitLab" كمزود الخدمة</p>
+                                <p>2. أدخل رابط المستودع: <code>username/project-name</code></p>
+                                <p>3. أدخل رمز الوصول الذي أنشأته</p>
+                                <p>4. انقر "اختبار الاتصال" للتأكد</p>
+                                <p>5. انقر "حفظ الإعدادات"</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="help-footer">
+                    <div class="help-tips">
+                        <h5><i class="fas fa-lightbulb"></i> نصائح مهمة:</h5>
+                        <ul>
+                            <li>احفظ رمز الوصول في مكان آمن - لن تتمكن من رؤيته مرة أخرى</li>
+                            <li>يمكنك استخدام مستودع عام أو خاص حسب احتياجاتك</li>
+                            <li>المزامنة التلقائية تحفظ بياناتك عند كل تغيير</li>
+                            <li>يمكنك إيقاف المزامنة التلقائية واستخدام المزامنة اليدوية</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
