@@ -242,6 +242,7 @@ class ArabicTVApp {
         this.syncMobileNavTabs();
         this.initializeNewFeatures(); // Initialize new navigation features
         this.updateChannelStats(); // Update channel statistics
+        this.updateChannelCategoryOptions(); // Update category options
         this.hideLoading();
         
         // تشخيص أولي
@@ -993,6 +994,7 @@ class ArabicTVApp {
         document.getElementById('adminModal').classList.add('active');
         this.renderAdminChannels();
         this.updateSaveOrderButton();
+        this.updateChannelCategoryOptions();
     }
 
     closeAdminPanel() {
@@ -1018,6 +1020,11 @@ class ArabicTVApp {
         // Load categories when switching to categories tab
         if (tab === 'categories') {
             this.renderCategories();
+        }
+        
+        // Update category options when switching to add tab
+        if (tab === 'add') {
+            this.updateChannelCategoryOptions();
         }
     }
 
@@ -1054,10 +1061,10 @@ class ArabicTVApp {
                             <i class="fas fa-chevron-down"></i>
                         </button>
                     </div>
-                    <button class="edit-btn" onclick="app.editChannel(${channel.id})">
+                    <button class="edit-btn" onclick="app.editChannel(${channel.id}, event)">
                         <i class="fas fa-edit"></i> تعديل
                     </button>
-                    <button class="delete-btn" onclick="app.deleteChannel(${channel.id})">
+                    <button class="delete-btn" onclick="app.deleteChannel(${channel.id}, event)">
                         <i class="fas fa-trash"></i> حذف
                     </button>
                 </div>
@@ -1098,6 +1105,13 @@ class ArabicTVApp {
             return;
         }
 
+        // Check if we're editing an existing channel
+        if (this.editingChannelId) {
+            this.updateChannel(this.editingChannelId);
+            return;
+        }
+
+        // Add new channel
         const newChannel = {
             id: Math.max(...this.channels.map(c => c.id), 0) + 1, // Generate proper unique ID
             name: name,
@@ -1114,7 +1128,7 @@ class ArabicTVApp {
         this.renderAdminChannels();
         
         this.resetAddChannelForm();
-        this.notifySuccess('تم إضافة القناة بنجاح وحفظها!');
+        this.showNotification('success', 'تم إضافة القناة', 'تم إضافة القناة بنجاح وحفظها!');
     }
 
     resetAddChannelForm() {
@@ -1136,9 +1150,17 @@ class ArabicTVApp {
         if (formTitle) {
             formTitle.textContent = 'إضافة قناة جديدة';
         }
+        
+        // Update category options to ensure latest categories are available
+        this.updateChannelCategoryOptions();
     }
 
-    editChannel(id) {
+    editChannel(id, event) {
+        // Prevent event propagation if event is provided
+        if (event) {
+            event.stopPropagation();
+        }
+        
         const channel = this.channels.find(c => c.id === id);
         if (!channel) return;
 
@@ -1156,6 +1178,9 @@ class ArabicTVApp {
 
         // Update button text to indicate editing mode
         document.querySelector('.add-btn').textContent = 'تحديث القناة';
+        
+        // Show notification
+        this.showNotification('success', 'تم فتح نموذج التعديل', 'يمكنك الآن تعديل بيانات القناة');
     }
 
     updateChannel(id) {
@@ -1197,20 +1222,41 @@ class ArabicTVApp {
         // Reset editing state and form
         this.resetAddChannelForm();
         
-        this.notifySuccess('تم تحديث القناة وحفظ التغييرات بنجاح!');
+        this.showNotification('success', 'تم تحديث القناة', 'تم تحديث القناة وحفظ التغييرات بنجاح!');
         
         // Switch back to channels list tab
         this.switchAdminTab('channels');
     }
 
-    deleteChannel(id) {
-        if (confirm('هل أنت متأكد من حذف هذه القناة؟')) {
+    deleteChannel(id, event) {
+        // Prevent event propagation if event is provided
+        if (event) {
+            event.stopPropagation();
+        }
+        
+        const channel = this.channels.find(c => c.id === id);
+        if (!channel) return;
+        
+        if (confirm(`هل أنت متأكد من حذف قناة "${channel.name}"؟\n\nهذا الإجراء لا يمكن التراجع عنه.`)) {
+            // Remove from favorites if favorited
+            if (this.favorites.has(id)) {
+                this.favorites.delete(id);
+                this.saveFavorites();
+            }
+            
+            // Remove from channels array
             this.channels = this.channels.filter(c => c.id !== id);
-            this.saveChannelsToStorage();
             this.filteredChannels = [...this.channels]; // Update filtered channels too
+            
+            // Save to storage
+            this.saveChannelsToStorage();
+            
+            // Re-render channels
             this.renderChannels();
             this.renderAdminChannels();
-            this.notifySuccess('تم حذف القناة بنجاح!');
+            
+            // Show success notification
+            this.showNotification('success', 'تم حذف القناة', `تم حذف قناة "${channel.name}" بنجاح`);
         }
     }
 

@@ -1859,18 +1859,19 @@ input:checked + .slider:before {
 
 /* Add Channel Form */
 .add-channel-form {
-    max-width: 600px;
+    max-width: 400px;
 }
 
 .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.6rem;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
     font-weight: 500;
     color: var(--text-primary);
+    font-size: 0.85rem;
 }
 
 .form-group input,
@@ -1878,10 +1879,11 @@ input:checked + .slider:before {
     width: 100%;
     background: var(--background-dark);
     border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 12px;
+    border-radius: 5px;
+    padding: 6px;
     color: var(--text-primary);
     font-family: inherit;
+    font-size: 0.85rem;
     transition: var(--transition);
 }
 
@@ -1896,10 +1898,11 @@ input:checked + .slider:before {
     background: linear-gradient(45deg, var(--highlight-color), #ff6b6b);
     color: white;
     border: none;
-    padding: 12px 24px;
-    border-radius: 8px;
+    padding: 6px 12px;
+    border-radius: 5px;
     cursor: pointer;
     font-weight: 600;
+    font-size: 0.85rem;
     transition: var(--transition);
     font-family: inherit;
 }
@@ -4582,6 +4585,30 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     .admin-content {
         width: 95vw;
         height: 90vh;
+    }
+    
+    .add-channel-form {
+        max-width: 90vw;
+    }
+    
+    .form-group {
+        margin-bottom: 0.6rem;
+    }
+    
+    .form-group label {
+        font-size: 0.85rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .form-group input,
+    .form-group select {
+        padding: 6px;
+        font-size: 0.85rem;
+    }
+    
+    .add-btn {
+        padding: 6px 12px;
+        font-size: 0.85rem;
     }
     
     .admin-tabs {
