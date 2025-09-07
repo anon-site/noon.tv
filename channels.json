@@ -320,8 +320,13 @@
       "key": "music",
       "name": "الموسيقى",
       "icon": "fas fa-music"
+    },
+    {
+      "key": "documentary",
+      "name": "الوثائقية",
+      "icon": "fas fa-newspaper"
     }
   ],
-  "lastModified": "2025-09-07T19:01:24.989Z",
+  "lastModified": "2025-09-07T20:45:28.101Z",
   "version": "1.0"
 }
