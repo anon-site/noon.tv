@@ -1,6 +1,4 @@
 {
-  "version": "1.0",
-  "timestamp": "2025-09-07T18:27:27.566Z",
   "channels": [
     {
       "id": 3,
@@ -85,7 +83,7 @@
     {
       "id": 16,
       "name": "Al Jadeed",
-      "url": "https://live-hls-apps-ajd-fa.getaj.net/AJD/index.m3u8",
+      "url": "http://185.9.2.18/chid_391/mono.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Al_Jadeed_TV_LOGO_2018.jpg",
       "category": "entertainment",
       "country": "لبنان"
@@ -165,7 +163,7 @@
     {
       "id": 29,
       "name": "الأقصى",
-      "url": "https://64c53df624b1b.servers.dvcloud.tv/hls/feedspare/6udfi7v8a3eof6nlps6e9ovfrs65c7l7.m3u8",
+      "url": "http://167.172.161.13/hls/feedspare/6udfi7v8a3eof6nlps6e9ovfrs65c7l7.m3u8",
       "logo": "https://felesteen.news/thumb/w920/uploads/images/2021/05/ldelg.png",
       "category": "news",
       "country": "فلسطين"
@@ -185,6 +183,94 @@
       "logo": "https://upload.wikimedia.org/wikipedia/ar/thumb/b/bb/AlsumariatvLogo.jpg/330px-AlsumariatvLogo.jpg",
       "category": "entertainment",
       "country": "العراق"
+    },
+    {
+      "id": 32,
+      "name": "السنة النبوية",
+      "url": "https://cdn-globecast.akamaized.net/live/eds/saudi_sunnah/hls_roku/index.m3u8",
+      "logo": "https://pbs.twimg.com/media/EmmsIRzXMAEVNSi.jpg",
+      "category": "religious",
+      "country": "السعودية"
+    },
+    {
+      "id": 33,
+      "name": "إقرأ",
+      "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv3/playlist.m3u8",
+      "logo": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv3/playlist.m3u8",
+      "category": "religious",
+      "country": "السعودية"
+    },
+    {
+      "id": 34,
+      "name": "إقرأ قرآن",
+      "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv2/playlist.m3u8",
+      "logo": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv2/playlist.m3u8",
+      "category": "religious",
+      "country": "السعودية"
+    },
+    {
+      "id": 35,
+      "name": "MBC 1",
+      "url": "https://mbc1-enc.edgenextcdn.net/out/v1/0965e4d7deae49179172426cbfb3bc5e/index.m3u8",
+      "logo": "https://mbc1-enc.edgenextcdn.net/out/v1/0965e4d7deae49179172426cbfb3bc5e/index.m3u8",
+      "category": "entertainment",
+      "country": "السعودية"
+    },
+    {
+      "id": 36,
+      "name": "MBC 2",
+      "url": "http://213.57.91.138:8000/play/a05k",
+      "logo": "http://213.57.91.138:8000/play/a05k",
+      "category": "entertainment",
+      "country": "السعودية"
+    },
+    {
+      "id": 37,
+      "name": "MBC 4",
+      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-4/24f134f1cd63db9346439e96b86ca6ed/index.m3u8",
+      "logo": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-4/24f134f1cd63db9346439e96b86ca6ed/index.m3u8",
+      "category": "entertainment",
+      "country": "السعودية"
+    },
+    {
+      "id": 38,
+      "name": "MBC 5",
+      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-5/ee6b000cee0629411b666ab26cb13e9b/index.m3u8",
+      "logo": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-5/ee6b000cee0629411b666ab26cb13e9b/index.m3u8",
+      "category": "entertainment",
+      "country": "السعودية"
+    },
+    {
+      "id": 39,
+      "name": "MBC Action",
+      "url": "http://213.57.91.138:8000/play/a05l",
+      "logo": "http://213.57.91.138:8000/play/a05l",
+      "category": "entertainment",
+      "country": "السعودية"
+    },
+    {
+      "id": 40,
+      "name": "MBC Iraq",
+      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-iraq/e38c44b1b43474e1c39cb5b90203691e/index.m3u8",
+      "logo": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-iraq/e38c44b1b43474e1c39cb5b90203691e/index.m3u8",
+      "category": "entertainment",
+      "country": "السعودية"
+    },
+    {
+      "id": 41,
+      "name": "MBC+ Drama",
+      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-plus-drama/e37251ec2aac8f6c98f75cd0fa37cd28/index.m3u8",
+      "logo": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-plus-drama/e37251ec2aac8f6c98f75cd0fa37cd28/index.m3u8",
+      "category": "entertainment",
+      "country": "السعودية"
+    },
+    {
+      "id": 42,
+      "name": "National Geographic",
+      "url": "http://213.57.91.138:8000/play/a05a",
+      "logo": "http://213.57.91.138:8000/play/a05a",
+      "category": "documentary",
+      "country": "الإمارات"
     }
   ],
   "favorites": [],
@@ -241,18 +327,6 @@
       "icon": "fas fa-newspaper"
     }
   ],
-  "remoteStorage": {
-    "enabled": true,
-    "provider": "github",
-    "repository": "anon-site/TV-AR",
-    "branch": "main",
-    "filename": "channels.json",
-    "autoSync": true,
-    "lastSync": "2025-09-07T18:27:02.569Z"
-  },
-  "generalSettings": {
-    "appTitle": "القنوات الفضائية العربية",
-    "maxChannels": 100,
-    "enableAnalytics": false
-  }
+  "lastModified": "2025-09-07T18:53:31.351Z",
+  "version": "1.0"
 }
