@@ -189,13 +189,13 @@
   "settings": {
     "autoQuality": true,
     "autoplay": true,
-    "volume": 62,
+    "volume": 80,
     "theme": "dark",
     "showNewsTicker": false,
     "zoomLevel": 100,
     "colorTheme": "default",
     "layoutMode": "compact",
-    "fontSize": "small",
+    "fontSize": "medium",
     "animationsEnabled": true,
     "compactMode": true,
     "highContrast": false,
@@ -232,13 +232,8 @@
       "key": "music",
       "name": "الموسيقى",
       "icon": "fas fa-music"
-    },
-    {
-      "key": "movies",
-      "name": "أفلام",
-      "icon": "fas fa-film"
     }
   ],
-  "lastModified": "2025-09-07T17:19:05.509Z",
+  "lastModified": "2025-09-07T17:26:00.984Z",
   "version": "1.0"
 }
