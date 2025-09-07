@@ -1,6 +1,4 @@
 {
-  "version": "1.0",
-  "timestamp": "2025-09-08T05:15:28.279Z",
   "channels": [
     {
       "id": 3,
@@ -217,6 +215,14 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/7/75/Deutsche_Welle_symbol_2012.svg",
       "category": "documentary",
       "country": "قطر"
+    },
+    {
+      "id": 45,
+      "name": "I24 News Arabic",
+      "url": "https://bcovlive-a.akamaihd.net/95116e8d79524d87bf3ac20ba04241e3/eu-central-1/5377161796001/playlist.m3u8",
+      "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4phcpAtr74wQxlpfLrZQ2Qn8XZN02nw7V6w&s",
+      "category": "news",
+      "country": "France"
     }
   ],
   "favorites": [],
@@ -276,18 +282,6 @@
       "icon": "fas fa-newspaper"
     }
   ],
-  "remoteStorage": {
-    "enabled": true,
-    "provider": "github",
-    "repository": "anon-site/TV-AR",
-    "branch": "main",
-    "filename": "channels.json",
-    "autoSync": true,
-    "lastSync": "2025-09-08T05:15:10.654Z"
-  },
-  "generalSettings": {
-    "appTitle": "القنوات الفضائية العربية",
-    "maxChannels": 100,
-    "enableAnalytics": false
-  }
+  "lastModified": "2025-09-08T05:17:00.991Z",
+  "version": "1.0"
 }
