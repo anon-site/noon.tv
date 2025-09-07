@@ -275,7 +275,7 @@
     {
       "id": 43,
       "name": "الإستقامة",
-      "url": "https://jmc-live.ercdn.net/alistiqama/alistiqama_576p.m3u8",
+      "url": "https://jmc-live.ercdn.net/alistiqama/alistiqama_360p.m3u8",
       "logo": "https://jmc-live.ercdn.net/alistiqama/alistiqama_576p.m3u8",
       "category": "religious",
       "country": "عُمان"
@@ -333,6 +333,6 @@
       "icon": "fas fa-music"
     }
   ],
-  "lastModified": "2025-09-07T21:12:01.487Z",
+  "lastModified": "2025-09-07T21:12:40.716Z",
   "version": "1.0"
 }
