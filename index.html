@@ -455,11 +455,17 @@
                     </div>
                     <div class="save-order-container" id="saveOrderContainer" style="display: none;">
                         <div class="order-info">
+                            <i class="fas fa-info-circle"></i>
                             يمكنك سحب وإفلات القنوات أو استخدام أزرار الأسهم لترتيبها حسب رغبتك
                         </div>
-                        <button class="save-order-btn" id="saveOrderBtn" onclick="app.saveChannelsOrder()">
-                            <i class="fas fa-save"></i> حفظ الترتيب الجديد
-                        </button>
+                        <div class="save-order-actions">
+                            <button class="save-order-btn" id="saveOrderBtn" onclick="app.saveChannelsOrder()">
+                                <i class="fas fa-save"></i> حفظ الترتيب الجديد
+                            </button>
+                            <button class="reset-order-btn" onclick="app.resetChannelsOrder()">
+                                <i class="fas fa-undo"></i> إعادة تعيين
+                            </button>
+                        </div>
                     </div>
                 </div>
                 

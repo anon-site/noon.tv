@@ -991,6 +991,7 @@ class ArabicTVApp {
     openAdminPanel() {
         document.getElementById('adminModal').classList.add('active');
         this.renderAdminChannels();
+        this.updateSaveOrderButton();
     }
 
     closeAdminPanel() {
@@ -2505,6 +2506,9 @@ class ArabicTVApp {
         this.renderAdminChannels();
         this.renderChannels(); // تحديث العرض الرئيسي أيضاً
 
+        // إظهار زر الحفظ
+        this.updateSaveOrderButton();
+
         this.notifyInfo(`تم نقل "${movedChannel.name}" إلى الموضع الجديد`);
     }
 
@@ -2555,6 +2559,7 @@ class ArabicTVApp {
         
         this.renderAdminChannels();
         this.renderChannels();
+        this.updateSaveOrderButton();
         
         this.notifyInfo('تم إعادة تعيين ترتيب القنوات');
     }

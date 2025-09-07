@@ -226,6 +226,14 @@ body[data-theme="light"] .save-order-container {
     border-color: #e2e8f0;
 }
 
+body[data-theme="light"] .reset-order-btn {
+    background: linear-gradient(45deg, #6b7280, #4b5563);
+}
+
+body[data-theme="light"] .reset-order-btn:hover {
+    box-shadow: 0 8px 25px rgba(107, 114, 128, 0.3);
+}
+
 /* Light theme for mobile sidebar */
 body[data-theme="light"] .mobile-sidebar {
     background: rgba(255, 255, 255, 0.95);
@@ -1760,6 +1768,41 @@ input:checked + .slider:before {
     border-radius: 12px;
     border: 1px solid var(--border-color);
     text-align: center;
+}
+
+.save-order-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.reset-order-btn {
+    background: linear-gradient(45deg, #6b7280, #4b5563);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+    font-family: inherit;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.reset-order-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(107, 114, 128, 0.4);
+}
+
+.reset-order-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .save-order-btn {
