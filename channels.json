@@ -232,8 +232,13 @@
       "key": "music",
       "name": "الموسيقى",
       "icon": "fas fa-music"
+    },
+    {
+      "key": "movies",
+      "name": "أفلام",
+      "icon": "fas fa-film"
     }
   ],
-  "lastModified": "2025-09-07T17:35:23.658Z",
+  "lastModified": "2025-09-07T17:36:33.373Z",
   "version": "1.0"
 }
