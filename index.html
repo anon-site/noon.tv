@@ -429,6 +429,44 @@
                         إعادة تعيين التخصيصات
                     </button>
                 </div>
+                
+                <!-- JSON File Management -->
+                <div class="settings-section">
+                    <h4 class="settings-section-title">📁 إدارة ملف channels.json</h4>
+                    
+                    <div class="json-actions">
+                        <button class="json-action-btn save-json-btn" onclick="saveToChannelsJson()">
+                            <i class="fas fa-download"></i>
+                            <span>حفظ في ملف channels.json</span>
+                            <small>تحميل ملف JSON محدث</small>
+                        </button>
+                        
+                        <button class="json-action-btn load-json-btn" onclick="document.getElementById('jsonFileInput').click()">
+                            <i class="fas fa-upload"></i>
+                            <span>تحميل من ملف channels.json</span>
+                            <small>استيراد البيانات من ملف</small>
+                        </button>
+                        
+                        <button class="json-action-btn auto-save-btn" onclick="toggleAutoSave()">
+                            <i class="fas fa-sync-alt"></i>
+                            <span id="autoSaveText">تفعيل الحفظ التلقائي</span>
+                            <small>حفظ تلقائي عند التغييرات</small>
+                        </button>
+                    </div>
+                    
+                    <div class="json-info">
+                        <h5><i class="fas fa-info-circle"></i> معلومات ملف channels.json:</h5>
+                        <ul>
+                            <li>يحتوي على جميع القنوات والإعدادات والمفضلة</li>
+                            <li>يمكن مشاركته مع الآخرين أو استخدامه كنسخة احتياطية</li>
+                            <li>الحفظ التلقائي يحفظ الملف عند كل تغيير</li>
+                            <li>آخر تعديل: <span id="lastJsonModification">غير محدد</span></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Hidden file input for JSON loading -->
+                <input type="file" id="jsonFileInput" accept=".json" style="display: none;" onchange="handleJsonFileLoad(event)" />
             </div>
         </div>
         <div class="modal-overlay"></div>
