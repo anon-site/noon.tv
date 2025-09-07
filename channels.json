@@ -217,14 +217,6 @@
       "country": "السعودية"
     },
     {
-      "id": 41,
-      "name": "MBC+ Drama",
-      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-plus-drama/e37251ec2aac8f6c98f75cd0fa37cd28/index.m3u8",
-      "logo": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-plus-drama/e37251ec2aac8f6c98f75cd0fa37cd28/index.m3u8",
-      "category": "entertainment",
-      "country": "السعودية"
-    },
-    {
       "id": 43,
       "name": "الإستقامة",
       "url": "https://jmc-live.ercdn.net/alistiqama/alistiqama.m3u8",
@@ -285,6 +277,6 @@
       "icon": "fas fa-music"
     }
   ],
-  "lastModified": "2025-09-07T21:17:04.905Z",
+  "lastModified": "2025-09-07T21:17:10.365Z",
   "version": "1.0"
 }
