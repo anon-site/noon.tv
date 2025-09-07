@@ -25,14 +25,6 @@
       "country": "الإمارات"
     },
     {
-      "id": 8,
-      "name": "Rotana Cinema KSA",
-      "url": "https://bcovlive-a.akamaihd.net/9527a892aeaf43019fd9eeb77ad1516e/eu-central-1/6057955906001/playlist.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Rotana_Cinema_Egy.png/800px-Rotana_Cinema_Egy.png",
-      "category": "entertainment",
-      "country": "السعودية"
-    },
-    {
       "id": 9,
       "name": "الشرقية",
       "url": "https://5d94523502c2d.streamlock.net/home/mystream/playlist.m3u8",
@@ -49,12 +41,28 @@
       "country": "العراق"
     },
     {
+      "id": 8,
+      "name": "Rotana Cinema KSA",
+      "url": "https://bcovlive-a.akamaihd.net/9527a892aeaf43019fd9eeb77ad1516e/eu-central-1/6057955906001/playlist.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Rotana_Cinema_Egy.png/800px-Rotana_Cinema_Egy.png",
+      "category": "entertainment",
+      "country": "السعودية"
+    },
+    {
       "id": 13,
       "name": "Rotana Classic",
       "url": "https://bcovlive-a.akamaihd.net/0debf5648e584e5fb795c3611c5c0252/eu-central-1/6057955906001/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Rotana_Classic.png/640px-Rotana_Classic.png",
       "category": "entertainment",
       "country": "السعودية"
+    },
+    {
+      "id": 24,
+      "name": "Rotana Cinema Eg",
+      "url": "https://rotana.hibridcdn.net/rotananet/cinemamasr_net-7Y83PP5adWixDF93/playlist.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Rotana_Cinema_Egy.png/800px-Rotana_Cinema_Egy.png",
+      "category": "entertainment",
+      "country": "مصر"
     },
     {
       "id": 14,
@@ -119,14 +127,6 @@
       "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSN2OWFmtKMWWlavNdQD0SJkpXJ5pp8E9hu3A&s",
       "category": "religious",
       "country": "السعودية"
-    },
-    {
-      "id": 24,
-      "name": "Rotana Cinema Eg",
-      "url": "https://rotana.hibridcdn.net/rotananet/cinemamasr_net-7Y83PP5adWixDF93/playlist.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Rotana_Cinema_Egy.png/800px-Rotana_Cinema_Egy.png",
-      "category": "entertainment",
-      "country": "مصر"
     },
     {
       "id": 25,
@@ -232,13 +232,8 @@
       "key": "music",
       "name": "الموسيقى",
       "icon": "fas fa-music"
-    },
-    {
-      "key": "movies",
-      "name": "أفلام",
-      "icon": "fas fa-film"
     }
   ],
-  "lastModified": "2025-09-07T17:36:33.373Z",
+  "lastModified": "2025-09-07T18:12:57.588Z",
   "version": "1.0"
 }
