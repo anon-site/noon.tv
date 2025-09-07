@@ -247,6 +247,14 @@
       "logo": "http://213.57.91.138:8000/play/a05l",
       "category": "entertainment",
       "country": "السعودية"
+    },
+    {
+      "id": 40,
+      "name": "MBC Iraq",
+      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-iraq/e38c44b1b43474e1c39cb5b90203691e/index.m3u8",
+      "logo": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-iraq/e38c44b1b43474e1c39cb5b90203691e/index.m3u8",
+      "category": "entertainment",
+      "country": "السعودية"
     }
   ],
   "favorites": [],
@@ -303,6 +311,6 @@
       "icon": "fas fa-newspaper"
     }
   ],
-  "lastModified": "2025-09-07T18:50:07.153Z",
+  "lastModified": "2025-09-07T18:51:27.359Z",
   "version": "1.0"
 }
