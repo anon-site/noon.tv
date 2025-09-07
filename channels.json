@@ -233,14 +233,6 @@
       "country": "السعودية"
     },
     {
-      "id": 38,
-      "name": "MBC 5",
-      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-5/ee6b000cee0629411b666ab26cb13e9b/index.m3u8",
-      "logo": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-5/ee6b000cee0629411b666ab26cb13e9b/index.m3u8",
-      "category": "entertainment",
-      "country": "السعودية"
-    },
-    {
       "id": 39,
       "name": "MBC Action",
       "url": "http://213.57.91.138:8000/play/a05l",
@@ -333,6 +325,6 @@
       "icon": "fas fa-music"
     }
   ],
-  "lastModified": "2025-09-07T21:16:32.512Z",
+  "lastModified": "2025-09-07T21:16:42.140Z",
   "version": "1.0"
 }
