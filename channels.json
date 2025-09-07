@@ -215,6 +215,14 @@
       "logo": "https://www.istiqama.tv/wp-content/uploads/2024/05/Logo-e1715111491262.png",
       "category": "religious",
       "country": "عُمان"
+    },
+    {
+      "id": 44,
+      "name": "القر",
+      "url": "https://ktvlive.online/stream/hls/ch1.m3u8",
+      "logo": "https://ktvlive.online/stream/hls/ch1.m3u8",
+      "category": "religious",
+      "country": "العراق"
     }
   ],
   "favorites": [],
@@ -267,8 +275,13 @@
       "key": "music",
       "name": "الموسيقى",
       "icon": "fas fa-music"
+    },
+    {
+      "key": "documentary",
+      "name": "الوثائقية",
+      "icon": "fas fa-newspaper"
     }
   ],
-  "lastModified": "2025-09-07T21:17:12.677Z",
+  "lastModified": "2025-09-07T21:22:26.591Z",
   "version": "1.0"
 }
