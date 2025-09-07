@@ -211,7 +211,7 @@
     {
       "id": 44,
       "name": "تجرية",
-      "url": "https://bcovlive-a.akamaihd.net/753a1f2c951b4fb3914f30e1deb147d8/us-west-2/6057955906001/playlist.m3u8",
+      "url": "https://dmieigthvllta.cdn.mgmlcdn.com/dubaitvht/smil:dubaitv.stream.smil/chunklist.m3u8",
       "logo": "https://cdn-globecast.akamaized.net/live/eds/2m_monde/hls_video_ts_tuhawxpiemz257adfc/2m_monde.m3u8",
       "category": "news",
       "country": "العراق"
@@ -274,6 +274,6 @@
       "icon": "fas fa-newspaper"
     }
   ],
-  "lastModified": "2025-09-08T05:13:02.017Z",
+  "lastModified": "2025-09-08T05:13:45.249Z",
   "version": "1.0"
 }
