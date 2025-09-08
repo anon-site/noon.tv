@@ -133,7 +133,7 @@
       "name": "روتانا افلام +",
       "url": "https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/rotana-aflam-plus/master.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Rotana_Cinema_Egy.png/800px-Rotana_Cinema_Egy.png",
-      "category": "entertainment",
+      "category": "movies",
       "country": "السعودية"
     },
     {
@@ -282,6 +282,6 @@
       "icon": "fas fa-film"
     }
   ],
-  "lastModified": "2025-09-09T03:19:25.972Z",
+  "lastModified": "2025-09-09T03:19:32.259Z",
   "version": "1.0"
 }
