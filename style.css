@@ -974,22 +974,6 @@ body[data-theme="light"] .logo h1 {
     margin-right: 5px;
 }
 
-.search-btn {
-    background: linear-gradient(45deg, #4ecdc4, #44a08d);
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: var(--transition);
-    box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
-}
-
-.search-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
-}
 
 /* Light Theme for Desktop Sidebar */
 body[data-theme="light"] .desktop-sidebar {
@@ -1061,8 +1045,7 @@ body[data-theme="light"] .sidebar-action-btn:hover {
         display: none;
     }
     
-    .header-actions .favorites-btn,
-    .header-actions .search-btn {
+    .header-actions .favorites-btn {
         display: none;
     }
 }

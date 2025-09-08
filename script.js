@@ -3537,13 +3537,6 @@ class ArabicTVApp {
         this.toggleFavoritesFilter();
     }
 
-    toggleSearch() {
-        // Focus on search input
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput) {
-            searchInput.focus();
-        }
-    }
 
     // Update sidebar counts
     updateSidebarCounts() {
