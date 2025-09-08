@@ -53,7 +53,7 @@
       "name": "Rotana Classic",
       "url": "https://bcovlive-a.akamaihd.net/0debf5648e584e5fb795c3611c5c0252/eu-central-1/6057955906001/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Rotana_Classic.png/640px-Rotana_Classic.png",
-      "category": "entertainment",
+      "category": "movies",
       "country": "السعودية"
     },
     {
@@ -229,7 +229,7 @@
   "settings": {
     "autoQuality": true,
     "autoplay": true,
-    "volume": 80,
+    "volume": 62,
     "theme": "dark",
     "showNewsTicker": false,
     "zoomLevel": 100,
@@ -239,7 +239,11 @@
     "animationsEnabled": true,
     "compactMode": true,
     "highContrast": false,
-    "borderRadius": "rounded"
+    "borderRadius": "rounded",
+    "showCustomControls": true,
+    "notifications": false,
+    "notificationSound": false,
+    "notificationDuration": 3
   },
   "categories": [
     {
@@ -271,8 +275,13 @@
       "key": "music",
       "name": "الموسيقى",
       "icon": "fas fa-music"
+    },
+    {
+      "key": "movies",
+      "name": "أفلام",
+      "icon": "fas fa-film"
     }
   ],
-  "lastModified": "2025-09-09T02:37:41.897Z",
+  "lastModified": "2025-09-09T03:19:12.860Z",
   "version": "1.0"
 }
