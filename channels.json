@@ -1,4 +1,6 @@
 {
+  "version": "1.0",
+  "timestamp": "2025-09-08T22:33:09.737Z",
   "channels": [
     {
       "id": 3,
@@ -275,8 +277,21 @@
       "key": "music",
       "name": "الموسيقى",
       "icon": "fas fa-music"
+    },
+    {
+      "key": "documentary",
+      "name": "الوثائقية",
+      "icon": "fas fa-newspaper"
     }
   ],
-  "lastModified": "2025-09-08T22:32:53.720Z",
-  "version": "1.0"
+  "remoteStorage": {
+    "enabled": true,
+    "provider": "github",
+    "repository": "anon-site/TV-AR",
+    "branch": "main",
+    "filename": "channels.json",
+    "autoSync": true,
+    "lastSync": "2025-09-08T22:32:54.674Z"
+  },
+  "generalSettings": {}
 }
