@@ -235,7 +235,7 @@
     {
       "id": 47,
       "name": "MBC Iraq",
-      "url": "http://mobi.jawaltv.com/pyr/?id=https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-iraq/e38c44b1b43474e1c39cb5b90203691e/index.m3u8",
+      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-iraq/e38c44b1b43474e1c39cb5b90203691e/manifest/video/1080p2400kbps/video.m3u8",
       "logo": "https://i.ytimg.com/vi/45tB7jUCKfw/maxresdefault.jpg",
       "category": "entertainment",
       "country": "Iraq",
@@ -304,6 +304,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-09T04:18:10.033Z",
+  "lastModified": "2025-09-09T04:18:41.705Z",
   "version": "1.0"
 }
