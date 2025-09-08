@@ -231,6 +231,14 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/4/45/%D9%82%D9%86%D8%A7%D8%A9_%D9%85%D9%83%D9%85%D9%84%D9%8A%D9%86.jpg",
       "category": "entertainment",
       "country": "Turly"
+    },
+    {
+      "id": 47,
+      "name": "تجربة يوتيوب",
+      "url": "https://www.youtube.com/watch?v=XqmIePLIRag",
+      "logo": "https://www.youtube.com/watch?v=XqmIePLIRag",
+      "category": "news",
+      "country": "السعودية"
     }
   ],
   "favorites": [],
@@ -295,6 +303,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-09T03:44:34.649Z",
+  "lastModified": "2025-09-09T03:45:38.820Z",
   "version": "1.0"
 }
