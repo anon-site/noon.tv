@@ -1,4 +1,6 @@
 {
+  "version": "1.0",
+  "timestamp": "2025-09-09T03:20:20.009Z",
   "channels": [
     {
       "id": 3,
@@ -282,6 +284,14 @@
       "icon": "fas fa-film"
     }
   ],
-  "lastModified": "2025-09-09T03:19:41.345Z",
-  "version": "1.0"
+  "remoteStorage": {
+    "enabled": true,
+    "provider": "github",
+    "repository": "anon-site/TV-AR",
+    "branch": "main",
+    "filename": "channels.json",
+    "autoSync": true,
+    "lastSync": "2025-09-09T03:19:42.109Z"
+  },
+  "generalSettings": {}
 }
