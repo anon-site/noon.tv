@@ -200,6 +200,7 @@ class ArabicTVApp {
         this.originalOrder = [...this.channels]; // Track original order for comparison
         this.hasOrderChanged = false; // Track if order has been modified
         this.isMobileSidebarOpen = false; // Track mobile sidebar state
+        this.isDesktopSidebarOpen = false; // Track desktop sidebar state
         this.favorites = new Set(); // Track favorite channels
         this.currentCountryFilter = 'all'; // Track country filter
         this.showFavoritesOnly = false; // Track favorites filter
@@ -243,6 +244,8 @@ class ArabicTVApp {
         this.initializeNewFeatures(); // Initialize new navigation features
         this.updateChannelStats(); // Update channel statistics
         this.updateChannelCategoryOptions(); // Update category options
+        this.updateNavigationTabs(); // Update navigation tabs
+        this.updateSidebarCounts(); // Update sidebar counts
         this.hideLoading();
         
         // تشخيص أولي
@@ -466,12 +469,6 @@ class ArabicTVApp {
     }
 
     bindEvents() {
-        // Navigation tabs
-        document.querySelectorAll('.nav-tab').forEach(tab => {
-            tab.addEventListener('click', (e) => {
-                this.filterChannels(e.target.dataset.category);
-            });
-        });
 
         // Search functionality
         document.getElementById('searchInput').addEventListener('input', (e) => {
@@ -622,22 +619,62 @@ class ArabicTVApp {
                 if (e.key === 'Escape' && this.isMobileSidebarOpen) {
                     this.closeMobileMenu();
                 }
+                if (e.key === 'Escape' && this.isDesktopSidebarOpen) {
+                    this.toggleSidebar();
+                }
+            });
+
+            // Add event listeners for desktop sidebar nav tabs
+            document.querySelectorAll('.sidebar-nav-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const category = tab.dataset.category;
+                    this.filterChannels(category);
+                    
+                    // Update active tab
+                    document.querySelectorAll('.sidebar-nav-tab, .mobile-nav-tab').forEach(t => {
+                        t.classList.remove('active');
+                    });
+                    document.querySelectorAll(`[data-category="${category}"]`).forEach(t => {
+                        t.classList.add('active');
+                    });
+                });
+            });
+
+            // Add event listeners for sidebar action buttons
+            document.querySelectorAll('.sidebar-action-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Close sidebar after action
+                    this.toggleSidebar();
+                });
             });
     }
 
     renderChannels() {
         const grid = document.getElementById('channelsGrid');
+        if (!grid) {
+            console.error('لم يتم العثور على عنصر channelsGrid');
+            return;
+        }
+        
         grid.innerHTML = '';
+        console.log('عرض القنوات:', this.filteredChannels.length, 'قناة');
 
         this.filteredChannels.forEach(channel => {
             const channelCard = this.createChannelCard(channel);
             grid.appendChild(channelCard);
         });
+
+        // Update sidebar counts
+        this.updateSidebarCounts();
+        
+        // Update navigation tabs
+        this.updateNavigationTabs();
     }
 
     createChannelCard(channel) {
         const card = document.createElement('div');
         card.className = 'channel-card';
+        card.dataset.category = channel.category;
         
         // إنشاء placeholder محسن للشعار
         const logoPlaceholder = this.createLogoPlaceholder(channel);
@@ -771,10 +808,11 @@ class ArabicTVApp {
     }
 
     filterChannels(category) {
+        console.log('تصفية القنوات حسب الفئة:', category);
         this.currentCategory = category;
         
         // Update active tab
-        document.querySelectorAll('.nav-tab, .mobile-nav-tab').forEach(tab => {
+        document.querySelectorAll('.mobile-nav-tab, .sidebar-nav-tab').forEach(tab => {
             tab.classList.remove('active');
         });
         document.querySelectorAll(`[data-category="${category}"]`).forEach(tab => {
@@ -1313,6 +1351,8 @@ class ArabicTVApp {
                 if (parsedChannels && parsedChannels.length > 0) {
                     this.channels = parsedChannels;
                     console.log('تم تحميل القنوات المحفوظة:', this.channels.length, 'قناة');
+                    // تحديث عداد القنوات
+                    this.updateSidebarCounts();
                     return;
                 }
             }
@@ -1320,16 +1360,23 @@ class ArabicTVApp {
             // إذا لم توجد قنوات محفوظة أو كانت فارغة، احفظ القنوات الافتراضية
             console.log('لا توجد قنوات محفوظة، سيتم حفظ القنوات الافتراضية');
             this.saveChannelsToStorage();
+            // تحديث عداد القنوات
+            this.updateSidebarCounts();
         
         } catch (error) {
             console.error('خطأ في تحميل القنوات المحفوظة:', error);
             console.log('سيتم استخدام القنوات الافتراضية وحفظها');
             this.saveChannelsToStorage();
+            // تحديث عداد القنوات
+            this.updateSidebarCounts();
         }
         
         // تحديث الترتيب الأصلي في جميع الحالات
         this.originalOrder = [...this.channels];
         this.hasOrderChanged = false;
+        
+        // تحديث عداد القنوات
+        this.updateSidebarCounts();
     }
 
     saveGeneralSettings() {
@@ -3081,7 +3128,7 @@ class ArabicTVApp {
             this.currentCategory = 'all';
             
             // Update nav tabs
-            const navTabs = document.querySelectorAll('.nav-tab, .mobile-nav-tab');
+            const navTabs = document.querySelectorAll('.mobile-nav-tab');
             navTabs.forEach(tab => {
                 tab.classList.remove('active');
                 if (tab.dataset.category === 'all') {
@@ -3459,10 +3506,104 @@ class ArabicTVApp {
         }
     }
 
+    // Desktop Sidebar Functions
+    toggleSidebar() {
+        this.isDesktopSidebarOpen = !this.isDesktopSidebarOpen;
+        const sidebar = document.getElementById('desktopSidebar');
+        const mainContent = document.querySelector('.main-content');
+        const overlay = document.querySelector('.sidebar-overlay') || this.createSidebarOverlay();
+        
+        if (this.isDesktopSidebarOpen) {
+            sidebar.classList.add('active');
+            mainContent.classList.add('sidebar-open');
+            overlay.classList.add('active');
+        } else {
+            sidebar.classList.remove('active');
+            mainContent.classList.remove('sidebar-open');
+            overlay.classList.remove('active');
+        }
+    }
+
+    createSidebarOverlay() {
+        const overlay = document.createElement('div');
+        overlay.className = 'sidebar-overlay';
+        overlay.onclick = () => this.toggleSidebar();
+        document.body.appendChild(overlay);
+        return overlay;
+    }
+
+    toggleFavorites() {
+        // Toggle favorites filter
+        this.toggleFavoritesFilter();
+    }
+
+    toggleSearch() {
+        // Focus on search input
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.focus();
+        }
+    }
+
+    // Update sidebar counts
+    updateSidebarCounts() {
+        console.log('بدء تحديث عداد القنوات - عدد القنوات الإجمالي:', this.channels.length);
+        
+        const categories = ['all', 'news', 'entertainment', 'sports', 'religious', 'music'];
+        
+        categories.forEach(category => {
+            // Update desktop sidebar counts
+            const countElement = document.getElementById(`${category}Count`);
+            if (countElement) {
+                let count = 0;
+                if (category === 'all') {
+                    count = this.channels.length;
+                } else {
+                    count = this.channels.filter(channel => channel.category === category).length;
+                }
+                countElement.textContent = count;
+                console.log(`عداد ${category}:`, count);
+            } else {
+                console.warn(`لم يتم العثور على عنصر ${category}Count`);
+            }
+            
+            // Update mobile sidebar counts
+            const mobileCountElement = document.getElementById(`mobile${category.charAt(0).toUpperCase() + category.slice(1)}Count`);
+            if (mobileCountElement) {
+                let count = 0;
+                if (category === 'all') {
+                    count = this.channels.length;
+                } else {
+                    count = this.channels.filter(channel => channel.category === category).length;
+                }
+                mobileCountElement.textContent = count;
+                console.log(`عداد الموبايل ${category}:`, count);
+            } else {
+                console.warn(`لم يتم العثور على عنصر mobile${category.charAt(0).toUpperCase() + category.slice(1)}Count`);
+            }
+        });
+
+        // Update favorites count
+        const favoritesCountElements = document.querySelectorAll('.favorites-count, #headerFavoritesCount');
+        favoritesCountElements.forEach(element => {
+            element.textContent = this.favorites.size;
+        });
+        
+        // Debug log
+        console.log('تم تحديث عداد القنوات:', {
+            all: this.channels.length,
+            news: this.channels.filter(c => c.category === 'news').length,
+            entertainment: this.channels.filter(c => c.category === 'entertainment').length,
+            sports: this.channels.filter(c => c.category === 'sports').length,
+            religious: this.channels.filter(c => c.category === 'religious').length,
+            music: this.channels.filter(c => c.category === 'music').length
+        });
+    }
+
     // Sync mobile nav tabs with desktop nav tabs
     syncMobileNavTabs() {
         const mobileNavTabs = document.querySelectorAll('.mobile-nav-tab');
-        const desktopNavTabs = document.querySelectorAll('.nav-tab');
+        const desktopNavTabs = document.querySelectorAll('.sidebar-nav-tab');
         
         mobileNavTabs.forEach((mobileTab, index) => {
             mobileTab.addEventListener('click', () => {
@@ -3824,24 +3965,6 @@ class ArabicTVApp {
     bindNewNavigationEvents() {
 
 
-        // Header filter buttons
-        const countryFilterBtn = document.getElementById('countryFilterBtn');
-        const favoritesFilterBtn = document.getElementById('favoritesFilterBtn');
-
-        if (countryFilterBtn) {
-            countryFilterBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.toggleFilterDropdown('country');
-            });
-        }
-
-
-
-        if (favoritesFilterBtn) {
-            favoritesFilterBtn.addEventListener('click', () => {
-                this.toggleFavoritesFilter();
-            });
-        }
 
         // Breadcrumb navigation
         const breadcrumbHome = document.querySelector('.breadcrumb-item[data-category="all"]');
@@ -3863,22 +3986,7 @@ class ArabicTVApp {
         });
 
         // Mobile main filter buttons (outside sidebar)
-        const mobileMainCountryFilter = document.getElementById('mobileMainCountryFilter');
-        const mobileMainFavoritesFilter = document.getElementById('mobileMainFavoritesFilter');
         const mobileMainSearchInput = document.getElementById('mobileMainSearchInput');
-
-        if (mobileMainCountryFilter) {
-            mobileMainCountryFilter.addEventListener('click', () => {
-                this.toggleMobileCountryDropdown();
-            });
-        }
-
-        if (mobileMainFavoritesFilter) {
-            mobileMainFavoritesFilter.addEventListener('click', () => {
-                this.toggleFavoritesFilter();
-                this.updateMobileFavoritesButton();
-            });
-        }
 
         if (mobileMainSearchInput) {
             mobileMainSearchInput.addEventListener('input', (e) => {
@@ -3893,49 +4001,13 @@ class ArabicTVApp {
 
 
 
-        // Setup mobile filter dropdown
-        this.setupMobileFilterDropdown();
     }
 
     setupFilterDropdowns() {
-        // Country filter options
-        const countryOptions = document.querySelectorAll('#countryDropdown .filter-option');
-        countryOptions.forEach(option => {
-            option.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const country = option.dataset.country;
-                this.setCountryFilter(country);
-                this.closeAllFilterDropdowns();
-            });
-        });
 
 
     }
 
-    setupMobileFilterDropdown() {
-        // Mobile country filter options
-        const mobileCountryOptions = document.querySelectorAll('#mobileCountryDropdown .mobile-filter-option');
-        mobileCountryOptions.forEach(option => {
-            option.addEventListener('click', (e) => {
-                const country = e.target.dataset.country;
-                this.setCountryFilter(country);
-                this.closeMobileCountryDropdown();
-                this.updateMobileCountryButton();
-            });
-        });
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            const mobileCountryDropdown = document.getElementById('mobileCountryDropdown');
-            const mobileMainCountryFilter = document.getElementById('mobileMainCountryFilter');
-            
-            if (mobileCountryDropdown && 
-                !mobileCountryDropdown.contains(e.target) && 
-                !mobileMainCountryFilter.contains(e.target)) {
-                this.closeMobileCountryDropdown();
-            }
-        });
-    }
 
     // Favorites Management
     loadFavorites() {
@@ -3985,18 +4057,12 @@ class ArabicTVApp {
     }
 
     updateFavoritesCount() {
-        const mobileMainFavoritesCountElement = document.getElementById('mobileMainFavoritesCount');
-        
         const count = this.favorites.size;
         
-        if (mobileMainFavoritesCountElement) {
-            mobileMainFavoritesCountElement.textContent = count;
-            
-            if (count > 0) {
-                mobileMainFavoritesCountElement.classList.add('show');
-            } else {
-                mobileMainFavoritesCountElement.classList.remove('show');
-            }
+        // Update header favorites count
+        const headerFavoritesCountElement = document.getElementById('headerFavoritesCount');
+        if (headerFavoritesCountElement) {
+            headerFavoritesCountElement.textContent = count;
         }
     }
 
@@ -4074,27 +4140,7 @@ class ArabicTVApp {
     setCountryFilter(country) {
         this.currentCountryFilter = country;
         
-        // Update button text
-        const countryBtn = document.getElementById('countryFilterBtn');
-        if (countryBtn) {
-            const span = countryBtn.querySelector('span');
-            if (country === 'all') {
-                span.textContent = 'البلد';
-                countryBtn.classList.remove('active');
-            } else {
-                span.textContent = country;
-                countryBtn.classList.add('active');
-            }
-        }
 
-        // Update dropdown active state
-        const countryOptions = document.querySelectorAll('#countryDropdown .filter-option');
-        countryOptions.forEach(option => {
-            option.classList.remove('active');
-            if (option.dataset.country === country) {
-                option.classList.add('active');
-            }
-        });
 
         // Update mobile button text
         this.updateMobileCountryButton();
@@ -4107,22 +4153,24 @@ class ArabicTVApp {
 
     applyAllFilters() {
         let filtered = [...this.channels];
+        console.log('تطبيق الفلاتر - القنوات الأصلية:', this.channels.length);
 
         // Apply category filter
         if (this.currentCategory !== 'all') {
             filtered = filtered.filter(channel => channel.category === this.currentCategory);
+            console.log('بعد تصفية الفئة:', filtered.length);
         }
 
         // Apply country filter
         if (this.currentCountryFilter !== 'all') {
             filtered = filtered.filter(channel => channel.country === this.currentCountryFilter);
+            console.log('بعد تصفية البلد:', filtered.length);
         }
-
-
 
         // Apply favorites filter
         if (this.showFavoritesOnly) {
             filtered = filtered.filter(channel => this.favorites.has(channel.id));
+            console.log('بعد تصفية المفضلة:', filtered.length);
         }
 
         // Apply search filter
@@ -4133,9 +4181,11 @@ class ArabicTVApp {
                 return channel.name.toLowerCase().includes(searchTerm) ||
                        channel.country.toLowerCase().includes(searchTerm);
             });
+            console.log('بعد تصفية البحث:', filtered.length);
         }
 
         this.filteredChannels = filtered;
+        console.log('النتيجة النهائية:', this.filteredChannels.length, 'قناة');
         this.renderChannels();
         this.updateChannelStats();
     }
@@ -4146,27 +4196,10 @@ class ArabicTVApp {
         this.showFavoritesOnly = false;
 
         // Reset UI elements
-        document.querySelectorAll('.nav-tab').forEach(tab => {
-            tab.classList.remove('active');
-            if (tab.dataset.category === 'all') {
-                tab.classList.add('active');
-            }
-        });
-
-        // Reset filter buttons
-        const countryBtn = document.getElementById('countryFilterBtn');
-        if (countryBtn) {
-            countryBtn.querySelector('span').textContent = 'البلد';
-            countryBtn.classList.remove('active');
-        }
 
 
 
-        const favoritesFilterBtn = document.getElementById('favoritesFilterBtn');
-        
-        if (favoritesFilterBtn) {
-            favoritesFilterBtn.classList.remove('active');
-        }
+
 
         // Clear search
         const searchInput = document.getElementById('searchInput');
@@ -4543,107 +4576,10 @@ class ArabicTVApp {
         }
     }
 
-    // Mobile Dropdown Functions
-    toggleMobileCountryDropdown() {
-        const mobileCountryDropdown = document.getElementById('mobileCountryDropdown');
-        const mobileMainCountryFilter = document.getElementById('mobileMainCountryFilter');
-        
-        if (mobileCountryDropdown) {
-            const isOpen = mobileCountryDropdown.classList.contains('show');
-            
-            if (isOpen) {
-                this.closeMobileCountryDropdown();
-            } else {
-                this.openMobileCountryDropdown();
-            }
-            
-            // Toggle button state
-            if (mobileMainCountryFilter) {
-                mobileMainCountryFilter.classList.toggle('open', !isOpen);
-            }
-        }
-    }
 
-    openMobileCountryDropdown() {
-        const mobileCountryDropdown = document.getElementById('mobileCountryDropdown');
-        if (mobileCountryDropdown) {
-            mobileCountryDropdown.classList.add('show');
-            this.updateMobileCountryDropdownSelection();
-        }
-    }
 
-    closeMobileCountryDropdown() {
-        const mobileCountryDropdown = document.getElementById('mobileCountryDropdown');
-        const mobileMainCountryFilter = document.getElementById('mobileMainCountryFilter');
-        
-        if (mobileCountryDropdown) {
-            mobileCountryDropdown.classList.remove('show');
-        }
-        
-        if (mobileMainCountryFilter) {
-            mobileMainCountryFilter.classList.remove('open');
-        }
-    }
 
-    updateMobileCountryDropdownSelection() {
-        const mobileCountryOptions = document.querySelectorAll('#mobileCountryDropdown .mobile-filter-option');
-        mobileCountryOptions.forEach(option => {
-            option.classList.remove('selected');
-            if (option.dataset.country === this.currentCountryFilter) {
-                option.classList.add('selected');
-            }
-        });
-    }
 
-    updateMobileCountryButton() {
-        const mobileMainCountryFilter = document.getElementById('mobileMainCountryFilter');
-        if (mobileMainCountryFilter) {
-            const span = mobileMainCountryFilter.querySelector('span');
-            const displayText = this.currentCountryFilter === 'all' ? 'الكل' : this.currentCountryFilter;
-            span.textContent = `البلد: ${displayText}`;
-            
-            if (this.currentCountryFilter === 'all') {
-                mobileMainCountryFilter.classList.remove('active');
-            } else {
-                mobileMainCountryFilter.classList.add('active');
-            }
-        }
-    }
-
-    // Mobile-specific functions
-    toggleMobileCountryFilter() {
-        const countries = ['الكل', 'قطر', 'الإمارات', 'السعودية', 'لبنان', 'مصر', 'بريطانيا'];
-        const currentIndex = countries.indexOf(this.currentCountryFilter === 'all' ? 'الكل' : this.currentCountryFilter);
-        const nextIndex = (currentIndex + 1) % countries.length;
-        const nextCountry = countries[nextIndex];
-        
-        const countryValue = nextCountry === 'الكل' ? 'all' : nextCountry;
-        this.setCountryFilter(countryValue);
-        
-        // Update mobile main button text
-        const mobileMainCountryFilter = document.getElementById('mobileMainCountryFilter');
-        if (mobileMainCountryFilter) {
-            const span = mobileMainCountryFilter.querySelector('span');
-            span.textContent = `البلد: ${nextCountry}`;
-            
-            if (countryValue === 'all') {
-                mobileMainCountryFilter.classList.remove('active');
-            } else {
-                mobileMainCountryFilter.classList.add('active');
-            }
-        }
-    }
-
-    updateMobileFavoritesButton() {
-        const mobileMainFavoritesFilter = document.getElementById('mobileMainFavoritesFilter');
-        if (mobileMainFavoritesFilter) {
-            if (this.showFavoritesOnly) {
-                mobileMainFavoritesFilter.classList.add('active');
-            } else {
-                mobileMainFavoritesFilter.classList.remove('active');
-            }
-        }
-    }
 
     // Categories Management
     getDefaultCategories() {
@@ -4667,9 +4603,13 @@ class ArabicTVApp {
                 this.categories = this.getDefaultCategories();
                 this.saveCategories();
             }
+            
+            // Update navigation tabs after loading categories
+            this.updateNavigationTabs();
         } catch (error) {
             console.error('خطأ في تحميل الفئات:', error);
             this.categories = this.getDefaultCategories();
+            this.updateNavigationTabs();
         }
     }
 
@@ -4801,22 +4741,28 @@ class ArabicTVApp {
     }
 
     updateNavigationTabs() {
-        // Update desktop navigation
-        const navTabs = document.querySelector('.nav-tabs');
-        if (navTabs) {
-            navTabs.innerHTML = '';
+        console.log('تحديث أزرار التنقل - الفئات:', this.categories.length);
+        
+        // Update desktop sidebar navigation
+        const sidebarNavTabs = document.querySelectorAll('.sidebar-nav-tab');
+        if (sidebarNavTabs.length > 0) {
             this.categories.forEach(category => {
-                const tab = document.createElement('button');
-                tab.className = 'nav-tab';
-                tab.dataset.category = category.key;
-                if (category.key === 'all') {
-                    tab.classList.add('active');
+                const tab = document.querySelector(`[data-category="${category.key}"]`);
+                if (tab) {
+                    tab.innerHTML = `<i class="${category.icon}"></i> <span>${category.name}</span> <span class="tab-count" id="${category.key}Count">0</span>`;
+                    console.log('تم تحديث تبويب:', category.name);
+                } else {
+                    console.warn(`لم يتم العثور على تبويب ${category.key}`);
                 }
-                tab.innerHTML = `<i class="${category.icon}"></i> ${category.name}`;
-                tab.addEventListener('click', () => this.filterChannels(category.key));
-                navTabs.appendChild(tab);
             });
+        } else {
+            console.warn('لم يتم العثور على أزرار القائمة الجانبية');
         }
+        
+        // Update sidebar counts after updating tabs
+        this.updateSidebarCounts();
+        
+        console.log('تم الانتهاء من تحديث أزرار التنقل');
 
         // Update mobile navigation
         const mobileNavTabs = document.querySelector('.mobile-nav-tabs');
@@ -4829,14 +4775,19 @@ class ArabicTVApp {
                 if (category.key === 'all') {
                     tab.classList.add('active');
                 }
-                tab.innerHTML = `<i class="${category.icon}"></i> ${category.name}`;
+                tab.innerHTML = `<i class="${category.icon}"></i> <span>${category.name}</span> <span class="tab-count" id="mobile${category.key.charAt(0).toUpperCase() + category.key.slice(1)}Count">0</span>`;
                 tab.addEventListener('click', () => {
                     this.filterChannels(category.key);
                     this.closeMobileMenu();
                 });
                 mobileNavTabs.appendChild(tab);
             });
+            console.log('تم تحديث قائمة الموبايل');
+        } else {
+            console.warn('لم يتم العثور على قائمة الموبايل');
         }
+        
+        console.log('تم الانتهاء من تحديث جميع أزرار التنقل');
     }
 
     updateChannelCategoryOptions() {
@@ -4870,6 +4821,10 @@ function openAdminPanel() {
 
 function closeAdminPanel() {
     app.closeAdminPanel();
+}
+
+function openIPTVChecker() {
+    window.open('iptv-checker.html', '_blank');
 }
 
 function closeModal() {

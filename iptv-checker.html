@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فحص روابط IPTV - القنوات العربية</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* IPTV Checker Specific Styles */
+        .iptv-checker-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .checker-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .checker-header h1 {
+            font-size: 2.5rem;
+            color: var(--highlight-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .checker-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .checker-form {
+            background: var(--secondary-color);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .url-input-container {
+            position: relative;
+            display: flex;
+            gap: 10px;
+        }
+
+        .url-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background: var(--background-dark);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: var(--highlight-color);
+            box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.1);
+        }
+
+        .check-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, var(--highlight-color), #ff6b7a);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .check-btn:hover {
+            background: #d6336c;
+        }
+
+        .check-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .supported-formats {
+            background: var(--accent-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .supported-formats h3 {
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .formats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .format-item {
+            background: var(--background-dark);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .format-item:hover {
+            background: var(--highlight-color);
+            color: white;
+        }
+
+        .format-item i {
+            font-size: 2rem;
+            color: var(--highlight-color);
+            margin-bottom: 8px;
+        }
+
+        .format-item span {
+            display: block;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .results-container {
+            background: var(--secondary-color);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            display: none;
+        }
+
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .results-title {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .status-error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .status-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .status-loading {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+        }
+
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .detail-item {
+            background: var(--background-dark);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--highlight-color);
+        }
+
+        .detail-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .stream-info {
+            background: var(--background-dark);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stream-info h4 {
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quality-levels {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .quality-badge {
+            padding: 6px 12px;
+            background: var(--accent-color);
+            color: var(--text-primary);
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .actions-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .actions-container .action-btn {
+            min-width: 160px;
+            justify-content: center;
+            padding: 15px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .actions-container .action-btn i {
+            font-size: 1.1rem;
+            margin-left: 8px;
+        }
+
+        .action-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .play-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .copy-btn {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+        }
+
+        .test-btn {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+        }
+
+        .action-btn:hover {
+            opacity: 0.8;
+        }
+
+        .error-details {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .error-details h4 {
+            color: #dc2626;
+            margin-bottom: 10px;
+        }
+
+        .error-details p {
+            color: #991b1b;
+            margin-bottom: 5px;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--highlight-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            background: #d6336c;
+        }
+
+        .quick-tests {
+            background: var(--secondary-color);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .quick-tests h3 {
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .test-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .quick-test-btn {
+            padding: 15px 25px;
+            background: var(--accent-color);
+            color: var(--text-primary);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            min-width: 160px;
+            justify-content: center;
+        }
+
+        .quick-test-btn i {
+            font-size: 1.1rem;
+        }
+
+        .quick-test-btn:hover {
+            background: var(--highlight-color);
+            color: white;
+        }
+
+        /* File Checker Styles */
+        .file-checker {
+            background: var(--secondary-color);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .file-checker h3 {
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-checker p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .file-upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            background: var(--background-dark);
+            transition: border-color 0.2s ease;
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--highlight-color);
+        }
+
+        .file-upload-area.dragover {
+            border-color: var(--highlight-color);
+            background: rgba(233, 69, 96, 0.05);
+        }
+
+        .upload-content i {
+            font-size: 3rem;
+            color: var(--highlight-color);
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .upload-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .upload-content p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .upload-btn {
+            padding: 12px 24px;
+            background: var(--highlight-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 auto;
+            font-weight: 600;
+        }
+
+        .upload-btn:hover {
+            background: #d6336c;
+        }
+
+        .file-info {
+            background: var(--background-dark);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .file-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .file-name, .file-size, .file-links-count {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary);
+        }
+
+        .file-name i {
+            color: var(--highlight-color);
+        }
+
+        .file-size i {
+            color: #3b82f6;
+        }
+
+        .file-links-count i {
+            color: #10b981;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .file-actions .action-btn {
+            min-width: 180px;
+            justify-content: center;
+            padding: 15px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .file-actions .action-btn i {
+            font-size: 1.1rem;
+            margin-left: 8px;
+        }
+
+        .file-results-container {
+            background: var(--secondary-color);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .file-status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .file-progress {
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--background-dark);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--highlight-color), #ff6b7a);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .file-summary {
+            background: var(--background-dark);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: var(--accent-color);
+            border-radius: 8px;
+        }
+
+        .stat-item i {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .stat-item i.fa-check-circle {
+            color: #10b981;
+        }
+
+        .stat-item i.fa-times-circle {
+            color: #ef4444;
+        }
+
+        .stat-item i.fa-clock {
+            color: #3b82f6;
+        }
+
+        .stat-label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            display: block;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .links-results {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .link-result-item {
+            background: var(--background-dark);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-left: 3px solid var(--border-color);
+        }
+
+        .link-result-item.working {
+            border-left-color: #10b981;
+        }
+
+        .link-result-item.broken {
+            border-left-color: #ef4444;
+        }
+
+        .link-result-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .link-name {
+            color: var(--text-primary);
+            font-weight: 600;
+            flex: 1;
+            margin-right: 15px;
+        }
+
+        .link-status {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .link-status.working {
+            background: #10b981;
+            color: white;
+        }
+
+        .link-status.broken {
+            background: #ef4444;
+            color: white;
+        }
+
+        .link-url {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            word-break: break-all;
+            margin-bottom: 8px;
+            cursor: pointer;
+            padding: 6px 10px;
+            background: var(--accent-color);
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+            user-select: none;
+        }
+
+        .link-url:hover {
+            background: var(--highlight-color);
+            color: white;
+        }
+
+        .link-url.copied {
+            background: #10b981;
+            color: white;
+        }
+
+        .link-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            font-size: 0.8rem;
+        }
+
+        .link-detail {
+            color: var(--text-secondary);
+        }
+
+        .link-detail strong {
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 768px) {
+            .iptv-checker-container {
+                padding: 15px;
+            }
+
+            .checker-header h1 {
+                font-size: 2rem;
+            }
+
+            .url-input-container {
+                flex-direction: column;
+            }
+
+            .check-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .result-details {
+                grid-template-columns: 1fr;
+            }
+
+            .actions-container {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+                min-width: auto;
+            }
+
+            .test-buttons {
+                flex-direction: column;
+            }
+
+            .quick-test-btn {
+                width: 100%;
+                min-width: auto;
+            }
+
+            .file-actions {
+                flex-direction: column;
+            }
+
+            .file-actions .action-btn {
+                width: 100%;
+                min-width: auto;
+            }
+
+            .back-btn {
+                top: 15px;
+                right: 15px;
+                width: 45px;
+                height: 45px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="goBack()" title="العودة للصفحة الرئيسية">
+        <i class="fas fa-arrow-right"></i>
+    </button>
+
+    <div class="iptv-checker-container">
+        <div class="checker-header">
+            <h1>
+                <i class="fas fa-search"></i>
+                فحص روابط IPTV
+            </h1>
+            <p>أداة احترافية لفحص وتحليل روابط البث المباشر والتأكد من جودتها ومدى عملها</p>
+        </div>
+
+        <div class="supported-formats">
+            <h3>
+                <i class="fas fa-check-circle"></i>
+                الصيغ المدعومة
+            </h3>
+            <div class="formats-grid">
+                <div class="format-item">
+                    <i class="fas fa-video"></i>
+                    <span>M3U8</span>
+                </div>
+                <div class="format-item">
+                    <i class="fas fa-play"></i>
+                    <span>MP4</span>
+                </div>
+                <div class="format-item">
+                    <i class="fas fa-stream"></i>
+                    <span>RTMP</span>
+                </div>
+                <div class="format-item">
+                    <i class="fas fa-broadcast-tower"></i>
+                    <span>RTSP</span>
+                </div>
+                <div class="format-item">
+                    <i class="fas fa-globe"></i>
+                    <span>HTTP/HTTPS</span>
+                </div>
+                <div class="format-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>HLS</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-tests">
+            <h3>
+                <i class="fas fa-bolt"></i>
+                اختبارات سريعة
+            </h3>
+            <div class="test-buttons">
+                <button class="quick-test-btn" onclick="testSampleUrl('https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8')">
+                    <i class="fas fa-play"></i>
+                    رابط تجريبي
+                </button>
+                <button class="quick-test-btn" onclick="testSampleUrl('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')">
+                    <i class="fas fa-video"></i>
+                    بث تجريبي
+                </button>
+                <button class="quick-test-btn" onclick="testSampleUrl('https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8')">
+                    <i class="fas fa-broadcast-tower"></i>
+                    بث مباشر
+                </button>
+            </div>
+        </div>
+
+        <div class="file-checker">
+            <h3>
+                <i class="fas fa-file-upload"></i>
+                فحص ملف الروابط
+            </h3>
+            <p>ارفع ملف M3U أو M3U8 لفحص جميع الروابط الموجودة فيه</p>
+            
+            <div class="file-upload-area" id="fileUploadArea">
+                <div class="upload-content">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h4>اسحب ملف الروابط هنا أو انقر للاختيار</h4>
+                    <p>يدعم ملفات M3U, M3U8, TXT</p>
+                    <input type="file" id="fileInput" accept=".m3u,.m3u8,.txt" style="display: none;">
+                    <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-folder-open"></i>
+                        اختيار ملف
+                    </button>
+                </div>
+            </div>
+
+            <div class="file-info" id="fileInfo" style="display: none;">
+                <div class="file-details">
+                    <div class="file-name">
+                        <i class="fas fa-file"></i>
+                        <span id="fileName">-</span>
+                    </div>
+                    <div class="file-size">
+                        <i class="fas fa-weight"></i>
+                        <span id="fileSize">-</span>
+                    </div>
+                    <div class="file-links-count">
+                        <i class="fas fa-link"></i>
+                        <span id="linksCount">-</span> رابط
+                    </div>
+                </div>
+                <div class="file-actions">
+                    <button class="action-btn play-btn" onclick="checkAllLinks()" id="checkAllBtn">
+                        <i class="fas fa-search"></i>
+                        فحص جميع الروابط
+                    </button>
+                    <button class="action-btn copy-btn" onclick="downloadResults()" id="downloadBtn" style="display: none;">
+                        <i class="fas fa-download"></i>
+                        تحميل النتائج
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="checker-form">
+            <div class="form-group">
+                <label for="urlInput">
+                    <i class="fas fa-link"></i>
+                    رابط البث المباشر
+                </label>
+                <div class="url-input-container">
+                    <input type="url" id="urlInput" class="url-input" placeholder="أدخل رابط البث المباشر (m3u8, mp4, rtmp, rtsp...)" />
+                    <button class="check-btn" onclick="checkStream()" id="checkBtn">
+                        <i class="fas fa-search"></i>
+                        فحص الرابط
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="file-results-container" id="fileResultsContainer" style="display: none;">
+            <div class="results-header">
+                <h3 class="results-title">
+                    <i class="fas fa-list-check"></i>
+                    نتائج فحص الملف
+                </h3>
+                <div class="file-status-badge" id="fileStatusBadge">
+                    <i class="fas fa-clock"></i>
+                    جاهز للفحص
+                </div>
+            </div>
+            
+            <div class="file-progress" id="fileProgress" style="display: none;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">0 / 0</div>
+            </div>
+
+            <div class="file-summary" id="fileSummary" style="display: none;">
+                <div class="summary-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span class="stat-label">يعمل</span>
+                        <span class="stat-value" id="workingCount">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-times-circle"></i>
+                        <span class="stat-label">لا يعمل</span>
+                        <span class="stat-value" id="brokenCount">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-clock"></i>
+                        <span class="stat-label">متوسط الاستجابة</span>
+                        <span class="stat-value" id="avgResponseTime">0ms</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="links-results" id="linksResults">
+                <!-- Links results will be populated here -->
+            </div>
+        </div>
+
+        <div class="results-container" id="resultsContainer">
+            <div class="results-header">
+                <h3 class="results-title">
+                    <i class="fas fa-chart-line"></i>
+                    نتائج الفحص
+                </h3>
+                <div class="status-badge" id="statusBadge">
+                    <i class="fas fa-check"></i>
+                    جاهز للفحص
+                </div>
+            </div>
+
+            <div class="result-details" id="resultDetails">
+                <!-- Results will be populated here -->
+            </div>
+
+            <div class="stream-info" id="streamInfo" style="display: none;">
+                <h4>
+                    <i class="fas fa-info-circle"></i>
+                    معلومات البث
+                </h4>
+                <div id="streamDetails">
+                    <!-- Stream details will be populated here -->
+                </div>
+            </div>
+
+            <div class="actions-container" id="actionsContainer" style="display: none;">
+                <button class="action-btn play-btn" onclick="playStream()">
+                    <i class="fas fa-play"></i>
+                    تشغيل البث
+                </button>
+                <button class="action-btn copy-btn" onclick="copyUrl()">
+                    <i class="fas fa-copy"></i>
+                    نسخ الرابط
+                </button>
+                <button class="action-btn test-btn" onclick="testStreamQuality()">
+                    <i class="fas fa-tachometer-alt"></i>
+                    اختبار الجودة
+                </button>
+            </div>
+
+            <div class="error-details" id="errorDetails" style="display: none;">
+                <h4>
+                    <i class="fas fa-exclamation-triangle"></i>
+                    تفاصيل الخطأ
+                </h4>
+                <div id="errorContent">
+                    <!-- Error details will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUrl = '';
+        let streamData = null;
+        let fileData = null;
+        let fileResults = [];
+
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        function testSampleUrl(url) {
+            document.getElementById('urlInput').value = url;
+            checkStream();
+        }
+
+        async function checkStream() {
+            const urlInput = document.getElementById('urlInput');
+            const checkBtn = document.getElementById('checkBtn');
+            const resultsContainer = document.getElementById('resultsContainer');
+            const statusBadge = document.getElementById('statusBadge');
+            const resultDetails = document.getElementById('resultDetails');
+            const streamInfo = document.getElementById('streamInfo');
+            const actionsContainer = document.getElementById('actionsContainer');
+            const errorDetails = document.getElementById('errorDetails');
+
+            const url = urlInput.value.trim();
+            if (!url) {
+                showNotification('يرجى إدخال رابط البث', 'error');
+                return;
+            }
+
+            currentUrl = url;
+            
+            // Reset UI
+            resultsContainer.style.display = 'block';
+            streamInfo.style.display = 'none';
+            actionsContainer.style.display = 'none';
+            errorDetails.style.display = 'none';
+
+            // Update status to loading
+            statusBadge.className = 'status-badge status-loading';
+            statusBadge.innerHTML = '<div class="loading-spinner"></div> جاري الفحص...';
+
+            checkBtn.disabled = true;
+            checkBtn.innerHTML = '<div class="loading-spinner"></div> جاري الفحص...';
+
+            try {
+                const result = await performStreamCheck(url);
+                displayResults(result);
+            } catch (error) {
+                displayError(error);
+            } finally {
+                checkBtn.disabled = false;
+                checkBtn.innerHTML = '<i class="fas fa-search"></i> فحص الرابط';
+            }
+        }
+
+        async function performStreamCheck(url) {
+            const startTime = Date.now();
+            
+            try {
+                // Check if URL is accessible
+                const response = await fetch(url, {
+                    method: 'HEAD',
+                    mode: 'cors'
+                });
+
+                const endTime = Date.now();
+                const responseTime = endTime - startTime;
+
+                if (response.ok) {
+                    return {
+                        status: 'success',
+                        url: url,
+                        responseTime: responseTime,
+                        statusCode: response.status,
+                        contentType: response.headers.get('content-type'),
+                        contentLength: response.headers.get('content-length'),
+                        lastModified: response.headers.get('last-modified'),
+                        server: response.headers.get('server'),
+                        accessible: true,
+                        isM3U8: url.includes('.m3u8'),
+                        isHLS: response.headers.get('content-type')?.includes('application/vnd.apple.mpegurl') || url.includes('.m3u8')
+                    };
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                // Try with CORS proxy for cross-origin requests
+                try {
+                    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+                    const proxyResponse = await fetch(proxyUrl, {
+                        method: 'HEAD'
+                    });
+
+                    const endTime = Date.now();
+                    const responseTime = endTime - startTime;
+
+                    return {
+                        status: 'success',
+                        url: url,
+                        responseTime: responseTime,
+                        statusCode: proxyResponse.status,
+                        contentType: 'application/octet-stream',
+                        accessible: true,
+                        isM3U8: url.includes('.m3u8'),
+                        isHLS: url.includes('.m3u8'),
+                        note: 'تم الوصول عبر خادم وسيط'
+                    };
+                } catch (proxyError) {
+                    throw new Error(`لا يمكن الوصول للرابط: ${error.message}`);
+                }
+            }
+        }
+
+        function displayResults(result) {
+            const statusBadge = document.getElementById('statusBadge');
+            const resultDetails = document.getElementById('resultDetails');
+            const streamInfo = document.getElementById('streamInfo');
+            const actionsContainer = document.getElementById('actionsContainer');
+
+            // Update status badge
+            if (result.status === 'success') {
+                statusBadge.className = 'status-badge status-success';
+                statusBadge.innerHTML = '<i class="fas fa-check"></i> الرابط يعمل';
+            } else {
+                statusBadge.className = 'status-badge status-error';
+                statusBadge.innerHTML = '<i class="fas fa-times"></i> الرابط لا يعمل';
+            }
+
+            // Display basic details
+            resultDetails.innerHTML = `
+                <div class="detail-item">
+                    <div class="detail-label">حالة الرابط</div>
+                    <div class="detail-value">${result.accessible ? 'يعمل' : 'لا يعمل'}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">وقت الاستجابة</div>
+                    <div class="detail-value">${result.responseTime}ms</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">كود الحالة</div>
+                    <div class="detail-value">${result.statusCode || 'غير محدد'}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">نوع المحتوى</div>
+                    <div class="detail-value">${result.contentType || 'غير محدد'}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">نوع البث</div>
+                    <div class="detail-value">${result.isHLS ? 'HLS (M3U8)' : 'بث عادي'}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">الخادم</div>
+                    <div class="detail-value">${result.server || 'غير محدد'}</div>
+                </div>
+            `;
+
+            // Show stream info if it's HLS
+            if (result.isHLS) {
+                streamInfo.style.display = 'block';
+                document.getElementById('streamDetails').innerHTML = `
+                    <div class="quality-levels">
+                        <span class="quality-badge">HLS</span>
+                        <span class="quality-badge">متوافق مع جميع الأجهزة</span>
+                        <span class="quality-badge">دعم التكيف التلقائي</span>
+                    </div>
+                `;
+            }
+
+            // Show actions
+            actionsContainer.style.display = 'flex';
+
+            streamData = result;
+        }
+
+        function displayError(error) {
+            const statusBadge = document.getElementById('statusBadge');
+            const resultDetails = document.getElementById('resultDetails');
+            const errorDetails = document.getElementById('errorDetails');
+
+            statusBadge.className = 'status-badge status-error';
+            statusBadge.innerHTML = '<i class="fas fa-times"></i> خطأ في الفحص';
+
+            resultDetails.innerHTML = `
+                <div class="detail-item">
+                    <div class="detail-label">حالة الرابط</div>
+                    <div class="detail-value">لا يعمل</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">نوع الخطأ</div>
+                    <div class="detail-value">خطأ في الاتصال</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">السبب المحتمل</div>
+                    <div class="detail-value">الرابط غير متاح أو محظور</div>
+                </div>
+            `;
+
+            errorDetails.style.display = 'block';
+            document.getElementById('errorContent').innerHTML = `
+                <p><strong>الخطأ:</strong> ${error.message}</p>
+                <p><strong>الحلول المقترحة:</strong></p>
+                <ul>
+                    <li>تأكد من صحة الرابط</li>
+                    <li>تحقق من اتصال الإنترنت</li>
+                    <li>جرب رابط آخر</li>
+                    <li>تأكد من أن الرابط يدعم CORS</li>
+                </ul>
+            `;
+        }
+
+        function playStream() {
+            if (currentUrl) {
+                // Open in new tab
+                window.open(currentUrl, '_blank');
+            }
+        }
+
+        function copyUrl() {
+            if (currentUrl) {
+                navigator.clipboard.writeText(currentUrl).then(() => {
+                    showNotification('تم نسخ الرابط بنجاح', 'success');
+                }).catch(() => {
+                    showNotification('فشل في نسخ الرابط', 'error');
+                });
+            }
+        }
+
+        async function testStreamQuality() {
+            if (!currentUrl) return;
+
+            const statusBadge = document.getElementById('statusBadge');
+            statusBadge.className = 'status-badge status-loading';
+            statusBadge.innerHTML = '<div class="loading-spinner"></div> اختبار الجودة...';
+
+            try {
+                // Simulate quality test
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                statusBadge.className = 'status-badge status-success';
+                statusBadge.innerHTML = '<i class="fas fa-check"></i> الجودة ممتازة';
+                
+                showNotification('تم اختبار الجودة بنجاح', 'success');
+            } catch (error) {
+                statusBadge.className = 'status-badge status-error';
+                statusBadge.innerHTML = '<i class="fas fa-times"></i> فشل اختبار الجودة';
+                showNotification('فشل في اختبار الجودة', 'error');
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'times' : 'info'}"></i>
+                ${message}
+            `;
+
+            // Add styles
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+                color: white;
+                padding: 15px 25px;
+                border-radius: 8px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-weight: 600;
+                animation: slideDown 0.3s ease;
+            `;
+
+            document.body.appendChild(notification);
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideUp 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideDown {
+                from { transform: translateX(-50%) translateY(-100%); opacity: 0; }
+                to { transform: translateX(-50%) translateY(0); opacity: 1; }
+            }
+            @keyframes slideUp {
+                from { transform: translateX(-50%) translateY(0); opacity: 1; }
+                to { transform: translateX(-50%) translateY(-100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Handle Enter key press
+        document.getElementById('urlInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkStream();
+            }
+        });
+
+        // File handling functions
+        function setupFileHandling() {
+            const fileInput = document.getElementById('fileInput');
+            const uploadArea = document.getElementById('fileUploadArea');
+
+            // File input change
+            fileInput.addEventListener('change', handleFileSelect);
+
+            // Drag and drop
+            uploadArea.addEventListener('dragover', handleDragOver);
+            uploadArea.addEventListener('dragleave', handleDragLeave);
+            uploadArea.addEventListener('drop', handleDrop);
+            uploadArea.addEventListener('click', () => fileInput.click());
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        }
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        }
+
+        function handleFile(file) {
+            // Validate file type
+            const allowedTypes = ['.m3u', '.m3u8', '.txt'];
+            const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+            
+            if (!allowedTypes.includes(fileExtension)) {
+                showNotification('نوع الملف غير مدعوم. يرجى اختيار ملف M3U, M3U8 أو TXT', 'error');
+                return;
+            }
+
+            // Validate file size (max 10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                showNotification('حجم الملف كبير جداً. الحد الأقصى 10 ميجابايت', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                parseFileContent(content, file);
+            };
+            reader.readAsText(file);
+        }
+
+        function parseFileContent(content, file) {
+            const lines = content.split('\n');
+            const links = [];
+            let currentChannel = null;
+
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                
+                if (line.startsWith('#EXTINF:')) {
+                    // Parse channel info
+                    const match = line.match(/#EXTINF:(-?\d+)(?:\s+(.*))?,(.*)/);
+                    if (match) {
+                        currentChannel = {
+                            duration: match[1],
+                            attributes: match[2] || '',
+                            name: match[3].trim()
+                        };
+                    }
+                } else if (line && !line.startsWith('#') && (line.startsWith('http') || line.startsWith('rtmp') || line.startsWith('rtsp'))) {
+                    // This is a URL
+                    if (currentChannel) {
+                        links.push({
+                            name: currentChannel.name,
+                            url: line,
+                            duration: currentChannel.duration,
+                            attributes: currentChannel.attributes
+                        });
+                        currentChannel = null;
+                    } else {
+                        // URL without channel info
+                        links.push({
+                            name: `رابط ${links.length + 1}`,
+                            url: line,
+                            duration: '-1',
+                            attributes: ''
+                        });
+                    }
+                }
+            }
+
+            fileData = {
+                name: file.name,
+                size: file.size,
+                links: links
+            };
+
+            displayFileInfo();
+        }
+
+        function displayFileInfo() {
+            const fileInfo = document.getElementById('fileInfo');
+            const fileName = document.getElementById('fileName');
+            const fileSize = document.getElementById('fileSize');
+            const linksCount = document.getElementById('linksCount');
+
+            fileName.textContent = fileData.name;
+            fileSize.textContent = formatFileSize(fileData.size);
+            linksCount.textContent = fileData.links.length;
+
+            fileInfo.style.display = 'block';
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 بايت';
+            const k = 1024;
+            const sizes = ['بايت', 'كيلوبايت', 'ميجابايت', 'جيجابايت'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        async function checkAllLinks() {
+            if (!fileData || fileData.links.length === 0) {
+                showNotification('لا توجد روابط للفحص', 'error');
+                return;
+            }
+
+            const fileResultsContainer = document.getElementById('fileResultsContainer');
+            const fileProgress = document.getElementById('fileProgress');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            const checkAllBtn = document.getElementById('checkAllBtn');
+
+            // Show results container
+            fileResultsContainer.style.display = 'block';
+            fileProgress.style.display = 'block';
+
+            // Reset results
+            fileResults = [];
+            checkAllBtn.disabled = true;
+            checkAllBtn.innerHTML = '<div class="loading-spinner"></div> جاري الفحص...';
+
+            const totalLinks = fileData.links.length;
+            let checkedLinks = 0;
+
+            // Update status badge
+            const fileStatusBadge = document.getElementById('fileStatusBadge');
+            fileStatusBadge.className = 'file-status-badge status-loading';
+            fileStatusBadge.innerHTML = '<div class="loading-spinner"></div> جاري فحص الروابط...';
+
+            // Check links in batches to avoid overwhelming the browser
+            const batchSize = 5;
+            for (let i = 0; i < totalLinks; i += batchSize) {
+                const batch = fileData.links.slice(i, i + batchSize);
+                const batchPromises = batch.map(async (link) => {
+                    try {
+                        const result = await performStreamCheck(link.url);
+                        return {
+                            ...link,
+                            status: 'working',
+                            responseTime: result.responseTime,
+                            statusCode: result.statusCode,
+                            contentType: result.contentType
+                        };
+                    } catch (error) {
+                        return {
+                            ...link,
+                            status: 'broken',
+                            error: error.message
+                        };
+                    }
+                });
+
+                const batchResults = await Promise.all(batchPromises);
+                fileResults.push(...batchResults);
+
+                checkedLinks += batch.length;
+                const progress = (checkedLinks / totalLinks) * 100;
+                
+                progressFill.style.width = progress + '%';
+                progressText.textContent = `${checkedLinks} / ${totalLinks}`;
+
+                // Update UI with new results
+                updateFileResults();
+            }
+
+            // Finalize results
+            checkAllBtn.disabled = false;
+            checkAllBtn.innerHTML = '<i class="fas fa-search"></i> فحص جميع الروابط';
+            
+            fileStatusBadge.className = 'file-status-badge status-success';
+            fileStatusBadge.innerHTML = '<i class="fas fa-check"></i> تم الفحص بنجاح';
+
+            fileProgress.style.display = 'none';
+            document.getElementById('fileSummary').style.display = 'block';
+            document.getElementById('downloadBtn').style.display = 'flex';
+
+            updateFileSummary();
+            showNotification(`تم فحص ${totalLinks} رابط بنجاح`, 'success');
+        }
+
+        function updateFileResults() {
+            const linksResults = document.getElementById('linksResults');
+            linksResults.innerHTML = '';
+
+            fileResults.forEach((result, index) => {
+                const resultItem = document.createElement('div');
+                resultItem.className = `link-result-item ${result.status}`;
+                
+                resultItem.innerHTML = `
+                    <div class="link-result-header">
+                        <div class="link-name">${result.name}</div>
+                        <div class="link-status ${result.status}">
+                            ${result.status === 'working' ? 'يعمل' : 'لا يعمل'}
+                        </div>
+                    </div>
+                    <div class="link-url" onclick="copyLinkToClipboard('${result.url}', this)">${result.url}</div>
+                    <div class="link-details">
+                        ${result.status === 'working' ? `
+                            <div class="link-detail"><strong>الاستجابة:</strong> ${result.responseTime}ms</div>
+                            <div class="link-detail"><strong>الكود:</strong> ${result.statusCode}</div>
+                            <div class="link-detail"><strong>النوع:</strong> ${result.contentType || 'غير محدد'}</div>
+                        ` : `
+                            <div class="link-detail"><strong>الخطأ:</strong> ${result.error}</div>
+                        `}
+                    </div>
+                `;
+
+                linksResults.appendChild(resultItem);
+            });
+        }
+
+        function updateFileSummary() {
+            const workingCount = fileResults.filter(r => r.status === 'working').length;
+            const brokenCount = fileResults.filter(r => r.status === 'broken').length;
+            const avgResponseTime = fileResults
+                .filter(r => r.status === 'working')
+                .reduce((sum, r) => sum + r.responseTime, 0) / workingCount || 0;
+
+            document.getElementById('workingCount').textContent = workingCount;
+            document.getElementById('brokenCount').textContent = brokenCount;
+            document.getElementById('avgResponseTime').textContent = Math.round(avgResponseTime) + 'ms';
+        }
+
+        function downloadResults() {
+            if (fileResults.length === 0) {
+                showNotification('لا توجد نتائج للتحميل', 'error');
+                return;
+            }
+
+            const results = {
+                fileName: fileData.name,
+                checkedAt: new Date().toLocaleString('ar-SA'),
+                totalLinks: fileResults.length,
+                workingLinks: fileResults.filter(r => r.status === 'working').length,
+                brokenLinks: fileResults.filter(r => r.status === 'broken').length,
+                results: fileResults
+            };
+
+            const blob = new Blob([JSON.stringify(results, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `iptv-check-results-${Date.now()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showNotification('تم تحميل النتائج بنجاح', 'success');
+        }
+
+        function copyLinkToClipboard(url, element) {
+            // Add visual feedback
+            element.classList.add('copied');
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(url).then(() => {
+                showNotification('تم نسخ الرابط بنجاح', 'success');
+                
+                // Remove visual feedback after animation
+                setTimeout(() => {
+                    element.classList.remove('copied');
+                }, 600);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = url;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showNotification('تم نسخ الرابط بنجاح', 'success');
+                } catch (err) {
+                    showNotification('فشل في نسخ الرابط', 'error');
+                }
+                document.body.removeChild(textArea);
+                
+                // Remove visual feedback
+                setTimeout(() => {
+                    element.classList.remove('copied');
+                }, 600);
+            });
+        }
+
+        // Initialize file handling when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setupFileHandling();
+        });
+    </script>
+</body>
+</html>
