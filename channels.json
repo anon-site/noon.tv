@@ -70,7 +70,7 @@
       "url": "https://alarabyta.cdn.octivid.com/alaraby/smil:alaraby.stream.smil/chunklist.m3u8",
       "logo": "https://www.alaraby.com/themes/custom/arabytv/logo.png",
       "category": "news",
-      "country": "قطر"
+      "country": "Qatar"
     },
     {
       "id": 15,
@@ -78,12 +78,12 @@
       "url": "https://alarabyta.cdn.octivid.com/alaraby2n/smil:alaraby2n.stream.smil/chunklist.m3u8",
       "logo": "https://media0084.elcinema.com/tvguide/1382_1.png",
       "category": "entertainment",
-      "country": "قطر"
+      "country": "Qatar"
     },
     {
       "id": 16,
       "name": "Al Jadeed",
-      "url": "https://185.9.2.18/chid_391/mono.m3u8",
+      "url": "http://185.9.2.18/chid_391/mono.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Al_Jadeed_TV_LOGO_2018.jpg",
       "category": "entertainment",
       "country": "لبنان"
@@ -155,7 +155,7 @@
     {
       "id": 29,
       "name": "الأقصى",
-      "url": "https://167.172.161.13/hls/feedspare/6udfi7v8a3eof6nlps6e9ovfrs65c7l7.m3u8",
+      "url": "http://167.172.161.13/hls/feedspare/6udfi7v8a3eof6nlps6e9ovfrs65c7l7.m3u8",
       "logo": "https://felesteen.news/thumb/w920/uploads/images/2021/05/ldelg.png",
       "category": "news",
       "country": "فلسطين"
@@ -188,7 +188,7 @@
       "id": 33,
       "name": "إقرأ",
       "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv3/playlist.m3u8",
-      "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcF88fNlvQcVAGMTDMw4rpE3_ov4mD_QM2AUQtoImvIvQmvjmcYVMr8x-0du56pZZw158&usqp=CAU",
+      "logo": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv3/playlist.m3u8",
       "category": "religious",
       "country": "السعودية"
     },
@@ -196,7 +196,7 @@
       "id": 34,
       "name": "إقرأ قرآن",
       "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv2/playlist.m3u8",
-      "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSN2OWFmtKMWWlavNdQD0SJkpXJ5pp8E9hu3A&s",
+      "logo": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv2/playlist.m3u8",
       "category": "religious",
       "country": "السعودية"
     },
@@ -207,6 +207,22 @@
       "logo": "https://www.istiqama.tv/wp-content/uploads/2024/05/Logo-e1715111491262.png",
       "category": "religious",
       "country": "عُمان"
+    },
+    {
+      "id": 44,
+      "name": "DW Arabic",
+      "url": "https://dwamdstream103.akamaized.net/hls/live/2015526/dwstream103/master.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/7/75/Deutsche_Welle_symbol_2012.svg",
+      "category": "documentary",
+      "country": "قطر"
+    },
+    {
+      "id": 45,
+      "name": "I24 News Arabic",
+      "url": "https://bcovlive-a.akamaihd.net/95116e8d79524d87bf3ac20ba04241e3/eu-central-1/5377161796001/playlist.m3u8",
+      "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4phcpAtr74wQxlpfLrZQ2Qn8XZN02nw7V6w&s",
+      "category": "news",
+      "country": "France"
     }
   ],
   "favorites": [],
@@ -266,6 +282,6 @@
       "icon": "fas fa-newspaper"
     }
   ],
-  "lastModified": "2025-09-07T21:27:40.705Z",
+  "lastModified": "2025-09-08T05:19:35.171Z",
   "version": "1.0"
 }
