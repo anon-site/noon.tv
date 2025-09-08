@@ -1,6 +1,4 @@
 {
-  "version": "1.0",
-  "timestamp": "2025-09-09T03:20:20.009Z",
   "channels": [
     {
       "id": 3,
@@ -231,7 +229,7 @@
   "settings": {
     "autoQuality": true,
     "autoplay": true,
-    "volume": 62,
+    "volume": 80,
     "theme": "dark",
     "showNewsTicker": false,
     "zoomLevel": 100,
@@ -241,11 +239,7 @@
     "animationsEnabled": true,
     "compactMode": true,
     "highContrast": false,
-    "borderRadius": "rounded",
-    "showCustomControls": true,
-    "notifications": false,
-    "notificationSound": false,
-    "notificationDuration": 3
+    "borderRadius": "rounded"
   },
   "categories": [
     {
@@ -277,21 +271,8 @@
       "key": "music",
       "name": "الموسيقى",
       "icon": "fas fa-music"
-    },
-    {
-      "key": "movies",
-      "name": "أفلام",
-      "icon": "fas fa-film"
     }
   ],
-  "remoteStorage": {
-    "enabled": true,
-    "provider": "github",
-    "repository": "anon-site/TV-AR",
-    "branch": "main",
-    "filename": "channels.json",
-    "autoSync": true,
-    "lastSync": "2025-09-09T03:19:42.109Z"
-  },
-  "generalSettings": {}
+  "lastModified": "2025-09-09T03:22:03.076Z",
+  "version": "1.0"
 }
