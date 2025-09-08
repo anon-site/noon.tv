@@ -235,7 +235,7 @@
     {
       "id": 47,
       "name": "MBC Iraq",
-      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-iraq/e38c44b1b43474e1c39cb5b90203691e/manifest/video/1080p2400kbps/video.m3u8",
+      "url": "https://e1.taghtia.com/https://shls-iraq-prod-dub.shahid.net/out/v1/c9bf1e87ea66478bb20bc5c93c9d41ea/index_1.m3u8",
       "logo": "https://i.ytimg.com/vi/45tB7jUCKfw/maxresdefault.jpg",
       "category": "entertainment",
       "country": "Iraq",
@@ -304,6 +304,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-09T04:18:41.705Z",
+  "lastModified": "2025-09-09T04:21:28.564Z",
   "version": "1.0"
 }
