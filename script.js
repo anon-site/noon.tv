@@ -4822,7 +4822,7 @@ function closeAdminPanel() {
 }
 
 function openIPTVChecker() {
-    window.open('iptv-checker.html', '_blank');
+    window.location.href = 'iptv-checker.html';
 }
 
 function closeModal() {
