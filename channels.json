@@ -1,6 +1,4 @@
 {
-  "version": "1.0",
-  "timestamp": "2025-09-09T03:32:13.905Z",
   "channels": [
     {
       "id": 3,
@@ -224,23 +222,15 @@
       "url": "https://starmenajo.com/hls/almahriah/index.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/ar/0/04/%D9%82%D9%86%D8%A7%D8%A9_%D8%A7%D9%84%D9%85%D9%87%D8%B1%D9%8A%D8%A9.png",
       "category": "news",
-      "country": "تركيا"
+      "country": "Turky"
     },
     {
       "id": 46,
-      "name": "MBC 2",
-      "url": "https://bcovlive-a.akamaihd.net/0debf5648e584e5fb795c3611c5c0252/eu-central-1/6057955906001/playlist.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/MBC_2_Logo.svg/1200px-MBC_2_Logo.svg.png",
-      "category": "movies",
-      "country": "السعودية"
-    },
-    {
-      "id": 47,
-      "name": "MBC Max",
-      "url": "https://bcovlive-a.akamaihd.net/9527a892aeaf43019fd9eeb77ad1516e/eu-central-1/6057955906001/playlist.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/MBC_2_Logo.svg/1200px-MBC_2_Logo.svg.png",
-      "category": "movies",
-      "country": "السعودية"
+      "name": "مكملين",
+      "url": "https://mn-nl.mncdn.com/mekameleen/smil:mekameleentv.smil/chunklist_b2128000.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/4/45/%D9%82%D9%86%D8%A7%D8%A9_%D9%85%D9%83%D9%85%D9%84%D9%8A%D9%86.jpg",
+      "category": "entertainment",
+      "country": "Turly"
     }
   ],
   "favorites": [],
@@ -296,7 +286,7 @@
     },
     {
       "key": "movies",
-      "name": "الأفلام",
+      "name": "أفلام",
       "icon": "fas fa-film"
     },
     {
@@ -305,14 +295,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "remoteStorage": {
-    "enabled": true,
-    "provider": "github",
-    "repository": "anon-site/TV-AR",
-    "branch": "main",
-    "filename": "channels.json",
-    "autoSync": true,
-    "lastSync": "2025-09-09T03:31:17.621Z"
-  },
-  "generalSettings": {}
+  "lastModified": "2025-09-09T03:35:42.244Z",
+  "version": "1.0"
 }
