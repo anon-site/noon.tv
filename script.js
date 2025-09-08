@@ -664,11 +664,11 @@ class ArabicTVApp {
             grid.appendChild(channelCard);
         });
 
-        // Update sidebar counts
-        this.updateSidebarCounts();
-        
-        // Update navigation tabs
+        // Update navigation tabs first
         this.updateNavigationTabs();
+        
+        // Update sidebar counts after updating tabs
+        this.updateSidebarCounts();
     }
 
     createChannelCard(channel) {
@@ -4759,11 +4759,6 @@ class ArabicTVApp {
             console.warn('لم يتم العثور على أزرار القائمة الجانبية');
         }
         
-        // Update sidebar counts after updating tabs
-        this.updateSidebarCounts();
-        
-        console.log('تم الانتهاء من تحديث أزرار التنقل');
-
         // Update mobile navigation
         const mobileNavTabs = document.querySelector('.mobile-nav-tabs');
         if (mobileNavTabs) {
@@ -4786,6 +4781,9 @@ class ArabicTVApp {
         } else {
             console.warn('لم يتم العثور على قائمة الموبايل');
         }
+        
+        // Update sidebar counts after updating all tabs
+        this.updateSidebarCounts();
         
         console.log('تم الانتهاء من تحديث جميع أزرار التنقل');
     }
