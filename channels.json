@@ -227,7 +227,7 @@
     {
       "id": 46,
       "name": "مكملين",
-      "url": "https://mn-nl.mncdn.com/mekameleen/smil:mekameleentv.smil/chunklist_b2128000.m3u8",
+      "url": "https://mn-nl.mncdn.com/mekameleen/smil:mekameleentv.smil/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/4/45/%D9%82%D9%86%D8%A7%D8%A9_%D9%85%D9%83%D9%85%D9%84%D9%8A%D9%86.jpg",
       "category": "entertainment",
       "country": "Turly"
@@ -295,6 +295,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-09T03:35:42.244Z",
+  "lastModified": "2025-09-09T03:36:30.349Z",
   "version": "1.0"
 }
