@@ -235,10 +235,11 @@
     {
       "id": 47,
       "name": "تجربة يوتيوب",
-      "url": "https://www.youtube.com/watch?v=XqmIePLIRag",
-      "logo": "https://www.youtube.com/watch?v=XqmIePLIRag",
+      "url": "https://www.youtube.com/watch?v=45tB7jUCKfw",
+      "logo": "https://i.ytimg.com/vi/45tB7jUCKfw/maxresdefault.jpg",
       "category": "news",
-      "country": "السعودية"
+      "country": "السعودية",
+      "type": "youtube"
     }
   ],
   "favorites": [],
@@ -303,6 +304,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-09T03:45:38.820Z",
+  "lastModified": "2025-09-09T03:55:35.241Z",
   "version": "1.0"
 }
