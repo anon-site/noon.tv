@@ -229,7 +229,7 @@
   "settings": {
     "autoQuality": true,
     "autoplay": true,
-    "volume": 62,
+    "volume": 80,
     "theme": "dark",
     "showNewsTicker": false,
     "zoomLevel": 100,
@@ -239,11 +239,7 @@
     "animationsEnabled": true,
     "compactMode": true,
     "highContrast": false,
-    "borderRadius": "rounded",
-    "showCustomControls": true,
-    "notifications": false,
-    "notificationSound": false,
-    "notificationDuration": 3
+    "borderRadius": "rounded"
   },
   "categories": [
     {
@@ -277,6 +273,6 @@
       "icon": "fas fa-music"
     }
   ],
-  "lastModified": "2025-09-09T02:29:22.544Z",
+  "lastModified": "2025-09-09T02:37:41.897Z",
   "version": "1.0"
 }
