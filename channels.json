@@ -219,7 +219,7 @@
     {
       "id": 45,
       "name": "المهرية",
-      "url": "https://streamingplaylists.s3.sohobcom.ye/hls/2df49e96-96f2-4c3c-88fc-79dfea70dd7d/0.m3u8",
+      "url": "https://streamingplaylists.s3.sohobcom.ye/hls/2df49e96-96f2-4c3c-88fc-79dfea70dd7d/master.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/ar/0/04/%D9%82%D9%86%D8%A7%D8%A9_%D8%A7%D9%84%D9%85%D9%87%D8%B1%D9%8A%D8%A9.png",
       "category": "news",
       "country": "Turky"
@@ -295,6 +295,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-09T03:40:38.798Z",
+  "lastModified": "2025-09-09T03:41:01.232Z",
   "version": "1.0"
 }
