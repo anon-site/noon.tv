@@ -231,15 +231,6 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/4/45/%D9%82%D9%86%D8%A7%D8%A9_%D9%85%D9%83%D9%85%D9%84%D9%8A%D9%86.jpg",
       "category": "entertainment",
       "country": "Turly"
-    },
-    {
-      "id": 52,
-      "name": "DW عربي - يوتيوب",
-      "url": "https://www.youtube.com/watch?v=9Auq9mYxFEE",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/7/75/Deutsche_Welle_symbol_2012.svg",
-      "category": "documentary",
-      "country": "ألمانيا",
-      "type": "youtube"
     }
   ],
   "favorites": [],
@@ -304,6 +295,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-09T12:45:54.549Z",
+  "lastModified": "2025-09-09T12:46:00.769Z",
   "version": "1.0"
 }
