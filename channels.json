@@ -250,15 +250,6 @@
       "country": "السعودية"
     },
     {
-      "id": 51,
-      "name": "BBC عربي - يوتيوب",
-      "url": "https://www.youtube.com/watch?v=9Auq9mYxFEE",
-      "logo": "https://i.imgur.com/2P4m5Eb.png",
-      "category": "news",
-      "country": "بريطانيا",
-      "type": "youtube"
-    },
-    {
       "id": 52,
       "name": "DW عربي - يوتيوب",
       "url": "https://www.youtube.com/watch?v=9Auq9mYxFEE",
@@ -339,6 +330,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-09T12:45:41.835Z",
+  "lastModified": "2025-09-09T12:45:43.897Z",
   "version": "1.0"
 }
