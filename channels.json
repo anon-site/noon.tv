@@ -1,4 +1,6 @@
 {
+  "version": "1.0",
+  "timestamp": "2025-09-09T12:46:21.813Z",
   "channels": [
     {
       "id": 3,
@@ -231,67 +233,6 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/4/45/%D9%82%D9%86%D8%A7%D8%A9_%D9%85%D9%83%D9%85%D9%84%D9%8A%D9%86.jpg",
       "category": "entertainment",
       "country": "Turly"
-    },
-    {
-      "id": 47,
-      "name": "MBC Iraq",
-      "url": "https://e1.taghtia.com/https://shls-iraq-prod-dub.shahid.net/out/v1/c9bf1e87ea66478bb20bc5c93c9d41ea/index_1.m3u8",
-      "logo": "https://i.ytimg.com/vi/45tB7jUCKfw/maxresdefault.jpg",
-      "category": "entertainment",
-      "country": "Iraq",
-      "type": "hls"
-    },
-    {
-      "id": 48,
-      "name": "MBC 2",
-      "url": "https://bcovlive-a.akamaihd.net/0debf5648e584e5fb795c3611c5c0252/eu-central-1/6057955906001/playlist.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/MBC_2_Logo.svg/1200px-MBC_2_Logo.svg.png",
-      "category": "movies",
-      "country": "السعودية"
-    },
-    {
-      "id": 49,
-      "name": "MBC Max",
-      "url": "https://bcovlive-a.akamaihd.net/9527a892aeaf43019fd9eeb77ad1516e/eu-central-1/6057955906001/playlist.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/MBC_2_Logo.svg/1200px-MBC_2_Logo.svg.png",
-      "category": "movies",
-      "country": "السعودية"
-    },
-    {
-      "id": 50,
-      "name": "الجزيرة - يوتيوب",
-      "url": "https://www.youtube.com/watch?v=9Auq9mYxFEE",
-      "logo": "https://www.aljazeera.net/wp-content/uploads/2015/10/16c0c819-3b03-40e6-a960-004297f4f1dc.jpeg?resize=686%2C513&quality=80",
-      "category": "news",
-      "country": "قطر",
-      "type": "youtube"
-    },
-    {
-      "id": 51,
-      "name": "BBC عربي - يوتيوب",
-      "url": "https://www.youtube.com/watch?v=9Auq9mYxFEE",
-      "logo": "https://i.imgur.com/2P4m5Eb.png",
-      "category": "news",
-      "country": "بريطانيا",
-      "type": "youtube"
-    },
-    {
-      "id": 52,
-      "name": "DW عربي - يوتيوب",
-      "url": "https://www.youtube.com/watch?v=9Auq9mYxFEE",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/7/75/Deutsche_Welle_symbol_2012.svg",
-      "category": "documentary",
-      "country": "ألمانيا",
-      "type": "youtube"
-    },
-    {
-      "id": 53,
-      "name": "قناة القرآن الكريم - يوتيوب",
-      "url": "https://www.youtube.com/watch?v=9Auq9mYxFEE",
-      "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSN2OWFmtKMWWlavNdQD0SJkpXJ5pp8E9hu3A&s",
-      "category": "religious",
-      "country": "السعودية",
-      "type": "youtube"
     }
   ],
   "favorites": [],
@@ -356,6 +297,14 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-09T05:14:51.218Z",
-  "version": "1.0"
+  "remoteStorage": {
+    "enabled": true,
+    "provider": "github",
+    "repository": "anon-site/TV-AR",
+    "branch": "main",
+    "filename": "channels.json",
+    "autoSync": true,
+    "lastSync": "2025-09-09T12:46:01.910Z"
+  },
+  "generalSettings": {}
 }
