@@ -294,6 +294,11 @@
                                 <span>360p - توفير البيانات</span>
                                 <i class="fas fa-check quality-check"></i>
                             </div>
+                            <div class="quality-option" data-quality="240">
+                                <i class="fas fa-video"></i>
+                                <span>240p - منخفض جداً</span>
+                                <i class="fas fa-check quality-check"></i>
+                            </div>
                         </div>
                     </div>
                     <button class="pip-btn" onclick="togglePictureInPicture()" title="إخراج الشاشة خارج المتصفح">
@@ -522,8 +527,14 @@
                             <input type="text" id="channelName" required>
                         </div>
                         <div class="form-group">
-                            <label for="channelUrl">رابط البث (m3u8)</label>
-                            <input type="url" id="channelUrl" required>
+                            <label for="channelUrl" id="urlLabel">رابط البث</label>
+                            <input type="url" id="channelUrl" required placeholder="أدخل رابط البث (HLS أو يوتيوب)" oninput="detectUrlType()">
+                            <small id="urlHelp" class="form-help" style="color: #666; font-size: 0.85rem; margin-top: 0.25rem; display: block;">أدخل رابط البث المباشر أو رابط يوتيوب</small>
+                            <div id="urlTypeIndicator" style="margin-top: 0.5rem; padding: 0.5rem; border-radius: 4px; display: none;">
+                                <i id="urlTypeIcon" class="fas fa-info-circle"></i>
+                                <span id="urlTypeText">نوع الرابط: </span>
+                                <span id="urlTypeValue" style="font-weight: bold;"></span>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="channelLogo">رابط الشعار</label>

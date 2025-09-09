@@ -872,7 +872,8 @@ class ArabicTVApp {
     async playChannel(channel) {
         this.currentChannel = channel;
         this.showVideoModal(channel);
-        await this.loadVideoStream(channel.url);
+        const type = channel.type || (this.isYouTubeUrl(channel.url) ? 'youtube' : 'hls');
+        await this.loadVideoStream(channel.url, type);
     }
 
     showVideoModal(channel) {
@@ -901,12 +902,20 @@ class ArabicTVApp {
         document.getElementById('videoPlayer').controls = true;
     }
 
-    async loadVideoStream(url) {
+    async loadVideoStream(url, type = 'hls') {
         const video = document.getElementById('videoPlayer');
         const source = document.getElementById('videoSource');
         const loading = document.getElementById('videoLoading');
 
         try {
+            // Check if it's a YouTube URL
+            if (type === 'youtube' || this.isYouTubeUrl(url)) {
+                const currentQuality = this.getCurrentQuality();
+                await this.loadYouTubeVideo(url, currentQuality);
+                return;
+            }
+
+            // HLS streaming
             if (Hls.isSupported()) {
                 if (this.hls) {
                     this.hls.destroy();
@@ -952,6 +961,18 @@ class ArabicTVApp {
 
                 this.hls.on(Hls.Events.ERROR, (event, data) => {
                     console.error('HLS Error:', data);
+                    
+                    // Show specific error messages
+                    if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
+                        this.showVideoError('خطأ في الشبكة - تحقق من اتصال الإنترنت');
+                    } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+                        this.showVideoError('خطأ في تنسيق الفيديو - الرابط قد يكون غير صحيح');
+                    } else if (data.details === Hls.ErrorDetails.MANIFEST_LOAD_ERROR) {
+                        this.showVideoError('لا يمكن تحميل قائمة التشغيل - الرابط غير متاح');
+                    } else if (data.details === Hls.ErrorDetails.MANIFEST_LOAD_TIMEOUT) {
+                        this.showVideoError('انتهت مهلة تحميل قائمة التشغيل - الخادم بطيء');
+                    }
+                    
                     if (data.fatal) {
                         this.handleVideoError();
                     }
@@ -991,6 +1012,25 @@ class ArabicTVApp {
         }
     }
 
+    showVideoError(message) {
+        const loading = document.getElementById('videoLoading');
+        loading.innerHTML = `
+            <div class="error-icon" style="font-size: 3rem; color: #e94560; margin-bottom: 1rem;">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <p style="color: #e94560; font-size: 1.1rem; margin-bottom: 1rem;">${message}</p>
+            <button onclick="app.retryVideo()" style="
+                background: #e94560; 
+                color: white; 
+                border: none; 
+                padding: 0.5rem 1rem; 
+                border-radius: 5px; 
+                cursor: pointer;
+                font-size: 0.9rem;
+            ">إعادة المحاولة</button>
+        `;
+    }
+
     handleVideoError() {
         const loading = document.getElementById('videoLoading');
         loading.innerHTML = `
@@ -1006,17 +1046,208 @@ class ArabicTVApp {
         }, 3000);
     }
 
+    retryVideo() {
+        if (this.currentChannel) {
+            const type = this.currentChannel.type || 'hls';
+            this.loadVideoStream(this.currentChannel.url, type);
+        }
+    }
+
+    // Detect URL type automatically
+    detectUrlType() {
+        const channelUrl = document.getElementById('channelUrl');
+        const urlTypeIndicator = document.getElementById('urlTypeIndicator');
+        const urlTypeIcon = document.getElementById('urlTypeIcon');
+        const urlTypeValue = document.getElementById('urlTypeValue');
+        
+        const url = channelUrl.value.trim();
+        
+        if (!url) {
+            urlTypeIndicator.style.display = 'none';
+            return;
+        }
+        
+        // Detect URL type
+        let urlType = 'unknown';
+        let iconClass = 'fas fa-question-circle';
+        let typeText = 'غير معروف';
+        let indicatorColor = '#666';
+        
+        if (this.isYouTubeUrl(url)) {
+            urlType = 'youtube';
+            iconClass = 'fab fa-youtube';
+            typeText = 'يوتيوب';
+            indicatorColor = '#ff0000';
+        } else if (url.includes('.m3u8') || url.includes('playlist.m3u8') || url.includes('index.m3u8')) {
+            urlType = 'hls';
+            iconClass = 'fas fa-broadcast-tower';
+            typeText = 'HLS (مباشر)';
+            indicatorColor = '#00a8ff';
+        } else if (url.includes('.mp4') || url.includes('.webm') || url.includes('.avi')) {
+            urlType = 'video';
+            iconClass = 'fas fa-video';
+            typeText = 'فيديو مباشر';
+            indicatorColor = '#00d2d3';
+        } else if (url.includes('rtmp://') || url.includes('rtsp://')) {
+            urlType = 'stream';
+            iconClass = 'fas fa-satellite-dish';
+            typeText = 'بث مباشر';
+            indicatorColor = '#ff9ff3';
+        }
+        
+        // Update indicator
+        urlTypeIcon.className = iconClass;
+        urlTypeValue.textContent = typeText;
+        urlTypeIndicator.style.display = 'block';
+        urlTypeIndicator.style.backgroundColor = indicatorColor + '20';
+        urlTypeIndicator.style.border = '1px solid ' + indicatorColor;
+        urlTypeIndicator.style.color = indicatorColor;
+        
+        // Store detected type for form submission
+        this.detectedUrlType = urlType;
+    }
+
+    // Check if URL is a YouTube URL
+    isYouTubeUrl(url) {
+        const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/)|youtu\.be\/|m\.youtube\.com\/watch\?v=)/;
+        return youtubeRegex.test(url);
+    }
+
+    // Extract YouTube video ID from URL
+    getYouTubeVideoId(url) {
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    // Load YouTube video using iframe
+    async loadYouTubeVideo(url, quality = 'auto') {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            const videoId = this.getYouTubeVideoId(url);
+            if (!videoId) {
+                throw new Error('Invalid YouTube URL');
+            }
+
+            // Hide the video element and show iframe
+            video.style.display = 'none';
+            
+            // Create or update YouTube iframe
+            let iframe = document.getElementById('youtubePlayer');
+            if (!iframe) {
+                iframe = document.createElement('iframe');
+                iframe.id = 'youtubePlayer';
+                iframe.style.width = '100%';
+                iframe.style.height = '100%';
+                iframe.style.border = 'none';
+                iframe.allowFullscreen = true;
+                iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                
+                // Insert iframe after video element
+                video.parentNode.insertBefore(iframe, video.nextSibling);
+            }
+
+            // Build embed URL with quality parameters
+            const embedUrl = this.buildYouTubeEmbedUrl(videoId, quality);
+            iframe.src = embedUrl;
+            
+            // Hide loading
+            loading.style.display = 'none';
+            
+            // Show iframe
+            iframe.style.display = 'block';
+            
+            // Update quality display
+            this.updateYouTubeQualityDisplay(quality);
+            
+        } catch (error) {
+            console.error('Error loading YouTube video:', error);
+            this.showVideoError('خطأ في تحميل فيديو اليوتيوب - تحقق من الرابط');
+        }
+    }
+
+    // Build YouTube embed URL with quality parameters
+    buildYouTubeEmbedUrl(videoId, quality) {
+        let embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&controls=1`;
+        
+        // Add quality parameters based on selection
+        switch (quality) {
+            case '1080':
+                embedUrl += '&vq=hd1080';
+                break;
+            case '720':
+                embedUrl += '&vq=hd720';
+                break;
+            case '480':
+                embedUrl += '&vq=large';
+                break;
+            case '360':
+                embedUrl += '&vq=medium';
+                break;
+            case '240':
+                embedUrl += '&vq=small';
+                break;
+            default: // auto
+                embedUrl += '&vq=auto';
+                break;
+        }
+        
+        return embedUrl;
+    }
+
+    // Update quality display for YouTube videos
+    updateYouTubeQualityDisplay(quality) {
+        const qualityDisplay = document.getElementById('currentQualityText');
+        if (qualityDisplay) {
+            const qualityTexts = {
+                'auto': 'تلقائي (يوتيوب)',
+                '1080': '1080p (يوتيوب)',
+                '720': '720p (يوتيوب)',
+                '480': '480p (يوتيوب)',
+                '360': '360p (يوتيوب)',
+                '240': '240p (يوتيوب)'
+            };
+            qualityDisplay.textContent = qualityTexts[quality] || 'تلقائي (يوتيوب)';
+        }
+    }
+
+    // Get current quality setting
+    getCurrentQuality() {
+        const activeQuality = document.querySelector('.quality-option.active');
+        return activeQuality ? activeQuality.dataset.quality : 'auto';
+    }
+
     closeModal() {
         const modal = document.getElementById('videoModal');
+        const video = document.getElementById('videoPlayer');
+        const iframe = document.getElementById('youtubePlayer');
+        
+        // Hide modal
         modal.classList.remove('active');
         
+        // Reset video display
+        video.style.display = 'block';
+        
+        // Hide YouTube iframe if exists
+        if (iframe) {
+            iframe.style.display = 'none';
+            iframe.src = '';
+        }
+        
+        // Stop video playback
+        if (video.pause) {
+            video.pause();
+        }
+        
+        // Destroy HLS instance if exists
         if (this.hls) {
             this.hls.destroy();
             this.hls = null;
         }
         
-        const video = document.getElementById('videoPlayer');
-        video.pause();
+        // Clear video source
         video.src = '';
         
         // Ensure news ticker is stopped and hidden
@@ -1187,6 +1418,16 @@ class ArabicTVApp {
         const logo = document.getElementById('channelLogo').value.trim();
         const category = document.getElementById('channelCategory').value;
         const country = document.getElementById('channelCountry').value.trim();
+        
+        // Auto-detect URL type
+        let type = 'hls'; // default
+        if (this.detectedUrlType) {
+            type = this.detectedUrlType;
+        } else if (this.isYouTubeUrl(url)) {
+            type = 'youtube';
+        } else if (url.includes('.m3u8')) {
+            type = 'hls';
+        }
 
         // Validate required fields
         if (!name || !url || !logo || !category || !country) {
@@ -1207,7 +1448,8 @@ class ArabicTVApp {
             url: url,
             logo: logo,
             category: category,
-            country: country
+            country: country,
+            type: type
         };
 
         this.channels.push(newChannel);
@@ -1230,6 +1472,15 @@ class ArabicTVApp {
         document.getElementById('channelLogo').value = '';
         document.getElementById('channelCategory').value = '';
         document.getElementById('channelCountry').value = '';
+        
+        // Hide URL type indicator
+        const urlTypeIndicator = document.getElementById('urlTypeIndicator');
+        if (urlTypeIndicator) {
+            urlTypeIndicator.style.display = 'none';
+        }
+        
+        // Reset detected URL type
+        this.detectedUrlType = null;
         
         // Reset button text and class
         const submitBtn = document.querySelector('#addChannelForm button[type="submit"]');
@@ -1268,6 +1519,10 @@ class ArabicTVApp {
         document.getElementById('channelLogo').value = channel.logo;
         document.getElementById('channelCategory').value = channel.category;
         document.getElementById('channelCountry').value = channel.country;
+        
+        // Auto-detect URL type for editing
+        this.detectedUrlType = channel.type || 'hls';
+        this.detectUrlType();
 
         // Update button text to indicate editing mode
         document.querySelector('.add-btn').textContent = 'تحديث القناة';
@@ -1289,6 +1544,16 @@ class ArabicTVApp {
         const logo = document.getElementById('channelLogo').value.trim();
         const category = document.getElementById('channelCategory').value;
         const country = document.getElementById('channelCountry').value.trim();
+        
+        // Auto-detect URL type
+        let type = 'hls'; // default
+        if (this.detectedUrlType) {
+            type = this.detectedUrlType;
+        } else if (this.isYouTubeUrl(url)) {
+            type = 'youtube';
+        } else if (url.includes('.m3u8')) {
+            type = 'hls';
+        }
 
         // Validate required fields
         if (!name || !url || !logo || !category || !country) {
@@ -1303,7 +1568,8 @@ class ArabicTVApp {
             url: url,
             logo: logo,
             category: category,
-            country: country
+            country: country,
+            type: type
         };
 
         // Save and refresh
@@ -3879,8 +4145,6 @@ class ArabicTVApp {
 
     // Set video quality
     setVideoQuality(quality) {
-        if (!this.hls) return;
-
         // Remove active class from all options
         document.querySelectorAll('.quality-option').forEach(option => {
             option.classList.remove('active');
@@ -3891,6 +4155,16 @@ class ArabicTVApp {
         if (selectedOption) {
             selectedOption.classList.add('active');
         }
+
+        // Check if current channel is YouTube
+        if (this.currentChannel && (this.currentChannel.type === 'youtube' || this.isYouTubeUrl(this.currentChannel.url))) {
+            // Reload YouTube video with new quality
+            this.loadYouTubeVideo(this.currentChannel.url, quality);
+            return;
+        }
+
+        // Handle HLS quality
+        if (!this.hls) return;
 
         // Apply quality setting
         if (quality === 'auto') {
@@ -3936,10 +4210,15 @@ class ArabicTVApp {
         const currentQualityText = document.getElementById('currentQualityText');
         
         if (qualityDisplay && currentQualityText) {
-            if (quality === 'auto') {
-                currentQualityText.textContent = 'تلقائي';
+            // Check if current channel is YouTube
+            if (this.currentChannel && (this.currentChannel.type === 'youtube' || this.isYouTubeUrl(this.currentChannel.url))) {
+                this.updateYouTubeQualityDisplay(quality);
             } else {
-                currentQualityText.textContent = `${quality}p`;
+                if (quality === 'auto') {
+                    currentQualityText.textContent = 'تلقائي';
+                } else {
+                    currentQualityText.textContent = `${quality}p`;
+                }
             }
             
             // Show the quality display
@@ -5040,6 +5319,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Global function for URL type detection
+function detectUrlType() {
+    if (window.app) {
+        window.app.detectUrlType();
+    }
+}
 
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {

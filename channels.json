@@ -8,7 +8,8 @@
       "logo": "https://www.aljazeera.net/wp-content/uploads/2015/10/16c0c819-3b03-40e6-a960-004297f4f1dc.jpeg?resize=686%2C513&quality=80",
       "url": "https://live-hls-apps-aja-fa.getaj.net/AJA/index.m3u8",
       "category": "news",
-      "country": "قطر"
+      "country": "قطر",
+      "type": "hls"
     },
     {
       "id": 5,
@@ -16,7 +17,8 @@
       "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcF88fNlvQcVAGMTDMw4rpE3_ov4mD_QM2AUQtoImvIvQmvjmcYVMr8x-0du56pZZw158&usqp=CAU",
       "url": "https://av.alarabiya.net/alarabiapublish/alhadath.smil/playlist.m3u8",
       "category": "news",
-      "country": "الإمارات"
+      "country": "الإمارات",
+      "type": "hls"
     },
     {
       "id": 6,
@@ -24,7 +26,8 @@
       "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-hadath/2ff87ec4c2f3ede35295a20637d9f8fd/index.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/5/5a/AlHADATH.png",
       "category": "news",
-      "country": "الإمارات"
+      "country": "الإمارات",
+      "type": "hls"
     },
     {
       "id": 9,
@@ -32,7 +35,8 @@
       "url": "https://5d94523502c2d.streamlock.net/home/mystream/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/1/1e/Al_Sharqiya.png",
       "category": "entertainment",
-      "country": "العراق"
+      "country": "العراق",
+      "type": "hls"
     },
     {
       "id": 10,
@@ -40,7 +44,8 @@
       "url": "https://media1.livaat.com/static/AL-RASHEED-HD/playlist.m3u8",
       "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-UWUxt13Ax8uQUvrjpb3Lie7Li7g6y1lcEA&s",
       "category": "entertainment",
-      "country": "العراق"
+      "country": "العراق",
+      "type": "hls"
     },
     {
       "id": 8,
@@ -48,7 +53,8 @@
       "url": "https://bcovlive-a.akamaihd.net/9527a892aeaf43019fd9eeb77ad1516e/eu-central-1/6057955906001/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Rotana_Cinema_Egy.png/800px-Rotana_Cinema_Egy.png",
       "category": "movies",
-      "country": "السعودية"
+      "country": "السعودية",
+      "type": "hls"
     },
     {
       "id": 13,
@@ -56,7 +62,8 @@
       "url": "https://bcovlive-a.akamaihd.net/0debf5648e584e5fb795c3611c5c0252/eu-central-1/6057955906001/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Rotana_Classic.png/640px-Rotana_Classic.png",
       "category": "movies",
-      "country": "السعودية"
+      "country": "السعودية",
+      "type": "hls"
     },
     {
       "id": 24,
@@ -64,7 +71,8 @@
       "url": "https://rotana.hibridcdn.net/rotananet/cinemamasr_net-7Y83PP5adWixDF93/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Rotana_Cinema_Egy.png/800px-Rotana_Cinema_Egy.png",
       "category": "movies",
-      "country": "مصر"
+      "country": "مصر",
+      "type": "hls"
     },
     {
       "id": 14,
@@ -72,7 +80,8 @@
       "url": "https://alarabyta.cdn.octivid.com/alaraby/smil:alaraby.stream.smil/chunklist.m3u8",
       "logo": "https://www.alaraby.com/themes/custom/arabytv/logo.png",
       "category": "news",
-      "country": "Qatar"
+      "country": "Qatar",
+      "type": "hls"
     },
     {
       "id": 15,
@@ -80,7 +89,8 @@
       "url": "https://alarabyta.cdn.octivid.com/alaraby2n/smil:alaraby2n.stream.smil/chunklist.m3u8",
       "logo": "https://media0084.elcinema.com/tvguide/1382_1.png",
       "category": "entertainment",
-      "country": "Qatar"
+      "country": "Qatar",
+      "type": "hls"
     },
     {
       "id": 16,
@@ -88,7 +98,8 @@
       "url": "http://185.9.2.18/chid_391/mono.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Al_Jadeed_TV_LOGO_2018.jpg",
       "category": "entertainment",
-      "country": "لبنان"
+      "country": "لبنان",
+      "type": "hls"
     },
     {
       "id": 18,
@@ -96,7 +107,8 @@
       "url": "https://live.kwikmotion.com/futurelive/ftv.smil/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/ar/thumb/d/d5/%D8%B4%D8%B9%D8%A7%D8%B1_%D8%AA%D9%84%D9%81%D8%B2%D9%8A%D9%88%D9%86_%D8%A7%D9%84%D9%85%D8%B3%D8%AA%D9%82%D8%A8%D9%84.jpg/330px-%D8%B4%D8%B9%D8%A7%D8%B1_%D8%AA%D9%84%D9%81%D8%B2%D9%8A%D9%88%D9%86_%D8%A7%D9%84%D9%85%D8%B3%D8%AA%D9%82%D8%A8%D9%84.jpg",
       "category": "entertainment",
-      "country": "لبنان"
+      "country": "لبنان",
+      "type": "hls"
     },
     {
       "id": 20,
@@ -104,7 +116,8 @@
       "url": "https://hms.pfs.gdn/v1/broadcast/mtv/playlist.m3u8",
       "logo": "https://lebanon.mom-gmr.org/uploads/tx_lfrogmom/media/14023-1409_import.png",
       "category": "entertainment",
-      "country": "لبنان"
+      "country": "لبنان",
+      "type": "hls"
     },
     {
       "id": 21,
@@ -112,7 +125,8 @@
       "url": "https://ghaasiflu.online/Dijlah/index.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/4/4f/%D9%82%D9%86%D8%A7%D8%A9_%D8%AF%D8%AC%D9%84%D8%A9.png",
       "category": "entertainment",
-      "country": "العراق"
+      "country": "العراق",
+      "type": "hls"
     },
     {
       "id": 22,
@@ -120,7 +134,8 @@
       "url": "https://ghaasiflu.online/tarab/index.m3u8",
       "logo": "https://dijlah.tv/wp-content/uploads/2020/08/6ae1a3504ff099db9397dc19558b8d74.jpeg",
       "category": "entertainment",
-      "country": "العراق"
+      "country": "العراق",
+      "type": "hls"
     },
     {
       "id": 23,
@@ -128,7 +143,8 @@
       "url": "https://cdn-globecast.akamaized.net/live/eds/saudi_quran/hls_roku/index.m3u8",
       "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSN2OWFmtKMWWlavNdQD0SJkpXJ5pp8E9hu3A&s",
       "category": "religious",
-      "country": "السعودية"
+      "country": "السعودية",
+      "type": "hls"
     },
     {
       "id": 25,
@@ -136,7 +152,8 @@
       "url": "https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/rotana-aflam-plus/master.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Rotana_Cinema_Egy.png/800px-Rotana_Cinema_Egy.png",
       "category": "movies",
-      "country": "السعودية"
+      "country": "السعودية",
+      "type": "hls"
     },
     {
       "id": 26,
@@ -144,7 +161,8 @@
       "url": "https://live.kwikmotion.com/syriatvlive/syriatv.smil/playlist_dvr.m3u8",
       "logo": "https://yt3.googleusercontent.com/i0Svx00AI-4D1LoLwJqIp1Mc_xV6twtI-niAXHPzSjDh7rn5rfMG4-U1ZttmbOoC_us-_7VfTGc=s900-c-k-c0x00ffffff-no-rj",
       "category": "entertainment",
-      "country": "سورية"
+      "country": "سورية",
+      "type": "hls"
     },
     {
       "id": 28,
@@ -152,7 +170,8 @@
       "url": "https://pbc.furrera.ps/palestinehd/index.m3u8?v=6db2fbd3",
       "logo": "https://www.al-monitor.com/sites/default/files/styles/article_hero_medium/public/almpics/2019/01/PalestineBroadcastingCorp.jpg/PalestineBroadcastingCorp.jpg?h=a5ae579a&itok=F6d4j5Q3",
       "category": "news",
-      "country": "فلسطين"
+      "country": "فلسطين",
+      "type": "hls"
     },
     {
       "id": 29,
@@ -160,7 +179,8 @@
       "url": "http://167.172.161.13/hls/feedspare/6udfi7v8a3eof6nlps6e9ovfrs65c7l7.m3u8",
       "logo": "https://felesteen.news/thumb/w920/uploads/images/2021/05/ldelg.png",
       "category": "news",
-      "country": "فلسطين"
+      "country": "فلسطين",
+      "type": "hls"
     },
     {
       "id": 30,
@@ -168,7 +188,8 @@
       "url": "https://htvmada.mada.ps:4443/wattan/index.m3u8?v=6db2fbd3",
       "logo": "https://qudsnet.com/thumb/w660/uploads/news/1/2014-04-29_659130359.jpg",
       "category": "news",
-      "country": "فلسطين"
+      "country": "فلسطين",
+      "type": "hls"
     },
     {
       "id": 31,
@@ -176,7 +197,8 @@
       "url": "https://live.kwikmotion.com/alsumariatvlive/sumariamob.smil/playlist.m3u8?hdnts=exp=1757180184~acl=/alsumariatvlive/sumariamob.smil/*~hmac=9a1c4405ecdf6cf72c30ab92d0fe8c59e1d283b9f99a36a1da53933081a1bddc",
       "logo": "https://upload.wikimedia.org/wikipedia/ar/thumb/b/bb/AlsumariatvLogo.jpg/330px-AlsumariatvLogo.jpg",
       "category": "entertainment",
-      "country": "العراق"
+      "country": "العراق",
+      "type": "hls"
     },
     {
       "id": 32,
@@ -184,7 +206,8 @@
       "url": "https://cdn-globecast.akamaized.net/live/eds/saudi_sunnah/hls_roku/index.m3u8",
       "logo": "https://pbs.twimg.com/media/EmmsIRzXMAEVNSi.jpg",
       "category": "religious",
-      "country": "السعودية"
+      "country": "السعودية",
+      "type": "hls"
     },
     {
       "id": 33,
@@ -192,7 +215,8 @@
       "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv3/playlist.m3u8",
       "logo": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv3/playlist.m3u8",
       "category": "religious",
-      "country": "السعودية"
+      "country": "السعودية",
+      "type": "hls"
     },
     {
       "id": 34,
@@ -200,7 +224,8 @@
       "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv2/playlist.m3u8",
       "logo": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv2/playlist.m3u8",
       "category": "religious",
-      "country": "السعودية"
+      "country": "السعودية",
+      "type": "hls"
     },
     {
       "id": 43,
@@ -208,7 +233,8 @@
       "url": "https://jmc-live.ercdn.net/alistiqama/alistiqama.m3u8",
       "logo": "https://www.istiqama.tv/wp-content/uploads/2024/05/Logo-e1715111491262.png",
       "category": "religious",
-      "country": "عُمان"
+      "country": "عُمان",
+      "type": "hls"
     },
     {
       "id": 44,
@@ -216,15 +242,17 @@
       "url": "https://dwamdstream103.akamaized.net/hls/live/2015526/dwstream103/master.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/7/75/Deutsche_Welle_symbol_2012.svg",
       "category": "documentary",
-      "country": "قطر"
+      "country": "قطر",
+      "type": "hls"
     },
     {
       "id": 45,
       "name": "المهرية",
-      "url": "https://starmenajo.com/hls/almahriah/index.m3u8",
+      "url": "https://master.starmena-cloud.com/hls/almahriah.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/ar/0/04/%D9%82%D9%86%D8%A7%D8%A9_%D8%A7%D9%84%D9%85%D9%87%D8%B1%D9%8A%D8%A9.png",
       "category": "news",
-      "country": "تركيا"
+      "country": "تركيا",
+      "type": "hls"
     },
     {
       "id": 46,
@@ -232,7 +260,8 @@
       "url": "https://bcovlive-a.akamaihd.net/0debf5648e584e5fb795c3611c5c0252/eu-central-1/6057955906001/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/MBC_2_Logo.svg/1200px-MBC_2_Logo.svg.png",
       "category": "movies",
-      "country": "السعودية"
+      "country": "السعودية",
+      "type": "hls"
     },
     {
       "id": 47,
@@ -240,7 +269,44 @@
       "url": "https://bcovlive-a.akamaihd.net/9527a892aeaf43019fd9eeb77ad1516e/eu-central-1/6057955906001/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/MBC_2_Logo.svg/1200px-MBC_2_Logo.svg.png",
       "category": "movies",
-      "country": "السعودية"
+      "country": "السعودية",
+      "type": "hls"
+    },
+    {
+      "id": 48,
+      "name": "الجزيرة - يوتيوب",
+      "url": "https://www.youtube.com/watch?v=9Auq9mYxFEE",
+      "logo": "https://www.aljazeera.net/wp-content/uploads/2015/10/16c0c819-3b03-40e6-a960-004297f4f1dc.jpeg?resize=686%2C513&quality=80",
+      "category": "news",
+      "country": "قطر",
+      "type": "youtube"
+    },
+    {
+      "id": 49,
+      "name": "BBC عربي - يوتيوب",
+      "url": "https://www.youtube.com/watch?v=9Auq9mYxFEE",
+      "logo": "https://i.imgur.com/2P4m5Eb.png",
+      "category": "news",
+      "country": "بريطانيا",
+      "type": "youtube"
+    },
+    {
+      "id": 50,
+      "name": "DW عربي - يوتيوب",
+      "url": "https://www.youtube.com/watch?v=9Auq9mYxFEE",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/7/75/Deutsche_Welle_symbol_2012.svg",
+      "category": "documentary",
+      "country": "ألمانيا",
+      "type": "youtube"
+    },
+    {
+      "id": 51,
+      "name": "قناة القرآن الكريم - يوتيوب",
+      "url": "https://www.youtube.com/watch?v=9Auq9mYxFEE",
+      "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSN2OWFmtKMWWlavNdQD0SJkpXJ5pp8E9hu3A&s",
+      "category": "religious",
+      "country": "السعودية",
+      "type": "youtube"
     }
   ],
   "favorites": [],
