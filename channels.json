@@ -233,15 +233,6 @@
       "country": "Turly"
     },
     {
-      "id": 47,
-      "name": "MBC Iraq",
-      "url": "https://e1.taghtia.com/https://shls-iraq-prod-dub.shahid.net/out/v1/c9bf1e87ea66478bb20bc5c93c9d41ea/index_1.m3u8",
-      "logo": "https://i.ytimg.com/vi/45tB7jUCKfw/maxresdefault.jpg",
-      "category": "entertainment",
-      "country": "Iraq",
-      "type": "hls"
-    },
-    {
       "id": 52,
       "name": "DW عربي - يوتيوب",
       "url": "https://www.youtube.com/watch?v=9Auq9mYxFEE",
@@ -322,6 +313,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-09T12:45:48.916Z",
+  "lastModified": "2025-09-09T12:45:51.051Z",
   "version": "1.0"
 }
