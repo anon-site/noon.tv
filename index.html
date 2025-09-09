@@ -94,54 +94,47 @@
                     <i class="fas fa-tv"></i>
                     <span>تلفزيون</span>
                 </div>
-                <div class="tv-dropdown-container">
-                    <button class="tv-dropdown-btn" onclick="toggleTVDropdown()">
-                        <i class="fas fa-tv"></i>
+                <div class="sidebar-nav-tabs">
+                    <button class="sidebar-nav-tab active" data-category="all">
+                        <i class="fas fa-th-large"></i>
                         <span>جميع القنوات</span>
-                        <i class="fas fa-chevron-down tv-dropdown-arrow"></i>
+                        <span class="tab-count" id="allCount">0</span>
                     </button>
-                    <div class="tv-dropdown-menu" id="tvDropdownMenu">
-                        <button class="tv-dropdown-item active" data-category="all">
-                            <i class="fas fa-th-large"></i>
-                            <span>جميع القنوات</span>
-                            <span class="tab-count" id="allCount">0</span>
-                        </button>
-                        <button class="tv-dropdown-item" data-category="news">
-                            <i class="fas fa-newspaper"></i>
-                            <span>الأخبار</span>
-                            <span class="tab-count" id="newsCount">0</span>
-                        </button>
-                        <button class="tv-dropdown-item" data-category="entertainment">
-                            <i class="fas fa-film"></i>
-                            <span>الترفيه</span>
-                            <span class="tab-count" id="entertainmentCount">0</span>
-                        </button>
-                        <button class="tv-dropdown-item" data-category="sports">
-                            <i class="fas fa-futbol"></i>
-                            <span>الرياضة</span>
-                            <span class="tab-count" id="sportsCount">0</span>
-                        </button>
-                        <button class="tv-dropdown-item" data-category="religious">
-                            <i class="fas fa-mosque"></i>
-                            <span>الدينية</span>
-                            <span class="tab-count" id="religiousCount">0</span>
-                        </button>
-                        <button class="tv-dropdown-item" data-category="music">
-                            <i class="fas fa-music"></i>
-                            <span>الموسيقى</span>
-                            <span class="tab-count" id="musicCount">0</span>
-                        </button>
-                        <button class="tv-dropdown-item" data-category="movies">
-                            <i class="fas fa-film"></i>
-                            <span>الأفلام</span>
-                            <span class="tab-count" id="moviesCount">0</span>
-                        </button>
-                        <button class="tv-dropdown-item" data-category="documentary">
-                            <i class="fas fa-book-open"></i>
-                            <span>الوثائقية</span>
-                            <span class="tab-count" id="documentaryCount">0</span>
-                        </button>
-                    </div>
+                    <button class="sidebar-nav-tab" data-category="news">
+                        <i class="fas fa-newspaper"></i>
+                        <span>الأخبار</span>
+                        <span class="tab-count" id="newsCount">0</span>
+                    </button>
+                    <button class="sidebar-nav-tab" data-category="entertainment">
+                        <i class="fas fa-film"></i>
+                        <span>الترفيه</span>
+                        <span class="tab-count" id="entertainmentCount">0</span>
+                    </button>
+                    <button class="sidebar-nav-tab" data-category="sports">
+                        <i class="fas fa-futbol"></i>
+                        <span>الرياضة</span>
+                        <span class="tab-count" id="sportsCount">0</span>
+                    </button>
+                    <button class="sidebar-nav-tab" data-category="religious">
+                        <i class="fas fa-mosque"></i>
+                        <span>الدينية</span>
+                        <span class="tab-count" id="religiousCount">0</span>
+                    </button>
+                    <button class="sidebar-nav-tab" data-category="music">
+                        <i class="fas fa-music"></i>
+                        <span>الموسيقى</span>
+                        <span class="tab-count" id="musicCount">0</span>
+                    </button>
+                    <button class="sidebar-nav-tab" data-category="movies">
+                        <i class="fas fa-film"></i>
+                        <span>الأفلام</span>
+                        <span class="tab-count" id="moviesCount">0</span>
+                    </button>
+                    <button class="sidebar-nav-tab" data-category="documentary">
+                        <i class="fas fa-book-open"></i>
+                        <span>الوثائقية</span>
+                        <span class="tab-count" id="documentaryCount">0</span>
+                    </button>
                 </div>
             </div>
             
@@ -189,54 +182,47 @@
                     <i class="fas fa-tv"></i>
                     <span>تلفزيون</span>
                 </div>
-                <div class="mobile-tv-dropdown-container">
-                    <button class="mobile-tv-dropdown-btn" onclick="toggleMobileTVDropdown()">
-                        <i class="fas fa-tv"></i>
+                <div class="mobile-sidebar-nav-tabs">
+                    <button class="mobile-sidebar-nav-tab active" data-category="all">
+                        <i class="fas fa-th-large"></i>
                         <span>جميع القنوات</span>
-                        <i class="fas fa-chevron-down mobile-tv-dropdown-arrow"></i>
+                        <span class="tab-count" id="mobileAllCount">0</span>
                     </button>
-                    <div class="mobile-tv-dropdown-menu" id="mobileTVDropdownMenu">
-                        <button class="mobile-tv-dropdown-item active" data-category="all">
-                            <i class="fas fa-th-large"></i>
-                            <span>جميع القنوات</span>
-                            <span class="tab-count" id="mobileAllCount">0</span>
-                        </button>
-                        <button class="mobile-tv-dropdown-item" data-category="news">
-                            <i class="fas fa-newspaper"></i>
-                            <span>الأخبار</span>
-                            <span class="tab-count" id="mobileNewsCount">0</span>
-                        </button>
-                        <button class="mobile-tv-dropdown-item" data-category="entertainment">
-                            <i class="fas fa-film"></i>
-                            <span>الترفيه</span>
-                            <span class="tab-count" id="mobileEntertainmentCount">0</span>
-                        </button>
-                        <button class="mobile-tv-dropdown-item" data-category="sports">
-                            <i class="fas fa-futbol"></i>
-                            <span>الرياضة</span>
-                            <span class="tab-count" id="mobileSportsCount">0</span>
-                        </button>
-                        <button class="mobile-tv-dropdown-item" data-category="religious">
-                            <i class="fas fa-mosque"></i>
-                            <span>الدينية</span>
-                            <span class="tab-count" id="mobileReligiousCount">0</span>
-                        </button>
-                        <button class="mobile-tv-dropdown-item" data-category="music">
-                            <i class="fas fa-music"></i>
-                            <span>الموسيقى</span>
-                            <span class="tab-count" id="mobileMusicCount">0</span>
-                        </button>
-                        <button class="mobile-tv-dropdown-item" data-category="movies">
-                            <i class="fas fa-film"></i>
-                            <span>الأفلام</span>
-                            <span class="tab-count" id="mobileMoviesCount">0</span>
-                        </button>
-                        <button class="mobile-tv-dropdown-item" data-category="documentary">
-                            <i class="fas fa-book-open"></i>
-                            <span>الوثائقية</span>
-                            <span class="tab-count" id="mobileDocumentaryCount">0</span>
-                        </button>
-                    </div>
+                    <button class="mobile-sidebar-nav-tab" data-category="news">
+                        <i class="fas fa-newspaper"></i>
+                        <span>الأخبار</span>
+                        <span class="tab-count" id="mobileNewsCount">0</span>
+                    </button>
+                    <button class="mobile-sidebar-nav-tab" data-category="entertainment">
+                        <i class="fas fa-film"></i>
+                        <span>الترفيه</span>
+                        <span class="tab-count" id="mobileEntertainmentCount">0</span>
+                    </button>
+                    <button class="mobile-sidebar-nav-tab" data-category="sports">
+                        <i class="fas fa-futbol"></i>
+                        <span>الرياضة</span>
+                        <span class="tab-count" id="mobileSportsCount">0</span>
+                    </button>
+                    <button class="mobile-sidebar-nav-tab" data-category="religious">
+                        <i class="fas fa-mosque"></i>
+                        <span>الدينية</span>
+                        <span class="tab-count" id="mobileReligiousCount">0</span>
+                    </button>
+                    <button class="mobile-sidebar-nav-tab" data-category="music">
+                        <i class="fas fa-music"></i>
+                        <span>الموسيقى</span>
+                        <span class="tab-count" id="mobileMusicCount">0</span>
+                    </button>
+                    <button class="mobile-sidebar-nav-tab" data-category="movies">
+                        <i class="fas fa-film"></i>
+                        <span>الأفلام</span>
+                        <span class="tab-count" id="mobileMoviesCount">0</span>
+                    </button>
+                    <button class="mobile-sidebar-nav-tab" data-category="documentary">
+                        <i class="fas fa-book-open"></i>
+                        <span>الوثائقية</span>
+                        <span class="tab-count" id="mobileDocumentaryCount">0</span>
+                    </button>
                 </div>
             </div>
             

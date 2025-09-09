@@ -670,12 +670,17 @@ class ArabicTVApp {
                     this.filterChannels(category);
                     
                     // Update active tab
-                    document.querySelectorAll('.sidebar-nav-tab, .mobile-nav-tab').forEach(t => {
+                    document.querySelectorAll('.sidebar-nav-tab, .mobile-sidebar-nav-tab').forEach(t => {
                         t.classList.remove('active');
                     });
                     document.querySelectorAll(`[data-category="${category}"]`).forEach(t => {
                         t.classList.add('active');
                     });
+                    
+                    // Close desktop sidebar after selecting category (if open)
+                    if (this.isDesktopSidebarOpen) {
+                        this.toggleSidebar();
+                    }
                 });
             });
 
@@ -687,60 +692,20 @@ class ArabicTVApp {
                 });
             });
 
-            // Add event listeners for TV dropdown items
-            document.querySelectorAll('.tv-dropdown-item').forEach(item => {
-                item.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    const category = item.dataset.category;
-                    this.filterChannels(category);
-                    
-                    // Update active item
-                    document.querySelectorAll('.tv-dropdown-item, .mobile-tv-dropdown-item').forEach(t => {
-                        t.classList.remove('active');
-                    });
-                    item.classList.add('active');
-                    
-                    // Update dropdown button text
-                    const btn = document.querySelector('.tv-dropdown-btn span');
-                    if (btn) {
-                        btn.textContent = item.querySelector('span').textContent;
-                    }
-                    
-                    // Close dropdown immediately
-                    this.closeTVDropdown();
-                    
-                    // Close desktop sidebar after selecting category (if open)
-                    if (this.isDesktopSidebarOpen) {
-                        this.toggleSidebar();
-                    }
-                });
-            });
 
-            // Add event listeners for mobile TV dropdown items
-            document.querySelectorAll('.mobile-tv-dropdown-item').forEach(item => {
-                item.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    const category = item.dataset.category;
+            // Add event listeners for mobile sidebar nav tabs
+            document.querySelectorAll('.mobile-sidebar-nav-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const category = tab.dataset.category;
                     this.filterChannels(category);
                     
-                    // Update active item
-                    document.querySelectorAll('.tv-dropdown-item, .mobile-tv-dropdown-item').forEach(t => {
+                    // Update active tab
+                    document.querySelectorAll('.sidebar-nav-tab, .mobile-sidebar-nav-tab').forEach(t => {
                         t.classList.remove('active');
                     });
-                    item.classList.add('active');
-                    
-                    // Update dropdown button text
-                    const btn = document.querySelector('.mobile-tv-dropdown-btn span');
-                    if (btn) {
-                        btn.textContent = item.querySelector('span').textContent;
-                    }
-                    
-                    // Close dropdown immediately
-                    this.closeMobileTVDropdown();
+                    document.querySelectorAll(`[data-category="${category}"]`).forEach(t => {
+                        t.classList.add('active');
+                    });
                     
                     // Close mobile sidebar after selecting category
                     this.closeMobileMenu();
@@ -913,23 +878,19 @@ class ArabicTVApp {
         this.currentCategory = category;
         
         // Update active tab
-        document.querySelectorAll('.mobile-nav-tab, .sidebar-nav-tab, .tv-dropdown-item, .mobile-tv-dropdown-item').forEach(tab => {
+        const allTabs = document.querySelectorAll('.sidebar-nav-tab, .mobile-sidebar-nav-tab');
+        console.log('عدد التبويبات الموجودة:', allTabs.length);
+        
+        allTabs.forEach(tab => {
             tab.classList.remove('active');
         });
-        document.querySelectorAll(`[data-category="${category}"]`).forEach(tab => {
+        
+        const activeTabs = document.querySelectorAll(`[data-category="${category}"]`);
+        console.log('عدد التبويبات النشطة:', activeTabs.length);
+        
+        activeTabs.forEach(tab => {
             tab.classList.add('active');
         });
-
-        // Update dropdown button text
-        const activeItem = document.querySelector(`[data-category="${category}"]`);
-        if (activeItem) {
-            const itemText = activeItem.querySelector('span').textContent;
-            const desktopBtn = document.querySelector('.tv-dropdown-btn span');
-            const mobileBtn = document.querySelector('.mobile-tv-dropdown-btn span');
-            
-            if (desktopBtn) desktopBtn.textContent = itemText;
-            if (mobileBtn) mobileBtn.textContent = itemText;
-        }
 
         // Use the new unified filter system
         this.applyAllFilters();
@@ -1290,114 +1251,6 @@ class ArabicTVApp {
         return activeQuality ? activeQuality.dataset.quality : 'auto';
     }
 
-    // Toggle TV dropdown
-    toggleTVDropdown() {
-        const dropdown = document.getElementById('tvDropdownMenu');
-        const btn = document.querySelector('.tv-dropdown-btn');
-        
-        if (!dropdown || !btn) return;
-        
-        if (dropdown.classList.contains('show')) {
-            this.closeTVDropdown();
-        } else {
-            this.openTVDropdown();
-        }
-    }
-
-    // Open TV dropdown
-    openTVDropdown() {
-        const dropdown = document.getElementById('tvDropdownMenu');
-        const btn = document.querySelector('.tv-dropdown-btn');
-        
-        if (dropdown && btn) {
-            dropdown.classList.add('show');
-            btn.classList.add('open');
-            // Add click outside listener
-            setTimeout(() => {
-                document.addEventListener('click', this.handleTVDropdownClickOutside.bind(this));
-            }, 100);
-        }
-    }
-
-    // Close TV dropdown
-    closeTVDropdown() {
-        const dropdown = document.getElementById('tvDropdownMenu');
-        const btn = document.querySelector('.tv-dropdown-btn');
-        
-        if (dropdown && btn) {
-            dropdown.classList.remove('show');
-            btn.classList.remove('open');
-            // Remove click outside listener
-            document.removeEventListener('click', this.handleTVDropdownClickOutside);
-        }
-    }
-
-    // Handle click outside TV dropdown
-    handleTVDropdownClickOutside(event) {
-        const dropdown = document.getElementById('tvDropdownMenu');
-        const btn = document.querySelector('.tv-dropdown-btn');
-        
-        if (dropdown && btn && !dropdown.contains(event.target) && !btn.contains(event.target)) {
-            dropdown.classList.remove('show');
-            btn.classList.remove('open');
-            document.removeEventListener('click', this.handleTVDropdownClickOutside);
-        }
-    }
-
-    // Toggle Mobile TV dropdown
-    toggleMobileTVDropdown() {
-        const dropdown = document.getElementById('mobileTVDropdownMenu');
-        const btn = document.querySelector('.mobile-tv-dropdown-btn');
-        
-        if (!dropdown || !btn) return;
-        
-        if (dropdown.classList.contains('show')) {
-            this.closeMobileTVDropdown();
-        } else {
-            this.openMobileTVDropdown();
-        }
-    }
-
-    // Open Mobile TV dropdown
-    openMobileTVDropdown() {
-        const dropdown = document.getElementById('mobileTVDropdownMenu');
-        const btn = document.querySelector('.mobile-tv-dropdown-btn');
-        
-        if (dropdown && btn) {
-            dropdown.classList.add('show');
-            btn.classList.add('open');
-            // Add click outside listener
-            setTimeout(() => {
-                document.addEventListener('click', this.handleMobileTVDropdownClickOutside.bind(this));
-            }, 100);
-        }
-    }
-
-    // Close Mobile TV dropdown
-    closeMobileTVDropdown() {
-        const dropdown = document.getElementById('mobileTVDropdownMenu');
-        const btn = document.querySelector('.mobile-tv-dropdown-btn');
-        
-        if (dropdown && btn) {
-            dropdown.classList.remove('show');
-            btn.classList.remove('open');
-            // Remove click outside listener
-            document.removeEventListener('click', this.handleMobileTVDropdownClickOutside);
-        }
-    }
-
-
-    // Handle click outside mobile TV dropdown
-    handleMobileTVDropdownClickOutside(event) {
-        const dropdown = document.getElementById('mobileTVDropdownMenu');
-        const btn = document.querySelector('.mobile-tv-dropdown-btn');
-        
-        if (dropdown && btn && !dropdown.contains(event.target) && !btn.contains(event.target)) {
-            dropdown.classList.remove('show');
-            btn.classList.remove('open');
-            document.removeEventListener('click', this.handleMobileTVDropdownClickOutside);
-        }
-    }
 
     closeModal() {
         const modal = document.getElementById('videoModal');
@@ -4001,7 +3854,9 @@ class ArabicTVApp {
 
     // Desktop Sidebar Functions
     toggleSidebar() {
+        console.log('تبديل القائمة الجانبية - الحالة الحالية:', this.isDesktopSidebarOpen);
         this.isDesktopSidebarOpen = !this.isDesktopSidebarOpen;
+        console.log('الحالة الجديدة:', this.isDesktopSidebarOpen);
         
         // Use requestAnimationFrame for smoother animation
         requestAnimationFrame(() => {
@@ -4009,14 +3864,18 @@ class ArabicTVApp {
             const mainContent = document.querySelector('.main-content');
             const overlay = document.querySelector('.sidebar-overlay') || this.createSidebarOverlay();
             
+            console.log('عناصر DOM:', { sidebar, mainContent, overlay });
+            
             if (this.isDesktopSidebarOpen) {
                 sidebar.classList.add('active');
                 mainContent.classList.add('sidebar-open');
                 overlay.classList.add('active');
+                console.log('تم فتح القائمة الجانبية');
             } else {
                 sidebar.classList.remove('active');
                 mainContent.classList.remove('sidebar-open');
                 overlay.classList.remove('active');
+                console.log('تم إغلاق القائمة الجانبية');
             }
         });
     }
@@ -5515,18 +5374,6 @@ function detectUrlType() {
     }
 }
 
-// Global functions for TV dropdown
-function toggleTVDropdown() {
-    if (window.app) {
-        window.app.toggleTVDropdown();
-    }
-}
-
-function toggleMobileTVDropdown() {
-    if (window.app) {
-        window.app.toggleMobileTVDropdown();
-    }
-}
 
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
