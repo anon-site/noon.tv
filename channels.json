@@ -240,15 +240,6 @@
       "category": "documentary",
       "country": "ألمانيا",
       "type": "youtube"
-    },
-    {
-      "id": 53,
-      "name": "قناة القرآن الكريم - يوتيوب",
-      "url": "https://www.youtube.com/watch?v=9Auq9mYxFEE",
-      "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSN2OWFmtKMWWlavNdQD0SJkpXJ5pp8E9hu3A&s",
-      "category": "religious",
-      "country": "السعودية",
-      "type": "youtube"
     }
   ],
   "favorites": [],
@@ -313,6 +304,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-09T12:45:51.051Z",
+  "lastModified": "2025-09-09T12:45:54.549Z",
   "version": "1.0"
 }
