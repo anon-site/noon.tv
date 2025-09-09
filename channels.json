@@ -248,10 +248,10 @@
     "compactMode": true,
     "highContrast": false,
     "borderRadius": "rounded",
+    "showCustomControls": true,
     "notifications": false,
     "notificationSound": false,
-    "notificationDuration": 3,
-    "showCustomControls": true
+    "notificationDuration": 3
   },
   "categories": [
     {
@@ -290,6 +290,6 @@
       "icon": "fas fa-newspaper"
     }
   ],
-  "lastModified": "2025-09-09T12:53:05.315Z",
+  "lastModified": "2025-09-10T05:09:38.528Z",
   "version": "1.0"
 }
