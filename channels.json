@@ -70,7 +70,7 @@
       "url": "https://alarabyta.cdn.octivid.com/alaraby/smil:alaraby.stream.smil/chunklist.m3u8",
       "logo": "https://www.alaraby.com/themes/custom/arabytv/logo.png",
       "category": "news",
-      "country": "قطر"
+      "country": "Qatar"
     },
     {
       "id": 15,
@@ -78,7 +78,7 @@
       "url": "https://alarabyta.cdn.octivid.com/alaraby2n/smil:alaraby2n.stream.smil/chunklist.m3u8",
       "logo": "https://media0084.elcinema.com/tvguide/1382_1.png",
       "category": "entertainment",
-      "country": "قطر"
+      "country": "Qatar"
     },
     {
       "id": 16,
@@ -222,7 +222,7 @@
       "url": "https://starmenajo.com/hls/almahriah/index.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/ar/0/04/%D9%82%D9%86%D8%A7%D8%A9_%D8%A7%D9%84%D9%85%D9%87%D8%B1%D9%8A%D8%A9.png",
       "category": "news",
-      "country": "اليمن"
+      "country": "Yemen"
     },
     {
       "id": 46,
@@ -230,15 +230,16 @@
       "url": "https://mn-nl.mncdn.com/mekameleen/smil:mekameleentv.smil/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/4/45/%D9%82%D9%86%D8%A7%D8%A9_%D9%85%D9%83%D9%85%D9%84%D9%8A%D9%86.jpg",
       "category": "entertainment",
-      "country": "تركيا"
+      "country": "Turly"
     },
     {
       "id": 47,
-      "name": "MBC العراق",
+      "name": "MBC Iraq",
       "url": "https://e1.taghtia.com/https://shls-iraq-prod-dub.shahid.net/out/v1/c9bf1e87ea66478bb20bc5c93c9d41ea/index_1.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/MBC_2_Logo.svg/1200px-MBC_2_Logo.svg.png",
+      "logo": "https://i.ytimg.com/vi/45tB7jUCKfw/maxresdefault.jpg",
       "category": "entertainment",
-      "country": "العراق"
+      "country": "Iraq",
+      "type": "hls"
     },
     {
       "id": 48,
@@ -355,6 +356,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-09T05:13:04.280Z",
+  "lastModified": "2025-09-09T05:14:51.218Z",
   "version": "1.0"
 }
