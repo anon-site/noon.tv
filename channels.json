@@ -223,6 +223,22 @@
       "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4phcpAtr74wQxlpfLrZQ2Qn8XZN02nw7V6w&s",
       "category": "news",
       "country": "France"
+    },
+    {
+      "id": 46,
+      "name": "MBC 2",
+      "url": "https://bcovlive-a.akamaihd.net/0debf5648e584e5fb795c3611c5c0252/eu-central-1/6057955906001/playlist.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/MBC_2_Logo.svg/1200px-MBC_2_Logo.svg.png",
+      "category": "movies",
+      "country": "السعودية"
+    },
+    {
+      "id": 47,
+      "name": "MBC Max",
+      "url": "https://bcovlive-a.akamaihd.net/9527a892aeaf43019fd9eeb77ad1516e/eu-central-1/6057955906001/playlist.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/MBC_2_Logo.svg/1200px-MBC_2_Logo.svg.png",
+      "category": "movies",
+      "country": "السعودية"
     }
   ],
   "favorites": [],
@@ -279,7 +295,12 @@
     {
       "key": "documentary",
       "name": "الوثائقية",
-      "icon": "fas fa-newspaper"
+      "icon": "fas fa-book-open"
+    },
+    {
+      "key": "movies",
+      "name": "الأفلام",
+      "icon": "fas fa-film"
     }
   ],
   "lastModified": "2025-09-08T06:46:04.618Z",

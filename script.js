@@ -224,6 +224,7 @@ class ArabicTVApp {
     init() {
         this.testLocalStorage(); // Test if localStorage is working
         this.loadRemoteStorageSettings(); // Load remote storage configuration
+        this.loadDataFromFile(); // Load data from channels.json first
         this.loadChannelsFromStorage(); // Load saved channels first
         this.loadFavorites(); // Load saved favorites
         this.filteredChannels = [...this.channels]; // Ensure filtered channels match loaded channels
@@ -250,6 +251,44 @@ class ArabicTVApp {
         
         // تشخيص أولي
         console.log('تم تهيئة التطبيق مع', this.channels.length, 'قناة');
+    }
+
+    async loadDataFromFile() {
+        try {
+            const response = await fetch('channels.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            
+            // Load channels from JSON file
+            if (data.channels && Array.isArray(data.channels)) {
+                this.channels = data.channels;
+                console.log('تم تحميل القنوات من channels.json:', this.channels.length, 'قناة');
+            }
+            
+            // Load categories from JSON file
+            if (data.categories && Array.isArray(data.categories)) {
+                this.categories = data.categories;
+                console.log('تم تحميل الفئات من channels.json:', this.categories.length, 'فئة');
+            }
+            
+            // Load settings from JSON file
+            if (data.settings && typeof data.settings === 'object') {
+                this.settings = { ...this.settings, ...data.settings };
+                console.log('تم تحميل الإعدادات من channels.json');
+            }
+            
+            // Load favorites from JSON file
+            if (data.favorites && Array.isArray(data.favorites)) {
+                this.favorites = new Set(data.favorites);
+                console.log('تم تحميل المفضلة من channels.json:', this.favorites.size, 'قناة');
+            }
+            
+        } catch (error) {
+            console.error('خطأ في تحميل البيانات من channels.json:', error);
+            console.log('سيتم استخدام البيانات الافتراضية');
+        }
     }
 
     testLocalStorage() {
@@ -802,7 +841,9 @@ class ArabicTVApp {
             'entertainment': 'الترفيه',
             'sports': 'الرياضة',
             'religious': 'الدينية',
-            'music': 'الموسيقى'
+            'music': 'الموسيقى',
+            'movies': 'الأفلام',
+            'documentary': 'الوثائقية'
         };
         return categories[category] || category;
     }
@@ -3232,7 +3273,9 @@ class ArabicTVApp {
             'entertainment': 'الترفيه',
             'sports': 'الرياضة',
             'religious': 'الدينية',
-            'music': 'الموسيقى'
+            'music': 'الموسيقى',
+            'movies': 'الأفلام',
+            'documentary': 'الوثائقية'
         };
         return categoryNames[category] || category;
     }
@@ -3542,7 +3585,8 @@ class ArabicTVApp {
     updateSidebarCounts() {
         console.log('بدء تحديث عداد القنوات - عدد القنوات الإجمالي:', this.channels.length);
         
-        const categories = ['all', 'news', 'entertainment', 'sports', 'religious', 'music'];
+        // Use dynamic categories instead of hardcoded list
+        const categories = this.categories.map(cat => cat.key);
         
         categories.forEach(category => {
             // Update desktop sidebar counts
@@ -4582,7 +4626,9 @@ class ArabicTVApp {
             { key: 'entertainment', name: 'الترفيه', icon: 'fas fa-tv' },
             { key: 'sports', name: 'الرياضة', icon: 'fas fa-futbol' },
             { key: 'religious', name: 'الدينية', icon: 'fas fa-pray' },
-            { key: 'music', name: 'الموسيقى', icon: 'fas fa-music' }
+            { key: 'music', name: 'الموسيقى', icon: 'fas fa-music' },
+            { key: 'movies', name: 'الأفلام', icon: 'fas fa-film' },
+            { key: 'documentary', name: 'الوثائقية', icon: 'fas fa-book-open' }
         ];
     }
 
@@ -4737,19 +4783,31 @@ class ArabicTVApp {
         console.log('تحديث أزرار التنقل - الفئات:', this.categories.length);
         
         // Update desktop sidebar navigation
-        const sidebarNavTabs = document.querySelectorAll('.sidebar-nav-tab');
-        if (sidebarNavTabs.length > 0) {
+        const sidebarNavTabsContainer = document.querySelector('.sidebar-nav-tabs');
+        if (sidebarNavTabsContainer) {
+            // Clear existing tabs
+            sidebarNavTabsContainer.innerHTML = '';
+            
+            // Create new tabs for all categories
             this.categories.forEach(category => {
-                const tab = document.querySelector(`[data-category="${category.key}"]`);
-                if (tab) {
-                    tab.innerHTML = `<i class="${category.icon}"></i> <span>${category.name}</span> <span class="tab-count" id="${category.key}Count">0</span>`;
-                    console.log('تم تحديث تبويب:', category.name);
-                } else {
-                    console.warn(`لم يتم العثور على تبويب ${category.key}`);
+                const tab = document.createElement('button');
+                tab.className = 'sidebar-nav-tab';
+                tab.dataset.category = category.key;
+                if (category.key === 'all') {
+                    tab.classList.add('active');
                 }
+                tab.innerHTML = `<i class="${category.icon}"></i> <span>${category.name}</span> <span class="tab-count" id="${category.key}Count">0</span>`;
+                
+                // Add click event listener
+                tab.addEventListener('click', () => {
+                    this.filterChannels(category.key);
+                });
+                
+                sidebarNavTabsContainer.appendChild(tab);
+                console.log('تم إنشاء تبويب:', category.name);
             });
         } else {
-            console.warn('لم يتم العثور على أزرار القائمة الجانبية');
+            console.warn('لم يتم العثور على حاوية أزرار القائمة الجانبية');
         }
         
         // Update mobile navigation
@@ -4764,10 +4822,13 @@ class ArabicTVApp {
                     tab.classList.add('active');
                 }
                 tab.innerHTML = `<i class="${category.icon}"></i> <span>${category.name}</span> <span class="tab-count" id="mobile${category.key.charAt(0).toUpperCase() + category.key.slice(1)}Count">0</span>`;
+                
+                // Add click event listener
                 tab.addEventListener('click', () => {
                     this.filterChannels(category.key);
                     this.closeMobileMenu();
                 });
+                
                 mobileNavTabs.appendChild(tab);
             });
             console.log('تم تحديث قائمة الموبايل');
