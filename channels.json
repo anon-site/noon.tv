@@ -248,10 +248,10 @@
     "compactMode": true,
     "highContrast": false,
     "borderRadius": "rounded",
-    "showCustomControls": true,
     "notifications": false,
     "notificationSound": false,
-    "notificationDuration": 3
+    "notificationDuration": 3,
+    "showCustomControls": true
   },
   "categories": [
     {
@@ -285,16 +285,11 @@
       "icon": "fas fa-music"
     },
     {
-      "key": "movies",
-      "name": "أفلام",
-      "icon": "fas fa-film"
-    },
-    {
       "key": "documentary",
       "name": "الوثائقية",
-      "icon": "fas fa-book-open"
+      "icon": "fas fa-newspaper"
     }
   ],
-  "lastModified": "2025-09-09T12:50:13.274Z",
+  "lastModified": "2025-09-09T12:53:05.315Z",
   "version": "1.0"
 }
