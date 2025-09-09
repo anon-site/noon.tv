@@ -45,7 +45,7 @@
       "name": "Rotana Cinema KSA",
       "url": "https://bcovlive-a.akamaihd.net/9527a892aeaf43019fd9eeb77ad1516e/eu-central-1/6057955906001/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Rotana_Cinema_Egy.png/800px-Rotana_Cinema_Egy.png",
-      "category": "entertainment",
+      "category": "movies",
       "country": "السعودية"
     },
     {
@@ -53,7 +53,7 @@
       "name": "Rotana Classic",
       "url": "https://bcovlive-a.akamaihd.net/0debf5648e584e5fb795c3611c5c0252/eu-central-1/6057955906001/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Rotana_Classic.png/640px-Rotana_Classic.png",
-      "category": "entertainment",
+      "category": "movies",
       "country": "السعودية"
     },
     {
@@ -61,7 +61,7 @@
       "name": "Rotana Cinema Eg",
       "url": "https://rotana.hibridcdn.net/rotananet/cinemamasr_net-7Y83PP5adWixDF93/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Rotana_Cinema_Egy.png/800px-Rotana_Cinema_Egy.png",
-      "category": "entertainment",
+      "category": "movies",
       "country": "مصر"
     },
     {
@@ -133,7 +133,7 @@
       "name": "روتانا افلام +",
       "url": "https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/rotana-aflam-plus/master.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Rotana_Cinema_Egy.png/800px-Rotana_Cinema_Egy.png",
-      "category": "entertainment",
+      "category": "movies",
       "country": "السعودية"
     },
     {
@@ -218,11 +218,11 @@
     },
     {
       "id": 45,
-      "name": "I24 News Arabic",
-      "url": "https://bcovlive-a.akamaihd.net/95116e8d79524d87bf3ac20ba04241e3/eu-central-1/5377161796001/playlist.m3u8",
-      "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4phcpAtr74wQxlpfLrZQ2Qn8XZN02nw7V6w&s",
+      "name": "المهرية",
+      "url": "https://starmenajo.com/hls/almahriah/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/ar/0/04/%D9%82%D9%86%D8%A7%D8%A9_%D8%A7%D9%84%D9%85%D9%87%D8%B1%D9%8A%D8%A9.png",
       "category": "news",
-      "country": "France"
+      "country": "تركيا"
     },
     {
       "id": 46,
@@ -256,10 +256,10 @@
     "compactMode": true,
     "highContrast": false,
     "borderRadius": "rounded",
+    "showCustomControls": true,
     "notifications": false,
     "notificationSound": false,
-    "notificationDuration": 3,
-    "showCustomControls": true
+    "notificationDuration": 3
   },
   "categories": [
     {
@@ -293,16 +293,16 @@
       "icon": "fas fa-music"
     },
     {
-      "key": "documentary",
-      "name": "الوثائقية",
-      "icon": "fas fa-book-open"
-    },
-    {
       "key": "movies",
       "name": "الأفلام",
       "icon": "fas fa-film"
+    },
+    {
+      "key": "documentary",
+      "name": "الوثائقية",
+      "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-08T06:46:04.618Z",
+  "lastModified": "2025-09-09T03:31:16.058Z",
   "version": "1.0"
 }
