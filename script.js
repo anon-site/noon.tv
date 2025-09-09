@@ -3975,18 +3975,22 @@ class ArabicTVApp {
     // Mobile Sidebar Functions
     toggleMobileMenu() {
         this.isMobileSidebarOpen = !this.isMobileSidebarOpen;
-        const sidebar = document.getElementById('mobileSidebar');
-        const overlay = document.getElementById('mobileSidebarOverlay');
         
-        if (this.isMobileSidebarOpen) {
-            sidebar.classList.add('active');
-            overlay.classList.add('active');
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
-        } else {
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.style.overflow = ''; // Restore scrolling
-        }
+        // Use requestAnimationFrame for smoother animation
+        requestAnimationFrame(() => {
+            const sidebar = document.getElementById('mobileSidebar');
+            const overlay = document.getElementById('mobileSidebarOverlay');
+            
+            if (this.isMobileSidebarOpen) {
+                sidebar.classList.add('active');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            } else {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
     }
 
     closeMobileMenu() {
@@ -3998,19 +4002,23 @@ class ArabicTVApp {
     // Desktop Sidebar Functions
     toggleSidebar() {
         this.isDesktopSidebarOpen = !this.isDesktopSidebarOpen;
-        const sidebar = document.getElementById('desktopSidebar');
-        const mainContent = document.querySelector('.main-content');
-        const overlay = document.querySelector('.sidebar-overlay') || this.createSidebarOverlay();
         
-        if (this.isDesktopSidebarOpen) {
-            sidebar.classList.add('active');
-            mainContent.classList.add('sidebar-open');
-            overlay.classList.add('active');
-        } else {
-            sidebar.classList.remove('active');
-            mainContent.classList.remove('sidebar-open');
-            overlay.classList.remove('active');
-        }
+        // Use requestAnimationFrame for smoother animation
+        requestAnimationFrame(() => {
+            const sidebar = document.getElementById('desktopSidebar');
+            const mainContent = document.querySelector('.main-content');
+            const overlay = document.querySelector('.sidebar-overlay') || this.createSidebarOverlay();
+            
+            if (this.isDesktopSidebarOpen) {
+                sidebar.classList.add('active');
+                mainContent.classList.add('sidebar-open');
+                overlay.classList.add('active');
+            } else {
+                sidebar.classList.remove('active');
+                mainContent.classList.remove('sidebar-open');
+                overlay.classList.remove('active');
+            }
+        });
     }
 
     createSidebarOverlay() {
