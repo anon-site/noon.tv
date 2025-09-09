@@ -686,6 +686,66 @@ class ArabicTVApp {
                     this.toggleSidebar();
                 });
             });
+
+            // Add event listeners for TV dropdown items
+            document.querySelectorAll('.tv-dropdown-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const category = item.dataset.category;
+                    this.filterChannels(category);
+                    
+                    // Update active item
+                    document.querySelectorAll('.tv-dropdown-item, .mobile-tv-dropdown-item').forEach(t => {
+                        t.classList.remove('active');
+                    });
+                    item.classList.add('active');
+                    
+                    // Update dropdown button text
+                    const btn = document.querySelector('.tv-dropdown-btn span');
+                    if (btn) {
+                        btn.textContent = item.querySelector('span').textContent;
+                    }
+                    
+                    // Close dropdown immediately
+                    this.closeTVDropdown();
+                    
+                    // Close desktop sidebar after selecting category (if open)
+                    if (this.isDesktopSidebarOpen) {
+                        this.toggleSidebar();
+                    }
+                });
+            });
+
+            // Add event listeners for mobile TV dropdown items
+            document.querySelectorAll('.mobile-tv-dropdown-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const category = item.dataset.category;
+                    this.filterChannels(category);
+                    
+                    // Update active item
+                    document.querySelectorAll('.tv-dropdown-item, .mobile-tv-dropdown-item').forEach(t => {
+                        t.classList.remove('active');
+                    });
+                    item.classList.add('active');
+                    
+                    // Update dropdown button text
+                    const btn = document.querySelector('.mobile-tv-dropdown-btn span');
+                    if (btn) {
+                        btn.textContent = item.querySelector('span').textContent;
+                    }
+                    
+                    // Close dropdown immediately
+                    this.closeMobileTVDropdown();
+                    
+                    // Close mobile sidebar after selecting category
+                    this.closeMobileMenu();
+                });
+            });
     }
 
     renderChannels() {
@@ -853,12 +913,23 @@ class ArabicTVApp {
         this.currentCategory = category;
         
         // Update active tab
-        document.querySelectorAll('.mobile-nav-tab, .sidebar-nav-tab').forEach(tab => {
+        document.querySelectorAll('.mobile-nav-tab, .sidebar-nav-tab, .tv-dropdown-item, .mobile-tv-dropdown-item').forEach(tab => {
             tab.classList.remove('active');
         });
         document.querySelectorAll(`[data-category="${category}"]`).forEach(tab => {
             tab.classList.add('active');
         });
+
+        // Update dropdown button text
+        const activeItem = document.querySelector(`[data-category="${category}"]`);
+        if (activeItem) {
+            const itemText = activeItem.querySelector('span').textContent;
+            const desktopBtn = document.querySelector('.tv-dropdown-btn span');
+            const mobileBtn = document.querySelector('.mobile-tv-dropdown-btn span');
+            
+            if (desktopBtn) desktopBtn.textContent = itemText;
+            if (mobileBtn) mobileBtn.textContent = itemText;
+        }
 
         // Use the new unified filter system
         this.applyAllFilters();
@@ -1217,6 +1288,115 @@ class ArabicTVApp {
     getCurrentQuality() {
         const activeQuality = document.querySelector('.quality-option.active');
         return activeQuality ? activeQuality.dataset.quality : 'auto';
+    }
+
+    // Toggle TV dropdown
+    toggleTVDropdown() {
+        const dropdown = document.getElementById('tvDropdownMenu');
+        const btn = document.querySelector('.tv-dropdown-btn');
+        
+        if (!dropdown || !btn) return;
+        
+        if (dropdown.classList.contains('show')) {
+            this.closeTVDropdown();
+        } else {
+            this.openTVDropdown();
+        }
+    }
+
+    // Open TV dropdown
+    openTVDropdown() {
+        const dropdown = document.getElementById('tvDropdownMenu');
+        const btn = document.querySelector('.tv-dropdown-btn');
+        
+        if (dropdown && btn) {
+            dropdown.classList.add('show');
+            btn.classList.add('open');
+            // Add click outside listener
+            setTimeout(() => {
+                document.addEventListener('click', this.handleTVDropdownClickOutside.bind(this));
+            }, 100);
+        }
+    }
+
+    // Close TV dropdown
+    closeTVDropdown() {
+        const dropdown = document.getElementById('tvDropdownMenu');
+        const btn = document.querySelector('.tv-dropdown-btn');
+        
+        if (dropdown && btn) {
+            dropdown.classList.remove('show');
+            btn.classList.remove('open');
+            // Remove click outside listener
+            document.removeEventListener('click', this.handleTVDropdownClickOutside);
+        }
+    }
+
+    // Handle click outside TV dropdown
+    handleTVDropdownClickOutside(event) {
+        const dropdown = document.getElementById('tvDropdownMenu');
+        const btn = document.querySelector('.tv-dropdown-btn');
+        
+        if (dropdown && btn && !dropdown.contains(event.target) && !btn.contains(event.target)) {
+            dropdown.classList.remove('show');
+            btn.classList.remove('open');
+            document.removeEventListener('click', this.handleTVDropdownClickOutside);
+        }
+    }
+
+    // Toggle Mobile TV dropdown
+    toggleMobileTVDropdown() {
+        const dropdown = document.getElementById('mobileTVDropdownMenu');
+        const btn = document.querySelector('.mobile-tv-dropdown-btn');
+        
+        if (!dropdown || !btn) return;
+        
+        if (dropdown.classList.contains('show')) {
+            this.closeMobileTVDropdown();
+        } else {
+            this.openMobileTVDropdown();
+        }
+    }
+
+    // Open Mobile TV dropdown
+    openMobileTVDropdown() {
+        const dropdown = document.getElementById('mobileTVDropdownMenu');
+        const btn = document.querySelector('.mobile-tv-dropdown-btn');
+        
+        if (dropdown && btn) {
+            dropdown.classList.add('show');
+            btn.classList.add('open');
+            // Add click outside listener
+            setTimeout(() => {
+                document.addEventListener('click', this.handleMobileTVDropdownClickOutside.bind(this));
+            }, 100);
+        }
+    }
+
+    // Close Mobile TV dropdown
+    closeMobileTVDropdown() {
+        const dropdown = document.getElementById('mobileTVDropdownMenu');
+        const btn = document.querySelector('.mobile-tv-dropdown-btn');
+        
+        if (dropdown && btn) {
+            dropdown.classList.remove('show');
+            btn.classList.remove('open');
+            // Remove click outside listener
+            document.removeEventListener('click', this.handleMobileTVDropdownClickOutside);
+        }
+    }
+
+
+    // Handle click outside mobile TV dropdown
+    handleMobileTVDropdownClickOutside(event) {
+        const dropdown = document.getElementById('mobileTVDropdownMenu');
+        const btn = document.querySelector('.mobile-tv-dropdown-btn');
+        
+        if (dropdown && btn && !dropdown.contains(event.target) && !btn.contains(event.target)) {
+            dropdown.classList.remove('show');
+            btn.classList.remove('open');
+            document.removeEventListener('click', this.handleMobileTVDropdownClickOutside);
+        }
     }
 
     closeModal() {
@@ -5324,6 +5504,19 @@ document.addEventListener('DOMContentLoaded', function() {
 function detectUrlType() {
     if (window.app) {
         window.app.detectUrlType();
+    }
+}
+
+// Global functions for TV dropdown
+function toggleTVDropdown() {
+    if (window.app) {
+        window.app.toggleTVDropdown();
+    }
+}
+
+function toggleMobileTVDropdown() {
+    if (window.app) {
+        window.app.toggleMobileTVDropdown();
     }
 }
 

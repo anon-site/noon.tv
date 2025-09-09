@@ -249,20 +249,12 @@
       "url": "https://master.starmena-cloud.com/hls/almahriah.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/ar/0/04/%D9%82%D9%86%D8%A7%D8%A9_%D8%A7%D9%84%D9%85%D9%87%D8%B1%D9%8A%D8%A9.png",
       "category": "news",
-      "country": "اليمن",
-      "type": "hls"
-    },
-    {
-      "id": 46,
-      "name": "مكملين",
-      "url": "https://mn-nl.mncdn.com/mekameleen/smil:mekameleentv.smil/playlist.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/4/45/%D9%82%D9%86%D8%A7%D8%A9_%D9%85%D9%83%D9%85%D9%84%D9%8A%D9%86.jpg",
-      "category": "entertainment",
+<<<<<<< HEAD
       "country": "تركيا",
       "type": "hls"
     },
     {
-      "id": 47,
+      "id": 46,
       "name": "MBC 2",
       "url": "https://bcovlive-a.akamaihd.net/0debf5648e584e5fb795c3611c5c0252/eu-central-1/6057955906001/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/MBC_2_Logo.svg/1200px-MBC_2_Logo.svg.png",
@@ -271,7 +263,7 @@
       "type": "hls"
     },
     {
-      "id": 48,
+      "id": 47,
       "name": "MBC Max",
       "url": "https://bcovlive-a.akamaihd.net/9527a892aeaf43019fd9eeb77ad1516e/eu-central-1/6057955906001/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/MBC_2_Logo.svg/1200px-MBC_2_Logo.svg.png",
@@ -280,7 +272,7 @@
       "type": "hls"
     },
     {
-      "id": 49,
+      "id": 48,
       "name": "الجزيرة - يوتيوب",
       "url": "https://www.youtube.com/watch?v=9Auq9mYxFEE",
       "logo": "https://www.aljazeera.net/wp-content/uploads/2015/10/16c0c819-3b03-40e6-a960-004297f4f1dc.jpeg?resize=686%2C513&quality=80",
@@ -289,7 +281,7 @@
       "type": "youtube"
     },
     {
-      "id": 50,
+      "id": 49,
       "name": "BBC عربي - يوتيوب",
       "url": "https://www.youtube.com/watch?v=9Auq9mYxFEE",
       "logo": "https://i.imgur.com/2P4m5Eb.png",
@@ -298,7 +290,7 @@
       "type": "youtube"
     },
     {
-      "id": 51,
+      "id": 50,
       "name": "DW عربي - يوتيوب",
       "url": "https://www.youtube.com/watch?v=9Auq9mYxFEE",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/7/75/Deutsche_Welle_symbol_2012.svg",
@@ -307,20 +299,29 @@
       "type": "youtube"
     },
     {
-      "id": 52,
+      "id": 51,
       "name": "قناة القرآن الكريم - يوتيوب",
       "url": "https://www.youtube.com/watch?v=9Auq9mYxFEE",
       "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSN2OWFmtKMWWlavNdQD0SJkpXJ5pp8E9hu3A&s",
       "category": "religious",
-      "country": "السعودية",
-      "type": "youtube"
+=======
+      "country": "Yemen"
     },
     {
-      "id": 53,
+      "id": 46,
+      "name": "مكملين",
+      "url": "https://mn-nl.mncdn.com/mekameleen/smil:mekameleentv.smil/playlist.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/4/45/%D9%82%D9%86%D8%A7%D8%A9_%D9%85%D9%83%D9%85%D9%84%D9%8A%D9%86.jpg",
+      "category": "entertainment",
+      "country": "Turly"
+    },
+    {
+      "id": 47,
       "name": "تجربة يوتيوب",
       "url": "https://www.youtube.com/watch?v=45tB7jUCKfw",
       "logo": "https://i.ytimg.com/vi/45tB7jUCKfw/maxresdefault.jpg",
       "category": "news",
+>>>>>>> a6a5e44c8c4d4460a182810423a5a71c9c83db3e
       "country": "السعودية",
       "type": "youtube"
     }
