@@ -263,7 +263,7 @@
     "autoQuality": true,
     "autoplay": true,
     "volume": 62,
-    "theme": "dark",
+    "theme": "light",
     "showNewsTicker": false,
     "zoomLevel": 100,
     "colorTheme": "default",
@@ -275,15 +275,15 @@
     "borderRadius": "rounded",
     "notificationsEnabled": false,
     "notificationDuration": 3,
-    "showCustomControls": true,
-    "notifications": false,
-    "notificationSound": false,
-    "showChannelImages": false,
     "updateNotifications": true,
     "successNotifications": true,
     "errorNotifications": true,
     "infoNotifications": true,
-    "notificationPosition": "top-right"
+    "notificationPosition": "top-right",
+    "showChannelImages": false,
+    "showCustomControls": true,
+    "notifications": false,
+    "notificationSound": false
   },
   "categories": [
     {
@@ -327,6 +327,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T05:50:17.754Z",
+  "lastModified": "2025-09-11T05:52:56.174Z",
   "version": "1.0"
 }
