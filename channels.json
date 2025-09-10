@@ -22,7 +22,7 @@
       "id": 6,
       "name": "الحدث",
       "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-hadath/2ff87ec4c2f3ede35295a20637d9f8fd/index.m3u8",
-      "logo": "https://iili.io/Kzkhg3v.png",
+      "logo": "https://github.com/anon-site/TV-AR/blob/main/images/AlHADATH-removebg-preview.png",
       "category": "news",
       "country": "الإمارات",
       "type": "hls"
@@ -262,11 +262,11 @@
     "compactMode": true,
     "highContrast": false,
     "borderRadius": "rounded",
+    "showChannelImages": false,
     "showCustomControls": true,
     "notifications": false,
     "notificationSound": false,
-    "notificationDuration": 3,
-    "showChannelImages": false
+    "notificationDuration": 3
   },
   "categories": [
     {
@@ -310,6 +310,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T02:14:32.957Z",
+  "lastModified": "2025-09-11T02:16:43.152Z",
   "version": "1.0"
 }
