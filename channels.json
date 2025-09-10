@@ -179,9 +179,10 @@
       "id": 30,
       "name": "وطن",
       "url": "https://htvmada.mada.ps:4443/wattan/index.m3u8?v=6db2fbd3",
-      "logo": "https://qudsnet.com/thumb/w660/uploads/news/1/2014-04-29_659130359.jpg",
+      "logo": "https://watanegypt.tv/wp-content/uploads/2021/11/logo-watan.png",
       "category": "news",
-      "country": "فلسطين"
+      "country": "فلسطين",
+      "type": "hls"
     },
     {
       "id": 31,
@@ -315,6 +316,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T02:26:20.208Z",
+  "lastModified": "2025-09-11T02:26:47.189Z",
   "version": "1.0"
 }
