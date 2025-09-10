@@ -283,15 +283,15 @@
     "borderRadius": "rounded",
     "notificationsEnabled": true,
     "notificationDuration": 3,
+    "showCustomControls": true,
+    "notifications": false,
+    "notificationSound": false,
+    "showChannelImages": false,
     "updateNotifications": true,
     "successNotifications": true,
     "errorNotifications": true,
     "infoNotifications": true,
-    "notificationPosition": "top-right",
-    "showChannelImages": false,
-    "showCustomControls": true,
-    "notifications": false,
-    "notificationSound": false
+    "notificationPosition": "top-right"
   },
   "categories": [
     {
@@ -335,6 +335,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T05:38:15.398Z",
+  "lastModified": "2025-09-11T05:41:43.497Z",
   "version": "1.0"
 }
