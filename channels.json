@@ -242,10 +242,11 @@
     {
       "id": 45,
       "name": "المهرية",
-      "url": "https://starmenajo.com/hls/almahriah/index.m3u8",
+      "url": "https://video.yementdy.tv/hls/yementoday_src.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/ar/0/04/%D9%82%D9%86%D8%A7%D8%A9_%D8%A7%D9%84%D9%85%D9%87%D8%B1%D9%8A%D8%A9.png",
       "category": "news",
-      "country": "Yemen"
+      "country": "Yemen",
+      "type": "hls"
     },
     {
       "id": 46,
@@ -281,8 +282,8 @@
     "compactMode": true,
     "highContrast": false,
     "borderRadius": "rounded",
-    "notificationsEnabled": false,
-    "notificationDuration": 2000,
+    "notificationsEnabled": true,
+    "notificationDuration": 3,
     "updateNotifications": true,
     "successNotifications": true,
     "errorNotifications": true,
@@ -335,6 +336,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T05:43:10.198Z",
+  "lastModified": "2025-09-11T05:44:47.938Z",
   "version": "1.0"
 }
