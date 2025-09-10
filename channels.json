@@ -281,7 +281,7 @@
       "id": 50,
       "name": "Asharq Discovery",
       "url": "https://svs.itworkscdn.net/asharqdiscoverylive/asharqd.smil/playlist_dvr.m3u8",
-      "logo": "https://static.wikia.nocookie.net/logopedia/images/b/bd/Asharq_Discovery.svg/revision/latest/scale-to-width-down/350?cb=20231114005439",
+      "logo": "https://iili.io/KzLkfFs.png",
       "category": "documentary",
       "country": "السعودية",
       "type": "hls"
@@ -365,6 +365,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T06:41:20.081Z",
+  "lastModified": "2025-09-11T06:43:59.594Z",
   "version": "1.0"
 }
