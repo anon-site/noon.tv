@@ -262,7 +262,7 @@
     "autoQuality": true,
     "autoplay": true,
     "volume": 62,
-    "theme": "dark",
+    "theme": "light",
     "showNewsTicker": false,
     "zoomLevel": 100,
     "colorTheme": "default",
@@ -272,11 +272,11 @@
     "compactMode": true,
     "highContrast": false,
     "borderRadius": "rounded",
-    "showChannelImages": false,
     "showCustomControls": true,
     "notifications": false,
     "notificationSound": false,
-    "notificationDuration": 3
+    "notificationDuration": 3,
+    "showChannelImages": false
   },
   "categories": [
     {
@@ -320,6 +320,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T02:36:07.640Z",
+  "lastModified": "2025-09-11T02:47:11.865Z",
   "version": "1.0"
 }
