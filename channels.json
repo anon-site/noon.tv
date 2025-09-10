@@ -255,6 +255,15 @@
       "category": "entertainment",
       "country": "Turly",
       "type": "hls"
+    },
+    {
+      "id": 47,
+      "name": "Real Madrid",
+      "url": "https://rmtv.akamaized.net/hls/live/2043153/rmtv-es-web/master.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/sco/thumb/5/56/Real_Madrid_CF.svg/732px-Real_Madrid_CF.svg.png",
+      "category": "sports",
+      "country": "Espin",
+      "type": "hls"
     }
   ],
   "favorites": [],
@@ -262,7 +271,7 @@
     "autoQuality": true,
     "autoplay": true,
     "volume": 62,
-    "theme": "light",
+    "theme": "dark",
     "showNewsTicker": false,
     "zoomLevel": 100,
     "colorTheme": "default",
@@ -320,6 +329,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T04:23:00.428Z",
+  "lastModified": "2025-09-11T04:52:03.598Z",
   "version": "1.0"
 }
