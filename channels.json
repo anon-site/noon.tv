@@ -42,11 +42,12 @@
     },
     {
       "id": 8,
-      "name": "Rotana Cinema KSA",
+      "name": "روتانا سينيما",
       "url": "https://bcovlive-a.akamaihd.net/9527a892aeaf43019fd9eeb77ad1516e/eu-central-1/6057955906001/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Rotana_Cinema_Egy.png/800px-Rotana_Cinema_Egy.png",
       "category": "movies",
-      "country": "السعودية"
+      "country": "السعودية",
+      "type": "hls"
     },
     {
       "id": 13,
@@ -295,6 +296,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T01:06:28.512Z",
+  "lastModified": "2025-09-11T01:16:58.202Z",
   "version": "1.0"
 }
