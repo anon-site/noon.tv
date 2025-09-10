@@ -22,9 +22,10 @@
       "id": 6,
       "name": "الحدث",
       "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-hadath/2ff87ec4c2f3ede35295a20637d9f8fd/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/5/5a/AlHADATH.png",
+      "logo": "https://iili.io/Kzkhg3v.png",
       "category": "news",
-      "country": "الإمارات"
+      "country": "الإمارات",
+      "type": "hls"
     },
     {
       "id": 9,
@@ -302,6 +303,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T01:45:55.501Z",
+  "lastModified": "2025-09-11T01:46:11.232Z",
   "version": "1.0"
 }
