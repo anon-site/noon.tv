@@ -153,7 +153,7 @@
       "id": 26,
       "name": "سورية",
       "url": "https://live.kwikmotion.com/syriatvlive/syriatv.smil/playlist_dvr.m3u8",
-      "logo": "https://play-lh.googleusercontent.com/ihmGKNbRH9VO9NwrYuLl9L3I-3TbP7VVxKFBqfKeSKqYexLzXFADU_c8lHakvtQdgOc2",
+      "logo": "https://www.fadaatmedia.com/sites/default/files/2024-08/syria%20tv%20logo%20final%20with%20color%20palette-07_0.png",
       "category": "entertainment",
       "country": "سورية",
       "type": "hls"
@@ -320,6 +320,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T02:33:25.755Z",
+  "lastModified": "2025-09-11T02:33:48.314Z",
   "version": "1.0"
 }
