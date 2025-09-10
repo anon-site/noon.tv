@@ -12,7 +12,7 @@
     {
       "id": 5,
       "name": "العربية",
-      "logo": "https://iili.io/Kzk2sK7.png",
+      "logo": "https://iili.io/KzkTqe2.png",
       "url": "https://av.alarabiya.net/alarabiapublish/alhadath.smil/playlist.m3u8",
       "category": "news",
       "country": "الإمارات",
@@ -243,7 +243,7 @@
     "autoQuality": true,
     "autoplay": true,
     "volume": 62,
-    "theme": "dark",
+    "theme": "light",
     "showNewsTicker": false,
     "zoomLevel": 100,
     "colorTheme": "default",
@@ -301,6 +301,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T01:36:44.187Z",
+  "lastModified": "2025-09-11T01:39:54.546Z",
   "version": "1.0"
 }
