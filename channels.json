@@ -100,7 +100,7 @@
       "id": 18,
       "name": "المستقبل",
       "url": "https://live.kwikmotion.com/futurelive/ftv.smil/playlist.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/en/b/bc/Future_tv_logo_2012.jpg",
+      "logo": "https://iili.io/KzvH0du.png",
       "category": "entertainment",
       "country": "لبنان",
       "type": "hls"
@@ -305,6 +305,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T01:54:48.559Z",
+  "lastModified": "2025-09-11T01:55:56.282Z",
   "version": "1.0"
 }
