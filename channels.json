@@ -290,7 +290,7 @@
       "id": 51,
       "name": "Asharq Documentary",
       "url": "https://svs.itworkscdn.net/asharqdocumentarylive/asharqdocumentary.smil/playlist_dvr.m3u8",
-      "logo": "https://static.wikia.nocookie.net/logopedia/images/a/a8/Asharq_Doc_23.png/revision/latest?cb=20230924082531",
+      "logo": "https://iili.io/KzLkFPn.png",
       "category": "documentary",
       "country": "السعودية",
       "type": "hls"
@@ -365,6 +365,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T06:43:59.594Z",
+  "lastModified": "2025-09-11T06:44:11.518Z",
   "version": "1.0"
 }
