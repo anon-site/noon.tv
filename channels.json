@@ -243,6 +243,7 @@
     "volume": 62,
     "theme": "dark",
     "showNewsTicker": false,
+    "showChannelImages": false,
     "zoomLevel": 100,
     "colorTheme": "default",
     "layoutMode": "compact",
@@ -298,6 +299,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T01:23:03.272Z",
+  "lastModified": "2025-09-11T01:23:21.214Z",
   "version": "1.0"
 }
