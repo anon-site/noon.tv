@@ -203,9 +203,10 @@
       "id": 33,
       "name": "إقرأ",
       "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv3/playlist.m3u8",
-      "logo": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv3/playlist.m3u8",
+      "logo": "https://iili.io/Kz83mkF.png",
       "category": "religious",
-      "country": "السعودية"
+      "country": "السعودية",
+      "type": "hls"
     },
     {
       "id": 34,
@@ -311,6 +312,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T02:19:00.638Z",
+  "lastModified": "2025-09-11T02:21:23.939Z",
   "version": "1.0"
 }
