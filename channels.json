@@ -100,9 +100,10 @@
       "id": 18,
       "name": "المستقبل",
       "url": "https://live.kwikmotion.com/futurelive/ftv.smil/playlist.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/ar/thumb/d/d5/%D8%B4%D8%B9%D8%A7%D8%B1_%D8%AA%D9%84%D9%81%D8%B2%D9%8A%D9%88%D9%86_%D8%A7%D9%84%D9%85%D8%B3%D8%AA%D9%82%D8%A8%D9%84.jpg/330px-%D8%B4%D8%B9%D8%A7%D8%B1_%D8%AA%D9%84%D9%81%D8%B2%D9%8A%D9%88%D9%86_%D8%A7%D9%84%D9%85%D8%B3%D8%AA%D9%82%D8%A8%D9%84.jpg",
+      "logo": "https://e7.pngegg.com/pngimages/999/254/png-clipart-beirut-future-tv-television-channel-television-in-lebanon-others-television-blue.png",
       "category": "entertainment",
-      "country": "لبنان"
+      "country": "لبنان",
+      "type": "hls"
     },
     {
       "id": 20,
@@ -304,6 +305,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T01:53:52.797Z",
+  "lastModified": "2025-09-11T01:54:31.759Z",
   "version": "1.0"
 }
