@@ -281,7 +281,7 @@
       "id": 50,
       "name": "Asharq Discovery",
       "url": "https://svs.itworkscdn.net/asharqdiscoverylive/asharqd.smil/playlist_dvr.m3u8",
-      "logo": "https://static.wikia.nocookie.net/logopedia/images/b/bd/Asharq_Discovery.svg/revision/latest/scale-to-width-down/350?cb=20231114005439",
+      "logo": "https://wasmenia.com/_next/image?url=https%3A%2F%2Fstrapi.wasmenia.com%2Fuploads%2FAsharq_Discovery_01_df7e757371.svg&w=640&q=75",
       "category": "documentary",
       "country": "السعودية",
       "type": "hls"
@@ -313,15 +313,15 @@
     "borderRadius": "rounded",
     "notificationsEnabled": false,
     "notificationDuration": 3,
-    "showCustomControls": true,
-    "notifications": false,
-    "notificationSound": false,
-    "showChannelImages": false,
     "updateNotifications": true,
     "successNotifications": true,
     "errorNotifications": true,
     "infoNotifications": true,
-    "notificationPosition": "top-right"
+    "notificationPosition": "top-right",
+    "showChannelImages": false,
+    "showCustomControls": true,
+    "notifications": false,
+    "notificationSound": false
   },
   "categories": [
     {
@@ -365,6 +365,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T06:31:59.681Z",
+  "lastModified": "2025-09-11T06:33:39.725Z",
   "version": "1.0"
 }
