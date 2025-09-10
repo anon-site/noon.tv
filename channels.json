@@ -93,7 +93,8 @@
       "url": "http://185.9.2.18/chid_391/mono.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Al_Jadeed_TV_LOGO_2018.jpg",
       "category": "entertainment",
-      "country": "لبنان"
+      "country": "لبنان",
+      "type": "hls"
     },
     {
       "id": 18,
@@ -303,6 +304,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T01:49:13.641Z",
+  "lastModified": "2025-09-11T01:49:23.099Z",
   "version": "1.0"
 }
