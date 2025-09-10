@@ -87,7 +87,8 @@
       "url": "https://alarabyta.cdn.octivid.com/alaraby2n/smil:alaraby2n.stream.smil/chunklist.m3u8",
       "logo": "https://media0084.elcinema.com/tvguide/1382_1.png",
       "category": "entertainment",
-      "country": "Qatar"
+      "country": "قطر",
+      "type": "hls"
     },
     {
       "id": 16,
@@ -346,6 +347,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T06:21:10.807Z",
+  "lastModified": "2025-09-11T06:21:16.479Z",
   "version": "1.0"
 }
