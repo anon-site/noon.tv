@@ -285,11 +285,16 @@
       "icon": "fas fa-music"
     },
     {
+      "key": "movies",
+      "name": "أفلام",
+      "icon": "fas fa-film"
+    },
+    {
       "key": "documentary",
       "name": "الوثائقية",
-      "icon": "fas fa-newspaper"
+      "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T00:54:32.587Z",
+  "lastModified": "2025-09-11T01:06:28.512Z",
   "version": "1.0"
 }
