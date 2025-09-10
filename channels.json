@@ -1,6 +1,4 @@
 {
-  "version": "1.0",
-  "timestamp": "2025-09-11T06:18:52.522Z",
   "channels": [
     {
       "id": 3,
@@ -274,7 +272,7 @@
       "url": "https://partwota.cdn.mgmlcdn.com/omcultural/smil:omcultural.stream.smil/chunklist.m3u8",
       "logo": "https://admango.cdn.mangomolo.com/analytics/uploads/168/60b5da80cd.png",
       "category": "documentary",
-      "country": "Oman",
+      "country": "عُمان",
       "type": "hls"
     }
   ],
@@ -347,14 +345,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "remoteStorage": {
-    "enabled": true,
-    "provider": "github",
-    "repository": "anon-site/TV-AR",
-    "branch": "main",
-    "filename": "channels.json",
-    "autoSync": true,
-    "lastSync": "2025-09-11T06:18:36.714Z"
-  },
-  "generalSettings": {}
+  "lastModified": "2025-09-11T06:20:39.358Z",
+  "version": "1.0"
 }
