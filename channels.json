@@ -3,10 +3,11 @@
     {
       "id": 3,
       "name": "الجزيرة",
-      "logo": "https://www.aljazeera.net/wp-content/uploads/2015/10/16c0c819-3b03-40e6-a960-004297f4f1dc.jpeg?resize=686%2C513&quality=80",
+      "logo": "https://iili.io/Kzk3dKP.png",
       "url": "https://live-hls-apps-aja-fa.getaj.net/AJA/index.m3u8",
       "category": "news",
-      "country": "قطر"
+      "country": "قطر",
+      "type": "hls"
     },
     {
       "id": 5,
@@ -243,7 +244,6 @@
     "volume": 62,
     "theme": "dark",
     "showNewsTicker": false,
-    "showChannelImages": false,
     "zoomLevel": 100,
     "colorTheme": "default",
     "layoutMode": "compact",
@@ -252,6 +252,7 @@
     "compactMode": true,
     "highContrast": false,
     "borderRadius": "rounded",
+    "showChannelImages": false,
     "showCustomControls": true,
     "notifications": false,
     "notificationSound": false,
@@ -299,6 +300,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T01:23:21.214Z",
+  "lastModified": "2025-09-11T01:36:16.951Z",
   "version": "1.0"
 }
