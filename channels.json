@@ -187,9 +187,10 @@
       "id": 31,
       "name": "السومرية",
       "url": "https://live.kwikmotion.com/alsumariatvlive/sumariamob.smil/playlist.m3u8?hdnts=exp=1757180184~acl=/alsumariatvlive/sumariamob.smil/*~hmac=9a1c4405ecdf6cf72c30ab92d0fe8c59e1d283b9f99a36a1da53933081a1bddc",
-      "logo": "https://upload.wikimedia.org/wikipedia/ar/thumb/b/bb/AlsumariatvLogo.jpg/330px-AlsumariatvLogo.jpg",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Alsumaria_logo.svg/2560px-Alsumaria_logo.svg.png",
       "category": "entertainment",
-      "country": "العراق"
+      "country": "العراق",
+      "type": "hls"
     },
     {
       "id": 32,
@@ -314,6 +315,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T02:25:55.272Z",
+  "lastModified": "2025-09-11T02:26:20.208Z",
   "version": "1.0"
 }
