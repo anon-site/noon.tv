@@ -260,7 +260,7 @@
     {
       "id": 48,
       "name": "Oman",
-      "url": "https://partneta.cdn.mgmlcdn.com/omantv/smil:omantv.stream.smil/chunklist_b4500000.m3u8",
+      "url": "https://partneta.cdn.mgmlcdn.com/omantv/smil:omantv.stream.smil/chunklist.m3u8",
       "logo": "https://images.crunchbase.com/image/upload/c_pad,f_auto,q_auto:eco,dpr_1/v1485363667/ya6httyscqrqa1twfanl.png",
       "category": "entertainment",
       "country": "عُمان",
@@ -336,6 +336,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T06:13:34.916Z",
+  "lastModified": "2025-09-11T06:14:22.869Z",
   "version": "1.0"
 }
