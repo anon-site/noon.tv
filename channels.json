@@ -136,7 +136,7 @@
       "id": 23,
       "name": "القران الكريم",
       "url": "https://cdn-globecast.akamaized.net/live/eds/saudi_quran/hls_roku/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/%D9%82%D9%86%D8%A7%D8%A9_%D8%A7%D9%84%D9%82%D8%B1%D8%A2%D9%86_%D8%A7%D9%84%D9%83%D8%B1%D9%8A%D9%85.svg/640px-%D9%82%D9%86%D8%A7%D8%A9_%D8%A7%D9%84%D9%82%D8%B1%D8%A2%D9%86_%D8%A7%D9%84%D9%83%D8%B1%D9%8A%D9%85.svg.png",
+      "logo": "https://iili.io/Kz8M9Ul.png",
       "category": "religious",
       "country": "السعودية",
       "type": "hls"
@@ -319,6 +319,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T02:29:55.205Z",
+  "lastModified": "2025-09-11T02:31:30.311Z",
   "version": "1.0"
 }
