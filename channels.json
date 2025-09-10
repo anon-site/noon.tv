@@ -281,11 +281,11 @@
     "compactMode": true,
     "highContrast": false,
     "borderRadius": "rounded",
-    "showChannelImages": false,
     "showCustomControls": true,
     "notifications": false,
     "notificationSound": false,
-    "notificationDuration": 3
+    "notificationDuration": 3,
+    "showChannelImages": false
   },
   "categories": [
     {
@@ -329,6 +329,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T04:52:03.598Z",
+  "lastModified": "2025-09-11T05:14:44.218Z",
   "version": "1.0"
 }
