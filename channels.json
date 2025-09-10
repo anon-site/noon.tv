@@ -1,4 +1,6 @@
 {
+  "version": "1.0",
+  "timestamp": "2025-09-11T01:48:03.161Z",
   "channels": [
     {
       "id": 3,
@@ -245,7 +247,7 @@
     "autoQuality": true,
     "autoplay": true,
     "volume": 62,
-    "theme": "light",
+    "theme": "dark",
     "showNewsTicker": false,
     "zoomLevel": 100,
     "colorTheme": "default",
@@ -303,6 +305,14 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T01:46:11.232Z",
-  "version": "1.0"
+  "remoteStorage": {
+    "enabled": true,
+    "provider": "github",
+    "repository": "anon-site/TV-AR",
+    "branch": "main",
+    "filename": "channels.json",
+    "autoSync": true,
+    "lastSync": "2025-09-11T01:46:12.759Z"
+  },
+  "generalSettings": {}
 }
