@@ -171,9 +171,10 @@
       "id": 29,
       "name": "الأقصى",
       "url": "http://167.172.161.13/hls/feedspare/6udfi7v8a3eof6nlps6e9ovfrs65c7l7.m3u8",
-      "logo": "https://felesteen.news/thumb/w920/uploads/images/2021/05/ldelg.png",
+      "logo": "https://iili.io/Kz8auGp.png",
       "category": "news",
-      "country": "فلسطين"
+      "country": "فلسطين",
+      "type": "hls"
     },
     {
       "id": 30,
@@ -316,6 +317,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T02:26:47.189Z",
+  "lastModified": "2025-09-11T02:28:53.538Z",
   "version": "1.0"
 }
