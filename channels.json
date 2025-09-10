@@ -51,11 +51,12 @@
     },
     {
       "id": 13,
-      "name": "Rotana Classic",
+      "name": "روتانا كلاسيك",
       "url": "https://bcovlive-a.akamaihd.net/0debf5648e584e5fb795c3611c5c0252/eu-central-1/6057955906001/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Rotana_Classic.png/640px-Rotana_Classic.png",
       "category": "movies",
-      "country": "السعودية"
+      "country": "السعودية",
+      "type": "hls"
     },
     {
       "id": 24,
@@ -297,6 +298,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T01:17:14.857Z",
+  "lastModified": "2025-09-11T01:17:28.047Z",
   "version": "1.0"
 }
