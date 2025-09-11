@@ -417,6 +417,12 @@ class ArabicTVApp {
             console.log('نمط تلقائي:', isDarkMode ? 'داكن' : 'فاتح');
         }
         
+        // Update theme toggle switch state
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.checked = this.settings.theme === 'dark';
+        }
+        
         console.log('تم تطبيق النمط:', this.settings.theme);
     }
 
@@ -542,6 +548,18 @@ class ArabicTVApp {
             this.applyTheme(); // Apply theme immediately
             console.log('تم تغيير النمط إلى:', e.target.value);
         });
+
+        // Theme toggle switch event listener
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('change', (e) => {
+                const isDarkMode = e.target.checked;
+                this.settings.theme = isDarkMode ? 'dark' : 'light';
+                this.saveSettings();
+                this.applyTheme();
+                console.log('تم تغيير النمط إلى:', isDarkMode ? 'داكن' : 'فاتح');
+            });
+        }
 
 
         // New customization controls
@@ -4422,11 +4440,11 @@ class ArabicTVApp {
     updateFavoritesCount() {
         const count = this.favorites.size;
         
-        // Update header favorites count
-        const headerFavoritesCountElement = document.getElementById('headerFavoritesCount');
-        if (headerFavoritesCountElement) {
-            headerFavoritesCountElement.textContent = count;
-        }
+        // Update all favorites count elements
+        const favoritesCountElements = document.querySelectorAll('.favorites-count, #headerFavoritesCount, #sidebarFavoritesCount, #mobileFavoritesCount');
+        favoritesCountElements.forEach(element => {
+            element.textContent = count;
+        });
     }
 
     toggleFavoritesFilter() {

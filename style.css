@@ -607,6 +607,125 @@ body[data-theme="light"] .logo h1 {
 
 /* Header Filters */
 
+/* Theme Toggle Switch */
+.theme-switch {
+    font-size: 17px;
+    position: relative;
+    display: inline-block;
+    width: 64px;
+    height: 34px;
+    cursor: pointer;
+}
+
+.theme-switch .theme-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.theme-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #73C0FC;
+    transition: .4s;
+    border-radius: 30px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.theme-slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    border-radius: 20px;
+    left: 2px;
+    bottom: 2px;
+    z-index: 2;
+    background-color: #e8e8e8;
+    transition: .4s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.theme-switch .sun svg {
+    position: absolute;
+    top: 6px;
+    left: 36px;
+    z-index: 1;
+    width: 24px;
+    height: 24px;
+    transition: .4s;
+}
+
+.theme-switch .moon svg {
+    fill: #73C0FC;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    z-index: 1;
+    width: 24px;
+    height: 24px;
+    transition: .4s;
+}
+
+.theme-switch .sun svg {
+    animation: rotate 15s linear infinite;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.theme-switch .moon svg {
+    animation: tilt 5s linear infinite;
+}
+
+@keyframes tilt {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-10deg);
+    }
+    75% {
+        transform: rotate(10deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.theme-input:checked + .theme-slider {
+    background-color: #183153;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.theme-input:focus + .theme-slider {
+    box-shadow: 0 0 1px #183153;
+}
+
+.theme-input:checked + .theme-slider:before {
+    transform: translateX(30px);
+    background-color: #ffffff;
+}
+
+.theme-input:checked ~ .sun svg {
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.theme-input:not(:checked) ~ .moon svg {
+    opacity: 0;
+    transform: scale(0.8);
+}
 
 .header-actions {
     display: flex;
@@ -882,6 +1001,37 @@ body[data-theme="light"] .logo h1 {
 .sidebar-action-btn span {
     flex: 1;
     font-size: 0.9rem;
+}
+
+/* Favorites button in sidebar */
+.favorites-sidebar-btn {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a52) !important;
+    border-color: #ff6b6b !important;
+    color: white !important;
+    position: relative;
+}
+
+.favorites-sidebar-btn:hover {
+    background: linear-gradient(45deg, #ff5252, #e53935) !important;
+    border-color: #ff5252 !important;
+    transform: translateX(-3px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4) !important;
+}
+
+.favorites-sidebar-btn .favorites-count {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    min-width: 20px;
+    text-align: center;
+    margin-left: auto;
+}
+
+.favorites-sidebar-btn:hover .favorites-count {
+    background: rgba(255, 255, 255, 0.3);
 }
 
 /* TV Dropdown Styles */
@@ -1497,6 +1647,18 @@ body[data-theme="light"] .sidebar-action-btn:hover {
     background: rgba(59, 130, 246, 0.1);
     border-color: #3b82f6;
     color: #1e293b;
+}
+
+/* Light theme for favorites button in sidebar */
+body[data-theme="light"] .favorites-sidebar-btn {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a52) !important;
+    border-color: #ff6b6b !important;
+    color: white !important;
+}
+
+body[data-theme="light"] .favorites-sidebar-btn:hover {
+    background: linear-gradient(45deg, #ff5252, #e53935) !important;
+    border-color: #ff5252 !important;
 }
 
 
@@ -3678,6 +3840,25 @@ body[data-theme="light"] .header-search-icon {
     color: rgba(0, 0, 0, 0.5);
 }
 
+/* Theme Toggle for Light Mode */
+body[data-theme="light"] .theme-slider {
+    background-color: #3b82f6;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .theme-switch .moon svg {
+    fill: #3b82f6;
+}
+
+body[data-theme="light"] .theme-input:checked + .theme-slider {
+    background-color: #1e293b;
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+body[data-theme="light"] .theme-input:checked + .theme-slider:before {
+    background-color: #ffffff;
+}
+
 
 /* Mobile Search and Filters Bar */
 .mobile-search-filters-bar {
@@ -3902,6 +4083,34 @@ body[data-theme="light"] .mobile-sidebar-nav-tab.active {
     transform: translateX(-3px);
 }
 
+/* Favorites button in mobile sidebar */
+.favorites-mobile-btn {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a52) !important;
+    color: white !important;
+    border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.favorites-mobile-btn:hover {
+    background: linear-gradient(45deg, #ff5252, #e53935) !important;
+    padding-right: 2rem;
+}
+
+.favorites-mobile-btn .favorites-count {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    min-width: 20px;
+    text-align: center;
+    margin-left: auto;
+}
+
+.favorites-mobile-btn:hover .favorites-count {
+    background: rgba(255, 255, 255, 0.3);
+}
+
 /* Mobile Filter Dropdown */
 
 
@@ -3979,6 +4188,17 @@ body[data-theme="light"] .mobile-sidebar-action-btn:hover i:first-child {
 
 body[data-theme="light"] .mobile-sidebar-action-btn:hover i:last-child {
     color: #1e293b;
+}
+
+/* Light theme for favorites button in mobile sidebar */
+body[data-theme="light"] .favorites-mobile-btn {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a52) !important;
+    color: white !important;
+    border-bottom-color: rgba(255, 107, 107, 0.2) !important;
+}
+
+body[data-theme="light"] .favorites-mobile-btn:hover {
+    background: linear-gradient(45deg, #ff5252, #e53935) !important;
 }
 
 /* Light theme for mobile sidebar */
@@ -5539,6 +5759,38 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     .header-actions {
         width: auto;
         justify-content: flex-end;
+    }
+    
+    /* Theme switch responsive adjustments */
+    .theme-switch {
+        width: 56px;
+        height: 30px;
+        font-size: 15px;
+    }
+    
+    .theme-slider:before {
+        height: 22px;
+        width: 22px;
+    }
+    
+    .theme-switch .sun svg,
+    .theme-switch .moon svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .theme-switch .sun svg {
+        left: 32px;
+        top: 5px;
+    }
+    
+    .theme-switch .moon svg {
+        left: 4px;
+        top: 4px;
+    }
+    
+    .theme-input:checked + .theme-slider:before {
+        transform: translateX(26px);
     }
     
     /* Show mobile menu button on mobile */
