@@ -122,8 +122,9 @@
       "name": "Dijlah",
       "url": "https://ghaasiflu.online/Dijlah/index.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/4/4f/%D9%82%D9%86%D8%A7%D8%A9_%D8%AF%D8%AC%D9%84%D8%A9.png",
-      "category": "entertainment",
-      "country": "العراق"
+      "category": "diversified",
+      "country": "العراق",
+      "type": "hls"
     },
     {
       "id": 22,
@@ -156,7 +157,7 @@
       "name": "سورية",
       "url": "https://live.kwikmotion.com/syriatvlive/syriatv.smil/playlist_dvr.m3u8",
       "logo": "https://www.fadaatmedia.com/sites/default/files/2024-08/syria%20tv%20logo%20final%20with%20color%20palette-07_0.png",
-      "category": "entertainment",
+      "category": "diversified",
       "country": "سورية",
       "type": "hls"
     },
@@ -192,7 +193,7 @@
       "name": "السومرية",
       "url": "https://live.kwikmotion.com/alsumariatvlive/sumariamob.smil/playlist.m3u8?hdnts=exp=1757180184~acl=/alsumariatvlive/sumariamob.smil/*~hmac=9a1c4405ecdf6cf72c30ab92d0fe8c59e1d283b9f99a36a1da53933081a1bddc",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Alsumaria_logo.svg/2560px-Alsumaria_logo.svg.png",
-      "category": "entertainment",
+      "category": "diversified",
       "country": "العراق",
       "type": "hls"
     },
@@ -374,6 +375,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-12T02:34:58.454Z",
+  "lastModified": "2025-09-12T02:35:29.633Z",
   "version": "1.0"
 }
