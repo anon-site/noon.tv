@@ -240,14 +240,6 @@
       "type": "hls"
     },
     {
-      "id": 45,
-      "name": "المهرية",
-      "url": "https://starmenajo.com/hls/almahriah/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/ar/0/04/%D9%82%D9%86%D8%A7%D8%A9_%D8%A7%D9%84%D9%85%D9%87%D8%B1%D9%8A%D8%A9.png",
-      "category": "news",
-      "country": "Yemen"
-    },
-    {
       "id": 46,
       "name": "مكملين",
       "url": "https://mn-nl.mncdn.com/mekameleen/smil:mekameleentv.smil/playlist.m3u8",
@@ -271,7 +263,7 @@
     "autoQuality": true,
     "autoplay": true,
     "volume": 62,
-    "theme": "dark",
+    "theme": "light",
     "showNewsTicker": false,
     "zoomLevel": 100,
     "colorTheme": "default",
@@ -281,7 +273,7 @@
     "compactMode": true,
     "highContrast": false,
     "borderRadius": "rounded",
-    "notificationsEnabled": true,
+    "notificationsEnabled": false,
     "notificationDuration": 3,
     "updateNotifications": true,
     "successNotifications": true,
@@ -335,6 +327,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T05:38:15.398Z",
+  "lastModified": "2025-09-11T05:52:56.174Z",
   "version": "1.0"
 }
