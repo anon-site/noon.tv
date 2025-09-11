@@ -294,6 +294,15 @@
       "category": "documentary",
       "country": "السعودية",
       "type": "hls"
+    },
+    {
+      "id": 52,
+      "name": "Al Jazeera Documentary",
+      "url": "http://213.57.91.138:8000/play/a06h",
+      "logo": "https://static.wikia.nocookie.net/logopedia/images/e/e8/Al_Jazeera_Documentary_Channel.png/revision/latest/scale-to-width-down/200?cb=20120211112107",
+      "category": "documentary",
+      "country": "قطر",
+      "type": "unknown"
     }
   ],
   "favorites": [],
@@ -365,6 +374,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T11:35:59.288Z",
+  "lastModified": "2025-09-11T11:38:25.399Z",
   "version": "1.0"
 }
