@@ -304,6 +304,15 @@
       "category": "diversified",
       "country": "العراق",
       "type": "hls"
+    },
+    {
+      "id": 53,
+      "name": "لانا",
+      "url": "https://p-ltv.akamaized.net/ltv/ltv.m3u8",
+      "logo": "https://tlfaz.com/wp-content/uploads/2023/03/Lana-Tv.png",
+      "category": "diversified",
+      "country": "سورية",
+      "type": "hls"
     }
   ],
   "favorites": [],
@@ -375,6 +384,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-12T02:40:20.697Z",
+  "lastModified": "2025-09-12T02:43:23.079Z",
   "version": "1.0"
 }
