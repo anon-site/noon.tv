@@ -332,15 +332,15 @@
     "borderRadius": "rounded",
     "notificationsEnabled": false,
     "notificationDuration": 3,
-    "showCustomControls": true,
-    "notifications": false,
-    "notificationSound": false,
-    "showChannelImages": false,
     "updateNotifications": true,
     "successNotifications": true,
     "errorNotifications": true,
     "infoNotifications": true,
-    "notificationPosition": "top-right"
+    "notificationPosition": "top-right",
+    "showChannelImages": false,
+    "showCustomControls": true,
+    "notifications": false,
+    "notificationSound": false
   },
   "categories": [
     {
@@ -354,9 +354,9 @@
       "icon": "fas fa-newspaper"
     },
     {
-      "key": "entertainment",
-      "name": "الترفيه",
-      "icon": "fas fa-tv"
+      "key": "diversified",
+      "name": "متنوعة",
+      "icon": "fas fa-globe"
     },
     {
       "key": "sports",
@@ -377,8 +377,13 @@
       "key": "movies",
       "name": "أفلام",
       "icon": "fas fa-film"
+    },
+    {
+      "key": "documentary",
+      "name": "الوثائقية",
+      "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-12T03:21:25.742Z",
+  "lastModified": "2025-09-12T03:22:16.514Z",
   "version": "1.0"
 }
