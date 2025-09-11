@@ -247,7 +247,7 @@
       "name": "مكملين",
       "url": "https://mn-nl.mncdn.com/mekameleen/smil:mekameleentv.smil/playlist.m3u8",
       "logo": "https://iili.io/Kz8Xqsn.png",
-      "category": "entertainment",
+      "category": "diversified",
       "country": "تركيا",
       "type": "hls"
     },
@@ -265,7 +265,7 @@
       "name": "Oman",
       "url": "https://partneta.cdn.mgmlcdn.com/omantv/smil:omantv.stream.smil/chunklist.m3u8",
       "logo": "https://images.crunchbase.com/image/upload/c_pad,f_auto,q_auto:eco,dpr_1/v1485363667/ya6httyscqrqa1twfanl.png",
-      "category": "entertainment",
+      "category": "diversified",
       "country": "عُمان",
       "type": "hls"
     },
@@ -375,6 +375,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-12T02:35:29.633Z",
+  "lastModified": "2025-09-12T02:35:37.934Z",
   "version": "1.0"
 }
