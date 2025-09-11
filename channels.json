@@ -294,24 +294,6 @@
       "category": "documentary",
       "country": "السعودية",
       "type": "hls"
-    },
-    {
-      "id": 52,
-      "name": "Bamboo flute",
-      "url": "https://www.youtube.com/watch?v=SNVtLg-uI70",
-      "logo": "https://i.ytimg.com/vi/SNVtLg-uI70/mqdefault.jpg",
-      "category": "music",
-      "country": "الصين",
-      "type": "youtube"
-    },
-    {
-      "id": 53,
-      "name": "Tibetan Healing Flute",
-      "url": "https://www.youtube.com/watch?v=_fUzur1Ep4c",
-      "logo": "https://i.ytimg.com/vi/_fUzur1Ep4c/maxresdefault.jpg",
-      "category": "music",
-      "country": "الصين",
-      "type": "youtube"
     }
   ],
   "favorites": [],
@@ -383,6 +365,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-12T02:13:21.938Z",
+  "lastModified": "2025-09-12T02:14:02.082Z",
   "version": "1.0"
 }
