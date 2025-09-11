@@ -41,7 +41,7 @@
       "name": "الرشيد",
       "url": "https://media1.livaat.com/static/AL-RASHEED-HD/playlist.m3u8",
       "logo": "https://iili.io/KzkhS6J.png",
-      "category": "entertainment",
+      "category": "diversified",
       "country": "العراق",
       "type": "hls"
     },
@@ -374,6 +374,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-12T02:34:24.553Z",
+  "lastModified": "2025-09-12T02:34:39.544Z",
   "version": "1.0"
 }
