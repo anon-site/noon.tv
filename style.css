@@ -6326,15 +6326,122 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     
     .add-channel-form {
         max-width: 90vw;
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 120px);
+        overflow: hidden;
+    }
+    
+    .form-fields {
+        flex: 1;
+        overflow-y: auto;
+        padding-bottom: 1rem;
+    }
+    
+    .form-actions {
+        position: sticky;
+        bottom: 0;
+        background: var(--background-dark);
+        padding: 1rem 0;
+        border-top: 1px solid var(--border-color);
+        margin-top: auto;
+        z-index: 10;
     }
     
     .form-group {
         margin-bottom: 0.6rem;
     }
     
+    .add-btn {
+        width: 100%;
+        padding: 14px;
+        font-size: 16px;
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    .add-btn:hover {
+        background: linear-gradient(135deg, #1d4ed8, #1e40af);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+    }
+    
     .form-group label {
         font-size: 0.85rem;
         margin-bottom: 0.25rem;
+    }
+    
+    /* Extra small screens - ensure form fits properly */
+    @media (max-width: 375px) {
+        .add-channel-form {
+            max-width: 95vw;
+            height: calc(100vh - 100px);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px;
+            font-size: 16px; /* Prevent zoom on iOS */
+            border-radius: 8px;
+            width: 100%;
+        }
+        
+        .add-btn {
+            padding: 12px;
+            font-size: 16px;
+        }
+        
+        .form-group label {
+            font-size: 0.8rem;
+        }
+    }
+    
+    /* Very small screens - ensure form fits */
+    @media (max-width: 320px) {
+        .add-channel-form {
+            max-width: 98vw;
+            height: calc(100vh - 80px);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px;
+            font-size: 16px;
+        }
+        
+        .add-btn {
+            padding: 10px;
+            font-size: 16px;
+        }
+        
+        .form-group label {
+            font-size: 0.75rem;
+        }
+    }
+    
+    /* Light theme for mobile form */
+    body[data-theme="light"] .form-actions {
+        background: #ffffff;
+        border-top-color: #e2e8f0;
+    }
+    
+    body[data-theme="light"] .add-btn {
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        color: white;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+    
+    body[data-theme="light"] .add-btn:hover {
+        background: linear-gradient(135deg, #1d4ed8, #1e40af);
+        box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
     }
     
     .form-group input,
