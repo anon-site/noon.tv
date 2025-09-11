@@ -681,10 +681,17 @@ body[data-theme="light"] .logo h1 {
 }
 
 .theme-switch .sun svg {
-    /* Animation removed */
+    animation: rotate 15s linear infinite;
 }
 
-/* @keyframes rotate removed - no longer needed */
+@keyframes rotate {
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
 
 .theme-switch .moon svg {
     animation: tilt 5s linear infinite;
@@ -754,6 +761,28 @@ body[data-theme="light"] .logo h1 {
     background: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.3);
     transform: translateY(-2px);
+}
+
+/* Dark theme styles for mobile menu button */
+body[data-theme="dark"] .mobile-menu-btn {
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+body[data-theme="dark"] .mobile-menu-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--highlight-color);
+}
+
+/* Light theme styles for mobile menu button */
+body[data-theme="light"] .mobile-menu-btn {
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+body[data-theme="light"] .mobile-menu-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: var(--highlight-color);
 }
 
 .settings-btn, .admin-btn, .iptv-checker-btn {
