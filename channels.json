@@ -1,6 +1,4 @@
 {
-  "version": "1.0",
-  "timestamp": "2025-09-12T02:38:36.638Z",
   "channels": [
     {
       "id": 3,
@@ -301,7 +299,7 @@
     {
       "id": 52,
       "name": "البغدادية",
-      "url": "https://games2.elahmad.xyz/tv753_www.elahmad.com_albaghdadia/tracks-v1a1/mono.m3u8?token=83bf215a4d43161022134ca11d775c5f84b4fe2c-7a8db953eab0285e918de87eae869790-1757618649-1757607849",
+      "url": "https://games2.elahmad.xyz/tv753_www.elahmad.com_honabaghdad/index.m3u8?token=94b30569a750df5cda779d2e596845b786682f76-030f2c0af8f3d6288c2a62a57a6be5e0-1757619295-1757608495",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/4/40/%D9%82%D9%86%D8%A7%D8%A9_%D8%A7%D9%84%D8%A8%D8%BA%D8%AF%D8%A7%D8%AF%D9%8A%D8%A9.png",
       "category": "diversified",
       "country": "العراق",
@@ -377,14 +375,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "remoteStorage": {
-    "enabled": true,
-    "provider": "github",
-    "repository": "anon-site/TV-AR",
-    "branch": "main",
-    "filename": "channels.json",
-    "autoSync": true,
-    "lastSync": "2025-09-12T02:37:26.167Z"
-  },
-  "generalSettings": {}
+  "lastModified": "2025-09-12T02:40:20.697Z",
+  "version": "1.0"
 }
