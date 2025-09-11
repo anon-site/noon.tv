@@ -294,15 +294,6 @@
       "category": "documentary",
       "country": "السعودية",
       "type": "hls"
-    },
-    {
-      "id": 52,
-      "name": "Al Jazeera Documentary",
-      "url": "https://games2.elahmad.xyz/tv753_www.elahmad.com_aljazeera_doc/tracks-v1a1/mono.m3u8?token=c17127570a6bd7d1f5f9f0d8c1aad6a1dc0e8100-8220b8d0352db724fe2f5a054bd4f3df-1757565839-1757555039",
-      "logo": "https://static.wikia.nocookie.net/logopedia/images/e/e8/Al_Jazeera_Documentary_Channel.png/revision/latest/scale-to-width-down/200?cb=20120211112107",
-      "category": "documentary",
-      "country": "قطر",
-      "type": "hls"
     }
   ],
   "favorites": [],
@@ -374,6 +365,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T11:50:44.696Z",
+  "lastModified": "2025-09-11T11:50:47.954Z",
   "version": "1.0"
 }
