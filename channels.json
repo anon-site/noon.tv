@@ -294,6 +294,15 @@
       "category": "documentary",
       "country": "السعودية",
       "type": "hls"
+    },
+    {
+      "id": 52,
+      "name": "Bamboo flute",
+      "url": "https://www.youtube.com/watch?v=SNVtLg-uI70",
+      "logo": "https://i.ytimg.com/vi/SNVtLg-uI70/mqdefault.jpg",
+      "category": "music",
+      "country": "الصين",
+      "type": "youtube"
     }
   ],
   "favorites": [],
@@ -360,6 +369,6 @@
       "icon": "fas fa-film"
     }
   ],
-  "lastModified": "2025-09-12T01:34:11.644Z",
+  "lastModified": "2025-09-12T01:57:00.883Z",
   "version": "1.0"
 }
