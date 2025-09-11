@@ -532,6 +532,27 @@
                             <span class="slider"></span>
                         </label>
                     </div>
+                    
+                    <div class="setting-item">
+                        <label for="notificationsEnabled">تفعيل الإشعارات</label>
+                        <label class="switch">
+                            <input type="checkbox" id="notificationsEnabled">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="notificationDuration">مدة عرض الإشعارات (ثانية)</label>
+                        <input type="range" id="notificationDuration" min="2" max="10" value="4" class="duration-slider">
+                        <span class="duration-value" id="durationValue">4 ثانية</span>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <button class="test-notification-btn" onclick="app.testNotifications()">
+                            <i class="fas fa-bell"></i>
+                            اختبار الإشعارات
+                        </button>
+                    </div>
                 </div>
                 
                 <!-- Quick Actions -->

@@ -190,7 +190,10 @@ class ArabicTVApp {
             animationsEnabled: true,
             compactMode: true,
             highContrast: false,
-            borderRadius: 'rounded' // minimal, normal, rounded
+            borderRadius: 'rounded', // minimal, normal, rounded
+            // Notification settings
+            notificationsEnabled: false,
+            notificationDuration: 4000
         };
         this.filteredChannels = [...this.channels];
         this.currentCategory = 'all';
@@ -232,6 +235,7 @@ class ArabicTVApp {
         this.renderChannels();
         this.bindEvents();
         this.bindRemoteStorageEvents();
+        this.setupAutoSave();
         this.setupMobileSearch();
         this.setupRepositoryAutoSuggest();
         this.setupPictureInPictureEvents();
@@ -466,6 +470,10 @@ class ArabicTVApp {
             console.error('خطأ في تحميل الإعدادات:', error);
             console.log('سيتم استخدام الإعدادات الافتراضية');
         }
+        
+        // تحميل إعدادات الإشعارات في النماذج
+        this.loadNotificationSettings();
+        
         this.applySettings();
     }
 
@@ -3767,9 +3775,20 @@ class ArabicTVApp {
     }
 
     // نظام الإشعارات الجميل
-    showNotification(title, message, type = 'info', duration = 4000) {
+    showNotification(title, message, type = 'info', duration = null) {
+        // التحقق من إعدادات الإشعارات
+        if (!this.settings.notificationsEnabled) {
+            console.log('الإشعارات معطلة:', title, message);
+            return;
+        }
+
         const container = document.getElementById('notificationsContainer');
         if (!container) return;
+
+        // استخدام مدة الإشعار من الإعدادات إذا لم يتم تحديد مدة
+        if (duration === null) {
+            duration = this.settings.notificationDuration;
+        }
 
         // إنشاء الإشعار
         const notification = document.createElement('div');
@@ -3847,6 +3866,79 @@ class ArabicTVApp {
             const oldestId = oldestNotification.dataset.id;
             this.closeNotification(oldestId);
         }
+    }
+
+    // إعداد الحفظ التلقائي
+    setupAutoSave() {
+        // حفظ تلقائي عند تغيير إعدادات الإشعارات
+        const notificationToggle = document.getElementById('notificationsEnabled');
+        const durationSlider = document.getElementById('notificationDuration');
+        const durationValue = document.getElementById('durationValue');
+
+        if (notificationToggle) {
+            notificationToggle.addEventListener('change', () => {
+                this.settings.notificationsEnabled = notificationToggle.checked;
+                this.saveSettings();
+                this.showNotification('تم الحفظ', 'تم حفظ إعدادات الإشعارات تلقائياً', 'success');
+            });
+        }
+
+        if (durationSlider && durationValue) {
+            // تحديث القيمة المعروضة
+            durationSlider.addEventListener('input', () => {
+                const value = durationSlider.value;
+                durationValue.textContent = `${value} ثانية`;
+                this.settings.notificationDuration = parseInt(value) * 1000; // تحويل إلى ميلي ثانية
+                this.saveSettings();
+            });
+
+            // تحميل القيمة الحالية
+            durationValue.textContent = `${this.settings.notificationDuration / 1000} ثانية`;
+            durationSlider.value = this.settings.notificationDuration / 1000;
+        }
+    }
+
+    // تحميل إعدادات الإشعارات في النماذج
+    loadNotificationSettings() {
+        try {
+            const notificationToggle = document.getElementById('notificationsEnabled');
+            const durationSlider = document.getElementById('notificationDuration');
+            const durationValue = document.getElementById('durationValue');
+
+            if (notificationToggle) {
+                notificationToggle.checked = this.settings.notificationsEnabled;
+            }
+
+            if (durationSlider && durationValue) {
+                durationSlider.value = this.settings.notificationDuration / 1000;
+                durationValue.textContent = `${this.settings.notificationDuration / 1000} ثانية`;
+            }
+        } catch (error) {
+            console.error('خطأ في تحميل إعدادات الإشعارات:', error);
+        }
+    }
+
+    // اختبار الإشعارات
+    testNotifications() {
+        if (!this.settings.notificationsEnabled) {
+            alert('الإشعارات معطلة! يرجى تفعيلها أولاً.');
+            return;
+        }
+
+        // اختبار أنواع مختلفة من الإشعارات
+        this.showNotification('اختبار النجاح', 'هذا إشعار نجاح للاختبار', 'success');
+        
+        setTimeout(() => {
+            this.showNotification('اختبار المعلومات', 'هذا إشعار معلومات للاختبار', 'info');
+        }, 1000);
+        
+        setTimeout(() => {
+            this.showNotification('اختبار التحذير', 'هذا إشعار تحذير للاختبار', 'warning');
+        }, 2000);
+        
+        setTimeout(() => {
+            this.showNotification('اختبار الخطأ', 'هذا إشعار خطأ للاختبار', 'error');
+        }, 3000);
     }
 
     // إشعارات مخصصة للتطبيق
