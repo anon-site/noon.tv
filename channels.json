@@ -305,12 +305,12 @@
     "showNewsTicker": false,
     "zoomLevel": 100,
     "colorTheme": "default",
-    "layoutMode": "grid",
+    "layoutMode": "compact",
     "fontSize": "small",
     "animationsEnabled": true,
     "compactMode": true,
     "highContrast": false,
-    "borderRadius": "normal",
+    "borderRadius": "rounded",
     "notificationsEnabled": false,
     "notificationDuration": 3,
     "showCustomControls": true,
@@ -358,8 +358,13 @@
       "key": "movies",
       "name": "أفلام",
       "icon": "fas fa-film"
+    },
+    {
+      "key": "documentary",
+      "name": "الوثائقية",
+      "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-12T02:17:40.368Z",
+  "lastModified": "2025-09-12T02:19:05.672Z",
   "version": "1.0"
 }
