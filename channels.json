@@ -313,13 +313,22 @@
       "category": "entertainment",
       "country": "سورية",
       "type": "hls"
+    },
+    {
+      "id": 54,
+      "name": "AL 24 News",
+      "url": "https://cdn.live.easybroadcast.io/abr_corp/66_al24_u4yga6h/playlist.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c1/AL24_News_Logo.svg",
+      "category": "news",
+      "country": "الجزائر",
+      "type": "hls"
     }
   ],
   "favorites": [],
   "settings": {
     "autoQuality": true,
     "autoplay": true,
-    "volume": 62,
+    "volume": 80,
     "theme": "dark",
     "showNewsTicker": false,
     "zoomLevel": 100,
@@ -379,6 +388,6 @@
       "icon": "fas fa-film"
     }
   ],
-  "lastModified": "2025-09-12T03:48:46.671Z",
+  "lastModified": "2025-09-12T03:53:47.397Z",
   "version": "1.0"
 }
