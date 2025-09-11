@@ -299,7 +299,7 @@
     {
       "id": 52,
       "name": "البغدادية",
-      "url": "https://games2.elahmad.xyz/tv753_www.elahmad.com_honabaghdad/index.m3u8?token=94b30569a750df5cda779d2e596845b786682f76-030f2c0af8f3d6288c2a62a57a6be5e0-1757619295-1757608495",
+      "url": "https://games2.elahmad.xyz/tv753_www.elahmad.com_albaghdadia/tracks-v1a1/mono.m3u8?token=bdcbdf233d39e231318787870259ff9e88b5cae1-754db6881d005ea915a3d793a0135c6b-1757620431-1757609631",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/4/40/%D9%82%D9%86%D8%A7%D8%A9_%D8%A7%D9%84%D8%A8%D8%BA%D8%AF%D8%A7%D8%AF%D9%8A%D8%A9.png",
       "category": "diversified",
       "country": "العراق",
@@ -384,6 +384,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-12T02:54:14.435Z",
+  "lastModified": "2025-09-12T02:58:52.522Z",
   "version": "1.0"
 }
