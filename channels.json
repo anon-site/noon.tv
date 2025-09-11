@@ -322,6 +322,15 @@
       "category": "news",
       "country": "الجزائر",
       "type": "hls"
+    },
+    {
+      "id": 55,
+      "name": "Iqraa Africa & Europe",
+      "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv1/playlist/2.m3u8",
+      "logo": "https://iili.io/Kz83mkF.png",
+      "category": "religious",
+      "country": "السعودية",
+      "type": "hls"
     }
   ],
   "favorites": [],
@@ -388,6 +397,6 @@
       "icon": "fas fa-film"
     }
   ],
-  "lastModified": "2025-09-12T03:55:01.892Z",
+  "lastModified": "2025-09-12T04:01:20.486Z",
   "version": "1.0"
 }
