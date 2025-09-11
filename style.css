@@ -6328,24 +6328,31 @@ body[data-theme="light"] .enhanced-save-btn:hover {
         max-width: 90vw;
         display: flex;
         flex-direction: column;
-        height: calc(100vh - 120px);
+        height: calc(100vh - 140px);
         overflow: hidden;
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        position: relative;
     }
     
     .form-fields {
         flex: 1;
         overflow-y: auto;
         padding-bottom: 1rem;
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        scroll-behavior: smooth;
     }
     
     .form-actions {
         position: sticky;
         bottom: 0;
         background: var(--background-dark);
-        padding: 1rem 0;
+        padding: 1rem 0 2rem 0;
         border-top: 1px solid var(--border-color);
         margin-top: auto;
-        z-index: 10;
+        z-index: 100;
+        margin-bottom: env(safe-area-inset-bottom, 0px);
+        flex-shrink: 0;
+        min-height: 80px;
     }
     
     .form-group {
@@ -6353,17 +6360,25 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     }
     
     .add-btn {
-        width: 100%;
-        padding: 14px;
-        font-size: 16px;
-        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        width: 100% !important;
+        padding: 14px !important;
+        font-size: 16px !important;
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 8px !important;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important;
         display: block !important;
         visibility: visible !important;
         opacity: 1 !important;
+        min-height: 48px !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+        position: relative !important;
+        z-index: 1000 !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        margin-top: 1rem !important;
     }
     
     .add-btn:hover {
@@ -6381,7 +6396,11 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     @media (max-width: 375px) {
         .add-channel-form {
             max-width: 95vw;
-            height: calc(100vh - 100px);
+            height: calc(100vh - 120px);
+        }
+        
+        .form-actions {
+            padding: 0.75rem 0 1.5rem 0;
         }
         
         .form-group input,
@@ -6407,7 +6426,11 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     @media (max-width: 320px) {
         .add-channel-form {
             max-width: 98vw;
-            height: calc(100vh - 80px);
+            height: calc(100vh - 100px);
+        }
+        
+        .form-actions {
+            padding: 0.5rem 0 1.25rem 0;
         }
         
         .form-group input,
@@ -6442,6 +6465,50 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     body[data-theme="light"] .add-btn:hover {
         background: linear-gradient(135deg, #1d4ed8, #1e40af);
         box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+    }
+    
+    /* Additional safety for very small screens */
+    @media (max-height: 600px) {
+        .add-channel-form {
+            height: calc(100vh - 100px);
+        }
+        
+        .form-actions {
+            padding: 0.5rem 0 1rem 0;
+        }
+    }
+    
+    /* Landscape orientation adjustments */
+    @media (max-height: 500px) and (orientation: landscape) {
+        .add-channel-form {
+            height: calc(100vh - 80px);
+        }
+        
+        .form-actions {
+            padding: 0.25rem 0 0.75rem 0;
+        }
+        
+        .add-btn {
+            padding: 8px !important;
+            font-size: 14px !important;
+        }
+    }
+    
+    /* Force button visibility on mobile */
+    @media (max-width: 768px) {
+        .add-btn {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            position: relative !important;
+            z-index: 9999 !important;
+            margin-top: 1rem !important;
+            width: 100% !important;
+        }
+        
+        .add-channel-form {
+            padding-bottom: 2rem !important;
+        }
     }
     
     .form-group input,
