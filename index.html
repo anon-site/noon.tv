@@ -54,9 +54,6 @@
                     <input type="text" class="mobile-main-search-input" placeholder="البحث عن قناة..." id="mobileMainSearchInput">
                     <i class="fas fa-search mobile-main-search-icon"></i>
                 </div>
-                <button class="mobile-update-btn" onclick="app.updateChannelsFromGitHub()" title="تحديث القنوات">
-                    <i class="fas fa-sync-alt"></i>
-                </button>
             </div>
         </div>
     </div>
@@ -175,13 +172,13 @@
                         <i class="fas fa-cog"></i>
                         <span>الإعدادات</span>
                     </button>
-                    <button class="sidebar-action-btn" onclick="app.updateChannelsFromGitHub()">
-                        <i class="fas fa-sync-alt"></i>
-                        <span>تحديث القنوات</span>
-                    </button>
                     <button class="sidebar-action-btn" onclick="openAdminPanel()">
                         <i class="fas fa-user-shield"></i>
                         <span>لوحة التحكم</span>
+                    </button>
+                    <button class="sidebar-action-btn" onclick="updateChannels()">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>تحديث القنوات</span>
                     </button>
                 </div>
             </div>
@@ -285,14 +282,14 @@
                         <span>الإعدادات</span>
                         <i class="fas fa-chevron-left"></i>
                     </button>
-                    <button class="mobile-sidebar-action-btn" onclick="app.updateChannelsFromGitHub(); app.closeMobileMenu();">
-                        <i class="fas fa-sync-alt"></i>
-                        <span>تحديث القنوات</span>
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
                     <button class="mobile-sidebar-action-btn" onclick="openAdminPanel(); app.closeMobileMenu();">
                         <i class="fas fa-user-shield"></i>
                         <span>لوحة التحكم</span>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="mobile-sidebar-action-btn" onclick="updateChannels(); app.closeMobileMenu();">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>تحديث القنوات</span>
                         <i class="fas fa-chevron-left"></i>
                     </button>
                 </div>
@@ -532,27 +529,6 @@
                             <span class="slider"></span>
                         </label>
                     </div>
-                    
-                    <div class="setting-item">
-                        <label for="notificationsEnabled">تفعيل الإشعارات</label>
-                        <label class="switch">
-                            <input type="checkbox" id="notificationsEnabled">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    
-                    <div class="setting-item">
-                        <label for="notificationDuration">مدة عرض الإشعارات (ثانية)</label>
-                        <input type="range" id="notificationDuration" min="2" max="10" value="4" class="duration-slider">
-                        <span class="duration-value" id="durationValue">4 ثانية</span>
-                    </div>
-                    
-                    <div class="setting-item">
-                        <button class="test-notification-btn" onclick="app.testNotifications()">
-                            <i class="fas fa-bell"></i>
-                            اختبار الإشعارات
-                        </button>
-                    </div>
                 </div>
                 
                 <!-- Quick Actions -->
@@ -759,10 +735,6 @@
                         <button class="enhanced-save-btn" onclick="saveGeneralSettings()">
                             <i class="fas fa-save"></i>
                             <span>حفظ الإعدادات</span>
-                        </button>
-                        <button class="enhanced-save-btn" onclick="app.updateChannelsFromGitHub()" style="background: linear-gradient(135deg, #28a745, #20c997);">
-                            <i class="fas fa-sync-alt"></i>
-                            <span>تحديث القنوات من GitHub</span>
                         </button>
                     </div>
                     
@@ -1272,4 +1244,5 @@
     <script src="script.js"></script>
 </body>
 </html>
+
 

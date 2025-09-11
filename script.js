@@ -190,10 +190,7 @@ class ArabicTVApp {
             animationsEnabled: true,
             compactMode: true,
             highContrast: false,
-            borderRadius: 'rounded', // minimal, normal, rounded
-            // Notification settings
-            notificationsEnabled: false,
-            notificationDuration: 4000
+            borderRadius: 'rounded' // minimal, normal, rounded
         };
         this.filteredChannels = [...this.channels];
         this.currentCategory = 'all';
@@ -235,7 +232,6 @@ class ArabicTVApp {
         this.renderChannels();
         this.bindEvents();
         this.bindRemoteStorageEvents();
-        this.setupAutoSave();
         this.setupMobileSearch();
         this.setupRepositoryAutoSuggest();
         this.setupPictureInPictureEvents();
@@ -245,10 +241,6 @@ class ArabicTVApp {
         if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
             this.syncFromRemote();
         }
-        
-        // فحص التحديث التلقائي من GitHub
-        this.checkForAutoUpdate();
-        
         this.syncMobileNavTabs();
         this.initializeNewFeatures(); // Initialize new navigation features
         this.updateChannelStats(); // Update channel statistics
@@ -299,139 +291,6 @@ class ArabicTVApp {
         }
     }
 
-    // تحديث القنوات من GitHub
-    async updateChannelsFromGitHub() {
-        // إضافة مؤشر التحميل للأزرار
-        this.setUpdateButtonsLoading(true);
-        
-        try {
-            console.log('بدء تحديث القنوات من GitHub...');
-            this.showNotification('info', 'جاري التحديث', 'يتم تحديث القنوات من GitHub...');
-            
-            const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json');
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const data = await response.json();
-            
-            // التحقق من وجود القنوات في البيانات
-            if (data.channels && Array.isArray(data.channels)) {
-                const oldChannelsCount = this.channels.length;
-                this.channels = data.channels;
-                
-                // تحديث الفئات إذا كانت موجودة
-                if (data.categories && Array.isArray(data.categories)) {
-                    this.categories = data.categories;
-                }
-                
-                // تحديث الإعدادات إذا كانت موجودة
-                if (data.settings && typeof data.settings === 'object') {
-                    this.settings = { ...this.settings, ...data.settings };
-                }
-                
-                // تحديث المفضلة إذا كانت موجودة
-                if (data.favorites && Array.isArray(data.favorites)) {
-                    this.favorites = new Set(data.favorites);
-                }
-                
-                // حفظ البيانات المحدثة محلياً
-                this.saveChannelsToStorage();
-                this.saveFavorites();
-                this.saveSettings();
-                
-                // تحديث العرض
-                this.filteredChannels = [...this.channels];
-                this.updateChannelStats();
-                this.updateSidebarCounts();
-                this.updateNavigationTabs();
-                this.renderChannels();
-                
-                const newChannelsCount = this.channels.length;
-                const addedChannels = newChannelsCount - oldChannelsCount;
-                
-                console.log(`تم تحديث القنوات بنجاح! العدد الجديد: ${newChannelsCount} (تم إضافة ${addedChannels} قناة)`);
-                
-                this.showNotification('success', 'تم التحديث بنجاح', 
-                    `تم تحديث القنوات! العدد الجديد: ${newChannelsCount} قناة${addedChannels > 0 ? ` (+${addedChannels} قناة جديدة)` : ''}`);
-                
-                return true;
-            } else {
-                throw new Error('لا توجد قنوات في البيانات المستلمة');
-            }
-            
-        } catch (error) {
-            console.error('خطأ في تحديث القنوات من GitHub:', error);
-            this.showNotification('error', 'فشل التحديث', 'حدث خطأ أثناء تحديث القنوات من GitHub');
-            return false;
-        } finally {
-            // إزالة مؤشر التحميل
-            this.setUpdateButtonsLoading(false);
-        }
-    }
-
-    // إدارة مؤشر التحميل للأزرار
-    setUpdateButtonsLoading(loading) {
-        const updateButtons = document.querySelectorAll('button[onclick*="updateChannelsFromGitHub"], .mobile-update-btn');
-        updateButtons.forEach(button => {
-            if (loading) {
-                button.classList.add('updating');
-                button.disabled = true;
-                const icon = button.querySelector('i');
-                if (icon) {
-                    icon.className = 'fas fa-sync-alt';
-                }
-            } else {
-                button.classList.remove('updating');
-                button.disabled = false;
-                const icon = button.querySelector('i');
-                if (icon) {
-                    icon.className = 'fas fa-sync-alt';
-                }
-            }
-        });
-    }
-
-    // فحص التحديث التلقائي عند فتح الموقع
-    async checkForAutoUpdate() {
-        try {
-            // فحص آخر تحديث
-            const lastUpdateCheck = localStorage.getItem('lastUpdateCheck');
-            const now = new Date().getTime();
-            const oneDay = 24 * 60 * 60 * 1000; // 24 ساعة بالميلي ثانية
-            
-            // فحص إذا كانت القنوات المحفوظة محلياً قليلة أو غير موجودة
-            const savedChannels = localStorage.getItem('arabicTVChannels');
-            const hasLocalChannels = savedChannels && JSON.parse(savedChannels).length > 0;
-            
-            // إذا مر أكثر من 24 ساعة أو لم يتم الفحص من قبل أو لا توجد قنوات محفوظة
-            if (!lastUpdateCheck || (now - parseInt(lastUpdateCheck)) > oneDay || !hasLocalChannels) {
-                console.log('فحص التحديث التلقائي...');
-                
-                // إظهار إشعار للمستخدم
-                if (!hasLocalChannels) {
-                    this.showNotification('info', 'تحديث تلقائي', 'يتم تحميل أحدث القنوات من GitHub...');
-                } else {
-                    this.showNotification('info', 'تحديث تلقائي', 'يتم فحص التحديثات من GitHub...');
-                }
-                
-                // تحديث القنوات من GitHub
-                const updateSuccess = await this.updateChannelsFromGitHub();
-                
-                // حفظ وقت آخر فحص
-                localStorage.setItem('lastUpdateCheck', now.toString());
-                
-                if (updateSuccess) {
-                    console.log('تم التحديث التلقائي بنجاح');
-                }
-            } else {
-                console.log('التحديث التلقائي غير مطلوب - آخر فحص كان منذ أقل من 24 ساعة');
-            }
-        } catch (error) {
-            console.error('خطأ في فحص التحديث التلقائي:', error);
-        }
-    }
-
     testLocalStorage() {
         try {
             const testKey = 'test-storage';
@@ -470,10 +329,6 @@ class ArabicTVApp {
             console.error('خطأ في تحميل الإعدادات:', error);
             console.log('سيتم استخدام الإعدادات الافتراضية');
         }
-        
-        // تحميل إعدادات الإشعارات في النماذج
-        this.loadNotificationSettings();
-        
         this.applySettings();
     }
 
@@ -3775,20 +3630,9 @@ class ArabicTVApp {
     }
 
     // نظام الإشعارات الجميل
-    showNotification(title, message, type = 'info', duration = null) {
-        // التحقق من إعدادات الإشعارات
-        if (!this.settings.notificationsEnabled) {
-            console.log('الإشعارات معطلة:', title, message);
-            return;
-        }
-
+    showNotification(title, message, type = 'info', duration = 4000) {
         const container = document.getElementById('notificationsContainer');
         if (!container) return;
-
-        // استخدام مدة الإشعار من الإعدادات إذا لم يتم تحديد مدة
-        if (duration === null) {
-            duration = this.settings.notificationDuration;
-        }
 
         // إنشاء الإشعار
         const notification = document.createElement('div');
@@ -3866,79 +3710,6 @@ class ArabicTVApp {
             const oldestId = oldestNotification.dataset.id;
             this.closeNotification(oldestId);
         }
-    }
-
-    // إعداد الحفظ التلقائي
-    setupAutoSave() {
-        // حفظ تلقائي عند تغيير إعدادات الإشعارات
-        const notificationToggle = document.getElementById('notificationsEnabled');
-        const durationSlider = document.getElementById('notificationDuration');
-        const durationValue = document.getElementById('durationValue');
-
-        if (notificationToggle) {
-            notificationToggle.addEventListener('change', () => {
-                this.settings.notificationsEnabled = notificationToggle.checked;
-                this.saveSettings();
-                this.showNotification('تم الحفظ', 'تم حفظ إعدادات الإشعارات تلقائياً', 'success');
-            });
-        }
-
-        if (durationSlider && durationValue) {
-            // تحديث القيمة المعروضة
-            durationSlider.addEventListener('input', () => {
-                const value = durationSlider.value;
-                durationValue.textContent = `${value} ثانية`;
-                this.settings.notificationDuration = parseInt(value) * 1000; // تحويل إلى ميلي ثانية
-                this.saveSettings();
-            });
-
-            // تحميل القيمة الحالية
-            durationValue.textContent = `${this.settings.notificationDuration / 1000} ثانية`;
-            durationSlider.value = this.settings.notificationDuration / 1000;
-        }
-    }
-
-    // تحميل إعدادات الإشعارات في النماذج
-    loadNotificationSettings() {
-        try {
-            const notificationToggle = document.getElementById('notificationsEnabled');
-            const durationSlider = document.getElementById('notificationDuration');
-            const durationValue = document.getElementById('durationValue');
-
-            if (notificationToggle) {
-                notificationToggle.checked = this.settings.notificationsEnabled;
-            }
-
-            if (durationSlider && durationValue) {
-                durationSlider.value = this.settings.notificationDuration / 1000;
-                durationValue.textContent = `${this.settings.notificationDuration / 1000} ثانية`;
-            }
-        } catch (error) {
-            console.error('خطأ في تحميل إعدادات الإشعارات:', error);
-        }
-    }
-
-    // اختبار الإشعارات
-    testNotifications() {
-        if (!this.settings.notificationsEnabled) {
-            alert('الإشعارات معطلة! يرجى تفعيلها أولاً.');
-            return;
-        }
-
-        // اختبار أنواع مختلفة من الإشعارات
-        this.showNotification('اختبار النجاح', 'هذا إشعار نجاح للاختبار', 'success');
-        
-        setTimeout(() => {
-            this.showNotification('اختبار المعلومات', 'هذا إشعار معلومات للاختبار', 'info');
-        }, 1000);
-        
-        setTimeout(() => {
-            this.showNotification('اختبار التحذير', 'هذا إشعار تحذير للاختبار', 'warning');
-        }, 2000);
-        
-        setTimeout(() => {
-            this.showNotification('اختبار الخطأ', 'هذا إشعار خطأ للاختبار', 'error');
-        }, 3000);
     }
 
     // إشعارات مخصصة للتطبيق
@@ -5636,6 +5407,53 @@ document.addEventListener('DOMContentLoaded', () => {
         window.app.initQualityMenu();
     }
 });
+
+// Update Channels Function
+async function updateChannels() {
+    if (!window.app) {
+        console.error('التطبيق غير محمل');
+        return;
+    }
+
+    try {
+        // Show loading notification
+        window.app.notifyInfo('جاري تحديث القنوات من GitHub...', 3000);
+        
+        // Fetch channels from GitHub
+        const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json');
+        
+        if (!response.ok) {
+            throw new Error(`خطأ في جلب البيانات: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (!data.channels || !Array.isArray(data.channels)) {
+            throw new Error('تنسيق البيانات غير صحيح');
+        }
+        
+        // Update channels in the app
+        window.app.channels = data.channels;
+        
+        // Save to localStorage
+        localStorage.setItem('tvChannels', JSON.stringify(data.channels));
+        
+        // Reload the channels display
+        window.app.renderChannels();
+        window.app.updateSidebarCounts();
+        
+        // Show success notification
+        window.app.notifySuccess(`تم تحديث القنوات بنجاح! تم جلب ${data.channels.length} قناة`, 5000);
+        
+        console.log('تم تحديث القنوات بنجاح:', data.channels.length, 'قناة');
+        
+    } catch (error) {
+        console.error('خطأ في تحديث القنوات:', error);
+        
+        // Show error notification
+        window.app.notifyError(`فشل في تحديث القنوات: ${error.message}`, 5000);
+    }
+}
 
 // Logo Upload Functions
 function handleLogoUpload(event) {
