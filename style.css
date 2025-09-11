@@ -566,7 +566,6 @@ body[data-theme="light"] .logo h1 {
 .logo i {
     font-size: 1.5rem;
     color: var(--highlight-color);
-    animation: pulse 2s infinite;
 }
 
 .logo h1 {
@@ -995,7 +994,6 @@ body[data-theme="light"] .logo h1 {
     min-width: 20px;
     text-align: center;
     transition: var(--transition);
-    animation: pulse 2s infinite;
 }
 
 /* Light theme for tab counts */
@@ -2592,7 +2590,6 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
     align-items: center;
     gap: 6px;
     z-index: 3;
-    animation: pulse 2s infinite;
 }
 
 .live-dot {
@@ -2600,7 +2597,6 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
     height: 8px;
     background: white;
     border-radius: 50%;
-    animation: blink 1s infinite;
 }
 
 /* Quality Display */
