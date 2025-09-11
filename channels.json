@@ -331,15 +331,15 @@
     "borderRadius": "rounded",
     "notificationsEnabled": false,
     "notificationDuration": 3,
-    "showCustomControls": true,
-    "notifications": false,
-    "notificationSound": false,
-    "showChannelImages": false,
     "updateNotifications": true,
     "successNotifications": true,
     "errorNotifications": true,
     "infoNotifications": true,
-    "notificationPosition": "top-right"
+    "notificationPosition": "top-right",
+    "showChannelImages": false,
+    "showCustomControls": true,
+    "notifications": false,
+    "notificationSound": false
   },
   "categories": [
     {
@@ -376,8 +376,13 @@
       "key": "movies",
       "name": "أفلام",
       "icon": "fas fa-film"
+    },
+    {
+      "key": "documentary",
+      "name": "الوثائقية",
+      "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-12T02:04:32.489Z",
+  "lastModified": "2025-09-12T02:12:46.752Z",
   "version": "1.0"
 }
