@@ -172,6 +172,10 @@
                         <i class="fas fa-cog"></i>
                         <span>الإعدادات</span>
                     </button>
+                    <button class="sidebar-action-btn" onclick="app.manualUpdateChannels()">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>تحديث القنوات</span>
+                    </button>
                     <button class="sidebar-action-btn" onclick="openAdminPanel()">
                         <i class="fas fa-user-shield"></i>
                         <span>لوحة التحكم</span>
@@ -281,6 +285,11 @@
                     <button class="mobile-sidebar-action-btn" onclick="openAdminPanel(); app.closeMobileMenu();">
                         <i class="fas fa-user-shield"></i>
                         <span>لوحة التحكم</span>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="mobile-sidebar-action-btn" onclick="app.manualUpdateChannels(); app.closeMobileMenu();">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>تحديث القنوات</span>
                         <i class="fas fa-chevron-left"></i>
                     </button>
                 </div>
@@ -726,6 +735,10 @@
                         <button class="enhanced-save-btn" onclick="saveGeneralSettings()">
                             <i class="fas fa-save"></i>
                             <span>حفظ الإعدادات</span>
+                        </button>
+                        <button class="enhanced-save-btn" onclick="app.manualUpdateChannels()" style="background: linear-gradient(45deg, #28a745, #20c997);">
+                            <i class="fas fa-sync-alt"></i>
+                            <span>تحديث القنوات من GitHub</span>
                         </button>
                     </div>
                     

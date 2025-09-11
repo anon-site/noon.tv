@@ -5206,6 +5206,154 @@ class ArabicTVApp {
             });
         }
     }
+
+    // Auto-update channels from GitHub
+    async loadChannelsFromGitHub() {
+        try {
+            console.log('🔄 جاري تحميل القنوات من GitHub...');
+            this.showUpdateIndicator(true);
+            
+            // Add timeout to prevent hanging
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 seconds timeout
+            
+            const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json', {
+                signal: controller.signal,
+                cache: 'no-cache' // Always fetch fresh data
+            });
+            
+            clearTimeout(timeoutId);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.channels && Array.isArray(data.channels) && data.channels.length > 0) {
+                // Update local channels with GitHub data
+                this.channels = data.channels;
+                
+                // Save to localStorage
+                this.saveChannels();
+                
+                // Refresh the display
+                this.loadChannels();
+                this.updateChannelCounts();
+                
+                console.log('✅ تم تحديث القنوات بنجاح من GitHub');
+                this.showNotification(`تم تحديث ${data.channels.length} قناة من GitHub`, 'success');
+                
+                // Update last update time
+                localStorage.setItem('lastChannelUpdate', new Date().toISOString());
+            } else {
+                throw new Error('Invalid data format from GitHub');
+            }
+        } catch (error) {
+            console.error('❌ خطأ في تحميل القنوات من GitHub:', error);
+            
+            if (error.name === 'AbortError') {
+                this.showNotification('انتهت مهلة التحديث - تحقق من اتصال الإنترنت', 'error');
+            } else {
+                this.showNotification('فشل في تحديث القنوات من GitHub', 'error');
+            }
+            
+            // Fallback to existing channels
+            this.loadChannels();
+            this.updateChannelCounts();
+        } finally {
+            this.showUpdateIndicator(false);
+        }
+    }
+
+    // Show/hide update indicator
+    showUpdateIndicator(show) {
+        const loadingElement = document.getElementById('loading');
+        if (loadingElement) {
+            if (show) {
+                loadingElement.style.display = 'flex';
+                loadingElement.querySelector('p').textContent = 'جارٍ تحديث القنوات من GitHub...';
+            } else {
+                loadingElement.style.display = 'none';
+            }
+        }
+    }
+
+    // Check if channels need update
+    shouldUpdateChannels() {
+        const lastUpdate = localStorage.getItem('lastChannelUpdate');
+        const savedChannels = localStorage.getItem('channels');
+        
+        // Always update if no channels are saved locally
+        if (!savedChannels) return true;
+        
+        // Always update if no previous update time
+        if (!lastUpdate) return true;
+        
+        const lastUpdateTime = new Date(lastUpdate);
+        const now = new Date();
+        const hoursSinceUpdate = (now - lastUpdateTime) / (1000 * 60 * 60);
+        
+        // Update if more than 24 hours have passed
+        return hoursSinceUpdate > 24;
+    }
+
+    // Auto-update on page load
+    async autoUpdateChannels() {
+        try {
+            if (this.shouldUpdateChannels()) {
+                console.log('🔄 تحديث تلقائي للقنوات...');
+                await this.loadChannelsFromGitHub();
+            } else {
+                console.log('ℹ️ القنوات محدثة بالفعل');
+                // Still load channels from localStorage
+                this.loadChannels();
+                this.updateChannelCounts();
+            }
+        } catch (error) {
+            console.error('❌ خطأ في التحديث التلقائي:', error);
+            // Fallback to loading from localStorage
+            this.loadChannels();
+            this.updateChannelCounts();
+        }
+    }
+
+    // Manual update function
+    async manualUpdateChannels() {
+        console.log('🔄 تحديث يدوي للقنوات...');
+        await this.loadChannelsFromGitHub();
+    }
+
+    // Show notification
+    showNotification(message, type = 'info') {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `
+            <div class="notification-content">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                <span>${message}</span>
+            </div>
+        `;
+        
+        // Add to page
+        document.body.appendChild(notification);
+        
+        // Show notification
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 100);
+        
+        // Remove notification after 3 seconds
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }, 3000);
+    }
 }
 
 // Global functions for inline event handlers
@@ -5405,6 +5553,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize quality menu
     if (window.app && window.app.initQualityMenu) {
         window.app.initQualityMenu();
+    }
+    
+    // Auto-update channels from GitHub
+    if (window.app && window.app.autoUpdateChannels) {
+        window.app.autoUpdateChannels();
     }
 });
 
