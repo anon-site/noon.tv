@@ -593,7 +593,24 @@
                         </div>
                         <div class="form-group">
                             <label for="channelLogo">رابط الشعار</label>
-                            <input type="url" id="channelLogo" required>
+                            <input type="url" id="channelLogo" placeholder="أدخل رابط الشعار">
+                        </div>
+                        <div class="form-group logo-upload-group">
+                            <label for="logoUpload">أو رفع شعار من الجهاز</label>
+                            <div class="logo-upload-container">
+                                <input type="file" id="logoUpload" accept="image/*" style="display: none;">
+                                <button type="button" class="logo-upload-btn" onclick="document.getElementById('logoUpload').click()">
+                                    <i class="fas fa-upload"></i>
+                                    <span>اختر شعار</span>
+                                </button>
+                                <div class="logo-preview" id="logoPreview" style="display: none;">
+                                    <img id="logoPreviewImg" src="" alt="معاينة الشعار">
+                                    <button type="button" class="remove-logo-btn" onclick="removeLogoPreview()">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <small class="form-help">سيتم وضع رابط الصورة تلقائياً في حقل رابط الشعار عند الرفع</small>
                         </div>
                         <div class="form-group">
                             <label for="channelCategory">الفئة</label>

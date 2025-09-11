@@ -1524,6 +1524,9 @@ class ArabicTVApp {
         document.getElementById('channelCategory').value = '';
         document.getElementById('channelCountry').value = '';
         
+        // Clear uploaded logo
+        removeLogoPreview();
+        
         // Hide URL type indicator
         const urlTypeIndicator = document.getElementById('urlTypeIndicator');
         if (urlTypeIndicator) {
@@ -1570,6 +1573,9 @@ class ArabicTVApp {
         document.getElementById('channelLogo').value = channel.logo;
         document.getElementById('channelCategory').value = channel.category;
         document.getElementById('channelCountry').value = channel.country;
+        
+        // Clear any uploaded logo preview when editing
+        removeLogoPreview();
         
         // Auto-detect URL type for editing
         this.detectedUrlType = channel.type || 'hls';
@@ -5399,6 +5405,85 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize quality menu
     if (window.app && window.app.initQualityMenu) {
         window.app.initQualityMenu();
+    }
+});
+
+// Logo Upload Functions
+function handleLogoUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+        if (window.app) {
+            window.app.notifyWarning('يرجى اختيار ملف صورة صالح!');
+        }
+        return;
+    }
+    
+    // Validate file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+        if (window.app) {
+            window.app.notifyWarning('حجم الملف كبير جداً! الحد الأقصى 2 ميجابايت');
+        }
+        return;
+    }
+    
+    // Create FileReader to convert image to base64
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const base64String = e.target.result;
+        showLogoPreview(base64String);
+        
+        // Put the base64 string in the URL input field
+        const urlInput = document.getElementById('channelLogo');
+        if (urlInput) {
+            urlInput.value = base64String;
+        }
+    };
+    reader.readAsDataURL(file);
+}
+
+function showLogoPreview(imageSrc) {
+    const preview = document.getElementById('logoPreview');
+    const previewImg = document.getElementById('logoPreviewImg');
+    
+    if (preview && previewImg) {
+        previewImg.src = imageSrc;
+        preview.style.display = 'inline-block';
+        
+        // Store the base64 image for later use
+        window.uploadedLogoData = imageSrc;
+    }
+}
+
+function removeLogoPreview() {
+    const preview = document.getElementById('logoPreview');
+    const fileInput = document.getElementById('logoUpload');
+    const urlInput = document.getElementById('channelLogo');
+    
+    if (preview) {
+        preview.style.display = 'none';
+    }
+    
+    if (fileInput) {
+        fileInput.value = '';
+    }
+    
+    // Clear the URL input if it contains a base64 string
+    if (urlInput && urlInput.value.startsWith('data:image/')) {
+        urlInput.value = '';
+    }
+    
+    // Clear stored image data
+    window.uploadedLogoData = null;
+}
+
+// Initialize logo upload functionality when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    const logoUploadInput = document.getElementById('logoUpload');
+    if (logoUploadInput) {
+        logoUploadInput.addEventListener('change', handleLogoUpload);
     }
 });
 

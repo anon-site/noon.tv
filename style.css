@@ -189,6 +189,15 @@ body[data-theme="light"] .admin-search input:focus {
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
+/* Light theme logo upload styles */
+body[data-theme="light"] .logo-preview {
+    border-color: #e2e8f0;
+}
+
+body[data-theme="light"] .form-help {
+    color: #64748b;
+}
+
 /* تحسين لوحة التحكم */
 body[data-theme="light"] .admin-content {
     background: #ffffff;
@@ -3090,6 +3099,91 @@ input:checked + .slider:before {
     outline: none;
     border-color: var(--highlight-color);
     box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.1);
+}
+
+/* Logo Upload Styles */
+.logo-upload-group {
+    margin-bottom: 1rem;
+}
+
+.logo-upload-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+}
+
+.logo-upload-btn {
+    background: linear-gradient(45deg, #4f46e5, #7c3aed);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo-upload-btn:hover {
+    background: linear-gradient(45deg, #4338ca, #6d28d9);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.logo-upload-btn:active {
+    transform: translateY(0);
+}
+
+.logo-preview {
+    position: relative;
+    display: inline-block;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--border-color);
+}
+
+.logo-preview img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    display: block;
+}
+
+.remove-logo-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+.remove-logo-btn:hover {
+    background: #dc2626;
+    transform: scale(1.1);
+}
+
+.form-help {
+    color: #6b7280;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    display: block;
 }
 
 .add-btn, .save-settings-btn {
@@ -6174,6 +6268,22 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     .add-btn {
         padding: 6px 12px;
         font-size: 0.85rem;
+    }
+    
+    .logo-upload-btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .logo-preview img {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .remove-logo-btn {
+        width: 20px;
+        height: 20px;
+        font-size: 10px;
     }
     
     .admin-tabs {
