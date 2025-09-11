@@ -5435,8 +5435,17 @@ async function updateChannels() {
         // Update channels in the app
         window.app.channels = data.channels;
         
+        // Update filtered channels to match the new channels
+        window.app.filteredChannels = [...data.channels];
+        
         // Save to localStorage
         localStorage.setItem('tvChannels', JSON.stringify(data.channels));
+        
+        // Apply current filters to the new channels
+        window.app.applyAllFilters();
+        
+        // Update channel statistics
+        window.app.updateChannelStats();
         
         // Reload the channels display
         window.app.renderChannels();
