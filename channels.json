@@ -1,4 +1,6 @@
 {
+  "version": "1.0",
+  "timestamp": "2025-09-11T06:45:37.636Z",
   "channels": [
     {
       "id": 3,
@@ -78,7 +80,8 @@
       "url": "https://alarabyta.cdn.octivid.com/alaraby/smil:alaraby.stream.smil/chunklist.m3u8",
       "logo": "https://www.alaraby.com/themes/custom/arabytv/logo.png",
       "category": "news",
-      "country": "Qatar"
+      "country": "قطر",
+      "type": "hls"
     },
     {
       "id": 15,
@@ -86,7 +89,8 @@
       "url": "https://alarabyta.cdn.octivid.com/alaraby2n/smil:alaraby2n.stream.smil/chunklist.m3u8",
       "logo": "https://media0084.elcinema.com/tvguide/1382_1.png",
       "category": "entertainment",
-      "country": "Qatar"
+      "country": "قطر",
+      "type": "hls"
     },
     {
       "id": 16,
@@ -245,7 +249,7 @@
       "url": "https://mn-nl.mncdn.com/mekameleen/smil:mekameleentv.smil/playlist.m3u8",
       "logo": "https://iili.io/Kz8Xqsn.png",
       "category": "entertainment",
-      "country": "Turly",
+      "country": "تركيا",
       "type": "hls"
     },
     {
@@ -254,7 +258,43 @@
       "url": "https://rmtv.akamaized.net/hls/live/2043153/rmtv-es-web/master.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/sco/thumb/5/56/Real_Madrid_CF.svg/732px-Real_Madrid_CF.svg.png",
       "category": "sports",
-      "country": "Espin",
+      "country": "إسبانيا",
+      "type": "hls"
+    },
+    {
+      "id": 48,
+      "name": "Oman",
+      "url": "https://partneta.cdn.mgmlcdn.com/omantv/smil:omantv.stream.smil/chunklist.m3u8",
+      "logo": "https://images.crunchbase.com/image/upload/c_pad,f_auto,q_auto:eco,dpr_1/v1485363667/ya6httyscqrqa1twfanl.png",
+      "category": "entertainment",
+      "country": "عُمان",
+      "type": "hls"
+    },
+    {
+      "id": 49,
+      "name": "عُمان الثقافية",
+      "url": "https://partwota.cdn.mgmlcdn.com/omcultural/smil:omcultural.stream.smil/chunklist.m3u8",
+      "logo": "https://admango.cdn.mangomolo.com/analytics/uploads/168/60b5da80cd.png",
+      "category": "documentary",
+      "country": "عُمان",
+      "type": "hls"
+    },
+    {
+      "id": 50,
+      "name": "Asharq Discovery",
+      "url": "https://svs.itworkscdn.net/asharqdiscoverylive/asharqd.smil/playlist_dvr.m3u8",
+      "logo": "https://iili.io/KzLkfFs.png",
+      "category": "documentary",
+      "country": "السعودية",
+      "type": "hls"
+    },
+    {
+      "id": 51,
+      "name": "Asharq Documentary",
+      "url": "https://svs.itworkscdn.net/asharqdocumentarylive/asharqdocumentary.smil/playlist_dvr.m3u8",
+      "logo": "https://iili.io/KzLkFPn.png",
+      "category": "documentary",
+      "country": "السعودية",
       "type": "hls"
     }
   ],
@@ -327,6 +367,14 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T06:01:50.419Z",
-  "version": "1.0"
+  "remoteStorage": {
+    "enabled": true,
+    "provider": "github",
+    "repository": "anon-site/TV-AR",
+    "branch": "main",
+    "filename": "channels.json",
+    "autoSync": true,
+    "lastSync": "2025-09-11T06:44:14.685Z"
+  },
+  "generalSettings": {}
 }
