@@ -800,21 +800,66 @@ body[data-theme="light"] .logo h1 {
     will-change: right;
 }
 
+/* Global Scrollbar Styles */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--highlight-color) rgba(255, 255, 255, 0.1);
+}
+
+/* Webkit Scrollbar Styles */
+*::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    margin: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, var(--highlight-color), #ff6b6b);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+    transition: all 0.3s ease;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(45deg, #ff5252, #e53935);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+*::-webkit-scrollbar-thumb:active {
+    background: linear-gradient(45deg, #d32f2f, #b71c1c);
+}
+
+*::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+/* Desktop Sidebar Specific Scrollbar */
 .desktop-sidebar::-webkit-scrollbar {
     width: 6px;
 }
 
 .desktop-sidebar::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    margin: 2px;
 }
 
 .desktop-sidebar::-webkit-scrollbar-thumb {
-    background: var(--highlight-color);
-    border-radius: 3px;
+    background: linear-gradient(135deg, var(--highlight-color), #ff6b6b);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .desktop-sidebar::-webkit-scrollbar-thumb:hover {
-    background: #ff6b6b;
+    background: linear-gradient(135deg, #ff5252, #e53935);
+    box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
 }
 
 .desktop-sidebar.active {
@@ -1254,6 +1299,38 @@ body[data-theme="light"] .logo h1 {
 .mobile-tv-dropdown-menu.show {
     max-height: 600px;
     overflow-y: auto;
+}
+
+/* Dropdown and List Scrollbar */
+.tv-dropdown-menu::-webkit-scrollbar,
+.mobile-tv-dropdown-menu::-webkit-scrollbar,
+.repo-suggestions::-webkit-scrollbar,
+.channels-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.tv-dropdown-menu::-webkit-scrollbar-track,
+.mobile-tv-dropdown-menu::-webkit-scrollbar-track,
+.repo-suggestions::-webkit-scrollbar-track,
+.channels-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+}
+
+.tv-dropdown-menu::-webkit-scrollbar-thumb,
+.mobile-tv-dropdown-menu::-webkit-scrollbar-thumb,
+.repo-suggestions::-webkit-scrollbar-thumb,
+.channels-list::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--highlight-color), #ff6b6b);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tv-dropdown-menu::-webkit-scrollbar-thumb:hover,
+.mobile-tv-dropdown-menu::-webkit-scrollbar-thumb:hover,
+.repo-suggestions::-webkit-scrollbar-thumb:hover,
+.channels-list::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #ff5252, #e53935);
 }
 
 .mobile-tv-dropdown-item {
@@ -1769,6 +1846,26 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
     flex: 1;
     overflow-y: auto;
     padding: 0;
+}
+
+/* Mobile Sidebar Scrollbar */
+.mobile-sidebar-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.mobile-sidebar-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.mobile-sidebar-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--highlight-color), #ff6b6b);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobile-sidebar-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #ff5252, #e53935);
 }
 
 .mobile-sidebar-section {
@@ -2571,6 +2668,44 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
     padding: 2rem;
     max-height: 400px;
     overflow-y: auto;
+}
+
+/* Modal and Settings Scrollbar */
+.settings-body::-webkit-scrollbar,
+.admin-body::-webkit-scrollbar,
+.diagnostic-content::-webkit-scrollbar,
+.setup-help-content::-webkit-scrollbar,
+.auto-detect-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.settings-body::-webkit-scrollbar-track,
+.admin-body::-webkit-scrollbar-track,
+.diagnostic-content::-webkit-scrollbar-track,
+.setup-help-content::-webkit-scrollbar-track,
+.auto-detect-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    margin: 2px;
+}
+
+.settings-body::-webkit-scrollbar-thumb,
+.admin-body::-webkit-scrollbar-thumb,
+.diagnostic-content::-webkit-scrollbar-thumb,
+.setup-help-content::-webkit-scrollbar-thumb,
+.auto-detect-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--highlight-color), #ff6b6b);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.settings-body::-webkit-scrollbar-thumb:hover,
+.admin-body::-webkit-scrollbar-thumb:hover,
+.diagnostic-content::-webkit-scrollbar-thumb:hover,
+.setup-help-content::-webkit-scrollbar-thumb:hover,
+.auto-detect-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #ff5252, #e53935);
+    box-shadow: 0 0 8px rgba(255, 107, 107, 0.4);
 }
 
 .setting-item {
@@ -4199,6 +4334,61 @@ body[data-theme="light"] .favorites-mobile-btn {
 
 body[data-theme="light"] .favorites-mobile-btn:hover {
     background: linear-gradient(45deg, #ff5252, #e53935) !important;
+}
+
+/* Light Theme Scrollbar Styles */
+body[data-theme="light"] * {
+    scrollbar-color: #3b82f6 rgba(0, 0, 0, 0.05);
+}
+
+body[data-theme="light"] *::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    margin: 4px;
+}
+
+body[data-theme="light"] *::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+body[data-theme="light"] *::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(45deg, #2563eb, #1e40af);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] *::-webkit-scrollbar-thumb:active {
+    background: linear-gradient(45deg, #1d4ed8, #1e3a8a);
+}
+
+/* Light Theme Specific Scrollbars */
+body[data-theme="light"] .desktop-sidebar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+body[data-theme="light"] .desktop-sidebar::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .desktop-sidebar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+}
+
+body[data-theme="light"] .mobile-sidebar-content::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+body[data-theme="light"] .mobile-sidebar-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .mobile-sidebar-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
 }
 
 /* Light theme for mobile sidebar */
