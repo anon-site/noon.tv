@@ -294,6 +294,15 @@
       "category": "documentary",
       "country": "السعودية",
       "type": "hls"
+    },
+    {
+      "id": 52,
+      "name": "البغدادية",
+      "url": "https://games2.elahmad.xyz/tv753_www.elahmad.com_albaghdadia/tracks-v1a1/mono.m3u8?token=83bf215a4d43161022134ca11d775c5f84b4fe2c-7a8db953eab0285e918de87eae869790-1757618649-1757607849",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/4/40/%D9%82%D9%86%D8%A7%D8%A9_%D8%A7%D9%84%D8%A8%D8%BA%D8%AF%D8%A7%D8%AF%D9%8A%D8%A9.png",
+      "category": "entertainment",
+      "country": "العراق",
+      "type": "hls"
     }
   ],
   "favorites": [],
@@ -313,15 +322,15 @@
     "borderRadius": "rounded",
     "notificationsEnabled": false,
     "notificationDuration": 3,
-    "showCustomControls": true,
-    "notifications": false,
-    "notificationSound": false,
-    "showChannelImages": false,
     "updateNotifications": true,
     "successNotifications": true,
     "errorNotifications": true,
     "infoNotifications": true,
-    "notificationPosition": "top-right"
+    "notificationPosition": "top-right",
+    "showChannelImages": false,
+    "showCustomControls": true,
+    "notifications": false,
+    "notificationSound": false
   },
   "categories": [
     {
@@ -365,6 +374,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-12T02:19:05.672Z",
+  "lastModified": "2025-09-12T02:31:38.322Z",
   "version": "1.0"
 }
