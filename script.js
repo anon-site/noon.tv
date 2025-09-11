@@ -224,8 +224,8 @@ class ArabicTVApp {
     init() {
         this.testLocalStorage(); // Test if localStorage is working
         this.loadRemoteStorageSettings(); // Load remote storage configuration
-        this.loadDataFromFile(); // Load data from channels.json first
-        this.loadChannelsFromStorage(); // Load saved channels first
+        this.loadChannelsFromStorage(); // Load saved channels first (priority)
+        this.loadDataFromFile(); // Load data from channels.json as fallback
         this.loadFavorites(); // Load saved favorites
         this.filteredChannels = [...this.channels]; // Ensure filtered channels match loaded channels
         this.loadSettings();
@@ -254,6 +254,12 @@ class ArabicTVApp {
     }
 
     async loadDataFromFile() {
+        // Only load from file if no channels are already loaded from localStorage
+        if (this.channels && this.channels.length > 0) {
+            console.log('القنوات محملة بالفعل من localStorage، تخطي تحميل channels.json');
+            return;
+        }
+        
         try {
             const response = await fetch('channels.json');
             if (!response.ok) {
@@ -261,10 +267,12 @@ class ArabicTVApp {
             }
             const data = await response.json();
             
-            // Load channels from JSON file
-            if (data.channels && Array.isArray(data.channels)) {
+            // Load channels from JSON file only if no channels exist
+            if (data.channels && Array.isArray(data.channels) && this.channels.length === 0) {
                 this.channels = data.channels;
-                console.log('تم تحميل القنوات من channels.json:', this.channels.length, 'قناة');
+                console.log('تم تحميل القنوات من channels.json كـ fallback:', this.channels.length, 'قناة');
+                // Save the loaded channels to localStorage
+                this.saveChannelsToStorage();
             }
             
             // Load categories from JSON file
@@ -5438,8 +5446,8 @@ async function updateChannels() {
         // Update filtered channels to match the new channels
         window.app.filteredChannels = [...data.channels];
         
-        // Save to localStorage
-        localStorage.setItem('tvChannels', JSON.stringify(data.channels));
+        // Save to localStorage using the app's save method
+        window.app.saveChannelsToStorage();
         
         // Apply current filters to the new channels
         window.app.applyAllFilters();
@@ -5453,6 +5461,9 @@ async function updateChannels() {
         
         // Show success notification
         window.app.notifySuccess(`تم تحديث القنوات بنجاح! تم جلب ${data.channels.length} قناة`, 5000);
+        
+        // Log confirmation that data was saved
+        console.log('✅ تم حفظ القنوات المحدثة في localStorage بنجاح');
         
         console.log('تم تحديث القنوات بنجاح:', data.channels.length, 'قناة');
         
