@@ -303,6 +303,15 @@
       "category": "documentary",
       "country": "قطر",
       "type": "unknown"
+    },
+    {
+      "id": 53,
+      "name": "Al-Majd Quran",
+      "url": "https://edge66.magictvbox.com/liveApple/al_majd/tracks-v1a1/mono.m3u8",
+      "logo": "https://static.wikia.nocookie.net/logopedia/images/f/fb/Almajd_Quran.png/revision/latest/scale-to-width-down/300?cb=20250621192917",
+      "category": "religious",
+      "country": "السعودية",
+      "type": "hls"
     }
   ],
   "favorites": [],
@@ -310,7 +319,7 @@
     "autoQuality": true,
     "autoplay": true,
     "volume": 62,
-    "theme": "light",
+    "theme": "dark",
     "showNewsTicker": false,
     "zoomLevel": 100,
     "colorTheme": "default",
@@ -374,6 +383,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T11:38:25.399Z",
+  "lastModified": "2025-09-11T11:42:07.005Z",
   "version": "1.0"
 }
