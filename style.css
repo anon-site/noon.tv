@@ -263,14 +263,18 @@ body[data-theme="light"] .mobile-sidebar-header h3 {
 }
 
 body[data-theme="light"] .mobile-close-btn {
-    border-color: #e2e8f0;
-    color: #64748b;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #d1d5db;
+    color: #374151;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 body[data-theme="light"] .mobile-close-btn:hover {
-    background: rgba(59, 130, 246, 0.1);
-    border-color: #3b82f6;
-    color: #3b82f6;
+    background: rgba(239, 68, 68, 0.1);
+    border-color: #ef4444;
+    color: #dc2626;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(239, 68, 68, 0.2);
 }
 
 body[data-theme="light"] .mobile-nav-tab {
@@ -994,6 +998,19 @@ body[data-theme="light"] .logo h1 {
     animation: pulse 2s infinite;
 }
 
+/* Light theme for tab counts */
+body[data-theme="light"] .tab-count {
+    background: rgba(59, 130, 246, 0.15);
+    color: #1d4ed8;
+    font-weight: 600;
+    animation: none;
+}
+
+body[data-theme="light"] .sidebar-nav-tab.active .tab-count {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
 @keyframes pulse {
     0% {
         transform: scale(1);
@@ -1690,8 +1707,9 @@ body[data-theme="light"] .sidebar-logo i {
 }
 
 body[data-theme="light"] .sidebar-section-title {
-    color: #64748b;
-    border-bottom: 1px solid #e2e8f0;
+    color: #374151;
+    border-bottom: 1px solid #d1d5db;
+    font-weight: 600;
 }
 
 body[data-theme="light"] .sidebar-section-title i {
@@ -1699,29 +1717,43 @@ body[data-theme="light"] .sidebar-section-title i {
 }
 
 body[data-theme="light"] .sidebar-nav-tab {
-    color: #64748b;
+    color: #475569;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+    font-weight: 500;
 }
 
 body[data-theme="light"] .sidebar-nav-tab:hover {
-    color: white;
+    color: #1e293b;
+    background: rgba(59, 130, 246, 0.1);
+    border-color: #3b82f6;
+    transform: translateX(-2px);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
 }
 
 body[data-theme="light"] .sidebar-nav-tab.active {
-    background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
     color: white;
-    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    border-color: #1d4ed8;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+    font-weight: 600;
 }
 
 body[data-theme="light"] .sidebar-action-btn {
-    background: rgba(0, 0, 0, 0.02);
-    border: 1px solid #e2e8f0;
-    color: #64748b;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid #d1d5db;
+    color: #4b5563;
+    transition: all 0.3s ease;
+    font-weight: 500;
 }
 
 body[data-theme="light"] .sidebar-action-btn:hover {
-    background: rgba(59, 130, 246, 0.1);
+    background: rgba(59, 130, 246, 0.15);
     border-color: #3b82f6;
     color: #1e293b;
+    transform: translateX(-3px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
 }
 
 /* Light theme for favorites button in sidebar */
@@ -4232,17 +4264,27 @@ body[data-theme="light"] .theme-input:checked + .theme-slider:before {
 
 /* Light theme for mobile sidebar nav tabs */
 body[data-theme="light"] .mobile-sidebar-nav-tab {
-    color: #64748b;
+    color: #475569;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+    font-weight: 500;
 }
 
 body[data-theme="light"] .mobile-sidebar-nav-tab:hover {
-    color: white;
+    color: #1e293b;
+    background: rgba(59, 130, 246, 0.1);
+    border-color: #3b82f6;
+    transform: translateX(-2px);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
 }
 
 body[data-theme="light"] .mobile-sidebar-nav-tab.active {
-    background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
     color: white;
-    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    border-color: #1d4ed8;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+    font-weight: 600;
 }
 
 /* Mobile Sidebar Actions */
@@ -4378,14 +4420,18 @@ body[data-theme="light"] .mobile-main-filter-btn.active {
 }
 
 body[data-theme="light"] .mobile-sidebar-action-btn {
-    background: transparent;
-    color: #64748b;
-    border-bottom-color: #f1f5f9;
+    background: rgba(255, 255, 255, 0.8);
+    color: #4b5563;
+    border-bottom-color: #e2e8f0;
+    transition: all 0.3s ease;
+    font-weight: 500;
 }
 
 body[data-theme="light"] .mobile-sidebar-action-btn:hover {
-    background: #f1f5f9;
+    background: rgba(59, 130, 246, 0.15);
     color: #1e293b;
+    padding-right: 2rem;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
 }
 
 body[data-theme="light"] .mobile-sidebar-action-btn i:first-child {
@@ -4404,8 +4450,50 @@ body[data-theme="light"] .mobile-sidebar-action-btn:hover i:first-child {
     color: #1d4ed8;
 }
 
-body[data-theme="light"] .mobile-sidebar-action-btn:hover i:last-child {
+/* Light theme for sidebar toggle buttons */
+body[data-theme="light"] .header-actions .sidebar-toggle-btn {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+    border: 1px solid #1d4ed8;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+body[data-theme="light"] .header-actions .sidebar-toggle-btn:hover {
+    background: linear-gradient(135deg, #1d4ed8, #1e40af);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+body[data-theme="light"] .mobile-menu-btn {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #d1d5db;
+    color: #374151;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .mobile-menu-btn:hover {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: #3b82f6;
     color: #1e293b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+/* Additional improvements for sidebar toggle buttons in light theme */
+body[data-theme="light"] .sidebar-toggle-btn {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #d1d5db;
+    color: #374151;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+body[data-theme="light"] .sidebar-toggle-btn:hover {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: #3b82f6;
+    color: #1e293b;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.2);
 }
 
 /* Light theme for favorites button in mobile sidebar */
@@ -4493,7 +4581,8 @@ body[data-theme="light"] .mobile-sidebar-logo i {
 }
 
 body[data-theme="light"] .mobile-sidebar-section-title {
-    color: #1e293b;
+    color: #374151;
+    font-weight: 600;
 }
 
 body[data-theme="light"] .mobile-sidebar-section-title i {
