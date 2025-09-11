@@ -54,6 +54,9 @@
                     <input type="text" class="mobile-main-search-input" placeholder="البحث عن قناة..." id="mobileMainSearchInput">
                     <i class="fas fa-search mobile-main-search-icon"></i>
                 </div>
+                <button class="mobile-update-btn" onclick="app.updateChannelsFromGitHub()" title="تحديث القنوات">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -172,7 +175,7 @@
                         <i class="fas fa-cog"></i>
                         <span>الإعدادات</span>
                     </button>
-                    <button class="sidebar-action-btn" onclick="app.manualUpdateChannels()">
+                    <button class="sidebar-action-btn" onclick="app.updateChannelsFromGitHub()">
                         <i class="fas fa-sync-alt"></i>
                         <span>تحديث القنوات</span>
                     </button>
@@ -282,14 +285,14 @@
                         <span>الإعدادات</span>
                         <i class="fas fa-chevron-left"></i>
                     </button>
+                    <button class="mobile-sidebar-action-btn" onclick="app.updateChannelsFromGitHub(); app.closeMobileMenu();">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>تحديث القنوات</span>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
                     <button class="mobile-sidebar-action-btn" onclick="openAdminPanel(); app.closeMobileMenu();">
                         <i class="fas fa-user-shield"></i>
                         <span>لوحة التحكم</span>
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button class="mobile-sidebar-action-btn" onclick="app.manualUpdateChannels(); app.closeMobileMenu();">
-                        <i class="fas fa-sync-alt"></i>
-                        <span>تحديث القنوات</span>
                         <i class="fas fa-chevron-left"></i>
                     </button>
                 </div>
@@ -736,7 +739,7 @@
                             <i class="fas fa-save"></i>
                             <span>حفظ الإعدادات</span>
                         </button>
-                        <button class="enhanced-save-btn" onclick="app.manualUpdateChannels()" style="background: linear-gradient(45deg, #28a745, #20c997);">
+                        <button class="enhanced-save-btn" onclick="app.updateChannelsFromGitHub()" style="background: linear-gradient(135deg, #28a745, #20c997);">
                             <i class="fas fa-sync-alt"></i>
                             <span>تحديث القنوات من GitHub</span>
                         </button>
