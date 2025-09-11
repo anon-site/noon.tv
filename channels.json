@@ -263,7 +263,7 @@
     "autoQuality": true,
     "autoplay": true,
     "volume": 62,
-    "theme": "light",
+    "theme": "dark",
     "showNewsTicker": false,
     "zoomLevel": 100,
     "colorTheme": "default",
@@ -327,6 +327,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-11T05:52:56.174Z",
+  "lastModified": "2025-09-11T06:01:50.419Z",
   "version": "1.0"
 }
