@@ -200,7 +200,7 @@
     {
       "id": 32,
       "name": "السنة النبوية",
-      "url": "https://cdn-globecast.akamaized.net/live/eds/saudi_sunnah/hls_roku/index.m3u8",
+      "url": "https://www.elahmad.com/tv/m3u8/online_live_14_tv.m3u8?id=sunna_tv&t=11111111",
       "logo": "https://iili.io/Kz8TUYJ.png",
       "category": "religious",
       "country": "السعودية",
@@ -342,12 +342,12 @@
     "showNewsTicker": false,
     "zoomLevel": 100,
     "colorTheme": "default",
-    "layoutMode": "grid",
+    "layoutMode": "compact",
     "fontSize": "small",
     "animationsEnabled": true,
     "compactMode": true,
     "highContrast": false,
-    "borderRadius": "normal",
+    "borderRadius": "rounded",
     "notificationsEnabled": false,
     "notificationDuration": 3,
     "showCustomControls": true,
@@ -393,10 +393,15 @@
     },
     {
       "key": "movies",
-      "name": "أفلام",
+      "name": "الأفلام",
       "icon": "fas fa-film"
+    },
+    {
+      "key": "documentary",
+      "name": "الوثائقية",
+      "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-12T13:00:42.543Z",
+  "lastModified": "2025-09-12T13:01:35.961Z",
   "version": "1.0"
 }
