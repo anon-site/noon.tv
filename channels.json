@@ -398,10 +398,21 @@
     "colorTheme": "default",
     "layoutMode": "compact",
     "fontSize": "small",
-    "animationsEnabled": false,
+    "animationsEnabled": true,
     "compactMode": true,
     "highContrast": false,
-    "borderRadius": "rounded"
+    "borderRadius": "rounded",
+    "notificationsEnabled": false,
+    "notificationDuration": 3,
+    "showCustomControls": true,
+    "notifications": false,
+    "notificationSound": false,
+    "showChannelImages": false,
+    "updateNotifications": true,
+    "successNotifications": true,
+    "errorNotifications": true,
+    "infoNotifications": true,
+    "notificationPosition": "top-right"
   },
   "categories": [
     {
@@ -436,15 +447,10 @@
     },
     {
       "key": "movies",
-      "name": "الأفلام",
+      "name": "أفلام",
       "icon": "fas fa-film"
-    },
-    {
-      "key": "documentary",
-      "name": "الوثائقية",
-      "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-13T04:52:13.336Z",
+  "lastModified": "2025-09-13T04:53:25.015Z",
   "version": "1.0"
 }
