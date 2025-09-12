@@ -345,7 +345,7 @@
       "id": 57,
       "name": "البحرين قرآن",
       "url": "https://5c7b683162943.streamlock.net/live/ngrp:bahrainquran_all/playlist.m3u8",
-      "logo": "https://5c7b683162943.streamlock.net/live/ngrp:bahrainquran_all/playlist.m3u8",
+      "logo": "https://qanawat.taghtia.com/assets/channels/bahrain-quran.png",
       "category": "religious",
       "country": "البحرين",
       "type": "hls"
@@ -398,7 +398,7 @@
     "colorTheme": "default",
     "layoutMode": "compact",
     "fontSize": "small",
-    "animationsEnabled": true,
+    "animationsEnabled": false,
     "compactMode": true,
     "highContrast": false,
     "borderRadius": "rounded",
@@ -447,15 +447,10 @@
     },
     {
       "key": "movies",
-      "name": "الأفلام",
+      "name": "أفلام",
       "icon": "fas fa-film"
-    },
-    {
-      "key": "documentary",
-      "name": "الوثائقية",
-      "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-13T02:47:47.917Z",
+  "lastModified": "2025-09-13T02:52:59.171Z",
   "version": "1.0"
 }
