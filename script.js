@@ -3366,6 +3366,7 @@ class ArabicTVApp {
         this.openDiagnosticModal();
     }
 
+<<<<<<< HEAD
     // وظيفة حذف جميع الكوكيز
     deleteAllCookies() {
         // عرض نافذة تأكيد
@@ -3507,6 +3508,8 @@ class ArabicTVApp {
         return !welcomeShown && !hasChannels;
     }
 
+=======
+>>>>>>> parent of 917e233 (حذف الكوكيز)
     openDiagnosticModal() {
         // Log to console for developers
         console.log('=== تشخيص التخزين ===');

@@ -7809,6 +7809,7 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     color: #8b5cf6;
 }
 
+<<<<<<< HEAD
 /* Cookie Delete Button */
 .cookie-delete-btn {
     background: linear-gradient(45deg, #dc2626, #ef4444);
@@ -8104,6 +8105,8 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     animation: pulse 2s infinite;
 }
 
+=======
+>>>>>>> parent of 917e233 (حذف الكوكيز)
 .backup-info {
     background: rgba(15, 52, 96, 0.1);
     padding: 20px;
