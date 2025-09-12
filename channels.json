@@ -200,7 +200,7 @@
     {
       "id": 32,
       "name": "السنة النبوية",
-      "url": "https://live.kwikmotion.com/ksasunnalive/ksasunna.smil/ksasunnapublish/ksasunna_360p/hdntl=exp=1757732581~acl=%2fksasunnalive%2fksasunna.smil%2f*~data=hdntl~hmac=fc0dc0a9cdd88f2adffbbbf8c00b5b04c76edba300d1ff37da110aacc4b0a18e/chunks_dvr.m3u8",
+      "url": "https://www.elahmad.com/tv/m3u8/online_live_14_tv.m3u8?id=sunna_tv&t=11111111",
       "logo": "https://iili.io/Kz8TUYJ.png",
       "category": "religious",
       "country": "السعودية",
@@ -402,6 +402,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-12T13:03:30.418Z",
+  "lastModified": "2025-09-12T13:03:53.454Z",
   "version": "1.0"
 }
