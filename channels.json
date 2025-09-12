@@ -367,6 +367,15 @@
       "category": "entertainment",
       "country": "فلسطين",
       "type": "hls"
+    },
+    {
+      "id": 60,
+      "name": "المدينة",
+      "url": "https://streaming.zaytonatube.com:8081/AlMadinatv/almadina21/index.m3u8",
+      "logo": "https://streaming.zaytonatube.com:8081/AlMadinatv/almadina21/index.m3u8",
+      "category": "entertainment",
+      "country": "فلسطين",
+      "type": "hls"
     }
   ],
   "favorites": [],
@@ -438,6 +447,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-12T13:28:53.724Z",
+  "lastModified": "2025-09-12T13:30:31.338Z",
   "version": "1.0"
 }
