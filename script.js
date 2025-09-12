@@ -3529,6 +3529,71 @@ class ArabicTVApp {
         this.openDiagnosticModal();
     }
 
+    // وظيفة حذف جميع الكوكيز
+    deleteAllCookies() {
+        // عرض نافذة تأكيد
+        const confirmDelete = confirm(
+            'هل أنت متأكد من حذف جميع الكوكيز؟\n\n' +
+            'سيتم حذف:\n' +
+            '• جميع الكوكيز المحفوظة في المتصفح\n' +
+            '• بيانات الجلسة (Session Storage)\n' +
+            '• البيانات المحلية (Local Storage)\n\n' +
+            'هذا الإجراء لا يمكن التراجع عنه!'
+        );
+
+        if (!confirmDelete) {
+            return;
+        }
+
+        try {
+            // حذف جميع الكوكيز
+            this.deleteAllCookiesFromBrowser();
+            
+            // حذف Local Storage
+            localStorage.clear();
+            
+            // حذف Session Storage
+            sessionStorage.clear();
+            
+            // إعادة تحميل الصفحة لتطبيق التغييرات
+            this.notifySuccess('تم حذف جميع الكوكيز والبيانات المحفوظة بنجاح!', 'تم الحذف');
+            
+            // إعادة تحميل الصفحة بعد تأخير قصير
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+            
+        } catch (error) {
+            console.error('خطأ في حذف الكوكيز:', error);
+            this.notifyError('حدث خطأ أثناء حذف الكوكيز: ' + error.message, 'خطأ');
+        }
+    }
+
+    // وظيفة مساعدة لحذف الكوكيز من المتصفح
+    deleteAllCookiesFromBrowser() {
+        // الحصول على جميع الكوكيز
+        const cookies = document.cookie.split(";");
+        
+        // حذف كل كوكي
+        for (let cookie of cookies) {
+            const eqPos = cookie.indexOf("=");
+            const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
+            
+            // حذف الكوكي للدومين الحالي
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+            
+            // حذف الكوكي للدومين الحالي مع www
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=" + window.location.hostname;
+            
+            // حذف الكوكي للدومين الحالي بدون www
+            const domain = window.location.hostname.replace(/^www\./, '');
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=" + domain;
+            
+            // حذف الكوكي للدومين الحالي مع www
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=." + domain;
+        }
+    }
+
     openDiagnosticModal() {
         // Log to console for developers
         console.log('=== تشخيص التخزين ===');

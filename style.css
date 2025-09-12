@@ -7809,6 +7809,50 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     color: #8b5cf6;
 }
 
+/* Cookie Delete Button */
+.cookie-delete-btn {
+    background: linear-gradient(45deg, #dc2626, #ef4444);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: inherit;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+}
+
+.cookie-delete-btn:hover {
+    background: linear-gradient(45deg, #b91c1c, #dc2626);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+}
+
+.cookie-delete-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.3);
+}
+
+.cookie-delete-btn i {
+    font-size: 1.1rem;
+}
+
+/* Light theme for cookie delete button */
+body[data-theme="light"] .cookie-delete-btn {
+    background: linear-gradient(45deg, #dc2626, #ef4444);
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.2);
+}
+
+body[data-theme="light"] .cookie-delete-btn:hover {
+    background: linear-gradient(45deg, #b91c1c, #dc2626);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
 .backup-info {
     background: rgba(15, 52, 96, 0.1);
     padding: 20px;
