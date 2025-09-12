@@ -398,7 +398,7 @@
     "colorTheme": "default",
     "layoutMode": "compact",
     "fontSize": "small",
-    "animationsEnabled": true,
+    "animationsEnabled": false,
     "compactMode": true,
     "highContrast": false,
     "borderRadius": "rounded",
@@ -447,15 +447,10 @@
     },
     {
       "key": "movies",
-      "name": "الأفلام",
+      "name": "أفلام",
       "icon": "fas fa-film"
-    },
-    {
-      "key": "documentary",
-      "name": "الوثائقية",
-      "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-13T02:34:07.855Z",
+  "lastModified": "2025-09-13T02:46:41.145Z",
   "version": "1.0"
 }
