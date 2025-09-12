@@ -36,6 +36,16 @@ class ArabicTVApp {
         this.showFavoritesOnly = false; // Track favorites filter
         this.categories = this.getDefaultCategories(); // Track categories
         
+        // Channel change tracking system
+        this.channelChangeTracker = {
+            lastUpdateTime: null,
+            previousChannels: [],
+            newChannels: [],
+            updatedChannels: [],
+            removedChannels: [],
+            changeHistory: []
+        };
+        
         // Remote Storage Configuration
         this.remoteStorage = {
             enabled: false,
@@ -78,6 +88,9 @@ class ArabicTVApp {
         this.updateNavigationTabs(); // Update navigation tabs
         this.updateSidebarCounts(); // Update sidebar counts
         this.hideLoading();
+        
+        // فحص التحديثات المتاحة عند فتح التطبيق
+        this.checkForUpdatesOnStartup();
         
         // تشخيص أولي
         console.log('تم تهيئة التطبيق مع', this.channels.length, 'قناة');
@@ -1363,7 +1376,20 @@ class ArabicTVApp {
         this.renderAdminChannels();
         
         this.resetAddChannelForm();
-        this.showNotification('success', 'تم إضافة القناة', 'تم إضافة القناة بنجاح وحفظها!');
+        
+        // إظهار إشعار محسن للقناة الجديدة
+        this.showEnhancedNotification(
+            'قناة جديدة! 🆕',
+            `تمت إضافة قناة "${name}" بنجاح!`,
+            'success',
+            5000,
+            {
+                showDetails: true,
+                channels: [newChannel],
+                actionText: 'عرض القناة الجديدة',
+                actionCallback: () => this.highlightNewChannels([newChannel])
+            }
+        );
     }
 
     resetAddChannelForm() {
@@ -1491,7 +1517,20 @@ class ArabicTVApp {
         // Reset editing state and form
         this.resetAddChannelForm();
         
-        this.showNotification('success', 'تم تحديث القناة', 'تم تحديث القناة وحفظ التغييرات بنجاح!');
+        // إظهار إشعار محسن للقناة المحدثة
+        const updatedChannel = this.channels[channelIndex];
+        this.showEnhancedNotification(
+            'تحديث القناة! 🔄',
+            `تم تحديث قناة "${name}" بنجاح!`,
+            'info',
+            5000,
+            {
+                showDetails: true,
+                channels: [updatedChannel],
+                actionText: 'عرض التحديثات',
+                actionCallback: () => this.highlightUpdatedChannels([updatedChannel])
+            }
+        );
         
         // Switch back to channels list tab
         this.switchAdminTab('channels');
@@ -3730,6 +3769,405 @@ class ArabicTVApp {
         return this.showNotification(title, message, 'info');
     }
 
+    // ===== Channel Change Tracking System =====
+    
+    // حفظ حالة القنوات الحالية قبل التحديث
+    saveCurrentChannelsState() {
+        this.channelChangeTracker.previousChannels = this.channels.map(channel => ({
+            id: channel.id,
+            name: channel.name,
+            url: channel.url,
+            logo: channel.logo,
+            category: channel.category,
+            country: channel.country
+        }));
+        this.channelChangeTracker.lastUpdateTime = new Date().toISOString();
+    }
+
+    // مقارنة القنوات وتحديد التغييرات
+    analyzeChannelChanges(newChannels) {
+        const previous = this.channelChangeTracker.previousChannels;
+        const current = newChannels;
+        
+        // إعادة تعيين التغييرات
+        this.channelChangeTracker.newChannels = [];
+        this.channelChangeTracker.updatedChannels = [];
+        this.channelChangeTracker.removedChannels = [];
+
+        // إنشاء خرائط للبحث السريع
+        const previousMap = new Map(previous.map(ch => [ch.id, ch]));
+        const currentMap = new Map(current.map(ch => [ch.id, ch]));
+
+        // البحث عن القنوات الجديدة والمحدثة
+        for (const currentChannel of current) {
+            const previousChannel = previousMap.get(currentChannel.id);
+            
+            if (!previousChannel) {
+                // قناة جديدة
+                this.channelChangeTracker.newChannels.push(currentChannel);
+            } else {
+                // فحص التحديثات
+                const hasChanges = this.hasChannelChanged(previousChannel, currentChannel);
+                if (hasChanges) {
+                    this.channelChangeTracker.updatedChannels.push({
+                        ...currentChannel,
+                        previousData: previousChannel
+                    });
+                }
+            }
+        }
+
+        // البحث عن القنوات المحذوفة
+        for (const previousChannel of previous) {
+            if (!currentMap.has(previousChannel.id)) {
+                this.channelChangeTracker.removedChannels.push(previousChannel);
+            }
+        }
+
+        // حفظ سجل التغييرات
+        this.channelChangeTracker.changeHistory.push({
+            timestamp: new Date().toISOString(),
+            newChannels: this.channelChangeTracker.newChannels.length,
+            updatedChannels: this.channelChangeTracker.updatedChannels.length,
+            removedChannels: this.channelChangeTracker.removedChannels.length
+        });
+
+        // الاحتفاظ بآخر 10 تحديثات فقط
+        if (this.channelChangeTracker.changeHistory.length > 10) {
+            this.channelChangeTracker.changeHistory.shift();
+        }
+    }
+
+    // فحص ما إذا كانت القناة قد تغيرت
+    hasChannelChanged(previous, current) {
+        const fieldsToCheck = ['name', 'url', 'logo', 'category', 'country'];
+        
+        for (const field of fieldsToCheck) {
+            if (previous[field] !== current[field]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // إظهار إشعارات التغييرات
+    showChannelChangeNotifications() {
+        const { newChannels, updatedChannels, removedChannels } = this.channelChangeTracker;
+        
+        // إشعار القنوات الجديدة
+        if (newChannels.length > 0) {
+            this.showNewChannelsNotification(newChannels);
+        }
+
+        // إشعار القنوات المحدثة
+        if (updatedChannels.length > 0) {
+            this.showUpdatedChannelsNotification(updatedChannels);
+        }
+
+        // إشعار القنوات المحذوفة
+        if (removedChannels.length > 0) {
+            this.showRemovedChannelsNotification(removedChannels);
+        }
+
+        // إشعار إجمالي إذا لم تكن هناك تغييرات محددة
+        if (newChannels.length === 0 && updatedChannels.length === 0 && removedChannels.length === 0) {
+            this.notifyInfo('تم تحديث القنوات - لا توجد تغييرات جديدة', 'تحديث القنوات');
+        }
+    }
+
+    // إشعار القنوات الجديدة
+    showNewChannelsNotification(newChannels) {
+        const count = newChannels.length;
+        let message;
+        
+        if (count === 1) {
+            message = `تمت إضافة قناة جديدة: "${newChannels[0].name}"`;
+        } else if (count <= 5) {
+            const names = newChannels.map(ch => ch.name).join('، ');
+            message = `تمت إضافة ${count} قنوات جديدة: ${names}`;
+        } else {
+            message = `تمت إضافة ${count} قنوات جديدة!`;
+        }
+
+        this.showEnhancedNotification(
+            'قنوات جديدة! 🆕',
+            message,
+            'success',
+            8000,
+            {
+                showDetails: count <= 5,
+                channels: newChannels,
+                actionText: 'عرض القنوات الجديدة',
+                actionCallback: () => this.highlightNewChannels(newChannels)
+            }
+        );
+    }
+
+    // إشعار القنوات المحدثة
+    showUpdatedChannelsNotification(updatedChannels) {
+        const count = updatedChannels.length;
+        let message;
+        
+        if (count === 1) {
+            message = `تم تحديث قناة: "${updatedChannels[0].name}"`;
+        } else if (count <= 5) {
+            const names = updatedChannels.map(ch => ch.name).join('، ');
+            message = `تم تحديث ${count} قنوات: ${names}`;
+        } else {
+            message = `تم تحديث ${count} قنوات!`;
+        }
+
+        this.showEnhancedNotification(
+            'تحديث القنوات! 🔄',
+            message,
+            'info',
+            6000,
+            {
+                showDetails: count <= 5,
+                channels: updatedChannels,
+                actionText: 'عرض التحديثات',
+                actionCallback: () => this.highlightUpdatedChannels(updatedChannels)
+            }
+        );
+    }
+
+    // إشعار القنوات المحذوفة
+    showRemovedChannelsNotification(removedChannels) {
+        const count = removedChannels.length;
+        let message;
+        
+        if (count === 1) {
+            message = `تم حذف قناة: "${removedChannels[0].name}"`;
+        } else if (count <= 5) {
+            const names = removedChannels.map(ch => ch.name).join('، ');
+            message = `تم حذف ${count} قنوات: ${names}`;
+        } else {
+            message = `تم حذف ${count} قنوات!`;
+        }
+
+        this.showEnhancedNotification(
+            'قنوات محذوفة! ❌',
+            message,
+            'warning',
+            5000,
+            {
+                showDetails: count <= 5,
+                channels: removedChannels,
+                actionText: 'عرض التفاصيل',
+                actionCallback: () => this.showRemovedChannelsDetails(removedChannels)
+            }
+        );
+    }
+
+    // إشعار محسن مع تفاصيل إضافية
+    showEnhancedNotification(title, message, type, duration, options = {}) {
+        const container = document.getElementById('notificationsContainer');
+        if (!container) return;
+
+        const notification = document.createElement('div');
+        notification.className = 'notification enhanced-notification entering';
+        
+        const notificationId = Date.now() + Math.random();
+        notification.dataset.id = notificationId;
+
+        const icons = {
+            success: '✓',
+            error: '✕',
+            warning: '⚠',
+            info: 'ℹ'
+        };
+
+        let detailsHtml = '';
+        if (options.showDetails && options.channels) {
+            detailsHtml = `
+                <div class="notification-details">
+                    <div class="channels-list">
+                        ${options.channels.map(channel => `
+                            <div class="channel-item">
+                                <img src="${channel.logo}" alt="${channel.name}" class="channel-logo-small" 
+                                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMCAxMkMxNS41ODU4IDEyIDEyIDE1LjU4NTggMTIgMjBDMTIgMjQuNDE0MiAxNS41ODU4IDI4IDIwIDI4QzI0LjQxNDIgMjggMjggMjQuNDE0MiAyOCAyMEMyOCAxNS41ODU4IDI0LjQxNDIgMTIgMjAgMTJaIiBmaWxsPSIjNjY3Nzg4Ii8+CjxwYXRoIGQ9Ik0yMCAxNkMxOC44OTU0IDE2IDE4IDE2Ljg5NTQgMTggMThWMTlIMjJWMThDMjIgMTYuODk1NCAyMS4xMDQ2IDE2IDIwIDE2WiIgZmlsbD0iI0ZGRkZGRiIvPgo8cGF0aCBkPSJNMjAgMjJDMjAuNTUyMyAyMiAyMSAyMS41NTIzIDIxIDIxQzIxIDIwLjQ0NzcgMjAuNTUyMyAyMCAyMCAyMEMxOS40NDc3IDIwIDE5IDIwLjQ0NzcgMTkgMjFDMjAgMjEuNTUyMyAxOS40NDc3IDIyIDIwIDIyWiIgZmlsbD0iI0ZGRkZGRiIvPgo8L3N2Zz4K'">
+                                <span class="channel-name">${channel.name}</span>
+                                <span class="channel-category">${this.getCategoryName(channel.category)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    ${options.actionText ? `
+                        <button class="notification-action-btn" onclick="window.app.handleNotificationAction('${notificationId}')">
+                            ${options.actionText}
+                        </button>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        notification.innerHTML = `
+            <div class="notification-icon ${type}">
+                ${icons[type]}
+            </div>
+            <div class="notification-content">
+                <div class="notification-title">${title}</div>
+                <div class="notification-message">${message}</div>
+                ${detailsHtml}
+            </div>
+            <button class="notification-close" onclick="window.app.closeNotification('${notificationId}')">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+
+        // حفظ callback للعمل
+        if (options.actionCallback) {
+            notification.dataset.actionCallback = 'true';
+            this.notificationActions = this.notificationActions || {};
+            this.notificationActions[notificationId] = options.actionCallback;
+        }
+
+        container.appendChild(notification);
+
+        // إضافة تأثير الدخول
+        setTimeout(() => {
+            notification.classList.remove('entering');
+            notification.classList.add('entered');
+        }, 100);
+
+        // إزالة تلقائية
+        if (duration > 0) {
+            setTimeout(() => {
+                this.closeNotification(notificationId);
+            }, duration);
+        }
+
+        return notificationId;
+    }
+
+    // معالجة إجراءات الإشعارات
+    handleNotificationAction(notificationId) {
+        if (this.notificationActions && this.notificationActions[notificationId]) {
+            this.notificationActions[notificationId]();
+            this.closeNotification(notificationId);
+        }
+    }
+
+    // تسليط الضوء على القنوات الجديدة
+    highlightNewChannels(newChannels) {
+        const channelIds = newChannels.map(ch => ch.id);
+        
+        // إزالة التمييز السابق
+        document.querySelectorAll('.channel-card.highlighted').forEach(card => {
+            card.classList.remove('highlighted', 'new-channel');
+        });
+
+        // تسليط الضوء على القنوات الجديدة
+        channelIds.forEach(id => {
+            const channelCard = document.querySelector(`[data-channel-id="${id}"]`);
+            if (channelCard) {
+                channelCard.classList.add('highlighted', 'new-channel');
+                
+                // إزالة التمييز بعد 5 ثوان
+                setTimeout(() => {
+                    channelCard.classList.remove('highlighted', 'new-channel');
+                }, 5000);
+            }
+        });
+
+        // إظهار رسالة تأكيد
+        this.notifyInfo('تم تسليط الضوء على القنوات الجديدة', 'تمييز القنوات');
+    }
+
+    // تسليط الضوء على القنوات المحدثة
+    highlightUpdatedChannels(updatedChannels) {
+        const channelIds = updatedChannels.map(ch => ch.id);
+        
+        // إزالة التمييز السابق
+        document.querySelectorAll('.channel-card.highlighted').forEach(card => {
+            card.classList.remove('highlighted', 'updated-channel');
+        });
+
+        // تسليط الضوء على القنوات المحدثة
+        channelIds.forEach(id => {
+            const channelCard = document.querySelector(`[data-channel-id="${id}"]`);
+            if (channelCard) {
+                channelCard.classList.add('highlighted', 'updated-channel');
+                
+                // إزالة التمييز بعد 5 ثوان
+                setTimeout(() => {
+                    channelCard.classList.remove('highlighted', 'updated-channel');
+                }, 5000);
+            }
+        });
+
+        // إظهار رسالة تأكيد
+        this.notifyInfo('تم تسليط الضوء على القنوات المحدثة', 'تمييز التحديثات');
+    }
+
+    // عرض تفاصيل القنوات المحذوفة
+    showRemovedChannelsDetails(removedChannels) {
+        const details = removedChannels.map(ch => 
+            `• ${ch.name} (${this.getCategoryName(ch.category)})`
+        ).join('\n');
+
+        alert(`القنوات المحذوفة:\n\n${details}`);
+    }
+
+    // الحصول على اسم الفئة
+    getCategoryName(categoryKey) {
+        const category = this.categories.find(cat => cat.key === categoryKey);
+        return category ? category.name : categoryKey;
+    }
+
+    // فحص التحديثات المتاحة عند فتح التطبيق
+    async checkForUpdatesOnStartup() {
+        try {
+            // فحص آخر وقت تحديث محفوظ
+            const lastCheck = localStorage.getItem('lastUpdateCheck');
+            const now = new Date().getTime();
+            const oneHour = 60 * 60 * 1000; // ساعة واحدة بالملي ثانية
+            
+            // إذا مرت أقل من ساعة، لا نفحص مرة أخرى
+            if (lastCheck && (now - parseInt(lastCheck)) < oneHour) {
+                return;
+            }
+            
+            // حفظ وقت الفحص الحالي
+            localStorage.setItem('lastUpdateCheck', now.toString());
+            
+            // جلب البيانات من GitHub
+            const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json');
+            if (!response.ok) return;
+            
+            const data = await response.json();
+            if (!data.channels || !Array.isArray(data.channels)) return;
+            
+            // مقارنة عدد القنوات
+            const currentCount = this.channels.length;
+            const remoteCount = data.channels.length;
+            
+            if (remoteCount > currentCount) {
+                const newChannelsCount = remoteCount - currentCount;
+                this.showUpdateAvailableNotification(newChannelsCount);
+            }
+            
+        } catch (error) {
+            console.log('فشل في فحص التحديثات:', error);
+        }
+    }
+
+    // إشعار التحديثات المتاحة
+    showUpdateAvailableNotification(newChannelsCount) {
+        this.showEnhancedNotification(
+            'تحديثات متاحة! 🔔',
+            `يوجد ${newChannelsCount} قناة جديدة متاحة للتحديث`,
+            'info',
+            10000,
+            {
+                showDetails: false,
+                actionText: 'تحديث الآن',
+                actionCallback: () => {
+                    updateChannels();
+                }
+            }
+        );
+    }
+
     // وظائف ترتيب القنوات
     addDragListeners(item) {
         item.addEventListener('dragstart', (e) => {
@@ -5426,6 +5864,9 @@ async function updateChannels() {
     }
 
     try {
+        // حفظ حالة القنوات الحالية قبل التحديث
+        window.app.saveCurrentChannelsState();
+        
         // Show loading notification
         window.app.notifyInfo('جاري تحديث القنوات من GitHub...', 3000);
         
@@ -5441,6 +5882,9 @@ async function updateChannels() {
         if (!data.channels || !Array.isArray(data.channels)) {
             throw new Error('تنسيق البيانات غير صحيح');
         }
+        
+        // تحليل التغييرات في القنوات
+        window.app.analyzeChannelChanges(data.channels);
         
         // Update channels in the app
         window.app.channels = data.channels;
@@ -5461,13 +5905,15 @@ async function updateChannels() {
         window.app.renderChannels();
         window.app.updateSidebarCounts();
         
-        // Show success notification
-        window.app.notifySuccess(`تم تحديث القنوات بنجاح! تم جلب ${data.channels.length} قناة`, 5000);
+        // إظهار إشعارات التغييرات المفصلة
+        window.app.showChannelChangeNotifications();
         
         // Log confirmation that data was saved
         console.log('✅ تم حفظ القنوات المحدثة في localStorage بنجاح');
         
-        console.log('تم تحديث القنوات بنجاح:', data.channels.length, 'قناة');
+        // تسجيل إحصائيات التحديث
+        const { newChannels, updatedChannels, removedChannels } = window.app.channelChangeTracker;
+        console.log(`📊 إحصائيات التحديث: ${newChannels.length} جديد، ${updatedChannels.length} محدث، ${removedChannels.length} محذوف`);
         
     } catch (error) {
         console.error('خطأ في تحديث القنوات:', error);
