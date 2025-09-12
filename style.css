@@ -7854,6 +7854,7 @@ body[data-theme="light"] .cookie-delete-btn:hover {
     box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
 }
 
+<<<<<<< HEAD
 /* Welcome Modal Styles */
 .welcome-content {
     max-width: 600px;
@@ -8107,6 +8108,8 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
 
 =======
 >>>>>>> parent of 917e233 (حذف الكوكيز)
+=======
+>>>>>>> parent of a567bab (رسالة والافتراضية)
 .backup-info {
     background: rgba(15, 52, 96, 0.1);
     padding: 20px;
