@@ -233,7 +233,6 @@ class ArabicTVApp {
         this.bindEvents();
         this.bindRemoteStorageEvents();
         this.setupMobileSearch();
-        this.setupRepositoryAutoSuggest();
         this.setupPictureInPictureEvents();
         this.checkAndSetupPictureInPicture();
         
@@ -2518,6 +2517,7 @@ class ArabicTVApp {
         }
     }
 
+<<<<<<< HEAD
     // ===== Setup Wizard Functions =====
     
     openRepositoryCreation(provider) {
@@ -3317,6 +3317,8 @@ class ArabicTVApp {
         }
     }
 
+=======
+>>>>>>> parent of 17f6d5f (33)
     saveRemoteStorageSettingsUI() {
         this.saveRemoteStorageSettings();
         this.notifySuccess('تم حفظ إعدادات التخزين السحابي!');
@@ -5388,20 +5390,6 @@ function openIPTVChecker() {
 
 function closeModal() {
     app.closeModal();
-}
-
-function closeSetupHelp() {
-    const modal = document.getElementById('setupHelpModal');
-    if (modal) {
-        modal.style.display = 'none';
-    }
-}
-
-function closeAutoDetect() {
-    const modal = document.getElementById('autoDetectModal');
-    if (modal) {
-        modal.style.display = 'none';
-    }
 }
 
 function toggleQuality() {
