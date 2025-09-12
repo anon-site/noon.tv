@@ -1247,6 +1247,59 @@
         <div class="modal-overlay"></div>
     </div>
 
+    <!-- Welcome Modal -->
+    <div class="modal" id="welcomeModal">
+        <div class="modal-content welcome-content">
+            <div class="welcome-header">
+                <div class="welcome-icon">
+                    <i class="fas fa-satellite-dish"></i>
+                </div>
+                <h2>مرحباً بك في القنوات العربية</h2>
+                <p>أهلاً وسهلاً بك في منصة القنوات الفضائية العربية</p>
+            </div>
+            <div class="welcome-body">
+                <div class="welcome-step">
+                    <div class="step-icon">
+                        <i class="fas fa-list"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>1. افتح القائمة</h3>
+                        <p>انقر على زر القائمة في أعلى الصفحة</p>
+                    </div>
+                </div>
+                <div class="welcome-step">
+                    <div class="step-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>2. اضغط على "تحديث القنوات"</h3>
+                        <p>سيتم تحميل جميع القنوات المتاحة تلقائياً</p>
+                    </div>
+                </div>
+                <div class="welcome-step">
+                    <div class="step-icon">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>3. استمتع بالمشاهدة</h3>
+                        <p>اختر القناة التي تريدها واستمتع بالمشاهدة</p>
+                    </div>
+                </div>
+            </div>
+            <div class="welcome-footer">
+                <button class="welcome-btn primary" onclick="closeWelcomeModal()">
+                    <i class="fas fa-check"></i>
+                    فهمت، دعني أبدأ
+                </button>
+                <button class="welcome-btn secondary" onclick="showWelcomeHelp()">
+                    <i class="fas fa-question-circle"></i>
+                    أحتاج مساعدة
+                </button>
+            </div>
+        </div>
+        <div class="modal-overlay"></div>
+    </div>
+
     <!-- Notifications Container -->
     <div class="notifications-container" id="notificationsContainer"></div>
 

@@ -1,177 +1,7 @@
 // Arabic Satellite TV Channels Application
 class ArabicTVApp {
     constructor() {
-        this.channels = [
-            // News Channels
-            {
-                id: 1,
-                name: "الجزيرة",
-                logo: "https://i.imgur.com/7bRVpnu.png",
-                url: "https://live-hls-web-aje.getaj.net/AJE/01.m3u8",
-                category: "news",
-                country: "قطر"
-            },
-            {
-                id: 2,
-                name: "العربية",
-                logo: "https://i.imgur.com/Dj16oKL.png",
-                url: "https://live.alarabiya.net/alarabiapublish/alarabiya.smil/playlist.m3u8",
-                category: "news",
-                country: "الإمارات"
-            },
-            {
-                id: 3,
-                name: "سكاي نيوز عربية",
-                logo: "https://i.imgur.com/McQv1xE.png",
-                url: "https://stream.skynewsarabia.com/hls/sna.m3u8",
-                category: "news",
-                country: "الإمارات"
-            },
-            {
-                id: 4,
-                name: "BBC عربي",
-                logo: "https://i.imgur.com/2P4m5Eb.png",
-                url: "https://vs-cmaf-pushb-ww-live.akamaized.net/x=3/i=urn:bbc:pips:service:bbc_arabic_tv/iptv_hd_abr_v1.m3u8",
-                category: "news",
-                country: "بريطانيا"
-            },
-            {
-                id: 5,
-                name: "الحدث",
-                logo: "https://i.imgur.com/8dUS3Ih.png",
-                url: "https://av.alarabiya.net/alarabiapublish/alhadath.smil/playlist.m3u8",
-                category: "news",
-                country: "الإمارات"
-            },
-            
-            // Entertainment Channels
-            {
-                id: 6,
-                name: "MBC 1",
-                logo: "https://i.imgur.com/eKKOX8x.png",
-                url: "https://mbc1-enc.edgenextcdn.net/out/v1/84ab37e99d6e4b16b33c6600ace5daa6/index.m3u8",
-                category: "entertainment",
-                country: "الإمارات"
-            },
-            {
-                id: 7,
-                name: "MBC 4",
-                logo: "https://i.imgur.com/pfF61uH.png",
-                url: "https://mbc4-prod-dub-ak.akamaized.net/out/v1/c08681f81775496ab4afa2ee7ef2a4a6/index.m3u8",
-                category: "entertainment",
-                country: "الإمارات"
-            },
-            {
-                id: 8,
-                name: "روتانا سينما",
-                logo: "https://i.imgur.com/X1h2ML8.png",
-                url: "https://rotana-cinema.hibridmedia.com/live/rotana-cinema/playlist.m3u8",
-                category: "entertainment",
-                country: "السعودية"
-            },
-            {
-                id: 9,
-                name: "أبو ظبي الأولى",
-                logo: "https://i.imgur.com/5XV8bXB.png",
-                url: "https://vo-live.cdb.cdn.orange.com/Content/Channel/AbuDhabiChannel/HLS/index.m3u8",
-                category: "entertainment",
-                country: "الإمارات"
-            },
-            {
-                id: 10,
-                name: "دبي",
-                logo: "https://i.imgur.com/H1PfYOY.png",
-                url: "https://dmisxthvll.cdn.mangomolo.com/dubaitv/smil:dubaitv.stream.smil/playlist.m3u8",
-                category: "entertainment",
-                country: "الإمارات"
-            },
-            
-            // Sports Channels
-            {
-                id: 11,
-                name: "بي إن سبورت 1",
-                logo: "https://i.imgur.com/6BVWk8z.png",
-                url: "https://webhdrus.onlinehdhls.ru/lb/premium132/index.m3u8",
-                category: "sports",
-                country: "قطر"
-            },
-            {
-                id: 12,
-                name: "بي إن سبورت 2",
-                logo: "https://i.imgur.com/JkbAMnU.png",
-                url: "https://webhdrus.onlinehdhls.ru/lb/premium133/index.m3u8",
-                category: "sports",
-                country: "قطر"
-            },
-            {
-                id: 13,
-                name: "أبو ظبي الرياضية",
-                logo: "https://i.imgur.com/ooyKqbW.png",
-                url: "https://vo-live.cdb.cdn.orange.com/Content/Channel/AbuDhabiSportsChannel/HLS/index.m3u8",
-                category: "sports",
-                country: "الإمارات"
-            },
-            {
-                id: 14,
-                name: "دبي الرياضية",
-                logo: "https://i.imgur.com/UdxqMQh.png",
-                url: "https://dmithrvll.cdn.mangomolo.com/dubaisports/smil:dubaisports.stream.smil/playlist.m3u8",
-                category: "sports",
-                country: "الإمارات"
-            },
-            
-            // Religious Channels
-            {
-                id: 15,
-                name: "المجد للقرآن الكريم",
-                logo: "https://i.imgur.com/fNA3O4y.png",
-                url: "https://live.al-majd.net/live/MajdQuraan/chunklist.m3u8",
-                category: "religious",
-                country: "السعودية"
-            },
-            {
-                id: 16,
-                name: "قناة السنة النبوية",
-                logo: "https://i.imgur.com/GF9Nq2x.png",
-                url: "https://svs.itworkscdn.net/sunnah/sunnah/chunklist.m3u8",
-                category: "religious",
-                country: "السعودية"
-            },
-            {
-                id: 17,
-                name: "الرسالة",
-                logo: "https://i.imgur.com/8gJ4KhP.png",
-                url: "https://live.al-resalah.net/live/alresalah/chunklist.m3u8",
-                category: "religious",
-                country: "لبنان"
-            },
-            
-            // Music Channels
-            {
-                id: 18,
-                name: "روتانا موسيقى",
-                logo: "https://i.imgur.com/WaFdYon.png",
-                url: "https://rotana-music.hibridmedia.com/live/rotana-music/playlist.m3u8",
-                category: "music",
-                country: "السعودية"
-            },
-            {
-                id: 19,
-                name: "نغم",
-                logo: "https://i.imgur.com/T4Q6XLV.png",
-                url: "https://f24hls-i.akamaihd.net/hls/live/221147/NAGH/playlist.m3u8",
-                category: "music",
-                country: "لبنان"
-            },
-            {
-                id: 20,
-                name: "MTV لبنان",
-                logo: "https://i.imgur.com/5Q8zBUN.png",
-                url: "https://live.mtv.com.lb/hls/live/578407/Live/playlist.m3u8",
-                category: "music",
-                country: "لبنان"
-            }
-        ];
+        this.channels = [];
 
         this.currentChannel = null;
         this.hls = null;
@@ -251,6 +81,13 @@ class ArabicTVApp {
         
         // تشخيص أولي
         console.log('تم تهيئة التطبيق مع', this.channels.length, 'قناة');
+        
+        // إظهار الرسالة الترحيبية إذا لزم الأمر
+        if (this.shouldShowWelcome()) {
+            setTimeout(() => {
+                this.showWelcomeModal();
+            }, 1000); // تأخير قصير لضمان تحميل الصفحة بالكامل
+        }
     }
 
     async loadDataFromFile() {
@@ -1737,15 +1574,15 @@ class ArabicTVApp {
                 }
             }
             
-            // إذا لم توجد قنوات محفوظة أو كانت فارغة، احفظ القنوات الافتراضية
-            console.log('لا توجد قنوات محفوظة، سيتم حفظ القنوات الافتراضية');
+            // إذا لم توجد قنوات محفوظة أو كانت فارغة، احفظ القنوات الفارغة
+            console.log('لا توجد قنوات محفوظة، سيتم حفظ القنوات الفارغة');
             this.saveChannelsToStorage();
             // تحديث عداد القنوات
             this.updateSidebarCounts();
         
         } catch (error) {
             console.error('خطأ في تحميل القنوات المحفوظة:', error);
-            console.log('سيتم استخدام القنوات الافتراضية وحفظها');
+            console.log('سيتم استخدام القنوات الفارغة وحفظها');
             this.saveChannelsToStorage();
             // تحديث عداد القنوات
             this.updateSidebarCounts();
@@ -3594,6 +3431,82 @@ class ArabicTVApp {
         }
     }
 
+    // وظائف النافذة الترحيبية
+    showWelcomeModal() {
+        const modal = document.getElementById('welcomeModal');
+        if (modal) {
+            modal.classList.add('active');
+            // إضافة تأثيرات بصرية
+            setTimeout(() => {
+                modal.style.opacity = '1';
+                modal.style.transform = 'scale(1)';
+            }, 10);
+        }
+    }
+
+    closeWelcomeModal() {
+        const modal = document.getElementById('welcomeModal');
+        if (modal) {
+            modal.classList.remove('active');
+            // حفظ أن المستخدم شاهد الرسالة الترحيبية
+            localStorage.setItem('welcomeShown', 'true');
+        }
+    }
+
+    showWelcomeHelp() {
+        // إغلاق النافذة الترحيبية
+        this.closeWelcomeModal();
+        
+        // فتح القائمة الجانبية
+        this.toggleSidebar();
+        
+        // إظهار رسالة توجيهية مع تسليط الضوء على زر التحديث
+        this.notifyInfo(
+            'انقر على "تحديث القنوات" في القائمة الجانبية لتحميل القنوات المتاحة',
+            'تحديث القنوات',
+            6000
+        );
+        
+        // تسليط الضوء على زر تحديث القنوات
+        setTimeout(() => {
+            this.highlightUpdateButton();
+        }, 1000);
+    }
+
+    // تسليط الضوء على زر تحديث القنوات
+    highlightUpdateButton() {
+        // البحث عن زر تحديث القنوات في القائمة الجانبية
+        const updateButtons = document.querySelectorAll('[onclick="updateChannels()"]');
+        
+        updateButtons.forEach(button => {
+            // إضافة تأثير تسليط الضوء
+            button.style.background = 'linear-gradient(45deg, #ff6b6b, #ff8e8e)';
+            button.style.boxShadow = '0 0 20px rgba(255, 107, 107, 0.6)';
+            button.style.transform = 'scale(1.05)';
+            button.style.transition = 'all 0.3s ease';
+            
+            // إضافة تأثير نبضة
+            button.classList.add('pulse-effect');
+            
+            // إزالة التأثير بعد 5 ثوانٍ
+            setTimeout(() => {
+                button.style.background = '';
+                button.style.boxShadow = '';
+                button.style.transform = '';
+                button.classList.remove('pulse-effect');
+            }, 5000);
+        });
+    }
+
+    // فحص ما إذا كان يجب إظهار الرسالة الترحيبية
+    shouldShowWelcome() {
+        // إظهار الرسالة إذا لم تكن هناك قنوات ولم يسبق للمستخدم رؤية الرسالة
+        const welcomeShown = localStorage.getItem('welcomeShown');
+        const hasChannels = this.channels && this.channels.length > 0;
+        
+        return !welcomeShown && !hasChannels;
+    }
+
     openDiagnosticModal() {
         // Log to console for developers
         console.log('=== تشخيص التخزين ===');
@@ -5374,6 +5287,15 @@ function openConsoleInfo() {
     console.log('الإعدادات:', app.settings);
     console.log('Local Storage:', localStorage);
     app.notifyInfo('تم عرض التفاصيل الكاملة في Console (F12)', 'معلومات المطور');
+}
+
+// وظائف النافذة الترحيبية
+function closeWelcomeModal() {
+    app.closeWelcomeModal();
+}
+
+function showWelcomeHelp() {
+    app.showWelcomeHelp();
 }
 
 // Categories Management Functions
