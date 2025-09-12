@@ -381,7 +381,7 @@
       "id": 61,
       "name": "فلسطيني",
       "url": "https://rp.tactivemedia.com/palestiniantv_source/live/playlist.m3u8",
-      "logo": "https://rp.tactivemedia.com/palestiniantv_source/live/playlist.m3u8",
+      "logo": "https://www.falastini.tv/wp-content/uploads/2017/02/logo.png",
       "category": "entertainment",
       "country": "فلسطين",
       "type": "hls"
@@ -456,6 +456,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-12T13:32:58.012Z",
+  "lastModified": "2025-09-12T13:33:28.902Z",
   "version": "1.0"
 }
