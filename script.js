@@ -2517,7 +2517,6 @@ class ArabicTVApp {
         }
     }
 
-<<<<<<< HEAD
     // ===== Setup Wizard Functions =====
     
     openRepositoryCreation(provider) {
@@ -3317,8 +3316,6 @@ class ArabicTVApp {
         }
     }
 
-=======
->>>>>>> parent of 17f6d5f (33)
     saveRemoteStorageSettingsUI() {
         this.saveRemoteStorageSettings();
         this.notifySuccess('تم حفظ إعدادات التخزين السحابي!');
@@ -3524,7 +3521,6 @@ class ArabicTVApp {
         this.openDiagnosticModal();
     }
 
-<<<<<<< HEAD
     // وظيفة حذف جميع الكوكيز
     deleteAllCookies() {
         // عرض نافذة تأكيد
@@ -3590,7 +3586,6 @@ class ArabicTVApp {
         }
     }
 
-<<<<<<< HEAD
     // وظائف النافذة الترحيبية
     showWelcomeModal() {
         const modal = document.getElementById('welcomeModal');
@@ -3667,10 +3662,6 @@ class ArabicTVApp {
         return !welcomeShown && !hasChannels;
     }
 
-=======
->>>>>>> parent of 917e233 (حذف الكوكيز)
-=======
->>>>>>> parent of a567bab (رسالة والافتراضية)
     openDiagnosticModal() {
         // Log to console for developers
         console.log('=== تشخيص التخزين ===');
