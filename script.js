@@ -887,16 +887,24 @@ class ArabicTVApp {
     }
 
     getCategoryName(category) {
-        const categories = {
-            'news': 'الأخبار',
-            'entertainment': 'الترفيه',
-            'sports': 'الرياضة',
-            'religious': 'الدينية',
-            'music': 'الموسيقى',
-            'movies': 'الأفلام',
-            'documentary': 'الوثائقية'
-        };
-        return categories[category] || category;
+        // First check if it's the 'all' category
+        if (category === 'all') {
+            return 'جميع القنوات';
+        }
+        
+        // Ensure categories are loaded
+        if (!this.categories || this.categories.length === 0) {
+            this.loadCategories();
+        }
+        
+        // Look for the category in the loaded categories
+        const foundCategory = this.categories.find(cat => cat.key === category);
+        if (foundCategory) {
+            return foundCategory.name;
+        }
+        
+        // Fallback to the original category key if not found
+        return category;
     }
 
     filterChannels(category) {
@@ -3598,17 +3606,24 @@ class ArabicTVApp {
     }
 
     getCategoryName(category) {
-        const categoryNames = {
-            'all': 'جميع القنوات',
-            'news': 'الأخبار',
-            'entertainment': 'الترفيه',
-            'sports': 'الرياضة',
-            'religious': 'الدينية',
-            'music': 'الموسيقى',
-            'movies': 'الأفلام',
-            'documentary': 'الوثائقية'
-        };
-        return categoryNames[category] || category;
+        // First check if it's the 'all' category
+        if (category === 'all') {
+            return 'جميع القنوات';
+        }
+        
+        // Ensure categories are loaded
+        if (!this.categories || this.categories.length === 0) {
+            this.loadCategories();
+        }
+        
+        // Look for the category in the loaded categories
+        const foundCategory = this.categories.find(cat => cat.key === category);
+        if (foundCategory) {
+            return foundCategory.name;
+        }
+        
+        // Fallback to the original category key if not found
+        return category;
     }
 
     testLocalStorageAvailability() {
