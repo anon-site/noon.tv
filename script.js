@@ -894,8 +894,7 @@ class ArabicTVApp {
             'religious': 'الدينية',
             'music': 'الموسيقى',
             'movies': 'الأفلام',
-            'documentary': 'الوثائقية',
-            'diversified': 'متنوعة'
+            'documentary': 'الوثائقية'
         };
         return categories[category] || category;
     }
@@ -3607,8 +3606,7 @@ class ArabicTVApp {
             'religious': 'الدينية',
             'music': 'الموسيقى',
             'movies': 'الأفلام',
-            'documentary': 'الوثائقية',
-            'diversified': 'متنوعة'
+            'documentary': 'الوثائقية'
         };
         return categoryNames[category] || category;
     }
