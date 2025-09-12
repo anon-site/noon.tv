@@ -358,6 +358,15 @@
       "category": "entertainment",
       "country": "لبنان",
       "type": "hls"
+    },
+    {
+      "id": 59,
+      "name": "رايا",
+      "url": "https://htvmada.mada.ps:4443/raya/index.m3u8",
+      "logo": "https://htvmada.mada.ps:4443/raya/index.m3u8",
+      "category": "entertainment",
+      "country": "فلسطين",
+      "type": "hls"
     }
   ],
   "favorites": [],
@@ -429,6 +438,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-12T13:26:15.867Z",
+  "lastModified": "2025-09-12T13:28:53.724Z",
   "version": "1.0"
 }
