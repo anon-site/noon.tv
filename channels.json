@@ -447,15 +447,10 @@
     },
     {
       "key": "movies",
-      "name": "الأفلام",
+      "name": "أفلام",
       "icon": "fas fa-film"
-    },
-    {
-      "key": "documentary",
-      "name": "الوثائقية",
-      "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-13T04:59:10.346Z",
+  "lastModified": "2025-09-13T05:34:43.429Z",
   "version": "1.0"
 }
