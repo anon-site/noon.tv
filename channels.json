@@ -398,7 +398,7 @@
     "colorTheme": "default",
     "layoutMode": "compact",
     "fontSize": "small",
-    "animationsEnabled": true,
+    "animationsEnabled": false,
     "compactMode": true,
     "highContrast": false,
     "borderRadius": "rounded",
@@ -456,6 +456,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-13T03:37:44.978Z",
+  "lastModified": "2025-09-13T03:38:04.885Z",
   "version": "1.0"
 }
