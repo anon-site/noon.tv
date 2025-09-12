@@ -6948,8 +6948,6 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     }
     
 }
-<<<<<<< HEAD
-
 /* Setup Wizard Styles */
 .quick-setup-section {
     background: linear-gradient(135deg, rgba(15, 52, 96, 0.1) 0%, rgba(26, 26, 46, 0.1) 100%);
@@ -7825,7 +7823,6 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     color: #8b5cf6;
 }
 
-<<<<<<< HEAD
 /* Cookie Delete Button */
 .cookie-delete-btn {
     background: linear-gradient(45deg, #dc2626, #ef4444);
@@ -7870,7 +7867,6 @@ body[data-theme="light"] .cookie-delete-btn:hover {
     box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
 }
 
-<<<<<<< HEAD
 /* Welcome Modal Styles */
 .welcome-content {
     max-width: 600px;
@@ -8122,10 +8118,6 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     animation: pulse 2s infinite;
 }
 
-=======
->>>>>>> parent of 917e233 (حذف الكوكيز)
-=======
->>>>>>> parent of a567bab (رسالة والافتراضية)
 .backup-info {
     background: rgba(15, 52, 96, 0.1);
     padding: 20px;
@@ -8285,6 +8277,97 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     }
 }
 
+/* Notification Styles */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 16px 20px;
+    min-width: 300px;
+    max-width: 500px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transform: translateX(100%);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
 
-=======
->>>>>>> parent of 17f6d5f (33)
+.notification.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-primary);
+}
+
+.notification-content i {
+    font-size: 1.2rem;
+    width: 20px;
+    text-align: center;
+}
+
+.notification-success {
+    border-left: 4px solid #10b981;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+}
+
+.notification-success .notification-content i {
+    color: #10b981;
+}
+
+.notification-error {
+    border-left: 4px solid #ef4444;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.05));
+}
+
+.notification-error .notification-content i {
+    color: #ef4444;
+}
+
+.notification-info {
+    border-left: 4px solid #3b82f6;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.05));
+}
+
+.notification-info .notification-content i {
+    color: #3b82f6;
+}
+
+.notification-warning {
+    border-left: 4px solid #f59e0b;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.05));
+}
+
+.notification-warning .notification-content i {
+    color: #f59e0b;
+}
+
+/* Light theme notifications */
+body[data-theme="light"] .notification {
+    background: white;
+    border-color: #e2e8f0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .notification-content {
+    color: #1e293b;
+}
+
+/* Mobile responsive notifications */
+@media (max-width: 768px) {
+    .notification {
+        right: 10px;
+        left: 10px;
+        min-width: auto;
+        max-width: none;
+    }
+}
+
+
