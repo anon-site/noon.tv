@@ -363,7 +363,7 @@
       "id": 59,
       "name": "رايا",
       "url": "https://htvmada.mada.ps:4443/raya/index.m3u8",
-      "logo": "https://htvmada.mada.ps:4443/raya/index.m3u8",
+      "logo": "https://rayafruitwater.com/cdn/shop/files/rayafruitwaterdrinklogo55.png?v=1749497356&width=3000",
       "category": "entertainment",
       "country": "فلسطين",
       "type": "hls"
@@ -447,10 +447,15 @@
     },
     {
       "key": "movies",
-      "name": "أفلام",
+      "name": "الأفلام",
       "icon": "fas fa-film"
+    },
+    {
+      "key": "documentary",
+      "name": "الوثائقية",
+      "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-13T02:54:10.329Z",
+  "lastModified": "2025-09-13T02:56:03.976Z",
   "version": "1.0"
 }
