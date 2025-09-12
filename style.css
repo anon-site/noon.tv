@@ -1076,7 +1076,7 @@ body[data-theme="light"] .sidebar-nav-tab.active .tab-count {
 }
 
 .sidebar-action-btn[onclick="updateChannels()"] i {
-    animation: pulse 2s infinite;
+    /* Removed pulse animation */
 }
 
 @keyframes pulse {
@@ -4495,7 +4495,7 @@ body[data-theme="light"] .mobile-sidebar-nav-tab.active {
 }
 
 .mobile-sidebar-action-btn[onclick="updateChannels(); app.closeMobileMenu();"] i {
-    animation: pulse 2s infinite;
+    /* Removed pulse animation */
 }
 
 .mobile-sidebar-action-btn i:first-child {
