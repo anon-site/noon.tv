@@ -5872,6 +5872,21 @@ input:checked + .enhanced-slider:before {
     color: #8b5cf6;
 }
 
+.enhanced-diagnostic-btn.delete-cookies-btn {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    border: 1px solid #dc2626;
+}
+
+.enhanced-diagnostic-btn.delete-cookies-btn:hover {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(220, 38, 38, 0.3);
+}
+
+.enhanced-diagnostic-btn.delete-cookies-btn i {
+    color: #ffffff;
+}
+
 .diagnostic-tools-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
