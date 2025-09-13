@@ -403,6 +403,15 @@
       "category": "kids",
       "country": "عالمية",
       "type": "youtube"
+    },
+    {
+      "id": 65,
+      "name": "المسيرة",
+      "url": "https://live.cdnbridge.tv/Almasirah/Almasirah_all/playlist.m3u8",
+      "logo": "https://iili.io/KTDKWYv.png",
+      "category": "news",
+      "country": "اليمن",
+      "type": "hls"
     }
   ],
   "favorites": [],
@@ -474,6 +483,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-14T03:47:30.147Z",
+  "lastModified": "2025-09-14T03:53:01.064Z",
   "version": "1.0"
 }
