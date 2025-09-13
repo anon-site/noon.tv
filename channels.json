@@ -345,7 +345,7 @@
       "id": 57,
       "name": "البحرين قرآن",
       "url": "https://5c7b683162943.streamlock.net/live/ngrp:bahrainquran_all/playlist.m3u8",
-      "logo": "https://5c7b683162943.streamlock.net/live/ngrp:bahrainquran_all/playlist.m3u8",
+      "logo": "https://qanawat.taghtia.com/assets/channels/bahrain-quran.png",
       "category": "religious",
       "country": "البحرين",
       "type": "hls"
@@ -354,7 +354,7 @@
       "id": 58,
       "name": "الإتحاد",
       "url": "https://live.alittihad.tv:444/ittihad/index.m3u8",
-      "logo": "https://live.alittihad.tv:444/ittihad/index.m3u8",
+      "logo": "https://qanawat.taghtia.com/assets/channels/alittihad.png",
       "category": "entertainment",
       "country": "لبنان",
       "type": "hls"
@@ -363,7 +363,7 @@
       "id": 59,
       "name": "رايا",
       "url": "https://htvmada.mada.ps:4443/raya/index.m3u8",
-      "logo": "https://htvmada.mada.ps:4443/raya/index.m3u8",
+      "logo": "https://rayafruitwater.com/cdn/shop/files/rayafruitwaterdrinklogo55.png?v=1749497356&width=3000",
       "category": "entertainment",
       "country": "فلسطين",
       "type": "hls"
@@ -372,7 +372,7 @@
       "id": 60,
       "name": "المدينة",
       "url": "https://streaming.zaytonatube.com:8081/AlMadinatv/almadina21/index.m3u8",
-      "logo": "https://streaming.zaytonatube.com:8081/AlMadinatv/almadina21/index.m3u8",
+      "logo": "https://almadina.tv/wp-content/uploads/2021/07/logo-.png",
       "category": "entertainment",
       "country": "فلسطين",
       "type": "hls"
@@ -447,10 +447,15 @@
     },
     {
       "key": "movies",
-      "name": "أفلام",
+      "name": "الأفلام",
       "icon": "fas fa-film"
+    },
+    {
+      "key": "documentary",
+      "name": "الوثائقية",
+      "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-13T02:46:41.145Z",
+  "lastModified": "2025-09-13T03:03:57.173Z",
   "version": "1.0"
 }
