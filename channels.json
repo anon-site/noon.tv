@@ -412,6 +412,15 @@
       "category": "news",
       "country": "اليمن",
       "type": "hls"
+    },
+    {
+      "id": 66,
+      "name": "اليمن اليوم",
+      "url": "https://video.yementdy.tv/hls/yementoday.m3u8",
+      "logo": "https://en.yementv.tv/wp-content/uploads/2023/07/logo-4.png",
+      "category": "news",
+      "country": "اليمن",
+      "type": "hls"
     }
   ],
   "favorites": [],
@@ -483,6 +492,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-14T03:55:08.760Z",
+  "lastModified": "2025-09-14T03:57:23.286Z",
   "version": "1.0"
 }
