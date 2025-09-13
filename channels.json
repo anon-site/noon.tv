@@ -28,15 +28,6 @@
       "type": "hls"
     },
     {
-      "id": 5,
-      "name": "العربية",
-      "logo": "https://iili.io/KzkaIj4.png",
-      "url": "https://live.alarabiya.net/alarabiapublish/alarabiya.smil/playlist.m3u8",
-      "category": "news",
-      "country": "الإمارات",
-      "type": "hls"
-    },
-    {
       "id": 9,
       "name": "الشرقية",
       "url": "https://5d94523502c2d.streamlock.net/home/mystream/playlist.m3u8",
@@ -492,6 +483,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-14T05:37:39.613Z",
+  "lastModified": "2025-09-14T05:37:42.256Z",
   "version": "1.0"
 }
