@@ -412,6 +412,15 @@
       "category": "religious",
       "country": "ليبيا",
       "type": "hls"
+    },
+    {
+      "id": 68,
+      "name": "A Punt",
+      "url": "https://bcovlive-a.akamaihd.net/8499d938ef904e39b58a4adec2ddeada/eu-west-1/6057955885001/playlist_dvr.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/8/82/Logotip_d%27%C3%80_Punt_%282017-%29.svg",
+      "category": "news",
+      "country": "إسبانيا",
+      "type": "hls"
     }
   ],
   "favorites": [],
@@ -428,7 +437,18 @@
     "animationsEnabled": false,
     "compactMode": true,
     "highContrast": false,
-    "borderRadius": "rounded"
+    "borderRadius": "rounded",
+    "notificationsEnabled": false,
+    "notificationDuration": 3,
+    "showCustomControls": true,
+    "notifications": false,
+    "notificationSound": false,
+    "showChannelImages": false,
+    "updateNotifications": true,
+    "successNotifications": true,
+    "errorNotifications": true,
+    "infoNotifications": true,
+    "notificationPosition": "top-right"
   },
   "categories": [
     {
@@ -443,8 +463,8 @@
     },
     {
       "key": "entertainment",
-      "name": "المنوعة",
-      "icon": "fas fa-tv"
+      "name": "منوعة",
+      "icon": "fas fa-globe"
     },
     {
       "key": "sports",
@@ -463,15 +483,15 @@
     },
     {
       "key": "movies",
-      "name": "الأفلام",
+      "name": "أفلام",
       "icon": "fas fa-film"
     },
     {
-      "key": "documentary",
-      "name": "الوثائقية",
-      "icon": "fas fa-book-open"
+      "key": "kids",
+      "name": "أطفال",
+      "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-14T09:33:33.047Z",
+  "lastModified": "2025-09-14T09:36:17.890Z",
   "version": "1.0"
 }
