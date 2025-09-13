@@ -2970,9 +2970,10 @@ input:checked + .slider:before {
 
 /* Admin Panel */
 .admin-content {
-    width: 90vw;
-    max-width: 1000px;
-    height: 80vh;
+    width: 95vw;
+    max-width: 1200px;
+    height: 90vh;
+    min-height: 700px;
 }
 
 .admin-tabs {
@@ -2998,7 +2999,7 @@ input:checked + .slider:before {
 }
 
 .admin-body {
-    padding: 2rem;
+    padding: 1.5rem;
     height: calc(100% - 100px);
     overflow-y: auto;
     /* منع الترميش الأبيض */
@@ -3252,6 +3253,7 @@ input:checked + .slider:before {
 /* Add Channel Form */
 .add-channel-form {
     max-width: 400px;
+    padding-bottom: 2rem;
 }
 
 .form-group {
@@ -5053,6 +5055,7 @@ body[data-theme="light"] .mobile-nav-tab.active .tab-count {
     gap: 1rem;
     justify-content: center;
     margin-top: 2rem;
+    padding-bottom: 1rem;
 }
 
 .save-category-btn {
@@ -5698,8 +5701,8 @@ body[data-theme="light"] .merge-btn {
 .settings-section-card {
     background: var(--background-light);
     border: 1px solid var(--border-color);
-    border-radius: 16px;
-    margin-bottom: 2rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -5728,16 +5731,16 @@ body[data-theme="light"] .merge-btn {
 }
 
 .settings-section-content {
-    padding: 2rem;
+    padding: 1.5rem;
 }
 
 .enhanced-setting-item {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    padding: 1.5rem 0;
+    padding: 1rem 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    gap: 2rem;
+    gap: 1.5rem;
 }
 
 .enhanced-setting-item:last-child {
@@ -6568,8 +6571,9 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     }
     
     .admin-content {
-        width: 95vw;
-        height: 90vh;
+        width: 98vw;
+        height: 95vh;
+        max-width: none;
     }
     
     .add-channel-form {
