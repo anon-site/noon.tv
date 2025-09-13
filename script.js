@@ -266,13 +266,8 @@ class ArabicTVApp {
             }
             const data = await response.json();
             
-            // Load channels from JSON file only if no channels exist
-            if (data.channels && Array.isArray(data.channels) && this.channels.length === 0) {
-                this.channels = data.channels;
-                console.log('تم تحميل القنوات من channels.json كـ fallback:', this.channels.length, 'قناة');
-                // Save the loaded channels to localStorage
-                this.saveChannelsToStorage();
-            }
+            // لا نحمل القنوات من JSON file - نبدأ بقائمة فارغة
+            console.log('تم تخطي تحميل القنوات من channels.json - سيتم البدء بقائمة فارغة');
             
             // Load categories from JSON file
             if (data.categories && Array.isArray(data.categories)) {
@@ -1729,16 +1724,16 @@ class ArabicTVApp {
                 }
             }
             
-            // إذا لم توجد قنوات محفوظة أو كانت فارغة، احفظ القنوات الافتراضية
-            console.log('لا توجد قنوات محفوظة، سيتم حفظ القنوات الافتراضية');
-            this.saveChannelsToStorage();
+            // إذا لم توجد قنوات محفوظة، ابدأ بقائمة فارغة
+            console.log('لا توجد قنوات محفوظة، سيتم البدء بقائمة فارغة');
+            this.channels = [];
             // تحديث عداد القنوات
             this.updateSidebarCounts();
         
         } catch (error) {
             console.error('خطأ في تحميل القنوات المحفوظة:', error);
-            console.log('سيتم استخدام القنوات الافتراضية وحفظها');
-            this.saveChannelsToStorage();
+            console.log('سيتم البدء بقائمة فارغة');
+            this.channels = [];
             // تحديث عداد القنوات
             this.updateSidebarCounts();
         }
