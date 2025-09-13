@@ -394,6 +394,15 @@
       "category": "religious",
       "country": "الكويت",
       "type": "hls"
+    },
+    {
+      "id": 64,
+      "name": "كارتون مينا",
+      "url": "https://www.youtube.com/watch?v=yIK9W-EwCn8",
+      "logo": "https://iili.io/KTtQE11.png",
+      "category": "kids",
+      "country": "عالمية",
+      "type": "youtube"
     }
   ],
   "favorites": [],
@@ -458,8 +467,13 @@
       "key": "movies",
       "name": "أفلام",
       "icon": "fas fa-film"
+    },
+    {
+      "key": "kids",
+      "name": "أطفال",
+      "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-14T03:41:41.628Z",
+  "lastModified": "2025-09-14T03:47:11.874Z",
   "version": "1.0"
 }
