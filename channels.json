@@ -31,7 +31,7 @@
       "id": 5,
       "name": "العربية",
       "logo": "https://iili.io/KzkaIj4.png",
-      "url": "https://av.alarabiya.net/alarabiapublish/alhadath.smil/playlist.m3u8",
+      "url": "https://live.alarabiya.net/alarabiapublish/alarabiya.smil/playlist.m3u8",
       "category": "news",
       "country": "الإمارات",
       "type": "hls"
@@ -501,6 +501,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-14T04:30:07.759Z",
+  "lastModified": "2025-09-14T04:30:45.579Z",
   "version": "1.0"
 }
