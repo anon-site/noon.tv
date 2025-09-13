@@ -2868,17 +2868,6 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
     -webkit-overflow-scrolling: touch;
 }
 
-/* Mobile Settings Body */
-@media (max-width: 768px) {
-    .settings-body {
-        padding: 1.5rem 1rem;
-        max-height: calc(100vh - 80px);
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        scroll-behavior: smooth;
-    }
-}
-
 /* Modal and Settings Scrollbar */
 .settings-body::-webkit-scrollbar,
 .admin-body::-webkit-scrollbar,
@@ -2934,116 +2923,12 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
     color: var(--text-primary);
 }
 
-/* Mobile Setting Items */
-@media (max-width: 768px) {
-    .setting-item {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0.5rem;
-        padding: 0.75rem 0;
-        min-height: 45px;
-    }
-    
-    .setting-item label {
-        font-size: 0.9rem;
-        font-weight: 600;
-        margin-bottom: 0.25rem;
-        line-height: 1.3;
-    }
-    
-    .setting-item .switch {
-        align-self: flex-start;
-        margin-top: 0.25rem;
-    }
-    
-    .setting-item input[type="range"] {
-        width: 100%;
-        margin-top: 0.5rem;
-        height: 8px;
-        border-radius: 4px;
-        background: var(--border-color);
-        outline: none;
-        -webkit-appearance: none;
-    }
-    
-    .setting-item input[type="range"]::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        background: var(--highlight-color);
-        cursor: pointer;
-        border: 3px solid white;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    }
-    
-    .setting-item input[type="range"]::-moz-range-thumb {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        background: var(--highlight-color);
-        cursor: pointer;
-        border: 3px solid white;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    }
-    
-    .zoom-control {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin-top: 0.5rem;
-    }
-    
-    .zoom-value {
-        font-weight: 600;
-        color: var(--highlight-color);
-        font-size: 1rem;
-        min-width: 50px;
-        text-align: center;
-    }
-    
-    .setting-item select {
-        width: 100%;
-        padding: 0.5rem;
-        font-size: 0.9rem;
-        border-radius: 6px;
-        border: 1px solid var(--border-color);
-        background: var(--background-light);
-        color: var(--text-primary);
-    }
-}
-
 /* Switch Toggle */
 .switch {
     position: relative;
     display: inline-block;
     width: 50px;
     height: 24px;
-}
-
-/* Mobile Switch Toggle */
-@media (max-width: 768px) {
-    .switch {
-        width: 50px;
-        height: 26px;
-    }
-    
-    .switch .slider {
-        height: 26px;
-        border-radius: 26px;
-    }
-    
-    .switch .slider:before {
-        height: 20px;
-        width: 20px;
-        left: 3px;
-        bottom: 3px;
-    }
-    
-    .switch input:checked + .slider:before {
-        transform: translateX(24px);
-    }
 }
 
 .switch input {
@@ -6710,12 +6595,8 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     }
     
     .settings-content {
-        width: 100vw;
-        max-width: none;
-        height: 100vh;
-        border-radius: 0;
-        margin: 0;
-        padding: 0;
+        width: 95vw;
+        max-width: 600px;
     }
     
     .admin-content {
@@ -7041,40 +6922,17 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     .enhanced-setting-item {
         flex-direction: column;
         align-items: stretch;
-        gap: 0.75rem;
-        padding: 1rem 0;
-        min-height: 55px;
+        gap: 1rem;
     }
     
     .enhanced-input,
     .enhanced-select {
         max-width: none;
         width: 100%;
-        padding: 0.6rem;
-        font-size: 0.9rem;
-        border-radius: 6px;
-        border: 1px solid var(--border-color);
-        background: var(--background-light);
-        color: var(--text-primary);
     }
     
     .enhanced-switch {
         align-self: flex-start;
-        margin-top: 0.5rem;
-    }
-    
-    .setting-label-group label {
-        font-size: 0.95rem;
-        font-weight: 600;
-        margin-bottom: 0.25rem;
-        line-height: 1.3;
-    }
-    
-    .setting-label-group small {
-        font-size: 0.8rem;
-        color: var(--text-secondary);
-        margin-top: 0.2rem;
-        line-height: 1.2;
     }
     
     .diagnostic-tools-grid {
@@ -7090,103 +6948,6 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     .enhanced-save-btn {
         width: 100%;
         min-width: auto;
-    }
-    
-    /* Settings Sections Mobile */
-    .settings-section {
-        margin: 1.5rem 0;
-        padding: 1rem;
-        background: var(--background-light);
-        border-radius: 8px;
-        border: 1px solid var(--border-color);
-    }
-    
-    .settings-section-title {
-        font-size: 1rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 2px solid var(--highlight-color);
-        color: var(--text-primary);
-    }
-    
-    .settings-actions {
-        margin-top: 1.5rem;
-        padding-top: 1rem;
-        border-top: 1px solid var(--border-color);
-    }
-    
-    .reset-settings-btn {
-        padding: 0.75rem 1.25rem;
-        font-size: 0.9rem;
-        font-weight: 600;
-        border-radius: 6px;
-        background: linear-gradient(135deg, var(--highlight-color), #ff5252);
-        color: white;
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 3px 10px rgba(233, 69, 96, 0.3);
-    }
-    
-    .reset-settings-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(233, 69, 96, 0.4);
-    }
-    
-    /* Mobile Touch Improvements */
-    .setting-item {
-        touch-action: manipulation;
-        -webkit-tap-highlight-color: transparent;
-    }
-    
-    .setting-item label {
-        cursor: pointer;
-        user-select: none;
-        -webkit-user-select: none;
-    }
-    
-    .switch {
-        cursor: pointer;
-        touch-action: manipulation;
-    }
-    
-    .setting-item select:focus,
-    .setting-item input:focus {
-        outline: none;
-        border-color: var(--highlight-color);
-        box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.1);
-    }
-    
-    /* Mobile Modal Header */
-    .modal-header {
-        padding: 1rem;
-        background: var(--secondary-color);
-        border-bottom: 2px solid var(--border-color);
-        position: sticky;
-        top: 0;
-        z-index: 100;
-    }
-    
-    .modal-header h3 {
-        font-size: 1.2rem;
-        font-weight: 700;
-        color: var(--text-primary);
-    }
-    
-    .modal-header .close-btn {
-        padding: 0.5rem;
-        border-radius: 6px;
-        background: var(--background-light);
-        border: 1px solid var(--border-color);
-        color: var(--text-primary);
-        transition: all 0.2s ease;
-    }
-    
-    .modal-header .close-btn:hover {
-        background: var(--highlight-color);
-        color: white;
-        transform: scale(1.05);
     }
     
     .nav-tab {
@@ -7235,112 +6996,6 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     .time-display {
         display: none !important; /* Always hidden on mobile */
     }
-}
-
-/* Extra Small Mobile Screens */
-@media (max-width: 480px) {
-    .settings-content {
-        width: 100vw;
-        height: 100vh;
-    }
-    
-    .settings-body {
-        padding: 1rem 0.75rem;
-        max-height: calc(100vh - 70px);
-    }
-    
-    .setting-item {
-        padding: 0.75rem 0;
-        min-height: 45px;
-    }
-    
-    .setting-item label {
-        font-size: 0.85rem;
-        font-weight: 600;
-    }
-    
-    .enhanced-setting-item {
-        padding: 1rem 0;
-        min-height: 50px;
-    }
-    
-    .setting-label-group label {
-        font-size: 0.9rem;
-        font-weight: 600;
-    }
-    
-    .setting-label-group small {
-        font-size: 0.75rem;
-    }
-    
-    .enhanced-input,
-    .enhanced-select {
-        padding: 0.6rem;
-        font-size: 0.85rem;
-    }
-    
-    .settings-section {
-        margin: 1.25rem 0;
-        padding: 1rem;
-        border-radius: 8px;
-    }
-    
-    .settings-section-title {
-        font-size: 0.95rem;
-        margin-bottom: 1rem;
-        padding-bottom: 0.4rem;
-    }
-    
-    .modal-header {
-        padding: 1rem 0.75rem;
-    }
-    
-    .modal-header h3 {
-        font-size: 1.1rem;
-    }
-    
-    .modal-header .close-btn {
-        padding: 0.5rem;
-    }
-    
-    .reset-settings-btn {
-        padding: 0.7rem 1rem;
-        font-size: 0.85rem;
-    }
-    
-    .switch {
-        width: 45px;
-        height: 24px;
-    }
-    
-    .switch .slider {
-        height: 24px;
-        border-radius: 24px;
-    }
-    
-    .switch .slider:before {
-        height: 18px;
-        width: 18px;
-        left: 3px;
-        bottom: 3px;
-    }
-    
-    .switch input:checked + .slider:before {
-        transform: translateX(21px);
-    }
-    
-    .setting-item input[type="range"]::-webkit-slider-thumb {
-        width: 18px;
-        height: 18px;
-        border: 2px solid white;
-    }
-    
-    .setting-item input[type="range"]::-moz-range-thumb {
-        width: 18px;
-        height: 18px;
-        border: 2px solid white;
-    }
-}
     
     
     /* إشعارات متجاوبة للموبايل */
