@@ -5682,53 +5682,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Notification Functions
-function showNotification(type, message, duration = 3000) {
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.innerHTML = `
-        <div class="notification-content">
-            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-            <span>${message}</span>
-        </div>
-    `;
-    
-    // Add to page
-    document.body.appendChild(notification);
-    
-    // Show notification
-    setTimeout(() => {
-        notification.classList.add('show');
-    }, 100);
-    
-    // Hide notification
-    setTimeout(() => {
-        notification.classList.remove('show');
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 300);
-    }, duration);
-}
-
-// Add notification methods to ArabicTVApp class
-ArabicTVApp.prototype.notifySuccess = function(message, duration) {
-    showNotification('success', message, duration);
-};
-
-ArabicTVApp.prototype.notifyError = function(message, duration) {
-    showNotification('error', message, duration);
-};
-
-ArabicTVApp.prototype.notifyInfo = function(message, duration) {
-    showNotification('info', message, duration);
-};
-
-ArabicTVApp.prototype.notifyWarning = function(message, duration) {
-    showNotification('warning', message, duration);
-};
 
 // Service Worker for offline functionality
 if ('serviceWorker' in navigator) {
