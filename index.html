@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>القنوات الفضائية العربية</title>
+    <title>ANON TV</title>
+    
+    <!-- Favicon and App Icons -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -15,7 +22,7 @@
             <div class="header-content">
                 <div class="logo">
                     <i class="fas fa-satellite-dish"></i>
-                    <h1>القنوات العربية</h1>
+                    <h1>ANON TV</h1>
                 </div>
                 <div class="header-center">
                     <!-- Search Container in Header -->
@@ -84,7 +91,7 @@
         <div class="sidebar-header">
             <div class="sidebar-logo">
                 <i class="fas fa-satellite-dish"></i>
-                <span class="sidebar-title">القنوات العربية</span>
+                <span class="sidebar-title">ANON TV</span>
             </div>
             <button class="sidebar-toggle-btn" onclick="app.toggleSidebar()">
                 <i class="fas fa-chevron-right"></i>
@@ -191,7 +198,7 @@
         <div class="mobile-sidebar-header">
             <div class="mobile-sidebar-logo">
                 <i class="fas fa-satellite-dish"></i>
-                <span>القنوات العربية</span>
+                <span>ANON TV</span>
             </div>
             <button class="mobile-close-btn" onclick="app.toggleMobileMenu()">
                 <i class="fas fa-times"></i>
@@ -704,39 +711,7 @@
                 
                 <!-- General Settings Tab -->
                 <div class="admin-tab-content" id="settingsTab">
-                    <!-- Basic Settings Section -->
-                    <div class="settings-section-card">
-                        <div class="settings-section-header">
-                            <i class="fas fa-cog"></i>
-                            <h3>الإعدادات الأساسية</h3>
-                        </div>
-                        <div class="settings-section-content">
-                            <div class="enhanced-setting-item">
-                                <div class="setting-label-group">
-                                    <label for="appTitle">عنوان التطبيق</label>
-                                    <small>العنوان الذي سيظهر في شريط العنوان</small>
-                                </div>
-                                <input type="text" id="appTitle" value="القنوات الفضائية العربية" class="enhanced-input">
-                            </div>
-                            
-                            <div class="enhanced-setting-item">
-                                <div class="setting-label-group">
-                                    <label for="maxChannels">الحد الأقصى للقنوات</label>
-                                    <small>عدد القنوات المسموح بإضافتها</small>
-                                </div>
-                                <input type="number" id="maxChannels" value="100" class="enhanced-input" min="10" max="1000">
-                            </div>
-                            
-                        </div>
-                    </div>
                     
-                    <!-- Save Button -->
-                    <div class="settings-save-section">
-                        <button class="enhanced-save-btn" onclick="saveGeneralSettings()">
-                            <i class="fas fa-save"></i>
-                            <span>حفظ الإعدادات</span>
-                        </button>
-                    </div>
                     
                     <!-- Remote Storage Settings -->
                     <div class="settings-section-card">
@@ -925,7 +900,7 @@
                 <div class="welcome-icon">
                     <i class="fas fa-satellite-dish"></i>
                 </div>
-                <h2>مرحباً بك في القنوات العربية!</h2>
+                <h2>مرحباً بك في ANON TV!</h2>
                 <p>ابدأ رحلتك مع أفضل القنوات الفضائية العربية</p>
             </div>
             
