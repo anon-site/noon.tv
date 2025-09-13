@@ -472,8 +472,8 @@
     },
     {
       "key": "entertainment",
-      "name": "الترفيه",
-      "icon": "fas fa-tv"
+      "name": "منوعة",
+      "icon": "fas fa-globe"
     },
     {
       "key": "sports",
@@ -501,6 +501,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-14T04:03:03.266Z",
+  "lastModified": "2025-09-14T04:05:22.094Z",
   "version": "1.0"
 }
