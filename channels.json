@@ -421,6 +421,15 @@
       "category": "news",
       "country": "اليمن",
       "type": "hls"
+    },
+    {
+      "id": 67,
+      "name": "تناصح",
+      "url": "https://kilolink.pulsarstarsolutions.com/live/smil:tanasuhtv.smil/manifest.m3u8",
+      "logo": "https://live.tanasuh.tv/img/logo.png",
+      "category": "religious",
+      "country": "ليبيا",
+      "type": "hls"
     }
   ],
   "favorites": [],
@@ -492,6 +501,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-14T03:57:23.286Z",
+  "lastModified": "2025-09-14T04:00:00.534Z",
   "version": "1.0"
 }
