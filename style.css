@@ -228,9 +228,19 @@ body[data-theme="light"] .admin-tab {
 }
 
 body[data-theme="light"] .admin-tab.active {
-    background: #f1f5f9;
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
     color: #1e293b;
     border-bottom: 3px solid #3b82f6;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+}
+
+body[data-theme="light"] .admin-tab:hover {
+    background: rgba(59, 130, 246, 0.05);
+    color: #1e293b;
+}
+
+body[data-theme="light"] .admin-tab:hover:not(.active) {
+    background: rgba(59, 130, 246, 0.08);
 }
 
 body[data-theme="light"] .admin-channel-item {
@@ -2980,22 +2990,41 @@ input:checked + .slider:before {
     display: flex;
     background: var(--background-dark);
     border-bottom: 1px solid var(--border-color);
+    padding: 0.5rem 0.5rem 0 0.5rem;
+    gap: 0.25rem;
 }
 
 .admin-tab {
     background: transparent;
     color: var(--text-secondary);
     border: none;
-    padding: 1rem 2rem;
+    padding: 1.2rem 2.5rem;
     cursor: pointer;
     transition: var(--transition);
     font-family: inherit;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 8px 8px 0 0;
+    position: relative;
+    min-width: 120px;
+    text-align: center;
 }
 
 .admin-tab.active {
-    background: var(--secondary-color);
+    background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
     color: var(--text-primary);
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    border-bottom: 3px solid var(--highlight-color);
+}
+
+.admin-tab:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+}
+
+.admin-tab:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .admin-body {
@@ -6797,8 +6826,10 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     .admin-tab {
         flex: 1;
         text-align: center;
-        padding: 0.8rem 1rem;
+        padding: 1rem 0.8rem;
         font-size: 0.9rem;
+        min-width: 80px;
+        border-radius: 6px 6px 0 0;
     }
     
     .admin-channel-item {
