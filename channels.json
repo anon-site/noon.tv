@@ -1,6 +1,24 @@
 {
   "channels": [
     {
+      "id": 14,
+      "name": "Alaraby TV",
+      "url": "https://alarabyta.cdn.octivid.com/alaraby/smil:alaraby.stream.smil/chunklist.m3u8",
+      "logo": "https://www.alaraby.com/themes/custom/arabytv/logo.png",
+      "category": "news",
+      "country": "قطر",
+      "type": "hls"
+    },
+    {
+      "id": 15,
+      "name": "Alaraby 2",
+      "url": "https://alarabyta.cdn.octivid.com/alaraby2n/smil:alaraby2n.stream.smil/chunklist.m3u8",
+      "logo": "https://media0084.elcinema.com/tvguide/1382_1.png",
+      "category": "entertainment",
+      "country": "قطر",
+      "type": "hls"
+    },
+    {
       "id": 3,
       "name": "الجزيرة",
       "logo": "https://iili.io/Kzk3dKP.png",
@@ -70,24 +88,6 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Rotana_Cinema_Egy.png/800px-Rotana_Cinema_Egy.png",
       "category": "movies",
       "country": "مصر",
-      "type": "hls"
-    },
-    {
-      "id": 14,
-      "name": "Alaraby TV",
-      "url": "https://alarabyta.cdn.octivid.com/alaraby/smil:alaraby.stream.smil/chunklist.m3u8",
-      "logo": "https://www.alaraby.com/themes/custom/arabytv/logo.png",
-      "category": "news",
-      "country": "قطر",
-      "type": "hls"
-    },
-    {
-      "id": 15,
-      "name": "Alaraby 2",
-      "url": "https://alarabyta.cdn.octivid.com/alaraby2n/smil:alaraby2n.stream.smil/chunklist.m3u8",
-      "logo": "https://media0084.elcinema.com/tvguide/1382_1.png",
-      "category": "entertainment",
-      "country": "قطر",
       "type": "hls"
     },
     {
@@ -456,6 +456,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-13T03:03:57.173Z",
+  "lastModified": "2025-09-13T03:38:04.885Z",
   "version": "1.0"
 }
