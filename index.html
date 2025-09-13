@@ -918,6 +918,63 @@
         <div class="modal-overlay"></div>
     </div>
 
+    <!-- Welcome Modal -->
+    <div class="modal" id="welcomeModal">
+        <div class="modal-content welcome-content">
+            <div class="welcome-header">
+                <div class="welcome-icon">
+                    <i class="fas fa-satellite-dish"></i>
+                </div>
+                <h2>مرحباً بك في القنوات العربية!</h2>
+                <p>ابدأ رحلتك مع أفضل القنوات الفضائية العربية</p>
+            </div>
+            
+            <div class="welcome-body">
+                <div class="welcome-step">
+                    <div class="step-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <div class="step-content">
+                        <h4>تحديث القنوات</h4>
+                        <p>انقر على زر "تحديث القنوات" في القائمة الجانبية لجلب أحدث القنوات والتحديثات من الإنترنت</p>
+                    </div>
+                </div>
+                
+                <div class="welcome-step">
+                    <div class="step-icon">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="step-content">
+                        <h4>إضافة قنوات جديدة</h4>
+                        <p>يمكنك إضافة قنوات جديدة من خلال لوحة التحكم في القائمة الجانبية</p>
+                    </div>
+                </div>
+                
+                <div class="welcome-step">
+                    <div class="step-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <div class="step-content">
+                        <h4>المفضلة</h4>
+                        <p>احفظ القنوات المفضلة لديك للوصول السريع إليها في أي وقت</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="welcome-footer">
+                <button class="welcome-btn primary" onclick="app.showWelcomeHelp()">
+                    <i class="fas fa-arrow-left"></i>
+                    ابدأ الآن
+                </button>
+                <button class="welcome-btn secondary" onclick="app.closeWelcomeModal()">
+                    <i class="fas fa-times"></i>
+                    إغلاق
+                </button>
+            </div>
+        </div>
+        <div class="modal-overlay"></div>
+    </div>
+
     <!-- Notifications Container -->
     <div class="notifications-container" id="notificationsContainer"></div>
 

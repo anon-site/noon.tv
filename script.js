@@ -248,6 +248,13 @@ class ArabicTVApp {
         this.updateSidebarCounts(); // Update sidebar counts
         this.hideLoading();
         
+        // إظهار الرسالة الترحيبية إذا لزم الأمر
+        if (this.shouldShowWelcome()) {
+            setTimeout(() => {
+                this.showWelcomeModal();
+            }, 1000); // تأخير قصير لضمان تحميل الواجهة
+        }
+        
         // تشخيص أولي
         console.log('تم تهيئة التطبيق مع', this.channels.length, 'قناة');
     }
@@ -3653,6 +3660,13 @@ class ArabicTVApp {
         // إظهار الرسالة إذا لم تكن هناك قنوات ولم يسبق للمستخدم رؤية الرسالة
         const welcomeShown = localStorage.getItem('welcomeShown');
         const hasChannels = this.channels && this.channels.length > 0;
+        
+        console.log('فحص الرسالة الترحيبية:', {
+            welcomeShown: !!welcomeShown,
+            hasChannels: hasChannels,
+            channelsCount: this.channels ? this.channels.length : 0,
+            shouldShow: !welcomeShown && !hasChannels
+        });
         
         return !welcomeShown && !hasChannels;
     }
