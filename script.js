@@ -187,7 +187,7 @@ class ArabicTVApp {
             colorTheme: 'default', // default, blue, green, purple, orange, red
             layoutMode: 'compact', // grid, list, compact
             fontSize: 'small', // small, medium, large, xlarge
-            animationsEnabled: true,
+            animationsEnabled: false,
             compactMode: true,
             highContrast: false,
             borderRadius: 'rounded' // minimal, normal, rounded
@@ -2371,7 +2371,7 @@ class ArabicTVApp {
         this.settings.colorTheme = 'default';
         this.settings.layoutMode = 'compact';
         this.settings.fontSize = 'small';
-        this.settings.animationsEnabled = true;
+        this.settings.animationsEnabled = false;
         this.settings.compactMode = true;
         this.settings.highContrast = false;
         this.settings.borderRadius = 'rounded';
