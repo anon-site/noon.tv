@@ -392,7 +392,7 @@
       "name": "المسيرة",
       "url": "https://live.cdnbridge.tv/Almasirah/Almasirah_all/playlist.m3u8",
       "logo": "https://iili.io/KTDogae.png",
-      "category": "news",
+      "category": "entertainment",
       "country": "اليمن",
       "type": "hls"
     },
@@ -500,8 +500,18 @@
       "key": "documentary",
       "name": "الوثائقية",
       "icon": "fas fa-book-open"
+    },
+    {
+      "key": "kids",
+      "name": "الأطفال",
+      "icon": "fas fa-child"
+    },
+    {
+      "key": "Kids",
+      "name": "الأطفال",
+      "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-14T18:47:01.487Z",
+  "lastModified": "2025-09-14T18:51:57.725Z",
   "version": "1.0"
 }
