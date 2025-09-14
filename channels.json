@@ -431,13 +431,22 @@
       "category": "entertainment",
       "country": "اليونان",
       "type": "hls"
+    },
+    {
+      "id": 70,
+      "name": "ATR Aflam 2",
+      "url": "https://games1.elahmad.xyz/tv754_www.elahmad.com_art_aflam2/index.m3u8?token=35c854264866c213dc18fad0ffd9aad00b04824f-b4e80d2ef88e76a62839a33367802d7d-1757882111-1757871311",
+      "logo": "https://games1.elahmad.xyz/tv754_www.elahmad.com_art_aflam2/index.m3u8?token=35c854264866c213dc18fad0ffd9aad00b04824f-b4e80d2ef88e76a62839a33367802d7d-1757882111-1757871311",
+      "category": "movies",
+      "country": "السعودية",
+      "type": "hls"
     }
   ],
   "favorites": [],
   "settings": {
     "autoQuality": true,
     "autoplay": true,
-    "volume": 80,
+    "volume": 100,
     "theme": "dark",
     "showNewsTicker": false,
     "zoomLevel": 100,
@@ -500,8 +509,13 @@
       "key": "documentary",
       "name": "الوثائقية",
       "icon": "fas fa-book-open"
+    },
+    {
+      "key": "Kids",
+      "name": "الأطفال",
+      "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-15T03:38:13.274Z",
+  "lastModified": "2025-09-15T03:40:49.527Z",
   "version": "1.0"
 }
