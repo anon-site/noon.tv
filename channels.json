@@ -433,15 +433,6 @@
       "type": "hls"
     },
     {
-      "id": 70,
-      "name": "test",
-      "url": "https://games1.elahmad.xyz/tv754_www.elahmad.com_art_aflam2/index.m3u8?token=35c854264866c213dc18fad0ffd9aad00b04824f-b4e80d2ef88e76a62839a33367802d7d-1757882111-1757871311",
-      "logo": "https://games1.elahmad.xyz/tv754_www.elahmad.com_art_aflam2/index.m3u8?token=35c854264866c213dc18fad0ffd9aad00b04824f-b4e80d2ef88e76a62839a33367802d7d-1757882111-1757871311",
-      "category": "movies",
-      "country": "السعودية",
-      "type": "hls"
-    },
-    {
       "id": 71,
       "name": "راجعين",
       "url": "https://mn-nl.mncdn.com/palabroad/live/playlist.m3u8",
@@ -520,6 +511,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-15T04:00:52.149Z",
+  "lastModified": "2025-09-15T04:00:57.506Z",
   "version": "1.0"
 }
