@@ -383,7 +383,7 @@
       "name": "كارتون مينا",
       "url": "https://www.youtube.com/watch?v=yIK9W-EwCn8",
       "logo": "https://iili.io/KTtQE11.png",
-      "category": "kids",
+      "category": "Kids",
       "country": "عالمية",
       "type": "youtube"
     },
@@ -502,16 +502,11 @@
       "icon": "fas fa-book-open"
     },
     {
-      "key": "kids",
-      "name": "الأطفال",
-      "icon": "fas fa-child"
-    },
-    {
       "key": "Kids",
       "name": "الأطفال",
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-14T18:55:27.402Z",
+  "lastModified": "2025-09-14T18:59:12.062Z",
   "version": "1.0"
 }
