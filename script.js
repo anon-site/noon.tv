@@ -934,6 +934,12 @@ class ArabicTVApp {
     searchChannels(query) {
         // Use the new unified filter system
         this.applyAllFilters();
+        
+        // Scroll to top when searching on desktop
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     }
 
     async playChannel(channel) {
@@ -6112,6 +6118,49 @@ document.addEventListener('DOMContentLoaded', function() {
     if (logoUploadInput) {
         logoUploadInput.addEventListener('change', handleLogoUpload);
     }
+});
+
+// Scroll to Top Button Functions
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
+
+function setupScrollToTopButton() {
+    const scrollBtn = document.getElementById('scrollToTopBtn');
+    if (!scrollBtn) {
+        console.log('زر الصعود إلى الأعلى غير موجود');
+        return;
+    }
+
+    console.log('تم إعداد زر الصعود إلى الأعلى');
+
+    // Show/hide button based on scroll position (show when scrolled down 500px)
+    function handleScroll() {
+        const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+        
+        console.log('التمرير الحالي:', scrollPosition);
+        
+        if (scrollPosition > 500) {
+            scrollBtn.classList.add('show');
+            console.log('تم إظهار الزر');
+        } else {
+            scrollBtn.classList.remove('show');
+            console.log('تم إخفاء الزر');
+        }
+    }
+
+    window.addEventListener('scroll', handleScroll);
+    
+    // Test the function immediately
+    handleScroll();
+}
+
+// Initialize scroll to top button when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    setupScrollToTopButton();
 });
 
 
