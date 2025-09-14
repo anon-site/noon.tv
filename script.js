@@ -4805,28 +4805,6 @@ class ArabicTVApp {
         this.notifySuccess(`تم اختيار قناة "${randomChannel.name}" عشوائياً`);
     }
 
-    refreshChannels() {
-        const refreshBtn = document.getElementById('refreshChannelsBtn');
-        if (refreshBtn) {
-            refreshBtn.classList.add('spinning');
-            const icon = refreshBtn.querySelector('i');
-            icon.style.animation = 'spin 1s linear infinite';
-        }
-
-        // Simulate refresh delay
-        setTimeout(() => {
-            this.applyAllFilters();
-            this.updateChannelStats();
-            
-            if (refreshBtn) {
-                refreshBtn.classList.remove('spinning');
-                const icon = refreshBtn.querySelector('i');
-                icon.style.animation = '';
-            }
-            
-            this.notifySuccess('تم تحديث القنوات بنجاح');
-        }, 1000);
-    }
 
     // Breadcrumbs and Stats
     updateBreadcrumbs() {
