@@ -921,6 +921,12 @@ class ArabicTVApp {
             tab.classList.add('active');
         });
 
+        // Scroll to top when category is selected (both mobile and desktop)
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+
         // Use the new unified filter system
         this.applyAllFilters();
     }
@@ -5697,12 +5703,6 @@ function selectCategory(category) {
         
         // Update bottom nav active state
         updateBottomNavActiveState('home');
-        
-        // Scroll to top when category is selected on mobile
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
         
         // Close dropdown
         closeCategoriesDropdown();
