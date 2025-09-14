@@ -2420,10 +2420,10 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
 /* Mobile Modal Content */
 @media (max-width: 768px) {
     .modal-content {
-        max-width: 95vw;
+        max-width: 90vw;
         max-height: 90vh;
         border-radius: 12px;
-        width: 95vw;
+        width: 90vw;
         height: auto;
         display: flex;
         flex-direction: column;
@@ -2603,9 +2603,9 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
 /* Mobile Video Container */
 @media (max-width: 768px) {
     .video-container {
-        width: 98vw;
-        height: 55.1vw; /* 16:9 aspect ratio for 98vw width */
-        max-height: 75vh;
+        width: 85vw;
+        height: 47.8vw; /* 16:9 aspect ratio for 85vw width */
+        max-height: 65vh;
         border-radius: 12px;
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
         position: relative;
@@ -2616,9 +2616,9 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
 
 @media (max-width: 480px) {
     .video-container {
-        width: 96vw;
-        height: 54vw; /* 16:9 aspect ratio for 96vw width */
-        max-height: 70vh;
+        width: 82vw;
+        height: 46.1vw; /* 16:9 aspect ratio for 82vw width */
+        max-height: 60vh;
         border-radius: 8px;
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         margin: 0 auto;
@@ -2652,9 +2652,9 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
 
 @media (max-width: 375px) {
     .video-container {
-        width: 94vw;
-        height: 52.9vw; /* 16:9 aspect ratio for 94vw width */
-        max-height: 65vh;
+        width: 80vw;
+        height: 45vw; /* 16:9 aspect ratio for 80vw width */
+        max-height: 55vh;
         border-radius: 6px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         margin: 0 auto;
@@ -7581,14 +7581,14 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     }
     
     .video-container {
-        width: 98vw;
-        height: 55vw;
-        max-height: 75vh;
+        width: 85vw;
+        height: 47.8vw;
+        max-height: 65vh;
     }
     
     .modal-content {
-        max-width: 95vw;
-        max-height: 95vh;
+        max-width: 90vw;
+        max-height: 90vh;
     }
     
     .settings-content {
@@ -7953,9 +7953,9 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     }
     
     .video-container {
-        width: 99vw;
-        height: 56vw;
-        max-height: 80vh;
+        width: 82vw;
+        height: 46.1vw;
+        max-height: 60vh;
     }
     
     /* Mobile responsive news ticker */
