@@ -1114,10 +1114,6 @@ body[data-theme="light"] .sidebar-nav-tab.active .tab-count {
     box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
-.sidebar-action-btn[onclick="updateChannels()"] i {
-    /* Removed pulse animation */
-}
-
 @keyframes pulse {
     0% { transform: scale(1); }
     50% { transform: scale(1.1); }
