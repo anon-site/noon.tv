@@ -5698,6 +5698,12 @@ function selectCategory(category) {
         // Update bottom nav active state
         updateBottomNavActiveState('home');
         
+        // Scroll to top when category is selected on mobile
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+        
         // Close dropdown
         closeCategoriesDropdown();
     }
