@@ -692,6 +692,8 @@ class ArabicTVApp {
                     this.closeMobileMenu();
                 }
                 if (e.key === 'Escape' && this.isDesktopSidebarOpen) {
+                    // Close all collapsible sections before closing sidebar
+                    this.closeAllCollapsibleSections();
                     this.toggleSidebar();
                 }
             });
@@ -4127,6 +4129,8 @@ class ArabicTVApp {
 
     closeMobileMenu() {
         if (this.isMobileSidebarOpen) {
+            // Close all collapsible sections before closing mobile menu
+            this.closeAllCollapsibleSections();
             this.toggleMobileMenu();
         }
     }
@@ -4155,6 +4159,9 @@ class ArabicTVApp {
                 mainContent.classList.remove('sidebar-open');
                 overlay.classList.remove('active');
                 console.log('تم إغلاق القائمة الجانبية');
+                
+                // Close all collapsible sections when sidebar is closed
+                this.closeAllCollapsibleSections();
             }
         });
     }
@@ -4162,9 +4169,51 @@ class ArabicTVApp {
     createSidebarOverlay() {
         const overlay = document.createElement('div');
         overlay.className = 'sidebar-overlay';
-        overlay.onclick = () => this.toggleSidebar();
+        overlay.onclick = () => {
+            // Close all collapsible sections before closing sidebar
+            this.closeAllCollapsibleSections();
+            this.toggleSidebar();
+        };
         document.body.appendChild(overlay);
         return overlay;
+    }
+
+    // Close all collapsible sections in sidebar
+    closeAllCollapsibleSections() {
+        const activeSections = document.querySelectorAll('.collapsible-content.active');
+        
+        if (activeSections.length === 0) return;
+        
+        console.log('إغلاق جميع الأزرار المندسلة:', activeSections.length, 'قسم');
+        
+        // Add closing animation class for better visual feedback
+        activeSections.forEach(activeContent => {
+            const activeHeader = activeContent.previousElementSibling;
+            const activeIcon = document.getElementById(activeContent.id + 'Icon');
+            
+            if (activeHeader && activeIcon) {
+                // Add closing animation
+                activeContent.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                activeHeader.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                
+                // Close section
+                activeContent.classList.remove('active');
+                activeHeader.classList.remove('active');
+                activeIcon.style.transform = 'rotate(0deg)';
+                activeIcon.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            }
+        });
+        
+        // Reset transitions after animation
+        setTimeout(() => {
+            activeSections.forEach(activeContent => {
+                activeContent.style.transition = '';
+                const activeHeader = activeContent.previousElementSibling;
+                if (activeHeader) {
+                    activeHeader.style.transition = '';
+                }
+            });
+        }, 300);
     }
 
     toggleFavorites() {
@@ -6516,4 +6565,89 @@ function resetChannelForm() {
     }
     
     // Notification removed as requested
+}
+
+// Global function for collapsible sidebar sections
+function toggleCollapsible(sectionId) {
+    const content = document.getElementById(sectionId);
+    const icon = document.getElementById(sectionId + 'Icon');
+    const header = content.previousElementSibling;
+    
+    if (!content || !icon || !header) {
+        console.error('عنصر غير موجود:', sectionId);
+        return;
+    }
+    
+    // Toggle active class
+    const isActive = content.classList.contains('active');
+    
+    if (isActive) {
+        // Close current section
+        closeCollapsibleSection(content, header, icon);
+    } else {
+        // Close all other sections first with smooth animation
+        closeAllCollapsibleSections();
+        
+        // Small delay to ensure smooth closing animation
+        setTimeout(() => {
+            // Open current section
+            openCollapsibleSection(content, header, icon);
+        }, 100);
+    }
+}
+
+// Helper function to close a collapsible section
+function closeCollapsibleSection(content, header, icon) {
+    // Add closing animation class
+    header.classList.add('closing');
+    
+    content.classList.remove('active');
+    header.classList.remove('active');
+    icon.style.transform = 'rotate(0deg)';
+    icon.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+    
+    // Remove closing animation class after animation
+    setTimeout(() => {
+        header.classList.remove('closing');
+    }, 300);
+}
+
+// Helper function to open a collapsible section
+function openCollapsibleSection(content, header, icon) {
+    content.classList.add('active');
+    header.classList.add('active');
+    icon.style.transform = 'rotate(180deg)';
+    icon.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+}
+
+// Helper function to close all collapsible sections
+function closeAllCollapsibleSections() {
+    const activeSections = document.querySelectorAll('.collapsible-content.active');
+    
+    if (activeSections.length === 0) return;
+    
+    // Add closing animation class for better visual feedback
+    activeSections.forEach(activeContent => {
+        const activeHeader = activeContent.previousElementSibling;
+        const activeIcon = document.getElementById(activeContent.id + 'Icon');
+        
+        if (activeHeader && activeIcon) {
+            // Add closing animation
+            activeContent.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            activeHeader.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            
+            closeCollapsibleSection(activeContent, activeHeader, activeIcon);
+        }
+    });
+    
+    // Reset transitions after animation
+    setTimeout(() => {
+        activeSections.forEach(activeContent => {
+            activeContent.style.transition = '';
+            const activeHeader = activeContent.previousElementSibling;
+            if (activeHeader) {
+                activeHeader.style.transition = '';
+            }
+        });
+    }, 300);
 }

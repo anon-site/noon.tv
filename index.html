@@ -91,11 +91,12 @@
         <div class="sidebar-content">
             <!-- TV Categories Section -->
             <div class="sidebar-section">
-                <div class="sidebar-section-title">
+                <div class="sidebar-section-title collapsible-header" onclick="toggleCollapsible('tvCategories')">
                     <i class="fas fa-tv"></i>
                     <span>تلفزيون</span>
+                    <i class="fas fa-chevron-down collapsible-icon" id="tvCategoriesIcon"></i>
                 </div>
-                <div class="sidebar-nav-tabs">
+                <div class="sidebar-nav-tabs collapsible-content" id="tvCategories">
                     <button class="sidebar-nav-tab active" data-category="all">
                         <i class="fas fa-th-large"></i>
                         <span>جميع القنوات</span>
@@ -135,6 +136,57 @@
                         <i class="fas fa-book-open"></i>
                         <span>الوثائقية</span>
                         <span class="tab-count" id="documentaryCount">0</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Video Categories Section -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title collapsible-header" onclick="toggleCollapsible('videoCategories')">
+                    <i class="fas fa-video"></i>
+                    <span>فيديو</span>
+                    <i class="fas fa-chevron-down collapsible-icon" id="videoCategoriesIcon"></i>
+                </div>
+                <div class="sidebar-nav-tabs collapsible-content" id="videoCategories">
+                    <button class="sidebar-nav-tab" data-category="youtube">
+                        <i class="fab fa-youtube"></i>
+                        <span>يوتيوب</span>
+                        <span class="tab-count" id="youtubeCount">0</span>
+                    </button>
+                    <button class="sidebar-nav-tab" data-category="live">
+                        <i class="fas fa-broadcast-tower"></i>
+                        <span>البث المباشر</span>
+                        <span class="tab-count" id="liveCount">0</span>
+                    </button>
+                    <button class="sidebar-nav-tab" data-category="movies">
+                        <i class="fas fa-film"></i>
+                        <span>الأفلام</span>
+                        <span class="tab-count" id="moviesVideoCount">0</span>
+                    </button>
+                    <button class="sidebar-nav-tab" data-category="series">
+                        <i class="fas fa-tv"></i>
+                        <span>المسلسلات</span>
+                        <span class="tab-count" id="seriesCount">0</span>
+                    </button>
+                    <button class="sidebar-nav-tab" data-category="documentary">
+                        <i class="fas fa-book-open"></i>
+                        <span>الوثائقية</span>
+                        <span class="tab-count" id="documentaryVideoCount">0</span>
+                    </button>
+                    <button class="sidebar-nav-tab" data-category="kids">
+                        <i class="fas fa-child"></i>
+                        <span>الأطفال</span>
+                        <span class="tab-count" id="kidsCount">0</span>
+                    </button>
+                    <button class="sidebar-nav-tab" data-category="educational">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>التعليمية</span>
+                        <span class="tab-count" id="educationalCount">0</span>
+                    </button>
+                    <button class="sidebar-nav-tab" data-category="cooking">
+                        <i class="fas fa-utensils"></i>
+                        <span>الطبخ</span>
+                        <span class="tab-count" id="cookingCount">0</span>
                     </button>
                 </div>
             </div>
