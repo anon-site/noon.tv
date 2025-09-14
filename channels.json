@@ -430,6 +430,15 @@
       "category": "entertainment",
       "country": "اليونان",
       "type": "hls"
+    },
+    {
+      "id": 70,
+      "name": "السنة النبوية2",
+      "url": "https://samaflix.com:12103/channel7/tracks-v2a1/mono.m3u8",
+      "logo": "https://iili.io/Kz8TUYJ.png",
+      "category": "music",
+      "country": "العراق",
+      "type": "hls"
     }
   ],
   "favorites": [],
@@ -501,6 +510,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-14T16:45:45.556Z",
+  "lastModified": "2025-09-14T16:53:09.562Z",
   "version": "1.0"
 }
