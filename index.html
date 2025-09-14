@@ -604,11 +604,26 @@
                 <!-- Add Channel Tab -->
                 <div class="admin-tab-content" id="addTab">
                     <form class="add-channel-form" id="addChannelForm">
-                        <div class="form-group">
-                            <label for="channelName">اسم القناة</label>
-                            <input type="text" id="channelName" required>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="channelName">اسم القناة</label>
+                                <input type="text" id="channelName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="channelCategory">الفئة</label>
+                                <select id="channelCategory" required>
+                                    <option value="news">الأخبار</option>
+                                    <option value="entertainment">المنوعة</option>
+                                    <option value="sports">الرياضة</option>
+                                    <option value="religious">الدينية</option>
+                                    <option value="music">الموسيقى</option>
+                                    <option value="movies">الأفلام</option>
+                                    <option value="documentary">الوثائقية</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="form-group">
+                        
+                        <div class="form-group full-width">
                             <label for="channelUrl" id="urlLabel">رابط البث</label>
                             <input type="url" id="channelUrl" required placeholder="أدخل رابط البث (HLS أو يوتيوب)" oninput="detectUrlType()">
                             <small id="urlHelp" class="form-help" style="color: #666; font-size: 0.85rem; margin-top: 0.25rem; display: block;">أدخل رابط البث المباشر أو رابط يوتيوب</small>
@@ -618,11 +633,19 @@
                                 <span id="urlTypeValue" style="font-weight: bold;"></span>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="channelLogo">رابط الشعار</label>
-                            <input type="url" id="channelLogo" placeholder="أدخل رابط الشعار">
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="channelLogo">رابط الشعار</label>
+                                <input type="url" id="channelLogo" placeholder="أدخل رابط الشعار">
+                            </div>
+                            <div class="form-group">
+                                <label for="channelCountryInput">البلد</label>
+                                <input type="text" id="channelCountryInput" required>
+                            </div>
                         </div>
-                        <div class="form-group logo-upload-group">
+                        
+                        <div class="form-group logo-upload-group full-width">
                             <label for="logoUpload">أو رفع شعار من الجهاز</label>
                             <div class="logo-upload-container">
                                 <input type="file" id="logoUpload" accept="image/*" style="display: none;">
@@ -639,23 +662,14 @@
                             </div>
                             <small class="form-help">سيتم وضع رابط الصورة تلقائياً في حقل رابط الشعار عند الرفع</small>
                         </div>
-                        <div class="form-group">
-                            <label for="channelCategory">الفئة</label>
-                            <select id="channelCategory" required>
-                                <option value="news">الأخبار</option>
-                                <option value="entertainment">المنوعة</option>
-                                <option value="sports">الرياضة</option>
-                                <option value="religious">الدينية</option>
-                                <option value="music">الموسيقى</option>
-                                <option value="movies">الأفلام</option>
-                                <option value="documentary">الوثائقية</option>
-                            </select>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="reset-btn" onclick="resetChannelForm()">
+                                <i class="fas fa-undo"></i>
+                                تصفير
+                            </button>
+                            <button type="submit" class="add-btn">إضافة القناة</button>
                         </div>
-                        <div class="form-group">
-                            <label for="channelCountryInput">البلد</label>
-                            <input type="text" id="channelCountryInput" required>
-                        </div>
-                        <button type="submit" class="add-btn">إضافة القناة</button>
                     </form>
                 </div>
                 

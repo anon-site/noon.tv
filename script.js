@@ -1613,6 +1613,7 @@ class ArabicTVApp {
         // to ensure proper timing and avoid conflicts
     }
 
+
     editChannel(id, event) {
         // Prevent event propagation if event is provided
         if (event) {
@@ -6311,4 +6312,47 @@ if ('serviceWorker' in navigator) {
                 console.log('SW registration failed: ', registrationError);
             });
     });
+}
+
+// Reset channel form function
+function resetChannelForm() {
+    // Clear all form fields
+    document.getElementById('channelName').value = '';
+    document.getElementById('channelUrl').value = '';
+    document.getElementById('channelLogo').value = '';
+    document.getElementById('channelCategory').value = 'news'; // Reset to default
+    document.getElementById('channelCountryInput').value = '';
+    
+    // Clear uploaded logo
+    removeLogoPreview();
+    
+    // Hide URL type indicator
+    const urlTypeIndicator = document.getElementById('urlTypeIndicator');
+    if (urlTypeIndicator) {
+        urlTypeIndicator.style.display = 'none';
+    }
+    
+    // Reset detected URL type
+    if (app && app.detectedUrlType) {
+        app.detectedUrlType = null;
+    }
+    
+    // Reset button text and class
+    const submitBtn = document.querySelector('#addChannelForm button[type="submit"]');
+    if (submitBtn) {
+        submitBtn.textContent = 'إضافة القناة';
+        submitBtn.className = 'add-btn';
+    }
+    
+    // Reset editing mode
+    if (app && app.editingChannelId) {
+        app.editingChannelId = null;
+    }
+    
+    // Show success notification
+    if (app && app.notifySuccess) {
+        app.notifySuccess('تم تصفير النموذج بنجاح');
+    } else {
+        console.log('تم تصفير النموذج بنجاح');
+    }
 }

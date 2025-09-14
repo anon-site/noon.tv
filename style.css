@@ -3461,12 +3461,86 @@ input:checked + .slider:before {
 
 /* Add Channel Form */
 .add-channel-form {
-    max-width: 400px;
+    max-width: 600px;
     padding-bottom: 2rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 0.6rem;
 }
 
 .form-group {
     margin-bottom: 0.6rem;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+/* Tablet responsive design */
+@media (max-width: 768px) and (min-width: 481px) {
+    .form-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.8rem;
+    }
+}
+
+/* Mobile responsive design */
+@media (max-width: 480px) {
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0.6rem;
+    }
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    justify-content: flex-end;
+}
+
+.reset-btn {
+    background: var(--background-dark);
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.reset-btn:hover {
+    background: var(--background-light);
+    border-color: var(--highlight-color);
+    color: var(--highlight-color);
+}
+
+.reset-btn i {
+    font-size: 0.8rem;
+}
+
+/* Light theme for reset button */
+body[data-theme="light"] .reset-btn {
+    background: #ffffff;
+    border-color: #e2e8f0;
+    color: #64748b;
+}
+
+body[data-theme="light"] .reset-btn:hover {
+    background: #f8fafc;
+    border-color: #3b82f6;
+    color: #3b82f6;
 }
 
 .form-group label {
@@ -7736,6 +7810,23 @@ body[data-theme="light"] .enhanced-save-btn:hover {
         overflow: hidden;
         padding-bottom: env(safe-area-inset-bottom, 0px);
         position: relative;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0.6rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    
+    .reset-btn,
+    .add-btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
     }
     
     .form-fields {
