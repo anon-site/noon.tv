@@ -6858,19 +6858,17 @@ body[data-theme="light"] .enhanced-save-btn:hover {
         font-size: 0.8rem;
     }
     
-    .breadcrumb-current {
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: var(--text-primary);
-    }
-    
     .breadcrumb-item {
         padding: 0.25rem 0.5rem;
-        font-size: 0.8rem;
+        font-size: 0.7rem;
         border-radius: 6px;
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.1);
         transition: all 0.3s ease;
+    }
+    
+    .breadcrumb-item:first-child {
+        display: none;
     }
     
     .breadcrumb-item:hover {
@@ -7076,7 +7074,7 @@ body[data-theme="light"] .enhanced-save-btn:hover {
         
         .breadcrumb-item {
             padding: 0.2rem 0.4rem;
-            font-size: 0.75rem;
+            font-size: 0.65rem;
         }
         
         .stats-text {
@@ -7283,7 +7281,7 @@ body[data-theme="light"] .enhanced-save-btn:hover {
         
         .breadcrumb-item {
             padding: 0.15rem 0.3rem;
-            font-size: 0.7rem;
+            font-size: 0.6rem;
         }
         
         .stats-text {
