@@ -2738,12 +2738,13 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
 
 .quality-menu {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 8px);
     right: 0;
     background: linear-gradient(135deg, var(--background-dark), var(--secondary-color));
     border: 1px solid var(--border-color);
     border-radius: 12px;
     min-width: 220px;
+    max-height: 400px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(20px);
     opacity: 0;
@@ -2751,8 +2752,7 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
     transform: translateY(-10px);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1000;
-    overflow: hidden;
-    margin-top: 8px;
+    overflow-y: auto;
 }
 
 .quality-menu.show {
@@ -2768,9 +2768,11 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
     padding: 12px 16px;
     color: var(--text-primary);
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
+    border-radius: 8px;
+    margin: 2px 8px;
 }
 
 .quality-option:last-child {
@@ -2780,11 +2782,15 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
 .quality-option:hover {
     background: var(--highlight-color);
     color: white;
+    transform: translateX(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .quality-option.active {
     background: linear-gradient(45deg, var(--highlight-color), #ff6b6b);
     color: white;
+    transform: translateX(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .quality-option i:first-child {
@@ -2810,6 +2816,21 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
 .quality-option.active .quality-check {
     opacity: 1;
     transform: scale(1);
+}
+
+.quality-option.quality-available {
+    opacity: 1;
+}
+
+.quality-option:not(.quality-available) {
+    opacity: 0.6;
+}
+
+.quality-option:not(.quality-available)::after {
+    content: "غير متوفر";
+    font-size: 0.7rem;
+    color: #ff6b6b;
+    margin-left: auto;
 }
 
 /* Quality menu header */
@@ -4356,7 +4377,7 @@ body[data-theme="light"] .pip-btn.pip-active {
     
     .quality-menu {
         position: absolute;
-        top: 100%;
+        top: calc(100% + 8px);
         right: 0;
         left: 0;
         background: var(--secondary-color);
@@ -4365,13 +4386,21 @@ body[data-theme="light"] .pip-btn.pip-active {
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         z-index: 1000;
         min-width: 160px;
+        max-width: 250px;
+        max-height: 300px;
         backdrop-filter: blur(8px);
+        margin-top: 8px;
+        margin-right: auto;
+        margin-left: auto;
+        overflow-y: auto;
     }
     
     .quality-option {
-        padding: 8px 12px;
-        gap: 8px;
-        font-size: 0.8rem;
+        padding: 10px 14px;
+        gap: 10px;
+        font-size: 0.85rem;
+        border-radius: 8px;
+        margin: 2px 8px;
     }
     
     .quality-option i:first-child {
@@ -4461,14 +4490,27 @@ body[data-theme="light"] .pip-btn.pip-active {
     }
     
     .quality-menu {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        left: 0;
         min-width: 140px;
+        max-width: 220px;
+        max-height: 250px;
         font-size: 0.8rem;
+        border-radius: 8px;
+        margin-top: 6px;
+        margin-right: auto;
+        margin-left: auto;
+        overflow-y: auto;
     }
     
     .quality-option {
-        padding: 6px 10px;
-        gap: 6px;
-        font-size: 0.75rem;
+        padding: 8px 12px;
+        gap: 8px;
+        font-size: 0.8rem;
+        border-radius: 6px;
+        margin: 1px 6px;
     }
     
     .quality-option i:first-child {
@@ -4538,14 +4580,27 @@ body[data-theme="light"] .pip-btn.pip-active {
     }
     
     .quality-menu {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        left: 0;
         min-width: 120px;
+        max-width: 200px;
+        max-height: 200px;
         font-size: 0.75rem;
+        border-radius: 6px;
+        margin-top: 4px;
+        margin-right: auto;
+        margin-left: auto;
+        overflow-y: auto;
     }
     
     .quality-option {
-        padding: 5px 8px;
-        gap: 5px;
-        font-size: 0.7rem;
+        padding: 6px 10px;
+        gap: 6px;
+        font-size: 0.75rem;
+        border-radius: 5px;
+        margin: 1px 4px;
     }
     
     .quality-option i:first-child {

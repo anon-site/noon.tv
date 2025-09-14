@@ -4516,28 +4516,37 @@ class ArabicTVApp {
 
     // Update available qualities based on stream
     updateAvailableQualities() {
-        if (!this.hls || !this.hls.levels) return;
-
-        const levels = this.hls.levels;
         const qualityOptions = document.querySelectorAll('.quality-option');
         
+        // Always show all quality options
         qualityOptions.forEach(option => {
-            const quality = option.dataset.quality;
-            
-            if (quality === 'auto') {
-                // Auto is always available
-                option.style.display = 'flex';
-                return;
-            }
-            
-            const targetHeight = parseInt(quality);
-            const hasQuality = levels.some(level => 
-                Math.abs(level.height - targetHeight) <= 50
-            );
-            
-            // Show/hide option based on availability
-            option.style.display = hasQuality ? 'flex' : 'none';
+            option.style.display = 'flex';
         });
+        
+        // If HLS is available, we can add visual indicators for available qualities
+        if (this.hls && this.hls.levels) {
+            const levels = this.hls.levels;
+            
+            qualityOptions.forEach(option => {
+                const quality = option.dataset.quality;
+                
+                if (quality === 'auto') {
+                    return; // Auto is always available
+                }
+                
+                const targetHeight = parseInt(quality);
+                const hasQuality = levels.some(level => 
+                    Math.abs(level.height - targetHeight) <= 50
+                );
+                
+                // Add visual indicator for availability (optional)
+                if (hasQuality) {
+                    option.classList.add('quality-available');
+                } else {
+                    option.classList.remove('quality-available');
+                }
+            });
+        }
     }
 
     // New Navigation Features Implementation
