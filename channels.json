@@ -453,9 +453,9 @@
       "icon": "fas fa-newspaper"
     },
     {
-      "key": "miscellaneous",
+      "key": "entertainment",
       "name": "منوعة",
-      "icon": "fas fa-tv"
+      "icon": "fas fa-globe"
     },
     {
       "key": "sports",
@@ -474,15 +474,15 @@
     },
     {
       "key": "movies",
-      "name": "الأفلام",
+      "name": "أفلام",
       "icon": "fas fa-film"
     },
     {
-      "key": "documentary",
-      "name": "الوثائقية",
-      "icon": "fas fa-book-open"
+      "key": "kids",
+      "name": "أطفال",
+      "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-14T06:59:22.764Z",
+  "lastModified": "2025-09-14T09:20:53.082Z",
   "version": "1.0"
 }
