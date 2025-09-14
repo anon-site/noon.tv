@@ -5446,6 +5446,34 @@ class ArabicTVApp {
             });
         }
     }
+
+    // Show all channels and scroll to top
+    showAllChannels() {
+        // Filter to show all channels
+        this.filterChannels('all');
+        
+        // Scroll to top of the page
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+        
+        // Update mobile bottom navigation active state
+        this.updateBottomNavActiveState('home');
+        
+        console.log('تم عرض جميع القنوات والانتقال للأعلى');
+    }
+
+    // Update mobile bottom navigation active state
+    updateBottomNavActiveState(activeAction) {
+        const bottomNavBtns = document.querySelectorAll('.bottom-nav-btn');
+        bottomNavBtns.forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.action === activeAction) {
+                btn.classList.add('active');
+            }
+        });
+    }
 }
 
 // Global functions for inline event handlers
