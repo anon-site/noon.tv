@@ -509,8 +509,13 @@
       "key": "documentary",
       "name": "الوثائقية",
       "icon": "fas fa-book-open"
+    },
+    {
+      "key": "Kids",
+      "name": "أطفال",
+      "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-15T07:09:28.421Z",
+  "lastModified": "2025-09-15T07:09:30.165Z",
   "version": "1.0"
 }
