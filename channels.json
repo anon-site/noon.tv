@@ -228,7 +228,7 @@
     {
       "id": 29,
       "name": "الأقصى",
-      "url": "http://167.172.161.13/hls/feedspare/6udfi7v8a3eof6nlps6e9ovfrs65c7l7.m3u8",
+      "url": "https://64c53df624b1b.servers.dvcloud.tv/hls/feedspare/6udfi7v8a3eof6nlps6e9ovfrs65c7l7.m3u8",
       "logo": "https://iili.io/Kz8auGp.png",
       "category": "news",
       "country": "فلسطين",
@@ -516,6 +516,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-15T03:41:35.554Z",
+  "lastModified": "2025-09-15T03:42:21.230Z",
   "version": "1.0"
 }
