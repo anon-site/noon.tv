@@ -1645,8 +1645,7 @@ class ArabicTVApp {
         // Update button text to indicate editing mode
         document.querySelector('.add-btn').textContent = 'تحديث القناة';
         
-        // Show notification
-        this.showNotification('success', 'تم فتح نموذج التعديل', 'يمكنك الآن تعديل بيانات القناة');
+        // Notification removed as requested
     }
 
     updateChannel(id) {
@@ -5096,8 +5095,7 @@ class ArabicTVApp {
             // Store the channel ID for editing
             this.editingChannelId = channelId;
             
-            // Show notification
-            this.showNotification('success', 'تم فتح نموذج التعديل', 'يمكنك الآن تعديل بيانات القناة');
+            // Notification removed as requested
         }, 100);
     }
 
@@ -6349,10 +6347,5 @@ function resetChannelForm() {
         app.editingChannelId = null;
     }
     
-    // Show success notification
-    if (app && app.notifySuccess) {
-        app.notifySuccess('تم تصفير النموذج بنجاح');
-    } else {
-        console.log('تم تصفير النموذج بنجاح');
-    }
+    // Notification removed as requested
 }

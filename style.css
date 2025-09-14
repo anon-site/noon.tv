@@ -7802,6 +7802,80 @@ body[data-theme="light"] .enhanced-save-btn:hover {
         max-width: none;
     }
     
+    /* Mobile admin modal header - close button positioning */
+    .admin-content .modal-header {
+        position: relative;
+        padding: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .admin-content .modal-header h3 {
+        text-align: center;
+        margin: 0;
+        flex: 1;
+    }
+    
+    .admin-content .modal-header .close-btn {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.75rem;
+        z-index: 10;
+        background: rgba(0, 0, 0, 0.7);
+        border: 2px solid var(--highlight-color);
+        color: var(--text-primary);
+        padding: 4px;
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    .admin-content .modal-header .close-btn:hover {
+        background: var(--highlight-color);
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+    
+    .admin-content .modal-header .close-btn i {
+        font-size: 0.9rem;
+        color: var(--text-primary);
+    }
+    
+    /* Additional mobile styles for smaller screens */
+    @media (max-width: 480px) {
+        .admin-content .modal-header .close-btn {
+            top: 0.4rem;
+            right: 0.6rem;
+            width: 24px;
+            height: 24px;
+            padding: 3px;
+        }
+        
+        .admin-content .modal-header .close-btn i {
+            font-size: 0.8rem;
+        }
+    }
+    
+    @media (max-width: 375px) {
+        .admin-content .modal-header .close-btn {
+            top: 0.3rem;
+            right: 0.5rem;
+            width: 22px;
+            height: 22px;
+            padding: 2px;
+        }
+        
+        .admin-content .modal-header .close-btn i {
+            font-size: 0.7rem;
+        }
+    }
+    
     .add-channel-form {
         max-width: 90vw;
         display: flex;
