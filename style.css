@@ -6851,10 +6851,17 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     }
     
     .breadcrumbs {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.25rem;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
         font-size: 0.8rem;
+    }
+    
+    .breadcrumb-current {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-primary);
     }
     
     .breadcrumb-item {
@@ -6883,8 +6890,9 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     
     .channel-stats {
         margin-right: 0;
-        margin-top: 0.25rem;
-        align-self: flex-end;
+        margin-top: 0;
+        margin-bottom: 0;
+        align-self: center;
     }
     
     .stats-text {
@@ -7063,7 +7071,7 @@ body[data-theme="light"] .enhanced-save-btn:hover {
         
         .breadcrumbs {
             font-size: 0.75rem;
-            gap: 0.2rem;
+            gap: 0.3rem;
         }
         
         .breadcrumb-item {
@@ -7270,7 +7278,7 @@ body[data-theme="light"] .enhanced-save-btn:hover {
         
         .breadcrumbs {
             font-size: 0.7rem;
-            gap: 0.15rem;
+            gap: 0.2rem;
         }
         
         .breadcrumb-item {
