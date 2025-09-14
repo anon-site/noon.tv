@@ -1463,44 +1463,77 @@ class ArabicTVApp {
 
         this.channels.forEach((channel, index) => {
             const item = document.createElement('div');
-            item.className = 'admin-channel-item';
-            item.draggable = true;
-            item.dataset.channelId = channel.id;
-            item.dataset.index = index;
             
-            // إنشاء placeholder مصغر للوحة التحكم
-            const adminPlaceholder = this.createAdminLogoPlaceholder(channel);
-            
-            item.innerHTML = `
-                <div class="admin-channel-info">
-                    <i class="fas fa-grip-vertical drag-handle"></i>
-                    <img src="${channel.logo}" alt="${channel.name}" class="admin-channel-logo"
-                         onerror="this.src='${adminPlaceholder}'; this.classList.add('admin-placeholder-logo');">
-                    <div>
-                        <h4>${channel.name}</h4>
-                        <p style="color: var(--text-secondary); font-size: 0.9rem;">${this.getCategoryName(channel.category)} • ${channel.country}</p>
+            if (this.reorderMode) {
+                item.className = `channel-item-reorder ${this.selectedChannelId === channel.id ? 'selected' : ''}`;
+                item.onclick = () => this.selectChannelForReorder(channel.id);
+                
+                // إنشاء placeholder مصغر للوحة التحكم
+                const adminPlaceholder = this.createAdminLogoPlaceholder(channel);
+                
+                item.innerHTML = `
+                    <div class="channel-order-number">${index + 1}</div>
+                    <div class="channel-item-content">
+                        <img src="${channel.logo}" alt="${channel.name}" class="channel-item-logo"
+                             onerror="this.src='${adminPlaceholder}'; this.classList.add('admin-placeholder-logo');">
+                        <div class="channel-item-info">
+                            <div class="channel-item-name">${channel.name}</div>
+                            <div class="channel-item-meta">
+                                <span>${channel.country}</span>
+                                <span>•</span>
+                                <span>${this.getCategoryName(channel.category)}</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="admin-channel-actions">
-                    <div class="move-buttons">
-                        <button class="move-btn" onclick="app.moveChannelUp(${index})" ${index === 0 ? 'disabled' : ''}>
-                            <i class="fas fa-chevron-up"></i>
+                    <div class="channel-item-actions">
+                        <button class="edit-btn" onclick="app.editChannel(${channel.id}, event)" title="تعديل">
+                            <i class="fas fa-edit"></i>
                         </button>
-                        <button class="move-btn" onclick="app.moveChannelDown(${index})" ${index === this.channels.length - 1 ? 'disabled' : ''}>
-                            <i class="fas fa-chevron-down"></i>
+                        <button class="delete-btn" onclick="app.deleteChannel(${channel.id}, event)" title="حذف">
+                            <i class="fas fa-trash"></i>
                         </button>
                     </div>
-                    <button class="edit-btn" onclick="app.editChannel(${channel.id}, event)">
-                        <i class="fas fa-edit"></i> تعديل
-                    </button>
-                    <button class="delete-btn" onclick="app.deleteChannel(${channel.id}, event)">
-                        <i class="fas fa-trash"></i> حذف
-                    </button>
-                </div>
-            `;
-            
-            // إضافة event listeners للسحب والإفلات
-            this.addDragListeners(item);
+                `;
+            } else {
+                item.className = 'admin-channel-item';
+                item.draggable = true;
+                item.dataset.channelId = channel.id;
+                item.dataset.index = index;
+                
+                // إنشاء placeholder مصغر للوحة التحكم
+                const adminPlaceholder = this.createAdminLogoPlaceholder(channel);
+                
+                item.innerHTML = `
+                    <div class="admin-channel-info">
+                        <i class="fas fa-grip-vertical drag-handle"></i>
+                        <img src="${channel.logo}" alt="${channel.name}" class="admin-channel-logo"
+                             onerror="this.src='${adminPlaceholder}'; this.classList.add('admin-placeholder-logo');">
+                        <div>
+                            <h4>${channel.name}</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem;">${this.getCategoryName(channel.category)} • ${channel.country}</p>
+                        </div>
+                    </div>
+                    <div class="admin-channel-actions">
+                        <div class="move-buttons">
+                            <button class="move-btn" onclick="app.moveChannelUp(${index})" ${index === 0 ? 'disabled' : ''}>
+                                <i class="fas fa-chevron-up"></i>
+                            </button>
+                            <button class="move-btn" onclick="app.moveChannelDown(${index})" ${index === this.channels.length - 1 ? 'disabled' : ''}>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                        <button class="edit-btn" onclick="app.editChannel(${channel.id}, event)">
+                            <i class="fas fa-edit"></i> تعديل
+                        </button>
+                        <button class="delete-btn" onclick="app.deleteChannel(${channel.id}, event)">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    </div>
+                `;
+                
+                // إضافة event listeners للسحب والإفلات
+                this.addDragListeners(item);
+            }
             
             list.appendChild(item);
         });
@@ -5097,6 +5130,141 @@ class ArabicTVApp {
             
             // Notification removed as requested
         }, 100);
+    }
+
+    // Reorder Mode Variables
+    reorderMode = false;
+    selectedChannelId = null;
+
+    // Enable Reorder Mode
+    enableReorderMode() {
+        this.reorderMode = true;
+        this.renderAdminChannels();
+        this.updateReorderButtons();
+        this.showNotification('info', 'وضع الترتيب مفعل', 'اختر قناة واستخدم أزرار التحكم لترتيبها');
+    }
+
+    // Disable Reorder Mode
+    disableReorderMode() {
+        this.reorderMode = false;
+        this.selectedChannelId = null;
+        this.renderAdminChannels();
+        this.updateReorderButtons();
+    }
+
+    // Update Reorder Buttons State
+    updateReorderButtons() {
+        const reorderBtn = document.getElementById('reorderBtn');
+        const resetOrderBtn = document.getElementById('resetOrderBtn');
+        const moveUpBtn = document.getElementById('moveUpBtn');
+        const moveDownBtn = document.getElementById('moveDownBtn');
+        const moveToTopBtn = document.getElementById('moveToTopBtn');
+        const moveToBottomBtn = document.getElementById('moveToBottomBtn');
+
+        if (this.reorderMode) {
+            reorderBtn.innerHTML = '<i class="fas fa-times"></i> إلغاء الترتيب';
+            reorderBtn.onclick = () => this.disableReorderMode();
+            resetOrderBtn.style.display = 'inline-flex';
+        } else {
+            reorderBtn.innerHTML = '<i class="fas fa-sort"></i> ترتيب القنوات';
+            reorderBtn.onclick = () => this.enableReorderMode();
+            resetOrderBtn.style.display = 'none';
+        }
+
+        const hasSelection = this.selectedChannelId !== null;
+        moveUpBtn.disabled = !hasSelection;
+        moveDownBtn.disabled = !hasSelection;
+        moveToTopBtn.disabled = !hasSelection;
+        moveToBottomBtn.disabled = !hasSelection;
+    }
+
+    // Select Channel for Reordering
+    selectChannelForReorder(channelId) {
+        if (!this.reorderMode) return;
+        
+        this.selectedChannelId = channelId;
+        this.renderAdminChannels();
+        this.updateReorderButtons();
+    }
+
+    // Move Selected Channel Up
+    moveSelectedUp() {
+        if (!this.selectedChannelId || !this.reorderMode) return;
+        
+        const currentIndex = this.channels.findIndex(c => c.id === this.selectedChannelId);
+        if (currentIndex > 0) {
+            const channel = this.channels[currentIndex];
+            this.channels.splice(currentIndex, 1);
+            this.channels.splice(currentIndex - 1, 0, channel);
+            this.renderAdminChannels();
+            this.updateReorderButtons();
+            this.showNotification('success', 'تم النقل', 'تم نقل القناة لأعلى');
+        }
+    }
+
+    // Move Selected Channel Down
+    moveSelectedDown() {
+        if (!this.selectedChannelId || !this.reorderMode) return;
+        
+        const currentIndex = this.channels.findIndex(c => c.id === this.selectedChannelId);
+        if (currentIndex < this.channels.length - 1) {
+            const channel = this.channels[currentIndex];
+            this.channels.splice(currentIndex, 1);
+            this.channels.splice(currentIndex + 1, 0, channel);
+            this.renderAdminChannels();
+            this.updateReorderButtons();
+            this.showNotification('success', 'تم النقل', 'تم نقل القناة لأسفل');
+        }
+    }
+
+    // Move Selected Channel to Top
+    moveToTop() {
+        if (!this.selectedChannelId || !this.reorderMode) return;
+        
+        const currentIndex = this.channels.findIndex(c => c.id === this.selectedChannelId);
+        if (currentIndex > 0) {
+            const channel = this.channels[currentIndex];
+            this.channels.splice(currentIndex, 1);
+            this.channels.unshift(channel);
+            this.renderAdminChannels();
+            this.updateReorderButtons();
+            this.showNotification('success', 'تم النقل', 'تم نقل القناة للأول');
+        }
+    }
+
+    // Move Selected Channel to Bottom
+    moveToBottom() {
+        if (!this.selectedChannelId || !this.reorderMode) return;
+        
+        const currentIndex = this.channels.findIndex(c => c.id === this.selectedChannelId);
+        if (currentIndex < this.channels.length - 1) {
+            const channel = this.channels[currentIndex];
+            this.channels.splice(currentIndex, 1);
+            this.channels.push(channel);
+            this.renderAdminChannels();
+            this.updateReorderButtons();
+            this.showNotification('success', 'تم النقل', 'تم نقل القناة للأخير');
+        }
+    }
+
+    // Reset Channels Order
+    resetChannelsOrder() {
+        if (confirm('هل أنت متأكد من إعادة تعيين ترتيب القنوات؟\nسيتم إرجاع القنوات إلى ترتيبها الأصلي.')) {
+            // Sort channels by name
+            this.channels.sort((a, b) => a.name.localeCompare(b.name, 'ar'));
+            
+            // Save changes
+            this.saveChannelsToStorage();
+            
+            // Re-render
+            this.renderChannels();
+            this.renderAdminChannels();
+            
+            // Disable reorder mode
+            this.disableReorderMode();
+            
+            this.showNotification('success', 'تم إعادة التعيين', 'تم إرجاع القنوات إلى ترتيبها الأصلي');
+        }
     }
 
     // Delete Channel Function

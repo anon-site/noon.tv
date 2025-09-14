@@ -583,6 +583,38 @@
                     <div class="admin-search">
                         <input type="text" placeholder="البحث في القنوات..." id="adminSearchInput">
                     </div>
+                    <div class="channels-controls">
+                        <div class="control-group">
+                            <button class="control-btn" onclick="app.enableReorderMode()" id="reorderBtn">
+                                <i class="fas fa-sort"></i>
+                                ترتيب القنوات
+                            </button>
+                            <button class="control-btn" onclick="app.resetChannelsOrder()" id="resetOrderBtn">
+                                <i class="fas fa-undo"></i>
+                                إعادة تعيين
+                            </button>
+                        </div>
+                        <div class="control-group">
+                            <button class="control-btn" onclick="app.moveSelectedUp()" id="moveUpBtn" disabled>
+                                <i class="fas fa-arrow-up"></i>
+                                نقل لأعلى
+                            </button>
+                            <button class="control-btn" onclick="app.moveSelectedDown()" id="moveDownBtn" disabled>
+                                <i class="fas fa-arrow-down"></i>
+                                نقل لأسفل
+                            </button>
+                        </div>
+                        <div class="control-group">
+                            <button class="control-btn" onclick="app.moveToTop()" id="moveToTopBtn" disabled>
+                                <i class="fas fa-angle-double-up"></i>
+                                للأول
+                            </button>
+                            <button class="control-btn" onclick="app.moveToBottom()" id="moveToBottomBtn" disabled>
+                                <i class="fas fa-angle-double-down"></i>
+                                للأخير
+                            </button>
+                        </div>
+                    </div>
                     <div class="channels-list" id="adminChannelsList">
                         <!-- Admin channels list will be loaded here -->
                     </div>
