@@ -7806,8 +7806,9 @@ body[data-theme="light"] .enhanced-save-btn:hover {
         max-width: 90vw;
         display: flex;
         flex-direction: column;
-        height: calc(100vh - 140px);
+        height: calc(100vh - 100px);
         overflow: hidden;
+        padding: 0.75rem;
         padding-bottom: env(safe-area-inset-bottom, 0px);
         position: relative;
     }
@@ -7818,15 +7819,27 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     }
     
     .form-actions {
-        flex-direction: column;
-        gap: 0.8rem;
+        flex-direction: row;
+        gap: 0.5rem;
+        padding: 0;
+        justify-content: space-between;
+        background: none;
+        border: none;
+        margin-top: 0.5rem;
     }
     
     .reset-btn,
     .add-btn {
-        width: 100%;
-        padding: 12px;
-        font-size: 16px;
+        flex: 1;
+        padding: 6px 10px;
+        font-size: 12px;
+        border-radius: 4px;
+        font-weight: 500;
+        letter-spacing: 0.1px;
+        transition: all 0.2s ease;
+        min-height: 32px;
+        border: none;
+        cursor: pointer;
     }
     
     .form-fields {
@@ -7840,46 +7853,54 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     .form-actions {
         position: sticky;
         bottom: 0;
-        background: var(--background-dark);
-        padding: 1rem 0 2rem 0;
-        border-top: 1px solid var(--border-color);
+        background: none;
+        padding: 0;
+        border: none;
         margin-top: auto;
         z-index: 100;
         margin-bottom: env(safe-area-inset-bottom, 0px);
         flex-shrink: 0;
-        min-height: 80px;
+        min-height: auto;
     }
     
     .form-group {
-        margin-bottom: 0.6rem;
+        margin-bottom: 0.4rem;
     }
     
     .add-btn {
         width: 100% !important;
-        padding: 14px !important;
-        font-size: 16px !important;
+        padding: 8px 12px !important;
+        font-size: 13px !important;
         background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important;
         color: white !important;
         border: none !important;
-        border-radius: 8px !important;
-        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important;
+        border-radius: 5px !important;
+        box-shadow: 0 1px 4px rgba(59, 130, 246, 0.2) !important;
         display: block !important;
         visibility: visible !important;
         opacity: 1 !important;
-        min-height: 48px !important;
+        min-height: 36px !important;
         margin: 0 !important;
         box-sizing: border-box !important;
         position: relative !important;
         z-index: 1000 !important;
         cursor: pointer !important;
-        transition: all 0.3s ease !important;
-        margin-top: 1rem !important;
+        transition: all 0.2s ease !important;
+        margin-top: 0.5rem !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.2px !important;
     }
     
     .add-btn:hover {
         background: linear-gradient(135deg, #1d4ed8, #1e40af);
         transform: translateY(-1px);
-        box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+    }
+    
+    .add-btn:active {
+        transform: translateY(0);
+        box-shadow: 0 1px 4px rgba(59, 130, 246, 0.3);
+        background: linear-gradient(135deg, #1e40af, #1e3a8a);
     }
     
     .form-group label {
@@ -7891,11 +7912,15 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     @media (max-width: 375px) {
         .add-channel-form {
             max-width: 95vw;
-            height: calc(100vh - 120px);
+            height: calc(100vh - 100px);
+            padding: 0.75rem;
         }
         
         .form-actions {
-            padding: 0.75rem 0 1.5rem 0;
+            padding: 0;
+            background: none;
+            border: none;
+            margin-top: 0.4rem;
         }
         
         .form-group input,
@@ -7908,8 +7933,9 @@ body[data-theme="light"] .enhanced-save-btn:hover {
         }
         
         .add-btn {
-            padding: 12px;
-            font-size: 16px;
+            padding: 5px 8px;
+            font-size: 11px;
+            min-height: 28px;
         }
         
         .form-group label {
@@ -7921,11 +7947,15 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     @media (max-width: 320px) {
         .add-channel-form {
             max-width: 98vw;
-            height: calc(100vh - 100px);
+            height: calc(100vh - 80px);
+            padding: 0.5rem;
         }
         
         .form-actions {
-            padding: 0.5rem 0 1.25rem 0;
+            padding: 0;
+            background: none;
+            border: none;
+            margin-top: 0.3rem;
         }
         
         .form-group input,
@@ -7936,8 +7966,9 @@ body[data-theme="light"] .enhanced-save-btn:hover {
         }
         
         .add-btn {
-            padding: 10px;
-            font-size: 16px;
+            padding: 4px 6px;
+            font-size: 10px;
+            min-height: 26px;
         }
         
         .form-group label {
@@ -7947,8 +7978,8 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     
     /* Light theme for mobile form */
     body[data-theme="light"] .form-actions {
-        background: #ffffff;
-        border-top-color: #e2e8f0;
+        background: none;
+        border: none;
     }
     
     body[data-theme="light"] .add-btn {
@@ -7969,7 +8000,10 @@ body[data-theme="light"] .enhanced-save-btn:hover {
         }
         
         .form-actions {
-            padding: 0.5rem 0 1rem 0;
+            padding: 0;
+            background: none;
+            border: none;
+            margin-top: 0.4rem;
         }
     }
     
@@ -7980,12 +8014,16 @@ body[data-theme="light"] .enhanced-save-btn:hover {
         }
         
         .form-actions {
-            padding: 0.25rem 0 0.75rem 0;
+            padding: 0;
+            background: none;
+            border: none;
+            margin-top: 0.2rem;
         }
         
         .add-btn {
-            padding: 8px !important;
-            font-size: 14px !important;
+            padding: 4px 8px !important;
+            font-size: 10px !important;
+            min-height: 24px !important;
         }
     }
     
@@ -8013,13 +8051,15 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     }
     
     .add-btn {
-        padding: 6px 12px;
-        font-size: 0.85rem;
+        padding: 4px 8px;
+        font-size: 0.75rem;
+        min-height: 28px;
     }
     
     .logo-upload-btn {
-        padding: 6px 12px;
-        font-size: 0.8rem;
+        padding: 6px 10px;
+        font-size: 0.75rem;
+        min-height: 32px;
     }
     
     .logo-preview img {
