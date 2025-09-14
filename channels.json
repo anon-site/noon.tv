@@ -430,15 +430,6 @@
       "category": "entertainment",
       "country": "اليونان",
       "type": "hls"
-    },
-    {
-      "id": 70,
-      "name": "السنة النبوية2",
-      "url": "https://live.cdnbridge.tv/Almasirah/Almasirah_all/playlist.m3u8",
-      "logo": "https://iili.io/Kz8TUYJ.png",
-      "category": "music",
-      "country": "العراق",
-      "type": "hls"
     }
   ],
   "favorites": [],
@@ -510,6 +501,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-14T16:53:27.673Z",
+  "lastModified": "2025-09-14T16:53:38.793Z",
   "version": "1.0"
 }
