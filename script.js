@@ -1465,14 +1465,18 @@ class ArabicTVApp {
             const item = document.createElement('div');
             
             if (this.reorderMode) {
-                item.className = `channel-item-reorder ${this.selectedChannelId === channel.id ? 'selected' : ''}`;
-                item.onclick = () => this.selectChannelForReorder(channel.id);
+                item.className = 'channel-item-reorder';
+                item.draggable = true;
+                item.dataset.channelId = channel.id;
+                item.dataset.index = index;
                 
                 // إنشاء placeholder مصغر للوحة التحكم
                 const adminPlaceholder = this.createAdminLogoPlaceholder(channel);
                 
                 item.innerHTML = `
-                    <div class="channel-order-number">${index + 1}</div>
+                    <div class="channel-order-number" onclick="app.handleNumberClick(${channel.id}, ${index})" title="اضغط لتغيير الرقم">
+                        ${index + 1}
+                    </div>
                     <div class="channel-item-content">
                         <img src="${channel.logo}" alt="${channel.name}" class="channel-item-logo"
                              onerror="this.src='${adminPlaceholder}'; this.classList.add('admin-placeholder-logo');">
@@ -1494,6 +1498,9 @@ class ArabicTVApp {
                         </button>
                     </div>
                 `;
+                
+                // إضافة event listeners للسحب والإفلات
+                this.addDragListeners(item);
             } else {
                 item.className = 'admin-channel-item';
                 item.draggable = true;
@@ -3973,33 +3980,39 @@ class ArabicTVApp {
 
     // وظائف ترتيب القنوات
     addDragListeners(item) {
+        if (!this.reorderMode) return;
+        
         item.addEventListener('dragstart', (e) => {
-            e.target.classList.add('dragging');
-            e.dataTransfer.setData('text/plain', e.target.dataset.index);
+            this.draggedElement = item;
+            item.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', item.dataset.channelId);
         });
 
         item.addEventListener('dragend', (e) => {
-            e.target.classList.remove('dragging');
+            item.classList.remove('dragging');
+            this.draggedElement = null;
         });
 
         item.addEventListener('dragover', (e) => {
             e.preventDefault();
-            e.target.closest('.admin-channel-item')?.classList.add('drag-over');
+            e.dataTransfer.dropEffect = 'move';
+            item.classList.add('drag-over');
         });
 
         item.addEventListener('dragleave', (e) => {
-            e.target.closest('.admin-channel-item')?.classList.remove('drag-over');
+            item.classList.remove('drag-over');
         });
 
         item.addEventListener('drop', (e) => {
             e.preventDefault();
-            const draggedIndex = parseInt(e.dataTransfer.getData('text/plain'));
-            const targetItem = e.target.closest('.admin-channel-item');
+            item.classList.remove('drag-over');
             
-            if (targetItem) {
-                const targetIndex = parseInt(targetItem.dataset.index);
-                this.moveChannel(draggedIndex, targetIndex);
-                targetItem.classList.remove('drag-over');
+            if (this.draggedElement && this.draggedElement !== item) {
+                const draggedChannelId = parseInt(e.dataTransfer.getData('text/plain'));
+                const targetIndex = parseInt(item.dataset.index);
+                
+                this.moveChannelToPosition(draggedChannelId, targetIndex);
             }
         });
     }
@@ -5134,116 +5147,103 @@ class ArabicTVApp {
 
     // Reorder Mode Variables
     reorderMode = false;
-    selectedChannelId = null;
+    draggedElement = null;
 
-    // Enable Reorder Mode
-    enableReorderMode() {
-        this.reorderMode = true;
+    // Toggle Reorder Mode
+    toggleReorderMode() {
+        this.reorderMode = !this.reorderMode;
         this.renderAdminChannels();
-        this.updateReorderButtons();
-        this.showNotification('info', 'وضع الترتيب مفعل', 'اختر قناة واستخدم أزرار التحكم لترتيبها');
+        this.updateReorderUI();
+        
+        if (this.reorderMode) {
+            this.showNotification('info', 'وضع الترتيب مفعل', 'اسحب القنوات لترتيبها أو اضغط على الأرقام');
+        }
     }
 
-    // Disable Reorder Mode
-    disableReorderMode() {
-        this.reorderMode = false;
-        this.selectedChannelId = null;
-        this.renderAdminChannels();
-        this.updateReorderButtons();
-    }
-
-    // Update Reorder Buttons State
-    updateReorderButtons() {
+    // Update Reorder UI
+    updateReorderUI() {
         const reorderBtn = document.getElementById('reorderBtn');
         const resetOrderBtn = document.getElementById('resetOrderBtn');
-        const moveUpBtn = document.getElementById('moveUpBtn');
-        const moveDownBtn = document.getElementById('moveDownBtn');
-        const moveToTopBtn = document.getElementById('moveToTopBtn');
-        const moveToBottomBtn = document.getElementById('moveToBottomBtn');
+        const reorderInfo = document.getElementById('reorderInfo');
 
         if (this.reorderMode) {
             reorderBtn.innerHTML = '<i class="fas fa-times"></i> إلغاء الترتيب';
-            reorderBtn.onclick = () => this.disableReorderMode();
             resetOrderBtn.style.display = 'inline-flex';
+            reorderInfo.style.display = 'flex';
         } else {
             reorderBtn.innerHTML = '<i class="fas fa-sort"></i> ترتيب القنوات';
-            reorderBtn.onclick = () => this.enableReorderMode();
             resetOrderBtn.style.display = 'none';
+            reorderInfo.style.display = 'none';
         }
-
-        const hasSelection = this.selectedChannelId !== null;
-        moveUpBtn.disabled = !hasSelection;
-        moveDownBtn.disabled = !hasSelection;
-        moveToTopBtn.disabled = !hasSelection;
-        moveToBottomBtn.disabled = !hasSelection;
     }
 
-    // Select Channel for Reordering
-    selectChannelForReorder(channelId) {
+    // Move Channel to Position
+    moveChannelToPosition(channelId, newPosition) {
+        const currentIndex = this.channels.findIndex(c => c.id === channelId);
+        if (currentIndex === -1) return;
+
+        const channel = this.channels[currentIndex];
+        this.channels.splice(currentIndex, 1);
+        this.channels.splice(newPosition, 0, channel);
+        
+        this.saveChannelsToStorage();
+        this.renderChannels();
+        this.renderAdminChannels();
+    }
+
+    // Handle Number Click - Start Editing
+    handleNumberClick(channelId, currentPosition) {
         if (!this.reorderMode) return;
         
-        this.selectedChannelId = channelId;
-        this.renderAdminChannels();
-        this.updateReorderButtons();
-    }
-
-    // Move Selected Channel Up
-    moveSelectedUp() {
-        if (!this.selectedChannelId || !this.reorderMode) return;
+        const numberElement = document.querySelector(`[data-channel-id="${channelId}"] .channel-order-number`);
+        if (!numberElement) return;
         
-        const currentIndex = this.channels.findIndex(c => c.id === this.selectedChannelId);
-        if (currentIndex > 0) {
-            const channel = this.channels[currentIndex];
-            this.channels.splice(currentIndex, 1);
-            this.channels.splice(currentIndex - 1, 0, channel);
-            this.renderAdminChannels();
-            this.updateReorderButtons();
-            this.showNotification('success', 'تم النقل', 'تم نقل القناة لأعلى');
+        // Create input element
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.className = 'channel-order-input';
+        input.value = currentPosition + 1;
+        input.min = 1;
+        input.max = this.channels.length;
+        
+        // Replace number with input
+        numberElement.innerHTML = '';
+        numberElement.appendChild(input);
+        numberElement.classList.add('editing');
+        
+        // Focus and select
+        input.focus();
+        input.select();
+        
+        // Handle input events
+        input.addEventListener('blur', () => this.finishNumberEdit(channelId, input));
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                this.finishNumberEdit(channelId, input);
+            } else if (e.key === 'Escape') {
+                this.cancelNumberEdit(channelId, currentPosition + 1);
+            }
+        });
+    }
+    
+    // Finish Number Edit
+    finishNumberEdit(channelId, input) {
+        const newPosition = parseInt(input.value);
+        const currentIndex = this.channels.findIndex(c => c.id === channelId);
+        
+        if (newPosition >= 1 && newPosition <= this.channels.length && newPosition !== currentIndex + 1) {
+            this.moveChannelToPosition(channelId, newPosition - 1);
+        } else {
+            this.cancelNumberEdit(channelId, currentIndex + 1);
         }
     }
-
-    // Move Selected Channel Down
-    moveSelectedDown() {
-        if (!this.selectedChannelId || !this.reorderMode) return;
-        
-        const currentIndex = this.channels.findIndex(c => c.id === this.selectedChannelId);
-        if (currentIndex < this.channels.length - 1) {
-            const channel = this.channels[currentIndex];
-            this.channels.splice(currentIndex, 1);
-            this.channels.splice(currentIndex + 1, 0, channel);
-            this.renderAdminChannels();
-            this.updateReorderButtons();
-            this.showNotification('success', 'تم النقل', 'تم نقل القناة لأسفل');
-        }
-    }
-
-    // Move Selected Channel to Top
-    moveToTop() {
-        if (!this.selectedChannelId || !this.reorderMode) return;
-        
-        const currentIndex = this.channels.findIndex(c => c.id === this.selectedChannelId);
-        if (currentIndex > 0) {
-            const channel = this.channels[currentIndex];
-            this.channels.splice(currentIndex, 1);
-            this.channels.unshift(channel);
-            this.renderAdminChannels();
-            this.updateReorderButtons();
-            this.showNotification('success', 'تم النقل', 'تم نقل القناة للأول');
-        }
-    }
-
-    // Move Selected Channel to Bottom
-    moveToBottom() {
-        if (!this.selectedChannelId || !this.reorderMode) return;
-        
-        const currentIndex = this.channels.findIndex(c => c.id === this.selectedChannelId);
-        if (currentIndex < this.channels.length - 1) {
-            const channel = this.channels[currentIndex];
-            this.channels.splice(currentIndex, 1);
-            this.channels.push(channel);
-            this.renderAdminChannels();
-            this.updateReorderButtons();
-            this.showNotification('success', 'تم النقل', 'تم نقل القناة للأخير');
+    
+    // Cancel Number Edit
+    cancelNumberEdit(channelId, originalPosition) {
+        const numberElement = document.querySelector(`[data-channel-id="${channelId}"] .channel-order-number`);
+        if (numberElement) {
+            numberElement.innerHTML = originalPosition;
+            numberElement.classList.remove('editing');
         }
     }
 

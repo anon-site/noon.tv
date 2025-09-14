@@ -3346,31 +3346,85 @@ input:checked + .slider:before {
     margin-bottom: 0.75rem;
     transition: var(--transition);
     cursor: move;
+    position: relative;
 }
 
 .channel-item-reorder:hover {
     border-color: var(--highlight-color);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
 }
 
-.channel-item-reorder.selected {
+.channel-item-reorder.dragging {
+    opacity: 0.5;
+    transform: rotate(5deg);
+}
+
+.channel-item-reorder.drag-over {
     border-color: var(--highlight-color);
     background: rgba(255, 107, 107, 0.1);
-    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.2);
 }
 
 .channel-order-number {
     background: var(--highlight-color);
     color: white;
-    width: 32px;
-    height: 32px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     flex-shrink: 0;
+    cursor: pointer;
+    transition: var(--transition);
+    user-select: none;
+    position: relative;
+    border: 2px solid transparent;
+}
+
+.channel-order-number:hover {
+    background: var(--accent-color);
+    transform: scale(1.05);
+    border-color: white;
+}
+
+.channel-order-number.editing {
+    background: var(--accent-color);
+    border-color: white;
+    transform: scale(1.1);
+}
+
+.channel-order-input {
+    background: transparent;
+    border: none;
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    outline: none;
+    cursor: pointer;
+}
+
+.channel-order-input:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid white;
+}
+
+.reorder-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 107, 107, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 107, 107, 0.3);
 }
 
 .channel-item-content {
@@ -8121,9 +8175,13 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     }
     
     .channel-order-number {
-        width: 28px;
-        height: 28px;
-        font-size: 0.8rem;
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .channel-order-input {
+        font-size: 1rem;
     }
     
     .channel-item-logo {
