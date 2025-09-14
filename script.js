@@ -204,7 +204,8 @@ class ArabicTVApp {
         this.favorites = new Set(); // Track favorite channels
         this.currentCountryFilter = 'all'; // Track country filter
         this.showFavoritesOnly = false; // Track favorites filter
-        this.categories = this.getDefaultCategories(); // Track categories
+        this.categories = this.getDefaultCategories(); // Track channel categories
+        this.videoCategories = this.getDefaultVideoCategories(); // Track video categories
         this.videos = []; // Track videos
         this.editingVideoId = null; // Track video being edited
         
@@ -251,12 +252,33 @@ class ArabicTVApp {
         // Load videos from storage
         this.loadVideosFromStorage();
 
+        // Load video categories from storage
+        this.loadVideoCategories();
+
         // Add video form handler
         const addVideoForm = document.getElementById('addVideoForm');
         if (addVideoForm) {
             addVideoForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 this.handleVideoFormSubmit();
+            });
+        }
+
+        // Add video category form handler
+        const videoCategoryForm = document.getElementById('videoCategoryForm');
+        if (videoCategoryForm) {
+            videoCategoryForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleVideoCategoryFormSubmit();
+            });
+        }
+
+        // Add channel category form handler
+        const channelCategoryForm = document.getElementById('categoryForm');
+        if (channelCategoryForm) {
+            channelCategoryForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleChannelCategoryFormSubmit();
             });
         }
 
@@ -5565,6 +5587,19 @@ class ArabicTVApp {
         ];
     }
 
+    getDefaultVideoCategories() {
+        return [
+            { key: 'youtube', name: 'يوتيوب', icon: 'fab fa-youtube' },
+            { key: 'live', name: 'البث المباشر', icon: 'fas fa-broadcast-tower' },
+            { key: 'movies', name: 'الأفلام', icon: 'fas fa-film' },
+            { key: 'series', name: 'المسلسلات', icon: 'fas fa-tv' },
+            { key: 'documentary', name: 'الوثائقية', icon: 'fas fa-book-open' },
+            { key: 'kids', name: 'الأطفال', icon: 'fas fa-child' },
+            { key: 'educational', name: 'التعليمية', icon: 'fas fa-graduation-cap' },
+            { key: 'cooking', name: 'الطبخ', icon: 'fas fa-utensils' }
+        ];
+    }
+
     loadCategories() {
         try {
             const savedCategories = localStorage.getItem('arabicTVCategories');
@@ -6951,6 +6986,300 @@ ArabicTVApp.prototype.switchAdminTab = function(tabName) {
     if (tabName === 'videos') {
         this.renderAdminVideos();
     }
+    
+    // Load video categories if switching to video categories tab
+    if (tabName === 'videoCategories') {
+        this.renderVideoCategories();
+    }
+    
+    // Load channel categories if switching to channel categories tab
+    if (tabName === 'channelCategories') {
+        this.renderChannelCategories();
+    }
+};
+
+// Video Categories Management Functions
+ArabicTVApp.prototype.loadVideoCategories = function() {
+    try {
+        const savedVideoCategories = localStorage.getItem('arabicTVVideoCategories');
+        if (savedVideoCategories) {
+            this.videoCategories = JSON.parse(savedVideoCategories);
+            console.log('تم تحميل فئات الفيديو:', this.videoCategories.length, 'فئة');
+        } else {
+            this.videoCategories = this.getDefaultVideoCategories();
+            this.saveVideoCategories();
+        }
+    } catch (error) {
+        console.error('خطأ في تحميل فئات الفيديو:', error);
+        this.videoCategories = this.getDefaultVideoCategories();
+    }
+};
+
+ArabicTVApp.prototype.saveVideoCategories = function() {
+    try {
+        localStorage.setItem('arabicTVVideoCategories', JSON.stringify(this.videoCategories));
+        console.log('تم حفظ فئات الفيديو بنجاح');
+    } catch (error) {
+        console.error('خطأ في حفظ فئات الفيديو:', error);
+    }
+};
+
+ArabicTVApp.prototype.renderVideoCategories = function() {
+    const categoriesList = document.getElementById('videoCategoriesList');
+    if (!categoriesList) return;
+    
+    if (this.videoCategories.length === 0) {
+        categoriesList.innerHTML = `
+            <div class="no-categories-message">
+                <i class="fas fa-video"></i>
+                <h3>لا توجد فئات فيديو</h3>
+                <p>ابدأ بإضافة فئة فيديو جديدة</p>
+            </div>
+        `;
+        return;
+    }
+    
+    categoriesList.innerHTML = this.videoCategories.map((category, index) => `
+        <div class="category-item" data-category-index="${index}">
+            <div class="category-info">
+                <i class="${category.icon}"></i>
+                <div class="category-details">
+                    <h4>${category.name}</h4>
+                    <p>المفتاح: ${category.key}</p>
+                </div>
+            </div>
+            <div class="category-actions">
+                <button class="edit-category-btn" onclick="app.editVideoCategory(${index})">
+                    <i class="fas fa-edit"></i>
+                    تعديل
+                </button>
+                <button class="delete-category-btn" onclick="app.deleteVideoCategory(${index})">
+                    <i class="fas fa-trash"></i>
+                    حذف
+                </button>
+            </div>
+        </div>
+    `).join('');
+};
+
+ArabicTVApp.prototype.renderChannelCategories = function() {
+    const categoriesList = document.getElementById('channelCategoriesList');
+    if (!categoriesList) return;
+    
+    if (this.categories.length === 0) {
+        categoriesList.innerHTML = `
+            <div class="no-categories-message">
+                <i class="fas fa-tv"></i>
+                <h3>لا توجد فئات قنوات</h3>
+                <p>ابدأ بإضافة فئة قناة جديدة</p>
+            </div>
+        `;
+        return;
+    }
+    
+    categoriesList.innerHTML = this.categories.map((category, index) => `
+        <div class="category-item" data-category-index="${index}">
+            <div class="category-info">
+                <i class="${category.icon}"></i>
+                <div class="category-details">
+                    <h4>${category.name}</h4>
+                    <p>المفتاح: ${category.key}</p>
+                </div>
+            </div>
+            <div class="category-actions">
+                <button class="edit-category-btn" onclick="app.editChannelCategory(${index})">
+                    <i class="fas fa-edit"></i>
+                    تعديل
+                </button>
+                <button class="delete-category-btn" onclick="app.deleteChannelCategory(${index})">
+                    <i class="fas fa-trash"></i>
+                    حذف
+                </button>
+            </div>
+        </div>
+    `).join('');
+};
+
+ArabicTVApp.prototype.addVideoCategory = function(categoryData) {
+    const newCategory = {
+        key: categoryData.key,
+        name: categoryData.name,
+        icon: categoryData.icon
+    };
+    
+    this.videoCategories.push(newCategory);
+    this.saveVideoCategories();
+    this.renderVideoCategories();
+    this.notifySuccess('تم إضافة فئة الفيديو بنجاح');
+    
+    return newCategory;
+};
+
+ArabicTVApp.prototype.addCategory = function(categoryData) {
+    const newCategory = {
+        key: categoryData.key,
+        name: categoryData.name,
+        icon: categoryData.icon
+    };
+    
+    this.categories.push(newCategory);
+    this.saveCategories();
+    this.renderChannelCategories();
+    this.notifySuccess('تم إضافة فئة القناة بنجاح');
+    
+    return newCategory;
+};
+
+ArabicTVApp.prototype.editVideoCategory = function(index) {
+    const category = this.videoCategories[index];
+    if (!category) return;
+    
+    // Fill form with category data
+    document.getElementById('videoCategoryKey').value = category.key;
+    document.getElementById('videoCategoryName').value = category.name;
+    document.getElementById('videoCategoryIcon').value = category.icon;
+    
+    // Set editing mode
+    document.getElementById('editingVideoCategoryIndex').value = index;
+    document.getElementById('videoCategoryFormTitle').textContent = 'تعديل فئة الفيديو';
+    
+    // Show form
+    document.getElementById('videoCategoryFormContainer').style.display = 'block';
+    
+    this.notifyInfo('تم تحميل بيانات فئة الفيديو للتعديل');
+};
+
+ArabicTVApp.prototype.deleteVideoCategory = function(index) {
+    const category = this.videoCategories[index];
+    if (!category) return;
+    
+    if (confirm(`هل أنت متأكد من حذف فئة الفيديو "${category.name}"؟\n\nهذا الإجراء لا يمكن التراجع عنه.`)) {
+        this.videoCategories.splice(index, 1);
+        this.saveVideoCategories();
+        this.renderVideoCategories();
+        this.notifySuccess('تم حذف فئة الفيديو بنجاح');
+        return true;
+    }
+    
+    return false;
+};
+
+ArabicTVApp.prototype.editChannelCategory = function(index) {
+    const category = this.categories[index];
+    if (!category) return;
+    
+    // Fill form with category data
+    document.getElementById('categoryKey').value = category.key;
+    document.getElementById('categoryName').value = category.name;
+    document.getElementById('categoryIcon').value = category.icon;
+    
+    // Set editing mode
+    document.getElementById('editingCategoryIndex').value = index;
+    document.getElementById('categoryFormTitle').textContent = 'تعديل فئة القناة';
+    
+    // Show form
+    document.getElementById('categoryFormContainer').style.display = 'block';
+    
+    this.notifyInfo('تم تحميل بيانات فئة القناة للتعديل');
+};
+
+ArabicTVApp.prototype.deleteChannelCategory = function(index) {
+    const category = this.categories[index];
+    if (!category) return;
+    
+    if (confirm(`هل أنت متأكد من حذف فئة القناة "${category.name}"؟\n\nهذا الإجراء لا يمكن التراجع عنه.`)) {
+        this.categories.splice(index, 1);
+        this.saveCategories();
+        this.renderChannelCategories();
+        this.notifySuccess('تم حذف فئة القناة بنجاح');
+        return true;
+    }
+    
+    return false;
+};
+
+ArabicTVApp.prototype.handleVideoCategoryFormSubmit = function() {
+    const key = document.getElementById('videoCategoryKey').value.trim();
+    const name = document.getElementById('videoCategoryName').value.trim();
+    const icon = document.getElementById('videoCategoryIcon').value;
+    const editingIndex = parseInt(document.getElementById('editingVideoCategoryIndex').value);
+    
+    // Validation
+    if (!key || !name || !icon) {
+        this.notifyError('يرجى ملء جميع الحقول المطلوبة');
+        return;
+    }
+    
+    // Check for duplicate key
+    const existingCategory = this.videoCategories.find((cat, index) => 
+        cat.key === key && index !== editingIndex
+    );
+    
+    if (existingCategory) {
+        this.notifyError('مفتاح الفئة موجود بالفعل، يرجى اختيار مفتاح آخر');
+        return;
+    }
+    
+    const categoryData = { key, name, icon };
+    
+    if (editingIndex >= 0) {
+        // Update existing category
+        this.videoCategories[editingIndex] = categoryData;
+        this.saveVideoCategories();
+        this.renderVideoCategories();
+        this.notifySuccess('تم تحديث فئة الفيديو بنجاح');
+    } else {
+        // Add new category
+        this.addVideoCategory(categoryData);
+    }
+    
+    // Reset form
+    document.getElementById('videoCategoryForm').reset();
+    document.getElementById('editingVideoCategoryIndex').value = '-1';
+    document.getElementById('videoCategoryFormTitle').textContent = 'إضافة فئة فيديو جديدة';
+    document.getElementById('videoCategoryFormContainer').style.display = 'none';
+};
+
+ArabicTVApp.prototype.handleChannelCategoryFormSubmit = function() {
+    const key = document.getElementById('categoryKey').value.trim();
+    const name = document.getElementById('categoryName').value.trim();
+    const icon = document.getElementById('categoryIcon').value;
+    const editingIndex = parseInt(document.getElementById('editingCategoryIndex').value);
+    
+    // Validation
+    if (!key || !name || !icon) {
+        this.notifyError('يرجى ملء جميع الحقول المطلوبة');
+        return;
+    }
+    
+    // Check for duplicate key
+    const existingCategory = this.categories.find((cat, index) => 
+        cat.key === key && index !== editingIndex
+    );
+    
+    if (existingCategory) {
+        this.notifyError('مفتاح الفئة موجود بالفعل، يرجى اختيار مفتاح آخر');
+        return;
+    }
+    
+    const categoryData = { key, name, icon };
+    
+    if (editingIndex >= 0) {
+        // Update existing category
+        this.categories[editingIndex] = categoryData;
+        this.saveCategories();
+        this.renderChannelCategories();
+        this.notifySuccess('تم تحديث فئة القناة بنجاح');
+    } else {
+        // Add new category
+        this.addCategory(categoryData);
+    }
+    
+    // Reset form
+    document.getElementById('categoryForm').reset();
+    document.getElementById('editingCategoryIndex').value = '-1';
+    document.getElementById('categoryFormTitle').textContent = 'إضافة فئة قناة جديدة';
+    document.getElementById('categoryFormContainer').style.display = 'none';
 };
 
 // Global functions for video management
@@ -6987,6 +7316,43 @@ function resetVideoForm() {
     // Reset editing mode
     if (app && app.editingVideoId) {
         app.editingVideoId = null;
+    }
+}
+
+// Global functions for video categories management
+function showAddVideoCategoryForm() {
+    const container = document.getElementById('videoCategoryFormContainer');
+    if (container) {
+        container.style.display = 'block';
+        container.scrollIntoView({ behavior: 'smooth' });
+        
+        // Focus on first input
+        document.getElementById('videoCategoryKey').focus();
+    }
+}
+
+function hideVideoCategoryForm() {
+    const container = document.getElementById('videoCategoryFormContainer');
+    if (container) {
+        container.style.display = 'none';
+    }
+}
+
+function showAddChannelCategoryForm() {
+    const container = document.getElementById('categoryFormContainer');
+    if (container) {
+        container.style.display = 'block';
+        container.scrollIntoView({ behavior: 'smooth' });
+        
+        // Focus on first input
+        document.getElementById('categoryKey').focus();
+    }
+}
+
+function hideChannelCategoryForm() {
+    const container = document.getElementById('categoryFormContainer');
+    if (container) {
+        container.style.display = 'none';
     }
 }
 
