@@ -421,6 +421,15 @@
       "category": "news",
       "country": "إسبانيا",
       "type": "hls"
+    },
+    {
+      "id": 69,
+      "name": "Action 24",
+      "url": "https://actionlive.siliconweb.com/actionabr/actiontv/playlist.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/8/88/Action24-logo-small.png",
+      "category": "entertainment",
+      "country": "اليونان",
+      "type": "hls"
     }
   ],
   "favorites": [],
@@ -463,8 +472,8 @@
     },
     {
       "key": "entertainment",
-      "name": "منوعة",
-      "icon": "fas fa-globe"
+      "name": "المنوعة",
+      "icon": "fas fa-tv"
     },
     {
       "key": "sports",
@@ -483,15 +492,15 @@
     },
     {
       "key": "movies",
-      "name": "أفلام",
+      "name": "الأفلام",
       "icon": "fas fa-film"
     },
     {
-      "key": "kids",
-      "name": "أطفال",
-      "icon": "fas fa-child"
+      "key": "documentary",
+      "name": "الوثائقية",
+      "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-14T09:37:30.103Z",
+  "lastModified": "2025-09-14T10:09:53.904Z",
   "version": "1.0"
 }
