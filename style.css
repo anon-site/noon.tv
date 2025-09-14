@@ -2317,13 +2317,14 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
 /* Mobile Modal Content */
 @media (max-width: 768px) {
     .modal-content {
-        max-width: 100vw;
-        max-height: 100vh;
-        border-radius: 0;
-        width: 100vw;
-        height: 100vh;
+        max-width: 95vw;
+        max-height: 90vh;
+        border-radius: 12px;
+        width: 95vw;
+        height: auto;
         display: flex;
         flex-direction: column;
+        margin: 5vh auto;
     }
     
     .modal {
@@ -2331,8 +2332,8 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
     }
     
     .modal.active {
-        align-items: stretch;
-        justify-content: stretch;
+        align-items: center;
+        justify-content: center;
     }
     
     .modal-header {
@@ -2443,23 +2444,25 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
 /* Mobile Video Container */
 @media (max-width: 768px) {
     .video-container {
-        width: 100vw;
-        height: 100%;
-        max-height: none;
-        border-radius: 0;
-        box-shadow: none;
+        width: 98vw;
+        height: 55.1vw; /* 16:9 aspect ratio for 98vw width */
+        max-height: 75vh;
+        border-radius: 12px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
         position: relative;
         overflow: hidden;
+        margin: 0 auto;
     }
 }
 
 @media (max-width: 480px) {
     .video-container {
-        width: 100vw;
-        height: 100%;
-        max-height: none;
-        border-radius: 0;
-        box-shadow: none;
+        width: 96vw;
+        height: 54vw; /* 16:9 aspect ratio for 96vw width */
+        max-height: 70vh;
+        border-radius: 8px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        margin: 0 auto;
     }
     
     .live-indicator {
@@ -2490,11 +2493,12 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
 
 @media (max-width: 375px) {
     .video-container {
-        width: 100vw;
-        height: 100%;
-        max-height: none;
-        border-radius: 0;
-        box-shadow: none;
+        width: 94vw;
+        height: 52.9vw; /* 16:9 aspect ratio for 94vw width */
+        max-height: 65vh;
+        border-radius: 6px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        margin: 0 auto;
     }
     
     .live-indicator {
@@ -4197,12 +4201,27 @@ body[data-theme="light"] .pip-btn.pip-active {
         right: 0;
         left: 0;
         background: var(--secondary-color);
-        border: 2px solid var(--highlight-color);
-        border-radius: 12px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        border: 1px solid var(--highlight-color);
+        border-radius: 8px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         z-index: 1000;
-        min-width: 220px;
-        backdrop-filter: blur(10px);
+        min-width: 160px;
+        backdrop-filter: blur(8px);
+    }
+    
+    .quality-option {
+        padding: 8px 12px;
+        gap: 8px;
+        font-size: 0.8rem;
+    }
+    
+    .quality-option i:first-child {
+        width: 16px;
+        font-size: 0.9rem;
+    }
+    
+    .quality-option span {
+        font-size: 0.8rem;
     }
     
     .modal-header {
@@ -4245,8 +4264,23 @@ body[data-theme="light"] .pip-btn.pip-active {
     }
     
     .quality-menu {
-        min-width: 200px;
-        font-size: 0.9rem;
+        min-width: 140px;
+        font-size: 0.8rem;
+    }
+    
+    .quality-option {
+        padding: 6px 10px;
+        gap: 6px;
+        font-size: 0.75rem;
+    }
+    
+    .quality-option i:first-child {
+        width: 14px;
+        font-size: 0.8rem;
+    }
+    
+    .quality-option span {
+        font-size: 0.75rem;
     }
     
     .modal-header {
@@ -4280,8 +4314,23 @@ body[data-theme="light"] .pip-btn.pip-active {
     }
     
     .quality-menu {
-        min-width: 180px;
-        font-size: 0.85rem;
+        min-width: 120px;
+        font-size: 0.75rem;
+    }
+    
+    .quality-option {
+        padding: 5px 8px;
+        gap: 5px;
+        font-size: 0.7rem;
+    }
+    
+    .quality-option i:first-child {
+        width: 12px;
+        font-size: 0.75rem;
+    }
+    
+    .quality-option span {
+        font-size: 0.7rem;
     }
     
     .modal-header {
