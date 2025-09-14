@@ -84,6 +84,9 @@
                         <i class="fas fa-clock"></i>
                         تحديث: <span id="lastUpdateTime">-</span>
                     </span>
+                    <button class="refresh-channels-btn" id="refreshChannelsBtn" onclick="updateChannels()" title="تحديث القنوات">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
                 </div>
             </nav>
         </div>
@@ -416,6 +419,12 @@
                 <div class="live-indicator">
                     <span class="live-dot"></span>
                     مباشر
+                </div>
+                
+                <!-- Ad Block Notification -->
+                <div class="ad-block-notification" id="adBlockNotification">
+                    <i class="fas fa-shield-alt"></i>
+                    تم تفعيل منع الإعلانات
                 </div>
             </div>
         </div>
@@ -915,7 +924,17 @@
                     </div>
                     <div class="step-content">
                         <h4>تحديث القنوات</h4>
-                        <p>انقر على زر "تحديث القنوات" في القائمة الجانبية لجلب أحدث القنوات والتحديثات من الإنترنت</p>
+                        <p>يمكنك تحديث القنوات بسهولة من خلال أيقونة التحديث في الشريط العلوي أو من القائمة الجانبية لجلب أحدث القنوات والتحديثات من الإنترنت</p>
+                    </div>
+                </div>
+                
+                <div class="welcome-step">
+                    <div class="step-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="step-content">
+                        <h4>معلومات التحديث</h4>
+                        <p>في الشريط العلوي ستجد عدد القنوات الحالي، وقت آخر تحديث، وأيقونة التحديث السريع للوصول السهل لأحدث القنوات</p>
                     </div>
                 </div>
                 
@@ -953,6 +972,83 @@
         </div>
         <div class="modal-overlay"></div>
     </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-satellite-dish"></i>
+                        <h3>ANON TV</h3>
+                    </div>
+                    <p class="footer-description">
+                        منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link" title="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Telegram">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Discord">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-title">القنوات</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" data-category="news">الأخبار</a></li>
+                        <li><a href="#" data-category="sports">الرياضة</a></li>
+                        <li><a href="#" data-category="entertainment">المنوعة</a></li>
+                        <li><a href="#" data-category="religious">الدينية</a></li>
+                        <li><a href="#" data-category="music">الموسيقى</a></li>
+                        <li><a href="#" data-category="movies">الأفلام</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-title">الأدوات</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="openIPTVChecker()">فحص الروابط</a></li>
+                        <li><a href="#" onclick="openSettings()">الإعدادات</a></li>
+                        <li><a href="#" onclick="updateChannels()">تحديث القنوات</a></li>
+                        <li><a href="#" onclick="app.exportChannels()">تصدير القنوات</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-title">المعلومات</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="app.showWelcomeModal()">حول التطبيق</a></li>
+                        <li><a href="#" onclick="openAdminPanel()">لوحة التحكم</a></li>
+                        <li><a href="#" onclick="debugStorage()">تشخيص النظام</a></li>
+                        <li><a href="#" onclick="app.resetCustomizations()">إعادة تعيين</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    <p>&copy; 2025 ANON TV. جميع الحقوق محفوظة.</p>
+                    <p class="footer-version">الإصدار 2.0.1 | آخر تحديث: <span id="appVersion">2025-09-13</span></p>
+                </div>
+                <div class="footer-legal">
+                    <a href="#" class="legal-link">سياسة الخصوصية</a>
+                    <span class="separator">|</span>
+                    <a href="#" class="legal-link">شروط الاستخدام</a>
+                    <span class="separator">|</span>
+                    <a href="#" class="legal-link">اتصل بنا</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <!-- Notifications Container -->
     <div class="notifications-container" id="notificationsContainer"></div>

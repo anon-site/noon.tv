@@ -242,6 +242,7 @@ class ArabicTVApp {
         }
         this.syncMobileNavTabs();
         this.initializeNewFeatures(); // Initialize new navigation features
+        this.initializeFooter(); // Initialize footer functionality
         this.updateChannelStats(); // Update channel statistics
         this.updateChannelCategoryOptions(); // Update category options
         this.updateNavigationTabs(); // Update navigation tabs
@@ -1204,6 +1205,7 @@ class ArabicTVApp {
                 iframe.style.border = 'none';
                 iframe.allowFullscreen = true;
                 iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation');
                 
                 // Insert iframe after video element
                 video.parentNode.insertBefore(iframe, video.nextSibling);
@@ -1219,6 +1221,9 @@ class ArabicTVApp {
             // Show iframe
             iframe.style.display = 'block';
             
+            // Show ad block notification
+            this.showAdBlockNotification();
+            
             // Update quality display
             this.updateYouTubeQualityDisplay(quality);
             
@@ -1228,9 +1233,12 @@ class ArabicTVApp {
         }
     }
 
-    // Build YouTube embed URL with quality parameters
+    // Build YouTube embed URL with quality parameters and ad blocking
     buildYouTubeEmbedUrl(videoId, quality) {
-        let embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&controls=1`;
+        let embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&controls=1&iv_load_policy=3&cc_load_policy=0&fs=1&disablekb=0&enablejsapi=1&origin=${window.location.origin}`;
+        
+        // Add ad blocking parameters
+        embedUrl += '&adblock=1&no_ads=1&adblocker=1';
         
         // Add quality parameters based on selection
         switch (quality) {
@@ -1255,6 +1263,19 @@ class ArabicTVApp {
         }
         
         return embedUrl;
+    }
+
+    // Show ad block notification for YouTube videos
+    showAdBlockNotification() {
+        const notification = document.getElementById('adBlockNotification');
+        if (notification) {
+            notification.classList.add('show');
+            
+            // Hide notification after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
     }
 
     // Update quality display for YouTube videos
@@ -1295,6 +1316,12 @@ class ArabicTVApp {
         if (iframe) {
             iframe.style.display = 'none';
             iframe.src = '';
+        }
+        
+        // Hide ad block notification
+        const adBlockNotification = document.getElementById('adBlockNotification');
+        if (adBlockNotification) {
+            adBlockNotification.classList.remove('show');
         }
         
         // Stop video playback
@@ -3619,7 +3646,7 @@ class ArabicTVApp {
         
         // إظهار رسالة توجيهية مع تسليط الضوء على زر التحديث
         this.notifyInfo(
-            'انقر على "تحديث القنوات" في القائمة الجانبية لتحميل القنوات المتاحة',
+            'يمكنك تحديث القنوات من أيقونة التحديث في الشريط العلوي أو من القائمة الجانبية لتحميل القنوات المتاحة',
             'تحديث القنوات',
             6000
         );
@@ -4834,6 +4861,40 @@ class ArabicTVApp {
         this.updateLastUpdateTime();
         
         this.updateBreadcrumbs();
+    }
+    
+    // Initialize footer functionality
+    initializeFooter() {
+        // Add click handlers for category links in footer
+        const footerCategoryLinks = document.querySelectorAll('.footer-links a[data-category]');
+        footerCategoryLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const category = link.getAttribute('data-category');
+                this.setCategory(category);
+                this.notifySuccess(`تم التبديل إلى فئة: ${this.getCategoryName(category)}`);
+            });
+        });
+        
+        // Add click handlers for social links
+        const socialLinks = document.querySelectorAll('.social-link');
+        socialLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const platform = link.getAttribute('title');
+                this.notifyInfo(`رابط ${platform} سيتم إضافته قريباً`, 3000);
+            });
+        });
+        
+        // Add click handlers for legal links
+        const legalLinks = document.querySelectorAll('.legal-link');
+        legalLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const linkText = link.textContent;
+                this.notifyInfo(`صفحة ${linkText} قيد التطوير`, 3000);
+            });
+        });
     }
     
     updateLastUpdateTime() {
