@@ -179,7 +179,7 @@ class ArabicTVApp {
         this.settings = {
             autoQuality: true,
             autoplay: true,
-            volume: 80,
+            volume: 100,
             theme: 'dark',
             showNewsTicker: false,
             // New customization settings
