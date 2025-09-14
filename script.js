@@ -4830,7 +4830,27 @@ class ArabicTVApp {
             channelCountElement.textContent = this.filteredChannels.length;
         }
         
+        // Update the last update time
+        this.updateLastUpdateTime();
+        
         this.updateBreadcrumbs();
+    }
+    
+    updateLastUpdateTime() {
+        const lastUpdateTimeElement = document.getElementById('lastUpdateTime');
+        if (lastUpdateTimeElement) {
+            const now = new Date();
+            const timeString = now.toLocaleString('en-US', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+            lastUpdateTimeElement.textContent = timeString;
+        }
     }
 
     // Enhanced Channel Card Creation (Override existing method)

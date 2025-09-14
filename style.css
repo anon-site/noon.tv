@@ -3697,6 +3697,40 @@ body[data-theme="light"] .notification-close:hover {
     color: var(--highlight-color);
 }
 
+.update-time-text {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    margin-right: 1rem;
+    opacity: 0.9;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1));
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+.update-time-text:hover {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.15));
+    border-color: rgba(59, 130, 246, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+}
+
+.update-time-text i {
+    color: var(--highlight-color);
+    margin-left: 0.25rem;
+    font-size: 0.7rem;
+    opacity: 0.8;
+}
+
+.update-time-text #lastUpdateTime {
+    color: var(--highlight-color);
+    font-weight: 600;
+    font-family: 'Cairo', sans-serif;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
 /* Quick Actions */
 .quick-actions {
     display: flex;
@@ -3961,6 +3995,27 @@ body[data-theme="light"] .breadcrumb-item {
 
 body[data-theme="light"] .breadcrumb-item:hover {
     background: rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .update-time-text {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(16, 185, 129, 0.08));
+    border-color: rgba(59, 130, 246, 0.15);
+    color: #4a5568;
+}
+
+body[data-theme="light"] .update-time-text:hover {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(16, 185, 129, 0.12));
+    border-color: rgba(59, 130, 246, 0.25);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.08);
+}
+
+body[data-theme="light"] .update-time-text i {
+    color: #3b82f6;
+}
+
+body[data-theme="light"] .update-time-text #lastUpdateTime {
+    color: #3b82f6;
+    text-shadow: none;
 }
 
 body[data-theme="light"] .breadcrumb-item.active {
@@ -6492,6 +6547,13 @@ body[data-theme="light"] .enhanced-save-btn:hover {
         font-size: 0.75rem;
     }
     
+    .update-time-text {
+        font-size: 0.7rem;
+        margin-right: 0.5rem;
+        padding: 0.2rem 0.4rem;
+        border-radius: 6px;
+    }
+    
     /* Mobile breadcrumbs for smaller screens */
     @media (max-width: 480px) {
         .breadcrumbs-container {
@@ -6511,6 +6573,13 @@ body[data-theme="light"] .enhanced-save-btn:hover {
         
         .stats-text {
             font-size: 0.7rem;
+        }
+        
+        .update-time-text {
+            font-size: 0.65rem;
+            margin-right: 0.25rem;
+            padding: 0.15rem 0.3rem;
+            border-radius: 4px;
         }
     }
     
