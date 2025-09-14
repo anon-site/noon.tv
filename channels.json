@@ -66,9 +66,9 @@
     {
       "id": 24,
       "name": "روتانا سينيما",
-      "url": "https://rotana.hibridcdn.net/rotananet/cinemamasr_net-7Y83PP5adWixDF93/playlist.m3u8",
+      "url": "https://content.uplynk.com/channel/3324f2467c414329b3b0cc5cd987b6be.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Rotana_Cinema_Egy.png/800px-Rotana_Cinema_Egy.png",
-      "category": "movies",
+      "category": "news",
       "country": "مصر",
       "type": "hls"
     },
@@ -490,6 +490,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-14T16:24:09.038Z",
+  "lastModified": "2025-09-14T16:26:03.098Z",
   "version": "1.0"
 }
