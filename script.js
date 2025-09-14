@@ -1421,6 +1421,7 @@ class ArabicTVApp {
         document.getElementById('adminModal').classList.add('active');
         this.renderAdminChannels();
         this.updateSaveOrderButton();
+        // Update category options to ensure latest categories are available
         this.updateChannelCategoryOptions();
     }
 
@@ -1439,11 +1440,6 @@ class ArabicTVApp {
         });
         document.getElementById(`${tab}Tab`).classList.add('active');
 
-        // Reset form when switching to add tab (unless we're editing)
-        if (tab === 'add' && !this.editingChannelId) {
-            this.resetAddChannelForm();
-        }
-
         // Load categories when switching to categories tab
         if (tab === 'categories') {
             this.renderCategories();
@@ -1452,6 +1448,12 @@ class ArabicTVApp {
         // Update category options when switching to add tab
         if (tab === 'add') {
             this.updateChannelCategoryOptions();
+        }
+
+        // Reset form when switching to add tab (unless we're editing)
+        // This should be after updateChannelCategoryOptions to ensure categories are loaded
+        if (tab === 'add' && !this.editingChannelId) {
+            this.resetAddChannelForm();
         }
     }
 
@@ -1524,7 +1526,7 @@ class ArabicTVApp {
         const url = document.getElementById('channelUrl').value.trim();
         const logo = document.getElementById('channelLogo').value.trim();
         const category = document.getElementById('channelCategory').value;
-        const country = document.getElementById('channelCountry').value.trim();
+        const country = document.getElementById('channelCountryInput').value.trim();
         
         // Auto-detect URL type
         let type = 'hls'; // default
@@ -1536,9 +1538,11 @@ class ArabicTVApp {
             type = 'hls';
         }
 
-        // Validate required fields
-        if (!name || !url || !logo || !category || !country) {
+        // Validate required fields (logo is optional)
+        console.log('التحقق من البيانات في addChannel:', { name, url, logo, category, country });
+        if (!name || !url || !category || !country) {
             this.notifyWarning('يرجى ملء جميع الحقول المطلوبة!');
+            console.log('فشل في التحقق من البيانات المطلوبة');
             return;
         }
 
@@ -1553,7 +1557,7 @@ class ArabicTVApp {
             id: Math.max(...this.channels.map(c => c.id), 0) + 1, // Generate proper unique ID
             name: name,
             url: url,
-            logo: logo,
+            logo: logo || '', // Allow empty logo
             category: category,
             country: country,
             type: type
@@ -1578,7 +1582,7 @@ class ArabicTVApp {
         document.getElementById('channelUrl').value = '';
         document.getElementById('channelLogo').value = '';
         document.getElementById('channelCategory').value = '';
-        document.getElementById('channelCountry').value = '';
+        document.getElementById('channelCountryInput').value = '';
         
         // Clear uploaded logo
         removeLogoPreview();
@@ -1605,8 +1609,8 @@ class ArabicTVApp {
             formTitle.textContent = 'إضافة قناة جديدة';
         }
         
-        // Update category options to ensure latest categories are available
-        this.updateChannelCategoryOptions();
+        // Note: updateChannelCategoryOptions() is called in switchAdminTab() 
+        // to ensure proper timing and avoid conflicts
     }
 
     editChannel(id, event) {
@@ -1628,7 +1632,7 @@ class ArabicTVApp {
         document.getElementById('channelUrl').value = channel.url;
         document.getElementById('channelLogo').value = channel.logo;
         document.getElementById('channelCategory').value = channel.category;
-        document.getElementById('channelCountry').value = channel.country;
+        document.getElementById('channelCountryInput').value = channel.country;
         
         // Clear any uploaded logo preview when editing
         removeLogoPreview();
@@ -1656,7 +1660,7 @@ class ArabicTVApp {
         const url = document.getElementById('channelUrl').value.trim();
         const logo = document.getElementById('channelLogo').value.trim();
         const category = document.getElementById('channelCategory').value;
-        const country = document.getElementById('channelCountry').value.trim();
+        const country = document.getElementById('channelCountryInput').value.trim();
         
         // Auto-detect URL type
         let type = 'hls'; // default
@@ -1668,8 +1672,8 @@ class ArabicTVApp {
             type = 'hls';
         }
 
-        // Validate required fields
-        if (!name || !url || !logo || !category || !country) {
+        // Validate required fields (logo is optional)
+        if (!name || !url || !category || !country) {
             this.notifyWarning('يرجى ملء جميع الحقول المطلوبة!');
             return;
         }
@@ -1679,7 +1683,7 @@ class ArabicTVApp {
             ...this.channels[channelIndex],
             name: name,
             url: url,
-            logo: logo,
+            logo: logo || '', // Allow empty logo
             category: category,
             country: country,
             type: type
@@ -5074,7 +5078,7 @@ class ArabicTVApp {
             document.getElementById('channelUrl').value = channel.url;
             document.getElementById('channelLogo').value = channel.logo;
             document.getElementById('channelCategory').value = channel.category;
-            document.getElementById('channelCountry').value = channel.country;
+            document.getElementById('channelCountryInput').value = channel.country;
             
             // Change form title and button text
             const formTitle = document.querySelector('#addTab h5, #addTab .form-title');
@@ -5392,7 +5396,12 @@ class ArabicTVApp {
         this.saveCategories();
         this.renderCategories();
         this.updateNavigationTabs();
-        this.updateChannelCategoryOptions();
+        
+        // Update category options with a slight delay to ensure DOM is ready
+        setTimeout(() => {
+            this.updateChannelCategoryOptions();
+        }, 100);
+        
         this.notifySuccess('تم إضافة الفئة بنجاح');
         return true;
     }
@@ -5419,7 +5428,12 @@ class ArabicTVApp {
         this.saveCategories();
         this.renderCategories();
         this.updateNavigationTabs();
-        this.updateChannelCategoryOptions();
+        
+        // Update category options with a slight delay to ensure DOM is ready
+        setTimeout(() => {
+            this.updateChannelCategoryOptions();
+        }, 100);
+        
         this.notifySuccess('تم تحديث الفئة بنجاح');
         return true;
     }
@@ -5457,7 +5471,12 @@ class ArabicTVApp {
         this.saveCategories();
         this.renderCategories();
         this.updateNavigationTabs();
-        this.updateChannelCategoryOptions();
+        
+        // Update category options with a slight delay to ensure DOM is ready
+        setTimeout(() => {
+            this.updateChannelCategoryOptions();
+        }, 100);
+        
         this.notifySuccess('تم حذف الفئة بنجاح');
         return true;
     }
@@ -5531,12 +5550,16 @@ class ArabicTVApp {
             categorySelect.innerHTML = '';
             // Skip 'all' category for channel assignment
             const assignableCategories = this.categories.filter(cat => cat.key !== 'all');
+            console.log('تحديث قائمة الفئات:', assignableCategories.length, 'فئة متاحة');
             assignableCategories.forEach(category => {
                 const option = document.createElement('option');
                 option.value = category.key;
                 option.textContent = category.name;
                 categorySelect.appendChild(option);
+                console.log('تم إضافة فئة:', category.name, 'بالمفتاح:', category.key);
             });
+        } else {
+            console.error('لم يتم العثور على عنصر channelCategory');
         }
     }
 
