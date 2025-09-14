@@ -7842,6 +7842,24 @@ body[data-theme="light"] .enhanced-save-btn:hover {
         cursor: pointer;
     }
     
+    .reset-btn {
+        background: linear-gradient(135deg, #6b7280, #4b5563) !important;
+        color: white !important;
+        box-shadow: 0 1px 4px rgba(107, 114, 128, 0.2) !important;
+    }
+    
+    .reset-btn:hover {
+        background: linear-gradient(135deg, #4b5563, #374151) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(107, 114, 128, 0.35) !important;
+    }
+    
+    .reset-btn:active {
+        transform: translateY(0);
+        box-shadow: 0 1px 4px rgba(107, 114, 128, 0.3) !important;
+        background: linear-gradient(135deg, #374151, #1f2937) !important;
+    }
+    
     .form-fields {
         flex: 1;
         overflow-y: auto;
@@ -7938,6 +7956,18 @@ body[data-theme="light"] .enhanced-save-btn:hover {
             min-height: 28px;
         }
         
+        .reset-btn {
+            background: linear-gradient(135deg, #6b7280, #4b5563) !important;
+            color: white !important;
+            box-shadow: 0 1px 4px rgba(107, 114, 128, 0.2) !important;
+        }
+        
+        .reset-btn:hover {
+            background: linear-gradient(135deg, #4b5563, #374151) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(107, 114, 128, 0.35) !important;
+        }
+        
         .form-group label {
             font-size: 0.8rem;
         }
@@ -7969,6 +7999,18 @@ body[data-theme="light"] .enhanced-save-btn:hover {
             padding: 4px 6px;
             font-size: 10px;
             min-height: 26px;
+        }
+        
+        .reset-btn {
+            background: linear-gradient(135deg, #6b7280, #4b5563) !important;
+            color: white !important;
+            box-shadow: 0 1px 4px rgba(107, 114, 128, 0.2) !important;
+        }
+        
+        .reset-btn:hover {
+            background: linear-gradient(135deg, #4b5563, #374151) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(107, 114, 128, 0.35) !important;
         }
         
         .form-group label {
@@ -8025,6 +8067,18 @@ body[data-theme="light"] .enhanced-save-btn:hover {
             font-size: 10px !important;
             min-height: 24px !important;
         }
+        
+        .reset-btn {
+            background: linear-gradient(135deg, #6b7280, #4b5563) !important;
+            color: white !important;
+            box-shadow: 0 1px 4px rgba(107, 114, 128, 0.2) !important;
+        }
+        
+        .reset-btn:hover {
+            background: linear-gradient(135deg, #4b5563, #374151) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(107, 114, 128, 0.35) !important;
+        }
     }
     
     /* Force button visibility on mobile */
@@ -8054,6 +8108,18 @@ body[data-theme="light"] .enhanced-save-btn:hover {
         padding: 4px 8px;
         font-size: 0.75rem;
         min-height: 28px;
+    }
+    
+    .reset-btn {
+        background: linear-gradient(135deg, #6b7280, #4b5563) !important;
+        color: white !important;
+        box-shadow: 0 1px 4px rgba(107, 114, 128, 0.2) !important;
+    }
+    
+    .reset-btn:hover {
+        background: linear-gradient(135deg, #4b5563, #374151) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(107, 114, 128, 0.35) !important;
     }
     
     .logo-upload-btn {
