@@ -436,7 +436,7 @@
   "settings": {
     "autoQuality": true,
     "autoplay": true,
-    "volume": 80,
+    "volume": 100,
     "theme": "dark",
     "showNewsTicker": false,
     "zoomLevel": 100,
@@ -501,6 +501,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-14T16:53:38.793Z",
+  "lastModified": "2025-09-14T17:08:06.871Z",
   "version": "1.0"
 }
