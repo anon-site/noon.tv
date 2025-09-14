@@ -9333,6 +9333,46 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     animation: pulse 2s infinite;
 }
 
+/* Update notification styles */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.update-indicator {
+    background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    animation: pulse 2s infinite;
+    margin-right: 8px;
+}
+
+.update-indicator i {
+    animation: spin 2s linear infinite;
+}
+
+.update-indicator button {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.update-indicator button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
 .backup-info {
     background: rgba(15, 52, 96, 0.1);
     padding: 20px;

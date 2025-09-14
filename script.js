@@ -232,6 +232,11 @@ class ArabicTVApp {
         this.renderChannels();
         this.bindEvents();
         this.bindRemoteStorageEvents();
+        
+        // Check for updates after a short delay
+        setTimeout(() => {
+            this.checkForUpdates();
+        }, 2000);
         this.setupMobileSearch();
         this.setupPictureInPictureEvents();
         this.checkAndSetupPictureInPicture();
@@ -4915,6 +4920,93 @@ class ArabicTVApp {
         }
     }
 
+    // Check for updates
+    async checkForUpdates() {
+        try {
+            console.log('🔍 فحص التحديثات...');
+            
+            // Get local data info
+            const localData = localStorage.getItem('tvChannels');
+            const localUpdateTime = localStorage.getItem('lastUpdateTime');
+            
+            if (!localData || !localUpdateTime) {
+                console.log('📥 لا توجد بيانات محلية، سيتم تحميل البيانات لأول مرة');
+                return false;
+            }
+
+            // Fetch remote data info
+            const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json', {
+                method: 'HEAD'
+            });
+            
+            if (!response.ok) {
+                console.log('❌ فشل في فحص التحديثات');
+                return false;
+            }
+
+            const remoteLastModified = response.headers.get('last-modified');
+            const localDate = new Date(localUpdateTime);
+            const remoteDate = new Date(remoteLastModified);
+
+            console.log('📅 آخر تحديث محلي:', localDate.toLocaleString('ar'));
+            console.log('📅 آخر تحديث سحابي:', remoteDate.toLocaleString('ar'));
+
+            if (remoteDate > localDate) {
+                console.log('🆕 يوجد تحديث جديد متاح!');
+                this.showUpdateAvailableNotification(remoteDate);
+                return true;
+            } else {
+                console.log('✅ البيانات محدثة');
+                return false;
+            }
+
+        } catch (error) {
+            console.error('خطأ في فحص التحديثات:', error);
+            return false;
+        }
+    }
+
+    // Show update available notification
+    showUpdateAvailableNotification(remoteDate) {
+        const updateTimeText = document.getElementById('updateTimeText');
+        if (updateTimeText) {
+            // Add update indicator
+            updateTimeText.innerHTML = `
+                <div class="update-indicator">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>تحديث جديد متاح!</span>
+                    <button onclick="updateChannels()">تحديث الآن</button>
+                </div>
+            `;
+        }
+
+        // Show notification
+        this.notifyInfo(
+            'يوجد تحديث جديد للقنوات متاح! اضغط على "تحديث الآن" لتحميل أحدث القنوات.',
+            'تحديث جديد متاح',
+            8000
+        );
+
+        // Add pulse effect to update button
+        setTimeout(() => {
+            this.highlightUpdateButton();
+        }, 1000);
+    }
+
+    // Reset update indicator
+    resetUpdateIndicator() {
+        const updateTimeText = document.getElementById('updateTimeText');
+        if (updateTimeText) {
+            // Reset to normal display
+            updateTimeText.innerHTML = `
+                <i class="fas fa-clock"></i>
+                تحديث: <span id="lastUpdateTime">-</span>
+            `;
+            // Update the time display
+            this.updateLastUpdateTime();
+        }
+    }
+
     // Enhanced Channel Card Creation (Override existing method)
     createChannelCard(channel) {
         const card = document.createElement('div');
@@ -6035,6 +6127,16 @@ async function updateChannels() {
         // Reload the channels display
         window.app.renderChannels();
         window.app.updateSidebarCounts();
+        
+        // Save update time
+        const updateTime = new Date().toISOString();
+        localStorage.setItem('lastUpdateTime', updateTime);
+        
+        // Update the display
+        window.app.updateLastUpdateTime();
+        
+        // Reset update indicator
+        window.app.resetUpdateIndicator();
         
         // Show success notification
         window.app.notifySuccess(`تم تحديث القنوات بنجاح! تم جلب ${data.channels.length} قناة`, 5000);
