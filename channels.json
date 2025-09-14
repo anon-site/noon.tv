@@ -430,6 +430,15 @@
       "category": "entertainment",
       "country": "اليونان",
       "type": "hls"
+    },
+    {
+      "id": 70,
+      "name": "تجربة",
+      "url": "https://directes-tv-int.3catdirectes.cat/live-origin/canal324-hls/master.m3u8",
+      "logo": "https://directes-tv-int.3catdirectes.cat/live-origin/canal324-hls/master.m3u8",
+      "category": "news",
+      "country": "اسبانيا",
+      "type": "hls"
     }
   ],
   "favorites": [],
@@ -501,6 +510,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-14T17:39:25.626Z",
+  "lastModified": "2025-09-14T17:41:10.106Z",
   "version": "1.0"
 }
