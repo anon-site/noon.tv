@@ -10,6 +10,15 @@
       "type": "hls"
     },
     {
+      "id": 32,
+      "name": "السنة النبوية",
+      "url": "https://www.elahmad.com/tv/m3u8/online_live_14_tv.m3u8?id=sunna_tv&t=11111111",
+      "logo": "https://iili.io/Kz8TUYJ.png",
+      "category": "religious",
+      "country": "السعودية",
+      "type": "hls"
+    },
+    {
       "id": 14,
       "name": "Alaraby TV",
       "url": "https://alarabyta.cdn.octivid.com/alaraby/smil:alaraby.stream.smil/chunklist.m3u8",
@@ -186,15 +195,6 @@
       "logo": "https://watanegypt.tv/wp-content/uploads/2021/11/logo-watan.png",
       "category": "news",
       "country": "فلسطين",
-      "type": "hls"
-    },
-    {
-      "id": 32,
-      "name": "السنة النبوية",
-      "url": "https://www.elahmad.com/tv/m3u8/online_live_14_tv.m3u8?id=sunna_tv&t=11111111",
-      "logo": "https://iili.io/Kz8TUYJ.png",
-      "category": "religious",
-      "country": "السعودية",
       "type": "hls"
     },
     {
@@ -510,6 +510,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-14T17:50:43.563Z",
+  "lastModified": "2025-09-14T17:50:52.953Z",
   "version": "1.0"
 }
