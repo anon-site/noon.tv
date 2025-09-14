@@ -46,6 +46,15 @@
       "type": "hls"
     },
     {
+      "id": 56,
+      "name": "مكة",
+      "url": "https://media2.streambrothers.com:1936/8122/8122/playlist.m3u8",
+      "logo": "https://play-lh.googleusercontent.com/89KDTm-c-N9GOuG4CK9P7Nc6WcbgGYOLguwblg1254ho2HkuZLkXkH35iuJM19-rng",
+      "category": "religious",
+      "country": "السعودية",
+      "type": "hls"
+    },
+    {
       "id": 14,
       "name": "Alaraby TV",
       "url": "https://alarabyta.cdn.octivid.com/alaraby/smil:alaraby.stream.smil/chunklist.m3u8",
@@ -306,15 +315,6 @@
       "type": "hls"
     },
     {
-      "id": 56,
-      "name": "مكة",
-      "url": "https://media2.streambrothers.com:1936/8122/8122/playlist.m3u8",
-      "logo": "https://play-lh.googleusercontent.com/89KDTm-c-N9GOuG4CK9P7Nc6WcbgGYOLguwblg1254ho2HkuZLkXkH35iuJM19-rng",
-      "category": "religious",
-      "country": "السعودية",
-      "type": "hls"
-    },
-    {
       "id": 57,
       "name": "البحرين قرآن",
       "url": "https://5c7b683162943.streamlock.net/live/ngrp:bahrainquran_all/playlist.m3u8",
@@ -510,6 +510,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-14T17:51:09.928Z",
+  "lastModified": "2025-09-14T17:51:13.184Z",
   "version": "1.0"
 }
