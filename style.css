@@ -3164,43 +3164,94 @@ input:checked + .slider:before {
     max-width: 1200px;
     height: 90vh;
     min-height: 700px;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-header {
+    background: var(--secondary-color);
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.admin-header h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.admin-header .close-btn {
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.admin-header .close-btn:hover {
+    background: var(--highlight-color);
+    border-color: var(--highlight-color);
+}
+
+.admin-layout {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    overflow: hidden;
 }
 
 .admin-tabs {
     display: flex;
+    flex-direction: column;
     background: var(--background-dark);
-    border-bottom: 1px solid var(--border-color);
-    padding: 0.5rem 0.5rem 0 0.5rem;
+    border-left: 1px solid var(--border-color);
+    padding: 1rem 0.5rem;
     gap: 0.25rem;
+    width: 200px;
+    min-width: 200px;
+    flex-shrink: 0;
 }
 
 .admin-tab {
     background: transparent;
     color: var(--text-secondary);
     border: none;
-    padding: 1.2rem 2.5rem;
+    padding: 1rem 0.75rem;
     cursor: pointer;
     transition: var(--transition);
     font-family: inherit;
     font-weight: 600;
-    font-size: 1rem;
-    border-radius: 8px 8px 0 0;
+    font-size: 0.9rem;
+    border-radius: 8px;
     position: relative;
-    min-width: 120px;
-    text-align: center;
+    min-width: auto;
+    text-align: right;
+    margin-bottom: 0.25rem;
+    border-right: 3px solid transparent;
 }
 
 .admin-tab.active {
     background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
     color: var(--text-primary);
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
-    border-bottom: 3px solid var(--highlight-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-right-color: var(--highlight-color);
+    transform: translateX(-2px);
 }
 
 .admin-tab:hover {
     background: rgba(255, 255, 255, 0.05);
     color: var(--text-primary);
-    transform: translateY(-1px);
+    transform: translateX(-2px);
 }
 
 .admin-tab:hover:not(.active) {
@@ -3209,8 +3260,10 @@ input:checked + .slider:before {
 
 .admin-body {
     padding: 1.5rem;
-    height: calc(100% - 100px);
+    height: 100%;
     overflow-y: auto;
+    flex: 1;
+    background: var(--background-color);
     /* منع الترميش الأبيض */
     overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
@@ -7800,80 +7853,100 @@ body[data-theme="light"] .enhanced-save-btn:hover {
         width: 98vw;
         height: 95vh;
         max-width: none;
+        flex-direction: column;
     }
     
-    /* Mobile admin modal header - close button positioning */
-    .admin-content .modal-header {
-        position: relative;
-        padding: 1rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    .admin-layout {
+        flex-direction: column;
     }
     
-    .admin-content .modal-header h3 {
+    .admin-tabs {
+        flex-direction: row;
+        width: 100%;
+        min-width: auto;
+        border-left: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 0.5rem 0.5rem 0 0.5rem;
+    }
+    
+    .admin-tab {
         text-align: center;
-        margin: 0;
-        flex: 1;
+        margin-bottom: 0;
+        border-right: none;
+        border-bottom: 3px solid transparent;
+        padding: 0.75rem 1rem;
+        min-width: 120px;
     }
     
-    .admin-content .modal-header .close-btn {
-        position: absolute;
-        top: 0.5rem;
-        right: 0.75rem;
-        z-index: 10;
-        background: rgba(0, 0, 0, 0.7);
-        border: 2px solid var(--highlight-color);
-        color: var(--text-primary);
-        padding: 4px;
-        border-radius: 50%;
-        width: 28px;
-        height: 28px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    .admin-tab.active {
+        border-right-color: transparent;
+        border-bottom-color: var(--highlight-color);
+        transform: none;
     }
     
-    .admin-content .modal-header .close-btn:hover {
-        background: var(--highlight-color);
-        transform: scale(1.1);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    .admin-tab:hover {
+        transform: none;
     }
     
-    .admin-content .modal-header .close-btn i {
+    .admin-body {
+        height: calc(100% - 100px);
+    }
+}
+
+/* Medium screens - keep horizontal tabs */
+@media (max-width: 1024px) {
+    .admin-content {
+        flex-direction: column;
+    }
+    
+    .admin-layout {
+        flex-direction: column;
+    }
+    
+    .admin-tabs {
+        flex-direction: row;
+        width: 100%;
+        min-width: auto;
+        border-left: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 0.5rem 0.5rem 0 0.5rem;
+    }
+    
+    .admin-tab {
+        text-align: center;
+        margin-bottom: 0;
+        border-right: none;
+        border-bottom: 3px solid transparent;
+        padding: 0.75rem 1rem;
+        min-width: 120px;
+    }
+    
+    .admin-tab.active {
+        border-right-color: transparent;
+        border-bottom-color: var(--highlight-color);
+        transform: none;
+    }
+    
+    .admin-tab:hover {
+        transform: none;
+    }
+    
+    .admin-body {
+        height: calc(100% - 100px);
+    }
+    
+    /* Mobile admin header styles */
+    .admin-header {
+        padding: 0.75rem 1rem;
+    }
+    
+    .admin-header h3 {
+        font-size: 1.1rem;
+    }
+    
+    .admin-header .close-btn {
+        padding: 6px 10px;
         font-size: 0.9rem;
-        color: var(--text-primary);
-    }
-    
-    /* Additional mobile styles for smaller screens */
-    @media (max-width: 480px) {
-        .admin-content .modal-header .close-btn {
-            top: 0.4rem;
-            right: 0.6rem;
-            width: 24px;
-            height: 24px;
-            padding: 3px;
-        }
-        
-        .admin-content .modal-header .close-btn i {
-            font-size: 0.8rem;
-        }
-    }
-    
-    @media (max-width: 375px) {
-        .admin-content .modal-header .close-btn {
-            top: 0.3rem;
-            right: 0.5rem;
-            width: 22px;
-            height: 22px;
-            padding: 2px;
-        }
-        
-        .admin-content .modal-header .close-btn i {
-            font-size: 0.7rem;
-        }
     }
     
     .add-channel-form {

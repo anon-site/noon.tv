@@ -564,18 +564,19 @@
     <!-- Admin Panel Modal -->
     <div class="modal" id="adminModal">
         <div class="modal-content admin-content">
-            <div class="modal-header">
+            <div class="admin-header">
                 <h3>لوحة التحكم</h3>
                 <button class="close-btn" onclick="closeAdminPanel()">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="admin-tabs">
-                <button class="admin-tab active" data-tab="channels">إدارة القنوات</button>
-                <button class="admin-tab" data-tab="add">إضافة قناة</button>
-                <button class="admin-tab" data-tab="categories">إدارة الفئات</button>
-                <button class="admin-tab" data-tab="settings">إعدادات عامة</button>
-            </div>
+            <div class="admin-layout">
+                <div class="admin-tabs">
+                    <button class="admin-tab active" data-tab="channels">إدارة القنوات</button>
+                    <button class="admin-tab" data-tab="add">إضافة قناة</button>
+                    <button class="admin-tab" data-tab="categories">إدارة الفئات</button>
+                    <button class="admin-tab" data-tab="settings">إعدادات عامة</button>
+                </div>
             <div class="admin-body">
                 <!-- Channels Management Tab -->
                 <div class="admin-tab-content active" id="channelsTab">
@@ -858,6 +859,7 @@
                     </div>
                     <input type="file" id="importFileInput" accept=".json" style="display: none;" />
                 </div>
+            </div>
             </div>
         </div>
         <div class="modal-overlay"></div>
