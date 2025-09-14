@@ -24,7 +24,7 @@
                     <i class="fas fa-satellite-dish"></i>
                     <h1>ANON TV</h1>
                 </div>
-                <div class="header-center">
+                <div class="header-center desktop-only">
                     <!-- Search Container in Header -->
                     <div class="header-search-container">
                         <input type="text" class="header-search-input" placeholder="البحث عن قناة..." id="searchInput">
@@ -45,25 +45,11 @@
                     <button class="sidebar-toggle-btn desktop-only" onclick="app.toggleSidebar()">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <button class="mobile-menu-btn mobile-only" onclick="app.toggleMobileMenu()">
-                        <i class="fas fa-bars"></i>
-                    </button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Mobile Search and Filters (Outside Sidebar) -->
-    <div class="mobile-search-filters-bar" id="mobileSearchFiltersBar">
-        <div class="container">
-            <div class="mobile-search-section">
-                <div class="mobile-search-input-container">
-                    <input type="text" class="mobile-main-search-input" placeholder="البحث عن قناة..." id="mobileMainSearchInput">
-                    <i class="fas fa-search mobile-main-search-icon"></i>
-                </div>
-            </div>
-        </div>
-    </div>
 
     
 
@@ -200,119 +186,128 @@
         </div>
     </div>
 
-    <!-- Mobile Sidebar -->
-    <div class="mobile-sidebar" id="mobileSidebar">
-        <div class="mobile-sidebar-header">
-            <div class="mobile-sidebar-logo">
-                <i class="fas fa-satellite-dish"></i>
-                <span>ANON TV</span>
-            </div>
-            <button class="mobile-close-btn" onclick="app.toggleMobileMenu()">
+    <!-- Mobile Bottom Navigation -->
+    <div class="mobile-bottom-nav" id="mobileBottomNav">
+        <button class="bottom-nav-btn" data-action="categories" onclick="toggleCategoriesDropdown()">
+            <i class="fas fa-th-large"></i>
+            <span>الفئات</span>
+        </button>
+        
+        <button class="bottom-nav-btn" data-action="favorites" onclick="app.toggleFavorites()">
+            <i class="fas fa-heart"></i>
+            <span>المفضلة</span>
+            <span class="favorites-badge" id="mobileFavoritesBadge">0</span>
+        </button>
+        
+        <button class="bottom-nav-btn active" data-action="home" onclick="app.showAllChannels()">
+            <i class="fas fa-home"></i>
+            <span>الرئيسية</span>
+        </button>
+        
+        <button class="bottom-nav-btn" data-action="search" onclick="toggleSearchPopup()">
+            <i class="fas fa-search"></i>
+            <span>البحث</span>
+        </button>
+        
+        <button class="bottom-nav-btn" data-action="more" onclick="toggleMoreMenu()">
+            <i class="fas fa-ellipsis-h"></i>
+            <span>المزيد</span>
+        </button>
+    </div>
+
+    <!-- Categories Dropdown -->
+    <div class="categories-dropdown" id="categoriesDropdown">
+        <div class="dropdown-header">
+            <h3>فئات القنوات</h3>
+            <button class="close-dropdown" onclick="closeCategoriesDropdown()">
                 <i class="fas fa-times"></i>
             </button>
         </div>
-        
-        <div class="mobile-sidebar-content">
-            <!-- TV Categories Section -->
-            <div class="mobile-sidebar-section">
-                <div class="mobile-sidebar-section-title">
-                    <i class="fas fa-tv"></i>
-                    <span>تلفزيون</span>
-                </div>
-                <div class="mobile-sidebar-nav-tabs">
-                    <button class="mobile-sidebar-nav-tab active" data-category="all">
-                        <i class="fas fa-th-large"></i>
-                        <span>جميع القنوات</span>
-                        <span class="tab-count" id="mobileAllCount">0</span>
-                    </button>
-                    <button class="mobile-sidebar-nav-tab" data-category="news">
-                        <i class="fas fa-newspaper"></i>
-                        <span>الأخبار</span>
-                        <span class="tab-count" id="mobileNewsCount">0</span>
-                    </button>
-                    <button class="mobile-sidebar-nav-tab" data-category="entertainment">
-                        <i class="fas fa-film"></i>
-                        <span>المنوعة</span>
-                        <span class="tab-count" id="mobileEntertainmentCount">0</span>
-                    </button>
-                    <button class="mobile-sidebar-nav-tab" data-category="sports">
-                        <i class="fas fa-futbol"></i>
-                        <span>الرياضة</span>
-                        <span class="tab-count" id="mobileSportsCount">0</span>
-                    </button>
-                    <button class="mobile-sidebar-nav-tab" data-category="religious">
-                        <i class="fas fa-mosque"></i>
-                        <span>الدينية</span>
-                        <span class="tab-count" id="mobileReligiousCount">0</span>
-                    </button>
-                    <button class="mobile-sidebar-nav-tab" data-category="music">
-                        <i class="fas fa-music"></i>
-                        <span>الموسيقى</span>
-                        <span class="tab-count" id="mobileMusicCount">0</span>
-                    </button>
-                    <button class="mobile-sidebar-nav-tab" data-category="movies">
-                        <i class="fas fa-film"></i>
-                        <span>الأفلام</span>
-                        <span class="tab-count" id="mobileMoviesCount">0</span>
-                    </button>
-                    <button class="mobile-sidebar-nav-tab" data-category="documentary">
-                        <i class="fas fa-book-open"></i>
-                        <span>الوثائقية</span>
-                        <span class="tab-count" id="mobileDocumentaryCount">0</span>
-                    </button>
-                </div>
+        <div class="dropdown-content">
+            <button class="category-item active" data-category="all" onclick="selectCategory('all')">
+                <i class="fas fa-th-large"></i>
+                <span>جميع القنوات</span>
+                <span class="category-count" id="mobileAllCount">0</span>
+            </button>
+            <button class="category-item" data-category="news" onclick="selectCategory('news')">
+                <i class="fas fa-newspaper"></i>
+                <span>الأخبار</span>
+                <span class="category-count" id="mobileNewsCount">0</span>
+            </button>
+            <button class="category-item" data-category="entertainment" onclick="selectCategory('entertainment')">
+                <i class="fas fa-film"></i>
+                <span>المنوعة</span>
+                <span class="category-count" id="mobileEntertainmentCount">0</span>
+            </button>
+            <button class="category-item" data-category="sports" onclick="selectCategory('sports')">
+                <i class="fas fa-futbol"></i>
+                <span>الرياضة</span>
+                <span class="category-count" id="mobileSportsCount">0</span>
+            </button>
+            <button class="category-item" data-category="religious" onclick="selectCategory('religious')">
+                <i class="fas fa-mosque"></i>
+                <span>الدينية</span>
+                <span class="category-count" id="mobileReligiousCount">0</span>
+            </button>
+            <button class="category-item" data-category="music" onclick="selectCategory('music')">
+                <i class="fas fa-music"></i>
+                <span>الموسيقى</span>
+                <span class="category-count" id="mobileMusicCount">0</span>
+            </button>
+            <button class="category-item" data-category="movies" onclick="selectCategory('movies')">
+                <i class="fas fa-film"></i>
+                <span>الأفلام</span>
+                <span class="category-count" id="mobileMoviesCount">0</span>
+            </button>
+            <button class="category-item" data-category="documentary" onclick="selectCategory('documentary')">
+                <i class="fas fa-book-open"></i>
+                <span>الوثائقية</span>
+                <span class="category-count" id="mobileDocumentaryCount">0</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Search Popup -->
+    <div class="search-popup" id="searchPopup">
+        <div class="search-popup-content">
+            <div class="search-popup-header">
+                <h3>البحث عن قناة</h3>
+                <button class="close-search" onclick="closeSearchPopup()">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            
-            <!-- Favorites Section -->
-            <div class="mobile-sidebar-section">
-                <div class="mobile-sidebar-section-title">
-                    <i class="fas fa-heart"></i>
-                    <span>المفضلة</span>
+            <div class="search-popup-body">
+                <div class="search-input-container">
+                    <input type="text" class="search-popup-input" placeholder="اكتب اسم القناة..." id="searchPopupInput">
+                    <i class="fas fa-search search-icon"></i>
                 </div>
-                <div class="mobile-sidebar-actions">
-                    <button class="mobile-sidebar-action-btn favorites-mobile-btn" onclick="app.toggleFavorites(); app.closeMobileMenu();">
-                        <i class="fas fa-heart"></i>
-                        <span>عرض المفضلة</span>
-                        <span class="favorites-count" id="mobileFavoritesCount">0</span>
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Actions Section -->
-            <div class="mobile-sidebar-section">
-                <div class="mobile-sidebar-section-title">
-                    <i class="fas fa-tools"></i>
-                    <span>الأدوات</span>
-                </div>
-                <div class="mobile-sidebar-actions">
-                    <button class="mobile-sidebar-action-btn" onclick="openIPTVChecker(); app.closeMobileMenu();">
-                        <i class="fas fa-search"></i>
-                        <span>فحص الروابط</span>
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button class="mobile-sidebar-action-btn" onclick="openSettings(); app.closeMobileMenu();">
-                        <i class="fas fa-cog"></i>
-                        <span>الإعدادات</span>
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button class="mobile-sidebar-action-btn" onclick="openAdminPanel(); app.closeMobileMenu();">
-                        <i class="fas fa-user-shield"></i>
-                        <span>لوحة التحكم</span>
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button class="mobile-sidebar-action-btn" onclick="updateChannels(); app.closeMobileMenu();">
-                        <i class="fas fa-sync-alt"></i>
-                        <span>تحديث القنوات</span>
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
+                <div class="search-results" id="searchResults">
+                    <!-- Search results will appear here -->
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Mobile Sidebar Overlay -->
-    <div class="mobile-sidebar-overlay" id="mobileSidebarOverlay"></div>
+    <!-- More Menu -->
+    <div class="more-menu" id="moreMenu">
+        <div class="more-menu-content">
+            <button class="more-menu-item" onclick="updateChannels(); closeMoreMenu();">
+                <i class="fas fa-sync-alt"></i>
+                <span>تحديث</span>
+            </button>
+            <button class="more-menu-item" onclick="openSettings(); closeMoreMenu();">
+                <i class="fas fa-cog"></i>
+                <span>الإعدادات</span>
+            </button>
+            <button class="more-menu-item" onclick="openAdminPanel(); closeMoreMenu();">
+                <i class="fas fa-user-shield"></i>
+                <span>التحكم</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
 
     <!-- Main Content -->
     <main class="main-content">

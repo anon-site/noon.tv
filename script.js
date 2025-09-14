@@ -5625,6 +5625,324 @@ function detectUrlType() {
 }
 
 
+// ========================================
+// Mobile Bottom Navigation Functions
+// ========================================
+
+// Categories Dropdown Functions
+function toggleCategoriesDropdown() {
+    const dropdown = document.getElementById('categoriesDropdown');
+    const overlay = document.getElementById('mobileOverlay');
+    
+    if (dropdown.classList.contains('active')) {
+        closeCategoriesDropdown();
+    } else {
+        // Close other dropdowns first
+        closeSearchPopup();
+        closeMoreMenu();
+        
+        dropdown.classList.add('active');
+        overlay.classList.add('active');
+        
+        // Update category counts
+        updateMobileCategoryCounts();
+    }
+}
+
+function closeCategoriesDropdown() {
+    const dropdown = document.getElementById('categoriesDropdown');
+    const overlay = document.getElementById('mobileOverlay');
+    
+    dropdown.classList.remove('active');
+    overlay.classList.remove('active');
+}
+
+function selectCategory(category) {
+    if (window.app) {
+        window.app.filterChannels(category);
+        
+        // Update active category in dropdown
+        document.querySelectorAll('.category-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        document.querySelector(`[data-category="${category}"]`).classList.add('active');
+        
+        // Update bottom nav active state
+        updateBottomNavActiveState('home');
+        
+        // Close dropdown
+        closeCategoriesDropdown();
+    }
+}
+
+// Search Popup Functions
+function toggleSearchPopup() {
+    const popup = document.getElementById('searchPopup');
+    const overlay = document.getElementById('mobileOverlay');
+    
+    if (popup.classList.contains('active')) {
+        closeSearchPopup();
+    } else {
+        // Close other dropdowns first
+        closeCategoriesDropdown();
+        closeMoreMenu();
+        
+        popup.classList.add('active');
+        overlay.classList.add('active');
+        
+        // Focus on search input
+        setTimeout(() => {
+            const searchInput = document.getElementById('searchPopupInput');
+            if (searchInput) {
+                searchInput.focus();
+            }
+        }, 300);
+    }
+}
+
+function closeSearchPopup() {
+    const popup = document.getElementById('searchPopup');
+    const overlay = document.getElementById('mobileOverlay');
+    
+    popup.classList.remove('active');
+    overlay.classList.remove('active');
+    
+    // Clear search results
+    const searchResults = document.getElementById('searchResults');
+    if (searchResults) {
+        searchResults.innerHTML = '';
+    }
+    
+    // Clear search input
+    const searchInput = document.getElementById('searchPopupInput');
+    if (searchInput) {
+        searchInput.value = '';
+    }
+}
+
+// More Menu Functions
+function toggleMoreMenu() {
+    const menu = document.getElementById('moreMenu');
+    const overlay = document.getElementById('mobileOverlay');
+    
+    if (menu.classList.contains('active')) {
+        closeMoreMenu();
+    } else {
+        // Close other dropdowns first
+        closeCategoriesDropdown();
+        closeSearchPopup();
+        
+        menu.classList.add('active');
+        overlay.classList.add('active');
+    }
+}
+
+function closeMoreMenu() {
+    const menu = document.getElementById('moreMenu');
+    const overlay = document.getElementById('mobileOverlay');
+    
+    menu.classList.remove('active');
+    overlay.classList.remove('active');
+}
+
+// Bottom Navigation Functions
+function updateBottomNavActiveState(activeAction) {
+    document.querySelectorAll('.bottom-nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    const activeBtn = document.querySelector(`[data-action="${activeAction}"]`);
+    if (activeBtn) {
+        activeBtn.classList.add('active');
+    }
+}
+
+function updateMobileCategoryCounts() {
+    if (!window.app) return;
+    
+    const categories = ['all', 'news', 'entertainment', 'sports', 'religious', 'music', 'movies', 'documentary'];
+    
+    categories.forEach(category => {
+        const count = window.app.getCategoryCount(category);
+        const countElement = document.getElementById(`mobile${category.charAt(0).toUpperCase() + category.slice(1)}Count`);
+        if (countElement) {
+            countElement.textContent = count;
+        }
+    });
+}
+
+function updateMobileFavoritesBadge() {
+    if (!window.app) return;
+    
+    const badge = document.getElementById('mobileFavoritesBadge');
+    if (badge) {
+        badge.textContent = window.app.favorites.size;
+    }
+}
+
+// Search functionality for mobile
+function setupMobileSearch() {
+    const searchInput = document.getElementById('searchPopupInput');
+    if (!searchInput) return;
+    
+    let searchTimeout;
+    
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        const query = e.target.value.trim();
+        
+        if (query.length < 2) {
+            document.getElementById('searchResults').innerHTML = '';
+            return;
+        }
+        
+        searchTimeout = setTimeout(() => {
+            performMobileSearch(query);
+        }, 300);
+    });
+    
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const query = e.target.value.trim();
+            if (query.length >= 2) {
+                performMobileSearch(query);
+            }
+        }
+    });
+}
+
+function performMobileSearch(query) {
+    if (!window.app) return;
+    
+    const results = window.app.channels.filter(channel => 
+        channel.name.toLowerCase().includes(query.toLowerCase()) ||
+        channel.country.toLowerCase().includes(query.toLowerCase())
+    );
+    
+    const searchResults = document.getElementById('searchResults');
+    if (!searchResults) return;
+    
+    if (results.length === 0) {
+        searchResults.innerHTML = '<div class="no-results">لم يتم العثور على نتائج</div>';
+        return;
+    }
+    
+    searchResults.innerHTML = results.map(channel => `
+        <div class="search-result-item" onclick="selectChannelFromSearch('${channel.id}')">
+            <div class="search-result-logo">
+                <img src="${channel.logo || 'https://via.placeholder.com/40x40/333/fff?text=' + channel.name.charAt(0)}" 
+                     alt="${channel.name}" onerror="this.src='https://via.placeholder.com/40x40/333/fff?text=' + this.alt.charAt(0)">
+            </div>
+            <div class="search-result-info">
+                <h4>${channel.name}</h4>
+                <p>${channel.country}</p>
+            </div>
+        </div>
+    `).join('');
+}
+
+function selectChannelFromSearch(channelId) {
+    if (window.app) {
+        const channel = window.app.channels.find(c => c.id === channelId);
+        if (channel) {
+            window.app.playChannel(channel);
+            closeSearchPopup();
+        }
+    }
+}
+
+// Close dropdowns when clicking overlay
+function setupMobileOverlay() {
+    const overlay = document.getElementById('mobileOverlay');
+    if (overlay) {
+        overlay.addEventListener('click', () => {
+            closeCategoriesDropdown();
+            closeSearchPopup();
+            closeMoreMenu();
+        });
+    }
+}
+
+// Add CSS for search results
+function addMobileSearchStyles() {
+    const style = document.createElement('style');
+    style.textContent = `
+        .search-result-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .search-result-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .search-result-logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        
+        .search-result-info h4 {
+            margin: 0 0 4px 0;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .search-result-info p {
+            margin: 0;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        
+        body[data-theme="light"] .search-result-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        body[data-theme="light"] .search-result-info h4 {
+            color: #1e293b;
+        }
+        
+        body[data-theme="light"] .search-result-info p {
+            color: #64748b;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// Initialize mobile bottom navigation
+function initializeMobileBottomNav() {
+    // Setup event listeners
+    setupMobileSearch();
+    setupMobileOverlay();
+    addMobileSearchStyles();
+    
+    // Update favorites badge periodically
+    setInterval(() => {
+        updateMobileFavoritesBadge();
+    }, 1000);
+    
+    // Update category counts when channels are loaded
+    if (window.app) {
+        updateMobileCategoryCounts();
+        updateMobileFavoritesBadge();
+    }
+}
+
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new ArabicTVApp();
@@ -5632,6 +5950,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.app && window.app.initQualityMenu) {
         window.app.initQualityMenu();
     }
+    
+    // Initialize mobile bottom navigation
+    initializeMobileBottomNav();
 });
 
 // Update Channels Function
