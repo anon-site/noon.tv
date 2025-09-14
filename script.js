@@ -205,6 +205,8 @@ class ArabicTVApp {
         this.currentCountryFilter = 'all'; // Track country filter
         this.showFavoritesOnly = false; // Track favorites filter
         this.categories = this.getDefaultCategories(); // Track categories
+        this.videos = []; // Track videos
+        this.editingVideoId = null; // Track video being edited
         
         // Remote Storage Configuration
         this.remoteStorage = {
@@ -244,6 +246,34 @@ class ArabicTVApp {
         // Attempt auto-sync if enabled
         if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
             this.syncFromRemote();
+        }
+
+        // Load videos from storage
+        this.loadVideosFromStorage();
+
+        // Add video form handler
+        const addVideoForm = document.getElementById('addVideoForm');
+        if (addVideoForm) {
+            addVideoForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleVideoFormSubmit();
+            });
+        }
+
+        // Add video search handler
+        const adminVideoSearchInput = document.getElementById('adminVideoSearchInput');
+        if (adminVideoSearchInput) {
+            adminVideoSearchInput.addEventListener('input', (e) => {
+                this.filterAdminVideos(e.target.value);
+            });
+        }
+
+        // Add thumbnail upload handler
+        const thumbnailUpload = document.getElementById('thumbnailUpload');
+        if (thumbnailUpload) {
+            thumbnailUpload.addEventListener('change', (e) => {
+                this.handleThumbnailUpload(e);
+            });
         }
         this.syncMobileNavTabs();
         this.initializeNewFeatures(); // Initialize new navigation features
@@ -6565,6 +6595,399 @@ function resetChannelForm() {
     }
     
     // Notification removed as requested
+}
+
+// Video Management Functions
+ArabicTVApp.prototype.detectVideoUrlType = function() {
+    const urlInput = document.getElementById('videoUrl');
+    const indicator = document.getElementById('videoUrlTypeIndicator');
+    const icon = document.getElementById('videoUrlTypeIcon');
+    const text = document.getElementById('videoUrlTypeText');
+    const value = document.getElementById('videoUrlTypeValue');
+    
+    if (!urlInput || !indicator) return;
+    
+    const url = urlInput.value.trim();
+    
+    if (!url) {
+        indicator.style.display = 'none';
+        return;
+    }
+    
+    let urlType = 'غير معروف';
+    let iconClass = 'fas fa-question-circle';
+    let bgColor = '#6c757d';
+    
+    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+        urlType = 'يوتيوب';
+        iconClass = 'fab fa-youtube';
+        bgColor = '#ff0000';
+    } else if (url.includes('vimeo.com')) {
+        urlType = 'فيميو';
+        iconClass = 'fab fa-vimeo';
+        bgColor = '#1ab7ea';
+    } else if (url.includes('.mp4') || url.includes('.webm') || url.includes('.ogg')) {
+        urlType = 'فيديو مباشر';
+        iconClass = 'fas fa-video';
+        bgColor = '#28a745';
+    } else if (url.includes('.m3u8')) {
+        urlType = 'HLS Stream';
+        iconClass = 'fas fa-stream';
+        bgColor = '#17a2b8';
+    }
+    
+    icon.className = iconClass;
+    value.textContent = urlType;
+    indicator.style.display = 'block';
+    indicator.style.backgroundColor = bgColor + '20';
+    indicator.style.borderColor = bgColor;
+    indicator.style.color = bgColor;
+};
+
+ArabicTVApp.prototype.addVideo = function(videoData) {
+    const newVideo = {
+        id: Date.now(),
+        name: videoData.name,
+        category: videoData.category,
+        description: videoData.description || '',
+        url: videoData.url,
+        thumbnail: videoData.thumbnail || '',
+        duration: videoData.duration || 0,
+        quality: videoData.quality || 'auto',
+        tags: videoData.tags ? videoData.tags.split(',').map(tag => tag.trim()) : [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+    };
+    
+    this.videos.push(newVideo);
+    this.saveVideosToStorage();
+    this.renderAdminVideos();
+    this.notifySuccess('تم إضافة الفيديو بنجاح');
+    
+    return newVideo;
+};
+
+ArabicTVApp.prototype.updateVideo = function(videoId, videoData) {
+    const videoIndex = this.videos.findIndex(v => v.id === videoId);
+    if (videoIndex === -1) return false;
+    
+    this.videos[videoIndex] = {
+        ...this.videos[videoIndex],
+        name: videoData.name,
+        category: videoData.category,
+        description: videoData.description || '',
+        url: videoData.url,
+        thumbnail: videoData.thumbnail || '',
+        duration: videoData.duration || 0,
+        quality: videoData.quality || 'auto',
+        tags: videoData.tags ? videoData.tags.split(',').map(tag => tag.trim()) : [],
+        updatedAt: new Date().toISOString()
+    };
+    
+    this.saveVideosToStorage();
+    this.renderAdminVideos();
+    this.notifySuccess('تم تحديث الفيديو بنجاح');
+    
+    return true;
+};
+
+ArabicTVApp.prototype.deleteVideo = function(videoId) {
+    const videoIndex = this.videos.findIndex(v => v.id === videoId);
+    if (videoIndex === -1) return false;
+    
+    const video = this.videos[videoIndex];
+    
+    if (confirm(`هل أنت متأكد من حذف الفيديو "${video.name}"؟\n\nهذا الإجراء لا يمكن التراجع عنه.`)) {
+        this.videos.splice(videoIndex, 1);
+        this.saveVideosToStorage();
+        this.renderAdminVideos();
+        this.notifySuccess('تم حذف الفيديو بنجاح');
+        return true;
+    }
+    
+    return false;
+};
+
+ArabicTVApp.prototype.renderAdminVideos = function() {
+    const videosList = document.getElementById('adminVideosList');
+    if (!videosList) return;
+    
+    if (this.videos.length === 0) {
+        videosList.innerHTML = `
+            <div class="no-videos-message">
+                <i class="fas fa-video"></i>
+                <h3>لا توجد فيديوهات</h3>
+                <p>ابدأ بإضافة فيديو جديد من تبويب "إضافة فيديو"</p>
+            </div>
+        `;
+        return;
+    }
+    
+    videosList.innerHTML = this.videos.map(video => `
+        <div class="video-item" data-video-id="${video.id}">
+            <img src="${video.thumbnail || 'https://via.placeholder.com/300x150?text=No+Thumbnail'}" 
+                 alt="${video.name}" class="video-thumbnail" 
+                 onerror="this.src='https://via.placeholder.com/300x150?text=No+Thumbnail'">
+            
+            <div class="video-info">
+                <h4>${video.name}</h4>
+                <span class="video-category">${this.getCategoryName(video.category)}</span>
+                <p class="video-description">${video.description || 'لا يوجد وصف'}</p>
+                
+                <div class="video-meta">
+                    <span class="video-duration">${video.duration ? video.duration + ' دقيقة' : 'غير محدد'}</span>
+                    <span class="video-quality">${video.quality}</span>
+                </div>
+                
+                ${video.tags.length > 0 ? `
+                    <div class="video-tags">
+                        ${video.tags.map(tag => `<span class="video-tag">${tag}</span>`).join('')}
+                    </div>
+                ` : ''}
+                
+                <div class="video-actions">
+                    <button class="video-action-btn edit-video-btn" onclick="app.editVideo(${video.id})">
+                        <i class="fas fa-edit"></i>
+                        تعديل
+                    </button>
+                    <button class="video-action-btn delete-video-btn" onclick="app.deleteVideo(${video.id})">
+                        <i class="fas fa-trash"></i>
+                        حذف
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+};
+
+ArabicTVApp.prototype.editVideo = function(videoId) {
+    const video = this.videos.find(v => v.id === videoId);
+    if (!video) return;
+    
+    this.editingVideoId = videoId;
+    
+    // Switch to add video tab
+    this.switchAdminTab('addVideo');
+    
+    // Fill form with video data
+    document.getElementById('videoName').value = video.name;
+    document.getElementById('videoCategory').value = video.category;
+    document.getElementById('videoDescription').value = video.description;
+    document.getElementById('videoUrl').value = video.url;
+    document.getElementById('videoThumbnail').value = video.thumbnail;
+    document.getElementById('videoDuration').value = video.duration;
+    document.getElementById('videoQuality').value = video.quality;
+    document.getElementById('videoTags').value = video.tags.join(', ');
+    
+    // Update form title
+    const formTitle = document.querySelector('#addVideoTab h3') || document.querySelector('#addVideoTab .form-title');
+    if (formTitle) {
+        formTitle.textContent = 'تعديل الفيديو';
+    }
+    
+    // Update submit button
+    const submitBtn = document.querySelector('#addVideoForm button[type="submit"]');
+    if (submitBtn) {
+        submitBtn.textContent = 'تحديث الفيديو';
+    }
+    
+    this.notifyInfo('تم تحميل بيانات الفيديو للتعديل');
+};
+
+ArabicTVApp.prototype.getCategoryName = function(categoryKey) {
+    const categoryMap = {
+        'youtube': 'يوتيوب',
+        'live': 'البث المباشر',
+        'movies': 'الأفلام',
+        'series': 'المسلسلات',
+        'documentary': 'الوثائقية',
+        'kids': 'الأطفال',
+        'educational': 'التعليمية',
+        'cooking': 'الطبخ'
+    };
+    
+    return categoryMap[categoryKey] || categoryKey;
+};
+
+ArabicTVApp.prototype.saveVideosToStorage = function() {
+    try {
+        localStorage.setItem('arabicTVVideos', JSON.stringify(this.videos));
+        console.log('تم حفظ الفيديوهات:', this.videos.length, 'فيديو');
+    } catch (error) {
+        console.error('خطأ في حفظ الفيديوهات:', error);
+    }
+};
+
+ArabicTVApp.prototype.loadVideosFromStorage = function() {
+    try {
+        const savedVideos = localStorage.getItem('arabicTVVideos');
+        if (savedVideos) {
+            this.videos = JSON.parse(savedVideos);
+            console.log('تم تحميل الفيديوهات:', this.videos.length, 'فيديو');
+        }
+    } catch (error) {
+        console.error('خطأ في تحميل الفيديوهات:', error);
+        this.videos = [];
+    }
+};
+
+ArabicTVApp.prototype.handleVideoFormSubmit = function() {
+    const formData = {
+        name: document.getElementById('videoName').value.trim(),
+        category: document.getElementById('videoCategory').value,
+        description: document.getElementById('videoDescription').value.trim(),
+        url: document.getElementById('videoUrl').value.trim(),
+        thumbnail: document.getElementById('videoThumbnail').value.trim(),
+        duration: parseInt(document.getElementById('videoDuration').value) || 0,
+        quality: document.getElementById('videoQuality').value,
+        tags: document.getElementById('videoTags').value.trim()
+    };
+
+    // Validation
+    if (!formData.name) {
+        this.notifyError('يرجى إدخال اسم الفيديو');
+        return;
+    }
+
+    if (!formData.url) {
+        this.notifyError('يرجى إدخال رابط الفيديو');
+        return;
+    }
+
+    // Use uploaded thumbnail if available
+    if (window.uploadedThumbnailData) {
+        formData.thumbnail = window.uploadedThumbnailData;
+    }
+
+    if (this.editingVideoId) {
+        // Update existing video
+        this.updateVideo(this.editingVideoId, formData);
+        this.editingVideoId = null;
+        
+        // Reset form
+        resetVideoForm();
+        
+        // Switch back to videos tab
+        this.switchAdminTab('videos');
+    } else {
+        // Add new video
+        this.addVideo(formData);
+        
+        // Reset form
+        resetVideoForm();
+    }
+};
+
+ArabicTVApp.prototype.handleThumbnailUpload = function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const imageSrc = e.target.result;
+        const preview = document.getElementById('thumbnailPreview');
+        const previewImg = document.getElementById('thumbnailPreviewImg');
+        const urlInput = document.getElementById('videoThumbnail');
+        
+        if (previewImg) {
+            previewImg.src = imageSrc;
+        }
+        
+        if (preview) {
+            preview.style.display = 'inline-block';
+        }
+        
+        if (urlInput) {
+            urlInput.value = imageSrc;
+        }
+        
+        // Store the base64 image for later use
+        window.uploadedThumbnailData = imageSrc;
+    };
+    reader.readAsDataURL(file);
+};
+
+ArabicTVApp.prototype.filterAdminVideos = function(query) {
+    const videoItems = document.querySelectorAll('.video-item');
+    const searchQuery = query.toLowerCase().trim();
+    
+    videoItems.forEach(item => {
+        const videoName = item.querySelector('h4').textContent.toLowerCase();
+        const videoDescription = item.querySelector('.video-description').textContent.toLowerCase();
+        const videoCategory = item.querySelector('.video-category').textContent.toLowerCase();
+        
+        const matches = videoName.includes(searchQuery) || 
+                       videoDescription.includes(searchQuery) || 
+                       videoCategory.includes(searchQuery);
+        
+        item.style.display = matches ? 'block' : 'none';
+    });
+};
+
+ArabicTVApp.prototype.switchAdminTab = function(tabName) {
+    // Remove active class from all tabs
+    document.querySelectorAll('.admin-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    // Add active class to clicked tab
+    const activeTab = document.querySelector(`[data-tab="${tabName}"]`);
+    if (activeTab) {
+        activeTab.classList.add('active');
+    }
+    
+    // Hide all tab contents
+    document.querySelectorAll('.admin-tab-content').forEach(content => {
+        content.classList.remove('active');
+    });
+    
+    // Show selected tab content
+    const activeContent = document.getElementById(tabName + 'Tab');
+    if (activeContent) {
+        activeContent.classList.add('active');
+    }
+    
+    // Load videos if switching to videos tab
+    if (tabName === 'videos') {
+        this.renderAdminVideos();
+    }
+};
+
+// Global functions for video management
+function detectVideoUrlType() {
+    if (window.app) {
+        window.app.detectVideoUrlType();
+    }
+}
+
+function removeThumbnailPreview() {
+    const preview = document.getElementById('thumbnailPreview');
+    const previewImg = document.getElementById('thumbnailPreviewImg');
+    const uploadInput = document.getElementById('thumbnailUpload');
+    const urlInput = document.getElementById('videoThumbnail');
+    
+    if (preview) preview.style.display = 'none';
+    if (previewImg) previewImg.src = '';
+    if (uploadInput) uploadInput.value = '';
+    if (urlInput) urlInput.value = '';
+    
+    // Clear stored image data
+    window.uploadedThumbnailData = null;
+}
+
+function resetVideoForm() {
+    const form = document.getElementById('addVideoForm');
+    if (form) {
+        form.reset();
+    }
+    
+    // Clear preview
+    removeThumbnailPreview();
+    
+    // Reset editing mode
+    if (app && app.editingVideoId) {
+        app.editingVideoId = null;
+    }
 }
 
 // Global function for collapsible sidebar sections

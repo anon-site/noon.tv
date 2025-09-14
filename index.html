@@ -626,6 +626,8 @@
                 <div class="admin-tabs">
                     <button class="admin-tab active" data-tab="channels">إدارة القنوات</button>
                     <button class="admin-tab" data-tab="add">إضافة قناة</button>
+                    <button class="admin-tab" data-tab="videos">إدارة الفيديوهات</button>
+                    <button class="admin-tab" data-tab="addVideo">إضافة فيديو</button>
                     <button class="admin-tab" data-tab="categories">إدارة الفئات</button>
                     <button class="admin-tab" data-tab="settings">إعدادات عامة</button>
                 </div>
@@ -739,6 +741,143 @@
                                 تصفير
                             </button>
                             <button type="submit" class="add-btn">إضافة القناة</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Videos Management Tab -->
+                <div class="admin-tab-content" id="videosTab">
+                    <div class="admin-search">
+                        <input type="text" placeholder="البحث في الفيديوهات..." id="adminVideoSearchInput">
+                    </div>
+                    <div class="videos-controls">
+                        <div class="control-group">
+                            <button class="control-btn" onclick="app.toggleVideoReorderMode()" id="videoReorderBtn">
+                                <i class="fas fa-sort"></i>
+                                ترتيب الفيديوهات
+                            </button>
+                            <button class="control-btn" onclick="app.resetVideosOrder()" id="resetVideoOrderBtn" style="display: none;">
+                                <i class="fas fa-undo"></i>
+                                إعادة تعيين
+                            </button>
+                        </div>
+                        <div class="control-group">
+                            <div class="reorder-info" id="videoReorderInfo" style="display: none;">
+                                <i class="fas fa-info-circle"></i>
+                                <span>غير الأرقام لنقل الفيديوهات أو اسحبها</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="videos-list" id="adminVideosList">
+                        <!-- Admin videos list will be loaded here -->
+                    </div>
+                    <div class="save-order-container" id="saveVideoOrderContainer" style="display: none;">
+                        <div class="order-info">
+                            <i class="fas fa-info-circle"></i>
+                            يمكنك سحب وإفلات الفيديوهات أو استخدام أزرار الأسهم لترتيبها حسب رغبتك
+                        </div>
+                        <div class="save-order-actions">
+                            <button class="save-order-btn" id="saveVideoOrderBtn" onclick="app.saveVideosOrder()">
+                                <i class="fas fa-save"></i> حفظ الترتيب الجديد
+                            </button>
+                            <button class="reset-order-btn" onclick="app.resetVideosOrder()">
+                                <i class="fas fa-undo"></i> إعادة تعيين
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Add Video Tab -->
+                <div class="admin-tab-content" id="addVideoTab">
+                    <form class="add-video-form" id="addVideoForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="videoName">اسم الفيديو</label>
+                                <input type="text" id="videoName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="videoCategory">الفئة</label>
+                                <select id="videoCategory" required>
+                                    <option value="youtube">يوتيوب</option>
+                                    <option value="live">البث المباشر</option>
+                                    <option value="movies">الأفلام</option>
+                                    <option value="series">المسلسلات</option>
+                                    <option value="documentary">الوثائقية</option>
+                                    <option value="kids">الأطفال</option>
+                                    <option value="educational">التعليمية</option>
+                                    <option value="cooking">الطبخ</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label for="videoDescription">وصف الفيديو</label>
+                            <textarea id="videoDescription" rows="3" placeholder="وصف مختصر للفيديو"></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label for="videoUrl" id="videoUrlLabel">رابط الفيديو</label>
+                            <input type="url" id="videoUrl" required placeholder="أدخل رابط الفيديو (يوتيوب، فيميو، أو رابط مباشر)" oninput="detectVideoUrlType()">
+                            <small id="videoUrlHelp" class="form-help" style="color: #666; font-size: 0.85rem; margin-top: 0.25rem; display: block;">أدخل رابط يوتيوب أو رابط فيديو مباشر</small>
+                            <div id="videoUrlTypeIndicator" style="margin-top: 0.5rem; padding: 0.5rem; border-radius: 4px; display: none;">
+                                <i id="videoUrlTypeIcon" class="fas fa-info-circle"></i>
+                                <span id="videoUrlTypeText">نوع الرابط: </span>
+                                <span id="videoUrlTypeValue" style="font-weight: bold;"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label for="videoThumbnail">رابط الصورة المصغرة</label>
+                            <input type="url" id="videoThumbnail" placeholder="أدخل رابط الصورة المصغرة">
+                        </div>
+                        
+                        <div class="form-group logo-upload-group full-width">
+                            <label for="thumbnailUpload">أو رفع صورة مصغرة من الجهاز</label>
+                            <div class="logo-upload-container">
+                                <input type="file" id="thumbnailUpload" accept="image/*" style="display: none;">
+                                <button type="button" class="logo-upload-btn" onclick="document.getElementById('thumbnailUpload').click()">
+                                    <i class="fas fa-upload"></i>
+                                    <span>اختر صورة مصغرة</span>
+                                </button>
+                                <div class="logo-preview" id="thumbnailPreview" style="display: none;">
+                                    <img id="thumbnailPreviewImg" src="" alt="معاينة الصورة المصغرة">
+                                    <button type="button" class="remove-logo-btn" onclick="removeThumbnailPreview()">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <small class="form-help">سيتم وضع رابط الصورة تلقائياً في حقل رابط الصورة المصغرة عند الرفع</small>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="videoDuration">مدة الفيديو (بالدقائق)</label>
+                                <input type="number" id="videoDuration" min="1" placeholder="مثال: 30">
+                            </div>
+                            <div class="form-group">
+                                <label for="videoQuality">جودة الفيديو</label>
+                                <select id="videoQuality">
+                                    <option value="auto">تلقائي</option>
+                                    <option value="1080p">1080p - عالي جداً</option>
+                                    <option value="720p">720p - عالي</option>
+                                    <option value="480p">480p - متوسط</option>
+                                    <option value="360p">360p - منخفض</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label for="videoTags">العلامات (Tags)</label>
+                            <input type="text" id="videoTags" placeholder="أدخل العلامات مفصولة بفواصل (مثال: تعليم، برمجة، تقنية)">
+                            <small class="form-help">تساعد العلامات في البحث والتصنيف</small>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="reset-btn" onclick="resetVideoForm()">
+                                <i class="fas fa-undo"></i>
+                                تصفير
+                            </button>
+                            <button type="submit" class="add-btn">إضافة الفيديو</button>
                         </div>
                     </form>
                 </div>
