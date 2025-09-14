@@ -37,6 +37,15 @@
       "type": "hls"
     },
     {
+      "id": 55,
+      "name": "Iqraa Africa & Europe",
+      "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv1/playlist.m3u8",
+      "logo": "https://iili.io/Kz83mkF.png",
+      "category": "religious",
+      "country": "السعودية",
+      "type": "hls"
+    },
+    {
       "id": 14,
       "name": "Alaraby TV",
       "url": "https://alarabyta.cdn.octivid.com/alaraby/smil:alaraby.stream.smil/chunklist.m3u8",
@@ -297,15 +306,6 @@
       "type": "hls"
     },
     {
-      "id": 55,
-      "name": "Iqraa Africa & Europe",
-      "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv1/playlist.m3u8",
-      "logo": "https://iili.io/Kz83mkF.png",
-      "category": "religious",
-      "country": "السعودية",
-      "type": "hls"
-    },
-    {
       "id": 56,
       "name": "مكة",
       "url": "https://media2.streambrothers.com:1936/8122/8122/playlist.m3u8",
@@ -510,6 +510,6 @@
       "icon": "fas fa-book-open"
     }
   ],
-  "lastModified": "2025-09-14T17:51:00.447Z",
+  "lastModified": "2025-09-14T17:51:09.928Z",
   "version": "1.0"
 }
