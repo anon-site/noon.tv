@@ -5840,8 +5840,10 @@ function performMobileSearch(query) {
         return;
     }
     
-    searchResults.innerHTML = results.map(channel => `
-        <div class="search-result-item" onclick="selectChannelFromSearch('${channel.id}')">
+    searchResults.innerHTML = results.map(channel => {
+        console.log('إنشاء عنصر بحث للقناة:', channel.name, 'مع ID:', channel.id);
+        return `
+        <div class="search-result-item" onclick="selectChannelFromSearch(${channel.id})">
             <div class="search-result-logo">
                 <img src="${channel.logo || 'https://via.placeholder.com/40x40/333/fff?text=' + channel.name.charAt(0)}" 
                      alt="${channel.name}" onerror="this.src='https://via.placeholder.com/40x40/333/fff?text=' + this.alt.charAt(0)">
@@ -5851,15 +5853,22 @@ function performMobileSearch(query) {
                 <p>${channel.country}</p>
             </div>
         </div>
-    `).join('');
+    `;
+    }).join('');
 }
 
 function selectChannelFromSearch(channelId) {
+    console.log('تم استدعاء selectChannelFromSearch مع ID:', channelId);
     if (window.app) {
-        const channel = window.app.channels.find(c => c.id === channelId);
+        // تحويل channelId إلى رقم إذا كان نص
+        const id = typeof channelId === 'string' ? parseInt(channelId) : channelId;
+        const channel = window.app.channels.find(c => c.id === id);
+        console.log('القناة الموجودة:', channel);
         if (channel) {
             window.app.playChannel(channel);
             closeSearchPopup();
+        } else {
+            console.error('لم يتم العثور على القناة مع ID:', id);
         }
     }
 }
