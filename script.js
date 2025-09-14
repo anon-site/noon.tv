@@ -890,7 +890,7 @@ class ArabicTVApp {
     getCategoryName(category) {
         const categories = {
             'news': 'الأخبار',
-            'entertainment': 'الترفيه',
+            'entertainment': 'المنوعة',
             'sports': 'الرياضة',
             'religious': 'الدينية',
             'music': 'الموسيقى',
@@ -3751,7 +3751,7 @@ class ArabicTVApp {
         const categoryNames = {
             'all': 'جميع القنوات',
             'news': 'الأخبار',
-            'entertainment': 'الترفيه',
+            'entertainment': 'المنوعة',
             'sports': 'الرياضة',
             'religious': 'الدينية',
             'music': 'الموسيقى',
@@ -5132,7 +5132,7 @@ class ArabicTVApp {
         return [
             { key: 'all', name: 'جميع القنوات', icon: 'fas fa-th' },
             { key: 'news', name: 'الأخبار', icon: 'fas fa-newspaper' },
-            { key: 'entertainment', name: 'الترفيه', icon: 'fas fa-tv' },
+            { key: 'entertainment', name: 'المنوعة', icon: 'fas fa-tv' },
             { key: 'sports', name: 'الرياضة', icon: 'fas fa-futbol' },
             { key: 'religious', name: 'الدينية', icon: 'fas fa-pray' },
             { key: 'music', name: 'الموسيقى', icon: 'fas fa-music' },
@@ -5265,7 +5265,7 @@ class ArabicTVApp {
         const channelsUsingCategory = this.channels.filter(channel => channel.category === category.key);
         if (channelsUsingCategory.length > 0) {
             const confirmDelete = confirm(
-                `هناك ${channelsUsingCategory.length} قناة تستخدم هذه الفئة. هل تريد حذف الفئة وتحويل القنوات إلى فئة "الترفيه"؟`
+                `هناك ${channelsUsingCategory.length} قناة تستخدم هذه الفئة. هل تريد حذف الفئة وتحويل القنوات إلى فئة "المنوعة"؟`
             );
             
             if (confirmDelete) {
