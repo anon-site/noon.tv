@@ -952,8 +952,10 @@ class ArabicTVApp {
     showVideoModal(channel) {
         const modal = document.getElementById('videoModal');
         const title = document.getElementById('channelTitle');
+        const countryText = document.querySelector('.country-text');
         
         title.textContent = channel.name;
+        countryText.textContent = channel.country || '-';
         // Channel logo overlay is now hidden
         
         modal.classList.add('active');
