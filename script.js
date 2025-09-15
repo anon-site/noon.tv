@@ -193,6 +193,7 @@ class ArabicTVApp {
             borderRadius: 'rounded' // minimal, normal, rounded
         };
         this.filteredChannels = [...this.channels];
+        this.filteredVideos = []; // Array to store filtered videos
         this.currentCategory = 'all';
         this.editingChannelId = null; // Track which channel is being edited
         this.notificationQueue = []; // Queue for notifications
@@ -226,11 +227,13 @@ class ArabicTVApp {
 
     init() {
         this.testLocalStorage(); // Test if localStorage is working
+        this.cleanupOldCategories(); // Clean up old categories
         this.loadRemoteStorageSettings(); // Load remote storage configuration
         this.loadChannelsFromStorage(); // Load saved channels first (priority)
         this.loadDataFromFile(); // Load data from channels.json as fallback
         this.loadFavorites(); // Load saved favorites
         this.filteredChannels = [...this.channels]; // Ensure filtered channels match loaded channels
+        this.filteredVideos = [...this.videos]; // Ensure filtered videos match loaded videos
         this.loadSettings();
         this.renderChannels();
         this.bindEvents();
@@ -257,6 +260,9 @@ class ArabicTVApp {
         
         // Update video categories in sidebar
         this.updateVideoCategoriesInSidebar();
+        
+        // Update video category counts
+        this.updateVideoCategoryCounts();
 
         // Add video form handler
         const addVideoForm = document.getElementById('addVideoForm');
@@ -380,6 +386,48 @@ class ArabicTVApp {
             console.error('❌ خطأ في Local Storage:', error);
             alert('تحذير: لا يمكن حفظ الإعدادات! قد يكون المتصفح في وضع الخصوصية أو مساحة التخزين ممتلئة.');
             return false;
+        }
+    }
+
+    cleanupOldCategories() {
+        try {
+            // Clean up old video categories
+            const savedVideoCategories = localStorage.getItem('arabicTVVideoCategories');
+            if (savedVideoCategories) {
+                const videoCategories = JSON.parse(savedVideoCategories);
+                const hasOldDocumentary = videoCategories.some(cat => cat.key === 'documentary');
+                
+                if (hasOldDocumentary) {
+                    console.log('تنظيف فئات الفيديو القديمة...');
+                    const updatedVideoCategories = videoCategories.map(cat => 
+                        cat.key === 'documentary' 
+                            ? { key: 'documentaries', name: 'الوثائقيات', icon: 'fas fa-book-open' }
+                            : cat
+                    );
+                    localStorage.setItem('arabicTVVideoCategories', JSON.stringify(updatedVideoCategories));
+                    console.log('تم تنظيف فئات الفيديو');
+                }
+            }
+
+            // Clean up old videos
+            const savedVideos = localStorage.getItem('arabicTVVideos');
+            if (savedVideos) {
+                const videos = JSON.parse(savedVideos);
+                const hasOldDocumentaryVideos = videos.some(video => video.category === 'documentary');
+                
+                if (hasOldDocumentaryVideos) {
+                    console.log('تنظيف الفيديوهات القديمة...');
+                    const updatedVideos = videos.map(video => 
+                        video.category === 'documentary' 
+                            ? { ...video, category: 'documentaries' }
+                            : video
+                    );
+                    localStorage.setItem('arabicTVVideos', JSON.stringify(updatedVideos));
+                    console.log('تم تنظيف الفيديوهات');
+                }
+            }
+        } catch (error) {
+            console.error('خطأ في تنظيف الفئات القديمة:', error);
         }
     }
 
@@ -965,6 +1013,7 @@ class ArabicTVApp {
             'music': 'الموسيقى',
             'movies': 'الأفلام',
             'documentary': 'الوثائقية',
+            'documentaries': 'الوثائقيات',
             'diversified': 'متنوعة'
         };
         return categories[category] || category;
@@ -972,6 +1021,35 @@ class ArabicTVApp {
 
     filterChannels(category) {
         console.log('تصفية القنوات حسب الفئة:', category);
+        this.currentCategory = category;
+        
+        // Update active tab
+        const allTabs = document.querySelectorAll('.sidebar-nav-tab, .mobile-sidebar-nav-tab');
+        console.log('عدد التبويبات الموجودة:', allTabs.length);
+        
+        allTabs.forEach(tab => {
+            tab.classList.remove('active');
+        });
+        
+        const activeTabs = document.querySelectorAll(`[data-category="${category}"]`);
+        console.log('عدد التبويبات النشطة:', activeTabs.length);
+        
+        activeTabs.forEach(tab => {
+            tab.classList.add('active');
+        });
+
+        // Scroll to top when category is selected (both mobile and desktop)
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+
+        // Use the new unified filter system
+        this.applyAllFilters();
+    }
+
+    filterVideos(category) {
+        console.log('تصفية الفيديوهات حسب الفئة:', category);
         this.currentCategory = category;
         
         // Update active tab
@@ -3910,6 +3988,7 @@ class ArabicTVApp {
             'music': 'الموسيقى',
             'movies': 'الأفلام',
             'documentary': 'الوثائقية',
+            'documentaries': 'الوثائقيات',
             'diversified': 'متنوعة'
         };
         return categoryNames[category] || category;
@@ -4913,8 +4992,57 @@ class ArabicTVApp {
 
 
     applyAllFilters() {
+        // Check if we're filtering video categories
+        const isVideoCategory = this.isVideoCategory(this.currentCategory);
+        
+        if (isVideoCategory) {
+            // Handle video filtering
+            this.applyVideoFilters();
+        } else {
+            // Handle channel filtering (existing logic)
+            this.applyChannelFilters();
+        }
+    }
+
+    isVideoCategory(category) {
+        // Check if the category is a video category
+        return this.videoCategories.some(videoCat => videoCat.key === category);
+    }
+
+    applyVideoFilters() {
+        let filtered = [...this.videos];
+        console.log('تطبيق فلاتر الفيديو - الفيديوهات الأصلية:', this.videos.length);
+
+        // Apply video category filter
+        if (this.currentCategory !== 'all') {
+            filtered = filtered.filter(video => video.category === this.currentCategory);
+            console.log('بعد تصفية فئة الفيديو:', filtered.length);
+        }
+
+        // Apply search filter for videos
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput && searchInput.value.trim()) {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            filtered = filtered.filter(video => {
+                return video.name.toLowerCase().includes(searchTerm) ||
+                       (video.description && video.description.toLowerCase().includes(searchTerm)) ||
+                       (video.tags && video.tags.some(tag => tag.toLowerCase().includes(searchTerm)));
+            });
+            console.log('بعد تصفية البحث في الفيديوهات:', filtered.length);
+        }
+
+        this.filteredVideos = filtered;
+        console.log('النتيجة النهائية للفيديوهات:', this.filteredVideos.length, 'فيديو');
+        this.renderVideos();
+        this.updateVideoStats();
+        
+        // Update video category counts
+        this.updateVideoCategoryCounts();
+    }
+
+    applyChannelFilters() {
         let filtered = [...this.channels];
-        console.log('تطبيق الفلاتر - القنوات الأصلية:', this.channels.length);
+        console.log('تطبيق فلاتر القنوات - القنوات الأصلية:', this.channels.length);
 
         // Apply category filter
         if (this.currentCategory !== 'all') {
@@ -4946,7 +5074,7 @@ class ArabicTVApp {
         }
 
         this.filteredChannels = filtered;
-        console.log('النتيجة النهائية:', this.filteredChannels.length, 'قناة');
+        console.log('النتيجة النهائية للقنوات:', this.filteredChannels.length, 'قناة');
         this.renderChannels();
         this.updateChannelStats();
     }
@@ -4955,6 +5083,10 @@ class ArabicTVApp {
         this.currentCategory = 'all';
         this.currentCountryFilter = 'all';
         this.showFavoritesOnly = false;
+
+        // Reset filtered arrays
+        this.filteredChannels = [...this.channels];
+        this.filteredVideos = [...this.videos];
 
         // Reset UI elements
 
@@ -5021,6 +5153,92 @@ class ArabicTVApp {
         const channelCountElement = document.getElementById('channelCount');
         if (channelCountElement) {
             channelCountElement.textContent = this.filteredChannels.length;
+        }
+        
+        // Update the last update time
+        this.updateLastUpdateTime();
+        
+        this.updateBreadcrumbs();
+    }
+
+    // Video rendering and stats
+    renderVideos() {
+        const grid = document.getElementById('channelsGrid');
+        if (!grid) {
+            console.error('لم يتم العثور على عنصر channelsGrid');
+            return;
+        }
+        
+        grid.innerHTML = '';
+        console.log('عرض الفيديوهات:', this.filteredVideos.length, 'فيديو');
+
+        this.filteredVideos.forEach(video => {
+            const videoCard = this.createVideoCard(video);
+            grid.appendChild(videoCard);
+        });
+    }
+
+    createVideoCard(video) {
+        const card = document.createElement('div');
+        card.className = 'channel-card video-card';
+        card.onclick = (event) => this.playVideo(video, event);
+        
+        card.innerHTML = `
+            <div class="channel-logo-container">
+                <img src="${video.thumbnail || 'https://via.placeholder.com/300x150?text=No+Thumbnail'}" 
+                     alt="${video.name}" class="channel-logo"
+                     onerror="this.src='https://via.placeholder.com/300x150?text=No+Thumbnail'">
+                <div class="video-duration-overlay">${video.duration ? video.duration + 'د' : 'غير محدد'}</div>
+                
+                <!-- Video Actions -->
+                <div class="video-actions">
+                    <button class="video-edit-btn" onclick="app.editVideo(${video.id}, event)" title="تعديل الفيديو">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="video-delete-btn" onclick="app.deleteVideo(${video.id}, event)" title="حذف الفيديو">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="channel-info">
+                <h3 class="channel-name">${video.name}</h3>
+                <p class="channel-category">${this.getVideoCategoryName(video.category)}</p>
+                ${video.description ? `<p class="video-description">${video.description.substring(0, 100)}${video.description.length > 100 ? '...' : ''}</p>` : ''}
+                <div class="video-meta">
+                    <span class="video-quality">${video.quality}</span>
+                    ${video.tags && video.tags.length > 0 ? `<div class="video-tags">${video.tags.slice(0, 3).map(tag => `<span class="video-tag">${tag}</span>`).join('')}</div>` : ''}
+                </div>
+            </div>
+        `;
+        
+        return card;
+    }
+
+    getVideoCategoryName(categoryKey) {
+        const category = this.videoCategories.find(cat => cat.key === categoryKey);
+        return category ? category.name : categoryKey;
+    }
+
+    playVideo(video, event) {
+        // Prevent playing if clicking on action buttons
+        if (event && (event.target.closest('.video-edit-btn') || event.target.closest('.video-delete-btn'))) {
+            return;
+        }
+        
+        // Open video in modal or new tab based on URL type
+        if (this.isYouTubeUrl(video.url)) {
+            this.showVideoModal(video);
+            this.loadYouTubeVideo(video.url);
+        } else {
+            // For other video types, open in new tab
+            window.open(video.url, '_blank');
+        }
+    }
+
+    updateVideoStats() {
+        const channelCountElement = document.getElementById('channelCount');
+        if (channelCountElement) {
+            channelCountElement.textContent = this.filteredVideos.length;
         }
         
         // Update the last update time
@@ -5602,7 +5820,7 @@ class ArabicTVApp {
             { key: 'live', name: 'البث المباشر', icon: 'fas fa-broadcast-tower' },
             { key: 'movies', name: 'الأفلام', icon: 'fas fa-film' },
             { key: 'series', name: 'المسلسلات', icon: 'fas fa-tv' },
-            { key: 'documentary', name: 'الوثائقية', icon: 'fas fa-book-open' },
+            { key: 'documentaries', name: 'الوثائقيات', icon: 'fas fa-book-open' },
             { key: 'kids', name: 'الأطفال', icon: 'fas fa-child' },
             { key: 'educational', name: 'التعليمية', icon: 'fas fa-graduation-cap' },
             { key: 'cooking', name: 'الطبخ', icon: 'fas fa-utensils' }
@@ -5856,7 +6074,23 @@ class ArabicTVApp {
     // Show all channels and scroll to top
     showAllChannels() {
         // Filter to show all channels
-        this.filterChannels('all');
+        this.currentCategory = 'all';
+        this.filteredChannels = [...this.channels];
+        this.filteredVideos = [...this.videos];
+        
+        // Show channels by default, not videos
+        this.renderChannels();
+        this.updateChannelStats();
+        
+        // Update active tabs
+        document.querySelectorAll('.sidebar-nav-tab, .mobile-sidebar-nav-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        
+        const allTabs = document.querySelectorAll('[data-category="all"]');
+        allTabs.forEach(tab => {
+            tab.classList.add('active');
+        });
         
         // Scroll to top of the page
         window.scrollTo({
@@ -6743,7 +6977,12 @@ ArabicTVApp.prototype.updateVideo = function(videoId, videoData) {
     return true;
 };
 
-ArabicTVApp.prototype.deleteVideo = function(videoId) {
+ArabicTVApp.prototype.deleteVideo = function(videoId, event) {
+    // Prevent event propagation if event is provided
+    if (event) {
+        event.stopPropagation();
+    }
+    
     const videoIndex = this.videos.findIndex(v => v.id === videoId);
     if (videoIndex === -1) return false;
     
@@ -6753,6 +6992,13 @@ ArabicTVApp.prototype.deleteVideo = function(videoId) {
         this.videos.splice(videoIndex, 1);
         this.saveVideosToStorage();
         this.renderAdminVideos();
+        
+        // Update filtered videos if we're currently showing videos
+        if (this.isVideoCategory(this.currentCategory)) {
+            this.filteredVideos = this.filteredVideos.filter(v => v.id !== videoId);
+            this.renderVideos();
+            this.updateVideoStats();
+        }
         
         // Update video category counts in sidebar
         this.updateVideoCategoryCounts();
@@ -6816,11 +7062,19 @@ ArabicTVApp.prototype.renderAdminVideos = function() {
     `).join('');
 };
 
-ArabicTVApp.prototype.editVideo = function(videoId) {
+ArabicTVApp.prototype.editVideo = function(videoId, event) {
+    // Prevent event propagation if event is provided
+    if (event) {
+        event.stopPropagation();
+    }
+    
     const video = this.videos.find(v => v.id === videoId);
     if (!video) return;
     
     this.editingVideoId = videoId;
+    
+    // Open admin panel first
+    this.openAdminPanel();
     
     // Switch to add video tab
     this.switchAdminTab('addVideo');
@@ -6881,6 +7135,9 @@ ArabicTVApp.prototype.loadVideosFromStorage = function() {
             this.videos = JSON.parse(savedVideos);
             console.log('تم تحميل الفيديوهات:', this.videos.length, 'فيديو');
         }
+        
+        // Update video category counts after loading
+        this.updateVideoCategoryCounts();
     } catch (error) {
         console.error('خطأ في تحميل الفيديوهات:', error);
         this.videos = [];
@@ -7031,6 +7288,32 @@ ArabicTVApp.prototype.loadVideoCategories = function() {
         if (savedVideoCategories) {
             this.videoCategories = JSON.parse(savedVideoCategories);
             console.log('تم تحميل فئات الفيديو:', this.videoCategories.length, 'فئة');
+            
+            // Clean up old categories - replace documentary with documentaries
+            const hasOldDocumentary = this.videoCategories.some(cat => cat.key === 'documentary');
+            if (hasOldDocumentary) {
+                console.log('تم العثور على فئة الوثائقية القديمة، سيتم تحديثها');
+                this.videoCategories = this.videoCategories.map(cat => 
+                    cat.key === 'documentary' 
+                        ? { key: 'documentaries', name: 'الوثائقيات', icon: 'fas fa-book-open' }
+                        : cat
+                );
+                this.saveVideoCategories();
+                console.log('تم تحديث فئات الفيديو');
+                
+                // Also update any videos that use the old category
+                const videosWithOldCategory = this.videos.filter(video => video.category === 'documentary');
+                if (videosWithOldCategory.length > 0) {
+                    console.log('تم العثور على فيديوهات تستخدم الفئة القديمة، سيتم تحديثها');
+                    this.videos = this.videos.map(video => 
+                        video.category === 'documentary' 
+                            ? { ...video, category: 'documentaries' }
+                            : video
+                    );
+                    this.saveVideosToStorage();
+                    console.log('تم تحديث الفيديوهات');
+                }
+            }
         } else {
             this.videoCategories = this.getDefaultVideoCategories();
             this.saveVideoCategories();
@@ -7259,7 +7542,7 @@ ArabicTVApp.prototype.renderSidebarVideoCategories = function(container) {
         const button = document.createElement('button');
         button.className = 'sidebar-nav-tab';
         button.setAttribute('data-category', category.key);
-        button.onclick = () => this.filterChannels(category.key);
+        button.onclick = () => this.filterVideos(category.key);
         
         button.innerHTML = `
             <i class="${category.icon}"></i>
