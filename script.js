@@ -5375,7 +5375,8 @@ class ArabicTVApp {
             { key: 'religious', name: 'الدينية', icon: 'fas fa-pray' },
             { key: 'music', name: 'الموسيقى', icon: 'fas fa-music' },
             { key: 'movies', name: 'الأفلام', icon: 'fas fa-film' },
-            { key: 'documentary', name: 'الوثائقية', icon: 'fas fa-book-open' }
+            { key: 'documentary', name: 'الوثائقية', icon: 'fas fa-book-open' },
+            { key: 'kids', name: 'أطفال', icon: 'fas fa-child' }
         ];
     }
 
@@ -5385,6 +5386,9 @@ class ArabicTVApp {
             if (savedCategories) {
                 this.categories = JSON.parse(savedCategories);
                 console.log('تم تحميل الفئات:', this.categories.length, 'فئة');
+                
+                // Check if new categories need to be added
+                this.mergeNewCategories();
             } else {
                 this.categories = this.getDefaultCategories();
                 this.saveCategories();
@@ -5396,6 +5400,25 @@ class ArabicTVApp {
             console.error('خطأ في تحميل الفئات:', error);
             this.categories = this.getDefaultCategories();
             this.updateNavigationTabs();
+        }
+    }
+
+    mergeNewCategories() {
+        const defaultCategories = this.getDefaultCategories();
+        let hasNewCategories = false;
+        
+        defaultCategories.forEach(defaultCategory => {
+            const existingCategory = this.categories.find(cat => cat.key === defaultCategory.key);
+            if (!existingCategory) {
+                this.categories.push(defaultCategory);
+                hasNewCategories = true;
+                console.log('تم إضافة فئة جديدة:', defaultCategory.name);
+            }
+        });
+        
+        if (hasNewCategories) {
+            this.saveCategories();
+            console.log('تم حفظ الفئات المحدثة');
         }
     }
 
