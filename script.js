@@ -1717,9 +1717,6 @@ class ArabicTVApp {
                 }
             };
         }
-        
-        // Show notification
-        this.showNotification('success', 'تم فتح نموذج التعديل', 'يمكنك الآن تعديل بيانات القناة');
     }
 
     updateChannel(id) {
@@ -5168,9 +5165,6 @@ class ArabicTVApp {
             
             // Store the channel ID for editing
             this.editingChannelId = channelId;
-            
-            // Show notification
-            this.showNotification('success', 'تم فتح نموذج التعديل', 'يمكنك الآن تعديل بيانات القناة');
         }, 100);
     }
 
@@ -5747,11 +5741,6 @@ function resetChannelForm() {
         addButton.textContent = 'تحديث القناة';
     } else if (addButton) {
         addButton.textContent = 'إضافة القناة';
-    }
-    
-    // إظهار رسالة تأكيد
-    if (window.app && window.app.showNotification) {
-        window.app.showNotification('تم تصفير النموذج بنجاح', 'success');
     }
 }
 
