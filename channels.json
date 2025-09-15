@@ -1,6 +1,78 @@
 {
   "channels": [
     {
+      "id": 33,
+      "name": "إقرأ",
+      "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv3/playlist.m3u8",
+      "logo": "https://iili.io/Kz83mkF.png",
+      "category": "religious",
+      "country": "السعودية",
+      "type": "hls"
+    },
+    {
+      "id": 23,
+      "name": "القران الكريم",
+      "url": "https://cdn-globecast.akamaized.net/live/eds/saudi_quran/hls_roku/index.m3u8",
+      "logo": "https://iili.io/Kz8M9Ul.png",
+      "category": "religious",
+      "country": "السعودية",
+      "type": "hls"
+    },
+    {
+      "id": 34,
+      "name": "إقرأ قرآن",
+      "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv2/playlist.m3u8",
+      "logo": "https://iili.io/Kz8outt.png",
+      "category": "religious",
+      "country": "السعودية",
+      "type": "hls"
+    },
+    {
+      "id": 32,
+      "name": "السنة النبوية",
+      "url": "https://www.elahmad.com/tv/m3u8/online_live_14_tv.m3u8?id=sunna_tv&t=11111111",
+      "logo": "https://iili.io/Kz8TUYJ.png",
+      "category": "religious",
+      "country": "السعودية",
+      "type": "hls"
+    },
+    {
+      "id": 57,
+      "name": "البحرين قرآن",
+      "url": "https://5c7b683162943.streamlock.net/live/ngrp:bahrainquran_all/playlist.m3u8",
+      "logo": "https://qanawat.taghtia.com/assets/channels/bahrain-quran.png",
+      "category": "religious",
+      "country": "البحرين",
+      "type": "hls"
+    },
+    {
+      "id": 56,
+      "name": "مكة",
+      "url": "https://media2.streambrothers.com:1936/8122/8122/playlist.m3u8",
+      "logo": "https://play-lh.googleusercontent.com/89KDTm-c-N9GOuG4CK9P7Nc6WcbgGYOLguwblg1254ho2HkuZLkXkH35iuJM19-rng",
+      "category": "religious",
+      "country": "السعودية",
+      "type": "hls"
+    },
+    {
+      "id": 43,
+      "name": "الإستقامة",
+      "url": "https://jmc-live.ercdn.net/alistiqama/alistiqama.m3u8",
+      "logo": "https://www.istiqama.tv/wp-content/uploads/2024/05/cropped-Channel-Logo-2024-scaled.png",
+      "category": "religious",
+      "country": "عُمان",
+      "type": "hls"
+    },
+    {
+      "id": 55,
+      "name": "Iqraa Africa & Europe",
+      "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv1/playlist.m3u8",
+      "logo": "https://iili.io/Kz83mkF.png",
+      "category": "religious",
+      "country": "السعودية",
+      "type": "hls"
+    },
+    {
       "id": 14,
       "name": "Alaraby TV",
       "url": "https://alarabyta.cdn.octivid.com/alaraby/smil:alaraby.stream.smil/chunklist.m3u8",
@@ -118,15 +190,6 @@
       "type": "hls"
     },
     {
-      "id": 23,
-      "name": "القران الكريم",
-      "url": "https://cdn-globecast.akamaized.net/live/eds/saudi_quran/hls_roku/index.m3u8",
-      "logo": "https://iili.io/Kz8M9Ul.png",
-      "category": "religious",
-      "country": "السعودية",
-      "type": "hls"
-    },
-    {
       "id": 25,
       "name": "روتانا افلام +",
       "url": "https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/rotana-aflam-plus/master.m3u8",
@@ -177,42 +240,6 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Alsumaria_logo.svg/2560px-Alsumaria_logo.svg.png",
       "category": "entertainment",
       "country": "العراق",
-      "type": "hls"
-    },
-    {
-      "id": 32,
-      "name": "السنة النبوية",
-      "url": "https://www.elahmad.com/tv/m3u8/online_live_14_tv.m3u8?id=sunna_tv&t=11111111",
-      "logo": "https://iili.io/Kz8TUYJ.png",
-      "category": "religious",
-      "country": "السعودية",
-      "type": "hls"
-    },
-    {
-      "id": 33,
-      "name": "إقرأ",
-      "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv3/playlist.m3u8",
-      "logo": "https://iili.io/Kz83mkF.png",
-      "category": "religious",
-      "country": "السعودية",
-      "type": "hls"
-    },
-    {
-      "id": 34,
-      "name": "إقرأ قرآن",
-      "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv2/playlist.m3u8",
-      "logo": "https://iili.io/Kz8outt.png",
-      "category": "religious",
-      "country": "السعودية",
-      "type": "hls"
-    },
-    {
-      "id": 43,
-      "name": "الإستقامة",
-      "url": "https://jmc-live.ercdn.net/alistiqama/alistiqama.m3u8",
-      "logo": "https://www.istiqama.tv/wp-content/uploads/2024/05/cropped-Channel-Logo-2024-scaled.png",
-      "category": "religious",
-      "country": "عُمان",
       "type": "hls"
     },
     {
@@ -294,33 +321,6 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c1/AL24_News_Logo.svg",
       "category": "news",
       "country": "الجزائر",
-      "type": "hls"
-    },
-    {
-      "id": 55,
-      "name": "Iqraa Africa & Europe",
-      "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv1/playlist.m3u8",
-      "logo": "https://iili.io/Kz83mkF.png",
-      "category": "religious",
-      "country": "السعودية",
-      "type": "hls"
-    },
-    {
-      "id": 56,
-      "name": "مكة",
-      "url": "https://media2.streambrothers.com:1936/8122/8122/playlist.m3u8",
-      "logo": "https://play-lh.googleusercontent.com/89KDTm-c-N9GOuG4CK9P7Nc6WcbgGYOLguwblg1254ho2HkuZLkXkH35iuJM19-rng",
-      "category": "religious",
-      "country": "السعودية",
-      "type": "hls"
-    },
-    {
-      "id": 57,
-      "name": "البحرين قرآن",
-      "url": "https://5c7b683162943.streamlock.net/live/ngrp:bahrainquran_all/playlist.m3u8",
-      "logo": "https://qanawat.taghtia.com/assets/channels/bahrain-quran.png",
-      "category": "religious",
-      "country": "البحرين",
       "type": "hls"
     },
     {
@@ -506,6 +506,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-15T13:07:23.430Z",
+  "lastModified": "2025-09-15T13:23:26.304Z",
   "version": "1.0"
 }
