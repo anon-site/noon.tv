@@ -1343,6 +1343,7 @@ class ArabicTVApp {
             this.saveLoginState(); // حفظ حالة تسجيل الدخول
             this.closeLoginModal();
             this.toggleChannelActions(true);
+            this.toggleAdminBadge(true); // إظهار Admin badge
             this.openAdminPanel();
             this.notifySuccess('مرحباً بك في لوحة التحكم - مزود الخدمة');
         } else {
@@ -1358,6 +1359,7 @@ class ArabicTVApp {
         this.saveLoginState(); // حفظ حالة تسجيل الخروج
         this.closeAdminPanel();
         this.toggleChannelActions(false);
+        this.toggleAdminBadge(false); // إخفاء Admin badge
         this.notifyInfo('تم تسجيل الخروج من مزود الخدمة');
     }
 
@@ -1384,6 +1386,7 @@ class ArabicTVApp {
                 if (isRecent && loginData.isLoggedIn) {
                     this.isLoggedIn = true;
                     this.toggleChannelActions(true);
+                    this.toggleAdminBadge(true); // إظهار Admin badge عند تحميل الحالة
                     return true;
                 }
             }
@@ -1394,6 +1397,7 @@ class ArabicTVApp {
         // إذا لم تكن هناك حالة محفوظة أو انتهت صلاحيتها
         this.isLoggedIn = false;
         this.toggleChannelActions(false);
+        this.toggleAdminBadge(false); // إخفاء Admin badge في الحالة الافتراضية
         return false;
     }
 
@@ -1402,6 +1406,14 @@ class ArabicTVApp {
         channelActions.forEach(actions => {
             actions.style.display = show ? 'flex' : 'none';
         });
+    }
+
+    // إظهار/إخفاء Admin badge
+    toggleAdminBadge(show) {
+        const adminBadge = document.getElementById('adminBadge');
+        if (adminBadge) {
+            adminBadge.style.display = show ? 'flex' : 'none';
+        }
     }
 
     switchAdminTab(tab) {

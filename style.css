@@ -603,6 +603,19 @@ body[data-theme="light"] .logo h1 {
     background-clip: text;
 }
 
+body[data-theme="light"] .admin-badge {
+    background: #ffffff;
+    color: #1e293b;
+    border: 2px solid #3b82f6;
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+body[data-theme="light"] .admin-badge i {
+    color: #3b82f6;
+}
+
 .container {
     max-width: 1400px;
     margin: 0 auto;
@@ -658,6 +671,30 @@ body[data-theme="light"] .logo h1 {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+}
+
+/* Admin Badge */
+.admin-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--background-dark);
+    color: var(--text-primary);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: 'Cairo', sans-serif;
+    border: 2px solid var(--highlight-color);
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+.admin-badge i {
+    font-size: 0.8rem;
+    color: var(--highlight-color);
 }
 
 /* Header Search */
@@ -8739,6 +8776,16 @@ body[data-theme="light"] .enhanced-save-btn:hover {
 @media (max-width: 480px) {
     .logo h1 {
         font-size: 1.4rem;
+    }
+    
+    .admin-badge {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+        gap: 6px;
+    }
+    
+    .admin-badge i {
+        font-size: 0.7rem;
     }
     
     .channels-grid {
