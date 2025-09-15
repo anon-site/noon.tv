@@ -65,7 +65,12 @@ class ArabicTVApp {
         this.loadFavorites(); // Load saved favorites
         this.filteredChannels = [...this.channels]; // Ensure filtered channels match loaded channels
         this.loadSettings();
-        this.renderChannels();
+        this.loadLoginState(); // تحميل حالة تسجيل الدخول بعد تحميل البيانات
+        this.renderChannels(); // عرض القنوات بعد تحميل حالة تسجيل الدخول
+        // إعادة عرض القنوات مرة أخرى لضمان ظهور الأيقونات بشكل صحيح
+        setTimeout(() => {
+            this.renderChannels();
+        }, 100);
         this.bindEvents();
         this.bindRemoteStorageEvents();
         
@@ -88,7 +93,7 @@ class ArabicTVApp {
         this.updateChannelCategoryOptions(); // Update category options
         this.updateNavigationTabs(); // Update navigation tabs
         this.updateSidebarCounts(); // Update sidebar counts
-        this.toggleChannelActions(false); // Hide channel actions by default
+        // لا نحتاج toggleChannelActions هنا لأن loadLoginState يتولى ذلك
         this.hideLoading();
         
         // إظهار الرسالة الترحيبية إذا لزم الأمر
@@ -1333,6 +1338,7 @@ class ArabicTVApp {
         
         if (password === this.adminPassword) {
             this.isLoggedIn = true;
+            this.saveLoginState(); // حفظ حالة تسجيل الدخول
             this.closeLoginModal();
             this.toggleChannelActions(true);
             this.openAdminPanel();
@@ -1347,9 +1353,46 @@ class ArabicTVApp {
 
     logoutFromAdmin() {
         this.isLoggedIn = false;
+        this.saveLoginState(); // حفظ حالة تسجيل الخروج
         this.closeAdminPanel();
         this.toggleChannelActions(false);
         this.notifyInfo('تم تسجيل الخروج');
+    }
+
+    // حفظ حالة تسجيل الدخول في localStorage
+    saveLoginState() {
+        try {
+            localStorage.setItem('anon_tv_login_state', JSON.stringify({
+                isLoggedIn: this.isLoggedIn,
+                timestamp: Date.now()
+            }));
+        } catch (error) {
+            console.warn('لا يمكن حفظ حالة تسجيل الدخول:', error);
+        }
+    }
+
+    // تحميل حالة تسجيل الدخول من localStorage
+    loadLoginState() {
+        try {
+            const savedState = localStorage.getItem('anon_tv_login_state');
+            if (savedState) {
+                const loginData = JSON.parse(savedState);
+                // التحقق من أن البيانات حديثة (أقل من 24 ساعة)
+                const isRecent = (Date.now() - loginData.timestamp) < (24 * 60 * 60 * 1000);
+                if (isRecent && loginData.isLoggedIn) {
+                    this.isLoggedIn = true;
+                    this.toggleChannelActions(true);
+                    return true;
+                }
+            }
+        } catch (error) {
+            console.warn('لا يمكن تحميل حالة تسجيل الدخول:', error);
+        }
+        
+        // إذا لم تكن هناك حالة محفوظة أو انتهت صلاحيتها
+        this.isLoggedIn = false;
+        this.toggleChannelActions(false);
+        return false;
     }
 
     toggleChannelActions(show) {
