@@ -9,6 +9,8 @@ class ArabicTVApp {
         this.currentChannel = null;
         this.hls = null;
         this.isPictureInPicture = false;
+        this.isLoggedIn = false;
+        this.adminPassword = 'admin123'; // كلمة المرور الافتراضية
         this.settings = {
             autoQuality: true,
             autoplay: true,
@@ -86,6 +88,7 @@ class ArabicTVApp {
         this.updateChannelCategoryOptions(); // Update category options
         this.updateNavigationTabs(); // Update navigation tabs
         this.updateSidebarCounts(); // Update sidebar counts
+        this.toggleChannelActions(false); // Hide channel actions by default
         this.hideLoading();
         
         // إظهار الرسالة الترحيبية إذا لزم الأمر
@@ -1269,6 +1272,11 @@ class ArabicTVApp {
     }
 
     openAdminPanel() {
+        if (!this.isLoggedIn) {
+            this.showLoginModal();
+            return;
+        }
+        
         document.getElementById('adminModal').classList.add('active');
         this.renderAdminChannels();
         this.updateSaveOrderButton();
@@ -1283,6 +1291,72 @@ class ArabicTVApp {
 
     closeAdminPanel() {
         document.getElementById('adminModal').classList.remove('active');
+    }
+
+    // Login System Functions
+    showLoginModal() {
+        document.getElementById('loginModal').classList.add('active');
+        document.getElementById('adminPassword').focus();
+        
+        // Add Enter key support
+        document.getElementById('adminPassword').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                this.loginToAdmin();
+            }
+        });
+    }
+
+    closeLoginModal() {
+        document.getElementById('loginModal').classList.remove('active');
+        document.getElementById('adminPassword').value = '';
+        document.getElementById('loginError').style.display = 'none';
+    }
+
+    togglePasswordVisibility() {
+        const passwordInput = document.getElementById('adminPassword');
+        const toggleIcon = document.querySelector('.toggle-password');
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleIcon.classList.remove('fa-eye');
+            toggleIcon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            toggleIcon.classList.remove('fa-eye-slash');
+            toggleIcon.classList.add('fa-eye');
+        }
+    }
+
+    loginToAdmin() {
+        const password = document.getElementById('adminPassword').value;
+        const errorElement = document.getElementById('loginError');
+        
+        if (password === this.adminPassword) {
+            this.isLoggedIn = true;
+            this.closeLoginModal();
+            this.toggleChannelActions(true);
+            this.openAdminPanel();
+            this.notifySuccess('تم تسجيل الدخول بنجاح');
+        } else {
+            errorElement.style.display = 'flex';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('adminPassword').focus();
+            this.notifyError('كلمة المرور غير صحيحة');
+        }
+    }
+
+    logoutFromAdmin() {
+        this.isLoggedIn = false;
+        this.closeAdminPanel();
+        this.toggleChannelActions(false);
+        this.notifyInfo('تم تسجيل الخروج');
+    }
+
+    toggleChannelActions(show) {
+        const channelActions = document.querySelectorAll('.channel-actions');
+        channelActions.forEach(actions => {
+            actions.style.display = show ? 'flex' : 'none';
+        });
     }
 
     switchAdminTab(tab) {
@@ -1345,12 +1419,30 @@ class ArabicTVApp {
                 </div>
                 <div class="admin-channel-actions">
                     <div class="move-buttons">
-                        <button class="move-btn" onclick="app.moveChannelUp(${index})" ${index === 0 ? 'disabled' : ''}>
+                        <div class="position-controls">
+                            <label class="position-label">الموقع:</label>
+                            <input type="number" 
+                                   class="position-input" 
+                                   value="${index + 1}" 
+                                   min="1" 
+                                   max="${this.channels.length}"
+                                   onchange="app.moveChannelToPosition(${index}, this.value)"
+                                   title="أدخل رقم الموقع الجديد">
+                        </div>
+                        <div class="arrow-buttons">
+                            <button class="move-btn" onclick="app.moveChannelUp(${index})" ${index === 0 ? 'disabled' : ''} title="نقل لأعلى">
                             <i class="fas fa-chevron-up"></i>
                         </button>
-                        <button class="move-btn" onclick="app.moveChannelDown(${index})" ${index === this.channels.length - 1 ? 'disabled' : ''}>
+                            <button class="move-btn" onclick="app.moveChannelDown(${index})" ${index === this.channels.length - 1 ? 'disabled' : ''} title="نقل لأسفل">
                             <i class="fas fa-chevron-down"></i>
                         </button>
+                            <button class="move-btn" onclick="app.moveChannelToTop(${index})" ${index === 0 ? 'disabled' : ''} title="نقل إلى الأعلى">
+                                <i class="fas fa-angle-double-up"></i>
+                            </button>
+                            <button class="move-btn" onclick="app.moveChannelToBottom(${index})" ${index === this.channels.length - 1 ? 'disabled' : ''} title="نقل إلى الأسفل">
+                                <i class="fas fa-angle-double-down"></i>
+                        </button>
+                        </div>
                     </div>
                     <button class="edit-btn" onclick="app.editChannel(${channel.id}, event)">
                         <i class="fas fa-edit"></i> تعديل
@@ -3879,6 +3971,20 @@ class ArabicTVApp {
         }
     }
 
+    moveChannelToTop(index) {
+        if (index > 0) {
+            this.moveChannel(index, 0);
+            this.notifySuccess(`تم نقل "${this.channels[0].name}" إلى الأعلى`);
+        }
+    }
+
+    moveChannelToBottom(index) {
+        if (index < this.channels.length - 1) {
+            this.moveChannel(index, this.channels.length - 1);
+            this.notifySuccess(`تم نقل "${this.channels[this.channels.length - 1].name}" إلى الأسفل`);
+        }
+    }
+
     moveChannel(fromIndex, toIndex) {
         if (fromIndex === toIndex) return;
 
@@ -3894,12 +4000,41 @@ class ArabicTVApp {
 
         // إعادة رسم القائمة
         this.renderAdminChannels();
-        this.renderChannels(); // تحديث العرض الرئيسي أيضاً
+    }
+
+    moveChannelToPosition(fromIndex, newPosition) {
+        // تحويل الموقع إلى فهرس (الموقع - 1)
+        const toIndex = parseInt(newPosition) - 1;
+        
+        // التحقق من صحة المدخلات
+        if (isNaN(toIndex) || toIndex < 0 || toIndex >= this.channels.length) {
+            this.notifyError('رقم الموقع غير صحيح. يجب أن يكون بين 1 و ' + this.channels.length);
+            // إعادة تعيين القيمة إلى الموقع الحالي
+            setTimeout(() => {
+                this.renderAdminChannels();
+            }, 100);
+            return;
+        }
+
+        if (fromIndex === toIndex) {
+            // لا حاجة للنقل إذا كان الموقع نفسه
+            return;
+        }
+
+        // حفظ اسم القناة قبل النقل
+        const channelName = this.channels[fromIndex].name;
+        
+        // نقل القناة
+        this.moveChannel(fromIndex, toIndex);
+        
+        // إظهار رسالة نجاح
+        this.notifySuccess(`تم نقل قناة "${channelName}" إلى الموقع ${newPosition}`);
+        
+        // تحديث العرض الرئيسي أيضاً
+        this.renderChannels();
 
         // إظهار زر الحفظ
         this.updateSaveOrderButton();
-
-        this.notifyInfo(`تم نقل "${movedChannel.name}" إلى الموضع الجديد`);
     }
 
     updateSaveOrderButton() {
@@ -3940,19 +4075,6 @@ class ArabicTVApp {
         }
     }
 
-    resetChannelsOrder() {
-        if (!this.hasOrderChanged) return;
-
-        this.channels = [...this.originalOrder];
-        this.filteredChannels = [...this.channels];
-        this.hasOrderChanged = false;
-        
-        this.renderAdminChannels();
-        this.renderChannels();
-        this.updateSaveOrderButton();
-        
-        this.notifyInfo('تم إعادة تعيين ترتيب القنوات');
-    }
 
     // Mobile Sidebar Functions
     toggleMobileMenu() {
@@ -4938,7 +5060,7 @@ class ArabicTVApp {
             <button class="favorite-btn ${favoritedClass}" onclick="app.toggleFavorite(${channel.id}, event)">
                 <i class="${heartClass}"></i>
             </button>
-            <div class="channel-actions">
+            <div class="channel-actions" ${!this.isLoggedIn ? 'style="display: none;"' : ''}>
                 <button class="channel-edit-btn" onclick="app.editChannel(${channel.id}, event)" title="تعديل القناة">
                     <i class="fas fa-edit"></i>
                 </button>
