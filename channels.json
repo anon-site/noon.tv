@@ -475,6 +475,15 @@
       "category": "entertainment",
       "country": "مصر",
       "type": "hls"
+    },
+    {
+      "id": 75,
+      "name": "PNC دراما",
+      "url": "https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/pnc-drama/master.m3u8",
+      "logo": "https://iili.io/KublkLG.png",
+      "category": "entertainment",
+      "country": "مصر",
+      "type": "hls"
     }
   ],
   "favorites": [],
@@ -551,6 +560,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-15T15:44:26.168Z",
+  "lastModified": "2025-09-15T15:46:32.994Z",
   "version": "1.0"
 }
