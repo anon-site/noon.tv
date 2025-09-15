@@ -430,6 +430,15 @@
       "category": "entertainment",
       "country": "اليونان",
       "type": "hls"
+    },
+    {
+      "id": 70,
+      "name": "راجعين",
+      "url": "https://mn-nl.mncdn.com/palabroad/live/playlist.m3u8",
+      "logo": "https://www.rajeen.tv/logo.png",
+      "category": "entertainment",
+      "country": "فلسطين",
+      "type": "hls"
     }
   ],
   "favorites": [],
@@ -506,6 +515,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-15T15:03:01.045Z",
+  "lastModified": "2025-09-15T15:04:36.378Z",
   "version": "1.0"
 }
