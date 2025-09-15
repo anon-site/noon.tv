@@ -277,6 +277,9 @@ class ArabicTVApp {
         
         // Update video category counts
         this.updateVideoCategoryCounts();
+        
+        // Update mobile video categories
+        this.updateMobileVideoCategories();
 
         // Add video form handler
         const addVideoForm = document.getElementById('addVideoForm');
@@ -5397,25 +5400,40 @@ class ArabicTVApp {
     updateMobileVideoCategories() {
         if (!this.isMobile()) return;
         
-        const videoCategories = ['youtube', 'live', 'movies', 'series', 'documentaries', 'kids', 'educational', 'cooking'];
+        // Get the video categories container
+        const videoCategoriesContent = document.getElementById('videoCategoriesContent');
+        if (!videoCategoriesContent) return;
         
-        videoCategories.forEach(category => {
-            const count = this.getCategoryCount(category);
+        // Clear existing content
+        videoCategoriesContent.innerHTML = '';
+        
+        // Render video categories dynamically based on current videoCategories
+        this.videoCategories.forEach(category => {
+            const count = this.getCategoryCount(category.key);
             let countElementId;
             
             // Handle special cases for video categories
-            if (category === 'movies') {
+            if (category.key === 'movies') {
                 countElementId = 'mobileMoviesVideoCount';
-            } else if (category === 'documentaries') {
+            } else if (category.key === 'documentaries') {
                 countElementId = 'mobileDocumentaryVideoCount';
             } else {
-                countElementId = `mobile${category.charAt(0).toUpperCase() + category.slice(1)}Count`;
+                countElementId = `mobile${category.key.charAt(0).toUpperCase() + category.key.slice(1)}Count`;
             }
             
-            const countElement = document.getElementById(countElementId);
-            if (countElement) {
-                countElement.textContent = count;
-            }
+            // Create category button
+            const categoryButton = document.createElement('button');
+            categoryButton.className = 'category-item';
+            categoryButton.setAttribute('data-category', category.key);
+            categoryButton.onclick = () => selectVideoCategory(category.key);
+            
+            categoryButton.innerHTML = `
+                <i class="${category.icon}"></i>
+                <span>${category.name}</span>
+                <span class="category-count" id="${countElementId}">${count}</span>
+            `;
+            
+            videoCategoriesContent.appendChild(categoryButton);
         });
     }
 
@@ -7195,6 +7213,9 @@ ArabicTVApp.prototype.addVideo = function(videoData) {
     // Update video category counts in sidebar
     this.updateVideoCategoryCounts();
     
+    // Update mobile video categories
+    this.updateMobileVideoCategories();
+    
     this.notifySuccess('تم إضافة الفيديو بنجاح');
     
     return newVideo;
@@ -7221,6 +7242,9 @@ ArabicTVApp.prototype.updateVideo = function(videoId, videoData) {
     
     // Update video category counts in sidebar
     this.updateVideoCategoryCounts();
+    
+    // Update mobile video categories
+    this.updateMobileVideoCategories();
     
     this.notifySuccess('تم تحديث الفيديو بنجاح');
     
@@ -7252,6 +7276,9 @@ ArabicTVApp.prototype.deleteVideo = function(videoId, event) {
         
         // Update video category counts in sidebar
         this.updateVideoCategoryCounts();
+        
+        // Update mobile video categories
+        this.updateMobileVideoCategories();
         
         this.notifySuccess('تم حذف الفيديو بنجاح');
         return true;
@@ -7387,6 +7414,9 @@ ArabicTVApp.prototype.loadVideosFromStorage = function() {
         
         // Update video category counts after loading
         this.updateVideoCategoryCounts();
+        
+        // Update mobile video categories
+        this.updateMobileVideoCategories();
     } catch (error) {
         console.error('خطأ في تحميل الفيديوهات:', error);
         this.videos = [];
@@ -7577,6 +7607,9 @@ ArabicTVApp.prototype.loadVideoCategories = function() {
         console.error('خطأ في تحميل فئات الفيديو:', error);
         this.videoCategories = this.getDefaultVideoCategories();
     }
+    
+    // Update mobile video categories after loading
+    this.updateMobileVideoCategories();
 };
 
 ArabicTVApp.prototype.saveVideoCategories = function() {
@@ -7678,6 +7711,9 @@ ArabicTVApp.prototype.addVideoCategory = function(categoryData) {
     // Update video categories in sidebar
     this.updateVideoCategoriesInSidebar();
     
+    // Update mobile video categories
+    this.updateMobileVideoCategories();
+    
     this.notifySuccess('تم إضافة فئة الفيديو بنجاح');
     
     return newCategory;
@@ -7728,6 +7764,9 @@ ArabicTVApp.prototype.deleteVideoCategory = function(index) {
         
         // Update video categories in sidebar
         this.updateVideoCategoriesInSidebar();
+        
+        // Update mobile video categories
+        this.updateMobileVideoCategories();
         
         this.notifySuccess('تم حذف فئة الفيديو بنجاح');
         return true;
@@ -7783,6 +7822,9 @@ ArabicTVApp.prototype.updateVideoCategoriesInSidebar = function() {
     if (mobileVideoCategories) {
         this.renderSidebarVideoCategories(mobileVideoCategories);
     }
+    
+    // Update mobile video categories in dropdown
+    this.updateMobileVideoCategories();
 };
 
 // Render video categories in sidebar
@@ -7810,6 +7852,9 @@ ArabicTVApp.prototype.renderSidebarVideoCategories = function(container) {
     
     // Update counts
     this.updateVideoCategoryCounts();
+    
+    // Update mobile video categories
+    this.updateMobileVideoCategories();
 };
 
 // Update video category counts
@@ -7821,6 +7866,9 @@ ArabicTVApp.prototype.updateVideoCategoryCounts = function() {
             countElement.textContent = count;
         }
     });
+    
+    // Update mobile video categories
+    this.updateMobileVideoCategories();
 };
 
 ArabicTVApp.prototype.handleVideoCategoryFormSubmit = function() {
@@ -7855,6 +7903,9 @@ ArabicTVApp.prototype.handleVideoCategoryFormSubmit = function() {
         
         // Update video categories in sidebar
         this.updateVideoCategoriesInSidebar();
+        
+        // Update mobile video categories
+        this.updateMobileVideoCategories();
         
         this.notifySuccess('تم تحديث فئة الفيديو بنجاح');
     } else {
