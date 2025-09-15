@@ -224,6 +224,7 @@ class ArabicTVApp {
     init() {
         this.testLocalStorage(); // Test if localStorage is working
         this.loadRemoteStorageSettings(); // Load remote storage configuration
+        this.loadCategories(); // Load categories first
         this.loadChannelsFromStorage(); // Load saved channels first (priority)
         this.loadDataFromFile(); // Load data from channels.json as fallback
         this.loadFavorites(); // Load saved favorites
@@ -246,7 +247,7 @@ class ArabicTVApp {
             this.syncFromRemote();
         }
         this.syncMobileNavTabs();
-        this.initializeNewFeatures(); // Initialize new navigation features
+        this.initializeNewFeatures(); // Initialize new navigation features (includes loadCategories)
         this.initializeFooter(); // Initialize footer functionality
         this.updateChannelStats(); // Update channel statistics
         this.updateChannelCategoryOptions(); // Update category options
@@ -282,11 +283,8 @@ class ArabicTVApp {
             // لا نحمل القنوات من JSON file - نبدأ بقائمة فارغة
             console.log('تم تخطي تحميل القنوات من channels.json - سيتم البدء بقائمة فارغة');
             
-            // Load categories from JSON file
-            if (data.categories && Array.isArray(data.categories)) {
-                this.categories = data.categories;
-                console.log('تم تحميل الفئات من channels.json:', this.categories.length, 'فئة');
-            }
+            // لا نحمل الفئات من JSON file - يجب أن تأتي من localStorage
+            console.log('تم تخطي تحميل الفئات من channels.json - سيتم تحميلها من localStorage');
             
             // Load settings from JSON file
             if (data.settings && typeof data.settings === 'object') {
@@ -926,19 +924,6 @@ class ArabicTVApp {
         return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
     }
 
-    getCategoryName(category) {
-        const categories = {
-            'news': 'الأخبار',
-            'entertainment': 'المنوعة',
-            'sports': 'الرياضة',
-            'religious': 'الدينية',
-            'music': 'الموسيقى',
-            'movies': 'الأفلام',
-            'documentary': 'الوثائقية',
-            'diversified': 'متنوعة'
-        };
-        return categories[category] || category;
-    }
 
     filterChannels(category) {
         console.log('تصفية القنوات حسب الفئة:', category);
@@ -3869,6 +3854,13 @@ class ArabicTVApp {
     }
 
     getCategoryName(category) {
+        // البحث في الفئات الديناميكية أولاً
+        const foundCategory = this.categories.find(cat => cat.key === category);
+        if (foundCategory) {
+            return foundCategory.name;
+        }
+        
+        // إذا لم توجد، استخدم القائمة الثابتة كاحتياطي
         const categoryNames = {
             'all': 'جميع القنوات',
             'news': 'الأخبار',
