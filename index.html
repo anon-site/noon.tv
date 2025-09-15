@@ -619,58 +619,72 @@
                 <!-- Add Channel Tab -->
                 <div class="admin-tab-content" id="addTab">
                     <form class="add-channel-form" id="addChannelForm">
-                        <div class="form-group">
-                            <label for="channelName">اسم القناة</label>
-                            <input type="text" id="channelName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="channelUrl" id="urlLabel">رابط البث</label>
-                            <input type="url" id="channelUrl" required placeholder="أدخل رابط البث (HLS أو يوتيوب)" oninput="detectUrlType()">
-                            <small id="urlHelp" class="form-help" style="color: #666; font-size: 0.85rem; margin-top: 0.25rem; display: block;">أدخل رابط البث المباشر أو رابط يوتيوب</small>
-                            <div id="urlTypeIndicator" style="margin-top: 0.5rem; padding: 0.5rem; border-radius: 4px; display: none;">
-                                <i id="urlTypeIcon" class="fas fa-info-circle"></i>
-                                <span id="urlTypeText">نوع الرابط: </span>
-                                <span id="urlTypeValue" style="font-weight: bold;"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="channelLogo">رابط الشعار</label>
-                            <input type="url" id="channelLogo" placeholder="أدخل رابط الشعار">
-                        </div>
-                        <div class="form-group logo-upload-group">
-                            <label for="logoUpload">أو رفع شعار من الجهاز</label>
-                            <div class="logo-upload-container">
-                                <input type="file" id="logoUpload" accept="image/*" style="display: none;">
-                                <button type="button" class="logo-upload-btn" onclick="document.getElementById('logoUpload').click()">
-                                    <i class="fas fa-upload"></i>
-                                    <span>اختر شعار</span>
-                                </button>
-                                <div class="logo-preview" id="logoPreview" style="display: none;">
-                                    <img id="logoPreviewImg" src="" alt="معاينة الشعار">
-                                    <button type="button" class="remove-logo-btn" onclick="removeLogoPreview()">
-                                        <i class="fas fa-times"></i>
-                                    </button>
+                        <div class="form-row">
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label for="channelName">اسم القناة</label>
+                                    <input type="text" id="channelName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="channelCategory">الفئة</label>
+                                    <select id="channelCategory" required>
+                                        <option value="news">الأخبار</option>
+                                        <option value="entertainment">المنوعة</option>
+                                        <option value="sports">الرياضة</option>
+                                        <option value="religious">الدينية</option>
+                                        <option value="music">الموسيقى</option>
+                                        <option value="movies">الأفلام</option>
+                                        <option value="documentary">الوثائقية</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="channelCountryInput">البلد</label>
+                                    <input type="text" id="channelCountryInput" required>
                                 </div>
                             </div>
-                            <small class="form-help">سيتم وضع رابط الصورة تلقائياً في حقل رابط الشعار عند الرفع</small>
+                            
+                            <div class="form-column">
+                                <div class="form-group">
+                                    <label for="channelUrl" id="urlLabel">رابط البث</label>
+                                    <input type="url" id="channelUrl" required placeholder="أدخل رابط البث (HLS أو يوتيوب)" oninput="detectUrlType()">
+                                    <small id="urlHelp" class="form-help" style="color: #666; font-size: 0.85rem; margin-top: 0.25rem; display: block;">أدخل رابط البث المباشر أو رابط يوتيوب</small>
+                                    <div id="urlTypeIndicator" style="margin-top: 0.5rem; padding: 0.5rem; border-radius: 4px; display: none;">
+                                        <i id="urlTypeIcon" class="fas fa-info-circle"></i>
+                                        <span id="urlTypeText">نوع الرابط: </span>
+                                        <span id="urlTypeValue" style="font-weight: bold;"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="channelLogo">رابط الشعار</label>
+                                    <input type="url" id="channelLogo" placeholder="أدخل رابط الشعار">
+                                </div>
+                                <div class="form-group logo-upload-group">
+                                    <label for="logoUpload">أو رفع شعار من الجهاز</label>
+                                    <div class="logo-upload-container">
+                                        <input type="file" id="logoUpload" accept="image/*" style="display: none;">
+                                        <button type="button" class="logo-upload-btn" onclick="document.getElementById('logoUpload').click()">
+                                            <i class="fas fa-upload"></i>
+                                            <span>اختر شعار</span>
+                                        </button>
+                                        <div class="logo-preview" id="logoPreview" style="display: none;">
+                                            <img id="logoPreviewImg" src="" alt="معاينة الشعار">
+                                            <button type="button" class="remove-logo-btn" onclick="removeLogoPreview()">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <small class="form-help">سيتم وضع رابط الصورة تلقائياً في حقل رابط الشعار عند الرفع</small>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="channelCategory">الفئة</label>
-                            <select id="channelCategory" required>
-                                <option value="news">الأخبار</option>
-                                <option value="entertainment">المنوعة</option>
-                                <option value="sports">الرياضة</option>
-                                <option value="religious">الدينية</option>
-                                <option value="music">الموسيقى</option>
-                                <option value="movies">الأفلام</option>
-                                <option value="documentary">الوثائقية</option>
-                            </select>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="reset-btn" onclick="resetChannelForm()">
+                                <i class="fas fa-undo"></i>
+                                تصفير
+                            </button>
+                            <button type="submit" class="add-btn">إضافة القناة</button>
                         </div>
-                        <div class="form-group">
-                            <label for="channelCountryInput">البلد</label>
-                            <input type="text" id="channelCountryInput" required>
-                        </div>
-                        <button type="submit" class="add-btn">إضافة القناة</button>
                     </form>
                 </div>
                 

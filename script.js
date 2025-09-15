@@ -5661,6 +5661,43 @@ function closeModal() {
     app.closeModal();
 }
 
+function resetChannelForm() {
+    // مسح جميع حقول النموذج
+    document.getElementById('channelName').value = '';
+    document.getElementById('channelUrl').value = '';
+    document.getElementById('channelLogo').value = '';
+    document.getElementById('channelCategory').value = 'news';
+    document.getElementById('channelCountryInput').value = '';
+    
+    // مسح معاينة الشعار
+    const logoPreview = document.getElementById('logoPreview');
+    if (logoPreview) {
+        logoPreview.style.display = 'none';
+    }
+    
+    // مسح مؤشر نوع الرابط
+    const urlTypeIndicator = document.getElementById('urlTypeIndicator');
+    if (urlTypeIndicator) {
+        urlTypeIndicator.style.display = 'none';
+    }
+    
+    // مسح مساعد الرابط
+    const urlHelp = document.getElementById('urlHelp');
+    if (urlHelp) {
+        urlHelp.style.display = 'block';
+    }
+    
+    // إعادة تعيين حالة التحرير
+    if (window.app) {
+        window.app.editingChannelId = null;
+    }
+    
+    // إظهار رسالة تأكيد
+    if (window.app && window.app.showNotification) {
+        window.app.showNotification('تم تصفير النموذج بنجاح', 'success');
+    }
+}
+
 function toggleQuality() {
     app.toggleQuality();
 }
