@@ -1472,6 +1472,7 @@ class ArabicTVApp {
         // Load categories when switching to categories tab
         if (tab === 'categories') {
             this.renderCategories();
+            this.updateCategoriesSyncStatus();
         }
         
         // Update category options when switching to add tab
@@ -2217,6 +2218,9 @@ class ArabicTVApp {
             // Update categories
             if (remoteData.categories && Array.isArray(remoteData.categories)) {
                 this.categories = remoteData.categories;
+                this.saveCategories();
+                this.updateNavigationTabs();
+                this.updateChannelCategoryOptions();
             }
 
             // Re-render everything
@@ -5384,7 +5388,7 @@ class ArabicTVApp {
             const savedCategories = localStorage.getItem('arabicTVCategories');
             if (savedCategories) {
                 this.categories = JSON.parse(savedCategories);
-                console.log('تم تحميل الفئات:', this.categories.length, 'فئة');
+                console.log('تم تحميل الفئات من التخزين المحلي:', this.categories.length, 'فئة');
             } else {
                 this.categories = this.getDefaultCategories();
                 this.saveCategories();
@@ -5392,6 +5396,13 @@ class ArabicTVApp {
             
             // Update navigation tabs after loading categories
             this.updateNavigationTabs();
+            
+            // Attempt to sync categories from remote if enabled
+            if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
+                this.syncCategoriesFromRemote().catch(error => {
+                    console.error('فشل في مزامنة الفئات من التخزين السحابي:', error);
+                });
+            }
         } catch (error) {
             console.error('خطأ في تحميل الفئات:', error);
             this.categories = this.getDefaultCategories();
@@ -5403,9 +5414,83 @@ class ArabicTVApp {
         try {
             localStorage.setItem('arabicTVCategories', JSON.stringify(this.categories));
             console.log('تم حفظ الفئات بنجاح');
+            
+            // Auto-sync to remote if enabled
+            if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
+                this.syncToRemote().catch(error => {
+                    console.error('فشل في المزامنة التلقائية للفئات:', error);
+                });
+            }
         } catch (error) {
             console.error('خطأ في حفظ الفئات:', error);
             this.notifyError('فشل في حفظ الفئات');
+        }
+    }
+
+    async syncCategoriesFromRemote() {
+        if (!this.remoteStorage.enabled || !this.remoteStorage.repository || !this.remoteStorage.token) {
+            this.notifyError('يجب تكوين إعدادات التخزين السحابي أولاً');
+            return false;
+        }
+
+        // Disable sync button and show loading state
+        const syncBtn = document.querySelector('.sync-categories-btn');
+        if (syncBtn) {
+            syncBtn.disabled = true;
+            syncBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جارٍ المزامنة...';
+        }
+
+        try {
+            this.notifyInfo('جارٍ مزامنة الفئات من التخزين السحابي...');
+            
+            const remoteData = await this.downloadFromRepository();
+            if (remoteData && remoteData.categories && Array.isArray(remoteData.categories)) {
+                // Check if remote categories are newer
+                const shouldUpdate = await this.shouldUpdateFromRemote(remoteData);
+                
+                if (shouldUpdate) {
+                    console.log('تم العثور على فئات محدثة في التخزين السحابي');
+                    this.categories = remoteData.categories;
+                    localStorage.setItem('arabicTVCategories', JSON.stringify(this.categories));
+                    this.updateNavigationTabs();
+                    this.updateChannelCategoryOptions();
+                    this.renderCategories(); // Re-render categories in admin panel
+                    this.updateCategoriesSyncStatus(); // Update sync status display
+                    console.log('تم تحديث الفئات من التخزين السحابي');
+                    this.notifySuccess(`تم تحديث الفئات بنجاح! تم تحميل ${this.categories.length} فئة`);
+                    return true;
+                } else {
+                    console.log('الفئات المحلية هي الأحدث، لا حاجة للتحديث');
+                    this.notifyInfo('الفئات المحلية محدثة بالفعل');
+                    return false;
+                }
+            } else {
+                this.notifyError('لم يتم العثور على فئات في التخزين السحابي');
+                return false;
+            }
+        } catch (error) {
+            console.error('خطأ في مزامنة الفئات من التخزين السحابي:', error);
+            this.notifyError('فشل في مزامنة الفئات: ' + error.message);
+            return false;
+        } finally {
+            // Restore sync button state
+            if (syncBtn) {
+                syncBtn.disabled = false;
+                syncBtn.innerHTML = '<i class="fas fa-sync-alt"></i> مزامنة الفئات';
+            }
+        }
+    }
+
+    updateCategoriesSyncStatus() {
+        const lastSyncElement = document.getElementById('lastCategoriesSync');
+        if (lastSyncElement) {
+            const lastSync = this.remoteStorage.lastSync;
+            if (lastSync) {
+                const syncDate = new Date(lastSync);
+                lastSyncElement.textContent = syncDate.toLocaleString('ar-SA');
+            } else {
+                lastSyncElement.textContent = 'لم يتم';
+            }
         }
     }
 
