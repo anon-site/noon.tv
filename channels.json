@@ -433,12 +433,12 @@
       "type": "hls"
     },
     {
-      "id": 70,
-      "name": "test",
-      "url": "https://games1.elahmad.xyz/tv754_www.elahmad.com_art_aflam2/index.m3u8?token=35c854264866c213dc18fad0ffd9aad00b04824f-b4e80d2ef88e76a62839a33367802d7d-1757882111-1757871311",
-      "logo": "https://games1.elahmad.xyz/tv754_www.elahmad.com_art_aflam2/index.m3u8?token=35c854264866c213dc18fad0ffd9aad00b04824f-b4e80d2ef88e76a62839a33367802d7d-1757882111-1757871311",
-      "category": "movies",
-      "country": "السعودية",
+      "id": 71,
+      "name": "راجعين",
+      "url": "https://mn-nl.mncdn.com/palabroad/live/playlist.m3u8",
+      "logo": "https://www.rajeen.tv/logo.png",
+      "category": "entertainment",
+      "country": "فلسطين",
       "type": "hls"
     }
   ],
@@ -509,13 +509,8 @@
       "key": "documentary",
       "name": "الوثائقية",
       "icon": "fas fa-book-open"
-    },
-    {
-      "key": "Kids",
-      "name": "الأطفال",
-      "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-15T03:42:42.332Z",
+  "lastModified": "2025-09-15T04:01:04.676Z",
   "version": "1.0"
 }
