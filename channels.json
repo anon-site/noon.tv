@@ -451,7 +451,7 @@
     },
     {
       "id": 72,
-      "name": "الكوفه",
+      "name": "الكوفية",
       "url": "https://customer-9vqui33qma2rownb.cloudflarestream.com/7792e558fe54e23bdd4b462ec275cdba/manifest/video.m3u8",
       "logo": "https://iili.io/KubCsz7.png",
       "category": "entertainment",
@@ -533,6 +533,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-15T15:38:06.795Z",
+  "lastModified": "2025-09-15T15:40:13.490Z",
   "version": "1.0"
 }
