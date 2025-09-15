@@ -903,20 +903,10 @@ class ArabicTVApp {
         grid.innerHTML = '';
         console.log('عرض القنوات:', this.filteredChannels.length, 'قناة');
 
-        // Render channels first
         this.filteredChannels.forEach(channel => {
             const channelCard = this.createChannelCard(channel);
             grid.appendChild(channelCard);
         });
-
-        // If we're showing all content (category = 'all'), also render videos
-        if (this.currentCategory === 'all' && this.filteredVideos.length > 0) {
-            console.log('عرض الفيديوهات أيضاً:', this.filteredVideos.length, 'فيديو');
-            this.filteredVideos.forEach(video => {
-                const videoCard = this.createVideoCard(video);
-                grid.appendChild(videoCard);
-            });
-        }
 
         // Update navigation tabs first
         this.updateNavigationTabs();
@@ -6281,11 +6271,9 @@ class ArabicTVApp {
         this.filteredChannels = [...this.channels];
         this.filteredVideos = [...this.videos];
         
-        // Show both channels and videos
+        // Show channels by default, not videos
         this.renderChannels();
-        this.renderVideos();
         this.updateChannelStats();
-        this.updateVideoStats();
         
         // Update active tabs
         document.querySelectorAll('.sidebar-nav-tab, .mobile-sidebar-nav-tab').forEach(tab => {
