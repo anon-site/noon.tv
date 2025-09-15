@@ -493,6 +493,15 @@
       "category": "entertainment",
       "country": "مصر",
       "type": "hls"
+    },
+    {
+      "id": 77,
+      "name": "وطن مصر",
+      "url": "https://rp.tactivemedia.com/watantv_source/live/playlist.m3u8",
+      "logo": "https://iili.io/Kubsdgf.png",
+      "category": "religious",
+      "country": "مصر",
+      "type": "hls"
     }
   ],
   "favorites": [],
@@ -569,6 +578,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-15T15:52:50.893Z",
+  "lastModified": "2025-09-15T15:57:20.806Z",
   "version": "1.0"
 }
