@@ -5379,7 +5379,7 @@ class ArabicTVApp {
         }
         
         // Check if it's a video category
-        const videoCategories = ['youtube', 'live', 'movies', 'series', 'documentary', 'kids', 'educational', 'cooking'];
+        const videoCategories = ['youtube', 'live', 'movies', 'series', 'documentaries', 'kids', 'educational', 'cooking'];
         if (videoCategories.includes(category)) {
             return this.videos ? this.videos.filter(video => video.category === category).length : 0;
         }
@@ -5397,7 +5397,7 @@ class ArabicTVApp {
     updateMobileVideoCategories() {
         if (!this.isMobile()) return;
         
-        const videoCategories = ['youtube', 'live', 'movies', 'series', 'documentary', 'kids', 'educational', 'cooking'];
+        const videoCategories = ['youtube', 'live', 'movies', 'series', 'documentaries', 'kids', 'educational', 'cooking'];
         
         videoCategories.forEach(category => {
             const count = this.getCategoryCount(category);
@@ -5406,7 +5406,7 @@ class ArabicTVApp {
             // Handle special cases for video categories
             if (category === 'movies') {
                 countElementId = 'mobileMoviesVideoCount';
-            } else if (category === 'documentary') {
+            } else if (category === 'documentaries') {
                 countElementId = 'mobileDocumentaryVideoCount';
             } else {
                 countElementId = `mobile${category.charAt(0).toUpperCase() + category.slice(1)}Count`;
@@ -6543,6 +6543,24 @@ function selectCategory(category) {
     }
 }
 
+function selectVideoCategory(category) {
+    if (window.app) {
+        window.app.filterVideos(category);
+        
+        // Update active category in dropdown
+        document.querySelectorAll('.category-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        document.querySelector(`[data-category="${category}"]`).classList.add('active');
+        
+        // Update bottom nav active state
+        updateBottomNavActiveState('home');
+        
+        // Close dropdown
+        closeCategoriesDropdown();
+    }
+}
+
 // Search Popup Functions
 function toggleSearchPopup() {
     const popup = document.getElementById('searchPopup');
@@ -6640,7 +6658,7 @@ function updateMobileCategoryCounts() {
     });
     
     // Video Categories
-    const videoCategories = ['youtube', 'live', 'movies', 'series', 'documentary', 'kids', 'educational', 'cooking'];
+    const videoCategories = ['youtube', 'live', 'movies', 'series', 'documentaries', 'kids', 'educational', 'cooking'];
     
     videoCategories.forEach(category => {
         const count = window.app.getCategoryCount(category);
@@ -6649,7 +6667,7 @@ function updateMobileCategoryCounts() {
         // Handle special cases for video categories
         if (category === 'movies') {
             countElementId = 'mobileMoviesVideoCount';
-        } else if (category === 'documentary') {
+        } else if (category === 'documentaries') {
             countElementId = 'mobileDocumentaryVideoCount';
         } else {
             countElementId = `mobile${category.charAt(0).toUpperCase() + category.slice(1)}Count`;
