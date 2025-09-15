@@ -550,6 +550,19 @@ body[data-theme="light"] .edit-btn:hover {
     color: #ffffff;
 }
 
+body[data-theme="light"] .save-btn {
+    background: linear-gradient(45deg, #10b981, #059669);
+    border: 2px solid #10b981;
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+}
+
+body[data-theme="light"] .save-btn:hover {
+    background: linear-gradient(45deg, #059669, #047857);
+    border-color: #059669;
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+}
+
 body[data-theme="light"] .delete-btn {
     background: #ffffff;
     border: 2px solid #ef4444;
@@ -3509,6 +3522,25 @@ input:checked + .slider:before {
 .edit-btn:hover {
     background: var(--accent-color);
     border-color: var(--accent-color);
+}
+
+.save-btn {
+    background: linear-gradient(45deg, #10b981, #059669);
+    border: 1px solid #10b981;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: inherit;
+    font-weight: 600;
+}
+
+.save-btn:hover {
+    background: linear-gradient(45deg, #059669, #047857);
+    border-color: #059669;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
 .delete-btn:hover {

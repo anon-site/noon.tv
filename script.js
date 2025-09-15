@@ -1647,6 +1647,22 @@ class ArabicTVApp {
             submitBtn.className = 'add-btn';
         }
         
+        // إعادة تعيين زر التعديل إلى حالته الأصلية
+        const saveButton = document.querySelector('.save-btn');
+        if (saveButton) {
+            saveButton.innerHTML = '<i class="fas fa-edit"></i> تعديل';
+            saveButton.classList.remove('save-btn');
+            saveButton.classList.add('edit-btn');
+            saveButton.onclick = function(event) {
+                event.stopPropagation();
+                // إعادة تعيين وظيفة التعديل الأصلية
+                const channelId = this.getAttribute('data-channel-id');
+                if (channelId && window.app) {
+                    window.app.editChannel(parseInt(channelId), event);
+                }
+            };
+        }
+        
         // Reset form title if it exists
         const formTitle = document.querySelector('#addTab h5, #addTab .form-title');
         if (formTitle) {
@@ -1687,6 +1703,20 @@ class ArabicTVApp {
 
         // Update button text to indicate editing mode
         document.querySelector('.add-btn').textContent = 'تحديث القناة';
+        
+        // تغيير زر التعديل إلى زر الحفظ في وضع التعديل
+        const editButton = document.querySelector('.edit-btn');
+        if (editButton) {
+            editButton.innerHTML = '<i class="fas fa-save"></i> حفظ';
+            editButton.classList.remove('edit-btn');
+            editButton.classList.add('save-btn');
+            editButton.onclick = function(event) {
+                event.stopPropagation();
+                if (window.app && window.app.editingChannelId) {
+                    window.app.updateChannel(window.app.editingChannelId);
+                }
+            };
+        }
         
         // Show notification
         this.showNotification('success', 'تم فتح نموذج التعديل', 'يمكنك الآن تعديل بيانات القناة');
@@ -5690,6 +5720,33 @@ function resetChannelForm() {
     // إعادة تعيين حالة التحرير
     if (window.app) {
         window.app.editingChannelId = null;
+    }
+    
+    // تغيير زر التعديل إلى زر الحفظ
+    const editButton = document.querySelector('.edit-btn');
+    if (editButton) {
+        editButton.innerHTML = '<i class="fas fa-save"></i> حفظ';
+        editButton.classList.remove('edit-btn');
+        editButton.classList.add('save-btn');
+        editButton.onclick = function(event) {
+            event.stopPropagation();
+            if (window.app && window.app.editingChannelId) {
+                window.app.updateChannel(window.app.editingChannelId);
+            } else {
+                // إذا لم تكن في وضع التعديل، أضف قناة جديدة
+                if (window.app) {
+                    window.app.addChannel();
+                }
+            }
+        };
+    }
+    
+    // تغيير زر الإضافة إلى "تحديث القناة" إذا كنا في وضع التعديل
+    const addButton = document.querySelector('.add-btn');
+    if (addButton && window.app && window.app.editingChannelId) {
+        addButton.textContent = 'تحديث القناة';
+    } else if (addButton) {
+        addButton.textContent = 'إضافة القناة';
     }
     
     // إظهار رسالة تأكيد
