@@ -1342,7 +1342,7 @@ class ArabicTVApp {
             this.closeLoginModal();
             this.toggleChannelActions(true);
             this.openAdminPanel();
-            this.notifySuccess('تم تسجيل الدخول بنجاح');
+            this.notifySuccess('مرحباً بك في لوحة التحكم - مزود الخدمة');
         } else {
             errorElement.style.display = 'flex';
             document.getElementById('adminPassword').value = '';
@@ -1356,7 +1356,7 @@ class ArabicTVApp {
         this.saveLoginState(); // حفظ حالة تسجيل الخروج
         this.closeAdminPanel();
         this.toggleChannelActions(false);
-        this.notifyInfo('تم تسجيل الخروج');
+        this.notifyInfo('تم تسجيل الخروج من مزود الخدمة');
     }
 
     // حفظ حالة تسجيل الدخول في localStorage
