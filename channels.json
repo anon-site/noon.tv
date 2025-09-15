@@ -439,6 +439,15 @@
       "category": "entertainment",
       "country": "فلسطين",
       "type": "hls"
+    },
+    {
+      "id": 71,
+      "name": "المهرية",
+      "url": "https://starmenajo.com/hls/almahriah/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/ar/0/04/%D9%82%D9%86%D8%A7%D8%A9_%D8%A7%D9%84%D9%85%D9%87%D8%B1%D9%8A%D8%A9.png",
+      "category": "entertainment",
+      "country": "تركيا",
+      "type": "hls"
     }
   ],
   "favorites": [],
@@ -515,6 +524,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-15T15:20:09.834Z",
+  "lastModified": "2025-09-15T15:33:44.054Z",
   "version": "1.0"
 }
