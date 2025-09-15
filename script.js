@@ -6139,6 +6139,9 @@ class ArabicTVApp {
         this.renderCategories();
         this.updateNavigationTabs();
         
+        // تحديث فوري للزوار الآخرين
+        this.forceUpdateForVisitors();
+        
         // Update category options with a slight delay to ensure DOM is ready
         setTimeout(() => {
             this.updateChannelCategoryOptions();
@@ -6170,6 +6173,9 @@ class ArabicTVApp {
         this.saveCategories();
         this.renderCategories();
         this.updateNavigationTabs();
+        
+        // تحديث فوري للزوار الآخرين
+        this.forceUpdateForVisitors();
         
         // Update category options with a slight delay to ensure DOM is ready
         setTimeout(() => {
@@ -6213,6 +6219,9 @@ class ArabicTVApp {
         this.saveCategories();
         this.renderCategories();
         this.updateNavigationTabs();
+        
+        // تحديث فوري للزوار الآخرين
+        this.forceUpdateForVisitors();
         
         // Update category options with a slight delay to ensure DOM is ready
         setTimeout(() => {
@@ -7806,6 +7815,9 @@ ArabicTVApp.prototype.addVideoCategory = function(categoryData) {
     this.saveVideoCategories();
     this.renderVideoCategories();
     
+    // تحديث فوري للزوار الآخرين
+    this.forceUpdateForVisitors();
+    
     // Update video categories in sidebar
     this.updateVideoCategoriesInSidebar();
     
@@ -7859,6 +7871,9 @@ ArabicTVApp.prototype.deleteVideoCategory = function(index) {
         this.videoCategories.splice(index, 1);
         this.saveVideoCategories();
         this.renderVideoCategories();
+        
+        // تحديث فوري للزوار الآخرين
+        this.forceUpdateForVisitors();
         
         // Update video categories in sidebar
         this.updateVideoCategoriesInSidebar();
@@ -7998,6 +8013,9 @@ ArabicTVApp.prototype.handleVideoCategoryFormSubmit = function() {
         this.videoCategories[editingIndex] = categoryData;
         this.saveVideoCategories();
         this.renderVideoCategories();
+        
+        // تحديث فوري للزوار الآخرين
+        this.forceUpdateForVisitors();
         
         // Update video categories in sidebar
         this.updateVideoCategoriesInSidebar();
