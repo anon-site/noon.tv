@@ -570,13 +570,28 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="admin-tabs">
-                <button class="admin-tab active" data-tab="channels">إدارة القنوات</button>
-                <button class="admin-tab" data-tab="add">إضافة قناة</button>
-                <button class="admin-tab" data-tab="categories">إدارة الفئات</button>
-                <button class="admin-tab" data-tab="settings">إعدادات عامة</button>
-            </div>
-            <div class="admin-body">
+            <div class="admin-layout">
+                <div class="admin-sidebar">
+                    <div class="admin-tabs">
+                        <button class="admin-tab active" data-tab="channels" onclick="app.switchAdminTab('channels')">
+                            <i class="fas fa-tv"></i>
+                            <span>إدارة القنوات</span>
+                        </button>
+                        <button class="admin-tab" data-tab="add" onclick="app.switchAdminTab('add')">
+                            <i class="fas fa-plus"></i>
+                            <span>إضافة قناة</span>
+                        </button>
+                        <button class="admin-tab" data-tab="categories" onclick="app.switchAdminTab('categories')">
+                            <i class="fas fa-tags"></i>
+                            <span>إدارة الفئات</span>
+                        </button>
+                        <button class="admin-tab" data-tab="settings" onclick="app.switchAdminTab('settings')">
+                            <i class="fas fa-cog"></i>
+                            <span>إعدادات عامة</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="admin-body">
                 <!-- Channels Management Tab -->
                 <div class="admin-tab-content active" id="channelsTab">
                     <div class="admin-search">
@@ -844,6 +859,7 @@
                         </div>
                     </div>
                     <input type="file" id="importFileInput" accept=".json" style="display: none;" />
+                </div>
                 </div>
             </div>
         </div>

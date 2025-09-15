@@ -222,6 +222,11 @@ body[data-theme="light"] .admin-content {
     background: #ffffff;
 }
 
+body[data-theme="light"] .admin-sidebar {
+    background: #f8fafc;
+    border-left-color: #e2e8f0;
+}
+
 body[data-theme="light"] .admin-tab {
     color: #64748b;
     background: transparent;
@@ -230,8 +235,8 @@ body[data-theme="light"] .admin-tab {
 body[data-theme="light"] .admin-tab.active {
     background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
     color: #1e293b;
-    border-bottom: 3px solid #3b82f6;
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+    border-right-color: #3b82f6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 body[data-theme="light"] .admin-tab:hover {
@@ -241,6 +246,10 @@ body[data-theme="light"] .admin-tab:hover {
 
 body[data-theme="light"] .admin-tab:hover:not(.active) {
     background: rgba(59, 130, 246, 0.08);
+}
+
+body[data-theme="light"] .admin-body {
+    background: #ffffff;
 }
 
 body[data-theme="light"] .admin-channel-item {
@@ -3166,41 +3175,72 @@ input:checked + .slider:before {
     min-height: 700px;
 }
 
+/* Admin Layout - Sidebar Design */
+.admin-layout {
+    display: flex;
+    height: calc(100% - 60px);
+    background: var(--background-dark);
+}
+
+.admin-sidebar {
+    width: 280px;
+    background: var(--background-darker);
+    border-left: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
 .admin-tabs {
     display: flex;
-    background: var(--background-dark);
-    border-bottom: 1px solid var(--border-color);
-    padding: 0.5rem 0.5rem 0 0.5rem;
-    gap: 0.25rem;
+    flex-direction: column;
+    padding: 1rem 0;
+    gap: 0.5rem;
 }
 
 .admin-tab {
     background: transparent;
     color: var(--text-secondary);
     border: none;
-    padding: 1.2rem 2.5rem;
+    padding: 1rem 1.5rem;
     cursor: pointer;
     transition: var(--transition);
     font-family: inherit;
     font-weight: 600;
-    font-size: 1rem;
-    border-radius: 8px 8px 0 0;
+    font-size: 0.95rem;
+    border-radius: 0;
     position: relative;
-    min-width: 120px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: right;
+    border-right: 3px solid transparent;
+    margin: 0 0.5rem;
+    border-radius: 8px;
+}
+
+.admin-tab i {
+    font-size: 1.1rem;
+    width: 20px;
     text-align: center;
+}
+
+.admin-tab span {
+    flex: 1;
 }
 
 .admin-tab.active {
     background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
     color: var(--text-primary);
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
-    border-bottom: 3px solid var(--highlight-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-right-color: var(--highlight-color);
 }
 
 .admin-tab:hover {
     background: rgba(255, 255, 255, 0.05);
     color: var(--text-primary);
-    transform: translateY(-1px);
+    transform: translateX(-2px);
 }
 
 .admin-tab:hover:not(.active) {
@@ -3208,9 +3248,10 @@ input:checked + .slider:before {
 }
 
 .admin-body {
+    flex: 1;
     padding: 1.5rem;
-    height: calc(100% - 100px);
     overflow-y: auto;
+    background: var(--background-dark);
     /* منع الترميش الأبيض */
     overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
@@ -7942,17 +7983,66 @@ body[data-theme="light"] .enhanced-save-btn:hover {
         font-size: 10px;
     }
     
+    .admin-layout {
+        flex-direction: column;
+        height: calc(100% - 60px);
+    }
+    
+    .admin-sidebar {
+        width: 100%;
+        height: auto;
+        border-left: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
     .admin-tabs {
-        flex-wrap: wrap;
+        flex-direction: row;
+        padding: 0.5rem;
+        gap: 0.25rem;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    .admin-tabs::-webkit-scrollbar {
+        display: none;
     }
     
     .admin-tab {
         flex: 1;
+        min-width: 120px;
+        padding: 0.8rem 1rem;
+        font-size: 0.85rem;
+        border-radius: 6px;
+        border-right: none;
+        border-bottom: 3px solid transparent;
+        margin: 0;
         text-align: center;
-        padding: 1rem 0.8rem;
-        font-size: 0.9rem;
-        min-width: 80px;
-        border-radius: 6px 6px 0 0;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    
+    .admin-tab i {
+        font-size: 1rem;
+        width: auto;
+    }
+    
+    .admin-tab span {
+        font-size: 0.8rem;
+    }
+    
+    .admin-tab.active {
+        border-right-color: transparent;
+        border-bottom-color: var(--highlight-color);
+    }
+    
+    .admin-tab:hover {
+        transform: translateY(-1px);
+    }
+    
+    .admin-body {
+        flex: 1;
+        padding: 1rem;
     }
     
     .admin-channel-item {

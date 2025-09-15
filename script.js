@@ -655,21 +655,62 @@ class ArabicTVApp {
 
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                this.closeModal();
-                this.closeSettings();
-                this.closeAdminPanel();
+            // منع الاختصارات عند الكتابة في حقول الإدخال
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.contentEditable === 'true') {
+                return;
+            }
+            
+            switch(e.key.toLowerCase()) {
+                case 'escape':
+                    this.closeModal();
+                    this.closeSettings();
+                    this.closeAdminPanel();
+                    // إغلاق القوائم المحمولة
+                    if (this.isMobileSidebarOpen) {
+                        this.closeMobileMenu();
+                    }
+                    if (this.isDesktopSidebarOpen) {
+                        this.toggleSidebar();
+                    }
+                    break;
+                case 'c':
+                    this.openAdminPanel();
+                    break;
+                case 's':
+                    this.openSettings();
+                    break;
+                case 'm':
+                    this.toggleSidebar();
+                    break;
             }
         });
     }
 
-    bindAdminEvents() {
-        // Admin tabs
+    bindAdminTabEvents() {
+        // إزالة الأحداث السابقة لتجنب التكرار
         document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.replaceWith(tab.cloneNode(true));
+        });
+        
+        // ربط الأحداث الجديدة
+        const adminTabs = document.querySelectorAll('.admin-tab');
+        
+        adminTabs.forEach(tab => {
             tab.addEventListener('click', (e) => {
-                this.switchAdminTab(e.target.dataset.tab);
+                // التأكد من أننا نحصل على الزر وليس العنصر الداخلي
+                const button = e.target.closest('.admin-tab');
+                if (button && button.dataset.tab) {
+                    this.switchAdminTab(button.dataset.tab);
+                }
             });
         });
+    }
+
+    bindAdminEvents() {
+        // Admin tabs - إضافة تأخير للتأكد من وجود العناصر
+        setTimeout(() => {
+            this.bindAdminTabEvents();
+        }, 100);
 
         // Add channel form
         document.getElementById('addChannelForm').addEventListener('submit', (e) => {
@@ -686,15 +727,7 @@ class ArabicTVApp {
                 this.filterAdminChannels(e.target.value);
             });
 
-            // Close mobile menu on Escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && this.isMobileSidebarOpen) {
-                    this.closeMobileMenu();
-                }
-                if (e.key === 'Escape' && this.isDesktopSidebarOpen) {
-                    this.toggleSidebar();
-                }
-            });
+            // Mobile menu handling is now integrated in the main keyboard shortcuts handler
 
             // Add event listeners for desktop sidebar nav tabs
             document.querySelectorAll('.sidebar-nav-tab').forEach(tab => {
@@ -1423,6 +1456,11 @@ class ArabicTVApp {
         this.updateSaveOrderButton();
         // Update category options to ensure latest categories are available
         this.updateChannelCategoryOptions();
+        
+        // إعادة ربط أحداث التبويبات عند فتح لوحة التحكم
+        setTimeout(() => {
+            this.bindAdminTabEvents();
+        }, 50);
     }
 
     closeAdminPanel() {
@@ -1432,13 +1470,19 @@ class ArabicTVApp {
     switchAdminTab(tab) {
         // Update active tab
         document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-        document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+        const activeTab = document.querySelector(`[data-tab="${tab}"]`);
+        if (activeTab) {
+            activeTab.classList.add('active');
+        }
 
         // Show tab content
         document.querySelectorAll('.admin-tab-content').forEach(content => {
             content.classList.remove('active');
         });
-        document.getElementById(`${tab}Tab`).classList.add('active');
+        const activeContent = document.getElementById(`${tab}Tab`);
+        if (activeContent) {
+            activeContent.classList.add('active');
+        }
 
         // Load categories when switching to categories tab
         if (tab === 'categories') {
@@ -6103,6 +6147,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.app && window.app.initQualityMenu) {
         window.app.initQualityMenu();
     }
+    
+    // ربط أحداث التبويبات الإدارية بعد تحميل الصفحة
+    setTimeout(() => {
+        if (window.app && window.app.bindAdminTabEvents) {
+            window.app.bindAdminTabEvents();
+        }
+    }, 500);
     
     // Initialize mobile bottom navigation
     initializeMobileBottomNav();
