@@ -212,10 +212,10 @@ class ArabicTVApp {
         
         // Remote Storage Configuration
         this.remoteStorage = {
-            enabled: false,
+            enabled: true, // تم تفعيل التخزين السحابي افتراضياً
             provider: 'github', // 'github' or 'gitlab'
-            repository: '',
-            token: '',
+            repository: 'anon-site/TV-AR', // تم تعيين المستودع الافتراضي
+            token: '', // يجب إدخال رمز الوصول من إعدادات GitHub
             branch: 'main',
             filename: 'channels.json',
             lastSync: null,
@@ -264,6 +264,11 @@ class ArabicTVApp {
         // Attempt auto-sync if enabled
         if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
             this.syncFromRemote();
+        } else if (this.remoteStorage.enabled && !this.remoteStorage.token) {
+            // إظهار إشعار لإعداد التخزين السحابي
+            setTimeout(() => {
+                this.notifyWarning('التخزين السحابي مُفعّل ولكن يحتاج إعداد. يرجى إدخال رمز الوصول من إعدادات GitHub لإظهار التعديلات للزوار الآخرين.', 8000);
+            }, 3000);
         }
 
         // Load videos from storage
@@ -1600,6 +1605,13 @@ class ArabicTVApp {
         this.updateSaveOrderButton();
         // Update category options to ensure latest categories are available
         this.updateChannelCategoryOptions();
+        
+        // إظهار تحذير إذا لم يكن التخزين السحابي مُعدّ
+        if (this.remoteStorage.enabled && !this.remoteStorage.token) {
+            setTimeout(() => {
+                this.notifyWarning('لإظهار التعديلات للزوار الآخرين، يرجى إعداد رمز الوصول من GitHub في تبويب الإعدادات', 6000);
+            }, 1000);
+        }
     }
 
     closeAdminPanel() {
@@ -1786,6 +1798,9 @@ class ArabicTVApp {
         this.renderChannels();
         this.renderAdminChannels();
         
+        // تحديث فوري للزوار الآخرين
+        this.forceUpdateForVisitors();
+        
         this.resetAddChannelForm();
         this.showNotification('success', 'تم إضافة القناة', 'تم إضافة القناة بنجاح وحفظها!');
     }
@@ -1912,6 +1927,9 @@ class ArabicTVApp {
         this.renderChannels();
         this.renderAdminChannels();
         
+        // تحديث فوري للزوار الآخرين
+        this.forceUpdateForVisitors();
+        
         // Reset editing state and form
         this.resetAddChannelForm();
         
@@ -1943,6 +1961,9 @@ class ArabicTVApp {
             
             // Save to storage
             this.saveChannelsToStorage();
+            
+            // تحديث فوري للزوار الآخرين
+            this.forceUpdateForVisitors();
             
             // Re-render channels
             this.renderChannels();
@@ -5537,6 +5558,26 @@ class ArabicTVApp {
         }
     }
 
+    // تحديث فوري للزوار الآخرين
+    async forceUpdateForVisitors() {
+        try {
+            console.log('🔄 تحديث فوري للزوار الآخرين...');
+            
+            // إذا كان التخزين السحابي مُفعّل، قم بالمزامنة
+            if (this.remoteStorage.enabled && this.remoteStorage.repository && this.remoteStorage.token) {
+                console.log('📤 رفع التحديثات إلى المستودع السحابي...');
+                await this.syncToRemote();
+                this.notifyInfo('تم رفع التحديثات للزوار الآخرين', 3000);
+            } else {
+                console.log('⚠️ التخزين السحابي غير مُعدّ - التحديثات محفوظة محلياً فقط');
+                this.notifyWarning('التحديثات محفوظة محلياً فقط. لإظهارها للزوار الآخرين، يرجى إعداد التخزين السحابي من الإعدادات.', 5000);
+            }
+        } catch (error) {
+            console.error('خطأ في التحديث الفوري:', error);
+            this.notifyError('فشل في رفع التحديثات للزوار الآخرين', 3000);
+        }
+    }
+
     // Show update available notification
     showUpdateAvailableNotification(remoteDate) {
         const updateTimeText = document.getElementById('updateTimeText');
@@ -6896,6 +6937,54 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeMobileBottomNav();
 });
 
+// Open Cloud Settings Function
+function openCloudSettings() {
+    if (!window.app) {
+        console.error('التطبيق غير محمل');
+        return;
+    }
+    
+    // Open admin panel first
+    window.app.openAdminPanel();
+    
+    // Switch to settings tab
+    window.app.switchAdminTab('settings');
+    
+    // Scroll to remote storage section
+    setTimeout(() => {
+        const remoteStorageSection = document.querySelector('.settings-section-card');
+        if (remoteStorageSection) {
+            remoteStorageSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, 500);
+    
+    window.app.notifyInfo('تم فتح إعدادات المزامنة السحابية');
+}
+
+// Force Sync Now Function
+async function forceSyncNow() {
+    if (!window.app) {
+        console.error('التطبيق غير محمل');
+        return;
+    }
+    
+    try {
+        window.app.notifyInfo('جاري المزامنة...', 2000);
+        
+        // Force update for visitors
+        await window.app.forceUpdateForVisitors();
+        
+        // Also try manual sync if remote storage is configured
+        if (window.app.remoteStorage.enabled && window.app.remoteStorage.token) {
+            await window.app.manualSync();
+        }
+        
+    } catch (error) {
+        console.error('خطأ في المزامنة اليدوية:', error);
+        window.app.notifyError('فشل في المزامنة: ' + error.message);
+    }
+}
+
 // Update Channels Function
 async function updateChannels() {
     if (!window.app) {
@@ -7210,6 +7299,9 @@ ArabicTVApp.prototype.addVideo = function(videoData) {
     this.saveVideosToStorage();
     this.renderAdminVideos();
     
+    // تحديث فوري للزوار الآخرين
+    this.forceUpdateForVisitors();
+    
     // Update video category counts in sidebar
     this.updateVideoCategoryCounts();
     
@@ -7240,6 +7332,9 @@ ArabicTVApp.prototype.updateVideo = function(videoId, videoData) {
     this.saveVideosToStorage();
     this.renderAdminVideos();
     
+    // تحديث فوري للزوار الآخرين
+    this.forceUpdateForVisitors();
+    
     // Update video category counts in sidebar
     this.updateVideoCategoryCounts();
     
@@ -7266,6 +7361,9 @@ ArabicTVApp.prototype.deleteVideo = function(videoId, event) {
         this.videos.splice(videoIndex, 1);
         this.saveVideosToStorage();
         this.renderAdminVideos();
+        
+        // تحديث فوري للزوار الآخرين
+        this.forceUpdateForVisitors();
         
         // Update filtered videos if we're currently showing videos
         if (this.isVideoCategory(this.currentCategory)) {
