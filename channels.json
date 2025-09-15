@@ -466,6 +466,15 @@
       "category": "news",
       "country": "تركيا",
       "type": "hls"
+    },
+    {
+      "id": 74,
+      "name": "DMC",
+      "url": "https://bcovlive-a.akamaihd.net/ba3169004d40484b9ff29e194964c9e8/eu-west-1/6057955906001/playlist.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/1/12/Dmc_TV_Logo.png",
+      "category": "entertainment",
+      "country": "مصر",
+      "type": "hls"
     }
   ],
   "favorites": [],
@@ -542,6 +551,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-15T15:41:56.150Z",
+  "lastModified": "2025-09-15T15:43:58.743Z",
   "version": "1.0"
 }
