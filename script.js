@@ -243,6 +243,20 @@ class ArabicTVApp {
         setTimeout(() => {
             this.checkForUpdates();
         }, 2000);
+        
+        // Auto-update channels on mobile devices if no local data exists
+        if (this.isMobile() && (!this.channels || this.channels.length === 0)) {
+            setTimeout(() => {
+                this.loadChannelsFromGitHub();
+            }, 3000);
+        }
+        
+        // Force update on mobile devices every 30 minutes
+        if (this.isMobile()) {
+            setInterval(() => {
+                this.checkForUpdates();
+            }, 30 * 60 * 1000); // 30 minutes
+        }
         this.setupMobileSearch();
         this.setupPictureInPictureEvents();
         this.checkAndSetupPictureInPicture();
@@ -313,6 +327,7 @@ class ArabicTVApp {
         this.updateChannelCategoryOptions(); // Update category options
         this.updateNavigationTabs(); // Update navigation tabs
         this.updateSidebarCounts(); // Update sidebar counts
+        this.updateMobileVideoCategories(); // Update mobile video categories
         this.hideLoading();
         
         // إظهار الرسالة الترحيبية إذا لزم الأمر
@@ -334,14 +349,32 @@ class ArabicTVApp {
         }
         
         try {
-            const response = await fetch('channels.json');
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
+            // Try to load from local channels.json first
+            let response = await fetch('channels.json');
+            let data;
             
-            // لا نحمل القنوات من JSON file - نبدأ بقائمة فارغة
-            console.log('تم تخطي تحميل القنوات من channels.json - سيتم البدء بقائمة فارغة');
+            if (!response.ok) {
+                console.log('فشل في تحميل channels.json المحلي، جاري التحميل من GitHub...');
+                // If local file fails, try GitHub
+                response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+            }
+            
+            data = await response.json();
+            
+            // Load channels from JSON file if no channels are loaded
+            if (data.channels && Array.isArray(data.channels) && data.channels.length > 0) {
+                this.channels = data.channels;
+                this.filteredChannels = [...data.channels];
+                console.log('تم تحميل القنوات من channels.json:', this.channels.length, 'قناة');
+                
+                // Save to localStorage for future use
+                this.saveChannelsToStorage();
+            } else {
+                console.log('لا توجد قنوات في channels.json - سيتم البدء بقائمة فارغة');
+            }
             
             // Load categories from JSON file
             if (data.categories && Array.isArray(data.categories)) {
@@ -5334,17 +5367,123 @@ class ArabicTVApp {
         }
     }
 
+    // Check if device is mobile
+    isMobile() {
+        return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
+    // Get category count for both channels and videos
+    getCategoryCount(category) {
+        if (category === 'all') {
+            return this.channels.length;
+        }
+        
+        // Check if it's a video category
+        const videoCategories = ['youtube', 'live', 'movies', 'series', 'documentary', 'kids', 'educational', 'cooking'];
+        if (videoCategories.includes(category)) {
+            return this.videos ? this.videos.filter(video => video.category === category).length : 0;
+        }
+        
+        // Check if it's a channel category
+        const channelCategories = ['news', 'entertainment', 'sports', 'religious', 'music', 'movies', 'documentary'];
+        if (channelCategories.includes(category)) {
+            return this.channels ? this.channels.filter(channel => channel.category === category).length : 0;
+        }
+        
+        return 0;
+    }
+
+    // Update mobile video categories display
+    updateMobileVideoCategories() {
+        if (!this.isMobile()) return;
+        
+        const videoCategories = ['youtube', 'live', 'movies', 'series', 'documentary', 'kids', 'educational', 'cooking'];
+        
+        videoCategories.forEach(category => {
+            const count = this.getCategoryCount(category);
+            let countElementId;
+            
+            // Handle special cases for video categories
+            if (category === 'movies') {
+                countElementId = 'mobileMoviesVideoCount';
+            } else if (category === 'documentary') {
+                countElementId = 'mobileDocumentaryVideoCount';
+            } else {
+                countElementId = `mobile${category.charAt(0).toUpperCase() + category.slice(1)}Count`;
+            }
+            
+            const countElement = document.getElementById(countElementId);
+            if (countElement) {
+                countElement.textContent = count;
+            }
+        });
+    }
+
+    // Load channels from GitHub
+    async loadChannelsFromGitHub() {
+        try {
+            console.log('🔄 جاري تحميل القنوات من GitHub...');
+            
+            const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json');
+            
+            if (!response.ok) {
+                throw new Error(`خطأ في جلب البيانات: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (!data.channels || !Array.isArray(data.channels)) {
+                throw new Error('تنسيق البيانات غير صحيح');
+            }
+            
+            // Update channels in the app
+            this.channels = data.channels;
+            this.filteredChannels = [...data.channels];
+            
+            // Save to localStorage
+            this.saveChannelsToStorage();
+            
+            // Update channel statistics
+            this.updateChannelStats();
+            this.updateSidebarCounts();
+            
+            // Save update time
+            const updateTime = new Date().toISOString();
+            localStorage.setItem('lastUpdateTime', updateTime);
+            
+            // Update the display
+            this.updateLastUpdateTime();
+            
+            console.log('✅ تم تحميل القنوات من GitHub بنجاح:', this.channels.length, 'قناة');
+            
+            // Show success notification
+            this.notifySuccess(`تم تحميل ${this.channels.length} قناة من GitHub بنجاح!`);
+            
+            // Update UI
+            this.renderChannels();
+            this.updateSidebarCounts();
+            this.updateChannelStats();
+            this.updateMobileVideoCategories();
+            
+        } catch (error) {
+            console.error('خطأ في تحميل القنوات من GitHub:', error);
+            this.notifyError(`فشل في تحميل القنوات: ${error.message}`);
+        }
+    }
+
     // Check for updates
     async checkForUpdates() {
         try {
             console.log('🔍 فحص التحديثات...');
             
             // Get local data info
-            const localData = localStorage.getItem('tvChannels');
+            const localData = localStorage.getItem('arabicTVChannels');
             const localUpdateTime = localStorage.getItem('lastUpdateTime');
             
+            // If no local data, try to load from GitHub
             if (!localData || !localUpdateTime) {
-                console.log('📥 لا توجد بيانات محلية، سيتم تحميل البيانات لأول مرة');
+                console.log('📥 لا توجد بيانات محلية، جاري تحميل البيانات من GitHub...');
+                await this.loadChannelsFromGitHub();
                 return false;
             }
 
@@ -6348,7 +6487,8 @@ function toggleCategoriesDropdown() {
         dropdown.classList.add('active');
         overlay.classList.add('active');
         
-        // Update category counts
+        // Reset to TV tab and update category counts
+        switchCategoryTab('tv');
         updateMobileCategoryCounts();
     }
 }
@@ -6359,6 +6499,30 @@ function closeCategoriesDropdown() {
     
     dropdown.classList.remove('active');
     overlay.classList.remove('active');
+}
+
+// Switch between TV and Video category tabs
+function switchCategoryTab(tabType) {
+    const tvTab = document.querySelector('.category-tab[data-tab="tv"]');
+    const videoTab = document.querySelector('.category-tab[data-tab="video"]');
+    const tvContent = document.getElementById('tvCategoriesContent');
+    const videoContent = document.getElementById('videoCategoriesContent');
+    
+    // Update tab states
+    if (tabType === 'tv') {
+        tvTab.classList.add('active');
+        videoTab.classList.remove('active');
+        tvContent.style.display = 'block';
+        videoContent.style.display = 'none';
+    } else if (tabType === 'video') {
+        videoTab.classList.add('active');
+        tvTab.classList.remove('active');
+        videoContent.style.display = 'block';
+        tvContent.style.display = 'none';
+    }
+    
+    // Update category counts for the active tab
+    updateMobileCategoryCounts();
 }
 
 function selectCategory(category) {
@@ -6464,15 +6628,43 @@ function updateBottomNavActiveState(activeAction) {
 function updateMobileCategoryCounts() {
     if (!window.app) return;
     
-    const categories = ['all', 'news', 'entertainment', 'sports', 'religious', 'music', 'movies', 'documentary'];
+    // TV Categories
+    const tvCategories = ['all', 'news', 'entertainment', 'sports', 'religious', 'music', 'movies', 'documentary'];
     
-    categories.forEach(category => {
+    tvCategories.forEach(category => {
         const count = window.app.getCategoryCount(category);
         const countElement = document.getElementById(`mobile${category.charAt(0).toUpperCase() + category.slice(1)}Count`);
         if (countElement) {
             countElement.textContent = count;
         }
     });
+    
+    // Video Categories
+    const videoCategories = ['youtube', 'live', 'movies', 'series', 'documentary', 'kids', 'educational', 'cooking'];
+    
+    videoCategories.forEach(category => {
+        const count = window.app.getCategoryCount(category);
+        let countElementId;
+        
+        // Handle special cases for video categories
+        if (category === 'movies') {
+            countElementId = 'mobileMoviesVideoCount';
+        } else if (category === 'documentary') {
+            countElementId = 'mobileDocumentaryVideoCount';
+        } else {
+            countElementId = `mobile${category.charAt(0).toUpperCase() + category.slice(1)}Count`;
+        }
+        
+        const countElement = document.getElementById(countElementId);
+        if (countElement) {
+            countElement.textContent = count;
+        }
+    });
+    
+    // Update mobile video categories
+    if (window.app && window.app.updateMobileVideoCategories) {
+        window.app.updateMobileVideoCategories();
+    }
 }
 
 function updateMobileFavoritesBadge() {
@@ -6710,6 +6902,12 @@ async function updateChannels() {
         // Reload the channels display
         window.app.renderChannels();
         window.app.updateSidebarCounts();
+        
+        // Update mobile navigation if on mobile
+        if (window.app.isMobile()) {
+            window.app.syncMobileNavTabs();
+            window.app.updateMobileVideoCategories();
+        }
         
         // Save update time
         const updateTime = new Date().toISOString();

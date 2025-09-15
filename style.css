@@ -11216,7 +11216,7 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     left: 50%;
     transform: translateX(-50%);
     width: 90%;
-    max-width: 400px;
+    max-width: 420px;
     background: var(--primary-color);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -11228,7 +11228,7 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     visibility: hidden;
     transform: translateX(-50%) translateY(20px);
     transition: all 0.3s ease;
-    max-height: 60vh;
+    max-height: 70vh;
     overflow: hidden;
 }
 
@@ -11246,6 +11246,63 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     border-bottom: 1px solid var(--border-color);
     background: var(--secondary-color);
     border-radius: 16px 16px 0 0;
+}
+
+/* Category Tabs */
+.category-tabs {
+    display: flex;
+    background: var(--secondary-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0 8px;
+}
+
+.category-tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    margin: 4px;
+    position: relative;
+}
+
+.category-tab:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.category-tab.active {
+    color: var(--highlight-color);
+    background: rgba(233, 69, 96, 0.1);
+}
+
+.category-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 2px;
+    background: var(--highlight-color);
+    border-radius: 1px;
+}
+
+.category-tab i {
+    font-size: 1rem;
+}
+
+.category-tab span {
+    font-size: 0.85rem;
 }
 
 .categories-dropdown .dropdown-header h3 {
@@ -11637,6 +11694,25 @@ body[data-theme="light"] .categories-dropdown .category-item:hover {
 body[data-theme="light"] .categories-dropdown .category-item.active {
     background: #3b82f6;
     color: white;
+}
+
+/* Light Theme for Category Tabs */
+body[data-theme="light"] .category-tab {
+    color: #64748b;
+}
+
+body[data-theme="light"] .category-tab:hover {
+    color: #1e293b;
+    background: rgba(59, 130, 246, 0.1);
+}
+
+body[data-theme="light"] .category-tab.active {
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.1);
+}
+
+body[data-theme="light"] .category-tab.active::after {
+    background: #3b82f6;
 }
 
 body[data-theme="light"] .search-popup-content {

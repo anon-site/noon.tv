@@ -267,12 +267,26 @@
     <!-- Categories Dropdown -->
     <div class="categories-dropdown" id="categoriesDropdown">
         <div class="dropdown-header">
-            <h3>فئات القنوات</h3>
+            <h3>فئات المحتوى</h3>
             <button class="close-dropdown" onclick="closeCategoriesDropdown()">
                 <i class="fas fa-times"></i>
             </button>
         </div>
-        <div class="dropdown-content">
+        
+        <!-- Category Tabs -->
+        <div class="category-tabs">
+            <button class="category-tab active" data-tab="tv" onclick="switchCategoryTab('tv')">
+                <i class="fas fa-tv"></i>
+                <span>تلفزيون</span>
+            </button>
+            <button class="category-tab" data-tab="video" onclick="switchCategoryTab('video')">
+                <i class="fas fa-video"></i>
+                <span>فيديو</span>
+            </button>
+        </div>
+        
+        <!-- TV Categories Content -->
+        <div class="dropdown-content" id="tvCategoriesContent">
             <button class="category-item active" data-category="all" onclick="selectCategory('all')">
                 <i class="fas fa-th-large"></i>
                 <span>جميع القنوات</span>
@@ -312,6 +326,50 @@
                 <i class="fas fa-book-open"></i>
                 <span>الوثائقية</span>
                 <span class="category-count" id="mobileDocumentaryCount">0</span>
+            </button>
+        </div>
+        
+        <!-- Video Categories Content -->
+        <div class="dropdown-content" id="videoCategoriesContent" style="display: none;">
+            <button class="category-item" data-category="youtube" onclick="selectCategory('youtube')">
+                <i class="fab fa-youtube"></i>
+                <span>يوتيوب</span>
+                <span class="category-count" id="mobileYoutubeCount">0</span>
+            </button>
+            <button class="category-item" data-category="live" onclick="selectCategory('live')">
+                <i class="fas fa-broadcast-tower"></i>
+                <span>البث المباشر</span>
+                <span class="category-count" id="mobileLiveCount">0</span>
+            </button>
+            <button class="category-item" data-category="movies" onclick="selectCategory('movies')">
+                <i class="fas fa-film"></i>
+                <span>الأفلام</span>
+                <span class="category-count" id="mobileMoviesVideoCount">0</span>
+            </button>
+            <button class="category-item" data-category="series" onclick="selectCategory('series')">
+                <i class="fas fa-tv"></i>
+                <span>المسلسلات</span>
+                <span class="category-count" id="mobileSeriesCount">0</span>
+            </button>
+            <button class="category-item" data-category="documentary" onclick="selectCategory('documentary')">
+                <i class="fas fa-book-open"></i>
+                <span>الوثائقية</span>
+                <span class="category-count" id="mobileDocumentaryVideoCount">0</span>
+            </button>
+            <button class="category-item" data-category="kids" onclick="selectCategory('kids')">
+                <i class="fas fa-child"></i>
+                <span>الأطفال</span>
+                <span class="category-count" id="mobileKidsCount">0</span>
+            </button>
+            <button class="category-item" data-category="educational" onclick="selectCategory('educational')">
+                <i class="fas fa-graduation-cap"></i>
+                <span>التعليمية</span>
+                <span class="category-count" id="mobileEducationalCount">0</span>
+            </button>
+            <button class="category-item" data-category="cooking" onclick="selectCategory('cooking')">
+                <i class="fas fa-utensils"></i>
+                <span>الطبخ</span>
+                <span class="category-count" id="mobileCookingCount">0</span>
             </button>
         </div>
     </div>
