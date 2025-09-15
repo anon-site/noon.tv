@@ -378,6 +378,15 @@
       "type": "hls"
     },
     {
+      "id": 64,
+      "name": "كارتون مينا",
+      "url": "https://www.youtube.com/watch?v=yIK9W-EwCn8",
+      "logo": "https://iili.io/KTtQE11.png",
+      "category": "kids",
+      "country": "عالمية",
+      "type": "youtube"
+    },
+    {
       "id": 65,
       "name": "المسيرة",
       "url": "https://live.cdnbridge.tv/Almasirah/Almasirah_all/playlist.m3u8",
@@ -421,22 +430,13 @@
       "category": "entertainment",
       "country": "اليونان",
       "type": "hls"
-    },
-    {
-      "id": 70,
-      "name": "كارتون مينا",
-      "url": "https://www.youtube.com/watch?v=yIK9W-EwCn8",
-      "logo": "https://iili.io/KTtQE11.png",
-      "category": "kids",
-      "country": "عالمية",
-      "type": "youtube"
     }
   ],
   "favorites": [],
   "settings": {
     "autoQuality": true,
     "autoplay": true,
-    "volume": 100,
+    "volume": 80,
     "theme": "dark",
     "showNewsTicker": false,
     "zoomLevel": 100,
@@ -446,7 +446,18 @@
     "animationsEnabled": false,
     "compactMode": true,
     "highContrast": false,
-    "borderRadius": "rounded"
+    "borderRadius": "rounded",
+    "notificationsEnabled": false,
+    "notificationDuration": 3,
+    "showCustomControls": true,
+    "notifications": false,
+    "notificationSound": false,
+    "showChannelImages": false,
+    "updateNotifications": true,
+    "successNotifications": true,
+    "errorNotifications": true,
+    "infoNotifications": true,
+    "notificationPosition": "top-right"
   },
   "categories": [
     {
@@ -488,13 +499,8 @@
       "key": "documentary",
       "name": "الوثائقية",
       "icon": "fas fa-book-open"
-    },
-    {
-      "key": "kids",
-      "name": "أطفال",
-      "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-15T12:30:39.637Z",
+  "lastModified": "2025-09-14T16:53:38.793Z",
   "version": "1.0"
 }
