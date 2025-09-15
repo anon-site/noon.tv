@@ -1913,8 +1913,6 @@ class ArabicTVApp {
         }
 
         try {
-            this.notifyInfo('جارٍ تحميل البيانات من المستودع...');
-            
             const data = await this.downloadFromRepository();
             
             if (data) {
@@ -1929,7 +1927,6 @@ class ArabicTVApp {
                     return true;
                 } else {
                     console.log('البيانات المحلية أحدث من المستودع');
-                    this.notifyInfo('البيانات المحلية محدثة');
                     return false;
                 }
             } else {
@@ -2237,7 +2234,6 @@ class ArabicTVApp {
             document.body.appendChild(conflictModal);
             
             conflictModal.querySelector('.use-local-btn').addEventListener('click', () => {
-                this.notifyInfo('تم الاحتفاظ بالبيانات المحلية');
                 document.body.removeChild(conflictModal);
                 resolve(false); // Don't merge
             });
@@ -2728,8 +2724,6 @@ class ArabicTVApp {
         }
 
         try {
-            this.notifyInfo('جاري اختبار الاتصال...');
-            
             // Test by trying to fetch repository info
             const testData = await this.downloadFromRepository();
             
@@ -2772,8 +2766,6 @@ class ArabicTVApp {
         }
 
         try {
-            this.notifyInfo('جاري المزامنة...');
-            
             // First try to sync from remote
             await this.syncFromRemote();
             
@@ -3006,8 +2998,6 @@ class ArabicTVApp {
         }
         
         try {
-            this.notifyInfo('جاري البحث عن المستودعات...');
-            
             let repositories = [];
             if (provider === 'github') {
                 repositories = await this.fetchGitHubRepositories(username, token);
@@ -3325,8 +3315,6 @@ class ArabicTVApp {
         }
         
         try {
-            this.notifyInfo('جاري رفع النسخة الاحتياطية للسحابة...');
-            
             // Create backup data without sensitive information
             const backupData = {
                 version: '1.0',
@@ -3377,8 +3365,6 @@ class ArabicTVApp {
         }
         
         try {
-            this.notifyInfo('جاري تحميل النسخة الاحتياطية من السحابة...');
-            
             // Download backup from cloud
             const backupData = await this.downloadFromRepository();
             
@@ -6265,9 +6251,6 @@ async function updateChannels() {
     }
 
     try {
-        // Show loading notification
-        window.app.notifyInfo('جاري تحديث القنوات من GitHub...', 3000);
-        
         // Fetch channels from GitHub
         const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json');
         
