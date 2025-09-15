@@ -1,19 +1,19 @@
 {
   "channels": [
     {
-      "id": 23,
-      "name": "القران الكريم",
-      "url": "https://cdn-globecast.akamaized.net/live/eds/saudi_quran/hls_roku/index.m3u8",
-      "logo": "https://iili.io/Kz8M9Ul.png",
+      "id": 33,
+      "name": "إقرأ",
+      "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv3/playlist.m3u8",
+      "logo": "https://iili.io/Kz83mkF.png",
       "category": "religious",
       "country": "السعودية",
       "type": "hls"
     },
     {
-      "id": 33,
-      "name": "إقرأ",
-      "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv3/playlist.m3u8",
-      "logo": "https://iili.io/Kz83mkF.png",
+      "id": 23,
+      "name": "القران الكريم",
+      "url": "https://cdn-globecast.akamaized.net/live/eds/saudi_quran/hls_roku/index.m3u8",
+      "logo": "https://iili.io/Kz8M9Ul.png",
       "category": "religious",
       "country": "السعودية",
       "type": "hls"
@@ -506,6 +506,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-15T13:22:46.457Z",
+  "lastModified": "2025-09-15T13:23:26.304Z",
   "version": "1.0"
 }
