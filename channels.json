@@ -228,7 +228,7 @@
     {
       "id": 29,
       "name": "الأقصى",
-      "url": "http://167.172.161.13/hls/feedspare/6udfi7v8a3eof6nlps6e9ovfrs65c7l7.m3u8",
+      "url": "https://64c53df624b1b.servers.dvcloud.tv/hls/feedspare/6udfi7v8a3eof6nlps6e9ovfrs65c7l7.m3u8",
       "logo": "https://iili.io/Kz8auGp.png",
       "category": "news",
       "country": "فلسطين",
@@ -431,6 +431,15 @@
       "category": "entertainment",
       "country": "اليونان",
       "type": "hls"
+    },
+    {
+      "id": 70,
+      "name": "test",
+      "url": "https://games1.elahmad.xyz/tv754_www.elahmad.com_art_aflam2/index.m3u8?token=35c854264866c213dc18fad0ffd9aad00b04824f-b4e80d2ef88e76a62839a33367802d7d-1757882111-1757871311",
+      "logo": "https://games1.elahmad.xyz/tv754_www.elahmad.com_art_aflam2/index.m3u8?token=35c854264866c213dc18fad0ffd9aad00b04824f-b4e80d2ef88e76a62839a33367802d7d-1757882111-1757871311",
+      "category": "movies",
+      "country": "السعودية",
+      "type": "hls"
     }
   ],
   "favorites": [],
@@ -507,6 +516,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-14T18:59:12.062Z",
+  "lastModified": "2025-09-15T03:42:42.332Z",
   "version": "1.0"
 }
