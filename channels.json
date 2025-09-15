@@ -436,7 +436,7 @@
   "settings": {
     "autoQuality": true,
     "autoplay": true,
-    "volume": 100,
+    "volume": 80,
     "theme": "dark",
     "showNewsTicker": false,
     "zoomLevel": 100,
@@ -499,8 +499,13 @@
       "key": "documentary",
       "name": "الوثائقية",
       "icon": "fas fa-book-open"
+    },
+    {
+      "key": "kids",
+      "name": "أطفال",
+      "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-15T12:20:56.455Z",
+  "lastModified": "2025-09-15T12:21:11.111Z",
   "version": "1.0"
 }
