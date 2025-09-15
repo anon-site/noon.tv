@@ -421,6 +421,15 @@
       "category": "entertainment",
       "country": "اليونان",
       "type": "hls"
+    },
+    {
+      "id": 70,
+      "name": "كارتون مينا",
+      "url": "https://www.youtube.com/watch?v=yIK9W-EwCn8",
+      "logo": "https://iili.io/KTtQE11.png",
+      "category": "kids",
+      "country": "عالمية",
+      "type": "youtube"
     }
   ],
   "favorites": [],
@@ -486,6 +495,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-15T12:29:50.062Z",
+  "lastModified": "2025-09-15T12:30:25.681Z",
   "version": "1.0"
 }
