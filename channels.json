@@ -446,18 +446,7 @@
     "animationsEnabled": false,
     "compactMode": true,
     "highContrast": false,
-    "borderRadius": "rounded",
-    "notificationsEnabled": false,
-    "notificationDuration": 3,
-    "showCustomControls": true,
-    "notifications": false,
-    "notificationSound": false,
-    "showChannelImages": false,
-    "updateNotifications": true,
-    "successNotifications": true,
-    "errorNotifications": true,
-    "infoNotifications": true,
-    "notificationPosition": "top-right"
+    "borderRadius": "rounded"
   },
   "categories": [
     {
@@ -506,6 +495,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-15T12:33:45.762Z",
+  "lastModified": "2025-09-15T12:35:41.078Z",
   "version": "1.0"
 }
