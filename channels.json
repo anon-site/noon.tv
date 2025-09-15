@@ -432,7 +432,9 @@
       "type": "hls"
     }
   ],
-  "favorites": [],
+  "favorites": [
+    16
+  ],
   "settings": {
     "autoQuality": true,
     "autoplay": true,
@@ -506,6 +508,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-15T15:02:28.436Z",
+  "lastModified": "2025-09-15T15:02:40.824Z",
   "version": "1.0"
 }
