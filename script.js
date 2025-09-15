@@ -714,6 +714,12 @@ class ArabicTVApp {
                 this.closeModal();
                 this.closeSettings();
                 this.closeAdminPanel();
+            } else if (e.key === 'c' || e.key === 'C') {
+                // Open admin panel (لوحة التحكم)
+                this.openAdminPanel();
+            } else if (e.key === 's' || e.key === 'S') {
+                // Open settings (الإعدادات)
+                this.openSettings();
             }
         });
     }
