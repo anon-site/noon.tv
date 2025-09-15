@@ -5184,11 +5184,18 @@ class ArabicTVApp {
         card.onclick = (event) => this.playVideo(video, event);
         
         card.innerHTML = `
-            <div class="channel-logo-container">
-                <img src="${video.thumbnail || 'https://via.placeholder.com/300x150?text=No+Thumbnail'}" 
-                     alt="${video.name}" class="channel-logo"
-                     onerror="this.src='https://via.placeholder.com/300x150?text=No+Thumbnail'">
-                <div class="video-duration-overlay">${video.duration ? video.duration + 'د' : 'غير محدد'}</div>
+            <div class="video-thumbnail-container">
+                <img src="${video.thumbnail || 'https://via.placeholder.com/300x200?text=No+Thumbnail'}" 
+                     alt="${video.name}" class="video-thumbnail"
+                     onerror="this.src='https://via.placeholder.com/300x200?text=No+Thumbnail'">
+                <div class="video-duration-overlay">${video.duration ? this.formatDuration(video.duration) : 'غير محدد'}</div>
+                
+                <!-- Video Play Icon Overlay -->
+                <div class="video-play-overlay">
+                    <div class="play-icon">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
                 
                 <!-- Video Actions -->
                 <div class="video-actions">
@@ -5200,14 +5207,10 @@ class ArabicTVApp {
                     </button>
                 </div>
             </div>
-            <div class="channel-info">
-                <h3 class="channel-name">${video.name}</h3>
-                <p class="channel-category">${this.getVideoCategoryName(video.category)}</p>
-                ${video.description ? `<p class="video-description">${video.description.substring(0, 100)}${video.description.length > 100 ? '...' : ''}</p>` : ''}
-                <div class="video-meta">
-                    <span class="video-quality">${video.quality}</span>
-                    ${video.tags && video.tags.length > 0 ? `<div class="video-tags">${video.tags.slice(0, 3).map(tag => `<span class="video-tag">${tag}</span>`).join('')}</div>` : ''}
-                </div>
+            <div class="video-info">
+                <h3 class="video-title" title="${video.name}">${video.name}</h3>
+                <span class="video-category">${this.getVideoCategoryName(video.category)}</span>
+                ${video.description ? `<div class="video-description" title="${video.description}">${video.description}</div>` : ''}
             </div>
         `;
         
@@ -5217,6 +5220,39 @@ class ArabicTVApp {
     getVideoCategoryName(categoryKey) {
         const category = this.videoCategories.find(cat => cat.key === categoryKey);
         return category ? category.name : categoryKey;
+    }
+
+    formatDuration(minutes) {
+        if (!minutes || minutes === 0) return '00:00';
+        
+        const hours = Math.floor(minutes / 60);
+        const mins = minutes % 60;
+        
+        if (hours > 0) {
+            return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+        } else {
+            return `00:${mins.toString().padStart(2, '0')}`;
+        }
+    }
+
+    parseDuration(durationString) {
+        if (!durationString || durationString.trim() === '') return 0;
+        
+        // Check if it's in HH:MM format
+        const timeMatch = durationString.match(/^(\d{1,2}):(\d{2})$/);
+        if (timeMatch) {
+            const hours = parseInt(timeMatch[1]);
+            const minutes = parseInt(timeMatch[2]);
+            return hours * 60 + minutes;
+        }
+        
+        // If it's just a number, treat it as minutes
+        const numberMatch = durationString.match(/^\d+$/);
+        if (numberMatch) {
+            return parseInt(durationString);
+        }
+        
+        return 0;
     }
 
     playVideo(video, event) {
@@ -6932,7 +6968,6 @@ ArabicTVApp.prototype.addVideo = function(videoData) {
         thumbnail: videoData.thumbnail || '',
         duration: videoData.duration || 0,
         quality: videoData.quality || 'auto',
-        tags: videoData.tags ? videoData.tags.split(',').map(tag => tag.trim()) : [],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
     };
@@ -6962,7 +6997,6 @@ ArabicTVApp.prototype.updateVideo = function(videoId, videoData) {
         thumbnail: videoData.thumbnail || '',
         duration: videoData.duration || 0,
         quality: videoData.quality || 'auto',
-        tags: videoData.tags ? videoData.tags.split(',').map(tag => tag.trim()) : [],
         updatedAt: new Date().toISOString()
     };
     
@@ -7085,9 +7119,8 @@ ArabicTVApp.prototype.editVideo = function(videoId, event) {
     document.getElementById('videoDescription').value = video.description;
     document.getElementById('videoUrl').value = video.url;
     document.getElementById('videoThumbnail').value = video.thumbnail;
-    document.getElementById('videoDuration').value = video.duration;
+    document.getElementById('videoDuration').value = this.formatDuration(video.duration);
     document.getElementById('videoQuality').value = video.quality;
-    document.getElementById('videoTags').value = video.tags.join(', ');
     
     // Update form title
     const formTitle = document.querySelector('#addVideoTab h3') || document.querySelector('#addVideoTab .form-title');
@@ -7151,9 +7184,8 @@ ArabicTVApp.prototype.handleVideoFormSubmit = function() {
         description: document.getElementById('videoDescription').value.trim(),
         url: document.getElementById('videoUrl').value.trim(),
         thumbnail: document.getElementById('videoThumbnail').value.trim(),
-        duration: parseInt(document.getElementById('videoDuration').value) || 0,
-        quality: document.getElementById('videoQuality').value,
-        tags: document.getElementById('videoTags').value.trim()
+        duration: this.parseDuration(document.getElementById('videoDuration').value),
+        quality: document.getElementById('videoQuality').value
     };
 
     // Validation
@@ -7164,6 +7196,13 @@ ArabicTVApp.prototype.handleVideoFormSubmit = function() {
 
     if (!formData.url) {
         this.notifyError('يرجى إدخال رابط الفيديو');
+        return;
+    }
+
+    // Validate duration format
+    const durationPattern = /^(\d{1,2}):(\d{2})$/;
+    if (formData.duration === 0 && document.getElementById('videoDuration').value.trim() !== '') {
+        this.notifyError('تنسيق مدة الفيديو غير صحيح. استخدم التنسيق: ساعات:دقائق (مثال: 01:30)');
         return;
     }
 
