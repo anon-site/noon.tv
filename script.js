@@ -1301,6 +1301,7 @@ class ArabicTVApp {
     // Login System Functions
     showLoginModal() {
         document.getElementById('loginModal').classList.add('active');
+        document.querySelector('.login-content').classList.add('active');
         document.getElementById('adminPassword').focus();
         
         // Add Enter key support
@@ -1313,6 +1314,7 @@ class ArabicTVApp {
 
     closeLoginModal() {
         document.getElementById('loginModal').classList.remove('active');
+        document.querySelector('.login-content').classList.remove('active');
         document.getElementById('adminPassword').value = '';
         document.getElementById('loginError').style.display = 'none';
     }
