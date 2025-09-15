@@ -804,6 +804,9 @@ class ArabicTVApp {
             } else if (e.key === 's' || e.key === 'S') {
                 // Open settings (الإعدادات)
                 this.openSettings();
+            } else if (e.key === 'm' || e.key === 'M') {
+                // Toggle sidebar (تبديل القائمة الجانبية)
+                this.toggleSidebar();
             }
         });
     }
