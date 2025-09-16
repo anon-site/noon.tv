@@ -421,16 +421,6 @@
       "status": "active"
     },
     {
-      "id": 64,
-      "name": "كارتون مينا",
-      "url": "https://www.youtube.com/watch?v=yIK9W-EwCn8",
-      "logo": "https://iili.io/KTtQE11.png",
-      "category": "kids",
-      "country": "عالمية",
-      "type": "youtube",
-      "status": "active"
-    },
-    {
       "id": 65,
       "name": "المسيرة",
       "url": "https://live.cdnbridge.tv/Almasirah/Almasirah_all/playlist.m3u8",
@@ -615,6 +605,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-16T16:21:13.764Z",
+  "lastModified": "2025-09-16T16:22:45.609Z",
   "version": "1.0"
 }
