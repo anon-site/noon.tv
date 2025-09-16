@@ -2105,9 +2105,6 @@ class ArabicTVApp {
             return;
         }
 
-        // تتبع العملية الأخيرة للمزامنة
-        this.lastOperation = 'add';
-
         // Get status from form
         const status = document.getElementById('channelStatus').value || 'active';
         
@@ -2137,24 +2134,10 @@ class ArabicTVApp {
         
         // المزامنة التلقائية مع السحابة
         if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
-            this.syncToRemoteWithRetry().catch(error => {
+            this.syncToRemote().catch(error => {
                 console.error('فشل في المزامنة التلقائية بعد إضافة القناة:', error);
-                
-                // رسالة خطأ أكثر تفصيلاً
-                let errorMessage = 'تم إضافة القناة محلياً، لكن فشلت المزامنة التلقائية.';
-                
-                if (error.message.includes('409')) {
-                    errorMessage += ' يبدو أن الملف تم تحديثه من مكان آخر. يرجى المحاولة مرة أخرى.';
-                } else if (error.message.includes('401') || error.message.includes('403')) {
-                    errorMessage += ' مشكلة في الصلاحيات - تحقق من رمز الوصول.';
-                } else if (error.message.includes('network') || error.message.includes('fetch')) {
-                    errorMessage += ' مشكلة في الاتصال بالإنترنت.';
-                } else {
-                    errorMessage += ' يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.';
-                }
-                
                 setTimeout(() => {
-                    this.notifyWarning(errorMessage);
+                    this.notifyWarning('تم إضافة القناة محلياً، لكن فشلت المزامنة التلقائية. يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.');
                 }, 2000);
             });
         }
@@ -2319,9 +2302,6 @@ class ArabicTVApp {
             return;
         }
 
-        // تتبع العملية الأخيرة للمزامنة
-        this.lastOperation = 'update';
-
         // Get status from form
         const status = document.getElementById('channelStatus').value || 'active';
         
@@ -2353,24 +2333,10 @@ class ArabicTVApp {
         
         // المزامنة التلقائية مع السحابة
         if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
-            this.syncToRemoteWithRetry().catch(error => {
+            this.syncToRemote().catch(error => {
                 console.error('فشل في المزامنة التلقائية بعد تحديث القناة:', error);
-                
-                // رسالة خطأ أكثر تفصيلاً
-                let errorMessage = 'تم تحديث القناة محلياً، لكن فشلت المزامنة التلقائية.';
-                
-                if (error.message.includes('409')) {
-                    errorMessage += ' يبدو أن الملف تم تحديثه من مكان آخر. يرجى المحاولة مرة أخرى.';
-                } else if (error.message.includes('401') || error.message.includes('403')) {
-                    errorMessage += ' مشكلة في الصلاحيات - تحقق من رمز الوصول.';
-                } else if (error.message.includes('network') || error.message.includes('fetch')) {
-                    errorMessage += ' مشكلة في الاتصال بالإنترنت.';
-                } else {
-                    errorMessage += ' يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.';
-                }
-                
                 setTimeout(() => {
-                    this.notifyWarning(errorMessage);
+                    this.notifyWarning('تم تحديث القناة محلياً، لكن فشلت المزامنة التلقائية. يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.');
                 }, 2000);
             });
         }
@@ -2389,9 +2355,6 @@ class ArabicTVApp {
         if (!channel) return;
         
         if (confirm(`هل أنت متأكد من حذف قناة "${channel.name}"؟\n\nهذا الإجراء لا يمكن التراجع عنه.`)) {
-            // تتبع العملية الأخيرة للمزامنة
-            this.lastOperation = 'delete';
-            
             // Remove from favorites if favorited
             if (this.favorites.has(id)) {
                 this.favorites.delete(id);
@@ -2401,9 +2364,6 @@ class ArabicTVApp {
             // Remove from channels array
             this.channels = this.channels.filter(c => c.id !== id);
             this.filteredChannels = [...this.channels]; // Update filtered channels too
-            
-            // تسجيل القناة المحذوفة لتجنب إعادتها عند التحديث
-            this.recordDeletedChannel(channel);
             
             // Save to storage
             this.saveChannelsToStorage();
@@ -2418,26 +2378,12 @@ class ArabicTVApp {
             // تحديث وقت التحديث عند حذف قناة من لوحة التحكم
             this.updateLastUpdateTime();
             
-            // المزامنة التلقائية مع السحابة مع معالجة محسنة للأخطاء
+            // المزامنة التلقائية مع السحابة
             if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
-                this.syncToRemoteWithRetry().catch(error => {
+                this.syncToRemote().catch(error => {
                     console.error('فشل في المزامنة التلقائية بعد حذف القناة:', error);
-                    
-                    // عرض رسالة خطأ أكثر تفصيلاً
-                    let errorMessage = 'تم حذف القناة محلياً، لكن فشلت المزامنة التلقائية.';
-                    
-                    if (error.message.includes('409')) {
-                        errorMessage += ' يبدو أن الملف تم تحديثه من مكان آخر. يرجى المحاولة مرة أخرى.';
-                    } else if (error.message.includes('401') || error.message.includes('403')) {
-                        errorMessage += ' مشكلة في الصلاحيات - تحقق من رمز الوصول.';
-                    } else if (error.message.includes('network') || error.message.includes('fetch')) {
-                        errorMessage += ' مشكلة في الاتصال بالإنترنت.';
-                    } else {
-                        errorMessage += ' يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.';
-                    }
-                    
                     setTimeout(() => {
-                        this.notifyWarning(errorMessage);
+                        this.notifyWarning('تم حذف القناة محلياً، لكن فشلت المزامنة التلقائية. يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.');
                     }, 2000);
                 });
             }
@@ -2461,25 +2407,11 @@ class ArabicTVApp {
                 
                 // Auto-sync to remote if enabled
                 if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
-                    this.syncToRemoteWithRetry().catch(error => {
+                    this.syncToRemote().catch(error => {
                         console.error('فشل في المزامنة التلقائية:', error);
-                        
-                        // رسالة خطأ أكثر تفصيلاً
-                        let errorMessage = 'فشلت المزامنة التلقائية.';
-                        
-                        if (error.message.includes('409')) {
-                            errorMessage += ' يبدو أن الملف تم تحديثه من مكان آخر.';
-                        } else if (error.message.includes('401') || error.message.includes('403')) {
-                            errorMessage += ' مشكلة في الصلاحيات - تحقق من رمز الوصول.';
-                        } else if (error.message.includes('network') || error.message.includes('fetch')) {
-                            errorMessage += ' مشكلة في الاتصال بالإنترنت.';
-                        }
-                        
-                        errorMessage += ' يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.';
-                        
                         // إظهار إشعار للمستخدم حول فشل المزامنة التلقائية
                         setTimeout(() => {
-                            this.notifyWarning(errorMessage);
+                            this.notifyWarning('فشلت المزامنة التلقائية. يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.');
                         }, 2000);
                     });
                 }
@@ -2620,320 +2552,6 @@ class ArabicTVApp {
         }
     }
 
-    // دالة مزامنة محسنة مع إعادة المحاولة التلقائية
-    async syncToRemoteWithRetry(maxRetries = 3) {
-        if (!this.remoteStorage.enabled || !this.remoteStorage.repository || !this.remoteStorage.token) {
-            throw new Error('يجب تكوين إعدادات التخزين السحابي أولاً');
-        }
-
-        let lastError = null;
-        
-        for (let attempt = 0; attempt < maxRetries; attempt++) {
-            try {
-                console.log(`محاولة المزامنة ${attempt + 1}/${maxRetries}`);
-                
-                // محاولة المزامنة العادية
-                const success = await this.syncToRemote();
-                
-                if (success) {
-                    console.log('تمت المزامنة بنجاح');
-                    return true;
-                }
-                
-                // إذا فشلت المزامنة، انتظر قليلاً قبل إعادة المحاولة
-                if (attempt < maxRetries - 1) {
-                    console.log(`انتظار ${(attempt + 1) * 2} ثانية قبل إعادة المحاولة...`);
-                    await new Promise(resolve => setTimeout(resolve, (attempt + 1) * 2000));
-                }
-                
-            } catch (error) {
-                lastError = error;
-                console.error(`فشلت محاولة المزامنة ${attempt + 1}:`, error);
-                
-                // إذا كان الخطأ متعلق بالشبكة، انتظر أكثر قبل إعادة المحاولة
-                if (error.message.includes('network') || error.message.includes('fetch')) {
-                    if (attempt < maxRetries - 1) {
-                        console.log(`انتظار ${(attempt + 1) * 3} ثانية بسبب مشكلة في الشبكة...`);
-                        await new Promise(resolve => setTimeout(resolve, (attempt + 1) * 3000));
-                    }
-                } else if (error.message.includes('409')) {
-                    // في حالة التضارب، انتظر أقل لأن المشكلة قد تكون مؤقتة
-                    if (attempt < maxRetries - 1) {
-                        console.log(`انتظار ${(attempt + 1) * 1} ثانية بسبب تضارب في الإصدارات...`);
-                        await new Promise(resolve => setTimeout(resolve, (attempt + 1) * 1000));
-                    }
-                }
-            }
-        }
-        
-        // إذا فشلت جميع المحاولات، ارمي آخر خطأ
-        throw lastError || new Error('فشلت جميع محاولات المزامنة');
-    }
-
-    // دالة لإنشاء رسائل التزام واضحة
-    generateCommitMessage(data) {
-        const timestamp = new Date().toLocaleString('ar');
-        const channelCount = data.channels ? data.channels.length : 0;
-        
-        // تحديد نوع العملية بناءً على السياق
-        let action = 'تحديث';
-        
-        // يمكن إضافة منطق أكثر تعقيداً هنا لتحديد نوع العملية
-        if (this.lastOperation) {
-            switch (this.lastOperation) {
-                case 'delete':
-                    action = 'حذف قناة';
-                    break;
-                case 'add':
-                    action = 'إضافة قناة';
-                    break;
-                case 'update':
-                    action = 'تحديث قناة';
-                    break;
-                default:
-                    action = 'تحديث';
-            }
-        }
-        
-        return `${action} - ${channelCount} قناة - ${timestamp}`;
-    }
-
-    // دالة دمج ذكي للقنوات تحافظ على التغييرات المحلية
-    mergeChannelsSmartly(remoteChannels) {
-        console.log('🔄 بدء الدمج الذكي للقنوات...');
-        console.log('القنوات المحلية:', this.channels.length);
-        console.log('القنوات البعيدة:', remoteChannels.length);
-        
-        // إنشاء خريطة للقنوات المحلية باستخدام URL كمعرف فريد
-        const localChannelsMap = new Map();
-        const localDeletedChannels = new Set();
-        
-        // تحميل القنوات المحذوفة محلياً من localStorage
-        const deletedChannelsData = localStorage.getItem('deletedChannels');
-        if (deletedChannelsData) {
-            try {
-                const deletedChannels = JSON.parse(deletedChannelsData);
-                deletedChannels.forEach(channel => {
-                    localDeletedChannels.add(channel.url);
-                });
-                console.log('القنوات المحذوفة محلياً:', localDeletedChannels.size);
-                console.log('URLs المحذوفة:', Array.from(localDeletedChannels));
-            } catch (error) {
-                console.error('خطأ في تحميل القنوات المحذوفة:', error);
-            }
-        } else {
-            console.log('لا توجد قنوات محذوفة محلياً');
-        }
-        
-        // إنشاء خريطة للقنوات المحلية
-        this.channels.forEach(channel => {
-            localChannelsMap.set(channel.url, channel);
-        });
-        
-        // إنشاء خريطة للقنوات البعيدة
-        const remoteChannelsMap = new Map();
-        remoteChannels.forEach(channel => {
-            remoteChannelsMap.set(channel.url, channel);
-        });
-        
-        const mergedChannels = [];
-        const addedChannels = [];
-        const updatedChannels = [];
-        const skippedChannels = [];
-        
-        // 1. إضافة القنوات الجديدة من البعيد
-        remoteChannels.forEach(remoteChannel => {
-            if (!localChannelsMap.has(remoteChannel.url)) {
-                // قناة جديدة من البعيد
-                if (!localDeletedChannels.has(remoteChannel.url)) {
-                    // لم يتم حذفها محلياً، أضفها
-                    mergedChannels.push(remoteChannel);
-                    addedChannels.push(remoteChannel.name);
-                    console.log('✅ إضافة قناة جديدة:', remoteChannel.name);
-                } else {
-                    // تم حذفها محلياً، تجاهلها
-                    skippedChannels.push(remoteChannel.name);
-                    console.log('❌ تجاهل قناة محذوفة محلياً:', remoteChannel.name);
-                }
-            } else {
-                // قناة موجودة محلياً، احتفظ بالنسخة المحلية
-                const localChannel = localChannelsMap.get(remoteChannel.url);
-                mergedChannels.push(localChannel);
-                
-                // تحقق من وجود تحديثات في النسخة البعيدة
-                if (this.hasChannelUpdates(localChannel, remoteChannel)) {
-                    updatedChannels.push(remoteChannel.name);
-                }
-            }
-        });
-        
-        // 2. إضافة القنوات المحلية التي لا توجد في البعيد
-        this.channels.forEach(localChannel => {
-            if (!remoteChannelsMap.has(localChannel.url)) {
-                // قناة محلية فقط، احتفظ بها
-                mergedChannels.push(localChannel);
-                console.log('✅ الاحتفاظ بقناة محلية:', localChannel.name);
-            }
-        });
-        
-        // 3. حفظ القنوات المحذوفة محلياً
-        if (localDeletedChannels.size > 0) {
-            localStorage.setItem('deletedChannels', JSON.stringify(
-                Array.from(localDeletedChannels).map(url => ({ url }))
-            ));
-        }
-        
-        // 4. تسجيل النتائج
-        console.log('✅ تم الدمج الذكي بنجاح:');
-        console.log('- القنوات المدمجة:', mergedChannels.length);
-        console.log('- القنوات المضافة:', addedChannels.length);
-        console.log('- القنوات المحدثة:', updatedChannels.length);
-        console.log('- القنوات المتجاهلة (محذوفة محلياً):', skippedChannels.length);
-        
-        if (addedChannels.length > 0) {
-            console.log('القنوات المضافة:', addedChannels);
-        }
-        if (updatedChannels.length > 0) {
-            console.log('القنوات المحدثة:', updatedChannels);
-        }
-        if (skippedChannels.length > 0) {
-            console.log('القنوات المتجاهلة:', skippedChannels);
-        }
-        
-        return mergedChannels;
-    }
-    
-    // دالة للتحقق من وجود تحديثات في القناة
-    hasChannelUpdates(localChannel, remoteChannel) {
-        const fieldsToCheck = ['name', 'category', 'country', 'logo'];
-        
-        for (const field of fieldsToCheck) {
-            if (localChannel[field] !== remoteChannel[field]) {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-    
-    // دالة لتسجيل القنوات المحذوفة محلياً
-    recordDeletedChannel(channel) {
-        try {
-            console.log('🔄 تسجيل القناة المحذوفة:', channel.name, 'URL:', channel.url);
-            
-            // تحميل القنوات المحذوفة الحالية
-            const deletedChannelsData = localStorage.getItem('deletedChannels');
-            let deletedChannels = [];
-            
-            if (deletedChannelsData) {
-                deletedChannels = JSON.parse(deletedChannelsData);
-                console.log('القنوات المحذوفة الموجودة:', deletedChannels.length);
-            }
-            
-            // إضافة القناة المحذوفة إذا لم تكن موجودة
-            const channelExists = deletedChannels.some(deleted => deleted.url === channel.url);
-            if (!channelExists) {
-                deletedChannels.push({
-                    url: channel.url,
-                    name: channel.name,
-                    deletedAt: new Date().toISOString()
-                });
-                
-                // حفظ القائمة المحدثة
-                localStorage.setItem('deletedChannels', JSON.stringify(deletedChannels));
-                console.log('✅ تم تسجيل القناة المحذوفة:', channel.name);
-                console.log('إجمالي القنوات المحذوفة:', deletedChannels.length);
-            } else {
-                console.log('القناة محذوفة بالفعل:', channel.name);
-            }
-        } catch (error) {
-            console.error('خطأ في تسجيل القناة المحذوفة:', error);
-        }
-    }
-    
-    // دالة لمسح قائمة القنوات المحذوفة (لإعادة تعيين التفضيلات)
-    clearDeletedChannels() {
-        try {
-            localStorage.removeItem('deletedChannels');
-            console.log('تم مسح قائمة القنوات المحذوفة');
-            this.notifySuccess('تم مسح قائمة القنوات المحذوفة - ستظهر جميع القنوات عند التحديث التالي');
-        } catch (error) {
-            console.error('خطأ في مسح قائمة القنوات المحذوفة:', error);
-            this.notifyError('فشل في مسح قائمة القنوات المحذوفة');
-        }
-    }
-    
-    // دالة لعرض القنوات المحذوفة محلياً
-    showDeletedChannels() {
-        try {
-            const deletedChannelsData = localStorage.getItem('deletedChannels');
-            if (!deletedChannelsData) {
-                this.notifyInfo('لا توجد قنوات محذوفة محلياً');
-                return;
-            }
-            
-            const deletedChannels = JSON.parse(deletedChannelsData);
-            if (deletedChannels.length === 0) {
-                this.notifyInfo('لا توجد قنوات محذوفة محلياً');
-                return;
-            }
-            
-            const channelNames = deletedChannels.map(channel => channel.name).join(', ');
-            this.notifyInfo(`القنوات المحذوفة محلياً (${deletedChannels.length}): ${channelNames}`);
-        } catch (error) {
-            console.error('خطأ في عرض القنوات المحذوفة:', error);
-            this.notifyError('فشل في عرض القنوات المحذوفة');
-        }
-    }
-    
-    // دالة اختبار الدمج الذكي
-    async testSmartMerge() {
-        try {
-            console.log('🧪 بدء اختبار الدمج الذكي...');
-            
-            // عرض القنوات الحالية
-            console.log('القنوات الحالية:', this.channels.length);
-            this.channels.forEach((channel, index) => {
-                console.log(`${index + 1}. ${channel.name} - ${channel.url}`);
-            });
-            
-            // عرض القنوات المحذوفة
-            const deletedChannelsData = localStorage.getItem('deletedChannels');
-            if (deletedChannelsData) {
-                const deletedChannels = JSON.parse(deletedChannelsData);
-                console.log('القنوات المحذوفة:', deletedChannels.length);
-                deletedChannels.forEach((channel, index) => {
-                    console.log(`${index + 1}. ${channel.name} - ${channel.url}`);
-                });
-            } else {
-                console.log('لا توجد قنوات محذوفة');
-            }
-            
-            // محاولة جلب البيانات من البعيد
-            console.log('جلب البيانات من البعيد...');
-            const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json');
-            
-            if (!response.ok) {
-                throw new Error(`خطأ في جلب البيانات: ${response.status}`);
-            }
-            
-            const data = await response.json();
-            console.log('القنوات البعيدة:', data.channels.length);
-            
-            // اختبار الدمج الذكي
-            console.log('اختبار الدمج الذكي...');
-            const mergedChannels = this.mergeChannelsSmartly(data.channels);
-            
-            console.log('نتيجة الدمج:', mergedChannels.length, 'قناة');
-            
-            this.notifySuccess(`اختبار الدمج الذكي مكتمل! النتيجة: ${mergedChannels.length} قناة`);
-            
-        } catch (error) {
-            console.error('خطأ في اختبار الدمج الذكي:', error);
-            this.notifyError('فشل في اختبار الدمج الذكي: ' + error.message);
-        }
-    }
-
     async syncFromRemote() {
         if (!this.remoteStorage.enabled || !this.remoteStorage.repository || !this.remoteStorage.token) {
             console.log('التخزين السحابي غير مُعدّ، تخطي المزامنة');
@@ -3035,7 +2653,7 @@ class ArabicTVApp {
         
         for (let attempt = 0; attempt < maxRetries; attempt++) {
             try {
-                // الحصول على SHA الحالي للملف في كل محاولة مع معالجة محسنة للأخطاء
+                // الحصول على SHA الحالي للملف في كل محاولة
                 let sha = null;
                 try {
                     const getResponse = await fetch(url, {
@@ -3049,22 +2667,15 @@ class ArabicTVApp {
                         const fileData = await getResponse.json();
                         sha = fileData.sha;
                         console.log(`تم الحصول على SHA للملف: ${sha.substring(0, 8)}...`);
-                    } else if (getResponse.status === 404) {
-                        console.log('الملف غير موجود، سيتم إنشاؤه');
-                    } else {
-                        console.warn(`فشل في الحصول على SHA: ${getResponse.status}`);
                     }
                 } catch (error) {
-                    console.log('خطأ في الحصول على SHA، سيتم إنشاء الملف:', error.message);
+                    console.log('الملف غير موجود، سيتم إنشاؤه');
                 }
 
                 const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
                 
-                // إنشاء رسالة التزام أكثر وضوحاً
-                const commitMessage = this.generateCommitMessage(data);
-                
                 const body = {
-                    message: commitMessage,
+                    message: `تحديث قنوات التلفزيون - ${new Date().toLocaleString('ar')}`,
                     content: content,
                     branch: branch
                 };
@@ -7557,14 +7168,11 @@ async function updateChannels() {
             console.warn('القنوات غير الصحيحة:', invalidChannels);
         }
         
-        // دمج ذكي للقنوات بدلاً من الاستبدال الكامل
-        const mergedChannels = window.app.mergeChannelsSmartly(data.channels);
-        
         // Update channels in the app
-        window.app.channels = mergedChannels;
+        window.app.channels = data.channels;
         
         // Update filtered channels to match the new channels
-        window.app.filteredChannels = [...mergedChannels];
+        window.app.filteredChannels = [...data.channels];
         
         // Save to localStorage using the app's save method
         window.app.saveChannelsToStorage();
@@ -7585,16 +7193,8 @@ async function updateChannels() {
         // Reset update indicator
         window.app.resetUpdateIndicator();
         
-        // Show success notification with merge details
-        const finalCount = window.app.channels.length;
-        const remoteCount = data.channels.length;
-        
-        let successMessage = `تم تحديث القنوات بنجاح!`;
-        successMessage += `\n• إجمالي القنوات: ${finalCount}`;
-        successMessage += `\n• تم الحفاظ على التغييرات المحلية`;
-        successMessage += `\n• القنوات المحذوفة محلياً لن تعود`;
-        
-        window.app.notifySuccess(successMessage, 5000);
+        // Show success notification
+        window.app.notifySuccess(`تم تحديث القنوات بنجاح! تم جلب ${data.channels.length} قناة`, 5000);
         
         // Log confirmation that data was saved
         console.log('✅ تم حفظ القنوات المحدثة في localStorage بنجاح');

@@ -522,12 +522,22 @@
     },
     {
       "id": 77,
-      "name": "وطن مصر111",
+      "name": "وطن مصر",
       "url": "https://rp.tactivemedia.com/watantv_source/live/playlist.m3u8",
       "logo": "https://iili.io/Kubt2C7.png",
       "category": "religious",
       "country": "مصر",
       "type": "hls",
+      "status": "active"
+    },
+    {
+      "id": 78,
+      "name": "Andalusian Chill",
+      "url": "https://www.youtube.com/watch?v=NNU5zgrrbcg",
+      "logo": "https://www.youtube.com/watch?v=NNU5zgrrbcg",
+      "category": "music",
+      "country": "عالمية",
+      "type": "youtube",
       "status": "active"
     }
   ],
@@ -595,6 +605,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-16T18:04:40.943Z",
+  "lastModified": "2025-09-16T16:22:45.609Z",
   "version": "1.0"
 }
