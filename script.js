@@ -3734,9 +3734,6 @@ class ArabicTVApp {
             // إعادة تحميل الصفحة لتطبيق التغييرات
             this.notifySuccess('تم حذف جميع الكوكيز والبيانات المحفوظة بنجاح!', 'تم الحذف');
             
-            // إغلاق نافذة الإعدادات إذا كانت مفتوحة
-            this.closeSettings();
-            
             // إعادة تحميل الصفحة بعد تأخير قصير
             setTimeout(() => {
                 window.location.reload();
@@ -4963,11 +4960,7 @@ class ArabicTVApp {
 
         this.filteredChannels = filtered;
         console.log('النتيجة النهائية:', this.filteredChannels.length, 'قناة');
-        
-        // Only render channels if we're not in the middle of an update operation
-        if (!this.isUpdatingChannels) {
-            this.renderChannels();
-        }
+        this.renderChannels();
         this.updateChannelStats();
     }
 
@@ -5084,7 +5077,6 @@ class ArabicTVApp {
     }
     
     updateLastUpdateTime() {
-        // Update the main lastUpdateTime element
         const lastUpdateTimeElement = document.getElementById('lastUpdateTime');
         if (lastUpdateTimeElement) {
             const now = new Date();
@@ -5099,22 +5091,6 @@ class ArabicTVApp {
             });
             lastUpdateTimeElement.textContent = timeString;
         }
-        
-        // Update any other last-update-time elements
-        const otherUpdateTimeElements = document.querySelectorAll('.last-update-time');
-        otherUpdateTimeElements.forEach(element => {
-            const now = new Date();
-            const timeString = now.toLocaleString('en-US', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false
-            });
-            element.textContent = timeString;
-        });
     }
 
     // Check for updates
@@ -5197,7 +5173,7 @@ class ArabicTVApp {
             // Reset to normal display
             updateTimeText.innerHTML = `
                 <i class="fas fa-clock"></i>
-                تحديث: <span class="last-update-time">-</span>
+                تحديث: <span id="lastUpdateTime">-</span>
             `;
             // Update the time display
             this.updateLastUpdateTime();
@@ -6405,47 +6381,18 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Update Channels Function
-async function updateChannels(retryCount = 0) {
+async function updateChannels() {
     if (!window.app) {
         console.error('التطبيق غير محمل');
         return;
     }
 
-    // Prevent multiple simultaneous updates
-    if (window.app.isUpdatingChannels) {
-        window.app.notifyWarning('جارٍ تحديث القنوات بالفعل...', 2000);
-        return;
-    }
-
-    // Set updating flag to prevent multiple renders
-    window.app.isUpdatingChannels = true;
-
     try {
-        // Check network connectivity
-        if (!navigator.onLine) {
-            throw new Error('لا يوجد اتصال بالإنترنت');
-        }
-        
-        // Show loading notification
-        window.app.notifyInfo('جارٍ تحديث القنوات...', 2000);
-        
-        // Fetch channels from GitHub with timeout and retry
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
-        
-        const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json', {
-            signal: controller.signal,
-            cache: 'no-cache', // Force fresh data
-            headers: {
-                'Cache-Control': 'no-cache',
-                'Pragma': 'no-cache'
-            }
-        });
-        
-        clearTimeout(timeoutId);
+        // Fetch channels from GitHub
+        const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json');
         
         if (!response.ok) {
-            throw new Error(`خطأ في جلب البيانات: ${response.status} ${response.statusText}`);
+            throw new Error(`خطأ في جلب البيانات: ${response.status}`);
         }
         
         const data = await response.json();
@@ -6463,28 +6410,15 @@ async function updateChannels(retryCount = 0) {
         // Save to localStorage using the app's save method
         window.app.saveChannelsToStorage();
         
-        // Reset updating flag first
-        window.app.isUpdatingChannels = false;
-        
-        // Apply current filters to the new channels (this will call renderChannels internally)
+        // Apply current filters to the new channels
         window.app.applyAllFilters();
         
         // Update channel statistics
         window.app.updateChannelStats();
         
-        // Update sidebar counts
-        window.app.updateSidebarCounts();
-        
-        // Force render to ensure channels are displayed
+        // Reload the channels display
         window.app.renderChannels();
-        
-        // Force a small delay to ensure DOM is updated
-        setTimeout(() => {
-            // Trigger a custom event to notify that channels have been updated
-            window.dispatchEvent(new CustomEvent('channelsUpdated', {
-                detail: { count: data.channels.length }
-            }));
-        }, 100);
+        window.app.updateSidebarCounts();
         
         // Save update time
         const updateTime = new Date().toISOString();
@@ -6507,42 +6441,8 @@ async function updateChannels(retryCount = 0) {
     } catch (error) {
         console.error('خطأ في تحديث القنوات:', error);
         
-        // Reset updating flag
-        window.app.isUpdatingChannels = false;
-        
-        // Determine error type and show appropriate message
-        let errorMessage = 'فشل في تحديث القنوات';
-        
-        if (error.name === 'AbortError') {
-            errorMessage = 'انتهت مهلة الاتصال. يرجى المحاولة مرة أخرى.';
-        } else if (error.message.includes('Failed to fetch')) {
-            errorMessage = 'مشكلة في الاتصال بالإنترنت. يرجى التحقق من الاتصال والمحاولة مرة أخرى.';
-        } else if (error.message.includes('خطأ في جلب البيانات')) {
-            errorMessage = `مشكلة في الخادم: ${error.message}`;
-        } else {
-            errorMessage = `${errorMessage}: ${error.message}`;
-        }
-        
         // Show error notification
-        window.app.notifyError(errorMessage, 7000);
-        
-        // Try to reload channels from localStorage as fallback
-        try {
-            window.app.loadChannelsFromStorage();
-            window.app.applyAllFilters();
-            window.app.renderChannels();
-            window.app.notifyInfo('تم تحميل القنوات المحفوظة محلياً', 3000);
-        } catch (fallbackError) {
-            console.error('فشل في تحميل القنوات المحفوظة:', fallbackError);
-        }
-        
-        // Auto-retry for network errors (max 2 retries)
-        if (retryCount < 2 && (error.name === 'AbortError' || error.message.includes('Failed to fetch'))) {
-            console.log(`محاولة إعادة التحديث رقم ${retryCount + 1}...`);
-            setTimeout(() => {
-                updateChannels(retryCount + 1);
-            }, 3000); // Wait 3 seconds before retry
-        }
+        window.app.notifyError(`فشل في تحديث القنوات: ${error.message}`, 5000);
     }
 }
 
