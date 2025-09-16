@@ -484,15 +484,6 @@
       "category": "religious",
       "country": "مصر",
       "type": "hls"
-    },
-    {
-      "id": 78,
-      "name": "الخليج اليوم",
-      "url": "https://mn-nl.mncdn.com/khalij/khalij/playlist.m3u8",
-      "logo": "https://iili.io/KAv9q7V.png",
-      "category": "documentary",
-      "country": "السعودية",
-      "type": "hls"
     }
   ],
   "favorites": [],
@@ -569,6 +560,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-16T10:34:18.129Z",
+  "lastModified": "2025-09-16T10:37:28.658Z",
   "version": "1.0"
 }
