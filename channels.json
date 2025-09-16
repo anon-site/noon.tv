@@ -552,10 +552,21 @@
     "colorTheme": "default",
     "layoutMode": "compact",
     "fontSize": "small",
-    "animationsEnabled": true,
+    "animationsEnabled": false,
     "compactMode": true,
     "highContrast": false,
-    "borderRadius": "rounded"
+    "borderRadius": "rounded",
+    "notificationsEnabled": false,
+    "notificationDuration": 3,
+    "showCustomControls": true,
+    "notifications": false,
+    "notificationSound": false,
+    "showChannelImages": false,
+    "updateNotifications": true,
+    "successNotifications": true,
+    "errorNotifications": true,
+    "infoNotifications": true,
+    "notificationPosition": "top-right"
   },
   "categories": [
     {
@@ -605,6 +616,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-16T14:12:58.724Z",
+  "lastModified": "2025-09-16T14:52:09.643Z",
   "version": "1.0"
 }
