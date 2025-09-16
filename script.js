@@ -3148,6 +3148,38 @@ class ArabicTVApp {
         this.applySettings();
         
         this.notifySuccess('تم إعادة تعيين جميع التخصيصات!');
+        
+        // تحديث البيانات التلقائي بعد إعادة التعيين
+        setTimeout(async () => {
+            try {
+                this.notifyInfo('جاري تحديث البيانات...', 'تحديث البيانات');
+                
+                // تحميل البيانات الجديدة من GitHub
+                const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json');
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // حفظ البيانات الجديدة محلياً
+                    this.channels = data.channels || [];
+                    this.saveChannelsToStorage();
+                    
+                    // تحديث واجهة المستخدم
+                    this.filteredChannels = [...this.channels];
+                    this.renderChannels();
+                    this.updateChannelStats();
+                    
+                    this.notifySuccess('تم تحديث البيانات بنجاح!', 'تحديث مكتمل');
+                    
+                } else {
+                    throw new Error(`خطأ في جلب البيانات: ${response.status}`);
+                }
+                
+            } catch (error) {
+                console.error('خطأ في تحديث البيانات:', error);
+                this.notifyWarning('فشل في تحديث البيانات، يمكنك المحاولة يدوياً من زر "تحديث القنوات"');
+            }
+        }, 1000);
     }
 
     // Remote Storage UI Management
@@ -4304,13 +4336,53 @@ class ArabicTVApp {
             // حذف Session Storage
             sessionStorage.clear();
             
+            // إعادة تعيين رسالة الترحيب ليعاد عرضها
+            localStorage.removeItem('welcomeShown');
+            
             // إعادة تحميل الصفحة لتطبيق التغييرات
             this.notifySuccess('تم حذف جميع الكوكيز والبيانات المحفوظة بنجاح!', 'تم الحذف');
             
-            // إعادة تحميل الصفحة بعد تأخير قصير
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
+            // تحديث البيانات التلقائي بعد حذف الكوكيز
+            setTimeout(async () => {
+                try {
+                    this.notifyInfo('جاري تحديث البيانات من المصدر الخارجي...', 'تحديث البيانات');
+                    
+                    // تحميل البيانات الجديدة من GitHub
+                    const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json');
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        
+                        // حفظ البيانات الجديدة محلياً
+                        this.channels = data.channels || [];
+                        this.saveChannelsToStorage();
+                        
+                        // تحديث واجهة المستخدم
+                        this.filteredChannels = [...this.channels];
+                        this.renderChannels();
+                        this.updateChannelStats();
+                        
+                        this.notifySuccess('تم تحديث البيانات بنجاح!', 'تحديث مكتمل');
+                        
+                        // إعادة تحميل الصفحة بعد التحديث
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1500);
+                        
+                    } else {
+                        throw new Error(`خطأ في جلب البيانات: ${response.status}`);
+                    }
+                    
+                } catch (error) {
+                    console.error('خطأ في تحديث البيانات:', error);
+                    this.notifyError('فشل في تحديث البيانات، سيتم إعادة تحميل الصفحة', 'خطأ في التحديث');
+                    
+                    // إعادة تحميل الصفحة في حالة فشل التحديث
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                }
+            }, 1000);
             
         } catch (error) {
             console.error('خطأ في حذف الكوكيز:', error);
@@ -4365,25 +4437,6 @@ class ArabicTVApp {
         }
     }
 
-    showWelcomeHelp() {
-        // إغلاق النافذة الترحيبية
-        this.closeWelcomeModal();
-        
-        // فتح القائمة الجانبية
-        this.toggleSidebar();
-        
-        // إظهار رسالة توجيهية مع تسليط الضوء على زر التحديث
-        this.notifyInfo(
-            'يمكنك تحديث القنوات من أيقونة التحديث في الشريط العلوي أو من القائمة الجانبية لتحميل القنوات المتاحة',
-            'تحديث القنوات',
-            6000
-        );
-        
-        // تسليط الضوء على زر تحديث القنوات
-        setTimeout(() => {
-            this.highlightUpdateButton();
-        }, 1000);
-    }
 
     // تسليط الضوء على زر تحديث القنوات
     highlightUpdateButton() {
@@ -4412,7 +4465,7 @@ class ArabicTVApp {
 
     // فحص ما إذا كان يجب إظهار الرسالة الترحيبية
     shouldShowWelcome() {
-        // إظهار الرسالة إذا لم تكن هناك قنوات ولم يسبق للمستخدم رؤية الرسالة
+        // إظهار الرسالة إذا لم يسبق للمستخدم رؤية الرسالة
         const welcomeShown = localStorage.getItem('welcomeShown');
         const hasChannels = this.channels && this.channels.length > 0;
         
@@ -4420,10 +4473,11 @@ class ArabicTVApp {
             welcomeShown: !!welcomeShown,
             hasChannels: hasChannels,
             channelsCount: this.channels ? this.channels.length : 0,
-            shouldShow: !welcomeShown && !hasChannels
+            shouldShow: !welcomeShown
         });
         
-        return !welcomeShown && !hasChannels;
+        // إظهار الرسالة الترحيبية للمستخدمين الجدد فقط
+        return !welcomeShown;
     }
 
     openDiagnosticModal() {

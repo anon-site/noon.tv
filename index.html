@@ -560,6 +560,10 @@
                         <i class="fas fa-undo"></i>
                         إعادة تعيين التخصيصات
                     </button>
+                    <button class="show-welcome-btn" onclick="app.showWelcomeModal()">
+                        <i class="fas fa-info-circle"></i>
+                        عرض رسالة الترحيب
+                    </button>
                     <button class="delete-cookies-btn" onclick="app.deleteAllCookies()">
                         <i class="fas fa-trash-alt"></i>
                         حذف الكوكيز
@@ -1131,7 +1135,7 @@
                     <i class="fas fa-satellite-dish"></i>
                 </div>
                 <h2>مرحباً بك في ANON TV!</h2>
-                <p>منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات</p>
+                <p>منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات مع مزامنة سحابية متطورة</p>
             </div>
             
             <div class="welcome-body">
@@ -1142,6 +1146,16 @@
                     <div class="step-content">
                         <h4>تحديث القنوات التلقائي</h4>
                         <p>يتم فحص التحديثات تلقائياً عند تحميل التطبيق. يمكنك تحديث القنوات يدوياً من خلال زر "تحديث القنوات" في القائمة الجانبية أو من قائمة "المزيد" في الهاتف</p>
+                    </div>
+                </div>
+                
+                <div class="welcome-step">
+                    <div class="step-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <div class="step-content">
+                        <h4>المزامنة السحابية المتطورة</h4>
+                        <p>احفظ قنواتك وإعداداتك في السحابة مع دعم GitHub/GitLab. تتم المزامنة تلقائياً عند إضافة أو تعديل القنوات، ويمكنك الوصول لبياناتك من أي جهاز</p>
                     </div>
                 </div>
                 
@@ -1171,7 +1185,7 @@
                     </div>
                     <div class="step-content">
                         <h4>المفضلة والإدارة</h4>
-                        <p>احفظ القنوات المفضلة للوصول السريع، أو أضف قنوات جديدة من لوحة التحكم. يمكنك أيضاً تصدير واستيراد قوائم القنوات</p>
+                        <p>احفظ القنوات المفضلة للوصول السريع، أو أضف قنوات جديدة من لوحة التحكم. يمكنك أيضاً تصدير واستيراد قوائم القنوات مع مزامنة تلقائية للتغييرات</p>
                     </div>
                 </div>
                 
@@ -1187,10 +1201,6 @@
             </div>
             
             <div class="welcome-footer">
-                <button class="welcome-btn primary" onclick="app.showWelcomeHelp()">
-                    <i class="fas fa-arrow-left"></i>
-                    ابدأ الآن
-                </button>
                 <button class="welcome-btn secondary" onclick="app.closeWelcomeModal()">
                     <i class="fas fa-times"></i>
                     إغلاق
