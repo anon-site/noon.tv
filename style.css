@@ -12015,5 +12015,77 @@ body[data-theme="light"] .more-menu-item:hover {
     }
 }
 
+/* Cloud Sync Prompt Notification Styles */
+.cloud-sync-prompt {
+    border-left: 4px solid #8b5cf6;
+    background: linear-gradient(135deg, var(--background-dark) 0%, rgba(139, 92, 246, 0.1) 100%);
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+.cloud-sync-prompt .notification-icon {
+    color: #8b5cf6;
+}
+
+.notification-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+.notification-actions .btn-primary,
+.notification-actions .btn-secondary {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    min-width: 0;
+}
+
+.notification-actions .btn-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.notification-actions .btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.notification-actions .btn-secondary {
+    background: var(--background-light);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.notification-actions .btn-secondary:hover {
+    background: var(--background-dark);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+}
+
+/* Responsive styles for notification actions */
+@media (max-width: 480px) {
+    .notification-actions {
+        flex-direction: column;
+        gap: 6px;
+    }
+    
+    .notification-actions .btn-primary,
+    .notification-actions .btn-secondary {
+        flex: none;
+        width: 100%;
+        justify-content: center;
+    }
+}
+
 
 

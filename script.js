@@ -195,6 +195,13 @@ class ArabicTVApp {
             if (savedPassword) {
                 this.adminPassword = savedPassword;
                 console.log('تم تحميل كلمة المرور المحفوظة');
+                
+                // تحذير المستخدم إذا لم تكن المزامنة السحابية مفعلة
+                if (!this.remoteStorage.enabled) {
+                    setTimeout(() => {
+                        this.notifyWarning('كلمة المرور محفوظة محلياً فقط. فعّل المزامنة السحابية لاستخدامها على جميع الأجهزة');
+                    }, 3000);
+                }
             } else {
                 console.log('لا توجد كلمة مرور محفوظة، سيتم استخدام كلمة المرور الافتراضية');
             }
@@ -1680,11 +1687,37 @@ class ArabicTVApp {
             // إظهار رسالة نجاح
             this.notifySuccess('تم تغيير كلمة المرور بنجاح');
             
-            // إشعار إضافي حول المزامنة السحابية
-            if (this.remoteStorage.enabled) {
+            // محاولة المزامنة التلقائية مع السحابة
+            if (this.remoteStorage.enabled && this.remoteStorage.repository && this.remoteStorage.token) {
+                this.notifyInfo('جارٍ مزامنة كلمة المرور الجديدة مع السحابة...');
+                
+                try {
+                    const syncSuccess = await this.syncToRemote();
+                    if (syncSuccess) {
+                        setTimeout(() => {
+                            this.notifySuccess('تم مزامنة كلمة المرور الجديدة مع جميع الأجهزة المتصلة');
+                        }, 1000);
+                    } else {
+                        setTimeout(() => {
+                            this.notifyWarning('تم تغيير كلمة المرور محلياً، لكن فشلت المزامنة مع السحابة. تأكد من إعدادات المزامنة السحابية');
+                        }, 1000);
+                    }
+                } catch (syncError) {
+                    console.error('خطأ في مزامنة كلمة المرور:', syncError);
+                    setTimeout(() => {
+                        this.notifyWarning('تم تغيير كلمة المرور محلياً، لكن فشلت المزامنة مع السحابة');
+                    }, 1000);
+                }
+            } else {
+                // إشعار المستخدم بضرورة تفعيل المزامنة السحابية
                 setTimeout(() => {
-                    this.notifyInfo('كلمة المرور الجديدة ستُزامن تلقائياً مع جميع الأجهزة المتصلة');
+                    this.notifyWarning('كلمة المرور تغيرت محلياً فقط. لاستخدامها على أجهزة أخرى، فعّل المزامنة السحابية من إعدادات عامة');
                 }, 2000);
+                
+                // إظهار زر سريع لتفعيل المزامنة السحابية
+                setTimeout(() => {
+                    this.showCloudSyncPrompt();
+                }, 4000);
             }
             
             // تحديث معلومات الأمان
@@ -1706,6 +1739,65 @@ class ArabicTVApp {
         this.updatePasswordStrength('');
         this.updatePasswordRequirements('');
         this.updatePasswordMatch('', '');
+    }
+
+    // دالة إظهار نافذة سريعة لتفعيل المزامنة السحابية
+    showCloudSyncPrompt() {
+        const notification = document.createElement('div');
+        notification.className = 'notification cloud-sync-prompt';
+        notification.innerHTML = `
+            <div class="notification-content">
+                <div class="notification-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <div class="notification-text">
+                    <h4>فعّل المزامنة السحابية</h4>
+                    <p>للاستفادة من كلمة المرور الجديدة على جميع أجهزتك</p>
+                </div>
+                <div class="notification-actions">
+                    <button class="btn-primary" onclick="app.openSettings(); app.closeNotification(this)">
+                        <i class="fas fa-cog"></i>
+                        الإعدادات
+                    </button>
+                    <button class="btn-secondary" onclick="app.closeNotification(this)">
+                        <i class="fas fa-times"></i>
+                        لاحقاً
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('notificationsContainer').appendChild(notification);
+        
+        // إظهار الإشعار مع تأثير
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 100);
+        
+        // إخفاء الإشعار تلقائياً بعد 10 ثوان
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }
+        }, 10000);
+    }
+
+    // دالة إغلاق الإشعارات
+    closeNotification(button) {
+        const notification = button.closest('.notification');
+        if (notification) {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }
     }
 
     // دالة إلغاء تغيير كلمة المرور
@@ -2258,6 +2350,10 @@ class ArabicTVApp {
                 if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
                     this.syncToRemote().catch(error => {
                         console.error('فشل في المزامنة التلقائية:', error);
+                        // إظهار إشعار للمستخدم حول فشل المزامنة التلقائية
+                        setTimeout(() => {
+                            this.notifyWarning('فشلت المزامنة التلقائية. يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.');
+                        }, 2000);
                     });
                 }
             } else {
@@ -2379,7 +2475,20 @@ class ArabicTVApp {
             }
         } catch (error) {
             console.error('خطأ في المزامنة إلى المستودع:', error);
-            this.notifyError('خطأ في المزامنة: ' + error.message);
+            
+            // رسائل خطأ أكثر وضوحاً للمستخدم
+            let errorMessage = 'خطأ في المزامنة: ';
+            if (error.message.includes('409')) {
+                errorMessage += 'تضارب في الإصدارات - تم تحديث الملف من مكان آخر. يرجى المحاولة مرة أخرى.';
+            } else if (error.message.includes('401') || error.message.includes('403')) {
+                errorMessage += 'مشكلة في الصلاحيات - تحقق من رمز الوصول (Token) وإعدادات المستودع.';
+            } else if (error.message.includes('404')) {
+                errorMessage += 'المستودع غير موجود - تحقق من اسم المستودع والإعدادات.';
+            } else {
+                errorMessage += error.message;
+            }
+            
+            this.notifyError(errorMessage);
             return false;
         }
     }
@@ -2414,7 +2523,20 @@ class ArabicTVApp {
             }
         } catch (error) {
             console.error('خطأ في المزامنة من المستودع:', error);
-            this.notifyError('خطأ في تحميل البيانات: ' + error.message);
+            
+            // رسائل خطأ أكثر وضوحاً للمستخدم
+            let errorMessage = 'خطأ في تحميل البيانات: ';
+            if (error.message.includes('401') || error.message.includes('403')) {
+                errorMessage += 'مشكلة في الصلاحيات - تحقق من رمز الوصول (Token) وإعدادات المستودع.';
+            } else if (error.message.includes('404')) {
+                errorMessage += 'المستودع أو الملف غير موجود - تحقق من اسم المستودع والإعدادات.';
+            } else if (error.message.includes('NetworkError') || error.message.includes('fetch')) {
+                errorMessage += 'مشكلة في الاتصال بالإنترنت - تحقق من اتصالك وحاول مرة أخرى.';
+            } else {
+                errorMessage += error.message;
+            }
+            
+            this.notifyError(errorMessage);
             return false;
         }
     }
@@ -2466,52 +2588,85 @@ class ArabicTVApp {
     async uploadToGitHub(data, repository, token, branch, filename) {
         const url = `https://api.github.com/repos/${repository}/contents/${filename}`;
         
-        // First, try to get the current file SHA
-        let sha = null;
-        try {
-            const getResponse = await fetch(url, {
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Accept': 'application/vnd.github.v3+json'
-                }
-            });
-            
-            if (getResponse.ok) {
-                const fileData = await getResponse.json();
-                sha = fileData.sha;
-            }
-        } catch (error) {
-            console.log('الملف غير موجود، سيتم إنشاؤه');
-        }
-
-        const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+        // محاولة التحديث مع إعادة المحاولة في حالة التضارب
+        const maxRetries = 3;
+        let lastError = null;
         
-        const body = {
-            message: `تحديث قنوات التلفزيون - ${new Date().toLocaleString('ar')}`,
-            content: content,
-            branch: branch
-        };
+        for (let attempt = 0; attempt < maxRetries; attempt++) {
+            try {
+                // الحصول على SHA الحالي للملف في كل محاولة
+                let sha = null;
+                try {
+                    const getResponse = await fetch(url, {
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Accept': 'application/vnd.github.v3+json'
+                        }
+                    });
+                    
+                    if (getResponse.ok) {
+                        const fileData = await getResponse.json();
+                        sha = fileData.sha;
+                        console.log(`تم الحصول على SHA للملف: ${sha.substring(0, 8)}...`);
+                    }
+                } catch (error) {
+                    console.log('الملف غير موجود، سيتم إنشاؤه');
+                }
 
-        if (sha) {
-            body.sha = sha;
+                const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+                
+                const body = {
+                    message: `تحديث قنوات التلفزيون - ${new Date().toLocaleString('ar')}`,
+                    content: content,
+                    branch: branch
+                };
+
+                if (sha) {
+                    body.sha = sha;
+                }
+
+                const response = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(body)
+                });
+
+                if (response.ok) {
+                    console.log('تم رفع البيانات بنجاح');
+                    return true;
+                }
+
+                // التعامل مع خطأ 409 (تضارب في الإصدارات)
+                if (response.status === 409) {
+                    const errorData = await response.json();
+                    console.warn(`تضارب في الإصدارات (محاولة ${attempt + 1}/${maxRetries}):`, errorData.message);
+                    
+                    if (attempt < maxRetries - 1) {
+                        // انتظار قصير قبل إعادة المحاولة
+                        await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+                        continue;
+                    } else {
+                        lastError = new Error(`فشل في المزامنة بعد ${maxRetries} محاولات بسبب تضارب في الإصدارات. يرجى المحاولة مرة أخرى.`);
+                    }
+                } else {
+                    const error = await response.text();
+                    lastError = new Error(`GitHub API Error: ${response.status} - ${error}`);
+                    break; // لا نعيد المحاولة للأخطاء الأخرى
+                }
+            } catch (error) {
+                lastError = error;
+                if (attempt < maxRetries - 1) {
+                    console.warn(`خطأ في المحاولة ${attempt + 1}:`, error.message);
+                    await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+                }
+            }
         }
-
-        const response = await fetch(url, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `token ${token}`,
-                'Accept': 'application/vnd.github.v3+json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(body)
-        });
-
-        if (!response.ok) {
-            const error = await response.text();
-            throw new Error(`GitHub API Error: ${response.status} - ${error}`);
-        }
-
-        return true;
+        
+        throw lastError;
     }
 
     async downloadFromGitHub(repository, token, branch, filename) {
