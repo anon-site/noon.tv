@@ -430,7 +430,8 @@
       "logo": "https://upload.wikimedia.org/wikipedia/ar/0/04/%D9%82%D9%86%D8%A7%D8%A9_%D8%A7%D9%84%D9%85%D9%87%D8%B1%D9%8A%D8%A9.png",
       "category": "entertainment",
       "country": "تركيا",
-      "type": "hls"
+      "type": "hls",
+      "status": "inactive"
     },
     {
       "id": 72,
@@ -561,6 +562,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-16T10:44:12.781Z",
+  "lastModified": "2025-09-16T10:48:50.139Z",
   "version": "1.0"
 }
