@@ -423,15 +423,6 @@
       "type": "hls"
     },
     {
-      "id": 69,
-      "name": "Action 24",
-      "url": "https://actionlive.siliconweb.com/actionabr/actiontv/playlist.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/8/88/Action24-logo-small.png",
-      "category": "entertainment",
-      "country": "اليونان",
-      "type": "hls"
-    },
-    {
       "id": 70,
       "name": "راجعين",
       "url": "https://mn-nl.mncdn.com/palabroad/live/playlist.m3u8",
@@ -578,6 +569,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-16T10:14:54.709Z",
+  "lastModified": "2025-09-16T10:15:49.118Z",
   "version": "1.0"
 }
