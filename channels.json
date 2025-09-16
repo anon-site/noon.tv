@@ -609,6 +609,16 @@
       "country": "العراق",
       "type": "hls",
       "status": "active"
+    },
+    {
+      "id": 86,
+      "name": "براعم",
+      "url": "https://games1.elahmad.xyz/tv755_www.elahmad.com_baraem/index.m3u8?token=e6672bc667eb3bd0254bf5293ca928160ee00546-923722675de0b12656810ed63dc28c00-1758076457-1758065657",
+      "logo": "https://games1.elahmad.xyz/tv755_www.elahmad.com_baraem/index.m3u8?token=e6672bc667eb3bd0254bf5293ca928160ee00546-923722675de0b12656810ed63dc28c00-1758076457-1758065657",
+      "category": "kids",
+      "country": "قطر",
+      "type": "hls",
+      "status": "active"
     }
   ],
   "favorites": [],
@@ -675,6 +685,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-17T09:36:52.340Z",
+  "lastModified": "2025-09-17T09:39:37.692Z",
   "version": "1.0"
 }
