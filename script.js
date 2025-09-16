@@ -545,6 +545,68 @@ class ArabicTVApp {
         });
     }
 
+    bindStatusToggleEvents() {
+        // إزالة الأحداث السابقة لتجنب التكرار
+        document.querySelectorAll('.status-toggle').forEach(toggle => {
+            const newToggle = toggle.cloneNode(true);
+            toggle.parentNode.replaceChild(newToggle, toggle);
+        });
+        
+        // ربط الأحداث الجديدة
+        document.querySelectorAll('.status-toggle').forEach(toggle => {
+            toggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const status = toggle.dataset.status;
+                this.setChannelStatus(status);
+            });
+        });
+    }
+
+    setChannelStatus(status) {
+        // تحديث القيمة المخفية
+        const statusInput = document.getElementById('channelStatus');
+        if (statusInput) {
+            statusInput.value = status;
+        }
+        
+        // تحديث واجهة المستخدم
+        this.updateStatusToggleUI(status);
+    }
+
+    updateStatusToggleUI(status) {
+        // التأكد من وجود العناصر
+        const toggles = document.querySelectorAll('.status-toggle');
+        if (toggles.length === 0) {
+            return;
+        }
+        
+        // إزالة الكلاس النشط من جميع التبديلات
+        toggles.forEach(toggle => {
+            toggle.classList.remove('active');
+        });
+        
+        // إضافة الكلاس النشط للتبديل المحدد
+        const activeToggle = document.querySelector(`[data-status="${status}"]`);
+        if (activeToggle) {
+            activeToggle.classList.add('active');
+        }
+        
+        // تحديث الأيقونات
+        document.querySelectorAll('.status-icon').forEach(icon => {
+            icon.classList.remove('active', 'inactive');
+            const toggle = icon.closest('.status-toggle');
+            if (toggle) {
+                const toggleStatus = toggle.dataset.status;
+                if (toggleStatus === status) {
+                    icon.classList.add('active');
+                } else {
+                    icon.classList.add('inactive');
+                }
+            }
+        });
+    }
+
     bindAdminEvents() {
         // Admin tabs - إضافة تأخير للتأكد من وجود العناصر
         setTimeout(() => {
@@ -1291,6 +1353,7 @@ class ArabicTVApp {
         // إعادة ربط أحداث التبويبات عند فتح لوحة التحكم
         setTimeout(() => {
             this.bindAdminTabEvents();
+            this.bindStatusToggleEvents();
         }, 50);
     }
 
@@ -1464,13 +1527,23 @@ class ArabicTVApp {
             // إنشاء placeholder مصغر للوحة التحكم
             const adminPlaceholder = this.createAdminLogoPlaceholder(channel);
             
+            // تحديد حالة القناة
+            const isActive = channel.status === 'active';
+            const statusClass = isActive ? 'active' : 'inactive';
+            const statusIcon = isActive ? 'fas fa-circle' : 'fas fa-circle';
+            
             item.innerHTML = `
                 <div class="admin-channel-info">
                     <i class="fas fa-grip-vertical drag-handle"></i>
                     <img src="${channel.logo}" alt="${channel.name}" class="admin-channel-logo"
                          onerror="this.src='${adminPlaceholder}'; this.classList.add('admin-placeholder-logo');">
                     <div>
-                        <h4>${channel.name}</h4>
+                        <div class="admin-channel-title-row">
+                            <h4>${channel.name}</h4>
+                            <div class="admin-channel-status-indicator ${statusClass}" title="${isActive ? 'القناة تعمل' : 'القناة لا تعمل'}">
+                                <i class="${statusIcon}"></i>
+                            </div>
+                        </div>
                         <p style="color: var(--text-secondary); font-size: 0.9rem;">${this.getCategoryName(channel.category)} • ${channel.country}</p>
                     </div>
                 </div>
@@ -1563,6 +1636,9 @@ class ArabicTVApp {
             return;
         }
 
+        // Get status from form
+        const status = document.getElementById('channelStatus').value || 'active';
+        
         // Add new channel
         const newChannel = {
             id: Math.max(...this.channels.map(c => c.id), 0) + 1, // Generate proper unique ID
@@ -1571,7 +1647,8 @@ class ArabicTVApp {
             logo: logo || '', // Allow empty logo
             category: category,
             country: country,
-            type: type
+            type: type,
+            status: status
         };
 
         this.channels.push(newChannel);
@@ -1606,6 +1683,9 @@ class ArabicTVApp {
         
         // Reset detected URL type
         this.detectedUrlType = null;
+        
+        // Reset status toggle
+        this.updateStatusToggleUI('active');
         
         // Reset button text and class
         const submitBtn = document.querySelector('#addChannelForm button[type="submit"]');
@@ -1655,11 +1735,35 @@ class ArabicTVApp {
         // Switch to add tab and populate with channel data
         this.switchAdminTab('add');
         
-        document.getElementById('channelName').value = channel.name;
-        document.getElementById('channelUrl').value = channel.url;
-        document.getElementById('channelLogo').value = channel.logo;
-        document.getElementById('channelCategory').value = channel.category;
-        document.getElementById('channelCountryInput').value = channel.country;
+        // Wait for tab switch to complete
+        setTimeout(() => {
+            document.getElementById('channelName').value = channel.name;
+            document.getElementById('channelUrl').value = channel.url;
+            document.getElementById('channelLogo').value = channel.logo;
+            document.getElementById('channelCategory').value = channel.category;
+            document.getElementById('channelCountryInput').value = channel.country;
+            document.getElementById('channelStatus').value = channel.status || 'active';
+            
+            // Change form title and button text
+            const formTitle = document.querySelector('#addTab h5, #addTab .form-title');
+            if (formTitle) {
+                formTitle.textContent = 'تعديل القناة';
+            }
+            
+            const submitBtn = document.querySelector('#addChannelForm button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.textContent = 'حفظ التعديلات';
+                submitBtn.className = 'add-btn edit-mode';
+            }
+            
+            // Re-bind status toggle events for the new form
+            this.bindStatusToggleEvents();
+            
+            // Update status toggle UI after binding events
+            setTimeout(() => {
+                this.updateStatusToggleUI(channel.status || 'active');
+            }, 100);
+        }, 300);
         
         // Clear any uploaded logo preview when editing
         removeLogoPreview();
@@ -1716,6 +1820,9 @@ class ArabicTVApp {
             return;
         }
 
+        // Get status from form
+        const status = document.getElementById('channelStatus').value || 'active';
+        
         // Update the channel
         this.channels[channelIndex] = {
             ...this.channels[channelIndex],
@@ -1724,7 +1831,8 @@ class ArabicTVApp {
             logo: logo || '', // Allow empty logo
             category: category,
             country: country,
-            type: type
+            type: type,
+            status: status
         };
 
         // Save and refresh
@@ -5085,11 +5193,21 @@ class ArabicTVApp {
         const heartClass = isFavorited ? 'fas fa-heart' : 'far fa-heart';
         const favoritedClass = isFavorited ? 'favorited' : '';
         
+        // تحديد حالة القناة
+        const isActive = channel.status === 'active';
+        const statusClass = isActive ? 'active' : 'inactive';
+        const statusIcon = isActive ? 'fas fa-circle' : 'fas fa-circle';
+        
         card.innerHTML = `
             <img src="${channel.logo}" alt="${channel.name}" class="channel-logo" 
                  onerror="this.src='${logoPlaceholder}'; this.classList.add('placeholder-logo');">
             <div class="channel-info">
-                <h3 class="channel-name">${channel.name}</h3>
+                <div class="channel-title-row">
+                    <h3 class="channel-name">${channel.name}</h3>
+                    <div class="channel-status-indicator ${statusClass}" title="${isActive ? 'القناة تعمل' : 'القناة لا تعمل'}">
+                        <i class="${statusIcon}"></i>
+                    </div>
+                </div>
                 <div class="channel-meta">
                     <span class="channel-country">${channel.country}</span>
                     <span class="channel-category">${this.getCategoryName(channel.category)}</span>
@@ -5104,7 +5222,7 @@ class ArabicTVApp {
                 <i class="${heartClass}"></i>
             </button>
             <div class="channel-actions" ${!this.isLoggedIn ? 'style="display: none;"' : ''}>
-                <button class="channel-edit-btn" onclick="app.editChannel(${channel.id}, event)" title="تعديل القناة">
+                <button class="channel-edit-btn" onclick="app.editChannelFromCard(${channel.id}, event)" title="تعديل القناة">
                     <i class="fas fa-edit"></i>
                 </button>
                 <button class="channel-delete-btn" onclick="app.deleteChannel(${channel.id}, event)" title="حذف القناة">
@@ -5117,8 +5235,8 @@ class ArabicTVApp {
         return card;
     }
 
-    // Edit Channel Function
-    editChannel(channelId, event) {
+    // Edit Channel Function (from channel card)
+    editChannelFromCard(channelId, event) {
         event.stopPropagation(); // Prevent triggering the card click
         
         const channel = this.channels.find(c => c.id === channelId);
@@ -5140,6 +5258,7 @@ class ArabicTVApp {
             document.getElementById('channelLogo').value = channel.logo;
             document.getElementById('channelCategory').value = channel.category;
             document.getElementById('channelCountryInput').value = channel.country;
+            document.getElementById('channelStatus').value = channel.status || 'active';
             
             // Change form title and button text
             const formTitle = document.querySelector('#addTab h5, #addTab .form-title');
@@ -5155,6 +5274,12 @@ class ArabicTVApp {
             
             // Store the channel ID for editing
             this.editingChannelId = channelId;
+            
+            // Update status toggle UI
+            setTimeout(() => {
+                this.bindStatusToggleEvents();
+                this.updateStatusToggleUI(channel.status || 'active');
+            }, 100);
         }, 100);
     }
 
