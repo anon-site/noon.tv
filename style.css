@@ -4063,6 +4063,35 @@ body[data-theme="light"] .logout-btn:hover {
     transform: none !important;
 }
 
+/* Delete Cookies Button in Settings */
+.delete-cookies-btn {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    border: 1px solid #dc2626;
+    color: #ffffff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    width: 100%;
+    justify-content: center;
+}
+
+.delete-cookies-btn:hover {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(220, 38, 38, 0.3);
+}
+
+.delete-cookies-btn i {
+    font-size: 16px;
+}
+
 .settings-body {
     padding: 2rem;
     max-height: 400px;
@@ -5263,12 +5292,9 @@ body[data-theme="light"] .notification-close:hover {
     font-size: 1rem;
     backdrop-filter: blur(10px);
     z-index: 2;
-    opacity: 0;
-}
-
-.channel-card:hover .favorite-btn {
     opacity: 1;
 }
+
 
 .favorite-btn:hover {
     background: var(--highlight-color);
