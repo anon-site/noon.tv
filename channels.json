@@ -418,7 +418,7 @@
       "category": "religious",
       "country": "الكويت",
       "type": "hls",
-      "status": "active"
+      "status": "inactive"
     },
     {
       "id": 64,
@@ -615,6 +615,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-16T11:20:16.619Z",
+  "lastModified": "2025-09-16T11:22:43.692Z",
   "version": "1.0"
 }
