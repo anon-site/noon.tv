@@ -601,16 +601,6 @@
       "status": "active"
     },
     {
-      "id": 85,
-      "name": "القرآن",
-      "url": "https://ktvlive.online/stream/hls/ch1.m3u8",
-      "logo": "https://play-lh.googleusercontent.com/4AcyPow0b0K0D2g48Oi2kWZOC-kAoHHeclz-xeSpBoBKMBcQ65fhD7fxIaW8ZS0CqrZU",
-      "category": "religious",
-      "country": "العراق",
-      "type": "hls",
-      "status": "active"
-    },
-    {
       "id": 86,
       "name": "براعم",
       "url": "https://games1.elahmad.xyz/tv755_www.elahmad.com_baraem/index.m3u8?token=a9cf5f6087e9f69a73cb9452846c937176bb5470-f03f489156ca0267526ca02e111d1ecd-1758076830-1758066030",
@@ -695,6 +685,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-17T09:46:10.734Z",
+  "lastModified": "2025-09-17T09:47:43.468Z",
   "version": "1.0"
 }
