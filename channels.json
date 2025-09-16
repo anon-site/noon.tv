@@ -40,7 +40,7 @@
       "id": 57,
       "name": "البحرين قرآن",
       "url": "https://5c7b683162943.streamlock.net/live/ngrp:bahrainquran_all/playlist.m3u8",
-      "logo": "https://qanawat.taghtia.com/assets/channels/bahrain-quran.png",
+      "logo": "https://iili.io/KAkOtje.png",
       "category": "religious",
       "country": "البحرين",
       "type": "hls"
@@ -560,6 +560,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-16T10:15:52.957Z",
+  "lastModified": "2025-09-16T10:17:58.772Z",
   "version": "1.0"
 }
