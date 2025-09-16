@@ -589,6 +589,16 @@
       "country": "الكويت",
       "type": "hls",
       "status": "active"
+    },
+    {
+      "id": 84,
+      "name": "KTV Arabe",
+      "url": "https://kwtktvata.cdn.mangomolo.com/ktva/smil:tktva.stream.smil/chunklist.m3u8",
+      "logo": "https://i.imgur.com/jg3VAxO.png",
+      "category": "entertainment",
+      "country": "الكويت",
+      "type": "hls",
+      "status": "active"
     }
   ],
   "favorites": [],
@@ -655,6 +665,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-17T09:22:24.174Z",
+  "lastModified": "2025-09-17T09:24:10.454Z",
   "version": "1.0"
 }
