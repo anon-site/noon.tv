@@ -291,7 +291,7 @@
       "id": 51,
       "name": "Asharq Documentary",
       "url": "https://svs.itworkscdn.net/asharqdocumentarylive/asharqdocumentary.smil/playlist_dvr.m3u8",
-      "logo": "https://iili.io/KzLkFPn.png",
+      "logo": "https://iili.io/KAkX0FI.png",
       "category": "documentary",
       "country": "السعودية",
       "type": "hls"
@@ -578,6 +578,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-16T10:06:00.910Z",
+  "lastModified": "2025-09-16T10:14:41.243Z",
   "version": "1.0"
 }
