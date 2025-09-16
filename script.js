@@ -2128,6 +2128,16 @@ class ArabicTVApp {
         
         this.resetAddChannelForm();
         this.showNotification('success', 'تم إضافة القناة', 'تم إضافة القناة بنجاح وحفظها!');
+        
+        // المزامنة التلقائية مع السحابة
+        if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
+            this.syncToRemote().catch(error => {
+                console.error('فشل في المزامنة التلقائية بعد إضافة القناة:', error);
+                setTimeout(() => {
+                    this.notifyWarning('تم إضافة القناة محلياً، لكن فشلت المزامنة التلقائية. يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.');
+                }, 2000);
+            });
+        }
     }
 
     resetAddChannelForm() {
@@ -2315,6 +2325,16 @@ class ArabicTVApp {
         
         this.showNotification('success', 'تم تحديث القناة', 'تم تحديث القناة وحفظ التغييرات بنجاح!');
         
+        // المزامنة التلقائية مع السحابة
+        if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
+            this.syncToRemote().catch(error => {
+                console.error('فشل في المزامنة التلقائية بعد تحديث القناة:', error);
+                setTimeout(() => {
+                    this.notifyWarning('تم تحديث القناة محلياً، لكن فشلت المزامنة التلقائية. يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.');
+                }, 2000);
+            });
+        }
+        
         // Switch back to channels list tab
         this.switchAdminTab('channels');
     }
@@ -2348,6 +2368,16 @@ class ArabicTVApp {
             
             // Show success notification
             this.showNotification('success', 'تم حذف القناة', `تم حذف قناة "${channel.name}" بنجاح`);
+            
+            // المزامنة التلقائية مع السحابة
+            if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
+                this.syncToRemote().catch(error => {
+                    console.error('فشل في المزامنة التلقائية بعد حذف القناة:', error);
+                    setTimeout(() => {
+                        this.notifyWarning('تم حذف القناة محلياً، لكن فشلت المزامنة التلقائية. يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.');
+                    }, 2000);
+                });
+            }
         }
     }
 
@@ -4762,6 +4792,16 @@ class ArabicTVApp {
             this.updateSaveOrderButton();
             
             this.notifySuccess('تم حفظ الترتيب الجديد للقنوات بنجاح!');
+            
+            // المزامنة التلقائية مع السحابة
+            if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
+                this.syncToRemote().catch(error => {
+                    console.error('فشل في المزامنة التلقائية بعد حفظ الترتيب:', error);
+                    setTimeout(() => {
+                        this.notifyWarning('تم حفظ الترتيب محلياً، لكن فشلت المزامنة التلقائية. يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.');
+                    }, 2000);
+                });
+            }
             
         } catch (error) {
             console.error('خطأ في حفظ ترتيب القنوات:', error);
