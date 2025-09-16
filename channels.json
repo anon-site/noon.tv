@@ -613,7 +613,7 @@
     {
       "id": 86,
       "name": "براعم",
-      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-spacetoon/d8382fb9ab4b2307058f12c7ea90db54/manifest/video/1080p2400kbps/video.m3u8",
+      "url": "https://games1.elahmad.xyz/tv755_www.elahmad.com_baraem/index.m3u8?token=a9cf5f6087e9f69a73cb9452846c937176bb5470-f03f489156ca0267526ca02e111d1ecd-1758076830-1758066030",
       "logo": "https://games1.elahmad.xyz/tv755_www.elahmad.com_baraem/index.m3u8?token=e6672bc667eb3bd0254bf5293ca928160ee00546-923722675de0b12656810ed63dc28c00-1758076457-1758065657",
       "category": "kids",
       "country": "قطر",
@@ -695,6 +695,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-17T09:44:24.146Z",
+  "lastModified": "2025-09-17T09:45:16.532Z",
   "version": "1.0"
 }
