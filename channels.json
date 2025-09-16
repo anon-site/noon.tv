@@ -539,6 +539,16 @@
       "country": "مصر",
       "type": "hls",
       "status": "active"
+    },
+    {
+      "id": 78,
+      "name": "Andalusian Chill",
+      "url": "https://www.youtube.com/watch?v=NNU5zgrrbcg",
+      "logo": "https://www.youtube.com/watch?v=NNU5zgrrbcg",
+      "category": "music",
+      "country": "عالمية",
+      "type": "youtube",
+      "status": "active"
     }
   ],
   "favorites": [],
@@ -605,6 +615,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-16T15:44:27.910Z",
+  "lastModified": "2025-09-16T15:45:50.722Z",
   "version": "1.0"
 }
