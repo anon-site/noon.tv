@@ -414,15 +414,6 @@
       "type": "hls"
     },
     {
-      "id": 68,
-      "name": "A Punt",
-      "url": "https://bcovlive-a.akamaihd.net/8499d938ef904e39b58a4adec2ddeada/eu-west-1/6057955885001/playlist_dvr.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/8/82/Logotip_d%27%C3%80_Punt_%282017-%29.svg",
-      "category": "news",
-      "country": "إسبانيا",
-      "type": "hls"
-    },
-    {
       "id": 70,
       "name": "راجعين",
       "url": "https://mn-nl.mncdn.com/palabroad/live/playlist.m3u8",
@@ -569,6 +560,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-16T10:15:49.118Z",
+  "lastModified": "2025-09-16T10:15:52.957Z",
   "version": "1.0"
 }
