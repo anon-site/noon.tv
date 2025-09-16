@@ -604,7 +604,7 @@
       "id": 85,
       "name": "القرآن",
       "url": "https://ktvlive.online/stream/hls/ch1.m3u8",
-      "logo": "https://e7.pngegg.com/pngimages/447/386/png-clipart-quran-2012-the-english-commentary-of-the-holy-quran-history-of-the-quran-tafsir-islam-islam-the-english-commentary-of-the-holy-quran-history-of-the-quran-thumbnail.png",
+      "logo": "https://play-lh.googleusercontent.com/4AcyPow0b0K0D2g48Oi2kWZOC-kAoHHeclz-xeSpBoBKMBcQ65fhD7fxIaW8ZS0CqrZU",
       "category": "religious",
       "country": "العراق",
       "type": "hls",
@@ -675,6 +675,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-17T09:36:31.678Z",
+  "lastModified": "2025-09-17T09:36:52.300Z",
   "version": "1.0"
 }
