@@ -87,7 +87,13 @@ class ArabicTVApp {
         
         // Attempt auto-sync if enabled
         if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
-            this.syncFromRemote();
+            // First check for updates from GitHub, then sync from remote storage
+            this.checkForUpdates().then(hasUpdates => {
+                if (!hasUpdates) {
+                    // Only sync from remote if no GitHub updates available
+                    this.syncFromRemote();
+                }
+            });
         }
         this.syncMobileNavTabs();
         this.initializeNewFeatures(); // Initialize new navigation features (includes loadCategories)
@@ -1772,7 +1778,7 @@ class ArabicTVApp {
                 </div>
                 <div class="notification-text">
                     <h4>فعّل المزامنة السحابية</h4>
-                    <p>للاستفادة من كلمة المرور الجديدة على جميع أجهزتك</p>
+                    <p>للاستفادة من مزامنة كلمة المرور والقنوات بين جميع أجهزتك. عند التحديث من GitHub، ستتم مزامنة التحديثات تلقائياً مع جميع الأجهزة المتصلة.</p>
                 </div>
                 <div class="notification-actions">
                     <button class="btn-primary" onclick="app.openSettings(); app.closeNotification(this)">
@@ -5801,6 +5807,12 @@ class ArabicTVApp {
             if (remoteDate > localDate) {
                 console.log('🆕 يوجد تحديث جديد متاح!');
                 this.showUpdateAvailableNotification(remoteDate);
+                
+                // إذا كانت المزامنة السحابية مفعلة، قم بإشعار المستخدم بإمكانية المزامنة التلقائية
+                if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
+                    console.log('💡 يمكن تحديث القنوات ومزامنتها تلقائياً مع السحابة');
+                }
+                
                 return true;
             } else {
                 console.log('✅ البيانات محدثة');
@@ -5827,11 +5839,17 @@ class ArabicTVApp {
             `;
         }
 
-        // Show notification
+        // Show notification with cloud sync info
+        let notificationMessage = 'يوجد تحديث جديد للقنوات متاح! اضغط على "تحديث الآن" لتحميل أحدث القنوات.';
+        
+        if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
+            notificationMessage += ' سيتم مزامنة التحديثات تلقائياً مع جميع الأجهزة المتصلة.';
+        }
+
         this.notifyInfo(
-            'يوجد تحديث جديد للقنوات متاح! اضغط على "تحديث الآن" لتحميل أحدث القنوات.',
+            notificationMessage,
             'تحديث جديد متاح',
-            8000
+            10000
         );
 
         // Add pulse effect to update button
@@ -7193,8 +7211,33 @@ async function updateChannels() {
         // Reset update indicator
         window.app.resetUpdateIndicator();
         
-        // Show success notification
-        window.app.notifySuccess(`تم تحديث القنوات بنجاح! تم جلب ${data.channels.length} قناة`, 5000);
+        // المزامنة التلقائية مع السحابة بعد التحديث من GitHub
+        if (window.app.remoteStorage.enabled && window.app.remoteStorage.autoSync) {
+            console.log('🔄 بدء المزامنة السحابية بعد التحديث من GitHub...');
+            window.app.syncToRemote().then(syncSuccess => {
+                if (syncSuccess) {
+                    console.log('✅ تمت المزامنة السحابية بنجاح');
+                    setTimeout(() => {
+                        window.app.notifySuccess('تم تحديث القنوات ومزامنتها مع جميع الأجهزة المتصلة!');
+                    }, 1000);
+                } else {
+                    console.log('⚠️ فشلت المزامنة السحابية');
+                    setTimeout(() => {
+                        window.app.notifyWarning('تم تحديث القنوات محلياً، لكن فشلت المزامنة مع السحابة. يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.');
+                    }, 1000);
+                }
+            }).catch(syncError => {
+                console.error('❌ خطأ في المزامنة السحابية:', syncError);
+                setTimeout(() => {
+                    window.app.notifyWarning('تم تحديث القنوات محلياً، لكن فشلت المزامنة مع السحابة. يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.');
+                }, 1000);
+            });
+        } else {
+            // Show success notification
+            setTimeout(() => {
+                window.app.notifySuccess(`تم تحديث القنوات بنجاح! تم تحميل ${data.channels.length} قناة جديدة.`);
+            }, 500);
+        }
         
         // Log confirmation that data was saved
         console.log('✅ تم حفظ القنوات المحدثة في localStorage بنجاح');
