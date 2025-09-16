@@ -4525,37 +4525,84 @@ body[data-theme="light"] .password-requirements {
     }
     
     .change-password-form {
-        padding: 24px 20px;
-        margin: 0 16px;
+        padding: 20px 16px;
+        margin: 0 8px;
+        border-radius: 16px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        font-size: 15px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+        gap: 6px;
     }
     
     .form-actions {
         justify-content: center;
+        margin-top: 24px;
     }
     
     .change-password-btn {
         width: 100%;
         padding: 16px 24px;
         min-width: auto;
+        font-size: 16px;
     }
     
     .password-input-wrapper {
-        margin-right: 45px;
+        margin-right: 0;
     }
     
     .password-input-wrapper input {
-        padding: 16px 20px;
+        padding: 16px 18px;
         font-size: 16px;
+        border-radius: 12px;
     }
     
     .form-group label .toggle-current-password,
     .form-group label .toggle-new-password,
     .form-group label .toggle-confirm-password {
         margin-left: 8px;
-        padding: 4px;
+        padding: 6px;
         font-size: 14px;
-        width: 24px;
-        height: 24px;
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+    }
+    
+    .password-strength {
+        margin-top: 10px;
+    }
+    
+    .strength-indicator {
+        padding: 12px;
+        border-radius: 10px;
+    }
+    
+    .password-match {
+        margin-top: 10px;
+        padding: 12px;
+        border-radius: 10px;
+    }
+    
+    .password-requirements {
+        padding: 16px;
+        margin-top: 16px;
+        border-radius: 12px;
+    }
+    
+    .requirements-list {
+        gap: 8px;
+    }
+    
+    .requirement-item {
+        padding: 8px 12px;
+        font-size: 14px;
+        border-radius: 8px;
     }
     
     .password-requirements {
@@ -4569,6 +4616,86 @@ body[data-theme="light"] .password-requirements {
     .requirement-item {
         padding: 6px 10px;
         font-size: 14px;
+    }
+}
+
+/* تحسينات إضافية للشاشات الصغيرة جداً */
+@media (max-width: 480px) {
+    .change-password-form {
+        padding: 16px 12px;
+        margin: 0 4px;
+        border-radius: 12px;
+    }
+    
+    .security-header {
+        padding: 16px 12px;
+    }
+    
+    .security-icon-wrapper {
+        width: 48px;
+        height: 48px;
+    }
+    
+    .security-icon-wrapper i {
+        font-size: 20px;
+    }
+    
+    .form-group label {
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+    
+    .password-input-wrapper input {
+        padding: 14px 16px;
+        font-size: 15px;
+        border-radius: 10px;
+    }
+    
+    .form-group label .toggle-current-password,
+    .form-group label .toggle-new-password,
+    .form-group label .toggle-confirm-password {
+        margin-left: 6px;
+        padding: 4px;
+        font-size: 12px;
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+    }
+    
+    .password-strength {
+        margin-top: 8px;
+    }
+    
+    .strength-indicator {
+        padding: 10px;
+        border-radius: 8px;
+    }
+    
+    .password-match {
+        margin-top: 8px;
+        padding: 10px;
+        border-radius: 8px;
+    }
+    
+    .password-requirements {
+        padding: 12px;
+        margin-top: 12px;
+        border-radius: 10px;
+    }
+    
+    .requirements-list {
+        gap: 6px;
+    }
+    
+    .requirement-item {
+        padding: 6px 10px;
+        font-size: 13px;
+        border-radius: 6px;
+    }
+    
+    .change-password-btn {
+        padding: 14px 20px;
+        font-size: 15px;
     }
 }
 }
