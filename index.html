@@ -679,6 +679,20 @@
                                     <label for="channelCountryInput">البلد</label>
                                     <input type="text" id="channelCountryInput" required>
                                 </div>
+                                <div class="form-group">
+                                    <label for="channelStatus">حالة القناة</label>
+                                    <div class="status-toggle-container">
+                                        <label class="status-toggle active" data-status="active">
+                                            <i class="fas fa-circle status-icon active"></i>
+                                            <span>تعمل</span>
+                                        </label>
+                                        <label class="status-toggle" data-status="inactive">
+                                            <i class="fas fa-circle status-icon inactive"></i>
+                                            <span>لا تعمل</span>
+                                        </label>
+                                    </div>
+                                    <input type="hidden" id="channelStatus" value="active">
+                                </div>
                             </div>
                             
                             <div class="form-column">
