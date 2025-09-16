@@ -63,9 +63,15 @@ class ArabicTVApp {
         this.loadRemoteStorageSettings(); // Load remote storage configuration
         this.loadCategories(); // Load categories first
         this.loadChannelsFromStorage(); // Load saved channels first (priority)
-        this.loadDataFromFile(); // Load data from channels.json as fallback
+        await this.loadDataFromFile(); // Load data from channels.json as fallback
         this.loadFavorites(); // Load saved favorites
         this.filteredChannels = [...this.channels]; // Ensure filtered channels match loaded channels
+        
+        // إذا لم يتم تحميل أي قنوات، جرب تحميلها من GitHub
+        if (this.channels.length === 0) {
+            console.log('⚠️ لم يتم تحميل أي قنوات، محاولة التحميل من GitHub...');
+            await this.loadChannelsFromGitHub();
+        }
         this.loadSettings();
         this.loadAdminPassword(); // تحميل كلمة المرور المحفوظة
         this.loadLoginState(); // تحميل حالة تسجيل الدخول بعد تحميل البيانات
@@ -76,6 +82,7 @@ class ArabicTVApp {
         }, 100);
         this.bindEvents();
         this.bindRemoteStorageEvents();
+        this.setupCloudSyncIntegration();
         
         // Check for updates after a short delay
         setTimeout(() => {
@@ -85,9 +92,24 @@ class ArabicTVApp {
         this.setupPictureInPictureEvents();
         this.checkAndSetupPictureInPicture();
         
-        // Attempt auto-sync if enabled
-        if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
-            this.syncFromRemote();
+        // استخدام نظام المزامنة السحابية الجديد
+        if (window.cloudSyncManager) {
+            console.log('✅ Cloud Sync Manager is available');
+            // سيتم تشغيل المزامنة التلقائية تلقائياً من CloudSyncManager
+        } else {
+            console.log('⚠️ Cloud Sync Manager not available, using legacy sync');
+            // استخدام النظام القديم كبديل
+            if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
+                this.unifiedCloudSync('auto').then(result => {
+                    if (result.success) {
+                        console.log('✅ المزامنة التلقائية مكتملة:', result.message);
+                    } else {
+                        console.log('⚠️ المزامنة التلقائية فشلت:', result.message);
+                    }
+                }).catch(error => {
+                    console.error('❌ خطأ في المزامنة التلقائية:', error);
+                });
+            }
         }
         this.syncMobileNavTabs();
         this.initializeNewFeatures(); // Initialize new navigation features (includes loadCategories)
@@ -124,11 +146,28 @@ class ArabicTVApp {
             }
             const data = await response.json();
             
-            // لا نحمل القنوات من JSON file - نبدأ بقائمة فارغة
-            console.log('تم تخطي تحميل القنوات من channels.json - سيتم البدء بقائمة فارغة');
+            // تحميل القنوات من JSON file إذا لم تكن موجودة في localStorage
+            if (data.channels && Array.isArray(data.channels) && data.channels.length > 0) {
+                this.channels = data.channels;
+                this.filteredChannels = [...this.channels];
+                console.log('✅ تم تحميل القنوات من channels.json:', this.channels.length, 'قناة');
+                
+                // حفظ القنوات في localStorage
+                this.saveChannelsToStorage();
+            } else {
+                console.log('⚠️ لا توجد قنوات في channels.json أو الملف فارغ');
+            }
             
-            // لا نحمل الفئات من JSON file - يجب أن تأتي من localStorage
-            console.log('تم تخطي تحميل الفئات من channels.json - سيتم تحميلها من localStorage');
+            // تحميل الفئات من JSON file إذا لم تكن موجودة في localStorage
+            if (data.categories && Array.isArray(data.categories) && data.categories.length > 0) {
+                this.categories = data.categories;
+                console.log('✅ تم تحميل الفئات من channels.json:', this.categories.length, 'فئة');
+                
+                // حفظ الفئات في localStorage
+                this.saveCategories();
+            } else {
+                console.log('⚠️ لا توجد فئات في channels.json أو الملف فارغ');
+            }
             
             // Load settings from JSON file
             if (data.settings && typeof data.settings === 'object') {
@@ -143,8 +182,49 @@ class ArabicTVApp {
             }
             
         } catch (error) {
-            console.error('خطأ في تحميل البيانات من channels.json:', error);
-            console.log('سيتم استخدام البيانات الافتراضية');
+            console.error('❌ خطأ في تحميل البيانات من channels.json:', error);
+            console.log('سيتم البدء بقائمة فارغة من القنوات');
+            
+            // إذا فشل تحميل الملف، جرب تحميل القنوات من GitHub مباشرة
+            this.loadChannelsFromGitHub();
+        }
+    }
+    
+    /**
+     * تحميل القنوات من GitHub كبديل عند فشل تحميل الملف المحلي
+     */
+    async loadChannelsFromGitHub() {
+        try {
+            console.log('🔄 محاولة تحميل القنوات من GitHub...');
+            
+            const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.channels && Array.isArray(data.channels) && data.channels.length > 0) {
+                this.channels = data.channels;
+                this.filteredChannels = [...this.channels];
+                console.log('✅ تم تحميل القنوات من GitHub:', this.channels.length, 'قناة');
+                
+                // حفظ القنوات في localStorage
+                this.saveChannelsToStorage();
+                
+                // تحديث العرض
+                this.renderChannels();
+                this.updateChannelStats();
+                
+                return true;
+            } else {
+                console.log('⚠️ لا توجد قنوات في GitHub أو الملف فارغ');
+                return false;
+            }
+            
+        } catch (error) {
+            console.error('❌ خطأ في تحميل القنوات من GitHub:', error);
+            return false;
         }
     }
 
@@ -762,16 +842,58 @@ class ArabicTVApp {
         grid.innerHTML = '';
         console.log('عرض القنوات:', this.filteredChannels.length, 'قناة');
 
-        this.filteredChannels.forEach(channel => {
-            const channelCard = this.createChannelCard(channel);
-            grid.appendChild(channelCard);
-        });
+        if (this.filteredChannels.length === 0) {
+            // عرض رسالة عدم وجود قنوات
+            grid.innerHTML = `
+                <div class="no-channels-message">
+                    <div class="no-channels-icon">
+                        <i class="fas fa-tv"></i>
+                    </div>
+                    <h3>لا توجد قنوات متاحة</h3>
+                    <p>لم يتم تحميل أي قنوات. جرب تحديث القنوات أو تحقق من اتصال الإنترنت.</p>
+                    <button class="btn btn-primary" onclick="updateChannels()">
+                        <i class="fas fa-sync-alt"></i>
+                        تحديث القنوات
+                    </button>
+                </div>
+            `;
+        } else {
+            this.filteredChannels.forEach(channel => {
+                const channelCard = this.createChannelCard(channel);
+                grid.appendChild(channelCard);
+            });
+        }
+
+        // إخفاء شاشة التحميل
+        this.hideLoadingScreen();
 
         // Update navigation tabs first
         this.updateNavigationTabs();
         
         // Update sidebar counts after updating tabs
         this.updateSidebarCounts();
+    }
+    
+    /**
+     * إخفاء شاشة التحميل
+     */
+    hideLoadingScreen() {
+        const loadingElement = document.getElementById('loading');
+        if (loadingElement) {
+            loadingElement.style.display = 'none';
+            console.log('✅ تم إخفاء شاشة التحميل');
+        }
+    }
+    
+    /**
+     * إظهار شاشة التحميل
+     */
+    showLoadingScreen() {
+        const loadingElement = document.getElementById('loading');
+        if (loadingElement) {
+            loadingElement.style.display = 'flex';
+            console.log('🔄 تم إظهار شاشة التحميل');
+        }
     }
 
     createChannelCard(channel) {
@@ -2137,24 +2259,19 @@ class ArabicTVApp {
         
         // المزامنة التلقائية مع السحابة
         if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
-            this.syncToRemoteWithRetry().catch(error => {
-                console.error('فشل في المزامنة التلقائية بعد إضافة القناة:', error);
-                
-                // رسالة خطأ أكثر تفصيلاً
-                let errorMessage = 'تم إضافة القناة محلياً، لكن فشلت المزامنة التلقائية.';
-                
-                if (error.message.includes('409')) {
-                    errorMessage += ' يبدو أن الملف تم تحديثه من مكان آخر. يرجى المحاولة مرة أخرى.';
-                } else if (error.message.includes('401') || error.message.includes('403')) {
-                    errorMessage += ' مشكلة في الصلاحيات - تحقق من رمز الوصول.';
-                } else if (error.message.includes('network') || error.message.includes('fetch')) {
-                    errorMessage += ' مشكلة في الاتصال بالإنترنت.';
+            this.unifiedCloudSync('upload').then(result => {
+                if (result.success) {
+                    console.log('✅ المزامنة التلقائية بعد إضافة القناة مكتملة:', result.message);
                 } else {
-                    errorMessage += ' يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.';
+                    console.log('⚠️ المزامنة التلقائية بعد إضافة القناة فشلت:', result.message);
+                    setTimeout(() => {
+                        this.notifyWarning('تم إضافة القناة محلياً، لكن فشلت المزامنة التلقائية: ' + result.message);
+                    }, 2000);
                 }
-                
+            }).catch(error => {
+                console.error('❌ خطأ في المزامنة التلقائية بعد إضافة القناة:', error);
                 setTimeout(() => {
-                    this.notifyWarning(errorMessage);
+                    this.notifyWarning('تم إضافة القناة محلياً، لكن فشلت المزامنة التلقائية: ' + error.message);
                 }, 2000);
             });
         }
@@ -2353,24 +2470,19 @@ class ArabicTVApp {
         
         // المزامنة التلقائية مع السحابة
         if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
-            this.syncToRemoteWithRetry().catch(error => {
-                console.error('فشل في المزامنة التلقائية بعد تحديث القناة:', error);
-                
-                // رسالة خطأ أكثر تفصيلاً
-                let errorMessage = 'تم تحديث القناة محلياً، لكن فشلت المزامنة التلقائية.';
-                
-                if (error.message.includes('409')) {
-                    errorMessage += ' يبدو أن الملف تم تحديثه من مكان آخر. يرجى المحاولة مرة أخرى.';
-                } else if (error.message.includes('401') || error.message.includes('403')) {
-                    errorMessage += ' مشكلة في الصلاحيات - تحقق من رمز الوصول.';
-                } else if (error.message.includes('network') || error.message.includes('fetch')) {
-                    errorMessage += ' مشكلة في الاتصال بالإنترنت.';
+            this.unifiedCloudSync('upload').then(result => {
+                if (result.success) {
+                    console.log('✅ المزامنة التلقائية بعد تحديث القناة مكتملة:', result.message);
                 } else {
-                    errorMessage += ' يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.';
+                    console.log('⚠️ المزامنة التلقائية بعد تحديث القناة فشلت:', result.message);
+                    setTimeout(() => {
+                        this.notifyWarning('تم تحديث القناة محلياً، لكن فشلت المزامنة التلقائية: ' + result.message);
+                    }, 2000);
                 }
-                
+            }).catch(error => {
+                console.error('❌ خطأ في المزامنة التلقائية بعد تحديث القناة:', error);
                 setTimeout(() => {
-                    this.notifyWarning(errorMessage);
+                    this.notifyWarning('تم تحديث القناة محلياً، لكن فشلت المزامنة التلقائية: ' + error.message);
                 }, 2000);
             });
         }
@@ -2420,24 +2532,19 @@ class ArabicTVApp {
             
             // المزامنة التلقائية مع السحابة مع معالجة محسنة للأخطاء
             if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
-                this.syncToRemoteWithRetry().catch(error => {
-                    console.error('فشل في المزامنة التلقائية بعد حذف القناة:', error);
-                    
-                    // عرض رسالة خطأ أكثر تفصيلاً
-                    let errorMessage = 'تم حذف القناة محلياً، لكن فشلت المزامنة التلقائية.';
-                    
-                    if (error.message.includes('409')) {
-                        errorMessage += ' يبدو أن الملف تم تحديثه من مكان آخر. يرجى المحاولة مرة أخرى.';
-                    } else if (error.message.includes('401') || error.message.includes('403')) {
-                        errorMessage += ' مشكلة في الصلاحيات - تحقق من رمز الوصول.';
-                    } else if (error.message.includes('network') || error.message.includes('fetch')) {
-                        errorMessage += ' مشكلة في الاتصال بالإنترنت.';
+                this.unifiedCloudSync('upload').then(result => {
+                    if (result.success) {
+                        console.log('✅ المزامنة التلقائية بعد حذف القناة مكتملة:', result.message);
                     } else {
-                        errorMessage += ' يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.';
+                        console.log('⚠️ المزامنة التلقائية بعد حذف القناة فشلت:', result.message);
+                        setTimeout(() => {
+                            this.notifyWarning('تم حذف القناة محلياً، لكن فشلت المزامنة التلقائية: ' + result.message);
+                        }, 2000);
                     }
-                    
+                }).catch(error => {
+                    console.error('❌ خطأ في المزامنة التلقائية بعد حذف القناة:', error);
                     setTimeout(() => {
-                        this.notifyWarning(errorMessage);
+                        this.notifyWarning('تم حذف القناة محلياً، لكن فشلت المزامنة التلقائية: ' + error.message);
                     }, 2000);
                 });
             }
@@ -2461,25 +2568,19 @@ class ArabicTVApp {
                 
                 // Auto-sync to remote if enabled
                 if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
-                    this.syncToRemoteWithRetry().catch(error => {
-                        console.error('فشل في المزامنة التلقائية:', error);
-                        
-                        // رسالة خطأ أكثر تفصيلاً
-                        let errorMessage = 'فشلت المزامنة التلقائية.';
-                        
-                        if (error.message.includes('409')) {
-                            errorMessage += ' يبدو أن الملف تم تحديثه من مكان آخر.';
-                        } else if (error.message.includes('401') || error.message.includes('403')) {
-                            errorMessage += ' مشكلة في الصلاحيات - تحقق من رمز الوصول.';
-                        } else if (error.message.includes('network') || error.message.includes('fetch')) {
-                            errorMessage += ' مشكلة في الاتصال بالإنترنت.';
+                    this.unifiedCloudSync('upload').then(result => {
+                        if (result.success) {
+                            console.log('✅ المزامنة التلقائية بعد الحفظ مكتملة:', result.message);
+                        } else {
+                            console.log('⚠️ المزامنة التلقائية بعد الحفظ فشلت:', result.message);
+                            setTimeout(() => {
+                                this.notifyWarning('تم حفظ البيانات محلياً، لكن فشلت المزامنة التلقائية: ' + result.message);
+                            }, 2000);
                         }
-                        
-                        errorMessage += ' يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.';
-                        
-                        // إظهار إشعار للمستخدم حول فشل المزامنة التلقائية
+                    }).catch(error => {
+                        console.error('❌ خطأ في المزامنة التلقائية بعد الحفظ:', error);
                         setTimeout(() => {
-                            this.notifyWarning(errorMessage);
+                            this.notifyWarning('تم حفظ البيانات محلياً، لكن فشلت المزامنة التلقائية: ' + error.message);
                         }, 2000);
                     });
                 }
@@ -2554,19 +2655,248 @@ class ArabicTVApp {
             if (savedRemoteStorage) {
                 const parsed = JSON.parse(savedRemoteStorage);
                 this.remoteStorage = { ...this.remoteStorage, ...parsed };
-                console.log('تم تحميل إعدادات التخزين السحابي:', this.remoteStorage);
+                console.log('✅ تم تحميل إعدادات التخزين السحابي:', this.remoteStorage);
+                
+                // تحديث واجهة المستخدم إذا كانت مفتوحة
+                this.updateRemoteStorageUI();
             }
         } catch (error) {
-            console.error('خطأ في تحميل إعدادات التخزين السحابي:', error);
+            console.error('❌ خطأ في تحميل إعدادات التخزين السحابي:', error);
+        }
+    }
+    
+    // دالة موحدة لإدارة المزامنة السحابية
+    async unifiedCloudSync(action = 'auto') {
+        try {
+            console.log(`🔄 بدء المزامنة السحابية الموحدة - العملية: ${action}`);
+            
+            // التحقق من إعدادات المزامنة السحابية
+            if (!this.remoteStorage.enabled) {
+                console.log('المزامنة السحابية غير مفعلة');
+                return { success: false, message: 'المزامنة السحابية غير مفعلة' };
+            }
+            
+            if (!this.remoteStorage.repository || !this.remoteStorage.token) {
+                console.log('إعدادات المزامنة السحابية غير مكتملة');
+                return { success: false, message: 'إعدادات المزامنة السحابية غير مكتملة' };
+            }
+            
+            // تحديد نوع العملية
+            switch (action) {
+                case 'upload':
+                    return await this.syncToRemote();
+                    
+                case 'download':
+                    return await this.syncFromRemote();
+                    
+                case 'auto':
+                default:
+                    // مزامنة تلقائية ذكية
+                    return await this.smartAutoSync();
+            }
+            
+        } catch (error) {
+            console.error('❌ خطأ في المزامنة السحابية الموحدة:', error);
+            return { success: false, message: error.message };
+        }
+    }
+    
+    // مزامنة تلقائية ذكية
+    async smartAutoSync() {
+        try {
+            console.log('🧠 بدء المزامنة التلقائية الذكية');
+            
+            // أولاً: محاولة تحميل البيانات من السحابة
+            const downloadResult = await this.syncFromRemote();
+            
+            if (downloadResult) {
+                console.log('✅ تم تحديث البيانات من السحابة');
+                return { success: true, message: 'تم تحديث البيانات من السحابة' };
+            }
+            
+            // إذا لم تكن هناك بيانات جديدة في السحابة، ارفع البيانات المحلية
+            const uploadResult = await this.syncToRemote();
+            
+            if (uploadResult) {
+                console.log('✅ تم رفع البيانات إلى السحابة');
+                return { success: true, message: 'تم رفع البيانات إلى السحابة' };
+            }
+            
+            return { success: false, message: 'لم يتم تحديث أي بيانات' };
+            
+        } catch (error) {
+            console.error('❌ خطأ في المزامنة التلقائية الذكية:', error);
+            return { success: false, message: error.message };
+        }
+    }
+    
+    // دالة مزامنة يدوية محسنة
+    async manualSync() {
+        try {
+            this.notifyInfo('جارٍ بدء المزامنة اليدوية...');
+            
+            const result = await this.unifiedCloudSync('auto');
+            
+            if (result.success) {
+                this.notifySuccess(result.message);
+                this.updateSyncStatus();
+            } else {
+                this.notifyError(result.message);
+            }
+            
+            return result;
+            
+        } catch (error) {
+            console.error('❌ خطأ في المزامنة اليدوية:', error);
+            this.notifyError('خطأ في المزامنة اليدوية: ' + error.message);
+            return { success: false, message: error.message };
+        }
+    }
+    
+    // تحديث حالة المزامنة في الواجهة
+    updateSyncStatus() {
+        try {
+            const syncStatusText = document.getElementById('syncStatusText');
+            const lastSyncTime = document.getElementById('lastSyncTime');
+            
+            if (syncStatusText) {
+                syncStatusText.textContent = this.remoteStorage.lastSync ? 'مكتملة' : 'لم يتم';
+            }
+            
+            if (lastSyncTime) {
+                lastSyncTime.textContent = this.remoteStorage.lastSync ? 
+                    new Date(this.remoteStorage.lastSync).toLocaleString('ar') : 'لم يتم';
+            }
+            
+        } catch (error) {
+            console.error('❌ خطأ في تحديث حالة المزامنة:', error);
+        }
+    }
+    
+    // تحديث واجهة إعدادات المزامنة السحابية
+    updateRemoteStorageUI() {
+        try {
+            const enableRemoteStorage = document.getElementById('enableRemoteStorage');
+            const storageProvider = document.getElementById('storageProvider');
+            const repositoryUrl = document.getElementById('repositoryUrl');
+            const accessToken = document.getElementById('accessToken');
+            const branchName = document.getElementById('branchName');
+            const autoSync = document.getElementById('autoSync');
+            
+            if (enableRemoteStorage) {
+                enableRemoteStorage.checked = this.remoteStorage.enabled;
+                this.toggleRemoteStorageConfig();
+            }
+            
+            if (storageProvider) {
+                storageProvider.value = this.remoteStorage.provider;
+            }
+            
+            if (repositoryUrl) {
+                repositoryUrl.value = this.remoteStorage.repository || '';
+            }
+            
+            if (accessToken) {
+                accessToken.value = this.remoteStorage.token || '';
+            }
+            
+            if (branchName) {
+                branchName.value = this.remoteStorage.branch || 'main';
+            }
+            
+            if (autoSync) {
+                autoSync.checked = this.remoteStorage.autoSync;
+            }
+            
+            // تحديث حالة المزامنة
+            this.updateSyncStatus();
+            
+        } catch (error) {
+            console.error('❌ خطأ في تحديث واجهة المزامنة السحابية:', error);
         }
     }
 
     saveRemoteStorageSettings() {
         try {
             localStorage.setItem('arabicTVRemoteStorage', JSON.stringify(this.remoteStorage));
-            console.log('تم حفظ إعدادات التخزين السحابي');
+            console.log('✅ تم حفظ إعدادات التخزين السحابي');
         } catch (error) {
-            console.error('خطأ في حفظ إعدادات التخزين السحابي:', error);
+            console.error('❌ خطأ في حفظ إعدادات التخزين السحابي:', error);
+        }
+    }
+    
+    // حفظ إعدادات المزامنة السحابية من الواجهة
+    saveRemoteStorageSettingsUI() {
+        try {
+            const enableRemoteStorage = document.getElementById('enableRemoteStorage');
+            const storageProvider = document.getElementById('storageProvider');
+            const repositoryUrl = document.getElementById('repositoryUrl');
+            const accessToken = document.getElementById('accessToken');
+            const branchName = document.getElementById('branchName');
+            const autoSync = document.getElementById('autoSync');
+            
+            if (!enableRemoteStorage || !storageProvider || !repositoryUrl || !accessToken || !branchName || !autoSync) {
+                this.notifyError('عناصر الواجهة غير موجودة');
+                return false;
+            }
+            
+            // التحقق من صحة البيانات
+            if (enableRemoteStorage.checked) {
+                if (!repositoryUrl.value.trim()) {
+                    this.notifyError('يرجى إدخال رابط المستودع');
+                    return false;
+                }
+                
+                if (!accessToken.value.trim()) {
+                    this.notifyError('يرجى إدخال رمز الوصول');
+                    return false;
+                }
+                
+                if (!branchName.value.trim()) {
+                    this.notifyError('يرجى إدخال اسم الفرع');
+                    return false;
+                }
+            }
+            
+            // حفظ الإعدادات
+            this.remoteStorage.enabled = enableRemoteStorage.checked;
+            this.remoteStorage.provider = storageProvider.value;
+            this.remoteStorage.repository = repositoryUrl.value.trim();
+            this.remoteStorage.token = accessToken.value.trim();
+            this.remoteStorage.branch = branchName.value.trim();
+            this.remoteStorage.autoSync = autoSync.checked;
+            
+            this.saveRemoteStorageSettings();
+            
+            // تحديث حالة المزامنة
+            this.updateSyncStatus();
+            
+            this.notifySuccess('تم حفظ إعدادات المزامنة السحابية بنجاح!');
+            
+            return true;
+            
+        } catch (error) {
+            console.error('❌ خطأ في حفظ إعدادات المزامنة السحابية من الواجهة:', error);
+            this.notifyError('خطأ في حفظ الإعدادات: ' + error.message);
+            return false;
+        }
+    }
+    
+    // تبديل عرض إعدادات المزامنة السحابية
+    toggleRemoteStorageConfig() {
+        try {
+            const enableRemoteStorage = document.getElementById('enableRemoteStorage');
+            const remoteStorageConfig = document.getElementById('remoteStorageConfig');
+            
+            if (enableRemoteStorage && remoteStorageConfig) {
+                if (enableRemoteStorage.checked) {
+                    remoteStorageConfig.style.display = 'block';
+                } else {
+                    remoteStorageConfig.style.display = 'none';
+                }
+            }
+        } catch (error) {
+            console.error('❌ خطأ في تبديل عرض إعدادات المزامنة السحابية:', error);
         }
     }
 
@@ -3035,13 +3365,16 @@ class ArabicTVApp {
         
         for (let attempt = 0; attempt < maxRetries; attempt++) {
             try {
+                console.log(`محاولة رفع البيانات إلى GitHub (${attempt + 1}/${maxRetries})`);
+                
                 // الحصول على SHA الحالي للملف في كل محاولة مع معالجة محسنة للأخطاء
                 let sha = null;
                 try {
                     const getResponse = await fetch(url, {
                         headers: {
-                            'Authorization': `token ${token}`,
-                            'Accept': 'application/vnd.github.v3+json'
+                            'Authorization': `Bearer ${token}`,
+                            'Accept': 'application/vnd.github.v3+json',
+                            'User-Agent': 'ANON-TV-Sync/1.0'
                         }
                     });
                     
@@ -3058,7 +3391,9 @@ class ArabicTVApp {
                     console.log('خطأ في الحصول على SHA، سيتم إنشاء الملف:', error.message);
                 }
 
-                const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+                // تحويل البيانات إلى JSON مع ترميز صحيح
+                const jsonData = JSON.stringify(data, null, 2);
+                const content = btoa(unescape(encodeURIComponent(jsonData)));
                 
                 // إنشاء رسالة التزام أكثر وضوحاً
                 const commitMessage = this.generateCommitMessage(data);
@@ -3076,40 +3411,48 @@ class ArabicTVApp {
                 const response = await fetch(url, {
                     method: 'PUT',
                     headers: {
-                        'Authorization': `token ${token}`,
+                        'Authorization': `Bearer ${token}`,
                         'Accept': 'application/vnd.github.v3+json',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'User-Agent': 'ANON-TV-Sync/1.0'
                     },
                     body: JSON.stringify(body)
                 });
 
                 if (response.ok) {
-                    console.log('تم رفع البيانات بنجاح');
+                    const responseData = await response.json();
+                    console.log('✅ تم رفع البيانات بنجاح إلى GitHub');
+                    console.log('Commit SHA:', responseData.commit.sha);
                     return true;
                 }
 
                 // التعامل مع خطأ 409 (تضارب في الإصدارات)
                 if (response.status === 409) {
                     const errorData = await response.json();
-                    console.warn(`تضارب في الإصدارات (محاولة ${attempt + 1}/${maxRetries}):`, errorData.message);
+                    console.warn(`⚠️ تضارب في الإصدارات (محاولة ${attempt + 1}/${maxRetries}):`, errorData.message);
                     
                     if (attempt < maxRetries - 1) {
                         // انتظار قصير قبل إعادة المحاولة
-                        await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+                        const waitTime = 1000 * (attempt + 1);
+                        console.log(`انتظار ${waitTime}ms قبل إعادة المحاولة...`);
+                        await new Promise(resolve => setTimeout(resolve, waitTime));
                         continue;
                     } else {
                         lastError = new Error(`فشل في المزامنة بعد ${maxRetries} محاولات بسبب تضارب في الإصدارات. يرجى المحاولة مرة أخرى.`);
                     }
                 } else {
-                    const error = await response.text();
-                    lastError = new Error(`GitHub API Error: ${response.status} - ${error}`);
+                    const errorText = await response.text();
+                    console.error(`❌ خطأ GitHub API: ${response.status} - ${errorText}`);
+                    lastError = new Error(`GitHub API Error: ${response.status} - ${errorText}`);
                     break; // لا نعيد المحاولة للأخطاء الأخرى
                 }
             } catch (error) {
                 lastError = error;
+                console.error(`❌ خطأ في المحاولة ${attempt + 1}:`, error.message);
                 if (attempt < maxRetries - 1) {
-                    console.warn(`خطأ في المحاولة ${attempt + 1}:`, error.message);
-                    await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+                    const waitTime = 1000 * (attempt + 1);
+                    console.log(`انتظار ${waitTime}ms قبل إعادة المحاولة...`);
+                    await new Promise(resolve => setTimeout(resolve, waitTime));
                 }
             }
         }
@@ -3120,25 +3463,38 @@ class ArabicTVApp {
     async downloadFromGitHub(repository, token, branch, filename) {
         const url = `https://api.github.com/repos/${repository}/contents/${filename}?ref=${branch}`;
         
+        console.log(`جاري تحميل البيانات من GitHub: ${repository}/${filename}`);
+        
         const response = await fetch(url, {
             headers: {
-                'Authorization': `token ${token}`,
-                'Accept': 'application/vnd.github.v3+json'
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'User-Agent': 'ANON-TV-Sync/1.0'
             }
         });
 
         if (response.status === 404) {
+            console.log('الملف غير موجود في المستودع');
             return null; // File doesn't exist
         }
 
         if (!response.ok) {
             const error = await response.text();
+            console.error(`❌ خطأ في تحميل البيانات من GitHub: ${response.status} - ${error}`);
             throw new Error(`GitHub API Error: ${response.status} - ${error}`);
         }
 
-        const fileData = await response.json();
-        const content = decodeURIComponent(escape(atob(fileData.content)));
-        return JSON.parse(content);
+        try {
+            const fileData = await response.json();
+            const content = decodeURIComponent(escape(atob(fileData.content)));
+            const parsedData = JSON.parse(content);
+            console.log('✅ تم تحميل البيانات بنجاح من GitHub');
+            console.log('عدد القنوات المحملة:', parsedData.channels ? parsedData.channels.length : 0);
+            return parsedData;
+        } catch (error) {
+            console.error('❌ خطأ في تحليل البيانات المحملة:', error);
+            throw new Error('خطأ في تحليل البيانات المحملة: ' + error.message);
+        }
     }
 
     async uploadToGitLab(data, repository, token, branch, filename) {
@@ -3498,33 +3854,54 @@ class ArabicTVApp {
         }
 
         try {
+            this.notifyInfo('جارٍ اختبار الاتصال بالمستودع...');
+            
             let url;
             let headers;
 
             if (provider === 'github') {
                 url = `https://api.github.com/repos/${repository}`;
                 headers = {
-                    'Authorization': `token ${token}`,
-                    'Accept': 'application/vnd.github.v3+json'
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'User-Agent': 'ANON-TV-Sync/1.0'
                 };
             } else if (provider === 'gitlab') {
                 url = `https://gitlab.com/api/v4/projects/${encodeURIComponent(repository)}`;
                 headers = {
                     'PRIVATE-TOKEN': token
                 };
+            } else {
+                this.notifyError('مزود الخدمة غير مدعوم');
+                return false;
             }
 
+            console.log(`اختبار الاتصال بـ ${provider}: ${repository}`);
             const response = await fetch(url, { headers });
             
             if (response.ok) {
-                this.notifySuccess('تم الاتصال بالمستودع بنجاح!');
+                const repoData = await response.json();
+                console.log('✅ تم الاتصال بالمستودع بنجاح');
+                console.log('اسم المستودع:', repoData.name);
+                console.log('المالك:', repoData.owner ? repoData.owner.login : repoData.namespace.name);
+                this.notifySuccess(`تم الاتصال بالمستودع "${repoData.name}" بنجاح!`);
                 return true;
             } else {
-                this.notifyError(`فشل الاتصال: ${response.status} - ${response.statusText}`);
+                const errorText = await response.text();
+                console.error(`❌ فشل الاتصال: ${response.status} - ${errorText}`);
+                
+                let errorMessage = `فشل الاتصال: ${response.status}`;
+                if (response.status === 401 || response.status === 403) {
+                    errorMessage += ' - تحقق من رمز الوصول (Token)';
+                } else if (response.status === 404) {
+                    errorMessage += ' - المستودع غير موجود أو غير متاح';
+                }
+                
+                this.notifyError(errorMessage);
                 return false;
             }
         } catch (error) {
-            console.error('خطأ في اختبار الاتصال:', error);
+            console.error('❌ خطأ في اختبار الاتصال:', error);
             this.notifyError('خطأ في الاتصال: ' + error.message);
             return false;
         }
@@ -3592,6 +3969,91 @@ class ArabicTVApp {
                 this.updateSyncStatus();
             });
         }
+    }
+    
+    /**
+     * إعداد تكامل المزامنة السحابية الجديدة
+     */
+    setupCloudSyncIntegration() {
+        try {
+            if (window.cloudSyncManager) {
+                console.log('🔗 Setting up cloud sync integration...');
+                
+                // نقل الإعدادات من النظام القديم إلى الجديد
+                this.migrateToNewCloudSync();
+                
+                // ربط أحداث النظام الجديد
+                this.bindNewCloudSyncEvents();
+                
+                console.log('✅ Cloud sync integration completed');
+            } else {
+                console.log('⚠️ Cloud Sync Manager not available for integration');
+            }
+        } catch (error) {
+            console.error('❌ Error setting up cloud sync integration:', error);
+        }
+    }
+    
+    /**
+     * نقل الإعدادات من النظام القديم إلى الجديد
+     */
+    migrateToNewCloudSync() {
+        try {
+            if (this.remoteStorage.enabled && this.remoteStorage.repository && this.remoteStorage.token) {
+                const newConfig = {
+                    enabled: this.remoteStorage.enabled,
+                    provider: this.remoteStorage.provider || 'github',
+                    repository: this.remoteStorage.repository,
+                    token: this.remoteStorage.token,
+                    branch: this.remoteStorage.branch || 'main',
+                    autoSync: this.remoteStorage.autoSync !== false
+                };
+                
+                window.cloudSyncManager.updateConfig(newConfig);
+                console.log('📦 Migrated cloud sync settings to new system');
+            }
+        } catch (error) {
+            console.error('❌ Error migrating cloud sync settings:', error);
+        }
+    }
+    
+    /**
+     * ربط أحداث النظام الجديد
+     */
+    bindNewCloudSyncEvents() {
+        // مراقبة تغييرات البيانات المحلية للمزامنة التلقائية
+        const originalSaveChannels = this.saveChannelsToStorage.bind(this);
+        this.saveChannelsToStorage = () => {
+            originalSaveChannels();
+            
+            // إشعار النظام الجديد بالتغيير
+            if (window.cloudSyncManager && window.cloudSyncManager.config.enabled) {
+                setTimeout(() => {
+                    window.cloudSyncManager.syncAll().catch(error => {
+                        console.error('❌ Auto-sync error:', error);
+                    });
+                }, 1000);
+            }
+        };
+        
+        // ربط دالة المزامنة اليدوية
+        if (window.cloudSyncUI) {
+            // إضافة دالة المزامنة السريعة
+            window.quickSync = () => {
+                if (window.cloudSyncManager) {
+                    window.cloudSyncManager.syncAll().then(result => {
+                        if (result.success) {
+                            this.notifySuccess(result.message);
+                        } else {
+                            this.notifyError(result.message);
+                        }
+                    }).catch(error => {
+                        this.notifyError('خطأ في المزامنة: ' + error.message);
+                    });
+                }
+            };
+        }
+    }
 
         // Provider selection
         const storageProviderSelect = document.getElementById('storageProvider');
@@ -3640,6 +4102,26 @@ class ArabicTVApp {
 
         // Load existing settings
         this.loadRemoteStorageUI();
+    }
+    
+    // تبديل عرض إعدادات المزامنة السحابية
+    toggleRemoteStorageConfig(enabled = null) {
+        try {
+            const enableRemoteStorage = document.getElementById('enableRemoteStorage');
+            const remoteStorageConfig = document.getElementById('remoteStorageConfig');
+            
+            if (enableRemoteStorage && remoteStorageConfig) {
+                const isEnabled = enabled !== null ? enabled : enableRemoteStorage.checked;
+                
+                if (isEnabled) {
+                    remoteStorageConfig.style.display = 'block';
+                } else {
+                    remoteStorageConfig.style.display = 'none';
+                }
+            }
+        } catch (error) {
+            console.error('❌ خطأ في تبديل عرض إعدادات المزامنة السحابية:', error);
+        }
     }
 
     loadRemoteStorageUI() {
