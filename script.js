@@ -6380,6 +6380,46 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeMobileBottomNav();
 });
 
+// Helper function to validate JSON and provide detailed error information
+function validateJSON(jsonString, context = '') {
+    try {
+        const parsed = JSON.parse(jsonString);
+        return { valid: true, data: parsed, error: null };
+    } catch (error) {
+        let detailedError = {
+            message: error.message,
+            position: null,
+            context: '',
+            suggestion: ''
+        };
+        
+        // Extract position if available
+        const positionMatch = error.message.match(/position (\d+)/);
+        if (positionMatch) {
+            detailedError.position = parseInt(positionMatch[1]);
+            
+            // Get context around the error
+            const start = Math.max(0, detailedError.position - 100);
+            const end = Math.min(jsonString.length, detailedError.position + 100);
+            detailedError.context = jsonString.substring(start, end);
+            
+            // Try to identify the issue
+            const charAtError = jsonString[detailedError.position];
+            if (charAtError === "'") {
+                detailedError.suggestion = 'يبدو أن هناك اقتباس مفرد بدلاً من اقتباس مزدوج';
+            } else if (charAtError === ',') {
+                detailedError.suggestion = 'يبدو أن هناك فاصلة زائدة أو مفقودة';
+            } else if (charAtError === '{' || charAtError === '}') {
+                detailedError.suggestion = 'يبدو أن هناك مشكلة في الأقواس المتعرجة';
+            } else if (charAtError === '[' || charAtError === ']') {
+                detailedError.suggestion = 'يبدو أن هناك مشكلة في الأقواس المربعة';
+            }
+        }
+        
+        return { valid: false, data: null, error: detailedError };
+    }
+}
+
 // Update Channels Function
 async function updateChannels() {
     if (!window.app) {
@@ -6388,17 +6428,70 @@ async function updateChannels() {
     }
 
     try {
+        console.log('🔄 بدء تحديث القنوات...');
+        
         // Fetch channels from GitHub
         const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json');
         
         if (!response.ok) {
-            throw new Error(`خطأ في جلب البيانات: ${response.status}`);
+            throw new Error(`خطأ في جلب البيانات: ${response.status} ${response.statusText}`);
         }
         
-        const data = await response.json();
+        // Get response text first to debug
+        const responseText = await response.text();
+        console.log('📥 تم جلب البيانات من GitHub، حجم البيانات:', responseText.length, 'حرف');
+        
+        // Validate JSON before parsing
+        const validation = validateJSON(responseText, 'GitHub channels data');
+        
+        if (!validation.valid) {
+            console.error('❌ خطأ في تحليل JSON:');
+            console.error('الرسالة:', validation.error.message);
+            console.error('الموضع:', validation.error.position);
+            console.error('السياق:', validation.error.context);
+            if (validation.error.suggestion) {
+                console.error('الاقتراح:', validation.error.suggestion);
+            }
+            
+            throw new Error(`خطأ في تنسيق JSON: ${validation.error.message}`);
+        }
+        
+        const data = validation.data;
+        
+        if (!data || typeof data !== 'object') {
+            throw new Error('البيانات المستلمة ليست كائن صحيح');
+        }
         
         if (!data.channels || !Array.isArray(data.channels)) {
-            throw new Error('تنسيق البيانات غير صحيح');
+            throw new Error('تنسيق البيانات غير صحيح - لا توجد قنوات في البيانات');
+        }
+        
+        if (data.channels.length === 0) {
+            throw new Error('لا توجد قنوات في البيانات المستلمة');
+        }
+        
+        console.log('✅ تم تحليل JSON بنجاح، عدد القنوات:', data.channels.length);
+        
+        // Create backup of current channels before updating
+        const currentChannels = window.app.channels || [];
+        if (currentChannels.length > 0) {
+            const backupData = {
+                channels: currentChannels,
+                timestamp: new Date().toISOString(),
+                count: currentChannels.length
+            };
+            localStorage.setItem('channels_backup', JSON.stringify(backupData));
+            console.log('💾 تم إنشاء نسخة احتياطية من القنوات الحالية:', currentChannels.length, 'قناة');
+        }
+        
+        // Validate each channel has required fields
+        const invalidChannels = data.channels.filter(channel => 
+            !channel.name || !channel.url || !channel.category
+        );
+        
+        if (invalidChannels.length > 0) {
+            console.warn('⚠️ تم العثور على قنوات غير صحيحة:', invalidChannels.length);
+            console.warn('القنوات غير الصحيحة:', invalidChannels);
         }
         
         // Update channels in the app
@@ -6435,14 +6528,58 @@ async function updateChannels() {
         
         // Log confirmation that data was saved
         console.log('✅ تم حفظ القنوات المحدثة في localStorage بنجاح');
-        
-        console.log('تم تحديث القنوات بنجاح:', data.channels.length, 'قناة');
+        console.log('✅ تم تحديث القنوات بنجاح:', data.channels.length, 'قناة');
         
     } catch (error) {
-        console.error('خطأ في تحديث القنوات:', error);
+        console.error('❌ خطأ في تحديث القنوات:', error);
         
-        // Show error notification
-        window.app.notifyError(`فشل في تحديث القنوات: ${error.message}`, 5000);
+        // Show detailed error notification
+        let errorMessage = 'فشل في تحديث القنوات';
+        if (error.message.includes('JSON')) {
+            errorMessage += ': خطأ في تنسيق البيانات';
+        } else if (error.message.includes('fetch')) {
+            errorMessage += ': مشكلة في الاتصال بالإنترنت';
+        } else {
+            errorMessage += `: ${error.message}`;
+        }
+        
+        window.app.notifyError(errorMessage, 8000);
+        
+        // Try to restore backup if available
+        const backupData = localStorage.getItem('channels_backup');
+        if (backupData) {
+            try {
+                const backup = JSON.parse(backupData);
+                if (backup.channels && backup.channels.length > 0) {
+                    console.log('🔄 محاولة استعادة النسخة الاحتياطية...');
+                    window.app.channels = backup.channels;
+                    window.app.filteredChannels = [...backup.channels];
+                    window.app.saveChannelsToStorage();
+                    window.app.applyAllFilters();
+                    window.app.renderChannels();
+                    window.app.updateSidebarCounts();
+                    
+                    setTimeout(() => {
+                        window.app.notifyInfo(
+                            `تم استعادة النسخة الاحتياطية (${backup.count} قناة)`,
+                            'استعادة النسخة الاحتياطية',
+                            5000
+                        );
+                    }, 3000);
+                }
+            } catch (backupError) {
+                console.error('❌ فشل في استعادة النسخة الاحتياطية:', backupError);
+            }
+        }
+        
+        // Show additional help
+        setTimeout(() => {
+            window.app.notifyInfo(
+                'يمكنك المحاولة مرة أخرى أو التحقق من اتصال الإنترنت',
+                'مساعدة',
+                5000
+            );
+        }, 2000);
     }
 }
 
