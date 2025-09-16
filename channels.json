@@ -478,7 +478,7 @@
       "category": "entertainment",
       "country": "تركيا",
       "type": "hls",
-      "status": "active"
+      "status": "inactive"
     },
     {
       "id": 72,
@@ -555,7 +555,18 @@
     "animationsEnabled": false,
     "compactMode": true,
     "highContrast": false,
-    "borderRadius": "rounded"
+    "borderRadius": "rounded",
+    "notificationsEnabled": false,
+    "notificationDuration": 3,
+    "showCustomControls": true,
+    "notifications": false,
+    "notificationSound": false,
+    "showChannelImages": false,
+    "updateNotifications": true,
+    "successNotifications": true,
+    "errorNotifications": true,
+    "infoNotifications": true,
+    "notificationPosition": "top-right"
   },
   "categories": [
     {
@@ -604,6 +615,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-16T10:50:33.708Z",
+  "lastModified": "2025-09-16T10:50:49.992Z",
   "version": "1.0"
 }
