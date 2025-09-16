@@ -282,7 +282,7 @@
       "id": 50,
       "name": "Asharq Discovery",
       "url": "https://svs.itworkscdn.net/asharqdiscoverylive/asharqd.smil/playlist_dvr.m3u8",
-      "logo": "https://iili.io/KzLkfFs.png",
+      "logo": "https://iili.io/KAkXaGp.png",
       "category": "documentary",
       "country": "السعودية",
       "type": "hls"
@@ -578,6 +578,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-16T10:14:41.243Z",
+  "lastModified": "2025-09-16T10:14:54.709Z",
   "version": "1.0"
 }
