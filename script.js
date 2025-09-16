@@ -5084,6 +5084,7 @@ class ArabicTVApp {
     }
     
     updateLastUpdateTime() {
+        // Update the main lastUpdateTime element
         const lastUpdateTimeElement = document.getElementById('lastUpdateTime');
         if (lastUpdateTimeElement) {
             const now = new Date();
@@ -5098,6 +5099,22 @@ class ArabicTVApp {
             });
             lastUpdateTimeElement.textContent = timeString;
         }
+        
+        // Update any other last-update-time elements
+        const otherUpdateTimeElements = document.querySelectorAll('.last-update-time');
+        otherUpdateTimeElements.forEach(element => {
+            const now = new Date();
+            const timeString = now.toLocaleString('en-US', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+            element.textContent = timeString;
+        });
     }
 
     // Check for updates
@@ -5180,7 +5197,7 @@ class ArabicTVApp {
             // Reset to normal display
             updateTimeText.innerHTML = `
                 <i class="fas fa-clock"></i>
-                تحديث: <span id="lastUpdateTime">-</span>
+                تحديث: <span class="last-update-time">-</span>
             `;
             // Update the time display
             this.updateLastUpdateTime();
