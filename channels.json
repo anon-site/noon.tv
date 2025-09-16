@@ -203,7 +203,7 @@
     },
     {
       "id": 24,
-      "name": "روتانا سينيما test",
+      "name": "روتانا سينيما طماطة",
       "url": "https://tgn.bozztv.com/gin-36bay3/ga-rotanacinema-ksa/index.m3u8?wmsAuthSign=c2VydmVyX3RpbWU9OS8xNi8yMDI1IDk6MzQ6NDkgQU0maGFzaF92YWx1ZT1sK0JOTjlOVDNhQVl4ZnZaQ25ockNBPT0mdmFsaWRtaW51dGVzPTE0NDAmc3RybV9sZW49MzA=",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Rotana_Cinema_Egy.png/800px-Rotana_Cinema_Egy.png",
       "category": "news",
@@ -595,6 +595,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-16T19:34:50.443Z",
+  "lastModified": "2025-09-16T19:38:53.500Z",
   "version": "1.0"
 }
