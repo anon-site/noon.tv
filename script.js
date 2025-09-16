@@ -981,6 +981,18 @@ class ArabicTVApp {
         const loading = document.getElementById('videoLoading');
 
         try {
+            // Validate URL
+            if (!url || url.trim() === '') {
+                throw new Error('رابط الفيديو فارغ أو غير صحيح');
+            }
+
+            // Show loading
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ تحميل البث...</p>
+            `;
+
             // Check if it's a YouTube URL
             if (type === 'youtube' || this.isYouTubeUrl(url)) {
                 const currentQuality = this.getCurrentQuality();
@@ -989,7 +1001,7 @@ class ArabicTVApp {
             }
 
             // HLS streaming
-            if (Hls.isSupported()) {
+            if (typeof Hls !== 'undefined' && Hls.isSupported()) {
                 if (this.hls) {
                     this.hls.destroy();
                 }
@@ -1072,6 +1084,8 @@ class ArabicTVApp {
                 if (this.settings.autoplay) {
                     video.play().catch(console.error);
                 }
+            } else if (typeof Hls === 'undefined') {
+                throw new Error('مكتبة HLS.js غير محملة - تحقق من اتصال الإنترنت');
             } else {
                 throw new Error('HLS not supported');
             }
@@ -1081,6 +1095,7 @@ class ArabicTVApp {
 
         } catch (error) {
             console.error('Error loading video:', error);
+            this.showVideoError(`خطأ في تحميل الفيديو: ${error.message}`);
             this.handleVideoError();
         }
     }
@@ -1199,9 +1214,14 @@ class ArabicTVApp {
         const loading = document.getElementById('videoLoading');
         
         try {
+            // Validate URL
+            if (!url || url.trim() === '') {
+                throw new Error('رابط اليوتيوب فارغ أو غير صحيح');
+            }
+
             const videoId = this.getYouTubeVideoId(url);
             if (!videoId) {
-                throw new Error('Invalid YouTube URL');
+                throw new Error('رابط اليوتيوب غير صحيح - تحقق من الرابط');
             }
 
             // Hide the video element and show iframe
@@ -1241,7 +1261,7 @@ class ArabicTVApp {
             
         } catch (error) {
             console.error('Error loading YouTube video:', error);
-            this.showVideoError('خطأ في تحميل فيديو اليوتيوب - تحقق من الرابط');
+            this.showVideoError(`خطأ في تحميل فيديو اليوتيوب: ${error.message}`);
         }
     }
 

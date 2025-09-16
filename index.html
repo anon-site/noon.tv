@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; media-src 'self' https:; connect-src 'self' https:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.youtube.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; media-src 'self' https: blob:; connect-src 'self' https: wss:; frame-src 'self' https://www.youtube.com https://youtube.com; child-src 'self' https://www.youtube.com https://youtube.com; object-src 'none'; base-uri 'self'; form-action 'self';">
     <title>ANON TV</title>
     
     <!-- Favicon and App Icons -->
@@ -1277,6 +1277,20 @@
 
     <!-- HLS.js Library for video streaming -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        // Check if HLS.js loaded successfully
+        window.addEventListener('load', function() {
+            if (typeof Hls === 'undefined') {
+                console.error('❌ فشل في تحميل مكتبة HLS.js');
+                // Show notification to user
+                if (window.app && window.app.notifyError) {
+                    window.app.notifyError('فشل في تحميل مكتبة تشغيل الفيديو - تحقق من اتصال الإنترنت');
+                }
+            } else {
+                console.log('✅ تم تحميل مكتبة HLS.js بنجاح');
+            }
+        });
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
