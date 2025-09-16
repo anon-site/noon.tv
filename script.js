@@ -2129,6 +2129,9 @@ class ArabicTVApp {
         this.resetAddChannelForm();
         this.showNotification('success', 'تم إضافة القناة', 'تم إضافة القناة بنجاح وحفظها!');
         
+        // تحديث وقت التحديث عند إضافة قناة من لوحة التحكم
+        this.updateLastUpdateTime();
+        
         // المزامنة التلقائية مع السحابة
         if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
             this.syncToRemote().catch(error => {
@@ -2325,6 +2328,9 @@ class ArabicTVApp {
         
         this.showNotification('success', 'تم تحديث القناة', 'تم تحديث القناة وحفظ التغييرات بنجاح!');
         
+        // تحديث وقت التحديث عند تعديل قناة من لوحة التحكم
+        this.updateLastUpdateTime();
+        
         // المزامنة التلقائية مع السحابة
         if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
             this.syncToRemote().catch(error => {
@@ -2368,6 +2374,9 @@ class ArabicTVApp {
             
             // Show success notification
             this.showNotification('success', 'تم حذف القناة', `تم حذف قناة "${channel.name}" بنجاح`);
+            
+            // تحديث وقت التحديث عند حذف قناة من لوحة التحكم
+            this.updateLastUpdateTime();
             
             // المزامنة التلقائية مع السحابة
             if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
@@ -4847,6 +4856,9 @@ class ArabicTVApp {
             
             this.notifySuccess('تم حفظ الترتيب الجديد للقنوات بنجاح!');
             
+            // تحديث وقت التحديث عند حفظ ترتيب القنوات من لوحة التحكم
+            this.updateLastUpdateTime();
+            
             // المزامنة التلقائية مع السحابة
             if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
                 this.syncToRemote().catch(error => {
@@ -5673,8 +5685,8 @@ class ArabicTVApp {
             channelCountElement.textContent = this.filteredChannels.length;
         }
         
-        // Update the last update time
-        this.updateLastUpdateTime();
+        // تحديث الوقت المعروض من البيانات المحفوظة (بدون تحديث الوقت الحالي)
+        this.displayLastUpdateTime();
         
         this.updateBreadcrumbs();
     }
@@ -5727,6 +5739,31 @@ class ArabicTVApp {
                 hour12: false
             });
             lastUpdateTimeElement.textContent = timeString;
+            
+            // حفظ الوقت في localStorage
+            localStorage.setItem('lastUpdateTime', now.toISOString());
+        }
+    }
+    
+    displayLastUpdateTime() {
+        const lastUpdateTimeElement = document.getElementById('lastUpdateTime');
+        if (lastUpdateTimeElement) {
+            const savedTime = localStorage.getItem('lastUpdateTime');
+            if (savedTime) {
+                const updateDate = new Date(savedTime);
+                const timeString = updateDate.toLocaleString('en-US', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                });
+                lastUpdateTimeElement.textContent = timeString;
+            } else {
+                lastUpdateTimeElement.textContent = '-';
+            }
         }
     }
 
@@ -5812,8 +5849,8 @@ class ArabicTVApp {
                 <i class="fas fa-clock"></i>
                 تحديث: <span id="lastUpdateTime">-</span>
             `;
-            // Update the time display
-            this.updateLastUpdateTime();
+            // عرض الوقت المحفوظ فقط
+            this.displayLastUpdateTime();
         }
     }
 
@@ -7150,11 +7187,7 @@ async function updateChannels() {
         window.app.renderChannels();
         window.app.updateSidebarCounts();
         
-        // Save update time
-        const updateTime = new Date().toISOString();
-        localStorage.setItem('lastUpdateTime', updateTime);
-        
-        // Update the display
+        // تحديث الوقت عند التحديث من لوحة التحكم فقط
         window.app.updateLastUpdateTime();
         
         // Reset update indicator
