@@ -559,6 +559,16 @@
       "country": "قطر",
       "type": "hls",
       "status": "active"
+    },
+    {
+      "id": 81,
+      "name": "بحري",
+      "url": "https://live.kwikmotion.com/bahry1live/bahry1.smil/playlist.m3u8",
+      "logo": "https://bahry.faulio.com/storage/mediagallery/9a/c7/fullhd_6a5a505408b027c0d4a4453c72258f9db0d2cb20.png",
+      "category": "documentary",
+      "country": "الكويت",
+      "type": "hls",
+      "status": "active"
     }
   ],
   "favorites": [],
@@ -625,6 +635,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-17T09:14:28.601Z",
+  "lastModified": "2025-09-17T09:17:13.710Z",
   "version": "1.0"
 }
