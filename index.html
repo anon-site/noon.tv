@@ -950,10 +950,10 @@
                                     <label for="currentPassword">
                                         <i class="fas fa-lock"></i>
                                         كلمة المرور الحالية
+                                        <i class="fas fa-eye toggle-current-password" onclick="app.toggleCurrentPasswordVisibility()"></i>
                                     </label>
                                     <div class="password-input-wrapper">
                                         <input type="password" id="currentPassword" required placeholder="أدخل كلمة المرور الحالية">
-                                        <i class="fas fa-eye toggle-current-password" onclick="app.toggleCurrentPasswordVisibility()"></i>
                                     </div>
                                 </div>
                                 
@@ -961,10 +961,10 @@
                                     <label for="newPassword">
                                         <i class="fas fa-key"></i>
                                         كلمة المرور الجديدة
+                                        <i class="fas fa-eye toggle-new-password" onclick="app.toggleNewPasswordVisibility()"></i>
                                     </label>
                                     <div class="password-input-wrapper">
                                         <input type="password" id="newPassword" required placeholder="أدخل كلمة المرور الجديدة">
-                                        <i class="fas fa-eye toggle-new-password" onclick="app.toggleNewPasswordVisibility()"></i>
                                     </div>
                                     <div class="password-strength" id="passwordStrength">
                                         <div class="strength-indicator">
@@ -980,10 +980,10 @@
                                     <label for="confirmPassword">
                                         <i class="fas fa-check-double"></i>
                                         تأكيد كلمة المرور
+                                        <i class="fas fa-eye toggle-confirm-password" onclick="app.toggleConfirmPasswordVisibility()"></i>
                                     </label>
                                     <div class="password-input-wrapper">
                                         <input type="password" id="confirmPassword" required placeholder="أعد إدخال كلمة المرور الجديدة">
-                                        <i class="fas fa-eye toggle-confirm-password" onclick="app.toggleConfirmPasswordVisibility()"></i>
                                     </div>
                                     <div class="password-match" id="passwordMatch">
                                         <i class="fas fa-check-circle match-icon" id="matchIcon"></i>

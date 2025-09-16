@@ -4057,12 +4057,12 @@ input:checked + .slider:before {
 .password-input-wrapper {
     position: relative;
     margin-bottom: 8px;
-    margin-right: 50px;
+    width: 100%;
 }
 
 .password-input-wrapper input {
     width: 100%;
-    padding: 18px 50px 18px 24px;
+    padding: 18px 20px;
     border: 1px solid var(--border-color);
     border-radius: 16px;
     background: var(--input-bg);
@@ -4072,6 +4072,7 @@ input:checked + .slider:before {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     position: relative;
+    box-sizing: border-box;
 }
 
 .password-input-wrapper input:focus {
@@ -4094,38 +4095,35 @@ input:checked + .slider:before {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.password-input-wrapper .toggle-current-password,
-.password-input-wrapper .toggle-new-password,
-.password-input-wrapper .toggle-confirm-password {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
+/* أيقونات إظهار/إخفاء كلمة المرور في التسميات */
+.form-group label .toggle-current-password,
+.form-group label .toggle-new-password,
+.form-group label .toggle-confirm-password {
+    float: left;
+    margin-left: 10px;
     cursor: pointer;
     color: var(--text-secondary);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    padding: 8px;
-    border-radius: 8px;
+    padding: 6px;
+    border-radius: 6px;
     font-size: 16px;
-    z-index: 10;
     background: transparent;
-    border: none;
-    box-shadow: none;
-    width: 36px;
-    height: 36px;
-    display: flex;
+    border: 1px solid transparent;
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
 }
 
-.password-input-wrapper .toggle-current-password:hover,
-.password-input-wrapper .toggle-new-password:hover,
-.password-input-wrapper .toggle-confirm-password:hover {
+/* تأثيرات التمرير للأيقونات في التسميات */
+.form-group label .toggle-current-password:hover,
+.form-group label .toggle-new-password:hover,
+.form-group label .toggle-confirm-password:hover {
     color: var(--primary-color);
     background: rgba(59, 130, 246, 0.1);
     border-color: var(--primary-color);
-    transform: translateY(-50%) scale(1.05);
-    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.25);
+    transform: scale(1.1);
 }
 
 /* تحسين مؤشر قوة كلمة المرور */
@@ -4432,11 +4430,12 @@ body[data-theme="dark"] .password-input-wrapper input:hover {
     background: rgba(255, 255, 255, 0.1);
 }
 
-body[data-theme="dark"] .password-input-wrapper .toggle-current-password,
-body[data-theme="dark"] .password-input-wrapper .toggle-new-password,
-body[data-theme="dark"] .password-input-wrapper .toggle-confirm-password {
+/* الثيم الداكن للأيقونات في التسميات */
+body[data-theme="dark"] .form-group label .toggle-current-password,
+body[data-theme="dark"] .form-group label .toggle-new-password,
+body[data-theme="dark"] .form-group label .toggle-confirm-password {
     background: transparent;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     color: rgba(255, 255, 255, 0.7);
 }
 
@@ -4484,11 +4483,12 @@ body[data-theme="light"] .password-input-wrapper input:hover {
     background: #ffffff;
 }
 
-body[data-theme="light"] .password-input-wrapper .toggle-current-password,
-body[data-theme="light"] .password-input-wrapper .toggle-new-password,
-body[data-theme="light"] .password-input-wrapper .toggle-confirm-password {
+/* الثيم الفاتح للأيقونات في التسميات */
+body[data-theme="light"] .form-group label .toggle-current-password,
+body[data-theme="light"] .form-group label .toggle-new-password,
+body[data-theme="light"] .form-group label .toggle-confirm-password {
     background: transparent;
-    border: none;
+    border: 1px solid rgba(0, 0, 0, 0.1);
     color: rgba(0, 0, 0, 0.6);
 }
 
@@ -4544,18 +4544,18 @@ body[data-theme="light"] .password-requirements {
     }
     
     .password-input-wrapper input {
-        padding: 16px 45px 16px 20px;
+        padding: 16px 20px;
         font-size: 16px;
     }
     
-    .password-input-wrapper .toggle-current-password,
-    .password-input-wrapper .toggle-new-password,
-    .password-input-wrapper .toggle-confirm-password {
-        right: 8px;
-        padding: 6px;
-        font-size: 16px;
-        width: 32px;
-        height: 32px;
+    .form-group label .toggle-current-password,
+    .form-group label .toggle-new-password,
+    .form-group label .toggle-confirm-password {
+        margin-left: 8px;
+        padding: 4px;
+        font-size: 14px;
+        width: 24px;
+        height: 24px;
     }
     
     .password-requirements {
