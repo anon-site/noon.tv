@@ -478,7 +478,7 @@
       "category": "entertainment",
       "country": "تركيا",
       "type": "hls",
-      "status": "active"
+      "status": "inactive"
     },
     {
       "id": 72,
@@ -615,6 +615,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-16T11:05:21.750Z",
+  "lastModified": "2025-09-16T11:07:58.922Z",
   "version": "1.0"
 }
