@@ -623,7 +623,7 @@
     {
       "id": 87,
       "name": "الجزيرة أطفال",
-      "url": "https://games1.elahmad.xyz/tv755_www.elahmad.com_jeem/tracks-v1a1/mono.m3u8?token=89a4be7f6d2dd876050ee35ac5895e9d6672a0cf-35d58f30a09b9698acb3436c2edd25cb-1758076543-1758065743",
+      "url": "https://games1.elahmad.xyz/tv755_www.elahmad.com_jeem/index.m3u8?token=38dd3b6fc150bf3b3c40c4984d1fe472a2eb2e4c-542d033903c87299a1b0fa5a2cc31e56-1758076873-1758066073",
       "logo": "https://cdn.live.easybroadcast.io/abr_corp/63_mosaique-fm_rn56tgl/corp/63_mosaique-fm_rn56tgl_720p/chunks_dvr.m3u8",
       "category": "kids",
       "country": "قطر",
@@ -695,6 +695,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-17T09:45:16.574Z",
+  "lastModified": "2025-09-17T09:46:10.692Z",
   "version": "1.0"
 }
