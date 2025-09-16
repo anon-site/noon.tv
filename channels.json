@@ -534,7 +534,7 @@
       "id": 78,
       "name": "المعارف",
       "url": "https://672a3a5c8e335.streamlock.net/AlMaaref/smil:almaareflive.smil/playlist.m3u8",
-      "logo": "https://almaaref.ch/wp-content/uploads/2021/10/Almaaref-Logo.png",
+      "logo": "https://iili.io/KREneEX.png",
       "category": "religious",
       "country": "قطر",
       "type": "hls",
@@ -605,6 +605,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-17T09:08:20.371Z",
+  "lastModified": "2025-09-17T09:09:39.158Z",
   "version": "1.0"
 }
