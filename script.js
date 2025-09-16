@@ -10,7 +10,9 @@ class ArabicTVApp {
         this.hls = null;
         this.isPictureInPicture = false;
         this.isLoggedIn = false;
-        this.adminPassword = 'admin123'; // كلمة المرور الافتراضية
+        // كلمة المرور مشفرة بـ SHA-256 Hash (أكثر أماناً)
+        // قراءة كلمة المرور من localStorage أو استخدام الافتراضية
+        this.adminPassword = localStorage.getItem('anon_tv_admin_password') || '3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657'; // كلمة مرور @admin123 مشفرة بـ SHA-256
         this.settings = {
             autoQuality: true,
             autoplay: true,
@@ -65,6 +67,7 @@ class ArabicTVApp {
         this.loadFavorites(); // Load saved favorites
         this.filteredChannels = [...this.channels]; // Ensure filtered channels match loaded channels
         this.loadSettings();
+        this.loadAdminPassword(); // تحميل كلمة المرور المحفوظة
         this.loadLoginState(); // تحميل حالة تسجيل الدخول بعد تحميل البيانات
         this.renderChannels(); // عرض القنوات بعد تحميل حالة تسجيل الدخول
         // إعادة عرض القنوات مرة أخرى لضمان ظهور الأيقونات بشكل صحيح
@@ -184,6 +187,21 @@ class ArabicTVApp {
             console.log('سيتم استخدام الإعدادات الافتراضية');
         }
         this.applySettings();
+    }
+
+    loadAdminPassword() {
+        try {
+            const savedPassword = localStorage.getItem('anon_tv_admin_password');
+            if (savedPassword) {
+                this.adminPassword = savedPassword;
+                console.log('تم تحميل كلمة المرور المحفوظة');
+            } else {
+                console.log('لا توجد كلمة مرور محفوظة، سيتم استخدام كلمة المرور الافتراضية');
+            }
+        } catch (error) {
+            console.error('خطأ في تحميل كلمة المرور:', error);
+            console.log('سيتم استخدام كلمة المرور الافتراضية');
+        }
     }
 
     saveSettings() {
@@ -491,6 +509,12 @@ class ArabicTVApp {
 
         // Admin panel events
         this.bindAdminEvents();
+        
+        // Security tab events
+        this.bindSecurityEvents();
+        
+        // Sidebar events
+        this.bindSidebarEvents();
 
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
@@ -629,9 +653,50 @@ class ArabicTVApp {
             });
 
             // Mobile menu handling is now integrated in the main keyboard shortcuts handler
+    }
 
-            // Add event listeners for desktop sidebar nav tabs
-            document.querySelectorAll('.sidebar-nav-tab').forEach(tab => {
+    bindSecurityEvents() {
+        // ربط أحداث تغيير كلمة المرور
+        setTimeout(() => {
+            const changePasswordForm = document.getElementById('changePasswordForm');
+            if (changePasswordForm) {
+                changePasswordForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.changePassword();
+                });
+            }
+
+            // ربط أحداث حقول كلمة المرور
+            const newPasswordInput = document.getElementById('newPassword');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+
+            if (newPasswordInput) {
+                newPasswordInput.addEventListener('input', (e) => {
+                    const password = e.target.value;
+                    this.updatePasswordStrength(password);
+                    this.updatePasswordRequirements(password);
+                    
+                    // تحديث مؤشر التطابق إذا كان حقل التأكيد مملوء
+                    const confirmPassword = document.getElementById('confirmPassword').value;
+                    if (confirmPassword.length > 0) {
+                        this.updatePasswordMatch(password, confirmPassword);
+                    }
+                });
+            }
+
+            if (confirmPasswordInput) {
+                confirmPasswordInput.addEventListener('input', (e) => {
+                    const newPassword = document.getElementById('newPassword').value;
+                    const confirmPassword = e.target.value;
+                    this.updatePasswordMatch(newPassword, confirmPassword);
+                });
+            }
+        }, 100);
+    }
+
+    bindSidebarEvents() {
+        // Add event listeners for desktop sidebar nav tabs
+        document.querySelectorAll('.sidebar-nav-tab').forEach(tab => {
                 tab.addEventListener('click', () => {
                     const category = tab.dataset.category;
                     this.filterChannels(category);
@@ -1397,11 +1462,298 @@ class ArabicTVApp {
         }
     }
 
-    loginToAdmin() {
+    // دالة لتشفير كلمة المرور باستخدام SHA-256
+    async hashPassword(password) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // دالة للتحقق من صحة كلمة المرور
+    validatePassword(password) {
+        // تنظيف المدخل من المسافات الزائدة
+        password = password.trim();
+        
+        // التحقق من الطول (8-50 حرف)
+        if (password.length < 8 || password.length > 50) {
+            return false;
+        }
+        
+        // التحقق من عدم احتواء رموز خطيرة
+        const dangerousChars = /[<>'"&]/;
+        if (dangerousChars.test(password)) {
+            return false;
+        }
+        
+        return true;
+    }
+
+    // دالة لتقييم قوة كلمة المرور
+    checkPasswordStrength(password) {
+        let score = 0;
+        const requirements = {
+            length: password.length >= 8,
+            uppercase: /[A-Z]/.test(password),
+            lowercase: /[a-z]/.test(password),
+            number: /\d/.test(password),
+            special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+        };
+
+        // حساب النقاط
+        Object.values(requirements).forEach(req => {
+            if (req) score++;
+        });
+
+        // تحديد مستوى القوة
+        if (score < 2) return { level: 'weak', score: 1 };
+        if (score < 4) return { level: 'fair', score: 2 };
+        if (score < 5) return { level: 'good', score: 3 };
+        return { level: 'strong', score: 4 };
+    }
+
+    // دالة لتحديث مؤشر قوة كلمة المرور
+    updatePasswordStrength(password) {
+        const strengthIndicator = this.checkPasswordStrength(password);
+        const strengthFill = document.getElementById('strengthFill');
+        const strengthText = document.getElementById('strengthText');
+        
+        // إزالة جميع الفئات السابقة
+        strengthFill.className = 'strength-fill';
+        
+        if (password.length > 0) {
+            strengthFill.classList.add(strengthIndicator.level);
+            
+            const strengthLabels = {
+                weak: 'ضعيفة',
+                fair: 'متوسطة',
+                good: 'جيدة',
+                strong: 'قوية جداً'
+            };
+            
+            strengthText.textContent = strengthLabels[strengthIndicator.level];
+        } else {
+            strengthText.textContent = 'أدخل كلمة مرور';
+        }
+    }
+
+    // دالة لتحديث متطلبات كلمة المرور
+    updatePasswordRequirements(password) {
+        const requirements = {
+            length: password.length >= 8,
+            uppercase: /[A-Z]/.test(password),
+            lowercase: /[a-z]/.test(password),
+            number: /\d/.test(password),
+            special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+        };
+
+        Object.keys(requirements).forEach(req => {
+            const element = document.getElementById(`req-${req}`);
+            if (element) {
+                element.classList.toggle('valid', requirements[req]);
+                element.classList.toggle('invalid', !requirements[req]);
+            }
+        });
+    }
+
+    // دالة لتحديث مؤشر تطابق كلمة المرور
+    updatePasswordMatch(newPassword, confirmPassword) {
+        const matchIcon = document.getElementById('matchIcon');
+        const matchText = document.getElementById('matchText');
+        
+        if (confirmPassword.length === 0) {
+            matchIcon.className = 'fas fa-check-circle match-icon';
+            matchText.className = 'match-text';
+            matchText.textContent = 'تطابق كلمة المرور';
+            return false;
+        }
+        
+        if (newPassword === confirmPassword) {
+            matchIcon.classList.add('valid');
+            matchIcon.classList.remove('invalid');
+            matchText.classList.add('valid');
+            matchText.classList.remove('invalid');
+            matchText.textContent = 'تطابق كلمة المرور';
+            return true;
+        } else {
+            matchIcon.classList.add('invalid');
+            matchIcon.classList.remove('valid');
+            matchText.classList.add('invalid');
+            matchText.classList.remove('valid');
+            matchText.textContent = 'كلمة المرور غير متطابقة';
+            return false;
+        }
+    }
+
+    // دوال إظهار/إخفاء كلمة المرور
+    toggleCurrentPasswordVisibility() {
+        const passwordInput = document.getElementById('currentPassword');
+        const toggleIcon = document.querySelector('.toggle-current-password');
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleIcon.classList.remove('fa-eye');
+            toggleIcon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            toggleIcon.classList.remove('fa-eye-slash');
+            toggleIcon.classList.add('fa-eye');
+        }
+    }
+
+    toggleNewPasswordVisibility() {
+        const passwordInput = document.getElementById('newPassword');
+        const toggleIcon = document.querySelector('.toggle-new-password');
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleIcon.classList.remove('fa-eye');
+            toggleIcon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            toggleIcon.classList.remove('fa-eye-slash');
+            toggleIcon.classList.add('fa-eye');
+        }
+    }
+
+    toggleConfirmPasswordVisibility() {
+        const passwordInput = document.getElementById('confirmPassword');
+        const toggleIcon = document.querySelector('.toggle-confirm-password');
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleIcon.classList.remove('fa-eye');
+            toggleIcon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            toggleIcon.classList.remove('fa-eye-slash');
+            toggleIcon.classList.add('fa-eye');
+        }
+    }
+
+    // دالة تغيير كلمة المرور
+    async changePassword() {
+        const currentPassword = document.getElementById('currentPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        // التحقق من كلمة المرور الحالية
+        const currentHashedPassword = await this.hashPassword(currentPassword);
+        if (currentHashedPassword !== this.adminPassword) {
+            this.notifyError('كلمة المرور الحالية غير صحيحة');
+            return;
+        }
+        
+        // التحقق من صحة كلمة المرور الجديدة
+        if (!this.validatePassword(newPassword)) {
+            this.notifyError('كلمة المرور الجديدة لا تلبي المتطلبات');
+            return;
+        }
+        
+        // التحقق من تطابق كلمة المرور
+        if (newPassword !== confirmPassword) {
+            this.notifyError('كلمة المرور الجديدة غير متطابقة');
+            return;
+        }
+        
+        // التحقق من أن كلمة المرور الجديدة مختلفة عن الحالية
+        if (currentPassword === newPassword) {
+            this.notifyError('كلمة المرور الجديدة يجب أن تكون مختلفة عن الحالية');
+            return;
+        }
+        
+        try {
+            // تشفير كلمة المرور الجديدة وحفظها
+            const newHashedPassword = await this.hashPassword(newPassword);
+            this.adminPassword = newHashedPassword;
+            
+            // حفظ كلمة المرور الجديدة في localStorage
+            localStorage.setItem('anon_tv_admin_password', newHashedPassword);
+            
+            // حفظ تاريخ آخر تغيير
+            localStorage.setItem('anon_tv_last_password_change', new Date().toISOString());
+            
+            // مسح النموذج
+            this.resetPasswordForm();
+            
+            // إظهار رسالة نجاح
+            this.notifySuccess('تم تغيير كلمة المرور بنجاح');
+            
+            // إشعار إضافي حول المزامنة السحابية
+            if (this.remoteStorage.enabled) {
+                setTimeout(() => {
+                    this.notifyInfo('كلمة المرور الجديدة ستُزامن تلقائياً مع جميع الأجهزة المتصلة');
+                }, 2000);
+            }
+            
+            // تحديث معلومات الأمان
+            this.updateSecurityInfo();
+            
+        } catch (error) {
+            console.error('خطأ في تغيير كلمة المرور:', error);
+            this.notifyError('حدث خطأ أثناء تغيير كلمة المرور');
+        }
+    }
+
+    // دالة إعادة تعيين نموذج كلمة المرور
+    resetPasswordForm() {
+        document.getElementById('currentPassword').value = '';
+        document.getElementById('newPassword').value = '';
+        document.getElementById('confirmPassword').value = '';
+        
+        // إعادة تعيين مؤشرات القوة والتطابق
+        this.updatePasswordStrength('');
+        this.updatePasswordRequirements('');
+        this.updatePasswordMatch('', '');
+    }
+
+    // دالة إلغاء تغيير كلمة المرور
+    cancelPasswordChange() {
+        this.resetPasswordForm();
+        this.notifyInfo('تم إلغاء تغيير كلمة المرور');
+    }
+
+    // دالة تحديث معلومات الأمان
+    updateSecurityInfo() {
+        const lastChange = localStorage.getItem('anon_tv_last_password_change');
+        const lastChangeElement = document.getElementById('lastPasswordChange');
+        
+        if (lastChange) {
+            const changeDate = new Date(lastChange);
+            lastChangeElement.textContent = changeDate.toLocaleString('ar-SA');
+        } else {
+            lastChangeElement.textContent = 'لم يتم تغييرها من قبل';
+        }
+        
+        // تحديث حالة الجلسة
+        const sessionStatus = document.getElementById('sessionStatus');
+        sessionStatus.textContent = this.isLoggedIn ? 'نشطة' : 'غير نشطة';
+    }
+
+    async loginToAdmin() {
         const password = document.getElementById('adminPassword').value;
         const errorElement = document.getElementById('loginError');
         
-        if (password === this.adminPassword) {
+        // التحقق من صحة كلمة المرور
+        if (!this.validatePassword(password)) {
+            errorElement.style.display = 'flex';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('adminPassword').focus();
+            this.notifyError('كلمة المرور غير صحيحة أو تحتوي على رموز غير مسموحة');
+            return;
+        }
+        
+        // تشفير كلمة المرور المدخلة ومقارنتها مع المخزنة
+        const hashedPassword = await this.hashPassword(password);
+        
+        // رسائل التشخيص (يمكن حذفها لاحقاً)
+        console.log('كلمة المرور المدخلة:', password);
+        console.log('كلمة المرور المشفرة:', hashedPassword);
+        console.log('كلمة المرور المخزنة:', this.adminPassword);
+        console.log('هل تتطابق؟', hashedPassword === this.adminPassword);
+        
+        if (hashedPassword === this.adminPassword) {
             this.isLoggedIn = true;
             this.saveLoginState(); // حفظ حالة تسجيل الدخول
             this.closeLoginModal();
@@ -1499,6 +1851,11 @@ class ArabicTVApp {
         // Load categories when switching to categories tab
         if (tab === 'categories') {
             this.renderCategories();
+        }
+        
+        // تحديث معلومات الأمان عند فتح تبويب الأمان
+        if (tab === 'security') {
+            this.updateSecurityInfo();
         }
         
         // Update category options when switching to add tab
@@ -2004,6 +2361,7 @@ class ArabicTVApp {
                 favorites: Array.from(this.favorites),
                 settings: this.settings,
                 categories: this.categories,
+                adminPassword: this.adminPassword, // إضافة كلمة المرور للمزامنة السحابية
                 lastModified: new Date().toISOString(),
                 version: '1.0'
             };
@@ -2304,6 +2662,16 @@ class ArabicTVApp {
             // Update categories
             if (remoteData.categories && Array.isArray(remoteData.categories)) {
                 this.categories = remoteData.categories;
+            }
+
+            // Update admin password if available
+            if (remoteData.adminPassword && remoteData.adminPassword !== this.adminPassword) {
+                this.adminPassword = remoteData.adminPassword;
+                localStorage.setItem('anon_tv_admin_password', remoteData.adminPassword);
+                console.log('تم تحديث كلمة المرور من المستودع السحابي');
+                this.notifyInfo('تم تحديث كلمة المرور من السحابة - يمكنك الآن استخدام كلمة المرور الجديدة');
+                // تحديث معلومات الأمان
+                this.updateSecurityInfo();
             }
 
             // Re-render everything

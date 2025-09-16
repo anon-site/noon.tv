@@ -3942,6 +3942,669 @@ input:checked + .slider:before {
     display: block;
 }
 
+/* Security Tab Styles */
+.security-settings {
+    padding: 20px;
+}
+
+.security-section {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    border: 1px solid var(--border-color);
+}
+
+.security-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.security-header i {
+    font-size: 24px;
+    color: var(--primary-color);
+    margin-left: 12px;
+}
+
+.security-header h3 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.security-header p {
+    margin: 8px 0 0 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* تحسين تصميم قسم الأمان */
+.security-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding: 24px;
+    background: linear-gradient(135deg, var(--card-bg) 0%, rgba(59, 130, 246, 0.05) 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.security-icon-wrapper {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #1d4ed8 100%);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+}
+
+.security-icon-wrapper i {
+    font-size: 28px;
+    color: white;
+}
+
+.security-title-group h3 {
+    margin: 0 0 8px 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.security-title-group p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.change-password-form {
+    max-width: 600px;
+    background: var(--card-bg);
+    padding: 32px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* تحسين تصميم حقول كلمة المرور */
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 16px;
+}
+
+.form-group label i {
+    color: var(--primary-color);
+    font-size: 18px;
+}
+
+.password-input-wrapper {
+    position: relative;
+    margin-bottom: 8px;
+    margin-right: 50px;
+}
+
+.password-input-wrapper input {
+    width: 100%;
+    padding: 18px 24px 18px 24px;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    background: var(--input-bg);
+    color: var(--text-primary);
+    font-size: 17px;
+    font-weight: 500;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.password-input-wrapper input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15), 0 8px 25px rgba(59, 130, 246, 0.2);
+    transform: translateY(-2px);
+    background: var(--input-bg);
+}
+
+.password-input-wrapper input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.8;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.password-input-wrapper input:hover {
+    border-color: rgba(59, 130, 246, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.password-input-wrapper .toggle-current-password,
+.password-input-wrapper .toggle-new-password,
+.password-input-wrapper .toggle-confirm-password {
+    position: absolute;
+    right: -45px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 20px;
+    z-index: 2;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.password-input-wrapper .toggle-current-password:hover,
+.password-input-wrapper .toggle-new-password:hover,
+.password-input-wrapper .toggle-confirm-password:hover {
+    color: var(--primary-color);
+    background: rgba(59, 130, 246, 0.1);
+    border-color: var(--primary-color);
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.25);
+}
+
+/* تحسين مؤشر قوة كلمة المرور */
+.password-strength {
+    margin-top: 12px;
+}
+
+.strength-indicator {
+    background: var(--card-bg);
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.strength-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    position: relative;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    transition: all 0.4s ease;
+    border-radius: 4px;
+    position: relative;
+}
+
+.strength-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.strength-fill.weak {
+    width: 25%;
+    background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+}
+
+.strength-fill.fair {
+    width: 50%;
+    background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+}
+
+.strength-fill.good {
+    width: 75%;
+    background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.strength-fill.strong {
+    width: 100%;
+    background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+}
+
+.strength-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.strength-text::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-secondary);
+    transition: all 0.3s ease;
+}
+
+.strength-text.weak::before {
+    background: #ef4444;
+}
+
+.strength-text.fair::before {
+    background: #f59e0b;
+}
+
+.strength-text.good::before {
+    background: #3b82f6;
+}
+
+.strength-text.strong::before {
+    background: #10b981;
+}
+
+/* تحسين مؤشر تطابق كلمة المرور */
+.password-match {
+    display: flex;
+    align-items: center;
+    margin-top: 12px;
+    padding: 12px 16px;
+    background: var(--card-bg);
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.password-match.matching {
+    border-color: #10b981;
+    background: rgba(16, 185, 129, 0.05);
+}
+
+.password-match.not-matching {
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.05);
+}
+
+.match-icon {
+    margin-left: 8px;
+    font-size: 18px;
+    transition: all 0.3s ease;
+}
+
+.password-match.matching .match-icon {
+    color: #10b981;
+}
+
+.password-match.not-matching .match-icon {
+    color: #ef4444;
+}
+}
+
+.match-icon.valid {
+    color: #10b981;
+}
+
+.match-icon.invalid {
+    color: #ef4444;
+}
+
+.match-text {
+    font-weight: 500;
+}
+
+.match-text.valid {
+    color: #10b981;
+}
+
+.match-text.invalid {
+    color: #ef4444;
+}
+
+/* تحسين تصميم متطلبات كلمة المرور */
+.password-requirements {
+    background: linear-gradient(135deg, var(--card-bg) 0%, rgba(59, 130, 246, 0.02) 100%);
+    border-radius: 16px;
+    padding: 20px;
+    margin: 24px 0;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.requirements-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.requirements-header i {
+    color: var(--primary-color);
+    font-size: 18px;
+}
+
+.password-requirements h4 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.requirements-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.requirement-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 15px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.requirement-item:hover {
+    background: rgba(59, 130, 246, 0.05);
+}
+
+.requirement-icon {
+    margin-left: 12px;
+    font-size: 10px;
+    transition: all 0.3s ease;
+}
+
+.requirement-item.valid .requirement-icon {
+    color: #10b981;
+    transform: scale(1.2);
+}
+
+.requirement-item.invalid .requirement-icon {
+    color: var(--text-secondary);
+}
+
+.requirement-item span {
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
+    font-weight: 500;
+}
+
+.requirement-item.valid span {
+    color: var(--text-primary);
+}
+
+.requirement-item.valid span {
+    color: #10b981;
+}
+
+/* تحسين تصميم أزرار الإجراءات */
+.form-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 32px;
+    justify-content: center;
+}
+
+.change-password-btn {
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 200px;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, var(--primary-color) 0%, #1d4ed8 100%);
+    color: white;
+    letter-spacing: 0.5px;
+}
+
+.change-password-btn:hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(59, 130, 246, 0.5);
+}
+
+.change-password-btn:disabled {
+    background: var(--border-color);
+    color: var(--text-secondary);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* تحسينات للوضع المظلم */
+body[data-theme="dark"] .security-header {
+    background: linear-gradient(135deg, var(--card-bg) 0%, rgba(59, 130, 246, 0.1) 100%);
+}
+
+body[data-theme="dark"] .change-password-form {
+    background: var(--card-bg);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body[data-theme="dark"] .password-input-wrapper input {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+}
+
+body[data-theme="dark"] .password-input-wrapper input:focus {
+    border-color: var(--primary-color);
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2), 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+body[data-theme="dark"] .password-input-wrapper input:hover {
+    border-color: rgba(59, 130, 246, 0.4);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+body[data-theme="dark"] .password-input-wrapper .toggle-current-password,
+body[data-theme="dark"] .password-input-wrapper .toggle-new-password,
+body[data-theme="dark"] .password-input-wrapper .toggle-confirm-password {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+body[data-theme="dark"] .password-input-wrapper .toggle-current-password:hover,
+body[data-theme="dark"] .password-input-wrapper .toggle-new-password:hover,
+body[data-theme="dark"] .password-input-wrapper .toggle-confirm-password:hover {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+body[data-theme="dark"] .strength-indicator,
+body[data-theme="dark"] .password-match,
+body[data-theme="dark"] .password-requirements {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* تحسينات للوضع الفاتح */
+body[data-theme="light"] .security-header {
+    background: linear-gradient(135deg, #ffffff 0%, rgba(59, 130, 246, 0.05) 100%);
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+body[data-theme="light"] .change-password-form {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+body[data-theme="light"] .password-input-wrapper input {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.12);
+    color: #1f2937;
+}
+
+body[data-theme="light"] .password-input-wrapper input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2), 0 8px 25px rgba(59, 130, 246, 0.15);
+    background: #ffffff;
+}
+
+body[data-theme="light"] .password-input-wrapper input:hover {
+    border-color: rgba(59, 130, 246, 0.4);
+    background: #ffffff;
+}
+
+body[data-theme="light"] .password-input-wrapper .toggle-current-password,
+body[data-theme="light"] .password-input-wrapper .toggle-new-password,
+body[data-theme="light"] .password-input-wrapper .toggle-confirm-password {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.6);
+}
+
+body[data-theme="light"] .password-input-wrapper .toggle-current-password:hover,
+body[data-theme="light"] .password-input-wrapper .toggle-new-password:hover,
+body[data-theme="light"] .password-input-wrapper .toggle-confirm-password:hover {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+body[data-theme="light"] .strength-indicator,
+body[data-theme="light"] .password-match,
+body[data-theme="light"] .password-requirements {
+    background: #f8fafc;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* تحسينات للشاشات الصغيرة */
+@media (max-width: 768px) {
+    .security-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+    }
+    
+    .security-icon-wrapper {
+        width: 56px;
+        height: 56px;
+    }
+    
+    .security-icon-wrapper i {
+        font-size: 24px;
+    }
+    
+    .change-password-form {
+        padding: 24px 20px;
+        margin: 0 16px;
+    }
+    
+    .form-actions {
+        justify-content: center;
+    }
+    
+    .change-password-btn {
+        width: 100%;
+        padding: 16px 24px;
+        min-width: auto;
+    }
+    
+    .password-input-wrapper {
+        margin-right: 45px;
+    }
+    
+    .password-input-wrapper input {
+        padding: 16px 20px 16px 20px;
+        font-size: 16px;
+    }
+    
+    .password-input-wrapper .toggle-current-password,
+    .password-input-wrapper .toggle-new-password,
+    .password-input-wrapper .toggle-confirm-password {
+        right: -40px;
+        padding: 10px;
+        font-size: 18px;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .password-requirements {
+        padding: 16px;
+    }
+    
+    .requirements-list {
+        gap: 8px;
+    }
+    
+    .requirement-item {
+        padding: 6px 10px;
+        font-size: 14px;
+    }
+}
+}
+
+.security-info {
+    display: grid;
+    gap: 16px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.info-item i {
+    font-size: 20px;
+    color: var(--primary-color);
+    margin-left: 16px;
+}
+
+.info-content h4 {
+    margin: 0 0 4px 0;
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.info-content p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
 .admin-search {
     margin-bottom: 2rem;
 }
@@ -4911,11 +5574,11 @@ body[data-theme="light"] .notification-close:hover {
     position: absolute;
     top: 12px;
     right: 12px;
-    background: rgba(0, 0, 0, 0.7);
-    border: none;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid rgba(255, 255, 255, 0.2);
     color: white;
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     cursor: pointer;
     transition: var(--transition);
@@ -4925,21 +5588,22 @@ body[data-theme="light"] .notification-close:hover {
     font-size: 1rem;
     backdrop-filter: blur(10px);
     z-index: 2;
-    opacity: 0;
-}
-
-.channel-card:hover .favorite-btn {
     opacity: 1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .favorite-btn:hover {
     background: var(--highlight-color);
+    border-color: rgba(255, 255, 255, 0.4);
     transform: scale(1.1);
+    box-shadow: 0 4px 16px rgba(233, 69, 96, 0.4);
 }
 
 .favorite-btn.favorited {
     background: var(--highlight-color);
+    border-color: rgba(255, 255, 255, 0.4);
     opacity: 1;
+    box-shadow: 0 4px 16px rgba(233, 69, 96, 0.4);
 }
 
 .favorite-btn.favorited i {
@@ -5134,18 +5798,24 @@ body[data-theme="light"] .filter-btn.active {
 
 
 body[data-theme="light"] .favorite-btn {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(0, 0, 0, 0.1);
     color: #64748b;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 body[data-theme="light"] .favorite-btn:hover {
     background: #3b82f6;
+    border-color: rgba(255, 255, 255, 0.4);
     color: white;
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
 }
 
 body[data-theme="light"] .favorite-btn.favorited {
     background: #3b82f6;
+    border-color: rgba(255, 255, 255, 0.4);
     color: white;
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
 }
 
 /* Light theme for Picture-in-Picture buttons */
