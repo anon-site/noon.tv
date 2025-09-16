@@ -569,6 +569,25 @@
                         حذف الكوكيز
                     </button>
                 </div>
+                
+                <!-- Channel Management Actions -->
+                <div class="settings-section">
+                    <h4 class="settings-section-title">📺 إدارة القنوات</h4>
+                    <div class="settings-actions">
+                        <button class="show-deleted-btn" onclick="app.showDeletedChannels()">
+                            <i class="fas fa-eye"></i>
+                            عرض القنوات المحذوفة
+                        </button>
+                        <button class="clear-deleted-btn" onclick="app.clearDeletedChannels()">
+                            <i class="fas fa-undo"></i>
+                            إعادة تعيين الحذف المحلي
+                        </button>
+                        <button class="test-merge-btn" onclick="app.testSmartMerge()">
+                            <i class="fas fa-flask"></i>
+                            اختبار الدمج الذكي
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
       <div class="modal-overlay"></div>
