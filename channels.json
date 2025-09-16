@@ -237,7 +237,7 @@
       "id": 31,
       "name": "السومرية",
       "url": "https://www.elahmad.com/tv/m3u8/online_live_14_tv.m3u8?id=sumari&t=11111111",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Alsumaria_logo.svg/2560px-Alsumaria_logo.svg.png",
+      "logo": "https://iili.io/KAkfJ4e.png",
       "category": "entertainment",
       "country": "العراق",
       "type": "hls"
@@ -578,6 +578,6 @@
       "icon": "fas fa-child"
     }
   ],
-  "lastModified": "2025-09-16T10:04:17.073Z",
+  "lastModified": "2025-09-16T10:06:00.910Z",
   "version": "1.0"
 }
