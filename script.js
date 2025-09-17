@@ -949,7 +949,8 @@ class ArabicTVApp {
     async playChannel(channel) {
         this.currentChannel = channel;
         this.showVideoModal(channel);
-        const type = channel.type || (this.isYouTubeUrl(channel.url) ? 'youtube' : 'hls');
+        const type = channel.type || (this.isYouTubeUrl(channel.url) ? 'youtube' : 
+            (channel.url.includes('/play/') || channel.url.includes(':8000/') || channel.url.includes(':8080/') || channel.url.includes(':1935/')) ? 'iptv' : 'hls');
         await this.loadVideoStream(channel.url, type);
     }
 
@@ -1003,6 +1004,12 @@ class ArabicTVApp {
             if (type === 'youtube' || this.isYouTubeUrl(url)) {
                 const currentQuality = this.getCurrentQuality();
                 await this.loadYouTubeVideo(url, currentQuality);
+                return;
+            }
+
+            // Check if it's an IPTV URL
+            if (type === 'iptv') {
+                await this.loadIPTVStream(url);
                 return;
             }
 
@@ -1187,6 +1194,11 @@ class ArabicTVApp {
             iconClass = 'fas fa-satellite-dish';
             typeText = 'بث مباشر';
             indicatorColor = '#ff9ff3';
+        } else if (url.includes('/play/') || url.includes(':8000/') || url.includes(':8080/') || url.includes(':1935/')) {
+            urlType = 'iptv';
+            iconClass = 'fas fa-tv';
+            typeText = 'IPTV مباشر';
+            indicatorColor = '#00b894';
         }
         
         // Update indicator
@@ -1212,6 +1224,47 @@ class ArabicTVApp {
         const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
         const match = url.match(regExp);
         return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    // Load IPTV stream
+    async loadIPTVStream(url) {
+        const video = document.getElementById('videoPlayer');
+        const source = document.getElementById('videoSource');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            // Validate URL
+            if (!url || url.trim() === '') {
+                throw new Error('رابط IPTV فارغ أو غير صحيح');
+            }
+
+            console.log('تحميل بث IPTV:', url);
+            
+            // Hide loading
+            loading.style.display = 'none';
+            
+            // Set video source directly for IPTV streams
+            source.src = url;
+            video.load();
+            
+            // Set volume
+            video.volume = this.settings.volume / 100;
+            
+            // Auto play if enabled
+            if (this.settings.autoplay) {
+                await video.play();
+            }
+            
+            // Update quality display
+            this.updateQualityDisplay('auto');
+            
+            console.log('تم تحميل بث IPTV بنجاح');
+            
+        } catch (error) {
+            console.error('خطأ في تحميل بث IPTV:', error);
+            this.showVideoError(`خطأ في تحميل بث IPTV: ${error.message}`);
+            this.handleVideoError();
+        }
     }
 
     // Load YouTube video using iframe
@@ -2095,6 +2148,8 @@ class ArabicTVApp {
             type = 'youtube';
         } else if (url.includes('.m3u8')) {
             type = 'hls';
+        } else if (url.includes('/play/') || url.includes(':8000/') || url.includes(':8080/') || url.includes(':1935/')) {
+            type = 'iptv';
         }
 
         // Validate required fields (logo is optional)
@@ -2300,6 +2355,8 @@ class ArabicTVApp {
             type = 'youtube';
         } else if (url.includes('.m3u8')) {
             type = 'hls';
+        } else if (url.includes('/play/') || url.includes(':8000/') || url.includes(':8080/') || url.includes(':1935/')) {
+            type = 'iptv';
         }
 
         // Validate required fields (logo is optional)
