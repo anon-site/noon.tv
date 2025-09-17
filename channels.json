@@ -613,11 +613,11 @@
     {
       "id": 86,
       "name": "الجزيرة الوثائقية",
-      "url": "http://213.57.91.138:8000/play/a06h",
+      "url": "http://213.57.91.138:8000/play/a06h.ts",
       "logo": "http://213.57.91.138:8000/play/a06h",
       "category": "documentary",
       "country": "قطر",
-      "type": "unknown",
+      "type": "iptv",
       "status": "active"
     }
   ],
@@ -685,6 +685,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-17T09:59:05.125Z",
+  "lastModified": "2025-09-17T10:02:52.449Z",
   "version": "1.0"
 }
