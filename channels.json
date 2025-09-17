@@ -701,9 +701,51 @@
       "key": "kids",
       "name": "أطفال",
       "icon": "fas fa-child"
+    },
+    {
+      "key": "youtube",
+      "name": "يوتيوب",
+      "icon": "fab fa-youtube",
+      "type": "video"
+    },
+    {
+      "key": "live",
+      "name": "البث المباشر",
+      "icon": "fas fa-broadcast-tower",
+      "type": "video"
+    },
+    {
+      "key": "series",
+      "name": "مسلسلات",
+      "icon": "fas fa-tv",
+      "type": "video"
+    },
+    {
+      "key": "educational",
+      "name": "تعليمية",
+      "icon": "fas fa-graduation-cap",
+      "type": "video"
+    },
+    {
+      "key": "cooking",
+      "name": "طبخ",
+      "icon": "fas fa-utensils",
+      "type": "video"
+    },
+    {
+      "key": "international",
+      "name": "دولية",
+      "icon": "fas fa-globe",
+      "type": "video"
+    },
+    {
+      "key": "hd",
+      "name": "عالية الجودة",
+      "icon": "fas fa-hd-video",
+      "type": "video"
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-18T09:15:33.707Z",
+  "lastModified": "2025-09-18T09:16:35.477Z",
   "version": "1.0"
 }
