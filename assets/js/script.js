@@ -124,7 +124,7 @@ class ArabicTVApp {
         }
         
         try {
-            const response = await fetch('channels.json');
+            const response = await fetch('data/channels.json');
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -6508,7 +6508,7 @@ function closeAdminPanel() {
 }
 
 function openIPTVChecker() {
-    window.location.href = 'iptv-checker.html';
+    window.location.href = 'tools/iptv-checker.html';
 }
 
 function closeModal() {
