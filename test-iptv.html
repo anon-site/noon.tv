@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار رابط IPTV</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success { background: #d4edda; border-color: #c3e6cb; }
+        .error { background: #f8d7da; border-color: #f5c6cb; }
+        .warning { background: #fff3cd; border-color: #ffeaa7; }
+        video {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 اختبار رابط IPTV</h1>
+        <p><strong>الرابط:</strong> <code>http://213.57.91.138:8000/play/a06h</code></p>
+        
+        <div class="test-section">
+            <h3>📹 اختبار الفيديو المباشر</h3>
+            <video id="video1" controls>
+                <source src="http://213.57.91.138:8000/play/a06h" type="video/mp4">
+                متصفحك لا يدعم تشغيل الفيديو
+            </video>
+            <div id="video1-status" class="log"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔄 اختبار HLS.js</h3>
+            <video id="video2" controls></video>
+            <div id="video2-status" class="log"></div>
+            <button onclick="testHLS()">اختبار HLS</button>
+        </div>
+
+        <div class="test-section">
+            <h3>🌐 اختبار iframe</h3>
+            <iframe id="iframe1" src="http://213.57.91.138:8000/play/a06h" width="100%" height="300" frameborder="0"></iframe>
+            <div id="iframe1-status" class="log"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔗 اختبار الاتصال</h3>
+            <button onclick="testConnection()">اختبار الاتصال</button>
+            <div id="connection-status" class="log"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 معلومات المتصفح</h3>
+            <div id="browser-info" class="log"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        const video1 = document.getElementById('video1');
+        const video2 = document.getElementById('video2');
+        const iframe1 = document.getElementById('iframe1');
+        
+        // اختبار الفيديو المباشر
+        video1.addEventListener('loadstart', () => {
+            log('video1', 'بدء تحميل الفيديو...');
+        });
+        
+        video1.addEventListener('canplay', () => {
+            log('video1', '✅ الفيديو جاهز للتشغيل!');
+        });
+        
+        video1.addEventListener('error', (e) => {
+            log('video1', '❌ خطأ في الفيديو: ' + e.message);
+            log('video1', 'كود الخطأ: ' + video1.error?.code);
+        });
+        
+        // اختبار HLS
+        function testHLS() {
+            log('video2', 'بدء اختبار HLS...');
+            
+            if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource('http://213.57.91.138:8000/play/a06h');
+                hls.attachMedia(video2);
+                
+                hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    log('video2', '✅ تم تحميل HLS بنجاح!');
+                });
+                
+                hls.on(Hls.Events.ERROR, (event, data) => {
+                    log('video2', '❌ خطأ HLS: ' + data.details);
+                });
+            } else {
+                log('video2', '❌ HLS غير مدعوم في هذا المتصفح');
+            }
+        }
+        
+        // اختبار الاتصال
+        async function testConnection() {
+            log('connection', 'اختبار الاتصال...');
+            
+            try {
+                const response = await fetch('http://213.57.91.138:8000/play/a06h', {
+                    method: 'HEAD',
+                    mode: 'no-cors'
+                });
+                log('connection', '✅ الاتصال ناجح');
+            } catch (error) {
+                log('connection', '❌ فشل الاتصال: ' + error.message);
+            }
+        }
+        
+        // معلومات المتصفح
+        function showBrowserInfo() {
+            const info = `
+المتصفح: ${navigator.userAgent}
+دعم HLS: ${video1.canPlayType('application/vnd.apple.mpegurl') ? 'نعم' : 'لا'}
+دعم MP4: ${video1.canPlayType('video/mp4') ? 'نعم' : 'لا'}
+دعم WebM: ${video1.canPlayType('video/webm') ? 'نعم' : 'لا'}
+دعم TS: ${video1.canPlayType('video/mp2t') ? 'نعم' : 'لا'}
+            `;
+            document.getElementById('browser-info').textContent = info;
+        }
+        
+        function log(elementId, message) {
+            const element = document.getElementById(elementId + '-status');
+            const timestamp = new Date().toLocaleTimeString();
+            element.textContent += `[${timestamp}] ${message}\n`;
+        }
+        
+        // تشغيل الاختبارات
+        showBrowserInfo();
+        
+        // اختبار تلقائي بعد 3 ثوان
+        setTimeout(() => {
+            testConnection();
+            testHLS();
+        }, 3000);
+    </script>
+</body>
+</html>
