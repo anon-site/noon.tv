@@ -34,6 +34,18 @@ class ArabicTVApp {
         this.editingChannelId = null; // Track which channel is being edited
         this.notificationQueue = []; // Queue for notifications
         this.activeNotifications = new Set(); // Track active notifications
+        this.notificationHistory = []; // Track notification history for deduplication
+        this.notificationGroups = new Map(); // Track notification groups for grouping similar notifications
+        this.notificationSettings = {
+            showSuccess: true,
+            showError: true,
+            showWarning: true,
+            showInfo: false, // Default to false for info notifications
+            maxHistory: 50,
+            deduplicationTime: 5000, // 5 seconds
+            enableGrouping: true, // Enable grouping similar notifications
+            groupingTime: 10000 // 10 seconds
+        };
         this.originalOrder = [...this.channels]; // Track original order for comparison
         this.hasOrderChanged = false; // Track if order has been modified
         this.isMobileSidebarOpen = false; // Track mobile sidebar state
@@ -283,6 +295,7 @@ class ArabicTVApp {
             this.applyCompactMode();
             this.applyHighContrast();
             this.applyBorderRadius();
+            this.applyNotificationSettings();
             
             console.log('✅ تم تطبيق جميع الإعدادات بنجاح');
             
@@ -395,6 +408,36 @@ class ArabicTVApp {
         
         if (document.getElementById('borderRadius')) {
             document.getElementById('borderRadius').value = borderRadius;
+        }
+    }
+
+    applyNotificationSettings() {
+        // Apply notification settings to UI controls
+        const showSuccessEl = document.getElementById('showSuccessNotifications');
+        if (showSuccessEl) {
+            showSuccessEl.checked = this.notificationSettings.showSuccess;
+        }
+        
+        const showErrorEl = document.getElementById('showErrorNotifications');
+        if (showErrorEl) {
+            showErrorEl.checked = this.notificationSettings.showError;
+        }
+        
+        const showWarningEl = document.getElementById('showWarningNotifications');
+        if (showWarningEl) {
+            showWarningEl.checked = this.notificationSettings.showWarning;
+        }
+        
+        const showInfoEl = document.getElementById('showInfoNotifications');
+        if (showInfoEl) {
+            showInfoEl.checked = this.notificationSettings.showInfo;
+        }
+        
+        const deduplicationTimeEl = document.getElementById('notificationDeduplicationTime');
+        const deduplicationTimeValueEl = document.getElementById('deduplicationTimeValue');
+        if (deduplicationTimeEl && deduplicationTimeValueEl) {
+            deduplicationTimeEl.value = this.notificationSettings.deduplicationTime / 1000; // Convert to seconds
+            deduplicationTimeValueEl.textContent = `${this.notificationSettings.deduplicationTime / 1000} ثواني`;
         }
     }
 
@@ -517,6 +560,50 @@ class ArabicTVApp {
                 this.settings.borderRadius = e.target.value;
                 this.saveSettings();
                 this.applyBorderRadius();
+            });
+        }
+
+        // Notification settings controls
+        const showSuccessNotifications = document.getElementById('showSuccessNotifications');
+        if (showSuccessNotifications) {
+            showSuccessNotifications.addEventListener('change', (e) => {
+                this.notificationSettings.showSuccess = e.target.checked;
+                this.updateNotificationSettings(this.notificationSettings);
+            });
+        }
+
+        const showErrorNotifications = document.getElementById('showErrorNotifications');
+        if (showErrorNotifications) {
+            showErrorNotifications.addEventListener('change', (e) => {
+                this.notificationSettings.showError = e.target.checked;
+                this.updateNotificationSettings(this.notificationSettings);
+            });
+        }
+
+        const showWarningNotifications = document.getElementById('showWarningNotifications');
+        if (showWarningNotifications) {
+            showWarningNotifications.addEventListener('change', (e) => {
+                this.notificationSettings.showWarning = e.target.checked;
+                this.updateNotificationSettings(this.notificationSettings);
+            });
+        }
+
+        const showInfoNotifications = document.getElementById('showInfoNotifications');
+        if (showInfoNotifications) {
+            showInfoNotifications.addEventListener('change', (e) => {
+                this.notificationSettings.showInfo = e.target.checked;
+                this.updateNotificationSettings(this.notificationSettings);
+            });
+        }
+
+        const notificationDeduplicationTime = document.getElementById('notificationDeduplicationTime');
+        const deduplicationTimeValue = document.getElementById('deduplicationTimeValue');
+        if (notificationDeduplicationTime && deduplicationTimeValue) {
+            notificationDeduplicationTime.addEventListener('input', (e) => {
+                const seconds = parseInt(e.target.value);
+                this.notificationSettings.deduplicationTime = seconds * 1000; // Convert to milliseconds
+                deduplicationTimeValue.textContent = `${seconds} ثواني`;
+                this.updateNotificationSettings(this.notificationSettings);
             });
         }
 
@@ -1715,7 +1802,7 @@ class ArabicTVApp {
             
             // محاولة المزامنة التلقائية مع السحابة
             if (this.remoteStorage.enabled && this.remoteStorage.repository && this.remoteStorage.token) {
-                this.notifyInfo('جارٍ مزامنة كلمة المرور الجديدة مع السحابة...');
+                this.notifyInfo('جارٍ مزامنة كلمة المرور الجديدة مع السحابة...', 'معلومة', 'low');
                 
                 try {
                     const syncSuccess = await this.syncToRemote();
@@ -1893,7 +1980,7 @@ class ArabicTVApp {
         this.closeAdminPanel();
         this.toggleChannelActions(false);
         this.toggleAdminBadge(false); // إخفاء Admin badge
-        this.notifyInfo('تم تسجيل الخروج من مزود الخدمة');
+        this.notifySilent('تم تسجيل الخروج من مزود الخدمة');
     }
 
     // حفظ حالة تسجيل الدخول في localStorage
@@ -4619,14 +4706,38 @@ class ArabicTVApp {
         modal.style.display = 'none';
     }
 
-    // نظام الإشعارات الجميل
-    showNotification(title, message, type = 'info', duration = 4000) {
+    // نظام الإشعارات المحسن مع منع التكرار والتحكم
+    showNotification(title, message, type = 'info', duration = 4000, priority = 'normal') {
         const container = document.getElementById('notificationsContainer');
         if (!container) return;
 
+        // التحقق من إعدادات الإشعارات
+        if (!this.shouldShowNotification(type)) {
+            console.log(`تم تجاهل إشعار ${type}: ${title}`);
+            return null;
+        }
+
+        // التحقق من التكرار
+        if (this.isDuplicateNotification(title, message, type)) {
+            console.log(`تم تجاهل إشعار مكرر: ${title}`);
+            return null;
+        }
+
+        // محاولة تجميع الإشعارات المتشابهة
+        const groupedNotificationId = this.groupSimilarNotifications(title, message, type);
+        if (groupedNotificationId) {
+            return groupedNotificationId;
+        }
+
+        // إضافة للإشعارات المهمة فقط
+        if (priority === 'low' && type === 'info') {
+            console.log(`تم تجاهل إشعار منخفض الأولوية: ${title}`);
+            return null;
+        }
+
         // إنشاء الإشعار
         const notification = document.createElement('div');
-        notification.className = 'notification entering';
+        notification.className = `notification entering priority-${priority}`;
         
         const notificationId = Date.now() + Math.random();
         notification.dataset.id = notificationId;
@@ -4655,6 +4766,16 @@ class ArabicTVApp {
         // إضافة الإشعار للحاوية
         container.appendChild(notification);
         this.activeNotifications.add(notificationId);
+
+        // تسجيل الإشعار في التاريخ
+        this.addToNotificationHistory(title, message, type);
+
+        // تسجيل الإشعار في المجموعة إذا كان جديداً
+        const groupKey = `${type}-${title}`;
+        if (this.notificationGroups.has(groupKey)) {
+            const group = this.notificationGroups.get(groupKey);
+            group.notificationId = notificationId;
+        }
 
         // إظهار الإشعار بعد إضافته للـ DOM
         setTimeout(() => {
@@ -4702,21 +4823,176 @@ class ArabicTVApp {
         }
     }
 
-    // إشعارات مخصصة للتطبيق
-    notifySuccess(message, title = 'نجح!') {
-        return this.showNotification(title, message, 'success');
+    // التحقق من إعدادات الإشعارات
+    shouldShowNotification(type) {
+        switch (type) {
+            case 'success':
+                return this.notificationSettings.showSuccess;
+            case 'error':
+                return this.notificationSettings.showError;
+            case 'warning':
+                return this.notificationSettings.showWarning;
+            case 'info':
+                return this.notificationSettings.showInfo;
+            default:
+                return true;
+        }
     }
 
-    notifyError(message, title = 'خطأ!') {
-        return this.showNotification(title, message, 'error');
+    // التحقق من تكرار الإشعارات
+    isDuplicateNotification(title, message, type) {
+        const now = Date.now();
+        const deduplicationTime = this.notificationSettings.deduplicationTime;
+        
+        // البحث في التاريخ عن إشعارات متشابهة حديثة
+        const recentNotification = this.notificationHistory.find(notification => {
+            const timeDiff = now - notification.timestamp;
+            return timeDiff < deduplicationTime &&
+                   notification.title === title &&
+                   notification.message === message &&
+                   notification.type === type;
+        });
+
+        return !!recentNotification;
     }
 
-    notifyWarning(message, title = 'تحذير!') {
-        return this.showNotification(title, message, 'warning');
+    // إضافة إشعار إلى التاريخ
+    addToNotificationHistory(title, message, type) {
+        const notification = {
+            title,
+            message,
+            type,
+            timestamp: Date.now()
+        };
+
+        this.notificationHistory.push(notification);
+
+        // الحفاظ على حجم التاريخ محدود
+        if (this.notificationHistory.length > this.notificationSettings.maxHistory) {
+            this.notificationHistory = this.notificationHistory.slice(-this.notificationSettings.maxHistory);
+        }
     }
 
-    notifyInfo(message, title = 'معلومة') {
-        return this.showNotification(title, message, 'info');
+    // تحديث إعدادات الإشعارات
+    updateNotificationSettings(settings) {
+        this.notificationSettings = { ...this.notificationSettings, ...settings };
+        this.saveSettings();
+    }
+
+    // تنظيف التاريخ القديم
+    cleanNotificationHistory() {
+        const now = Date.now();
+        const maxAge = 24 * 60 * 60 * 1000; // 24 ساعة
+        
+        this.notificationHistory = this.notificationHistory.filter(notification => {
+            return (now - notification.timestamp) < maxAge;
+        });
+    }
+
+    // تجميع الإشعارات المتشابهة
+    groupSimilarNotifications(title, message, type) {
+        if (!this.notificationSettings.enableGrouping) {
+            return null;
+        }
+
+        const groupKey = `${type}-${title}`;
+        const now = Date.now();
+        const groupingTime = this.notificationSettings.groupingTime;
+
+        // البحث عن مجموعة موجودة
+        if (this.notificationGroups.has(groupKey)) {
+            const group = this.notificationGroups.get(groupKey);
+            
+            // التحقق من أن المجموعة لا تزال نشطة
+            if ((now - group.lastUpdate) < groupingTime) {
+                group.count++;
+                group.lastUpdate = now;
+                group.messages.push(message);
+                
+                // تحديث الإشعار الموجود
+                this.updateGroupedNotification(group);
+                return group.notificationId;
+            }
+        }
+
+        // إنشاء مجموعة جديدة
+        const group = {
+            notificationId: null,
+            count: 1,
+            lastUpdate: now,
+            messages: [message],
+            title,
+            type
+        };
+
+        this.notificationGroups.set(groupKey, group);
+        return null;
+    }
+
+    // تحديث الإشعار المجمع
+    updateGroupedNotification(group) {
+        const notification = document.querySelector(`[data-id="${group.notificationId}"]`);
+        if (!notification) return;
+
+        const messageElement = notification.querySelector('.notification-message');
+        if (messageElement) {
+            if (group.count > 1) {
+                messageElement.innerHTML = `
+                    <div>${group.messages[group.messages.length - 1]}</div>
+                    <div style="font-size: 0.8em; opacity: 0.8; margin-top: 4px;">
+                        + ${group.count - 1} إشعارات أخرى مشابهة
+                    </div>
+                `;
+            } else {
+                messageElement.textContent = group.messages[0];
+            }
+        }
+
+        // إعادة تعيين المؤقت
+        const container = document.getElementById('notificationsContainer');
+        if (container) {
+            setTimeout(() => {
+                this.closeNotification(group.notificationId);
+            }, 5000);
+        }
+    }
+
+    // تنظيف المجموعات القديمة
+    cleanNotificationGroups() {
+        const now = Date.now();
+        const maxAge = this.notificationSettings.groupingTime * 2; // ضعف وقت التجميع
+
+        for (const [key, group] of this.notificationGroups.entries()) {
+            if ((now - group.lastUpdate) > maxAge) {
+                this.notificationGroups.delete(key);
+            }
+        }
+    }
+
+    // إشعارات مخصصة للتطبيق مع أولويات محسنة
+    notifySuccess(message, title = 'نجح!', priority = 'normal') {
+        return this.showNotification(title, message, 'success', 4000, priority);
+    }
+
+    notifyError(message, title = 'خطأ!', priority = 'high') {
+        return this.showNotification(title, message, 'error', 6000, priority);
+    }
+
+    notifyWarning(message, title = 'تحذير!', priority = 'normal') {
+        return this.showNotification(title, message, 'warning', 5000, priority);
+    }
+
+    notifyInfo(message, title = 'معلومة', priority = 'low') {
+        return this.showNotification(title, message, 'info', 3000, priority);
+    }
+
+    // إشعارات خاصة للأحداث المهمة
+    notifyCritical(message, title = 'مهم!') {
+        return this.showNotification(title, message, 'error', 8000, 'high');
+    }
+
+    notifySilent(message, title = 'تم') {
+        return this.showNotification(title, message, 'success', 2000, 'low');
     }
 
     // وظائف ترتيب القنوات
@@ -7045,6 +7321,14 @@ function initializeMobileBottomNav() {
     setInterval(() => {
         updateMobileFavoritesBadge();
     }, 1000);
+    
+    // تنظيف دوري للتاريخ القديم والمجموعات
+    setInterval(() => {
+        if (window.app) {
+            window.app.cleanNotificationHistory();
+            window.app.cleanNotificationGroups();
+        }
+    }, 60 * 60 * 1000); // كل ساعة
     
     // Update category counts when channels are loaded
     if (window.app) {

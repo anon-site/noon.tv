@@ -554,6 +554,49 @@
                     </div>
                 </div>
                 
+                <!-- Notifications Settings Section -->
+                <div class="settings-section">
+                    <h4 class="settings-section-title">🔔 إعدادات الإشعارات</h4>
+                    
+                    <div class="setting-item">
+                        <label for="showSuccessNotifications">إشعارات النجاح</label>
+                        <label class="switch">
+                            <input type="checkbox" id="showSuccessNotifications" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="showErrorNotifications">إشعارات الأخطاء</label>
+                        <label class="switch">
+                            <input type="checkbox" id="showErrorNotifications" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="showWarningNotifications">إشعارات التحذير</label>
+                        <label class="switch">
+                            <input type="checkbox" id="showWarningNotifications" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="showInfoNotifications">إشعارات المعلومات</label>
+                        <label class="switch">
+                            <input type="checkbox" id="showInfoNotifications">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="notificationDeduplicationTime">وقت منع التكرار (ثواني)</label>
+                        <input type="range" id="notificationDeduplicationTime" min="1" max="30" value="5" class="volume-slider">
+                        <span id="deduplicationTimeValue" class="zoom-value">5 ثواني</span>
+                    </div>
+                </div>
+                
                 <!-- Quick Actions -->
                 <div class="settings-actions">
                     <button class="reset-settings-btn" onclick="app.resetCustomizations()">
