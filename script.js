@@ -77,9 +77,6 @@ class ArabicTVApp {
         this.bindEvents();
         this.bindRemoteStorageEvents();
         
-        // Check if running on GitHub Pages and show notice
-        this.checkGitHubPagesLimitations();
-        
         // Check for updates after a short delay
         setTimeout(() => {
             this.checkForUpdates();
@@ -984,50 +981,6 @@ class ArabicTVApp {
         document.getElementById('videoPlayer').controls = true;
     }
 
-    // Create proxy URL for CORS issues
-    createProxyUrl(url) {
-        // List of free CORS proxy services
-        const proxies = [
-            'https://cors-anywhere.herokuapp.com/',
-            'https://api.allorigins.win/raw?url=',
-            'https://corsproxy.io/?',
-            'https://thingproxy.freeboard.io/fetch/'
-        ];
-        
-        // Try the first available proxy
-        return proxies[0] + encodeURIComponent(url);
-    }
-
-    // Check if URL is accessible (for CORS testing)
-    async testUrlAccessibility(url) {
-        try {
-            const response = await fetch(url, { 
-                method: 'HEAD',
-                mode: 'no-cors'
-            });
-            return true;
-        } catch (error) {
-            console.warn('URL accessibility test failed:', error);
-            return false;
-        }
-    }
-
-    // Check GitHub Pages limitations and show notice
-    checkGitHubPagesLimitations() {
-        const isGitHubPages = window.location.hostname.includes('github.io') || 
-                             window.location.hostname.includes('github.com');
-        
-        if (isGitHubPages) {
-            // Show notice after a delay to let the app load
-            setTimeout(() => {
-                this.notifyWarning(
-                    'تنبيه: GitHub Pages قد يمنع بعض روابط M3U8 بسبب قيود CORS. إذا واجهت مشاكل في التشغيل، جرب استخدام خادم آخر أو proxy.',
-                    10000 // Show for 10 seconds
-                );
-            }, 3000);
-        }
-    }
-
     async loadVideoStream(url, type = 'hls') {
         const video = document.getElementById('videoPlayer');
         const source = document.getElementById('videoSource');
@@ -1037,16 +990,6 @@ class ArabicTVApp {
             // Validate URL
             if (!url || url.trim() === '') {
                 throw new Error('رابط الفيديو فارغ أو غير صحيح');
-            }
-
-            // For M3U8 URLs, try to detect CORS issues and use proxy if needed
-            if (url.includes('.m3u8') && !url.includes('cors-anywhere') && !url.includes('allorigins')) {
-                console.log('Testing M3U8 URL accessibility...');
-                const isAccessible = await this.testUrlAccessibility(url);
-                if (!isAccessible) {
-                    console.log('URL may have CORS issues, trying proxy...');
-                    url = this.createProxyUrl(url);
-                }
             }
 
             // Show loading
@@ -1112,19 +1055,13 @@ class ArabicTVApp {
                     
                     // Show specific error messages
                     if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
-                        if (data.details === Hls.ErrorDetails.MANIFEST_LOAD_ERROR) {
-                            this.showVideoError('خطأ CORS - الرابط محظور من GitHub Pages. جرب استخدام خادم آخر أو proxy.');
-                        } else {
-                            this.showVideoError('خطأ في الشبكة - تحقق من اتصال الإنترنت');
-                        }
+                        this.showVideoError('خطأ في الشبكة - تحقق من اتصال الإنترنت');
                     } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
                         this.showVideoError('خطأ في تنسيق الفيديو - الرابط قد يكون غير صحيح');
                     } else if (data.details === Hls.ErrorDetails.MANIFEST_LOAD_ERROR) {
-                        this.showVideoError('لا يمكن تحميل قائمة التشغيل - الرابط غير متاح أو محظور من GitHub Pages');
+                        this.showVideoError('لا يمكن تحميل قائمة التشغيل - الرابط غير متاح');
                     } else if (data.details === Hls.ErrorDetails.MANIFEST_LOAD_TIMEOUT) {
                         this.showVideoError('انتهت مهلة تحميل قائمة التشغيل - الخادم بطيء');
-                    } else if (data.details === Hls.ErrorDetails.FRAG_LOAD_ERROR) {
-                        this.showVideoError('خطأ في تحميل مقاطع الفيديو - مشكلة CORS أو الخادم');
                     }
                     
                     if (data.fatal) {
