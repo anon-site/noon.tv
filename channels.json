@@ -1,16 +1,6 @@
 {
   "channels": [
     {
-      "id": 1001,
-      "name": "البث المباشر الجديد",
-      "url": "http://213.57.91.138:8000/play/a06h",
-      "logo": "https://via.placeholder.com/150x150/4CAF50/FFFFFF?text=Live",
-      "category": "entertainment",
-      "country": "غير محدد",
-      "type": "hls",
-      "status": "active"
-    },
-    {
       "id": 32,
       "name": "السنة النبوية",
       "url": "https://www.elahmad.com/tv/m3u8/online_live_14_tv.m3u8?id=sunna_tv&t=11111111",
@@ -622,12 +612,12 @@
     },
     {
       "id": 86,
-      "name": "الجزيرة الوثائقية",
-      "url": "http://213.57.91.138:8000/play/a06h.ts",
-      "logo": "http://213.57.91.138:8000/play/a06h",
-      "category": "documentary",
-      "country": "قطر",
-      "type": "iptv",
+      "name": "MBC Iraq",
+      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-iraq/e38c44b1b43474e1c39cb5b90203691e/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/MBC_Iraq.svg/2560px-MBC_Iraq.svg.png",
+      "category": "entertainment",
+      "country": "العراق",
+      "type": "hls",
       "status": "active"
     }
   ],
@@ -695,6 +685,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-17T10:02:52.449Z",
+  "lastModified": "2025-09-17T10:18:27.132Z",
   "version": "1.0"
 }
