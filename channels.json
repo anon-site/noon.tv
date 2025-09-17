@@ -613,7 +613,7 @@
     {
       "id": 86,
       "name": "MBC Iraq",
-      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-iraq/e38c44b1b43474e1c39cb5b90203691e/index.m3u8",
+      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-iraq/e38c44b1b43474e1c39cb5b90203691e/manifest/video/720p1750kbps/video.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/MBC_Iraq.svg/2560px-MBC_Iraq.svg.png",
       "category": "entertainment",
       "country": "العراق",
@@ -685,6 +685,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-17T10:24:02.067Z",
+  "lastModified": "2025-09-17T10:24:25.548Z",
   "version": "1.0"
 }
