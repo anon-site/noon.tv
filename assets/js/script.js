@@ -3284,6 +3284,15 @@ class ArabicTVApp {
             });
         }
 
+        // Filename
+        const filenameInput = document.getElementById('filename');
+        if (filenameInput) {
+            filenameInput.addEventListener('blur', (e) => {
+                this.remoteStorage.filename = e.target.value.trim() || 'channels.json';
+                this.saveRemoteStorageSettings();
+            });
+        }
+
         // Auto Sync
         const autoSyncCheckbox = document.getElementById('autoSync');
         if (autoSyncCheckbox) {
@@ -3303,6 +3312,7 @@ class ArabicTVApp {
         const repositoryInput = document.getElementById('repositoryUrl');
         const tokenInput = document.getElementById('accessToken');
         const branchInput = document.getElementById('branchName');
+        const filenameInput = document.getElementById('filename');
         const autoSyncCheckbox = document.getElementById('autoSync');
 
         if (enableCheckbox) {
@@ -3324,6 +3334,10 @@ class ArabicTVApp {
 
         if (branchInput) {
             branchInput.value = this.remoteStorage.branch;
+        }
+
+        if (filenameInput) {
+            filenameInput.value = this.remoteStorage.filename;
         }
 
         if (autoSyncCheckbox) {
