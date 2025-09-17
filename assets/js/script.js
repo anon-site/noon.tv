@@ -2543,12 +2543,16 @@ class ArabicTVApp {
             
             // رسائل خطأ أكثر وضوحاً للمستخدم
             let errorMessage = 'خطأ في المزامنة: ';
-            if (error.message.includes('409')) {
+            if (error.message.includes('422')) {
+                errorMessage += 'خطأ في الطلب - مشكلة في بيانات الملف أو SHA. تم إصلاح هذه المشكلة تلقائياً، يرجى المحاولة مرة أخرى.';
+            } else if (error.message.includes('409')) {
                 errorMessage += 'تضارب في الإصدارات - تم تحديث الملف من مكان آخر. يرجى المحاولة مرة أخرى.';
             } else if (error.message.includes('401') || error.message.includes('403')) {
                 errorMessage += 'مشكلة في الصلاحيات - تحقق من رمز الوصول (Token) وإعدادات المستودع.';
             } else if (error.message.includes('404')) {
                 errorMessage += 'المستودع غير موجود - تحقق من اسم المستودع والإعدادات.';
+            } else if (error.message.includes('sha')) {
+                errorMessage += 'مشكلة في الحصول على معلومات الملف. تم إصلاح هذه المشكلة تلقائياً، يرجى المحاولة مرة أخرى.';
             } else {
                 errorMessage += error.message;
             }
@@ -2661,6 +2665,8 @@ class ArabicTVApp {
             try {
                 // الحصول على SHA الحالي للملف في كل محاولة
                 let sha = null;
+                let fileExists = false;
+                
                 try {
                     const getResponse = await fetch(url, {
                         headers: {
@@ -2672,10 +2678,25 @@ class ArabicTVApp {
                     if (getResponse.ok) {
                         const fileData = await getResponse.json();
                         sha = fileData.sha;
+                        fileExists = true;
                         console.log(`تم الحصول على SHA للملف: ${sha.substring(0, 8)}...`);
+                    } else if (getResponse.status === 404) {
+                        console.log('الملف غير موجود، سيتم إنشاؤه');
+                        fileExists = false;
+                    } else {
+                        const errorText = await getResponse.text();
+                        console.error(`خطأ في الحصول على معلومات الملف: ${getResponse.status} - ${errorText}`);
+                        throw new Error(`فشل في الحصول على معلومات الملف: ${getResponse.status}`);
                     }
                 } catch (error) {
-                    console.log('الملف غير موجود، سيتم إنشاؤه');
+                    console.error('خطأ في الحصول على معلومات الملف:', error);
+                    if (attempt < maxRetries - 1) {
+                        console.warn(`إعادة المحاولة للحصول على معلومات الملف (محاولة ${attempt + 1}/${maxRetries})`);
+                        await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+                        continue;
+                    } else {
+                        throw new Error(`فشل في الحصول على معلومات الملف بعد ${maxRetries} محاولات: ${error.message}`);
+                    }
                 }
 
                 const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
@@ -2686,8 +2707,12 @@ class ArabicTVApp {
                     branch: branch
                 };
 
-                if (sha) {
+                // إضافة SHA فقط إذا كان الملف موجوداً
+                if (fileExists && sha) {
                     body.sha = sha;
+                    console.log(`سيتم تحديث الملف الموجود باستخدام SHA: ${sha.substring(0, 8)}...`);
+                } else {
+                    console.log('سيتم إنشاء ملف جديد');
                 }
 
                 const response = await fetch(url, {
@@ -2705,8 +2730,21 @@ class ArabicTVApp {
                     return true;
                 }
 
+                // التعامل مع خطأ 422 (Invalid request - SHA missing)
+                if (response.status === 422) {
+                    const errorData = await response.json();
+                    console.warn(`خطأ في الطلب (محاولة ${attempt + 1}/${maxRetries}):`, errorData.message);
+                    
+                    if (errorData.message.includes('sha') && attempt < maxRetries - 1) {
+                        console.warn('إعادة المحاولة للحصول على SHA صحيح...');
+                        await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+                        continue;
+                    } else {
+                        lastError = new Error(`خطأ في الطلب: ${errorData.message}`);
+                    }
+                }
                 // التعامل مع خطأ 409 (تضارب في الإصدارات)
-                if (response.status === 409) {
+                else if (response.status === 409) {
                     const errorData = await response.json();
                     console.warn(`تضارب في الإصدارات (محاولة ${attempt + 1}/${maxRetries}):`, errorData.message);
                     
