@@ -4215,8 +4215,18 @@ class ArabicTVApp {
     // وظيفة تشخيصية لتصدير القنوات
     exportChannels() {
         try {
-            const channelsData = JSON.stringify(this.channels, null, 2);
-            const blob = new Blob([channelsData], { type: 'application/json' });
+            const data = {
+                channels: this.channels,
+                favorites: Array.from(this.favorites),
+                settings: this.settings,
+                categories: this.categories,
+                adminPassword: this.adminPassword,
+                lastModified: new Date().toISOString(),
+                version: '1.0'
+            };
+            
+            const channelsData = JSON.stringify(data, null, 2);
+            const blob = new Blob([channelsData], { type: 'application/json;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
