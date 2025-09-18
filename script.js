@@ -6848,6 +6848,67 @@ class ArabicTVApp {
             }
         });
     }
+
+    // Get count of channels in a specific category
+    getCategoryCount(category) {
+        if (category === 'all') {
+            return this.channels.length;
+        }
+        return this.channels.filter(channel => channel.category === category).length;
+    }
+
+    // Set category and filter channels
+    setCategory(category) {
+        this.filterChannels(category);
+    }
+
+    // Update mobile favorites badge
+    updateMobileFavoritesBadge() {
+        const favoritesCount = this.favorites.size;
+        
+        // Update header favorites badge (mobile)
+        const headerBadge = document.getElementById('headerFavoritesBadge');
+        if (headerBadge) {
+            headerBadge.textContent = favoritesCount;
+        }
+        
+        // Update mobile favorites badge (if exists)
+        const mobileBadge = document.getElementById('mobileFavoritesBadge');
+        if (mobileBadge) {
+            mobileBadge.textContent = favoritesCount;
+        }
+    }
+
+    // Update mobile category counts
+    updateMobileCategoryCounts() {
+        // TV Categories
+        const tvCategories = ['all', 'news', 'entertainment', 'sports', 'religious', 'music', 'movies', 'documentary'];
+        
+        tvCategories.forEach(category => {
+            const count = this.getCategoryCount(category);
+            const countElement = document.getElementById(`mobile${category.charAt(0).toUpperCase() + category.slice(1)}Count`);
+            if (countElement) {
+                countElement.textContent = count;
+            }
+        });
+        
+        // Video Categories
+        const videoCategories = [
+            { key: 'youtube', id: 'mobileYoutubeCount' },
+            { key: 'video-movies', id: 'mobileVideoMoviesCount' },
+            { key: 'series', id: 'mobileSeriesCount' },
+            { key: 'video-documentary', id: 'mobileVideoDocumentaryCount' },
+            { key: 'kids', id: 'mobileKidsCount' }
+        ];
+        
+        videoCategories.forEach(category => {
+            const count = this.getCategoryCount(category.key);
+            const countElement = document.getElementById(category.id);
+            if (countElement) {
+                countElement.textContent = count;
+            }
+        });
+    }
 }
 
 // Global functions for inline event handlers
@@ -7106,16 +7167,16 @@ function toggleCategoriesDropdown() {
         overlay.classList.add('active');
         
         // Update category counts
-        updateMobileCategoryCounts();
+        if (window.app) {
+            window.app.updateMobileCategoryCounts();
+        }
     }
 }
 
 function closeCategoriesDropdown() {
-    const dropdown = document.getElementById('categoriesDropdown');
-    const overlay = document.getElementById('mobileOverlay');
-    
-    dropdown.classList.remove('active');
-    overlay.classList.remove('active');
+    // Close both TV and Video categories dropdowns
+    closeTvCategoriesDropdown();
+    closeVideoCategoriesDropdown();
 }
 
 function selectCategory(category) {
@@ -7163,7 +7224,9 @@ function toggleTvCategoriesDropdown() {
         overlay.classList.add('active');
         
         // Update category counts
-        updateMobileCategoryCounts();
+        if (window.app) {
+            window.app.updateMobileCategoryCounts();
+        }
     }
 }
 
@@ -7192,7 +7255,9 @@ function toggleVideoCategoriesDropdown() {
         overlay.classList.add('active');
         
         // Update category counts
-        updateMobileCategoryCounts();
+        if (window.app) {
+            window.app.updateMobileCategoryCounts();
+        }
     }
 }
 
@@ -7526,8 +7591,8 @@ function initializeMobileBottomNav() {
     
     // Update category counts when channels are loaded
     if (window.app) {
-        updateMobileCategoryCounts();
-        updateMobileFavoritesBadge();
+        window.app.updateMobileCategoryCounts();
+        window.app.updateMobileFavoritesBadge();
     }
 }
 
