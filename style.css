@@ -854,49 +854,6 @@ body[data-theme="light"] .admin-badge i {
     align-items: center;
 }
 
-/* Header Favorites Button (Mobile Only) */
-.header-favorites-btn {
-    background: linear-gradient(45deg, #ff6b6b, #ee5a52);
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: var(--transition);
-    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
-    position: relative;
-    display: none; /* Hidden by default, shown on mobile */
-    min-width: 40px;
-    height: 40px;
-}
-
-.header-favorites-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
-}
-
-.header-favorites-btn i {
-    font-size: 1rem;
-}
-
-.header-favorites-btn .favorites-badge {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    background: var(--highlight-color);
-    color: white;
-    border-radius: 50%;
-    width: 16px;
-    height: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.65rem;
-    font-weight: 600;
-    min-width: 16px;
-}
-
 .mobile-menu-btn {
     display: none;
     background: transparent;
@@ -958,21 +915,13 @@ body[data-theme="light"] .admin-badge i {
     background: var(--primary-color);
     border-left: 1px solid var(--border-color);
     z-index: 1000;
-    transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: right 0.2s ease-out;
     overflow-y: auto;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
-    will-change: transform;
+    will-change: right;
     /* منع الترميش الأبيض */
     overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
-    /* تحسين الأداء */
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    transform: translateX(0);
-    /* تحسينات إضافية للأداء */
-    contain: layout style paint;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
 }
 
 /* Global Scrollbar Styles */
@@ -1042,7 +991,7 @@ body[data-theme="light"] .admin-badge i {
 }
 
 .desktop-sidebar.active {
-    transform: translateX(-280px);
+    right: 0;
 }
 
 .sidebar-header {
@@ -1116,136 +1065,6 @@ body[data-theme="light"] .admin-badge i {
 
 .sidebar-section-title i {
     color: var(--highlight-color);
-}
-
-/* Sidebar Dropdown Styles */
-.sidebar-dropdown {
-    margin-bottom: 0.5rem;
-    position: relative;
-}
-
-.sidebar-dropdown::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, transparent 0%, rgba(16, 185, 129, 0.1) 50%, transparent 100%);
-    border-radius: 12px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-}
-
-.sidebar-dropdown.active::after {
-    opacity: 1;
-}
-
-.sidebar-dropdown-toggle {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px 20px;
-    background: linear-gradient(135deg, var(--secondary-color) 0%, rgba(255, 255, 255, 0.05) 100%);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    color: var(--text-color);
-    font-size: 0.95rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    text-align: right;
-    margin-bottom: 15px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.sidebar-dropdown-toggle::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-    transition: left 0.4s ease;
-}
-
-.sidebar-dropdown-toggle:hover::before {
-    left: 100%;
-}
-
-.sidebar-dropdown-toggle:hover {
-    color: var(--text-color);
-    background: linear-gradient(135deg, var(--secondary-color) 0%, rgba(255, 255, 255, 0.08) 100%);
-    border-color: var(--highlight-color);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.sidebar-dropdown-toggle:active {
-    background: linear-gradient(135deg, var(--secondary-color) 0%, rgba(255, 255, 255, 0.05) 100%);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-}
-
-.sidebar-dropdown-toggle:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
-}
-
-.dropdown-title {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    position: relative;
-    z-index: 1;
-}
-
-.dropdown-title i {
-    color: var(--highlight-color);
-    font-size: 1.1rem;
-}
-
-.dropdown-arrow {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 1;
-}
-
-.sidebar-dropdown.active .dropdown-arrow {
-    transform: rotate(180deg);
-    color: var(--highlight-color);
-    background: rgba(16, 185, 129, 0.1);
-}
-
-.sidebar-dropdown-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
-    border-radius: 0 0 12px 12px;
-    margin-top: -15px;
-    padding-top: 15px;
-    border: 1px solid var(--border-color);
-    border-top: none;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.sidebar-dropdown.active .sidebar-dropdown-content {
-    max-height: 500px; /* قيمة كافية لجميع الأزرار */
 }
 
 .sidebar-nav-tabs {
@@ -1937,10 +1756,7 @@ body[data-theme="light"] .sidebar-nav-tab.active .tab-count {
     z-index: 999;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: opacity, visibility;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+    transition: var(--transition);
 }
 
 .sidebar-overlay.active {
@@ -1950,7 +1766,7 @@ body[data-theme="light"] .sidebar-nav-tab.active .tab-count {
 
 /* Main Content Adjustment */
 .main-content {
-    transition: margin-right 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: margin-right 0.2s ease-out;
     will-change: margin-right;
 }
 
@@ -2043,41 +1859,6 @@ body[data-theme="light"] .sidebar-section-title {
 
 body[data-theme="light"] .sidebar-section-title i {
     color: #3b82f6;
-}
-
-/* Light Theme for Sidebar Dropdown */
-body[data-theme="light"] .sidebar-dropdown-toggle {
-    color: #374151;
-    background: linear-gradient(135deg, #f8fafc 0%, rgba(59, 130, 246, 0.05) 100%);
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-body[data-theme="light"] .sidebar-dropdown-toggle:hover {
-    color: #374151;
-    background: linear-gradient(135deg, #f8fafc 0%, rgba(59, 130, 246, 0.08) 100%);
-    border-color: #3b82f6;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-body[data-theme="light"] .dropdown-title i {
-    color: #3b82f6;
-}
-
-body[data-theme="light"] .dropdown-arrow {
-    color: #6b7280;
-    background: rgba(0, 0, 0, 0.05);
-}
-
-body[data-theme="light"] .sidebar-dropdown.active .dropdown-arrow {
-    background: rgba(59, 130, 246, 0.1);
-    color: #3b82f6;
-}
-
-body[data-theme="light"] .sidebar-dropdown-content {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.02) 0%, rgba(59, 130, 246, 0.01) 100%);
-    border: 1px solid #e2e8f0;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 body[data-theme="light"] .sidebar-nav-tab {
@@ -2173,10 +1954,7 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
     background: var(--background-dark);
     border-left: 1px solid var(--border-color);
     z-index: 2000;
-    transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-    transform: translateX(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+    transition: right 0.2s ease-out;
     overflow-y: auto;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.15);
     display: flex;
@@ -2188,7 +1966,7 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
 }
 
 .mobile-sidebar.active {
-    transform: translateX(-320px);
+    right: 0;
 }
 
 .mobile-sidebar-header {
@@ -11778,27 +11556,6 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     min-width: 18px;
 }
 
-/* TV and Video Category Buttons */
-.mobile-bottom-nav .bottom-nav-btn[data-action="tv-categories"] {
-    color: var(--text-secondary);
-}
-
-.mobile-bottom-nav .bottom-nav-btn[data-action="video-categories"] {
-    color: var(--text-secondary);
-}
-
-.mobile-bottom-nav .bottom-nav-btn[data-action="tv-categories"]:hover,
-.mobile-bottom-nav .bottom-nav-btn[data-action="tv-categories"].active {
-    color: #3b82f6;
-    background: rgba(59, 130, 246, 0.1);
-}
-
-.mobile-bottom-nav .bottom-nav-btn[data-action="video-categories"]:hover,
-.mobile-bottom-nav .bottom-nav-btn[data-action="video-categories"].active {
-    color: #ef4444;
-    background: rgba(239, 68, 68, 0.1);
-}
-
 /* Categories Dropdown */
 .categories-dropdown {
     position: fixed;
@@ -12191,32 +11948,6 @@ body[data-theme="light"] .mobile-bottom-nav .favorites-badge {
     background: #3b82f6;
 }
 
-body[data-theme="light"] .mobile-bottom-nav .bottom-nav-btn[data-action="tv-categories"]:hover,
-body[data-theme="light"] .mobile-bottom-nav .bottom-nav-btn[data-action="tv-categories"].active {
-    color: #3b82f6;
-    background: rgba(59, 130, 246, 0.1);
-}
-
-body[data-theme="light"] .mobile-bottom-nav .bottom-nav-btn[data-action="video-categories"]:hover,
-body[data-theme="light"] .mobile-bottom-nav .bottom-nav-btn[data-action="video-categories"].active {
-    color: #ef4444;
-    background: rgba(239, 68, 68, 0.1);
-}
-
-/* Light theme for header favorites button */
-body[data-theme="light"] .header-favorites-btn {
-    background: linear-gradient(45deg, #3b82f6, #1d4ed8);
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
-}
-
-body[data-theme="light"] .header-favorites-btn:hover {
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
-}
-
-body[data-theme="light"] .header-favorites-btn .favorites-badge {
-    background: #ef4444;
-}
-
 body[data-theme="light"] .categories-dropdown {
     background: rgba(255, 255, 255, 0.95);
     border-color: #e2e8f0;
@@ -12403,11 +12134,6 @@ body[data-theme="light"] .more-menu-item:hover {
     .header-content {
         justify-content: space-between;
     }
-    
-    /* Show header favorites button on mobile */
-    .header-favorites-btn {
-        display: flex !important;
-    }
 }
 
 @media (min-width: 769px) {
@@ -12508,93 +12234,6 @@ body[data-theme="light"] .more-menu-item:hover {
         width: 100%;
         justify-content: center;
     }
-}
-
-/* Notification Priority Styles */
-.notification.priority-high {
-    border-left: 4px solid #ef4444;
-    box-shadow: 
-        0 20px 60px rgba(239, 68, 68, 0.15),
-        0 0 0 1px rgba(239, 68, 68, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-.notification.priority-high .notification-icon {
-    animation: pulse 2s infinite;
-}
-
-.notification.priority-low {
-    opacity: 0.8;
-    border-left: 4px solid #6b7280;
-}
-
-.notification.priority-low .notification-icon {
-    background: linear-gradient(135deg, #6b7280, #4b5563, #374151);
-    box-shadow: 0 8px 24px rgba(107, 114, 128, 0.3);
-}
-
-.notification.priority-normal {
-    border-left: 4px solid var(--highlight-color);
-}
-
-/* Notification Deduplication Indicator */
-.notification.deduplicated {
-    position: relative;
-}
-
-.notification.deduplicated::after {
-    content: 'تم تجاهل إشعار مكرر';
-    position: absolute;
-    top: -8px;
-    right: 8px;
-    background: rgba(107, 114, 128, 0.9);
-    color: white;
-    font-size: 10px;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-weight: 500;
-}
-
-/* Notification Settings Styles */
-.settings-section-title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 16px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-}
-
-.settings-section-title i {
-    font-size: 1.2rem;
-    color: var(--highlight-color);
-}
-
-/* Enhanced notification container with better spacing */
-.notifications-container {
-    gap: 12px;
-    max-height: 80vh;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--highlight-color) transparent;
-}
-
-.notifications-container::-webkit-scrollbar {
-    width: 4px;
-}
-
-.notifications-container::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.notifications-container::-webkit-scrollbar-thumb {
-    background: var(--highlight-color);
-    border-radius: 2px;
-}
-
-.notifications-container::-webkit-scrollbar-thumb:hover {
-    background: var(--primary-dark);
 }
 
 
