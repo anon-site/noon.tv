@@ -1,14 +1,14 @@
 {
   "channels": [
     {
-      "id": 32,
-      "name": "السنة النبوية",
-      "url": "https://www.elahmad.com/tv/m3u8/online_live_14_tv.m3u8?id=sunna_tv&t=11111111",
-      "logo": "https://iili.io/Kz8TUYJ.png",
+      "id": 77,
+      "name": "وطن مصر",
+      "url": "https://rp.tactivemedia.com/watantv_source/live/playlist.m3u8",
+      "logo": "https://iili.io/Kubt2C7.png",
       "category": "religious",
-      "country": "السعودية",
+      "country": "مصر",
       "type": "hls",
-      "status": "inactive"
+      "status": "active"
     },
     {
       "id": 33,
@@ -18,7 +18,6 @@
       "category": "religious",
       "country": "السعودية",
       "type": "hls",
-      "isActive": true,
       "status": "active"
     },
     {
@@ -36,6 +35,46 @@
       "name": "إقرأ قرآن",
       "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv2/playlist.m3u8",
       "logo": "https://iili.io/Kz8outt.png",
+      "category": "religious",
+      "country": "السعودية",
+      "type": "hls",
+      "status": "active"
+    },
+    {
+      "id": 78,
+      "name": "المعارف",
+      "url": "https://672a3a5c8e335.streamlock.net/AlMaaref/smil:almaareflive.smil/playlist.m3u8",
+      "logo": "https://iili.io/KREneEX.png",
+      "category": "religious",
+      "country": "قطر",
+      "type": "hls",
+      "status": "active"
+    },
+    {
+      "id": 32,
+      "name": "السنة النبوية",
+      "url": "https://www.elahmad.com/tv/m3u8/online_live_14_tv.m3u8?id=sunna_tv&t=11111111",
+      "logo": "https://iili.io/Kz8TUYJ.png",
+      "category": "religious",
+      "country": "السعودية",
+      "type": "hls",
+      "status": "inactive"
+    },
+    {
+      "id": 82,
+      "name": "Ch4Teen",
+      "url": "https://ch14.tv/live/ch4teenclip/playlist.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/d/d5/%D9%82%D9%86%D8%A7%D8%A9_%D9%81%D9%88%D8%B1%D8%AA%D9%8A%D9%86.png",
+      "category": "religious",
+      "country": "الكويت",
+      "type": "hls",
+      "status": "active"
+    },
+    {
+      "id": 33,
+      "name": "إقرأ",
+      "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv3/playlist.m3u8",
+      "logo": "https://iili.io/Kz83mkF.png",
       "category": "religious",
       "country": "السعودية",
       "type": "hls",
@@ -175,7 +214,7 @@
       "id": 62,
       "name": "العراق المستقل",
       "url": "https://viewmedia7219.bozztv.com/wmedia/viewmedia100/web_040/Stream/playlist.m3u8",
-      "logo": "https://ktvlive.online/stream/hls/ch1.m3u8",
+      "logo": "https://iili.io/KRWIR9t.png",
       "category": "entertainment",
       "country": "العراق",
       "type": "hls",
@@ -219,7 +258,7 @@
       "category": "entertainment",
       "country": "لبنان",
       "type": "hls",
-      "status": "inactive"
+      "status": "active"
     },
     {
       "id": 18,
@@ -521,16 +560,6 @@
       "status": "active"
     },
     {
-      "id": 77,
-      "name": "وطن مصر",
-      "url": "https://rp.tactivemedia.com/watantv_source/live/playlist.m3u8",
-      "logo": "https://iili.io/Kubt2C7.png",
-      "category": "religious",
-      "country": "مصر",
-      "type": "hls",
-      "status": "active"
-    },
-    {
       "id": 78,
       "name": "المعارف",
       "url": "https://672a3a5c8e335.streamlock.net/AlMaaref/smil:almaareflive.smil/playlist.m3u8",
@@ -566,16 +595,6 @@
       "url": "https://live.kwikmotion.com/bahry1live/bahry1.smil/playlist.m3u8",
       "logo": "https://bahry.faulio.com/storage/mediagallery/9a/c7/fullhd_6a5a505408b027c0d4a4453c72258f9db0d2cb20.png",
       "category": "documentary",
-      "country": "الكويت",
-      "type": "hls",
-      "status": "active"
-    },
-    {
-      "id": 82,
-      "name": "Ch4Teen",
-      "url": "https://ch14.tv/live/ch4teenclip/playlist.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/d/d5/%D9%82%D9%86%D8%A7%D8%A9_%D9%81%D9%88%D8%B1%D8%AA%D9%8A%D9%86.png",
-      "category": "religious",
       "country": "الكويت",
       "type": "hls",
       "status": "active"
@@ -685,6 +704,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-18T09:16:35.477Z",
+  "lastModified": "2025-09-18T12:49:18.501Z",
   "version": "1.0"
 }
