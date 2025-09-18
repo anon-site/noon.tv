@@ -96,51 +96,100 @@
         <div class="sidebar-content">
             <!-- TV Categories Section -->
             <div class="sidebar-section">
-                <div class="sidebar-section-title">
-                    <i class="fas fa-tv"></i>
-                    <span>تلفزيون</span>
+                <div class="sidebar-dropdown">
+                    <button class="sidebar-dropdown-toggle" onclick="app.toggleTvDropdown()">
+                        <div class="dropdown-title">
+                            <i class="fas fa-tv"></i>
+                            <span>تلفزيون</span>
+                        </div>
+                        <i class="fas fa-chevron-down dropdown-arrow" id="tvDropdownArrow"></i>
+                    </button>
+                    <div class="sidebar-dropdown-content" id="tvDropdownContent">
+                        <div class="sidebar-nav-tabs">
+                            <button class="sidebar-nav-tab active" data-category="all">
+                                <i class="fas fa-th-large"></i>
+                                <span>جميع القنوات</span>
+                                <span class="tab-count" id="allCount">0</span>
+                            </button>
+                            <button class="sidebar-nav-tab" data-category="news">
+                                <i class="fas fa-newspaper"></i>
+                                <span>الأخبار</span>
+                                <span class="tab-count" id="newsCount">0</span>
+                            </button>
+                            <button class="sidebar-nav-tab" data-category="entertainment">
+                                <i class="fas fa-film"></i>
+                                <span>المنوعة</span>
+                                <span class="tab-count" id="entertainmentCount">0</span>
+                            </button>
+                            <button class="sidebar-nav-tab" data-category="sports">
+                                <i class="fas fa-futbol"></i>
+                                <span>الرياضة</span>
+                                <span class="tab-count" id="sportsCount">0</span>
+                            </button>
+                            <button class="sidebar-nav-tab" data-category="religious">
+                                <i class="fas fa-mosque"></i>
+                                <span>الدينية</span>
+                                <span class="tab-count" id="religiousCount">0</span>
+                            </button>
+                            <button class="sidebar-nav-tab" data-category="music">
+                                <i class="fas fa-music"></i>
+                                <span>الموسيقى</span>
+                                <span class="tab-count" id="musicCount">0</span>
+                            </button>
+                            <button class="sidebar-nav-tab" data-category="movies">
+                                <i class="fas fa-film"></i>
+                                <span>الأفلام</span>
+                                <span class="tab-count" id="moviesCount">0</span>
+                            </button>
+                            <button class="sidebar-nav-tab" data-category="documentary">
+                                <i class="fas fa-book-open"></i>
+                                <span>الوثائقية</span>
+                                <span class="tab-count" id="documentaryCount">0</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="sidebar-nav-tabs">
-                    <button class="sidebar-nav-tab active" data-category="all">
-                        <i class="fas fa-th-large"></i>
-                        <span>جميع القنوات</span>
-                        <span class="tab-count" id="allCount">0</span>
+            </div>
+            
+            <!-- Video Section -->
+            <div class="sidebar-section">
+                <div class="sidebar-dropdown">
+                    <button class="sidebar-dropdown-toggle" onclick="app.toggleVideoDropdown()">
+                        <div class="dropdown-title">
+                            <i class="fas fa-video"></i>
+                            <span>فيديو</span>
+                        </div>
+                        <i class="fas fa-chevron-down dropdown-arrow" id="videoDropdownArrow"></i>
                     </button>
-                    <button class="sidebar-nav-tab" data-category="news">
-                        <i class="fas fa-newspaper"></i>
-                        <span>الأخبار</span>
-                        <span class="tab-count" id="newsCount">0</span>
-                    </button>
-                    <button class="sidebar-nav-tab" data-category="entertainment">
-                        <i class="fas fa-film"></i>
-                        <span>المنوعة</span>
-                        <span class="tab-count" id="entertainmentCount">0</span>
-                    </button>
-                    <button class="sidebar-nav-tab" data-category="sports">
-                        <i class="fas fa-futbol"></i>
-                        <span>الرياضة</span>
-                        <span class="tab-count" id="sportsCount">0</span>
-                    </button>
-                    <button class="sidebar-nav-tab" data-category="religious">
-                        <i class="fas fa-mosque"></i>
-                        <span>الدينية</span>
-                        <span class="tab-count" id="religiousCount">0</span>
-                    </button>
-                    <button class="sidebar-nav-tab" data-category="music">
-                        <i class="fas fa-music"></i>
-                        <span>الموسيقى</span>
-                        <span class="tab-count" id="musicCount">0</span>
-                    </button>
-                    <button class="sidebar-nav-tab" data-category="movies">
-                        <i class="fas fa-film"></i>
-                        <span>الأفلام</span>
-                        <span class="tab-count" id="moviesCount">0</span>
-                    </button>
-                    <button class="sidebar-nav-tab" data-category="documentary">
-                        <i class="fas fa-book-open"></i>
-                        <span>الوثائقية</span>
-                        <span class="tab-count" id="documentaryCount">0</span>
-                    </button>
+                    <div class="sidebar-dropdown-content" id="videoDropdownContent">
+                        <div class="sidebar-nav-tabs">
+                            <button class="sidebar-nav-tab" data-category="youtube">
+                                <i class="fab fa-youtube"></i>
+                                <span>يوتيوب</span>
+                                <span class="tab-count" id="youtubeCount">0</span>
+                            </button>
+                            <button class="sidebar-nav-tab" data-category="movies">
+                                <i class="fas fa-film"></i>
+                                <span>أفلام</span>
+                                <span class="tab-count" id="moviesCount">0</span>
+                            </button>
+                            <button class="sidebar-nav-tab" data-category="series">
+                                <i class="fas fa-tv"></i>
+                                <span>مسلسلات</span>
+                                <span class="tab-count" id="seriesCount">0</span>
+                            </button>
+                            <button class="sidebar-nav-tab" data-category="documentary">
+                                <i class="fas fa-book-open"></i>
+                                <span>وثائقيات</span>
+                                <span class="tab-count" id="documentaryCount">0</span>
+                            </button>
+                            <button class="sidebar-nav-tab" data-category="kids">
+                                <i class="fas fa-child"></i>
+                                <span>أطفال</span>
+                                <span class="tab-count" id="kidsCount">0</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
             

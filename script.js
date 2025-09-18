@@ -809,6 +809,10 @@ class ArabicTVApp {
                         t.classList.add('active');
                     });
                     
+                    // إغلاق الأزرار المندسلة عند اختيار فئة
+                    this.closeTvDropdown();
+                    this.closeVideoDropdown();
+                    
                     // Close desktop sidebar after selecting category (if open)
                     if (this.isDesktopSidebarOpen) {
                         this.toggleSidebar();
@@ -5214,6 +5218,10 @@ class ArabicTVApp {
                 mainContent.classList.remove('sidebar-open');
                 overlay.classList.remove('active');
                 
+                // إغلاق الأزرار المندسلة تلقائياً عند إغلاق الشريط الجانبي
+                this.closeTvDropdown();
+                this.closeVideoDropdown();
+                
                 // إعادة تعيين will-change بعد انتهاء الانتقال
                 setTimeout(() => {
                     sidebar.style.willChange = 'auto';
@@ -5223,6 +5231,70 @@ class ArabicTVApp {
                 console.log('تم إغلاق القائمة الجانبية');
             }
         });
+    }
+
+    // TV Dropdown Functions
+    toggleTvDropdown() {
+        const dropdown = document.querySelector('.sidebar-dropdown');
+        const arrow = document.getElementById('tvDropdownArrow');
+        
+        if (dropdown && arrow) {
+            // إغلاق زر الفيديو المندسل إذا كان مفتوحاً
+            this.closeVideoDropdown();
+            
+            dropdown.classList.toggle('active');
+            
+            // تحسين الأداء
+            requestAnimationFrame(() => {
+                if (dropdown.classList.contains('active')) {
+                    console.log('تم فتح قائمة التلفزيون');
+                } else {
+                    console.log('تم إغلاق قائمة التلفزيون');
+                }
+            });
+        }
+    }
+
+    // إغلاق الزر المندسل
+    closeTvDropdown() {
+        const dropdown = document.querySelector('.sidebar-dropdown');
+        
+        if (dropdown && dropdown.classList.contains('active')) {
+            dropdown.classList.remove('active');
+            console.log('تم إغلاق قائمة التلفزيون تلقائياً');
+        }
+    }
+
+    // Video Dropdown Functions
+    toggleVideoDropdown() {
+        const dropdown = document.querySelector('#videoDropdownContent').closest('.sidebar-dropdown');
+        const arrow = document.getElementById('videoDropdownArrow');
+        
+        if (dropdown && arrow) {
+            // إغلاق زر التلفزيون المندسل إذا كان مفتوحاً
+            this.closeTvDropdown();
+            
+            dropdown.classList.toggle('active');
+            
+            // تحسين الأداء
+            requestAnimationFrame(() => {
+                if (dropdown.classList.contains('active')) {
+                    console.log('تم فتح قائمة الفيديو');
+                } else {
+                    console.log('تم إغلاق قائمة الفيديو');
+                }
+            });
+        }
+    }
+
+    // إغلاق زر الفيديو المندسل
+    closeVideoDropdown() {
+        const dropdown = document.querySelector('#videoDropdownContent').closest('.sidebar-dropdown');
+        
+        if (dropdown && dropdown.classList.contains('active')) {
+            dropdown.classList.remove('active');
+            console.log('تم إغلاق قائمة الفيديو تلقائياً');
+        }
     }
 
     createSidebarOverlay() {
