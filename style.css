@@ -9826,27 +9826,79 @@ body[data-theme="light"] .enhanced-save-btn:hover {
         gap: 1rem;
     }
     
+    /* إلغاء تأثيرات الهوفر في الهاتف */
+    .admin-channel-item:hover {
+        background: var(--background-dark);
+        transform: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-channel-logo:hover {
+        transform: none;
+        filter: brightness(1) contrast(1.1);
+    }
+    
+    /* إلغاء تأثيرات الهوفر في الهاتف للوضع الفاتح */
+    body[data-theme="light"] .admin-channel-item:hover {
+        background: #ffffff;
+        transform: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        border-color: #e2e8f0;
+    }
+    
+    /* إلغاء تأثيرات الهوفر على الأزرار في الهاتف */
+    .admin-channel-actions .edit-btn:hover,
+    .admin-channel-actions .delete-btn:hover {
+        transform: none;
+        box-shadow: none;
+    }
+    
+    .move-btn:hover {
+        transform: none;
+        box-shadow: none;
+    }
+    
     .admin-channel-actions {
         width: 100%;
-        justify-content: flex-end;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
     }
     
     .move-buttons {
         flex-direction: row;
-        gap: 12px;
+        gap: 8px;
         margin-left: 0;
-        margin-bottom: 8px;
+        margin-bottom: 0;
+        order: 1;
+    }
+    
+    .admin-channel-actions .edit-btn,
+    .admin-channel-actions .delete-btn {
+        order: 2;
     }
     
     .position-controls {
         flex: 1;
         min-width: 120px;
+        order: 1;
     }
     
     .arrow-buttons {
         flex-shrink: 0;
         flex-wrap: wrap;
         justify-content: center;
+        order: 1;
+    }
+    
+    /* تحسين أزرار التعديل والحذف في الهاتف */
+    .admin-channel-actions .edit-btn,
+    .admin-channel-actions .delete-btn {
+        min-width: 80px;
+        padding: 8px 12px;
+        font-size: 0.85rem;
+        margin: 4px 2px;
     }
     
     .arrow-buttons .move-btn {
@@ -9884,6 +9936,40 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     
     .admin-badge i {
         font-size: 0.7rem;
+    }
+    
+    /* تحسين تخطيط لوحة التحكم في الشاشات الصغيرة */
+    .admin-channel-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+    
+    .move-buttons {
+        justify-content: center;
+        order: 2;
+    }
+    
+    .admin-channel-actions .edit-btn,
+    .admin-channel-actions .delete-btn {
+        order: 1;
+        width: 100%;
+        max-width: none;
+        margin: 2px 0;
+    }
+    
+    /* إلغاء تأثيرات الهوفر في الشاشات الصغيرة جداً */
+    .admin-channel-item:hover {
+        background: var(--background-dark);
+        transform: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    body[data-theme="light"] .admin-channel-item:hover {
+        background: #ffffff;
+        transform: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        border-color: #e2e8f0;
     }
     
     
