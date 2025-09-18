@@ -645,7 +645,7 @@
     "autoQuality": true,
     "autoplay": true,
     "volume": 100,
-    "theme": "light",
+    "theme": "dark",
     "showNewsTicker": false,
     "zoomLevel": 100,
     "colorTheme": "default",
@@ -704,6 +704,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-18T14:00:42.170Z",
+  "lastModified": "2025-09-18T14:00:57.112Z",
   "version": "1.0"
 }
