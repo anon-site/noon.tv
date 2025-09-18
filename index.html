@@ -1326,7 +1326,7 @@
             </div>
             <div class="banner-text">
                 <h4>تثبيت ANON TV</h4>
-                <p>احصل على تجربة أفضل مع التطبيق المثبت على جهازك</p>
+                <p>احصل على تجربة أفضل مع تطبيق التلفزيون المثبت على جهازك</p>
             </div>
             <div class="banner-actions">
                 <button class="banner-install-btn" onclick="installPWA()">
@@ -1386,11 +1386,18 @@
         // Listen for beforeinstallprompt event
         window.addEventListener('beforeinstallprompt', (e) => {
             console.log('📱 PWA: Install prompt triggered');
-            e.preventDefault();
-            deferredPrompt = e;
             
-            // Show install button/banner
-            showInstallPrompt();
+            // Check if this is for the TV app specifically
+            if (window.location.pathname.includes('/TV-AR/')) {
+                e.preventDefault();
+                deferredPrompt = e;
+                
+                // Show install button/banner
+                showInstallPrompt();
+            } else {
+                // Don't prevent default for other apps
+                console.log('📱 PWA: Install prompt for different app, allowing default behavior');
+            }
         });
 
         // Listen for appinstalled event
@@ -1410,8 +1417,16 @@
             if (window.matchMedia('(display-mode: standalone)').matches || 
                 window.navigator.standalone === true) {
                 console.log('📱 PWA: App is running in standalone mode');
-                isInstalled = true;
-                hideInstallPrompt();
+                
+                // Check if this is the TV app specifically
+                if (window.location.pathname.includes('/TV-AR/') || 
+                    window.location.search.includes('source=pwa')) {
+                    console.log('📱 PWA: TV app is running in standalone mode');
+                    isInstalled = true;
+                    hideInstallPrompt();
+                } else {
+                    console.log('📱 PWA: Different app is running in standalone mode');
+                }
             }
         });
 
@@ -1451,6 +1466,12 @@
         // Show install prompt
         function showInstallPrompt() {
             if (isInstalled) return;
+            
+            // Double check we're on the TV app
+            if (!window.location.pathname.includes('/TV-AR/')) {
+                console.log('📱 PWA: Not on TV app, hiding install prompt');
+                return;
+            }
             
             const installBtn = document.getElementById('pwaInstallBtn');
             const installBanner = document.getElementById('pwaInstallBanner');
@@ -1576,6 +1597,29 @@
         document.addEventListener('click', () => {
             requestNotificationPermission();
         }, { once: true });
+
+        // Check for conflicting PWA installations
+        window.addEventListener('load', () => {
+            // Check if there's a conflicting PWA installed
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(registrations => {
+                    registrations.forEach(registration => {
+                        if (registration.scope.includes('anon-site.github.io') && 
+                            !registration.scope.includes('TV-AR')) {
+                            console.log('⚠️ PWA: Found conflicting PWA installation');
+                            
+                            // Show warning to user
+                            if (window.app && window.app.notifyWarning) {
+                                window.app.notifyWarning(
+                                    'تم اكتشاف تطبيق آخر مثبت من نفس الموقع. تأكد من تثبيت تطبيق ANON TV وليس الموقع الشخصي.',
+                                    5000
+                                );
+                            }
+                        }
+                    });
+                });
+            }
+        });
     </script>
     <script src="script.js"></script>
 </body>

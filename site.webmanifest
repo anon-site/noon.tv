@@ -2,6 +2,7 @@
     "name": "ANON TV - القنوات الفضائية العربية",
     "short_name": "ANON TV",
     "description": "منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات",
+    "id": "/TV-AR/",
     "lang": "ar",
     "dir": "rtl",
     "icons": [
@@ -58,7 +59,7 @@
     "background_color": "#1a1a1a",
     "display": "standalone",
     "orientation": "portrait-primary",
-    "start_url": "/TV-AR/",
+    "start_url": "/TV-AR/?source=pwa",
     "scope": "/TV-AR/",
     "categories": ["entertainment", "media", "tv"],
     "screenshots": [
