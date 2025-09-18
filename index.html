@@ -39,6 +39,12 @@
                 </div>
 
                 <div class="header-actions">
+                    <!-- Favorites Button (Mobile Only) -->
+                    <button class="header-favorites-btn mobile-only" onclick="app.toggleFavorites()" title="المفضلة">
+                        <i class="fas fa-heart"></i>
+                        <span class="favorites-badge" id="headerFavoritesBadge">0</span>
+                    </button>
+                    
                     <!-- Theme Toggle Switch -->
                     <label class="theme-switch">
                         <span class="sun"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="#ffd43b"><circle r="5" cy="12" cx="12"></circle><path d="m21 13h-1a1 1 0 0 1 0-2h1a1 1 0 0 1 0 2zm-17 0h-1a1 1 0 0 1 0-2h1a1 1 0 0 1 0 2zm13.66-5.66a1 1 0 0 1 -.66-.29 1 1 0 0 1 0-1.41l.71-.71a1 1 0 1 1 1.41 1.41l-.71.71a1 1 0 0 1 -.75.29zm-12.02 12.02a1 1 0 0 1 -.71-.29 1 1 0 0 1 0-1.41l.71-.66a1 1 0 0 1 1.41 1.41l-.71.71a1 1 0 0 1 -.7.24zm6.36-14.36a1 1 0 0 1 -1-1v-1a1 1 0 0 1 2 0v1a1 1 0 0 1 -1 1zm0 17a1 1 0 0 1 -1-1v-1a1 1 0 0 1 2 0v1a1 1 0 0 1 -1 1zm-5.66-14.66a1 1 0 0 1 -.7-.29l-.71-.71a1 1 0 0 1 1.41-1.41l.71.71a1 1 0 0 1 0 1.41 1 1 0 0 1 -.71.29zm12.02 12.02a1 1 0 0 1 -.7-.29l-.66-.71a1 1 0 0 1 1.36-1.36l.71.71a1 1 0 0 1 0 1.41 1 1 0 0 1 -.71.24z"></path></g></svg></span>
@@ -239,15 +245,14 @@
 
     <!-- Mobile Bottom Navigation -->
     <div class="mobile-bottom-nav" id="mobileBottomNav">
-        <button class="bottom-nav-btn" data-action="categories" onclick="toggleCategoriesDropdown()">
-            <i class="fas fa-th-large"></i>
-            <span>القائمة</span>
+        <button class="bottom-nav-btn" data-action="tv-categories" onclick="toggleTvCategoriesDropdown()">
+            <i class="fas fa-tv"></i>
+            <span>تلفزيون</span>
         </button>
         
-        <button class="bottom-nav-btn" data-action="favorites" onclick="app.toggleFavorites()">
-            <i class="fas fa-heart"></i>
-            <span>المفضلة</span>
-            <span class="favorites-badge" id="mobileFavoritesBadge">0</span>
+        <button class="bottom-nav-btn" data-action="video-categories" onclick="toggleVideoCategoriesDropdown()">
+            <i class="fas fa-video"></i>
+            <span>فيديو</span>
         </button>
         
         <button class="bottom-nav-btn active" data-action="home" onclick="app.showAllChannels()">
@@ -266,11 +271,11 @@
         </button>
     </div>
 
-    <!-- Categories Dropdown -->
-    <div class="categories-dropdown" id="categoriesDropdown">
+    <!-- TV Categories Dropdown -->
+    <div class="categories-dropdown" id="tvCategoriesDropdown">
         <div class="dropdown-header">
-            <h3>فئات القنوات</h3>
-            <button class="close-dropdown" onclick="closeCategoriesDropdown()">
+            <h3>فئات التلفزيون</h3>
+            <button class="close-dropdown" onclick="closeTvCategoriesDropdown()">
                 <i class="fas fa-times"></i>
             </button>
         </div>
@@ -314,6 +319,43 @@
                 <i class="fas fa-book-open"></i>
                 <span>الوثائقية</span>
                 <span class="category-count" id="mobileDocumentaryCount">0</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Video Categories Dropdown -->
+    <div class="categories-dropdown" id="videoCategoriesDropdown">
+        <div class="dropdown-header">
+            <h3>فئات الفيديو</h3>
+            <button class="close-dropdown" onclick="closeVideoCategoriesDropdown()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="dropdown-content">
+            <button class="category-item" data-category="youtube" onclick="selectCategory('youtube')">
+                <i class="fab fa-youtube"></i>
+                <span>يوتيوب</span>
+                <span class="category-count" id="mobileYoutubeCount">0</span>
+            </button>
+            <button class="category-item" data-category="video-movies" onclick="selectCategory('video-movies')">
+                <i class="fas fa-film"></i>
+                <span>أفلام</span>
+                <span class="category-count" id="mobileVideoMoviesCount">0</span>
+            </button>
+            <button class="category-item" data-category="series" onclick="selectCategory('series')">
+                <i class="fas fa-tv"></i>
+                <span>مسلسلات</span>
+                <span class="category-count" id="mobileSeriesCount">0</span>
+            </button>
+            <button class="category-item" data-category="video-documentary" onclick="selectCategory('video-documentary')">
+                <i class="fas fa-book-open"></i>
+                <span>وثائقيات</span>
+                <span class="category-count" id="mobileVideoDocumentaryCount">0</span>
+            </button>
+            <button class="category-item" data-category="kids" onclick="selectCategory('kids')">
+                <i class="fas fa-child"></i>
+                <span>أطفال</span>
+                <span class="category-count" id="mobileKidsCount">0</span>
             </button>
         </div>
     </div>

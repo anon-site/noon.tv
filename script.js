@@ -7128,12 +7128,80 @@ function selectCategory(category) {
         });
         document.querySelector(`[data-category="${category}"]`).classList.add('active');
         
-        // Update bottom nav active state
-        updateBottomNavActiveState('home');
+        // Update bottom nav active state based on category type
+        const tvCategories = ['all', 'news', 'entertainment', 'sports', 'religious', 'music', 'movies', 'documentary'];
+        const videoCategories = ['youtube', 'video-movies', 'series', 'video-documentary', 'kids'];
         
-        // Close dropdown
-        closeCategoriesDropdown();
+        if (tvCategories.includes(category)) {
+            updateBottomNavActiveState('tv-categories');
+        } else if (videoCategories.includes(category)) {
+            updateBottomNavActiveState('video-categories');
+        } else {
+            updateBottomNavActiveState('home');
+        }
+        
+        // Close dropdowns
+        closeTvCategoriesDropdown();
+        closeVideoCategoriesDropdown();
     }
+}
+
+// TV Categories Dropdown Functions
+function toggleTvCategoriesDropdown() {
+    const dropdown = document.getElementById('tvCategoriesDropdown');
+    const overlay = document.getElementById('mobileOverlay');
+    
+    if (dropdown.classList.contains('active')) {
+        closeTvCategoriesDropdown();
+    } else {
+        // Close other dropdowns first
+        closeVideoCategoriesDropdown();
+        closeSearchPopup();
+        closeMoreMenu();
+        
+        dropdown.classList.add('active');
+        overlay.classList.add('active');
+        
+        // Update category counts
+        updateMobileCategoryCounts();
+    }
+}
+
+function closeTvCategoriesDropdown() {
+    const dropdown = document.getElementById('tvCategoriesDropdown');
+    const overlay = document.getElementById('mobileOverlay');
+    
+    dropdown.classList.remove('active');
+    overlay.classList.remove('active');
+}
+
+// Video Categories Dropdown Functions
+function toggleVideoCategoriesDropdown() {
+    const dropdown = document.getElementById('videoCategoriesDropdown');
+    const overlay = document.getElementById('mobileOverlay');
+    
+    if (dropdown.classList.contains('active')) {
+        closeVideoCategoriesDropdown();
+    } else {
+        // Close other dropdowns first
+        closeTvCategoriesDropdown();
+        closeSearchPopup();
+        closeMoreMenu();
+        
+        dropdown.classList.add('active');
+        overlay.classList.add('active');
+        
+        // Update category counts
+        updateMobileCategoryCounts();
+    }
+}
+
+function closeVideoCategoriesDropdown() {
+    const dropdown = document.getElementById('videoCategoriesDropdown');
+    const overlay = document.getElementById('mobileOverlay');
+    
+    dropdown.classList.remove('active');
+    overlay.classList.remove('active');
 }
 
 // Search Popup Functions
@@ -7216,16 +7284,49 @@ function updateBottomNavActiveState(activeAction) {
     if (activeBtn) {
         activeBtn.classList.add('active');
     }
+    
+    // Update category buttons based on current filter
+    if (window.app && window.app.currentCategory) {
+        const category = window.app.currentCategory;
+        const tvCategories = ['all', 'news', 'entertainment', 'sports', 'religious', 'music', 'movies', 'documentary'];
+        const videoCategories = ['youtube', 'video-movies', 'series', 'video-documentary', 'kids'];
+        
+        if (tvCategories.includes(category)) {
+            const tvBtn = document.querySelector('[data-action="tv-categories"]');
+            if (tvBtn) tvBtn.classList.add('active');
+        } else if (videoCategories.includes(category)) {
+            const videoBtn = document.querySelector('[data-action="video-categories"]');
+            if (videoBtn) videoBtn.classList.add('active');
+        }
+    }
 }
 
 function updateMobileCategoryCounts() {
     if (!window.app) return;
     
-    const categories = ['all', 'news', 'entertainment', 'sports', 'religious', 'music', 'movies', 'documentary'];
+    // TV Categories
+    const tvCategories = ['all', 'news', 'entertainment', 'sports', 'religious', 'music', 'movies', 'documentary'];
     
-    categories.forEach(category => {
+    tvCategories.forEach(category => {
         const count = window.app.getCategoryCount(category);
         const countElement = document.getElementById(`mobile${category.charAt(0).toUpperCase() + category.slice(1)}Count`);
+        if (countElement) {
+            countElement.textContent = count;
+        }
+    });
+    
+    // Video Categories
+    const videoCategories = [
+        { key: 'youtube', id: 'mobileYoutubeCount' },
+        { key: 'video-movies', id: 'mobileVideoMoviesCount' },
+        { key: 'series', id: 'mobileSeriesCount' },
+        { key: 'video-documentary', id: 'mobileVideoDocumentaryCount' },
+        { key: 'kids', id: 'mobileKidsCount' }
+    ];
+    
+    videoCategories.forEach(category => {
+        const count = window.app.getCategoryCount(category.key);
+        const countElement = document.getElementById(category.id);
         if (countElement) {
             countElement.textContent = count;
         }
@@ -7235,9 +7336,18 @@ function updateMobileCategoryCounts() {
 function updateMobileFavoritesBadge() {
     if (!window.app) return;
     
-    const badge = document.getElementById('mobileFavoritesBadge');
-    if (badge) {
-        badge.textContent = window.app.favorites.size;
+    const favoritesCount = window.app.favorites.size;
+    
+    // Update header favorites badge (mobile)
+    const headerBadge = document.getElementById('headerFavoritesBadge');
+    if (headerBadge) {
+        headerBadge.textContent = favoritesCount;
+    }
+    
+    // Update mobile favorites badge (if exists)
+    const mobileBadge = document.getElementById('mobileFavoritesBadge');
+    if (mobileBadge) {
+        mobileBadge.textContent = favoritesCount;
     }
 }
 
