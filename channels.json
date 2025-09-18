@@ -678,16 +678,6 @@
       "country": "عالمية",
       "type": "youtube",
       "status": "active"
-    },
-    {
-      "id": 92,
-      "name": "وادي الذئاب",
-      "url": "https://www.youtube.com/watch?v=obPWjXXZUzA",
-      "logo": "https://e7.pngegg.com/pngimages/357/662/png-clipart-pana-film-serial-polat-alemdar-valley-of-the-wolves-star-tv-pana-angle-text-thumbnail.png",
-      "category": "series",
-      "country": "عالمية",
-      "type": "youtube",
-      "status": "active"
     }
   ],
   "favorites": [],
@@ -759,6 +749,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-19T02:39:37.551Z",
+  "lastModified": "2025-09-19T02:43:58.130Z",
   "version": "1.0"
 }
