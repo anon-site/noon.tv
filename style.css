@@ -12371,10 +12371,53 @@ body[data-theme="light"] .more-menu-item:hover {
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+/* PWA Conflict Resolution Button */
+.pwa-conflict-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    background: linear-gradient(135deg, #e94560, #f56565);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+    }
+    50% {
+        box-shadow: 0 6px 20px rgba(233, 69, 96, 0.6);
+    }
+    100% {
+        box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+    }
+}
+
 .pwa-install-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
     background: linear-gradient(135deg, #764ba2, #667eea);
+}
+
+.pwa-conflict-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(233, 69, 96, 0.6);
+    background: linear-gradient(135deg, #f56565, #e94560);
+    animation: none;
 }
 
 .pwa-install-btn i {
@@ -12525,6 +12568,16 @@ body[data-theme="light"] .pwa-install-btn:hover {
     box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
 }
 
+body[data-theme="light"] .pwa-conflict-btn {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+}
+
+body[data-theme="light"] .pwa-conflict-btn:hover {
+    background: linear-gradient(135deg, #b91c1c, #dc2626);
+    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+}
+
 body[data-theme="light"] .pwa-install-banner {
     background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(29, 78, 216, 0.95));
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -12545,7 +12598,8 @@ body[data-theme="light"] .banner-install-btn:hover {
 
 /* PWA Mobile Styles */
 @media (max-width: 768px) {
-    .pwa-install-btn {
+    .pwa-install-btn,
+    .pwa-conflict-btn {
         top: 15px;
         left: 15px;
         padding: 10px 16px;

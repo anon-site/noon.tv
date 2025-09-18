@@ -1,8 +1,8 @@
 // ANON TV - Service Worker
 // Version: 2.0.1
-const CACHE_NAME = 'anon-tv-tv-ar-v2.0.1';
-const STATIC_CACHE_NAME = 'anon-tv-tv-ar-static-v2.0.1';
-const DYNAMIC_CACHE_NAME = 'anon-tv-tv-ar-dynamic-v2.0.1';
+const CACHE_NAME = 'anon-tv-app-v2.0.1';
+const STATIC_CACHE_NAME = 'anon-tv-app-static-v2.0.1';
+const DYNAMIC_CACHE_NAME = 'anon-tv-app-dynamic-v2.0.1';
 
 // Files to cache for offline functionality
 const STATIC_FILES = [

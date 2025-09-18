@@ -2,7 +2,7 @@
     "name": "ANON TV - القنوات الفضائية العربية",
     "short_name": "ANON TV",
     "description": "منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات",
-    "id": "/TV-AR/",
+    "id": "anon-tv-app",
     "lang": "ar",
     "dir": "rtl",
     "icons": [

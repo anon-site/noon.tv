@@ -1318,6 +1318,12 @@
         <span>تثبيت التطبيق</span>
     </button>
 
+    <!-- PWA Conflict Resolution Button -->
+    <button class="pwa-conflict-btn" id="pwaConflictBtn" onclick="resolvePWAConflict()" title="إزالة التطبيق المتعارض" style="display: none;">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span>إزالة التطبيق المتعارض</span>
+    </button>
+
     <!-- PWA Install Banner -->
     <div class="pwa-install-banner" id="pwaInstallBanner" style="display: none;">
         <div class="banner-content">
@@ -1387,16 +1393,17 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             console.log('📱 PWA: Install prompt triggered');
             
-            // Check if this is for the TV app specifically
+            // Always prevent default and handle manually for TV app
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show install button/banner only for TV app
             if (window.location.pathname.includes('/TV-AR/')) {
-                e.preventDefault();
-                deferredPrompt = e;
-                
-                // Show install button/banner
+                console.log('📱 PWA: TV app install prompt captured');
                 showInstallPrompt();
             } else {
-                // Don't prevent default for other apps
-                console.log('📱 PWA: Install prompt for different app, allowing default behavior');
+                console.log('📱 PWA: Not TV app, hiding install prompt');
+                hideInstallPrompt();
             }
         });
 
@@ -1598,26 +1605,116 @@
             requestNotificationPermission();
         }, { once: true });
 
-        // Check for conflicting PWA installations
+        // Function to resolve PWA conflicts
+        async function resolvePWAConflict() {
+            if ('serviceWorker' in navigator) {
+                try {
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    let conflictsFound = false;
+                    
+                    for (const registration of registrations) {
+                        if (registration.scope.includes('anon-site.github.io') && 
+                            !registration.scope.includes('TV-AR')) {
+                            console.log('🔧 PWA: Unregistering conflicting service worker:', registration.scope);
+                            await registration.unregister();
+                            conflictsFound = true;
+                        }
+                    }
+                    
+                    if (conflictsFound) {
+                        // Clear all caches
+                        const cacheNames = await caches.keys();
+                        for (const cacheName of cacheNames) {
+                            if (cacheName.includes('anon-tv') && !cacheName.includes('anon-tv-app')) {
+                                await caches.delete(cacheName);
+                                console.log('🗑️ PWA: Deleted conflicting cache:', cacheName);
+                            }
+                        }
+                        
+                        // Show success message
+                        if (window.app && window.app.notifySuccess) {
+                            window.app.notifySuccess(
+                                'تم إزالة التطبيق المتعارض بنجاح! يمكنك الآن تثبيت تطبيق ANON TV.',
+                                5000
+                            );
+                        }
+                        
+                        // Hide conflict button and show install button
+                        const conflictBtn = document.getElementById('pwaConflictBtn');
+                        const installBtn = document.getElementById('pwaInstallBtn');
+                        
+                        if (conflictBtn) conflictBtn.style.display = 'none';
+                        if (installBtn) installBtn.style.display = 'flex';
+                        
+                        // Reload page to ensure clean state
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2000);
+                        
+                    } else {
+                        if (window.app && window.app.notifyInfo) {
+                            window.app.notifyInfo('لا توجد تطبيقات متعارضة.');
+                        }
+                    }
+                    
+                } catch (error) {
+                    console.error('❌ PWA: Failed to resolve conflicts:', error);
+                    if (window.app && window.app.notifyError) {
+                        window.app.notifyError('فشل في إزالة التطبيق المتعارض. حاول مرة أخرى.');
+                    }
+                }
+            }
+        }
+
+        // Check for conflicting PWA installations and show conflict resolution button
         window.addEventListener('load', () => {
-            // Check if there's a conflicting PWA installed
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.getRegistrations().then(registrations => {
+                    let hasConflicts = false;
+                    
                     registrations.forEach(registration => {
+                        // Check for conflicting registrations
                         if (registration.scope.includes('anon-site.github.io') && 
                             !registration.scope.includes('TV-AR')) {
                             console.log('⚠️ PWA: Found conflicting PWA installation');
-                            
-                            // Show warning to user
-                            if (window.app && window.app.notifyWarning) {
-                                window.app.notifyWarning(
-                                    'تم اكتشاف تطبيق آخر مثبت من نفس الموقع. تأكد من تثبيت تطبيق ANON TV وليس الموقع الشخصي.',
-                                    5000
-                                );
-                            }
+                            hasConflicts = true;
                         }
                     });
+                    
+                    if (hasConflicts) {
+                        // Show conflict resolution button
+                        const conflictBtn = document.getElementById('pwaConflictBtn');
+                        if (conflictBtn) {
+                            conflictBtn.style.display = 'flex';
+                        }
+                        
+                        // Show warning message
+                        if (window.app && window.app.notifyWarning) {
+                            window.app.notifyWarning(
+                                'تم اكتشاف تطبيق متعارض مثبت من نفس الموقع. اضغط على زر "إزالة التطبيق المتعارض" لحل المشكلة.',
+                                8000
+                            );
+                        }
+                    }
                 });
+            }
+            
+            // Check if we're in standalone mode but not the TV app
+            if (window.matchMedia('(display-mode: standalone)').matches || 
+                window.navigator.standalone === true) {
+                if (!window.location.pathname.includes('/TV-AR/')) {
+                    console.log('⚠️ PWA: Running in standalone mode but not TV app');
+                    
+                    // Redirect to TV app
+                    if (window.app && window.app.notifyInfo) {
+                        window.app.notifyInfo(
+                            'يبدو أنك تستخدم تطبيق آخر. اضغط هنا للانتقال إلى تطبيق ANON TV.',
+                            () => {
+                                window.location.href = '/TV-AR/';
+                            }
+                        );
+                    }
+                }
             }
         });
     </script>
