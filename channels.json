@@ -11,16 +11,6 @@
       "status": "active"
     },
     {
-      "id": 32,
-      "name": "السنة النبوية",
-      "url": "https://www.elahmad.com/tv/m3u8/online_live_14_tv.m3u8?id=sunna_tv&t=11111111",
-      "logo": "https://iili.io/Kz8TUYJ.png",
-      "category": "religious",
-      "country": "السعودية",
-      "type": "hls",
-      "status": "inactive"
-    },
-    {
       "id": 33,
       "name": "إقرأ",
       "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv3/playlist.m3u8",
@@ -714,6 +704,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-18T07:47:02.257Z",
+  "lastModified": "2025-09-18T08:11:50.206Z",
   "version": "1.0"
 }
