@@ -915,13 +915,21 @@ body[data-theme="light"] .admin-badge i {
     background: var(--primary-color);
     border-left: 1px solid var(--border-color);
     z-index: 1000;
-    transition: right 0.2s ease-out;
+    transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     overflow-y: auto;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
-    will-change: right;
+    will-change: transform;
     /* منع الترميش الأبيض */
     overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
+    /* تحسين الأداء */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: translateX(0);
+    /* تحسينات إضافية للأداء */
+    contain: layout style paint;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
 }
 
 /* Global Scrollbar Styles */
@@ -991,7 +999,7 @@ body[data-theme="light"] .admin-badge i {
 }
 
 .desktop-sidebar.active {
-    right: 0;
+    transform: translateX(-280px);
 }
 
 .sidebar-header {
@@ -1756,7 +1764,10 @@ body[data-theme="light"] .sidebar-nav-tab.active .tab-count {
     z-index: 999;
     opacity: 0;
     visibility: hidden;
-    transition: var(--transition);
+    transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: opacity, visibility;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .sidebar-overlay.active {
@@ -1766,7 +1777,7 @@ body[data-theme="light"] .sidebar-nav-tab.active .tab-count {
 
 /* Main Content Adjustment */
 .main-content {
-    transition: margin-right 0.2s ease-out;
+    transition: margin-right 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     will-change: margin-right;
 }
 
@@ -1954,7 +1965,10 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
     background: var(--background-dark);
     border-left: 1px solid var(--border-color);
     z-index: 2000;
-    transition: right 0.2s ease-out;
+    transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateX(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     overflow-y: auto;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.15);
     display: flex;
@@ -1966,7 +1980,7 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
 }
 
 .mobile-sidebar.active {
-    right: 0;
+    transform: translateX(-320px);
 }
 
 .mobile-sidebar-header {

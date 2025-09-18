@@ -5191,23 +5191,35 @@ class ArabicTVApp {
         this.isDesktopSidebarOpen = !this.isDesktopSidebarOpen;
         console.log('الحالة الجديدة:', this.isDesktopSidebarOpen);
         
-        // Use requestAnimationFrame for smoother animation
+        const sidebar = document.getElementById('desktopSidebar');
+        const mainContent = document.querySelector('.main-content');
+        const overlay = document.querySelector('.sidebar-overlay') || this.createSidebarOverlay();
+        
+        // تحسين الأداء باستخدام requestAnimationFrame
         requestAnimationFrame(() => {
-            const sidebar = document.getElementById('desktopSidebar');
-            const mainContent = document.querySelector('.main-content');
-            const overlay = document.querySelector('.sidebar-overlay') || this.createSidebarOverlay();
-            
-            console.log('عناصر DOM:', { sidebar, mainContent, overlay });
-            
             if (this.isDesktopSidebarOpen) {
+                // إضافة classes للانتقال السلس
                 sidebar.classList.add('active');
                 mainContent.classList.add('sidebar-open');
                 overlay.classList.add('active');
+                
+                // تحسين الأداء
+                sidebar.style.willChange = 'transform';
+                mainContent.style.willChange = 'margin-right';
+                
                 console.log('تم فتح القائمة الجانبية');
             } else {
+                // إزالة classes للانتقال السلس
                 sidebar.classList.remove('active');
                 mainContent.classList.remove('sidebar-open');
                 overlay.classList.remove('active');
+                
+                // إعادة تعيين will-change بعد انتهاء الانتقال
+                setTimeout(() => {
+                    sidebar.style.willChange = 'auto';
+                    mainContent.style.willChange = 'auto';
+                }, 150);
+                
                 console.log('تم إغلاق القائمة الجانبية');
             }
         });
