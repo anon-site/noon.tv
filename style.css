@@ -2356,11 +2356,26 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
         margin-bottom: 0.15rem;
     }
     
-    .channel-country,
-    .channel-category {
+    .channel-meta {
+        gap: 0.2rem;
+        justify-content: center;
+        flex-wrap: nowrap;
+    }
+    
+    .channel-country {
         font-size: 0.5rem;
-        padding: 0.05rem 0.2rem;
-        border-radius: 4px;
+        padding: 0.1rem 0.3rem;
+        border-radius: 6px;
+    }
+    
+    .channel-category {
+        font-size: 0.3rem;
+        padding: 0.03rem 0.15rem;
+        border-radius: 3px;
+    }
+    
+    .channel-country::before {
+        font-size: 0.4rem;
     }
 }
 
@@ -2443,6 +2458,8 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
+        padding: 12px;
+        text-align: center;
     }
     
     .channel-name {
@@ -2453,34 +2470,41 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: 100%;
+        text-align: center;
+        font-weight: 600;
+        line-height: 1.3;
     }
     
     .channel-meta {
         order: 2;
+        display: flex;
         flex-direction: row;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
-        gap: 0.5rem;
-        flex-wrap: wrap;
+        gap: 0.4rem;
+        flex-wrap: nowrap;
+        width: 100%;
+        margin-top: 0.25rem;
     }
     
     .channel-country {
         background: linear-gradient(135deg, var(--highlight-color), #4a90e2);
         color: white;
-        padding: 0.2rem 0.5rem;
+        padding: 0.25rem 0.6rem;
         border-radius: 12px;
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         font-weight: 600;
         white-space: nowrap;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
         border: 1px solid rgba(255, 255, 255, 0.2);
         text-transform: uppercase;
-        letter-spacing: 0.3px;
+        letter-spacing: 0.2px;
         display: flex;
         align-items: center;
-        gap: 0.3rem;
+        gap: 0.25rem;
         transition: all 0.3s ease;
         flex-shrink: 0;
+        min-width: fit-content;
     }
     
     .channel-country::before {
@@ -2494,40 +2518,42 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
     }
     
     .channel-category {
-        font-size: 0.7rem;
-        padding: 0.2rem 0.5rem;
+        background: linear-gradient(135deg, var(--highlight-color), #4a90e2);
+        color: white;
+        padding: 0.1rem 0.3rem;
+        border-radius: 8px;
+        font-size: 0.45rem;
+        font-weight: 400;
+        white-space: nowrap;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        text-transform: uppercase;
+        letter-spacing: 0.05px;
+        display: flex;
+        align-items: center;
+        gap: 0.15rem;
+        transition: all 0.3s ease;
         flex-shrink: 0;
+        min-width: fit-content;
+    }
+    
+    .channel-category:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
     }
 }
 
 @media (max-width: 480px) {
     .channel-meta {
         gap: 0.3rem;
-    }
-    
-    .channel-country {
-        font-size: 0.65rem;
-        padding: 0.15rem 0.4rem;
-    }
-    
-    .channel-country::before {
-        font-size: 0.55rem;
-    }
-    
-    .channel-category {
-        font-size: 0.65rem;
-        padding: 0.15rem 0.4rem;
-    }
-}
-
-@media (max-width: 375px) {
-    .channel-meta {
-        gap: 0.25rem;
+        justify-content: center;
+        flex-wrap: nowrap;
     }
     
     .channel-country {
         font-size: 0.6rem;
-        padding: 0.1rem 0.35rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 10px;
     }
     
     .channel-country::before {
@@ -2535,8 +2561,33 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
     }
     
     .channel-category {
-        font-size: 0.6rem;
-        padding: 0.1rem 0.35rem;
+        font-size: 0.4rem;
+        padding: 0.08rem 0.25rem;
+        border-radius: 6px;
+    }
+}
+
+@media (max-width: 375px) {
+    .channel-meta {
+        gap: 0.25rem;
+        justify-content: center;
+        flex-wrap: nowrap;
+    }
+    
+    .channel-country {
+        font-size: 0.55rem;
+        padding: 0.15rem 0.4rem;
+        border-radius: 8px;
+    }
+    
+    .channel-country::before {
+        font-size: 0.45rem;
+    }
+    
+    .channel-category {
+        font-size: 0.35rem;
+        padding: 0.05rem 0.2rem;
+        border-radius: 4px;
     }
 }
 
