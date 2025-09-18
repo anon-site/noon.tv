@@ -638,6 +638,16 @@
       "country": "السعوية",
       "type": "hls",
       "status": "active"
+    },
+    {
+      "id": 88,
+      "name": "سورية 2",
+      "url": "https://live.kwikmotion.com/syriatv02live/syriatv02.smil/playlist.m3u8",
+      "logo": "https://www.althania.tv/images/logo.png",
+      "category": "entertainment",
+      "country": "سورية",
+      "type": "hls",
+      "status": "active"
     }
   ],
   "favorites": [],
@@ -704,6 +714,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-18T14:09:47.187Z",
+  "lastModified": "2025-09-18T15:05:00.590Z",
   "version": "1.0"
 }
