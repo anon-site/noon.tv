@@ -628,6 +628,16 @@
       "country": "العراق",
       "type": "hls",
       "status": "active"
+    },
+    {
+      "id": 87,
+      "name": "السعودية",
+      "url": "https://cdn-globecast.akamaized.net/live/eds/saudi_tv/hls_roku/index.m3u8",
+      "logo": "https://iili.io/K5YZSDJ.png",
+      "category": "entertainment",
+      "country": "السعوية",
+      "type": "hls",
+      "status": "active"
     }
   ],
   "favorites": [],
@@ -694,6 +704,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-18T14:01:45.159Z",
+  "lastModified": "2025-09-18T14:09:47.187Z",
   "version": "1.0"
 }
