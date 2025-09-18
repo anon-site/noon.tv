@@ -11496,6 +11496,7 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     /* منع الترميش الأبيض */
     overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .mobile-bottom-nav .bottom-nav-btn {
@@ -11512,6 +11513,12 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     position: relative;
     min-width: 60px;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .mobile-bottom-nav .bottom-nav-btn:hover {
@@ -11575,6 +11582,7 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     transition: all 0.3s ease;
     max-height: 60vh;
     overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .categories-dropdown.active {
@@ -11591,6 +11599,7 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     border-bottom: 1px solid var(--border-color);
     background: var(--secondary-color);
     border-radius: 16px 16px 0 0;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .categories-dropdown .dropdown-header h3 {
@@ -11609,6 +11618,12 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .categories-dropdown .close-dropdown:hover {
@@ -11620,6 +11635,7 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     max-height: 50vh;
     overflow-y: auto;
     padding: 8px 0;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .categories-dropdown .category-item {
@@ -11634,6 +11650,12 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     text-align: right;
     transition: all 0.3s ease;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .categories-dropdown .category-item:hover {
@@ -11683,6 +11705,7 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .search-popup.active {
@@ -11703,6 +11726,7 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
     max-height: 80vh;
     overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
 }
 
 @media (max-width: 768px) {
@@ -11725,6 +11749,7 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     padding: 20px;
     border-bottom: 1px solid var(--border-color);
     background: var(--secondary-color);
+    -webkit-tap-highlight-color: transparent;
 }
 
 .search-popup-header h3 {
@@ -11743,6 +11768,12 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .search-popup .close-search:hover {
@@ -11752,11 +11783,13 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
 
 .search-popup-body {
     padding: 20px;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .search-input-container {
     position: relative;
     margin-bottom: 20px;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .search-popup-input {
@@ -11768,6 +11801,7 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     color: var(--text-primary);
     font-size: 1rem;
     transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .search-popup-input:focus {
@@ -11891,6 +11925,7 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     transition: all 0.3s ease;
     min-width: 150px;
     width: 200px;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .more-menu.active {
@@ -11901,6 +11936,7 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
 
 .more-menu-content {
     padding: 8px 0;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .more-menu-item {
@@ -11916,6 +11952,12 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     transition: all 0.3s ease;
     cursor: pointer;
     justify-content: flex-start;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .more-menu-item:hover {
