@@ -708,6 +708,16 @@
       "country": "عالمية",
       "type": "youtube",
       "status": "active"
+    },
+    {
+      "id": 95,
+      "name": "Music Radio",
+      "url": "https://www.youtube.com/watch?v=BPcUxivZHuU",
+      "logo": "https://static.vecteezy.com/system/resources/thumbnails/055/155/574/small/radio-podcast-live-png.png",
+      "category": "music",
+      "country": "عالمية",
+      "type": "youtube",
+      "status": "active"
     }
   ],
   "favorites": [],
@@ -779,6 +789,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-19T02:53:57.928Z",
+  "lastModified": "2025-09-19T02:57:44.522Z",
   "version": "1.0"
 }
