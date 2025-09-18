@@ -51,16 +51,6 @@
       "status": "active"
     },
     {
-      "id": 32,
-      "name": "السنة النبوية",
-      "url": "https://www.elahmad.com/tv/m3u8/online_live_14_tv.m3u8?id=sunna_tv&t=11111111",
-      "logo": "https://iili.io/Kz8TUYJ.png",
-      "category": "religious",
-      "country": "السعودية",
-      "type": "hls",
-      "status": "inactive"
-    },
-    {
       "id": 82,
       "name": "Ch4Teen",
       "url": "https://ch14.tv/live/ch4teenclip/playlist.m3u8",
@@ -638,6 +628,16 @@
       "country": "العراق",
       "type": "hls",
       "status": "active"
+    },
+    {
+      "id": 87,
+      "name": "السعودية",
+      "url": "https://cdn-globecast.akamaized.net/live/eds/saudi_tv/hls_roku/index.m3u8",
+      "logo": "https://iili.io/K5YZSDJ.png",
+      "category": "entertainment",
+      "country": "السعوية",
+      "type": "hls",
+      "status": "active"
     }
   ],
   "favorites": [],
@@ -704,6 +704,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-18T13:42:46.448Z",
+  "lastModified": "2025-09-18T14:09:47.187Z",
   "version": "1.0"
 }
