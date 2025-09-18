@@ -678,6 +678,16 @@
       "country": "عالمية",
       "type": "youtube",
       "status": "active"
+    },
+    {
+      "id": 92,
+      "name": "مستر بين",
+      "url": "https://www.youtube.com/watch?v=amzgpxDsJjQ",
+      "logo": "https://www.pngplay.com/wp-content/uploads/12/Mr.-Bean-Transparent-Clip-Art-Background.png",
+      "category": "entertainment",
+      "country": "عالمية",
+      "type": "youtube",
+      "status": "active"
     }
   ],
   "favorites": [],
@@ -749,6 +759,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-19T02:43:58.130Z",
+  "lastModified": "2025-09-19T02:49:49.668Z",
   "version": "1.0"
 }
