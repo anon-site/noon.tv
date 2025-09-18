@@ -6,13 +6,13 @@ const DYNAMIC_CACHE_NAME = 'anon-tv-dynamic-v2.0.1';
 
 // Files to cache for offline functionality
 const STATIC_FILES = [
-    '/',
-    '/index.html',
-    '/style.css',
-    '/script.js',
-    '/favicon.svg',
-    '/site.webmanifest',
-    '/channels.json',
+    '/TV-AR/',
+    '/TV-AR/index.html',
+    '/TV-AR/style.css',
+    '/TV-AR/script.js',
+    '/TV-AR/favicon.svg',
+    '/TV-AR/site.webmanifest',
+    '/TV-AR/channels.json',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
     'https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap',
     'https://cdn.jsdelivr.net/npm/hls.js@latest'
@@ -116,7 +116,7 @@ self.addEventListener('fetch', event => {
                         
                         // Return offline page for navigation requests
                         if (request.mode === 'navigate') {
-                            return caches.match('/index.html');
+                            return caches.match('/TV-AR/index.html');
                         }
                         
                         // Return a custom offline response for other requests
@@ -185,8 +185,8 @@ self.addEventListener('push', event => {
     
     const options = {
         body: event.data ? event.data.text() : 'تحديث جديد متاح!',
-        icon: '/icons/icon-192x192.png',
-        badge: '/icons/icon-72x72.png',
+        icon: '/TV-AR/icons/icon-192x192.png',
+        badge: '/TV-AR/icons/icon-72x72.png',
         vibrate: [200, 100, 200],
         data: {
             dateOfArrival: Date.now(),
@@ -196,12 +196,12 @@ self.addEventListener('push', event => {
             {
                 action: 'explore',
                 title: 'استكشاف',
-                icon: '/icons/action-explore.png'
+                icon: '/TV-AR/icons/action-explore.png'
             },
             {
                 action: 'close',
                 title: 'إغلاق',
-                icon: '/icons/action-close.png'
+                icon: '/TV-AR/icons/action-close.png'
             }
         ]
     };
@@ -219,7 +219,7 @@ self.addEventListener('notificationclick', event => {
     
     if (event.action === 'explore') {
         event.waitUntil(
-            clients.openWindow('/')
+            clients.openWindow('/TV-AR/')
         );
     } else if (event.action === 'close') {
         // Just close the notification
@@ -227,7 +227,7 @@ self.addEventListener('notificationclick', event => {
     } else {
         // Default action - open the app
         event.waitUntil(
-            clients.openWindow('/')
+            clients.openWindow('/TV-AR/')
         );
     }
 });
@@ -235,11 +235,11 @@ self.addEventListener('notificationclick', event => {
 // Helper function to sync channels data
 async function syncChannelsData() {
     try {
-        const response = await fetch('/channels.json');
+        const response = await fetch('/TV-AR/channels.json');
         if (response.ok) {
             const data = await response.json();
             const cache = await caches.open(DYNAMIC_CACHE_NAME);
-            await cache.put('/channels.json', response.clone());
+            await cache.put('/TV-AR/channels.json', response.clone());
             console.log('📡 Service Worker: Channels data synced');
         }
     } catch (error) {
@@ -266,7 +266,7 @@ self.addEventListener('message', event => {
         event.waitUntil(
             caches.open(DYNAMIC_CACHE_NAME)
                 .then(cache => {
-                    return cache.put('/channels.json', new Response(JSON.stringify(event.data.channels)));
+                    return cache.put('/TV-AR/channels.json', new Response(JSON.stringify(event.data.channels)));
                 })
                 .then(() => {
                     event.ports[0].postMessage({ success: true });

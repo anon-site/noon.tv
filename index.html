@@ -13,7 +13,7 @@
     <meta name="description" content="منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات">
     <meta name="format-detection" content="telephone=no">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="msapplication-config" content="/browserconfig.xml">
+    <meta name="msapplication-config" content="./browserconfig.xml">
     <meta name="msapplication-TileColor" content="#667eea">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="theme-color" content="#667eea">
@@ -22,8 +22,8 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="ANON TV - القنوات الفضائية العربية">
     <meta property="og:description" content="منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات">
-    <meta property="og:image" content="/icons/icon-512x512.png">
-    <meta property="og:url" content="/">
+    <meta property="og:image" content="./icons/icon-512x512.png">
+    <meta property="og:url" content="/TV-AR/">
     <meta property="og:site_name" content="ANON TV">
     <meta property="og:locale" content="ar_SA">
     
@@ -31,7 +31,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="ANON TV - القنوات الفضائية العربية">
     <meta name="twitter:description" content="منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات">
-    <meta name="twitter:image" content="/icons/icon-512x512.png">
+    <meta name="twitter:image" content="./icons/icon-512x512.png">
     
     <title>ANON TV - القنوات الفضائية العربية</title>
     
@@ -41,25 +41,25 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     
     <!-- Apple Touch Icons -->
-    <link rel="apple-touch-icon" sizes="57x57" href="icons/apple-touch-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="icons/apple-touch-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="icons/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="icons/apple-touch-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="icons/apple-touch-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="icons/apple-touch-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="icons/apple-touch-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="icons/apple-touch-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-180x180.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="./icons/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="./icons/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="./icons/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="./icons/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="./icons/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="./icons/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="./icons/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="./icons/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon-180x180.png">
     
     <!-- Android Icons -->
-    <link rel="icon" type="image/png" sizes="192x192" href="icons/android-chrome-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="icons/android-chrome-512x512.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="./icons/android-chrome-512x512.png">
     
     <!-- Manifest -->
-    <link rel="manifest" href="site.webmanifest">
+    <link rel="manifest" href="./site.webmanifest">
     
     <!-- Mask Icon for Safari -->
-    <link rel="mask-icon" href="icons/safari-pinned-tab.svg" color="#667eea">
+    <link rel="mask-icon" href="./icons/safari-pinned-tab.svg" color="#667eea">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -1364,7 +1364,7 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', async () => {
                 try {
-                    const registration = await navigator.serviceWorker.register('/sw.js');
+                    const registration = await navigator.serviceWorker.register('./sw.js');
                     console.log('✅ Service Worker registered successfully:', registration);
                     
                     // Check for updates
