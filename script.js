@@ -5839,19 +5839,6 @@ class ArabicTVApp {
             `;
         }
 
-        // Show notification with cloud sync info
-        let notificationMessage = 'يوجد تحديث جديد للقنوات متاح! اضغط على "تحديث الآن" لتحميل أحدث القنوات.';
-        
-        if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
-            notificationMessage += ' سيتم مزامنة التحديثات تلقائياً مع جميع الأجهزة المتصلة.';
-        }
-
-        this.notifyInfo(
-            notificationMessage,
-            'تحديث جديد متاح',
-            10000
-        );
-
         // Add pulse effect to update button
         setTimeout(() => {
             this.highlightUpdateButton();
