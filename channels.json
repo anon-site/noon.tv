@@ -648,6 +648,26 @@
       "country": "سورية",
       "type": "hls",
       "status": "active"
+    },
+    {
+      "id": 89,
+      "name": "طيور الجنة",
+      "url": "https://www.youtube.com/watch?v=UcQPvoO4wzk",
+      "logo": "https://upload.wikimedia.org/wikipedia/ar/thumb/2/21/%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D8%A7%D8%A9_%D8%B7%D9%8A%D9%88%D8%B1_%D8%A7%D9%84%D8%AC%D9%86%D8%A9.svg/280px-%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D8%A7%D8%A9_%D8%B7%D9%8A%D9%88%D8%B1_%D8%A7%D9%84%D8%AC%D9%86%D8%A9.svg.png",
+      "category": "kids",
+      "country": "قطر",
+      "type": "youtube",
+      "status": "active"
+    },
+    {
+      "id": 90,
+      "name": "Cartoonito",
+      "url": "https://www.youtube.com/watch?v=yIK9W-EwCn8",
+      "logo": "https://static.wikia.nocookie.net/logopedia/images/4/4c/Cartoonito.svg/revision/latest?cb=20220521025816",
+      "category": "kids",
+      "country": "قطر",
+      "type": "youtube",
+      "status": "active"
     }
   ],
   "favorites": [],
@@ -714,6 +734,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-18T15:05:00.590Z",
+  "lastModified": "2025-09-19T02:26:06.877Z",
   "version": "1.0"
 }
