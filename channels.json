@@ -711,7 +711,7 @@
     },
     {
       "id": 95,
-      "name": "Music Radio",
+      "name": "Guitar Music",
       "url": "https://www.youtube.com/watch?v=BPcUxivZHuU",
       "logo": "https://static.vecteezy.com/system/resources/thumbnails/055/155/574/small/radio-podcast-live-png.png",
       "category": "music",
@@ -789,6 +789,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-19T02:57:44.522Z",
+  "lastModified": "2025-09-19T03:26:31.908Z",
   "version": "1.0"
 }
