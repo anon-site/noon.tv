@@ -663,7 +663,7 @@
       "id": 90,
       "name": "Cartoonito",
       "url": "https://www.youtube.com/watch?v=yIK9W-EwCn8",
-      "logo": "https://static.wikia.nocookie.net/logopedia/images/4/4c/Cartoonito.svg/revision/latest?cb=20220521025816",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/7/79/Cartoonito_2020_logo.png",
       "category": "kids",
       "country": "قطر",
       "type": "youtube",
@@ -734,6 +734,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-19T02:26:06.877Z",
+  "lastModified": "2025-09-19T02:26:50.793Z",
   "version": "1.0"
 }
