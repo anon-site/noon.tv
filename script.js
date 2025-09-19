@@ -6438,12 +6438,47 @@ class ArabicTVApp {
                 return true;
             }
 
-            // Fetch remote data info
-            const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json', {
-                method: 'HEAD'
-            });
+            // Fetch remote data info من مصادر متعددة
+            const dataSources = [
+                'https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json',
+                'https://cdn.jsdelivr.net/gh/anon-site/TV-AR@main/channels.json',
+                'https://rawcdn.githack.com/anon-site/TV-AR/main/channels.json'
+            ];
             
-            if (!response.ok) {
+            let response = null;
+            let lastError = null;
+            
+            for (let sourceIndex = 0; sourceIndex < dataSources.length; sourceIndex++) {
+                const dataSource = dataSources[sourceIndex];
+                try {
+                    console.log(`🔄 فحص التحديثات من المصدر ${sourceIndex + 1}: ${dataSource}`);
+                    response = await fetch(dataSource, {
+                        method: 'HEAD',
+                        headers: {
+                            'Cache-Control': 'no-cache',
+                            'Pragma': 'no-cache',
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        console.log(`✅ نجح فحص التحديثات من المصدر ${sourceIndex + 1}`);
+                        break;
+                    } else {
+                        throw new Error(`خطأ ${response.status}: ${response.statusText}`);
+                    }
+                } catch (error) {
+                    lastError = error;
+                    console.log(`❌ فشل فحص التحديثات من المصدر ${sourceIndex + 1}: ${error.message}`);
+                    
+                    if (sourceIndex === dataSources.length - 1) {
+                        console.log('❌ فشل في فحص التحديثات من جميع المصادر');
+                        return false;
+                    }
+                }
+            }
+            
+            if (!response || !response.ok) {
                 console.log('❌ فشل في فحص التحديثات');
                 return false;
             }
@@ -6493,11 +6528,46 @@ class ArabicTVApp {
             const currentChannels = [...this.channels];
             const currentChannelIds = new Set(currentChannels.map(ch => ch.id));
             
-            // جلب البيانات الجديدة من GitHub
-            const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json');
+            // جلب البيانات الجديدة من مصادر متعددة
+            const dataSources = [
+                'https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json',
+                'https://cdn.jsdelivr.net/gh/anon-site/TV-AR@main/channels.json',
+                'https://rawcdn.githack.com/anon-site/TV-AR/main/channels.json'
+            ];
             
-            if (!response.ok) {
-                throw new Error(`خطأ في جلب البيانات: ${response.status} ${response.statusText}`);
+            let response = null;
+            let lastError = null;
+            
+            for (let sourceIndex = 0; sourceIndex < dataSources.length; sourceIndex++) {
+                const dataSource = dataSources[sourceIndex];
+                try {
+                    console.log(`🔄 محاولة المصدر ${sourceIndex + 1} للتحديث التلقائي: ${dataSource}`);
+                    response = await fetch(dataSource, {
+                        headers: {
+                            'Cache-Control': 'no-cache',
+                            'Pragma': 'no-cache',
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        console.log(`✅ نجح المصدر ${sourceIndex + 1} للتحديث التلقائي`);
+                        break;
+                    } else {
+                        throw new Error(`خطأ ${response.status}: ${response.statusText}`);
+                    }
+                } catch (error) {
+                    lastError = error;
+                    console.log(`❌ فشل المصدر ${sourceIndex + 1} للتحديث التلقائي: ${error.message}`);
+                    
+                    if (sourceIndex === dataSources.length - 1) {
+                        throw new Error(`فشل في جلب البيانات من جميع المصادر. آخر خطأ: ${lastError?.message || 'غير معروف'}`);
+                    }
+                }
+            }
+            
+            if (!response || !response.ok) {
+                throw new Error(`خطأ في جلب البيانات: ${response?.status || 'غير معروف'} ${response?.statusText || 'خطأ غير معروف'}`);
             }
             
             const responseText = await response.text();
@@ -7949,25 +8019,64 @@ async function updateChannels() {
         let retryCount = 0;
         const maxRetries = 3;
         
-        while (retryCount < maxRetries) {
-            try {
-                response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json', {
-                    signal: controller.signal,
-                    headers: {
-                        'Cache-Control': 'no-cache',
-                        'Pragma': 'no-cache'
-                    }
-                });
-                clearTimeout(timeoutId);
-                break;
-            } catch (error) {
-                retryCount++;
-                if (retryCount >= maxRetries) {
+        // قائمة المصادر البديلة
+        const dataSources = [
+            'https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json',
+            'https://cdn.jsdelivr.net/gh/anon-site/TV-AR@main/channels.json',
+            'https://rawcdn.githack.com/anon-site/TV-AR/main/channels.json'
+        ];
+        
+        let lastError = null;
+        
+        for (let sourceIndex = 0; sourceIndex < dataSources.length; sourceIndex++) {
+            const dataSource = dataSources[sourceIndex];
+            console.log(`🔄 محاولة المصدر ${sourceIndex + 1}: ${dataSource}`);
+            
+            retryCount = 0;
+            while (retryCount < maxRetries) {
+                try {
+                    response = await fetch(dataSource, {
+                        signal: controller.signal,
+                        headers: {
+                            'Cache-Control': 'no-cache',
+                            'Pragma': 'no-cache',
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                        }
+                    });
                     clearTimeout(timeoutId);
-                    throw new Error(`فشل في جلب البيانات بعد ${maxRetries} محاولات: ${error.message}`);
+                    
+                    if (response.ok) {
+                        console.log(`✅ نجح المصدر ${sourceIndex + 1}: ${dataSource}`);
+                        break;
+                    } else {
+                        throw new Error(`خطأ ${response.status}: ${response.statusText}`);
+                    }
+                } catch (error) {
+                    retryCount++;
+                    lastError = error;
+                    console.log(`❌ فشل المصدر ${sourceIndex + 1}, المحاولة ${retryCount}: ${error.message}`);
+                    
+                    if (retryCount >= maxRetries) {
+                        console.log(`❌ فشل المصدر ${sourceIndex + 1} بعد ${maxRetries} محاولات`);
+                        break;
+                    }
+                    
+                    // انتظار أطول بين المحاولات
+                    const waitTime = Math.min(5000 * retryCount, 15000); // من 5 إلى 15 ثانية
+                    console.log(`⏳ انتظار ${waitTime/1000} ثانية قبل المحاولة التالية...`);
+                    await new Promise(resolve => setTimeout(resolve, waitTime));
                 }
-                console.log(`🔄 محاولة ${retryCount + 1} من ${maxRetries}...`);
-                await new Promise(resolve => setTimeout(resolve, 2000 * retryCount)); // Exponential backoff
+            }
+            
+            // إذا نجح المصدر، اخرج من الحلقة
+            if (response && response.ok) {
+                break;
+            }
+            
+            // إذا كان هذا آخر مصدر، ارمي الخطأ
+            if (sourceIndex === dataSources.length - 1) {
+                clearTimeout(timeoutId);
+                throw new Error(`فشل في جلب البيانات من جميع المصادر. آخر خطأ: ${lastError?.message || 'غير معروف'}`);
             }
         }
         
@@ -8156,17 +8265,29 @@ async function updateChannels() {
     } catch (error) {
         console.error('❌ خطأ في تحديث القنوات:', error);
         
-        // Show detailed error notification
+        // Show detailed error notification with specific guidance
         let errorMessage = 'فشل في تحديث القنوات';
-        if (error.message.includes('JSON')) {
+        let errorDetails = '';
+        
+        if (error.message.includes('503')) {
+            errorMessage += ': الخادم غير متاح مؤقتاً';
+            errorDetails = 'يبدو أن خادم GitHub غير متاح حالياً. هذا خطأ مؤقت عادة ما يُحل خلال دقائق.';
+        } else if (error.message.includes('JSON')) {
             errorMessage += ': خطأ في تنسيق البيانات';
-        } else if (error.message.includes('fetch')) {
+            errorDetails = 'البيانات المستلمة من الخادم غير صحيحة.';
+        } else if (error.message.includes('fetch') || error.message.includes('NetworkError')) {
             errorMessage += ': مشكلة في الاتصال بالإنترنت';
+            errorDetails = 'تأكد من اتصالك بالإنترنت وحاول مرة أخرى.';
+        } else if (error.message.includes('timeout') || error.message.includes('aborted')) {
+            errorMessage += ': انتهت مهلة الاتصال';
+            errorDetails = 'استغرق الاتصال وقتاً أطول من المتوقع. حاول مرة أخرى.';
         } else {
             errorMessage += `: ${error.message}`;
+            errorDetails = 'حدث خطأ غير متوقع أثناء التحديث.';
         }
         
-        window.app.notifyError(errorMessage, 8000);
+        // إظهار رسالة الخطأ مع التفاصيل
+        window.app.notifyError(`${errorMessage}\n\n${errorDetails}\n\n💡 يمكنك المحاولة مرة أخرى بعد بضع دقائق أو استخدام البيانات المحفوظة محلياً.`, 'خطأ في التحديث', 10000);
         
         // Try to restore backup if available
         const backupData = localStorage.getItem('channels_backup');
@@ -8195,13 +8316,24 @@ async function updateChannels() {
             }
         }
         
-        // Show additional help
+        // إضافة خيار العمل في وضع عدم الاتصال
         setTimeout(() => {
-            window.app.notifyInfo(
-                'يمكنك المحاولة مرة أخرى أو التحقق من اتصال الإنترنت',
-                'مساعدة',
-                5000
-            );
+            const hasLocalData = window.app.channels && window.app.channels.length > 0;
+            const localDataCount = hasLocalData ? window.app.channels.length : 0;
+            
+            let helpMessage = '💡 نصائح لحل المشكلة:\n';
+            helpMessage += '• تأكد من اتصالك بالإنترنت\n';
+            helpMessage += '• حاول تحديث الصفحة\n';
+            helpMessage += '• جرب استخدام متصفح آخر\n';
+            helpMessage += '• انتظر بضع دقائق ثم حاول مرة أخرى\n\n';
+            
+            if (hasLocalData) {
+                helpMessage += `📱 يمكنك الاستمرار في استخدام التطبيق مع ${localDataCount} قناة محفوظة محلياً.`;
+            } else {
+                helpMessage += '⚠️ لا توجد بيانات محلية متاحة. يرجى المحاولة مرة أخرى لاحقاً.';
+            }
+            
+            window.app.notifyInfo(helpMessage, 'مساعدة في حل المشكلة', 15000);
         }, 2000);
     }
 }
