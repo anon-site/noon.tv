@@ -34,15 +34,6 @@ self.addEventListener('install', event => {
             })
             .catch(error => {
                 console.error('❌ Service Worker: Failed to cache static files', error);
-                // إشعار المستخدم بفشل التخزين المؤقت
-                self.clients.matchAll().then(clients => {
-                    clients.forEach(client => {
-                        client.postMessage({
-                            type: 'CACHE_ERROR',
-                            message: 'فشل في تخزين الملفات مؤقتاً - قد يؤثر على الأداء عند عدم وجود إنترنت'
-                        });
-                    });
-                });
             })
     );
 });
@@ -183,15 +174,6 @@ self.addEventListener('sync', event => {
                 })
                 .catch(error => {
                     console.error('❌ Service Worker: Sync failed', error);
-                    // إشعار المستخدم بفشل المزامنة
-                    self.clients.matchAll().then(clients => {
-                        clients.forEach(client => {
-                            client.postMessage({
-                                type: 'SYNC_ERROR',
-                                message: 'فشل في مزامنة البيانات - تحقق من اتصال الإنترنت والإعدادات'
-                            });
-                        });
-                    });
                 })
         );
     }
@@ -253,45 +235,15 @@ self.addEventListener('notificationclick', event => {
 // Helper function to sync channels data
 async function syncChannelsData() {
     try {
-        // التحقق من اتصال الإنترنت
-        if (!navigator.onLine) {
-            console.log('📴 Service Worker: No internet connection for sync');
-            return;
-        }
-
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
-
-        const response = await fetch('/TV-AR/channels.json', {
-            signal: controller.signal,
-            headers: {
-                'Cache-Control': 'no-cache',
-                'Pragma': 'no-cache'
-            }
-        });
-        
-        clearTimeout(timeoutId);
-        
+        const response = await fetch('/TV-AR/channels.json');
         if (response.ok) {
             const data = await response.json();
-            
-            // التحقق من صحة البيانات قبل التخزين المؤقت
-            if (data && data.channels && Array.isArray(data.channels)) {
-                const cache = await caches.open(DYNAMIC_CACHE_NAME);
-                await cache.put('/TV-AR/channels.json', response.clone());
-                console.log('📡 Service Worker: Channels data synced successfully');
-            } else {
-                console.warn('⚠️ Service Worker: Invalid channels data format');
-            }
-        } else {
-            console.warn('⚠️ Service Worker: Failed to fetch channels data:', response.status);
+            const cache = await caches.open(DYNAMIC_CACHE_NAME);
+            await cache.put('/TV-AR/channels.json', response.clone());
+            console.log('📡 Service Worker: Channels data synced');
         }
     } catch (error) {
-        if (error.name === 'AbortError') {
-            console.warn('⏰ Service Worker: Sync timeout');
-        } else {
-            console.error('❌ Service Worker: Failed to sync channels data', error);
-        }
+        console.error('❌ Service Worker: Failed to sync channels data', error);
         throw error;
     }
 }

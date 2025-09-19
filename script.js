@@ -12,31 +12,7 @@ class ArabicTVApp {
         this.isLoggedIn = false;
         // كلمة المرور مشفرة بـ SHA-256 Hash (أكثر أماناً)
         // قراءة كلمة المرور من localStorage أو استخدام الافتراضية
-        this.adminPassword = localStorage.getItem('anon_tv_admin_password');
-        // إزالة كلمة المرور الافتراضية المكشوفة للأمان
-        
-        // إذا لم تكن هناك كلمة مرور محفوظة، إظهار نافذة إعداد كلمة المرور الأولى
-        if (!this.adminPassword) {
-            this.showInitialPasswordSetup();
-        }
-
-        // تنظيف الجلسات القديمة عند بدء التطبيق
-        this.cleanupOldSessions();
-        
-        // نظام حماية متقدم من هجمات Brute Force
-        this.loginAttempts = JSON.parse(localStorage.getItem('anon_tv_login_attempts')) || {
-            count: 0,
-            lastAttempt: 0,
-            lockoutUntil: 0
-        };
-        this.maxLoginAttempts = 5;
-        this.lockoutDuration = 15 * 60 * 1000; // 15 دقيقة
-        this.sessionTimeout = 30 * 60 * 1000; // 30 دقيقة
-        this.lastActivity = Date.now();
-        
-        // نظام حماية الجلسات المتقدم
-        this.sessionToken = this.generateSessionToken();
-        this.maxConcurrentSessions = 1; // جلسة واحدة فقط
+        this.adminPassword = localStorage.getItem('anon_tv_admin_password') || '3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657'; // كلمة مرور @admin123 مشفرة بـ SHA-256
         this.settings = {
             autoQuality: true,
             autoplay: true,
@@ -93,37 +69,18 @@ class ArabicTVApp {
         this.loadSettings();
         this.loadAdminPassword(); // تحميل كلمة المرور المحفوظة
         this.loadLoginState(); // تحميل حالة تسجيل الدخول بعد تحميل البيانات
-        
-        // تنظيف القنوات المحذوفة القديمة
-        this.cleanupOldDeletedChannels();
-        
         this.renderChannels(); // عرض القنوات بعد تحميل حالة تسجيل الدخول
         // إعادة عرض القنوات مرة أخرى لضمان ظهور الأيقونات بشكل صحيح
         setTimeout(() => {
             this.renderChannels();
         }, 100);
         this.bindEvents();
-        
-        // فحص حالة التخزين للتأكد من سلامة البيانات
-        setTimeout(() => {
-            this.checkStorageHealth();
-        }, 500);
         this.bindRemoteStorageEvents();
         
-        // Check for updates after a short delay (only if auto-update is enabled)
+        // Check for updates after a short delay
         setTimeout(() => {
-            if (this.settings.autoUpdate !== false) { // Default to true
-                this.checkForUpdates();
-            }
+            this.checkForUpdates();
         }, 2000);
-        
-        // فحص دوري للتحديثات كل 30 دقيقة (إذا كان التحديث التلقائي مفعل)
-        if (this.settings.autoUpdate !== false) {
-            setInterval(() => {
-                console.log('🔄 فحص دوري للتحديثات...');
-                this.checkForUpdates();
-            }, 30 * 60 * 1000); // 30 دقيقة
-        }
         this.setupMobileSearch();
         this.setupPictureInPictureEvents();
         this.checkAndSetupPictureInPicture();
@@ -173,25 +130,11 @@ class ArabicTVApp {
             }
             const data = await response.json();
             
-            // تحميل القنوات من JSON file كبديل إذا لم توجد في localStorage
-            if (data.channels && Array.isArray(data.channels) && data.channels.length > 0) {
-                this.channels = data.channels;
-                this.filteredChannels = [...data.channels];
-                console.log('تم تحميل القنوات من channels.json:', this.channels.length, 'قناة');
-                
-                // حفظ القنوات في localStorage لضمان عدم فقدانها
-                this.saveChannelsToStorage();
-            } else {
-                console.log('لا توجد قنوات في channels.json - سيتم البدء بقائمة فارغة');
-            }
+            // لا نحمل القنوات من JSON file - نبدأ بقائمة فارغة
+            console.log('تم تخطي تحميل القنوات من channels.json - سيتم البدء بقائمة فارغة');
             
-            // تحميل الفئات من JSON file إذا لم توجد في localStorage
-            if (data.categories && Array.isArray(data.categories) && data.categories.length > 0) {
-                this.categories = data.categories;
-                console.log('تم تحميل الفئات من channels.json:', this.categories.length, 'فئة');
-            } else {
-                console.log('لا توجد فئات في channels.json - سيتم استخدام الفئات الافتراضية');
-            }
+            // لا نحمل الفئات من JSON file - يجب أن تأتي من localStorage
+            console.log('تم تخطي تحميل الفئات من channels.json - سيتم تحميلها من localStorage');
             
             // Load settings from JSON file
             if (data.settings && typeof data.settings === 'object') {
@@ -230,39 +173,6 @@ class ArabicTVApp {
             console.error('❌ خطأ في Local Storage:', error);
             alert('تحذير: لا يمكن حفظ الإعدادات! قد يكون المتصفح في وضع الخصوصية أو مساحة التخزين ممتلئة.');
             return false;
-        }
-    }
-
-    // دالة لفحص حالة التخزين والتأكد من وجود القنوات
-    checkStorageHealth() {
-        try {
-            const savedChannels = localStorage.getItem('arabicTVChannels');
-            const backupChannels = localStorage.getItem('channels_backup');
-            
-            console.log('🔍 فحص حالة التخزين:');
-            console.log('- القنوات المحفوظة:', savedChannels ? 'موجودة' : 'غير موجودة');
-            console.log('- النسخة الاحتياطية:', backupChannels ? 'موجودة' : 'غير موجودة');
-            
-            if (savedChannels) {
-                const channels = JSON.parse(savedChannels);
-                console.log('- عدد القنوات المحفوظة:', channels.length);
-            }
-            
-            if (backupChannels) {
-                const backup = JSON.parse(backupChannels);
-                console.log('- عدد القنوات في النسخة الاحتياطية:', backup.count);
-                console.log('- تاريخ النسخة الاحتياطية:', backup.timestamp);
-            }
-            
-            return {
-                hasMainChannels: !!savedChannels,
-                hasBackup: !!backupChannels,
-                mainCount: savedChannels ? JSON.parse(savedChannels).length : 0,
-                backupCount: backupChannels ? JSON.parse(backupChannels).count : 0
-            };
-        } catch (error) {
-            console.error('❌ خطأ في فحص حالة التخزين:', error);
-            return { hasMainChannels: false, hasBackup: false, mainCount: 0, backupCount: 0 };
         }
     }
 
@@ -344,12 +254,6 @@ class ArabicTVApp {
             if (autoplayEl) {
                 autoplayEl.checked = this.settings.autoplay;
                 console.log('تشغيل تلقائي:', this.settings.autoplay);
-            }
-            
-            const autoUpdateEl = document.getElementById('autoUpdate');
-            if (autoUpdateEl) {
-                autoUpdateEl.checked = this.settings.autoUpdate !== false; // Default to true
-                console.log('تحديث تلقائي:', this.settings.autoUpdate);
             }
             
             const volumeEl = document.getElementById('volume');
@@ -514,19 +418,6 @@ class ArabicTVApp {
             console.log('تم تغيير التشغيل التلقائي إلى:', e.target.checked);
         });
 
-        document.getElementById('autoUpdate').addEventListener('change', (e) => {
-            this.settings.autoUpdate = e.target.checked;
-            this.saveSettings();
-            console.log('تم تغيير التحديث التلقائي إلى:', e.target.checked);
-            
-            // إظهار رسالة توضيحية
-            if (e.target.checked) {
-                this.notifyInfo('تم تفعيل التحديث التلقائي - سيتم فحص التحديثات عند فتح الموقع');
-            } else {
-                this.notifyInfo('تم إلغاء التحديث التلقائي - يمكنك التحديث يدوياً من زر "تحديث القنوات"');
-            }
-        });
-
         document.getElementById('volume').addEventListener('input', (e) => {
             this.settings.volume = parseInt(e.target.value);
             this.saveSettings();
@@ -555,8 +446,6 @@ class ArabicTVApp {
             });
         }
 
-        // إضافة دعم للكيبورد للعناصر التفاعلية
-        this.addKeyboardSupport();
 
         // New customization controls
         const zoomLevelSlider = document.getElementById('zoomLevel');
@@ -899,52 +788,22 @@ class ArabicTVApp {
         // إنشاء placeholder محسن للشعار
         const logoPlaceholder = this.createLogoPlaceholder(channel);
         
-        // إنشاء العناصر بشكل آمن بدلاً من استخدام innerHTML
-        const img = document.createElement('img');
-        img.src = channel.logo;
-        img.alt = channel.name;
-        img.className = 'channel-logo';
-        img.loading = 'lazy'; // إضافة lazy loading للأداء
-        img.onerror = function() {
-            this.src = logoPlaceholder;
-            this.classList.add('placeholder-logo');
-        };
-        
-        const channelInfo = document.createElement('div');
-        channelInfo.className = 'channel-info';
-        
-        const channelName = document.createElement('h3');
-        channelName.className = 'channel-name';
-        channelName.textContent = channel.name;
-        
-        const channelMeta = document.createElement('div');
-        channelMeta.className = 'channel-meta';
-        
-        const countrySpan = document.createElement('span');
-        countrySpan.className = 'channel-country';
-        countrySpan.textContent = channel.country;
-        
-        const categorySpan = document.createElement('span');
-        categorySpan.className = 'channel-category';
-        categorySpan.textContent = this.getCategoryName(channel.category);
-        
-        channelMeta.appendChild(countrySpan);
-        channelMeta.appendChild(categorySpan);
-        channelInfo.appendChild(channelName);
-        channelInfo.appendChild(channelMeta);
-        
-        const playOverlay = document.createElement('div');
-        playOverlay.className = 'play-overlay';
-        
-        const playBtn = document.createElement('button');
-        playBtn.className = 'play-btn';
-        playBtn.innerHTML = '<i class="fas fa-play"></i>';
-        
-        playOverlay.appendChild(playBtn);
-        
-        card.appendChild(img);
-        card.appendChild(channelInfo);
-        card.appendChild(playOverlay);
+        card.innerHTML = `
+            <img src="${channel.logo}" alt="${channel.name}" class="channel-logo" 
+                 onerror="this.src='${logoPlaceholder}'; this.classList.add('placeholder-logo');">
+            <div class="channel-info">
+                <h3 class="channel-name">${channel.name}</h3>
+                <div class="channel-meta">
+                    <span class="channel-country">${channel.country}</span>
+                    <span class="channel-category">${this.getCategoryName(channel.category)}</span>
+                </div>
+            </div>
+            <div class="play-overlay">
+                <button class="play-btn">
+                    <i class="fas fa-play"></i>
+                </button>
+            </div>
+        `;
 
         card.addEventListener('click', () => this.playChannel(channel));
         return card;
@@ -1637,110 +1496,31 @@ class ArabicTVApp {
     }
 
     // دالة لتشفير كلمة المرور باستخدام SHA-256
-    // دالة تشفير كلمة المرور باستخدام bcrypt (أكثر أماناً)
     async hashPassword(password) {
-        try {
-            // استخدام bcrypt إذا كان متاحاً
-            if (typeof bcrypt !== 'undefined') {
-                return await new Promise((resolve, reject) => {
-                    bcrypt.hash(password, 12, (err, hash) => {
-                        if (err) reject(err);
-                        else resolve(hash);
-                    });
-                });
-            } else {
-                // العودة إلى SHA-256 كبديل
-                console.warn('bcrypt غير متاح، استخدام SHA-256');
-                const encoder = new TextEncoder();
-                const data = encoder.encode(password);
-                const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-                const hashArray = Array.from(new Uint8Array(hashBuffer));
-                return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-            }
-        } catch (error) {
-            console.error('خطأ في تشفير كلمة المرور:', error);
-            throw error;
-        }
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
-    // دالة للتحقق من كلمة المرور باستخدام bcrypt
-    async verifyPassword(password, hash) {
-        try {
-            // استخدام bcrypt إذا كان متاحاً
-            if (typeof bcrypt !== 'undefined') {
-                return await new Promise((resolve, reject) => {
-                    bcrypt.compare(password, hash, (err, result) => {
-                        if (err) reject(err);
-                        else resolve(result);
-                    });
-                });
-            } else {
-                // العودة إلى SHA-256 كبديل
-                const hashedPassword = await this.hashPassword(password);
-                return hashedPassword === hash;
-            }
-        } catch (error) {
-            console.error('خطأ في التحقق من كلمة المرور:', error);
-            return false;
-        }
-    }
-
-    // دالة للتحقق من صحة كلمة المرور (محسنة)
+    // دالة للتحقق من صحة كلمة المرور
     validatePassword(password) {
         // تنظيف المدخل من المسافات الزائدة
         password = password.trim();
         
-        // التحقق من الطول (8-128 حرف)
-        if (password.length < 8 || password.length > 128) {
+        // التحقق من الطول (8-50 حرف)
+        if (password.length < 8 || password.length > 50) {
             return false;
         }
         
-        // التحقق من عدم احتواء رموز خطيرة أو أحرف خاصة غير مرغوبة
-        const dangerousChars = /[<>'"&\\]/;
+        // التحقق من عدم احتواء رموز خطيرة
+        const dangerousChars = /[<>'"&]/;
         if (dangerousChars.test(password)) {
             return false;
         }
         
-        // التحقق من عدم احتواء مسافات في البداية أو النهاية
-        if (password !== password.trim()) {
-            return false;
-        }
-        
-        // التحقق من عدم احتواء أحرف التحكم
-        const controlChars = /[\x00-\x1F\x7F]/;
-        if (controlChars.test(password)) {
-            return false;
-        }
-        
         return true;
-    }
-
-    // دالة للتحقق من صحة المدخلات العامة
-    sanitizeInput(input) {
-        if (typeof input !== 'string') {
-            return '';
-        }
-        
-        // إزالة الأحرف الخطيرة
-        return input
-            .replace(/[<>'"&\\]/g, '')
-            .replace(/[\x00-\x1F\x7F]/g, '')
-            .trim();
-    }
-
-    // دالة للتحقق من صحة URL
-    validateURL(url) {
-        try {
-            const urlObj = new URL(url);
-            // التحقق من البروتوكولات المسموحة
-            const allowedProtocols = ['http:', 'https:', 'rtmp:', 'rtmps:'];
-            if (!allowedProtocols.includes(urlObj.protocol)) {
-                return false;
-            }
-            return true;
-        } catch (error) {
-            return false;
-        }
     }
 
     // دالة لتقييم قوة كلمة المرور
@@ -1892,8 +1672,8 @@ class ArabicTVApp {
         const confirmPassword = document.getElementById('confirmPassword').value;
         
         // التحقق من كلمة المرور الحالية
-        const isValidCurrentPassword = await this.verifyPassword(currentPassword, this.adminPassword);
-        if (!isValidCurrentPassword) {
+        const currentHashedPassword = await this.hashPassword(currentPassword);
+        if (currentHashedPassword !== this.adminPassword) {
             this.notifyError('كلمة المرور الحالية غير صحيحة');
             return;
         }
@@ -2069,390 +1849,46 @@ class ArabicTVApp {
         sessionStatus.textContent = this.isLoggedIn ? 'نشطة' : 'غير نشطة';
     }
 
-    // دالة للتحقق من حالة الحظر
-    isAccountLocked() {
-        const now = Date.now();
-        if (this.loginAttempts.lockoutUntil > now) {
-            return true;
-        }
-        return false;
-    }
-
-    // دالة لحساب الوقت المتبقي للحظر
-    getRemainingLockoutTime() {
-        const now = Date.now();
-        const remaining = this.loginAttempts.lockoutUntil - now;
-        if (remaining > 0) {
-            const minutes = Math.ceil(remaining / (1000 * 60));
-            return minutes;
-        }
-        return 0;
-    }
-
-    // دالة لتسجيل محاولة دخول فاشلة
-    recordFailedLoginAttempt() {
-        const now = Date.now();
-        this.loginAttempts.count++;
-        this.loginAttempts.lastAttempt = now;
-        
-        // إذا تجاوز عدد المحاولات الحد المسموح
-        if (this.loginAttempts.count >= this.maxLoginAttempts) {
-            this.loginAttempts.lockoutUntil = now + this.lockoutDuration;
-            this.notifyError(`تم حظر الحساب لمدة ${this.lockoutDuration / (1000 * 60)} دقيقة بسبب محاولات دخول متعددة فاشلة`);
-        }
-        
-        localStorage.setItem('anon_tv_login_attempts', JSON.stringify(this.loginAttempts));
-    }
-
-    // دالة لإعادة تعيين محاولات الدخول عند النجاح
-    resetLoginAttempts() {
-        this.loginAttempts = {
-            count: 0,
-            lastAttempt: 0,
-            lockoutUntil: 0
-        };
-        localStorage.setItem('anon_tv_login_attempts', JSON.stringify(this.loginAttempts));
-    }
-
-    // دالة للتحقق من انتهاء صلاحية الجلسة
-    isSessionExpired() {
-        const now = Date.now();
-        return (now - this.lastActivity) > this.sessionTimeout;
-    }
-
-    // دالة لتوليد رمز جلسة فريد
-    generateSessionToken() {
-        const timestamp = Date.now().toString(36);
-        const random = Math.random().toString(36).substring(2);
-        return `${timestamp}_${random}`;
-    }
-
-    // دالة للتحقق من صحة رمز الجلسة
-    validateSessionToken(token) {
-        return token === this.sessionToken;
-    }
-
-    // دالة لتحديث آخر نشاط
-    updateLastActivity() {
-        this.lastActivity = Date.now();
-        localStorage.setItem('anon_tv_last_activity', this.lastActivity.toString());
-        localStorage.setItem('anon_tv_session_token', this.sessionToken);
-    }
-
-    // دالة للتحقق من الجلسات المتعددة
-    checkConcurrentSessions() {
-        const savedToken = localStorage.getItem('anon_tv_session_token');
-        const savedActivity = localStorage.getItem('anon_tv_last_activity');
-        
-        // إذا لم توجد جلسة محفوظة، السماح بتسجيل الدخول
-        if (!savedToken || !savedActivity) {
-            return true;
-        }
-        
-        // التحقق من أن الجلسة المحفوظة حديثة (أقل من 30 دقيقة)
-        const lastActivity = parseInt(savedActivity);
-        const isRecent = (Date.now() - lastActivity) < this.sessionTimeout;
-        
-        // إذا كانت الجلسة قديمة، السماح بتسجيل الدخول الجديد
-        if (!isRecent) {
-            console.log('الجلسة السابقة منتهية الصلاحية، السماح بتسجيل الدخول الجديد');
-            this.clearSessionData();
-            return true;
-        }
-        
-        // إذا كانت الجلسة حديثة ورمز الجلسة مختلف، منع تسجيل الدخول
-        if (savedToken !== this.sessionToken) {
-            this.notifyWarning('يوجد جلسة نشطة أخرى. يرجى تسجيل الخروج من الجلسة الأخرى أولاً.');
-            return false;
-        }
-        
-        return true;
-    }
-
-    // إظهار نافذة إعداد كلمة المرور الأولى
-    showInitialPasswordSetup() {
-        const modal = document.createElement('div');
-        modal.className = 'modal active';
-        modal.innerHTML = `
-            <div class="modal-content initial-password-setup">
-                <div class="modal-header">
-                    <h3>إعداد كلمة المرور الأولى</h3>
-                </div>
-                <div class="modal-body">
-                    <p>مرحباً بك في ANON TV! يرجى تعيين كلمة مرور آمنة للوصول إلى لوحة التحكم.</p>
-                    <div class="form-group">
-                        <label for="initialPassword">كلمة المرور الجديدة</label>
-                        <input type="password" id="initialPassword" placeholder="أدخل كلمة مرور قوية" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="confirmInitialPassword">تأكيد كلمة المرور</label>
-                        <input type="password" id="confirmInitialPassword" placeholder="أعد إدخال كلمة المرور" required>
-                    </div>
-                    <div class="password-requirements">
-                        <h4>متطلبات كلمة المرور:</h4>
-                        <ul>
-                            <li>8 أحرف على الأقل</li>
-                            <li>حرف كبير واحد على الأقل</li>
-                            <li>حرف صغير واحد على الأقل</li>
-                            <li>رقم واحد على الأقل</li>
-                            <li>رمز خاص واحد على الأقل</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" onclick="app.setInitialPassword()">تعيين كلمة المرور</button>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(modal);
-    }
-
-    // تعيين كلمة المرور الأولى
-    async setInitialPassword() {
-        const password = document.getElementById('initialPassword').value;
-        const confirmPassword = document.getElementById('confirmInitialPassword').value;
-        
-        if (!password || !confirmPassword) {
-            this.notifyError('يرجى ملء جميع الحقول');
-            return;
-        }
-        
-        if (password !== confirmPassword) {
-            this.notifyError('كلمة المرور غير متطابقة');
-            return;
-        }
-        
-        if (!this.validatePasswordStrength(password)) {
-            this.notifyError('كلمة المرور لا تلبي المتطلبات');
-            return;
-        }
-        
-        try {
-            const hashedPassword = await this.hashPassword(password);
-            localStorage.setItem('anon_tv_admin_password', hashedPassword);
-            this.adminPassword = hashedPassword;
-            
-            // إغلاق النافذة
-            const modal = document.querySelector('.initial-password-setup').closest('.modal');
-            modal.remove();
-            
-            this.notifySuccess('تم تعيين كلمة المرور بنجاح! يمكنك الآن الوصول إلى لوحة التحكم.');
-        } catch (error) {
-            this.notifyError('حدث خطأ أثناء تعيين كلمة المرور');
-        }
-    }
-
-    // التحقق من قوة كلمة المرور
-    validatePasswordStrength(password) {
-        const minLength = 8;
-        const hasUpperCase = /[A-Z]/.test(password);
-        const hasLowerCase = /[a-z]/.test(password);
-        const hasNumbers = /\d/.test(password);
-        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-        
-        return password.length >= minLength && 
-               hasUpperCase && 
-               hasLowerCase && 
-               hasNumbers && 
-               hasSpecialChar;
-    }
-
-    // التحقق من صحة بيانات القناة
-    validateChannelData(channel) {
-        const errors = [];
-        
-        if (!channel.name || channel.name.trim().length < 2) {
-            errors.push('اسم القناة يجب أن يكون على الأقل حرفين');
-        }
-        
-        if (!channel.url || !this.isValidUrl(channel.url)) {
-            errors.push('رابط القناة غير صحيح');
-        }
-        
-        if (!channel.category || !this.categories.find(cat => cat.key === channel.category)) {
-            errors.push('فئة القناة غير صحيحة');
-        }
-        
-        if (!channel.country || channel.country.trim().length < 2) {
-            errors.push('اسم البلد يجب أن يكون على الأقل حرفين');
-        }
-        
-        return errors;
-    }
-
-    // التحقق من صحة الرابط
-    isValidUrl(url) {
-        try {
-            const urlObj = new URL(url);
-            return ['http:', 'https:'].includes(urlObj.protocol);
-        } catch {
-            return false;
-        }
-    }
-
     async loginToAdmin() {
         const password = document.getElementById('adminPassword').value;
         const errorElement = document.getElementById('loginError');
         
-        // التحقق من حالة الحظر
-        if (this.isAccountLocked()) {
-            const remainingTime = this.getRemainingLockoutTime();
-            errorElement.style.display = 'flex';
-            errorElement.querySelector('span').textContent = `الحساب محظور لمدة ${remainingTime} دقيقة أخرى`;
-            this.notifyError(`الحساب محظور لمدة ${remainingTime} دقيقة أخرى`);
-            return;
-        }
-        
         // التحقق من صحة كلمة المرور
         if (!this.validatePassword(password)) {
-            this.recordFailedLoginAttempt();
             errorElement.style.display = 'flex';
-            errorElement.querySelector('span').textContent = 'كلمة المرور غير صحيحة أو تحتوي على رموز غير مسموحة';
             document.getElementById('adminPassword').value = '';
             document.getElementById('adminPassword').focus();
             this.notifyError('كلمة المرور غير صحيحة أو تحتوي على رموز غير مسموحة');
             return;
         }
         
-        // التحقق من كلمة المرور باستخدام bcrypt
-        const isValidPassword = await this.verifyPassword(password, this.adminPassword);
+        // تشفير كلمة المرور المدخلة ومقارنتها مع المخزنة
+        const hashedPassword = await this.hashPassword(password);
         
-        if (isValidPassword) {
-            // التحقق من الجلسات المتعددة
-            if (!this.checkConcurrentSessions()) {
-                return;
-            }
-            
-            // نجح تسجيل الدخول
+        // رسائل التشخيص (يمكن حذفها لاحقاً)
+        console.log('كلمة المرور المدخلة:', password);
+        console.log('كلمة المرور المشفرة:', hashedPassword);
+        console.log('كلمة المرور المخزنة:', this.adminPassword);
+        console.log('هل تتطابق؟', hashedPassword === this.adminPassword);
+        
+        if (hashedPassword === this.adminPassword) {
             this.isLoggedIn = true;
-            this.resetLoginAttempts(); // إعادة تعيين محاولات الدخول
-            this.updateLastActivity(); // تحديث آخر نشاط
             this.saveLoginState(); // حفظ حالة تسجيل الدخول
             this.closeLoginModal();
             this.toggleChannelActions(true);
             this.toggleAdminBadge(true); // إظهار Admin badge
             this.openAdminPanel();
             this.notifySuccess('مرحباً بك في لوحة التحكم - مزود الخدمة');
-            
-            // بدء مراقبة انتهاء صلاحية الجلسة
-            this.startSessionMonitoring();
         } else {
-            // فشل تسجيل الدخول
-            this.recordFailedLoginAttempt();
             errorElement.style.display = 'flex';
-            errorElement.querySelector('span').textContent = 'كلمة المرور غير صحيحة';
             document.getElementById('adminPassword').value = '';
             document.getElementById('adminPassword').focus();
             this.notifyError('كلمة المرور غير صحيحة');
         }
     }
 
-    // دالة لبدء مراقبة انتهاء صلاحية الجلسة
-    startSessionMonitoring() {
-        // إيقاف المراقبة السابقة إن وجدت
-        if (this.sessionMonitor) {
-            clearInterval(this.sessionMonitor);
-        }
-        
-        // بدء مراقبة جديدة كل دقيقة
-        this.sessionMonitor = setInterval(() => {
-            if (this.isLoggedIn) {
-                // التحقق من انتهاء صلاحية الجلسة
-                if (this.isSessionExpired()) {
-                    this.forceLogout('انتهت صلاحية الجلسة بسبب عدم النشاط');
-                    return;
-                }
-                
-                // التحقق من صحة رمز الجلسة
-                const savedToken = localStorage.getItem('anon_tv_session_token');
-                if (!this.validateSessionToken(savedToken)) {
-                    this.forceLogout('تم اكتشاف تلاعب في رمز الجلسة');
-                    return;
-                }
-            }
-        }, 60000); // كل دقيقة
-        
-        // مراقبة النشاط على الصفحة
-        this.setupActivityMonitoring();
-    }
-
-    // دالة لإيقاف مراقبة الجلسة
-    stopSessionMonitoring() {
-        if (this.sessionMonitor) {
-            clearInterval(this.sessionMonitor);
-            this.sessionMonitor = null;
-        }
-    }
-
-    // دالة لمراقبة النشاط على الصفحة
-    setupActivityMonitoring() {
-        const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
-        
-        const updateActivity = () => {
-            if (this.isLoggedIn) {
-                this.updateLastActivity();
-            }
-        };
-        
-        // إزالة المستمعين السابقين
-        if (this.activityListeners) {
-            this.activityListeners.forEach(({ event, listener }) => {
-                document.removeEventListener(event, listener);
-            });
-        }
-        
-        // إضافة مستمعين جدد
-        this.activityListeners = events.map(event => {
-            const listener = updateActivity;
-            document.addEventListener(event, listener, true);
-            return { event, listener };
-        });
-    }
-
-    // دالة لتسجيل خروج إجباري
-    forceLogout(reason = 'انتهت صلاحية الجلسة') {
-        this.isLoggedIn = false;
-        this.stopSessionMonitoring();
-        this.saveLoginState();
-        this.closeAdminPanel();
-        this.toggleChannelActions(false);
-        this.toggleAdminBadge(false);
-        this.notifyWarning(`تم تسجيل الخروج: ${reason}`);
-    }
-
-    // دالة لتنظيف بيانات الجلسة
-    clearSessionData() {
-        localStorage.removeItem('anon_tv_session_token');
-        localStorage.removeItem('anon_tv_last_activity');
-        this.sessionToken = this.generateSessionToken();
-    }
-
-    // تنظيف الجلسات القديمة عند بدء التطبيق
-    cleanupOldSessions() {
-        try {
-            const savedActivity = localStorage.getItem('anon_tv_last_activity');
-            const savedToken = localStorage.getItem('anon_tv_session_token');
-            
-            if (savedActivity && savedToken) {
-                const lastActivity = parseInt(savedActivity);
-                const isRecent = (Date.now() - lastActivity) < this.sessionTimeout;
-                
-                // إذا كانت الجلسة قديمة، تنظيفها
-                if (!isRecent) {
-                    console.log('تنظيف الجلسة القديمة عند بدء التطبيق');
-                    this.clearSessionData();
-                    localStorage.removeItem('anon_tv_login_state');
-                }
-            }
-        } catch (error) {
-            console.warn('خطأ في تنظيف الجلسات القديمة:', error);
-        }
-    }
-
     logoutFromAdmin() {
         this.isLoggedIn = false;
-        this.stopSessionMonitoring(); // إيقاف مراقبة الجلسة
-        this.clearSessionData(); // تنظيف بيانات الجلسة
         this.saveLoginState(); // حفظ حالة تسجيل الخروج
         this.closeAdminPanel();
         this.toggleChannelActions(false);
@@ -2476,38 +1912,19 @@ class ArabicTVApp {
     loadLoginState() {
         try {
             const savedState = localStorage.getItem('anon_tv_login_state');
-            const savedActivity = localStorage.getItem('anon_tv_last_activity');
-            const savedToken = localStorage.getItem('anon_tv_session_token');
-            
-            if (savedState && savedActivity && savedToken) {
+            if (savedState) {
                 const loginData = JSON.parse(savedState);
-                const lastActivity = parseInt(savedActivity);
-                
-                // التحقق من أن البيانات حديثة (أقل من 30 دقيقة)
-                const isRecent = (Date.now() - loginData.timestamp) < this.sessionTimeout;
-                const isActivityRecent = (Date.now() - lastActivity) < this.sessionTimeout;
-                
-                // التحقق من صحة رمز الجلسة
-                const isValidToken = this.validateSessionToken(savedToken);
-                
-                if (isRecent && isActivityRecent && loginData.isLoggedIn && isValidToken) {
+                // التحقق من أن البيانات حديثة (أقل من 24 ساعة)
+                const isRecent = (Date.now() - loginData.timestamp) < (24 * 60 * 60 * 1000);
+                if (isRecent && loginData.isLoggedIn) {
                     this.isLoggedIn = true;
-                    this.lastActivity = lastActivity;
-                    this.sessionToken = savedToken; // استعادة رمز الجلسة
                     this.toggleChannelActions(true);
                     this.toggleAdminBadge(true); // إظهار Admin badge عند تحميل الحالة
-                    this.startSessionMonitoring(); // بدء مراقبة الجلسة
-                    console.log('تم استعادة حالة تسجيل الدخول بنجاح');
                     return true;
-                } else {
-                    // إذا كانت الجلسة منتهية الصلاحية أو غير صحيحة، تنظيف البيانات
-                    console.log('الجلسة منتهية الصلاحية أو غير صحيحة، تنظيف البيانات');
-                    this.clearSessionData();
                 }
             }
         } catch (error) {
             console.warn('لا يمكن تحميل حالة تسجيل الدخول:', error);
-            this.clearSessionData();
         }
         
         // إذا لم تكن هناك حالة محفوظة أو انتهت صلاحيتها
@@ -2715,10 +2132,6 @@ class ArabicTVApp {
         this.renderChannels();
         this.renderAdminChannels();
         
-        // تحديث عدد القنوات تلقائياً
-        this.updateChannelStats();
-        this.updateSidebarCounts();
-        
         this.resetAddChannelForm();
         this.showNotification('success', 'تم إضافة القناة', 'تم إضافة القناة بنجاح وحفظها!');
         
@@ -2916,10 +2329,6 @@ class ArabicTVApp {
         this.renderChannels();
         this.renderAdminChannels();
         
-        // تحديث عدد القنوات تلقائياً
-        this.updateChannelStats();
-        this.updateSidebarCounts();
-        
         // Reset editing state and form
         this.resetAddChannelForm();
         
@@ -2952,9 +2361,6 @@ class ArabicTVApp {
         if (!channel) return;
         
         if (confirm(`هل أنت متأكد من حذف قناة "${channel.name}"؟\n\nهذا الإجراء لا يمكن التراجع عنه.`)) {
-            // إضافة القناة إلى قائمة المحذوفات قبل الحذف
-            this.addToDeletedChannels(channel);
-            
             // Remove from favorites if favorited
             if (this.favorites.has(id)) {
                 this.favorites.delete(id);
@@ -2971,10 +2377,6 @@ class ArabicTVApp {
             // Re-render channels
             this.renderChannels();
             this.renderAdminChannels();
-            
-            // تحديث عدد القنوات تلقائياً
-            this.updateChannelStats();
-            this.updateSidebarCounts();
             
             // Show success notification
             this.showNotification('success', 'تم حذف القناة', `تم حذف قناة "${channel.name}" بنجاح`);
@@ -3001,16 +2403,6 @@ class ArabicTVApp {
             console.log('تم حفظ القنوات بنجاح:', this.channels.length, 'قناة');
             console.log('بيانات القنوات المحفوظة:', this.channels);
             
-            // إنشاء نسخة احتياطية تلقائياً
-            const backupData = {
-                channels: this.channels,
-                timestamp: new Date().toISOString(),
-                count: this.channels.length,
-                source: 'auto_backup'
-            };
-            localStorage.setItem('channels_backup', JSON.stringify(backupData));
-            console.log('تم إنشاء نسخة احتياطية تلقائية');
-            
             // تحقق من نجاح الحفظ
             const verifyChannels = localStorage.getItem('arabicTVChannels');
             if (verifyChannels === channelsData) {
@@ -3035,48 +2427,7 @@ class ArabicTVApp {
             }
         } catch (error) {
             console.error('خطأ في حفظ القنوات:', error);
-            
-            // معالجة أفضل لأخطاء التخزين
-            if (error.name === 'QuotaExceededError') {
-                this.notifyError('مساحة التخزين ممتلئة. يرجى حذف بعض البيانات أو استخدام وضع عدم الاتصال.');
-                this.clearOldData();
-            } else if (error.name === 'SecurityError') {
-                this.notifyError('لا يمكن حفظ البيانات بسبب إعدادات الأمان في المتصفح. يرجى التحقق من إعدادات الخصوصية.');
-            } else {
-                this.notifyError('فشل في حفظ القنوات! يرجى المحاولة مرة أخرى.');
-            }
-        }
-    }
-
-    // حذف البيانات القديمة لتوفير مساحة
-    clearOldData() {
-        try {
-            // حذف النسخ الاحتياطية القديمة
-            const keysToRemove = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key && key.includes('backup') && key.includes('old')) {
-                    keysToRemove.push(key);
-                }
-            }
-            
-            keysToRemove.forEach(key => localStorage.removeItem(key));
-            
-            // حذف بيانات الجلسات القديمة
-            const oldSessionKeys = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key && key.includes('session') && key.includes('old')) {
-                    oldSessionKeys.push(key);
-                }
-            }
-            
-            oldSessionKeys.forEach(key => localStorage.removeItem(key));
-            
-            console.log('✅ تم حذف البيانات القديمة لتوفير مساحة');
-            this.notifyInfo('تم حذف البيانات القديمة. يمكنك المحاولة مرة أخرى.');
-        } catch (error) {
-            console.error('فشل في حذف البيانات القديمة:', error);
+            this.notifyError('خطأ في حفظ القنوات! يرجى المحاولة مرة أخرى.');
         }
     }
 
@@ -3087,7 +2438,6 @@ class ArabicTVApp {
                 const parsedChannels = JSON.parse(savedChannels);
                 if (parsedChannels && parsedChannels.length > 0) {
                     this.channels = parsedChannels;
-                    this.filteredChannels = [...parsedChannels];
                     console.log('تم تحميل القنوات المحفوظة:', this.channels.length, 'قناة');
                     // تحديث عداد القنوات
                     this.updateSidebarCounts();
@@ -3095,29 +2445,9 @@ class ArabicTVApp {
                 }
             }
             
-            // إذا لم توجد قنوات محفوظة، تحقق من النسخة الاحتياطية
-            const backupChannels = localStorage.getItem('channels_backup');
-            if (backupChannels) {
-                try {
-                    const backupData = JSON.parse(backupChannels);
-                    if (backupData.channels && Array.isArray(backupData.channels) && backupData.channels.length > 0) {
-                        this.channels = backupData.channels;
-                        this.filteredChannels = [...backupData.channels];
-                        console.log('تم استعادة القنوات من النسخة الاحتياطية:', this.channels.length, 'قناة');
-                        // حفظ النسخة الاحتياطية كقنوات رئيسية
-                        this.saveChannelsToStorage();
-                        this.updateSidebarCounts();
-                        return;
-                    }
-                } catch (backupError) {
-                    console.error('خطأ في تحليل النسخة الاحتياطية:', backupError);
-                }
-            }
-            
-            // إذا لم توجد قنوات محفوظة أو نسخة احتياطية، ابدأ بقائمة فارغة
-            console.log('لا توجد قنوات محفوظة أو نسخة احتياطية، سيتم البدء بقائمة فارغة');
+            // إذا لم توجد قنوات محفوظة، ابدأ بقائمة فارغة
+            console.log('لا توجد قنوات محفوظة، سيتم البدء بقائمة فارغة');
             this.channels = [];
-            this.filteredChannels = [];
             // تحديث عداد القنوات
             this.updateSidebarCounts();
         
@@ -3125,7 +2455,6 @@ class ArabicTVApp {
             console.error('خطأ في تحميل القنوات المحفوظة:', error);
             console.log('سيتم البدء بقائمة فارغة');
             this.channels = [];
-            this.filteredChannels = [];
             // تحديث عداد القنوات
             this.updateSidebarCounts();
         }
@@ -3194,7 +2523,6 @@ class ArabicTVApp {
                 settings: this.settings,
                 categories: this.categories,
                 adminPassword: this.adminPassword, // إضافة كلمة المرور للمزامنة السحابية
-                deletedChannels: this.getDeletedChannels(), // إضافة القنوات المحذوفة
                 lastModified: new Date().toISOString(),
                 version: '1.0'
             };
@@ -3236,29 +2564,21 @@ class ArabicTVApp {
             return false;
         }
 
-        // التحقق من صحة إعدادات المزامنة السحابية
-        if (!this.validateRemoteStorageSettings()) {
-            this.notifyError('إعدادات التخزين السحابي غير صحيحة - تحقق من المعلومات المدخلة');
-            return false;
-        }
-
         try {
             const data = await this.downloadFromRepository();
             
             if (data) {
-                // مقارنة البيانات وتحديد ما إذا كان هناك تغييرات مهمة
-                const hasSignificantChanges = this.hasSignificantRemoteChanges(data);
+                // Compare versions and merge data
+                const shouldUpdate = this.shouldUpdateFromRemote(data);
                 
-                if (hasSignificantChanges) {
-                    console.log('🔄 تم اكتشاف تغييرات مهمة في السحابة - بدء الدمج الذكي');
+                if (shouldUpdate) {
                     await this.mergeRemoteData(data);
                     this.remoteStorage.lastSync = new Date().toISOString();
                     this.saveRemoteStorageSettings();
+                    this.notifySuccess('تم تحديث البيانات من المستودع!');
                     return true;
                 } else {
-                    console.log('✅ البيانات المحلية والسحابية متطابقة - لا حاجة للتحديث');
-                    this.remoteStorage.lastSync = new Date().toISOString();
-                    this.saveRemoteStorageSettings();
+                    console.log('البيانات المحلية أحدث من المستودع');
                     return false;
                 }
             } else {
@@ -3284,38 +2604,6 @@ class ArabicTVApp {
             this.notifyError(errorMessage);
             return false;
         }
-    }
-
-    // دالة للتحقق من صحة إعدادات المزامنة السحابية
-    validateRemoteStorageSettings() {
-        const { provider, repository, token, branch, filename } = this.remoteStorage;
-        
-        // التحقق من وجود جميع الحقول المطلوبة
-        if (!provider || !repository || !token || !filename) {
-            console.error('❌ إعدادات المزامنة السحابية غير مكتملة');
-            return false;
-        }
-        
-        // التحقق من صحة تنسيق المستودع
-        if (!repository.includes('/') || repository.split('/').length !== 2) {
-            console.error('❌ تنسيق اسم المستودع غير صحيح - يجب أن يكون username/repository-name');
-            return false;
-        }
-        
-        // التحقق من صحة رمز الوصول
-        if (token.length < 20) {
-            console.error('❌ رمز الوصول قصير جداً - تحقق من صحة الرمز');
-            return false;
-        }
-        
-        // التحقق من صحة اسم الملف
-        if (!filename.endsWith('.json')) {
-            console.error('❌ اسم الملف يجب أن ينتهي بـ .json');
-            return false;
-        }
-        
-        console.log('✅ إعدادات المزامنة السحابية صحيحة');
-        return true;
     }
 
     async uploadToRepository(data) {
@@ -3555,38 +2843,6 @@ class ArabicTVApp {
         return remoteTime > localTime;
     }
 
-    // دالة للتحقق من وجود تغييرات مهمة في السحابة
-    hasSignificantRemoteChanges(remoteData) {
-        if (!remoteData.channels || !Array.isArray(remoteData.channels)) {
-            return false;
-        }
-
-        const localChannelIds = new Set(this.channels.map(ch => ch.id));
-        const remoteChannelIds = new Set(remoteData.channels.map(ch => ch.id));
-        
-        // التحقق من القنوات الجديدة في السحابة
-        const newRemoteChannels = remoteData.channels.filter(ch => !localChannelIds.has(ch.id));
-        
-        // التحقق من القنوات المحذوفة من السحابة
-        const removedFromRemote = this.channels.filter(ch => !remoteChannelIds.has(ch.id));
-        
-        // التحقق من القنوات المعدلة
-        const modifiedChannels = remoteData.channels.filter(remoteChannel => {
-            const localChannel = this.channels.find(ch => ch.id === remoteChannel.id);
-            return localChannel && JSON.stringify(localChannel) !== JSON.stringify(remoteChannel);
-        });
-
-        const hasChanges = newRemoteChannels.length > 0 || removedFromRemote.length > 0 || modifiedChannels.length > 0;
-        
-        console.log(`🔍 فحص التغييرات في السحابة:`);
-        console.log(`- قنوات جديدة في السحابة: ${newRemoteChannels.length}`);
-        console.log(`- قنوات محذوفة من السحابة: ${removedFromRemote.length}`);
-        console.log(`- قنوات معدلة: ${modifiedChannels.length}`);
-        console.log(`- يوجد تغييرات مهمة: ${hasChanges}`);
-
-        return hasChanges;
-    }
-
     async mergeRemoteData(remoteData) {
         // Check for conflicts
         const hasConflicts = await this.detectConflicts(remoteData);
@@ -3603,35 +2859,11 @@ class ArabicTVApp {
         };
 
         try {
-            // دمج القنوات بذكاء بدلاً من الاستبدال المباشر
+            // Update channels
             if (remoteData.channels && Array.isArray(remoteData.channels)) {
-                const mergedChannels = this.mergeChannels(this.channels, remoteData.channels);
-                this.channels = mergedChannels;
+                this.channels = remoteData.channels;
                 this.filteredChannels = [...this.channels];
                 this.saveChannelsToStorage();
-                
-                // إظهار تقرير عن الدمج
-                const localChannelIds = new Set(this.channels.map(ch => ch.id));
-                const remoteChannelIds = new Set(remoteData.channels.map(ch => ch.id));
-                const addedFromRemote = remoteData.channels.filter(ch => !localChannelIds.has(ch.id));
-                const localOnly = this.channels.filter(ch => !remoteChannelIds.has(ch.id));
-                
-                console.log(`📊 دمج القنوات:`);
-                console.log(`- القنوات المحلية: ${this.channels.length}`);
-                console.log(`- القنوات من السحابة: ${remoteData.channels.length}`);
-                console.log(`- القنوات المضافة من السحابة: ${addedFromRemote.length}`);
-                console.log(`- القنوات المحلية فقط: ${localOnly.length}`);
-                
-                if (addedFromRemote.length > 0 || localOnly.length > 0) {
-                    let message = `تم دمج القنوات بنجاح! العدد الإجمالي: ${this.channels.length}`;
-                    if (addedFromRemote.length > 0) {
-                        message += `\nتم إضافة ${addedFromRemote.length} قناة من السحابة`;
-                    }
-                    if (localOnly.length > 0) {
-                        message += `\nتم الاحتفاظ بـ ${localOnly.length} قناة محلية`;
-                    }
-                    this.notifySuccess(message, 'دمج مكتمل', 5000);
-                }
             }
 
             // Update favorites
@@ -3660,11 +2892,6 @@ class ArabicTVApp {
                 this.notifyInfo('تم تحديث كلمة المرور من السحابة - يمكنك الآن استخدام كلمة المرور الجديدة');
                 // تحديث معلومات الأمان
                 this.updateSecurityInfo();
-            }
-
-            // تحديث قائمة القنوات المحذوفة من السحابة
-            if (remoteData.deletedChannels && Array.isArray(remoteData.deletedChannels)) {
-                this.mergeDeletedChannels(remoteData.deletedChannels);
             }
 
             // Re-render everything
@@ -3850,127 +3077,15 @@ class ArabicTVApp {
     mergeChannels(localChannels, remoteChannels) {
         const merged = [...localChannels];
         const localIds = new Set(localChannels.map(ch => ch.id));
-        const localChannelsMap = new Map(localChannels.map(ch => [ch.id, ch]));
-        
-        // الحصول على قائمة القنوات المحذوفة محلياً من localStorage
-        const deletedChannels = this.getDeletedChannels();
-        const deletedIds = new Set(deletedChannels.map(ch => ch.id));
 
-        // معالجة القنوات من السحابة
+        // Add remote channels that don't exist locally
         remoteChannels.forEach(remoteChannel => {
-            // تجاهل القنوات المحذوفة محلياً
-            if (deletedIds.has(remoteChannel.id)) {
-                console.log(`🚫 تجاهل قناة محذوفة محلياً: ${remoteChannel.name}`);
-                return;
-            }
-            
             if (!localIds.has(remoteChannel.id)) {
-                // قناة جديدة من السحابة - إضافتها فقط إذا لم تكن محذوفة محلياً
                 merged.push(remoteChannel);
-                console.log(`➕ إضافة قناة جديدة من السحابة: ${remoteChannel.name}`);
-            } else {
-                // قناة موجودة محلياً - مقارنة المحتوى
-                const localChannel = localChannelsMap.get(remoteChannel.id);
-                if (JSON.stringify(localChannel) !== JSON.stringify(remoteChannel)) {
-                    // القناة معدلة في السحابة - تحديثها
-                    const index = merged.findIndex(ch => ch.id === remoteChannel.id);
-                    if (index !== -1) {
-                        merged[index] = remoteChannel;
-                        console.log(`🔄 تحديث قناة من السحابة: ${remoteChannel.name}`);
-                    }
-                }
             }
         });
 
-        console.log(`📊 نتيجة الدمج: ${merged.length} قناة إجمالية`);
         return merged;
-    }
-
-    // دالة للحصول على القنوات المحذوفة محلياً
-    getDeletedChannels() {
-        try {
-            const deletedChannelsData = localStorage.getItem('arabicTVDeletedChannels');
-            if (deletedChannelsData) {
-                const parsed = JSON.parse(deletedChannelsData);
-                return Array.isArray(parsed) ? parsed : [];
-            }
-        } catch (error) {
-            console.error('خطأ في قراءة القنوات المحذوفة:', error);
-        }
-        return [];
-    }
-
-    // دالة لحفظ قناة محذوفة في قائمة المحذوفات
-    addToDeletedChannels(channel) {
-        try {
-            const deletedChannels = this.getDeletedChannels();
-            
-            // إضافة القناة المحذوفة مع timestamp
-            const deletedChannel = {
-                ...channel,
-                deletedAt: new Date().toISOString(),
-                deletedBy: 'local'
-            };
-            
-            // تجنب التكرار
-            if (!deletedChannels.find(ch => ch.id === channel.id)) {
-                deletedChannels.push(deletedChannel);
-                
-                // الاحتفاظ بآخر 100 قناة محذوفة فقط لتجنب امتلاء localStorage
-                if (deletedChannels.length > 100) {
-                    deletedChannels.splice(0, deletedChannels.length - 100);
-                }
-                
-                localStorage.setItem('arabicTVDeletedChannels', JSON.stringify(deletedChannels));
-                console.log(`🗑️ تم إضافة القناة المحذوفة إلى قائمة المحذوفات: ${channel.name}`);
-            }
-        } catch (error) {
-            console.error('خطأ في حفظ القناة المحذوفة:', error);
-        }
-    }
-
-    // دالة لتنظيف القنوات المحذوفة القديمة (أكثر من 30 يوم)
-    cleanupOldDeletedChannels() {
-        try {
-            const deletedChannels = this.getDeletedChannels();
-            const thirtyDaysAgo = new Date();
-            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-            
-            const filteredChannels = deletedChannels.filter(channel => {
-                const deletedDate = new Date(channel.deletedAt);
-                return deletedDate > thirtyDaysAgo;
-            });
-            
-            if (filteredChannels.length !== deletedChannels.length) {
-                localStorage.setItem('arabicTVDeletedChannels', JSON.stringify(filteredChannels));
-                console.log(`🧹 تم تنظيف ${deletedChannels.length - filteredChannels.length} قناة محذوفة قديمة`);
-            }
-        } catch (error) {
-            console.error('خطأ في تنظيف القنوات المحذوفة القديمة:', error);
-        }
-    }
-
-    // دالة لدمج القنوات المحذوفة من السحابة مع المحلية
-    mergeDeletedChannels(remoteDeletedChannels) {
-        try {
-            const localDeletedChannels = this.getDeletedChannels();
-            const mergedDeletedChannels = [...localDeletedChannels];
-            
-            // إضافة القنوات المحذوفة من السحابة إذا لم تكن موجودة محلياً
-            remoteDeletedChannels.forEach(remoteDeleted => {
-                if (!mergedDeletedChannels.find(local => local.id === remoteDeleted.id)) {
-                    mergedDeletedChannels.push(remoteDeleted);
-                    console.log(`🗑️ إضافة قناة محذوفة من السحابة: ${remoteDeleted.name}`);
-                }
-            });
-            
-            // حفظ القائمة المدمجة
-            localStorage.setItem('arabicTVDeletedChannels', JSON.stringify(mergedDeletedChannels));
-            console.log(`📊 تم دمج القنوات المحذوفة: ${mergedDeletedChannels.length} قناة إجمالية`);
-            
-        } catch (error) {
-            console.error('خطأ في دمج القنوات المحذوفة:', error);
-        }
     }
 
     mergeFavorites(localFavorites, remoteFavorites) {
@@ -5017,18 +4132,6 @@ class ArabicTVApp {
             return;
         }
 
-        // التحقق من اتصال الإنترنت
-        if (!navigator.onLine) {
-            this.notifyError('لا يوجد اتصال بالإنترنت - تحقق من اتصالك وحاول مرة أخرى');
-            return;
-        }
-
-        // التحقق من صحة الإعدادات
-        if (!this.validateRemoteStorageSettings()) {
-            this.notifyError('إعدادات التخزين السحابي غير صحيحة - تحقق من المعلومات المدخلة');
-            return;
-        }
-
         const button = document.querySelector('.sync-now-btn');
         const originalText = button.innerHTML;
         
@@ -6004,100 +5107,6 @@ class ArabicTVApp {
         }
     }
 
-    // تنظيف جميع الـ timers عند إغلاق التطبيق
-    cleanup() {
-        this.stopNewsTicker();
-        this.stopTimeUpdate();
-        
-        // تنظيف أي timers أخرى
-        if (this.updateInterval) {
-            clearInterval(this.updateInterval);
-            this.updateInterval = null;
-        }
-        
-        if (this.sessionMonitor) {
-            clearInterval(this.sessionMonitor);
-            this.sessionMonitor = null;
-        }
-        
-        // تنظيف HLS instance
-        if (this.hls) {
-            this.hls.destroy();
-            this.hls = null;
-        }
-        
-        console.log('✅ تم تنظيف جميع الموارد');
-    }
-
-    // إضافة دعم للكيبورد للعناصر التفاعلية
-    addKeyboardSupport() {
-        // دعم الكيبورد للأزرار
-        document.addEventListener('keydown', (e) => {
-            // ESC لإغلاق النوافذ المنبثقة
-            if (e.key === 'Escape') {
-                this.closeAllModals();
-            }
-            
-            // Enter أو Space للأزرار المحددة
-            if (e.key === 'Enter' || e.key === ' ') {
-                const activeElement = document.activeElement;
-                if (activeElement && activeElement.classList.contains('channel-card')) {
-                    e.preventDefault();
-                    const channelId = parseInt(activeElement.dataset.channelId);
-                    if (channelId) {
-                        this.playChannel(channelId);
-                    }
-                }
-            }
-            
-            // مفاتيح التنقل السريع
-            if (e.ctrlKey || e.metaKey) {
-                switch (e.key) {
-                    case 'k':
-                        e.preventDefault();
-                        this.toggleSearch();
-                        break;
-                    case 'f':
-                        e.preventDefault();
-                        this.toggleFavorites();
-                        break;
-                    case 's':
-                        e.preventDefault();
-                        this.toggleSidebar();
-                        break;
-                }
-            }
-        });
-
-        // إضافة tabindex للعناصر التفاعلية
-        const interactiveElements = document.querySelectorAll('.channel-card, .sidebar-action-btn, .play-btn');
-        interactiveElements.forEach(element => {
-            if (!element.hasAttribute('tabindex')) {
-                element.setAttribute('tabindex', '0');
-            }
-        });
-    }
-
-    // إغلاق جميع النوافذ المنبثقة
-    closeAllModals() {
-        const modals = document.querySelectorAll('.modal.active');
-        modals.forEach(modal => {
-            modal.classList.remove('active');
-        });
-    }
-
-    // إعادة تعيين الجلسة في حالة وجود مشاكل
-    resetSession() {
-        console.log('إعادة تعيين الجلسة...');
-        this.isLoggedIn = false;
-        this.stopSessionMonitoring();
-        this.clearSessionData();
-        localStorage.removeItem('anon_tv_login_state');
-        this.toggleChannelActions(false);
-        this.toggleAdminBadge(false);
-        this.notifyInfo('تم إعادة تعيين الجلسة. يمكنك تسجيل الدخول مرة أخرى.');
-    }
-
     updateNewsContent() {
         const newsItems = [
             'عاجل: القمة العربية تناقش أهم القضايا الإقليمية والدولية',
@@ -6767,66 +5776,23 @@ class ArabicTVApp {
     // Check for updates
     async checkForUpdates() {
         try {
-            console.log('🔍 فحص التحديثات التلقائي...');
-            
-            // التحقق من اتصال الإنترنت أولاً
-            if (!navigator.onLine) {
-                console.log('📴 لا يوجد اتصال بالإنترنت - تخطي فحص التحديثات');
-                return false;
-            }
+            console.log('🔍 فحص التحديثات...');
             
             // Get local data info
-            const localData = localStorage.getItem('arabicTVChannels');
-            const localUpdateTime = localStorage.getItem('arabicTVLastSaved');
+            const localData = localStorage.getItem('tvChannels');
+            const localUpdateTime = localStorage.getItem('lastUpdateTime');
             
-            // إذا لم توجد بيانات محلية، قم بالتحديث التلقائي
             if (!localData || !localUpdateTime) {
-                console.log('📥 لا توجد بيانات محلية، سيتم التحديث التلقائي لأول مرة');
-                await this.performAutoUpdate();
-                return true;
+                console.log('📥 لا توجد بيانات محلية، سيتم تحميل البيانات لأول مرة');
+                return false;
             }
 
-            // Fetch remote data info من مصادر متعددة
-            const dataSources = [
-                'https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json',
-                'https://cdn.jsdelivr.net/gh/anon-site/TV-AR@main/channels.json',
-                'https://rawcdn.githack.com/anon-site/TV-AR/main/channels.json'
-            ];
+            // Fetch remote data info
+            const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json', {
+                method: 'HEAD'
+            });
             
-            let response = null;
-            let lastError = null;
-            
-            for (let sourceIndex = 0; sourceIndex < dataSources.length; sourceIndex++) {
-                const dataSource = dataSources[sourceIndex];
-                try {
-                    console.log(`🔄 فحص التحديثات من المصدر ${sourceIndex + 1}: ${dataSource}`);
-                    response = await fetch(dataSource, {
-                        method: 'HEAD',
-                        headers: {
-                            'Cache-Control': 'no-cache',
-                            'Pragma': 'no-cache',
-                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-                        }
-                    });
-                    
-                    if (response.ok) {
-                        console.log(`✅ نجح فحص التحديثات من المصدر ${sourceIndex + 1}`);
-                        break;
-                    } else {
-                        throw new Error(`خطأ ${response.status}: ${response.statusText}`);
-                    }
-                } catch (error) {
-                    lastError = error;
-                    console.log(`❌ فشل فحص التحديثات من المصدر ${sourceIndex + 1}: ${error.message}`);
-                    
-                    if (sourceIndex === dataSources.length - 1) {
-                        console.log('❌ فشل في فحص التحديثات من جميع المصادر');
-                        return false;
-                    }
-                }
-            }
-            
-            if (!response || !response.ok) {
+            if (!response.ok) {
                 console.log('❌ فشل في فحص التحديثات');
                 return false;
             }
@@ -6839,151 +5805,23 @@ class ArabicTVApp {
             console.log('📅 آخر تحديث سحابي:', remoteDate.toLocaleString('ar'));
 
             if (remoteDate > localDate) {
-                console.log('🆕 يوجد تحديث جديد متاح! سيتم التحديث التلقائي...');
+                console.log('🆕 يوجد تحديث جديد متاح!');
+                this.showUpdateAvailableNotification(remoteDate);
                 
-                // تحديث تلقائي في الخلفية
-                const updateResult = await this.performAutoUpdate();
-                
-                if (updateResult.success) {
-                    // إظهار إشعار نجاح التحديث
-                    this.showAutoUpdateSuccessNotification(updateResult.newChannelsCount, updateResult.addedChannels, updateResult.removedChannels);
-                } else {
-                    // إظهار إشعار فشل التحديث
-                    this.showAutoUpdateErrorNotification(updateResult.error);
+                // إذا كانت المزامنة السحابية مفعلة، قم بإشعار المستخدم بإمكانية المزامنة التلقائية
+                if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
+                    console.log('💡 يمكن تحديث القنوات ومزامنتها تلقائياً مع السحابة');
                 }
                 
                 return true;
             } else {
-                console.log('✅ البيانات محدثة - لا توجد تحديثات جديدة');
+                console.log('✅ البيانات محدثة');
                 return false;
             }
 
         } catch (error) {
             console.error('خطأ في فحص التحديثات:', error);
             return false;
-        }
-    }
-
-    // دالة التحديث التلقائي في الخلفية
-    async performAutoUpdate() {
-        try {
-            console.log('🔄 بدء التحديث التلقائي...');
-            
-            // إظهار مؤشر بصري خفيف للتحديث
-            this.showUpdateIndicator();
-            
-            // حفظ القنوات الحالية للمقارنة
-            const currentChannels = [...this.channels];
-            const currentChannelIds = new Set(currentChannels.map(ch => ch.id));
-            
-            // جلب البيانات الجديدة من مصادر متعددة
-            const dataSources = [
-                'https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json',
-                'https://cdn.jsdelivr.net/gh/anon-site/TV-AR@main/channels.json',
-                'https://rawcdn.githack.com/anon-site/TV-AR/main/channels.json'
-            ];
-            
-            let response = null;
-            let lastError = null;
-            
-            for (let sourceIndex = 0; sourceIndex < dataSources.length; sourceIndex++) {
-                const dataSource = dataSources[sourceIndex];
-                try {
-                    console.log(`🔄 محاولة المصدر ${sourceIndex + 1} للتحديث التلقائي: ${dataSource}`);
-                    response = await fetch(dataSource, {
-                        headers: {
-                            'Cache-Control': 'no-cache',
-                            'Pragma': 'no-cache',
-                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-                        }
-                    });
-                    
-                    if (response.ok) {
-                        console.log(`✅ نجح المصدر ${sourceIndex + 1} للتحديث التلقائي`);
-                        break;
-                    } else {
-                        throw new Error(`خطأ ${response.status}: ${response.statusText}`);
-                    }
-                } catch (error) {
-                    lastError = error;
-                    console.log(`❌ فشل المصدر ${sourceIndex + 1} للتحديث التلقائي: ${error.message}`);
-                    
-                    if (sourceIndex === dataSources.length - 1) {
-                        throw new Error(`فشل في جلب البيانات من جميع المصادر. آخر خطأ: ${lastError?.message || 'غير معروف'}`);
-                    }
-                }
-            }
-            
-            if (!response || !response.ok) {
-                throw new Error(`خطأ في جلب البيانات: ${response?.status || 'غير معروف'} ${response?.statusText || 'خطأ غير معروف'}`);
-            }
-            
-            const responseText = await response.text();
-            const validation = validateJSON(responseText, 'GitHub channels data');
-            
-            if (!validation.valid) {
-                throw new Error(`خطأ في تنسيق JSON: ${validation.error.message}`);
-            }
-            
-            const data = validation.data;
-            
-            if (!data || !data.channels || !Array.isArray(data.channels)) {
-                throw new Error('تنسيق البيانات غير صحيح');
-            }
-            
-            // مقارنة القنوات الجديدة مع الموجودة
-            const newChannels = data.channels;
-            const newChannelIds = new Set(newChannels.map(ch => ch.id));
-            
-            // تحديد القنوات المضافة والمحذوفة
-            const addedChannels = newChannels.filter(ch => !currentChannelIds.has(ch.id));
-            const removedChannels = currentChannels.filter(ch => !newChannelIds.has(ch.id));
-            
-            console.log(`📊 مقارنة القنوات:`);
-            console.log(`- القنوات الحالية: ${currentChannels.length}`);
-            console.log(`- القنوات الجديدة: ${newChannels.length}`);
-            console.log(`- القنوات المضافة: ${addedChannels.length}`);
-            console.log(`- القنوات المحذوفة: ${removedChannels.length}`);
-            
-            // تحديث القنوات في التطبيق
-            this.channels = newChannels;
-            this.filteredChannels = [...newChannels];
-            
-            // حفظ التحديثات
-            this.saveChannelsToStorage();
-            
-            // تطبيق الفلاتر الحالية
-            this.applyAllFilters();
-            
-            // تحديث الإحصائيات
-            this.updateChannelStats();
-            this.updateSidebarCounts();
-            
-            // إعادة عرض القنوات
-            this.renderChannels();
-            
-            // تحديث وقت التحديث
-            this.updateLastUpdateTime();
-            
-            // إخفاء مؤشر التحديث
-            this.hideUpdateIndicator();
-            
-            console.log('✅ تم التحديث التلقائي بنجاح');
-            
-            return {
-                success: true,
-                newChannelsCount: newChannels.length,
-                addedChannels: addedChannels,
-                removedChannels: removedChannels,
-                hasChanges: addedChannels.length > 0 || removedChannels.length > 0
-            };
-            
-        } catch (error) {
-            console.error('❌ خطأ في التحديث التلقائي:', error);
-            return {
-                success: false,
-                error: error.message
-            };
         }
     }
 
@@ -7005,82 +5843,6 @@ class ArabicTVApp {
         setTimeout(() => {
             this.highlightUpdateButton();
         }, 1000);
-    }
-
-    // إشعار نجاح التحديث التلقائي
-    showAutoUpdateSuccessNotification(newCount, addedChannels, removedChannels) {
-        const hasChanges = addedChannels.length > 0 || removedChannels.length > 0;
-        
-        if (!hasChanges) {
-            // لا توجد تغييرات، لا نعرض إشعار
-            console.log('✅ تم فحص التحديثات - لا توجد تغييرات جديدة');
-            return;
-        }
-        
-        let message = `تم تحديث القنوات تلقائياً! العدد الجديد: ${newCount}`;
-        
-        if (addedChannels.length > 0) {
-            message += `\nتم إضافة ${addedChannels.length} قناة جديدة`;
-            if (addedChannels.length <= 3) {
-                message += `: ${addedChannels.map(ch => ch.name).join(', ')}`;
-            }
-        }
-        
-        if (removedChannels.length > 0) {
-            message += `\nتم حذف ${removedChannels.length} قناة`;
-        }
-        
-        // إشعار نجاح مع تفاصيل التحديث
-        this.notifySuccess(message, 'تحديث تلقائي مكتمل', 6000);
-        
-        // إضافة تأثير بصري خفيف
-        setTimeout(() => {
-            this.addUpdateGlowEffect();
-        }, 1000);
-    }
-    
-    // إشعار فشل التحديث التلقائي
-    showAutoUpdateErrorNotification(error) {
-        const message = `فشل التحديث التلقائي: ${error}\nيمكنك المحاولة يدوياً من زر "تحديث القنوات"`;
-        this.notifyWarning(message, 'فشل التحديث التلقائي', 8000);
-    }
-    
-    // تأثير بصري خفيف عند التحديث
-    addUpdateGlowEffect() {
-        const channelsGrid = document.getElementById('channelsGrid');
-        if (channelsGrid) {
-            channelsGrid.style.transition = 'box-shadow 0.5s ease';
-            channelsGrid.style.boxShadow = '0 0 20px rgba(102, 126, 234, 0.3)';
-            
-            setTimeout(() => {
-                channelsGrid.style.boxShadow = '';
-            }, 2000);
-        }
-    }
-    
-    // مؤشر بصري للتحديث التلقائي
-    showUpdateIndicator() {
-        const updateTimeText = document.getElementById('updateTimeText');
-        if (updateTimeText) {
-            updateTimeText.innerHTML = `
-                <div class="update-indicator auto-update">
-                    <i class="fas fa-sync-alt fa-spin"></i>
-                    <span>جاري التحديث التلقائي...</span>
-                </div>
-            `;
-        }
-    }
-    
-    // إخفاء مؤشر التحديث
-    hideUpdateIndicator() {
-        const updateTimeText = document.getElementById('updateTimeText');
-        if (updateTimeText) {
-            updateTimeText.innerHTML = `
-                <i class="fas fa-clock"></i>
-                تحديث: <span id="lastUpdateTime">-</span>
-            `;
-            this.displayLastUpdateTime();
-        }
     }
 
     // Reset update indicator
@@ -7115,91 +5877,38 @@ class ArabicTVApp {
         const statusClass = isActive ? 'active' : 'inactive';
         const statusIcon = isActive ? 'fas fa-circle' : 'fas fa-circle';
         
-        // إنشاء العناصر بشكل آمن بدلاً من استخدام innerHTML
-        const img = document.createElement('img');
-        img.src = channel.logo;
-        img.alt = channel.name;
-        img.className = 'channel-logo';
-        img.loading = 'lazy'; // إضافة lazy loading للأداء
-        img.onerror = function() {
-            this.src = logoPlaceholder;
-            this.classList.add('placeholder-logo');
-        };
-        
-        const channelInfo = document.createElement('div');
-        channelInfo.className = 'channel-info';
-        
-        const channelTitleRow = document.createElement('div');
-        channelTitleRow.className = 'channel-title-row';
-        
-        const channelName = document.createElement('h3');
-        channelName.className = 'channel-name';
-        channelName.textContent = channel.name;
-        
-        const statusIndicator = document.createElement('div');
-        statusIndicator.className = `channel-status-indicator ${statusClass}`;
-        statusIndicator.title = isActive ? 'القناة تعمل' : 'القناة لا تعمل';
-        statusIndicator.innerHTML = `<i class="${statusIcon}"></i>`;
-        
-        channelTitleRow.appendChild(channelName);
-        channelTitleRow.appendChild(statusIndicator);
-        
-        const channelMeta = document.createElement('div');
-        channelMeta.className = 'channel-meta';
-        
-        const countrySpan = document.createElement('span');
-        countrySpan.className = 'channel-country';
-        countrySpan.textContent = channel.country;
-        
-        const categorySpan = document.createElement('span');
-        categorySpan.className = 'channel-category';
-        categorySpan.textContent = this.getCategoryName(channel.category);
-        
-        channelMeta.appendChild(countrySpan);
-        channelMeta.appendChild(categorySpan);
-        channelInfo.appendChild(channelTitleRow);
-        channelInfo.appendChild(channelMeta);
-        
-        const playOverlay = document.createElement('div');
-        playOverlay.className = 'play-overlay';
-        
-        const playBtn = document.createElement('button');
-        playBtn.className = 'play-btn';
-        playBtn.innerHTML = '<i class="fas fa-play"></i>';
-        
-        playOverlay.appendChild(playBtn);
-        
-        const favoriteBtn = document.createElement('button');
-        favoriteBtn.className = `favorite-btn ${favoritedClass}`;
-        favoriteBtn.innerHTML = `<i class="${heartClass}"></i>`;
-        favoriteBtn.onclick = (event) => this.toggleFavorite(channel.id, event);
-        
-        const channelActions = document.createElement('div');
-        channelActions.className = 'channel-actions';
-        if (!this.isLoggedIn) {
-            channelActions.style.display = 'none';
-        }
-        
-        const editBtn = document.createElement('button');
-        editBtn.className = 'channel-edit-btn';
-        editBtn.title = 'تعديل القناة';
-        editBtn.innerHTML = '<i class="fas fa-edit"></i>';
-        editBtn.onclick = (event) => this.editChannelFromCard(channel.id, event);
-        
-        const deleteBtn = document.createElement('button');
-        deleteBtn.className = 'channel-delete-btn';
-        deleteBtn.title = 'حذف القناة';
-        deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
-        deleteBtn.onclick = (event) => this.deleteChannel(channel.id, event);
-        
-        channelActions.appendChild(editBtn);
-        channelActions.appendChild(deleteBtn);
-        
-        card.appendChild(img);
-        card.appendChild(channelInfo);
-        card.appendChild(playOverlay);
-        card.appendChild(favoriteBtn);
-        card.appendChild(channelActions);
+        card.innerHTML = `
+            <img src="${channel.logo}" alt="${channel.name}" class="channel-logo" 
+                 onerror="this.src='${logoPlaceholder}'; this.classList.add('placeholder-logo');">
+            <div class="channel-info">
+                <div class="channel-title-row">
+                    <h3 class="channel-name">${channel.name}</h3>
+                    <div class="channel-status-indicator ${statusClass}" title="${isActive ? 'القناة تعمل' : 'القناة لا تعمل'}">
+                        <i class="${statusIcon}"></i>
+                    </div>
+                </div>
+                <div class="channel-meta">
+                    <span class="channel-country">${channel.country}</span>
+                    <span class="channel-category">${this.getCategoryName(channel.category)}</span>
+                </div>
+            </div>
+            <div class="play-overlay">
+                <button class="play-btn">
+                    <i class="fas fa-play"></i>
+                </button>
+            </div>
+            <button class="favorite-btn ${favoritedClass}" onclick="app.toggleFavorite(${channel.id}, event)">
+                <i class="${heartClass}"></i>
+            </button>
+            <div class="channel-actions" ${!this.isLoggedIn ? 'style="display: none;"' : ''}>
+                <button class="channel-edit-btn" onclick="app.editChannelFromCard(${channel.id}, event)" title="تعديل القناة">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="channel-delete-btn" onclick="app.deleteChannel(${channel.id}, event)" title="حذف القناة">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        `;
 
         card.addEventListener('click', () => this.playChannel(channel));
         return card;
@@ -7262,9 +5971,6 @@ class ArabicTVApp {
         
         // Show confirmation dialog
         if (confirm(`هل أنت متأكد من حذف قناة "${channel.name}"؟\n\nهذا الإجراء لا يمكن التراجع عنه.`)) {
-            // إضافة القناة إلى قائمة المحذوفات قبل الحذف
-            this.addToDeletedChannels(channel);
-            
             // Remove from favorites if favorited
             if (this.favorites.has(channelId)) {
                 this.favorites.delete(channelId);
@@ -7286,10 +5992,6 @@ class ArabicTVApp {
             // Re-render channels
             this.renderChannels();
             this.renderAdminChannels();
-            
-            // تحديث عدد القنوات تلقائياً
-            this.updateChannelStats();
-            this.updateSidebarCounts();
             
             // Show success notification
             this.showNotification('success', 'تم حذف القناة', `تم حذف قناة "${channel.name}" بنجاح`);
@@ -8412,74 +7114,8 @@ async function updateChannels() {
     try {
         console.log('🔄 بدء تحديث القنوات...');
         
-        // Fetch channels from GitHub with timeout and retry logic
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
-        
-        let response;
-        let retryCount = 0;
-        const maxRetries = 3;
-        
-        // قائمة المصادر البديلة
-        const dataSources = [
-            'https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json',
-            'https://cdn.jsdelivr.net/gh/anon-site/TV-AR@main/channels.json',
-            'https://rawcdn.githack.com/anon-site/TV-AR/main/channels.json'
-        ];
-        
-        let lastError = null;
-        
-        for (let sourceIndex = 0; sourceIndex < dataSources.length; sourceIndex++) {
-            const dataSource = dataSources[sourceIndex];
-            console.log(`🔄 محاولة المصدر ${sourceIndex + 1}: ${dataSource}`);
-            
-            retryCount = 0;
-            while (retryCount < maxRetries) {
-                try {
-                    response = await fetch(dataSource, {
-                        signal: controller.signal,
-                        headers: {
-                            'Cache-Control': 'no-cache',
-                            'Pragma': 'no-cache',
-                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-                        }
-                    });
-                    clearTimeout(timeoutId);
-                    
-                    if (response.ok) {
-                        console.log(`✅ نجح المصدر ${sourceIndex + 1}: ${dataSource}`);
-                        break;
-                    } else {
-                        throw new Error(`خطأ ${response.status}: ${response.statusText}`);
-                    }
-                } catch (error) {
-                    retryCount++;
-                    lastError = error;
-                    console.log(`❌ فشل المصدر ${sourceIndex + 1}, المحاولة ${retryCount}: ${error.message}`);
-                    
-                    if (retryCount >= maxRetries) {
-                        console.log(`❌ فشل المصدر ${sourceIndex + 1} بعد ${maxRetries} محاولات`);
-                        break;
-                    }
-                    
-                    // انتظار أطول بين المحاولات
-                    const waitTime = Math.min(5000 * retryCount, 15000); // من 5 إلى 15 ثانية
-                    console.log(`⏳ انتظار ${waitTime/1000} ثانية قبل المحاولة التالية...`);
-                    await new Promise(resolve => setTimeout(resolve, waitTime));
-                }
-            }
-            
-            // إذا نجح المصدر، اخرج من الحلقة
-            if (response && response.ok) {
-                break;
-            }
-            
-            // إذا كان هذا آخر مصدر، ارمي الخطأ
-            if (sourceIndex === dataSources.length - 1) {
-                clearTimeout(timeoutId);
-                throw new Error(`فشل في جلب البيانات من جميع المصادر. آخر خطأ: ${lastError?.message || 'غير معروف'}`);
-            }
-        }
+        // Fetch channels from GitHub
+        const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json');
         
         if (!response.ok) {
             throw new Error(`خطأ في جلب البيانات: ${response.status} ${response.statusText}`);
@@ -8532,31 +7168,6 @@ async function updateChannels() {
             console.log('💾 تم إنشاء نسخة احتياطية من القنوات الحالية:', currentChannels.length, 'قناة');
         }
         
-        // مقارنة القنوات الجديدة مع الموجودة لتحديد التغييرات
-        const newChannels = data.channels;
-        const currentChannelIds = new Set(currentChannels.map(ch => ch.id));
-        const newChannelIds = new Set(newChannels.map(ch => ch.id));
-        
-        // تحديد القنوات المضافة والمحذوفة والمعدلة
-        const addedChannels = newChannels.filter(ch => !currentChannelIds.has(ch.id));
-        const removedChannels = currentChannels.filter(ch => !newChannelIds.has(ch.id));
-        
-        // تحديد القنوات المعدلة (نفس الـ ID لكن محتوى مختلف)
-        const modifiedChannels = newChannels.filter(newChannel => {
-            const currentChannel = currentChannels.find(ch => ch.id === newChannel.id);
-            return currentChannel && JSON.stringify(currentChannel) !== JSON.stringify(newChannel);
-        });
-        
-        const hasChanges = addedChannels.length > 0 || removedChannels.length > 0 || modifiedChannels.length > 0;
-        
-        console.log(`📊 مقارنة القنوات:`);
-        console.log(`- القنوات الحالية: ${currentChannels.length}`);
-        console.log(`- القنوات الجديدة: ${newChannels.length}`);
-        console.log(`- القنوات المضافة: ${addedChannels.length}`);
-        console.log(`- القنوات المحذوفة: ${removedChannels.length}`);
-        console.log(`- القنوات المعدلة: ${modifiedChannels.length}`);
-        console.log(`- يوجد تغييرات: ${hasChanges}`);
-        
         // Validate each channel has required fields
         const invalidChannels = data.channels.filter(channel => 
             !channel.name || !channel.url || !channel.category
@@ -8598,65 +7209,26 @@ async function updateChannels() {
             window.app.syncToRemote().then(syncSuccess => {
                 if (syncSuccess) {
                     console.log('✅ تمت المزامنة السحابية بنجاح');
-                    // إظهار إشعار فقط عند وجود تغييرات
-                    if (hasChanges) {
-                        setTimeout(() => {
-                            let message = `تم تحديث القنوات ومزامنتها مع جميع الأجهزة المتصلة!`;
-                            if (addedChannels.length > 0) {
-                                message += `\nتم إضافة ${addedChannels.length} قناة جديدة`;
-                                if (addedChannels.length <= 3) {
-                                    message += `: ${addedChannels.map(ch => ch.name).join(', ')}`;
-                                }
-                            }
-                            if (removedChannels.length > 0) {
-                                message += `\nتم حذف ${removedChannels.length} قناة`;
-                            }
-                            if (modifiedChannels.length > 0) {
-                                message += `\nتم تعديل ${modifiedChannels.length} قناة`;
-                            }
-                            window.app.notifySuccess(message, 'تحديث مكتمل', 6000);
-                        }, 1000);
-                    } else {
-                        console.log('✅ لا توجد تغييرات جديدة - تم فحص التحديثات بنجاح');
-                    }
+                    setTimeout(() => {
+                        window.app.notifySuccess('تم تحديث القنوات ومزامنتها مع جميع الأجهزة المتصلة!');
+                    }, 1000);
                 } else {
                     console.log('⚠️ فشلت المزامنة السحابية');
-                    if (hasChanges) {
-                        setTimeout(() => {
-                            window.app.notifyWarning('تم تحديث القنوات محلياً، لكن فشلت المزامنة مع السحابة. يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.');
-                        }, 1000);
-                    }
-                }
-            }).catch(syncError => {
-                console.error('❌ خطأ في المزامنة السحابية:', syncError);
-                if (hasChanges) {
                     setTimeout(() => {
                         window.app.notifyWarning('تم تحديث القنوات محلياً، لكن فشلت المزامنة مع السحابة. يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.');
                     }, 1000);
                 }
+            }).catch(syncError => {
+                console.error('❌ خطأ في المزامنة السحابية:', syncError);
+                setTimeout(() => {
+                    window.app.notifyWarning('تم تحديث القنوات محلياً، لكن فشلت المزامنة مع السحابة. يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.');
+                }, 1000);
             });
         } else {
-            // إظهار إشعار فقط عند وجود تغييرات
-            if (hasChanges) {
-                setTimeout(() => {
-                    let message = `تم تحديث القنوات بنجاح! العدد الجديد: ${data.channels.length}`;
-                    if (addedChannels.length > 0) {
-                        message += `\nتم إضافة ${addedChannels.length} قناة جديدة`;
-                        if (addedChannels.length <= 3) {
-                            message += `: ${addedChannels.map(ch => ch.name).join(', ')}`;
-                        }
-                    }
-                    if (removedChannels.length > 0) {
-                        message += `\nتم حذف ${removedChannels.length} قناة`;
-                    }
-                    if (modifiedChannels.length > 0) {
-                        message += `\nتم تعديل ${modifiedChannels.length} قناة`;
-                    }
-                    window.app.notifySuccess(message, 'تحديث مكتمل', 6000);
-                }, 500);
-            } else {
-                console.log('✅ لا توجد تغييرات جديدة - تم فحص التحديثات بنجاح');
-            }
+            // Show success notification
+            setTimeout(() => {
+                window.app.notifySuccess(`تم تحديث القنوات بنجاح! تم تحميل ${data.channels.length} قناة جديدة.`);
+            }, 500);
         }
         
         // Log confirmation that data was saved
@@ -8666,29 +7238,17 @@ async function updateChannels() {
     } catch (error) {
         console.error('❌ خطأ في تحديث القنوات:', error);
         
-        // Show detailed error notification with specific guidance
+        // Show detailed error notification
         let errorMessage = 'فشل في تحديث القنوات';
-        let errorDetails = '';
-        
-        if (error.message.includes('503')) {
-            errorMessage += ': الخادم غير متاح مؤقتاً';
-            errorDetails = 'يبدو أن خادم GitHub غير متاح حالياً. هذا خطأ مؤقت عادة ما يُحل خلال دقائق.';
-        } else if (error.message.includes('JSON')) {
+        if (error.message.includes('JSON')) {
             errorMessage += ': خطأ في تنسيق البيانات';
-            errorDetails = 'البيانات المستلمة من الخادم غير صحيحة.';
-        } else if (error.message.includes('fetch') || error.message.includes('NetworkError')) {
+        } else if (error.message.includes('fetch')) {
             errorMessage += ': مشكلة في الاتصال بالإنترنت';
-            errorDetails = 'تأكد من اتصالك بالإنترنت وحاول مرة أخرى.';
-        } else if (error.message.includes('timeout') || error.message.includes('aborted')) {
-            errorMessage += ': انتهت مهلة الاتصال';
-            errorDetails = 'استغرق الاتصال وقتاً أطول من المتوقع. حاول مرة أخرى.';
         } else {
             errorMessage += `: ${error.message}`;
-            errorDetails = 'حدث خطأ غير متوقع أثناء التحديث.';
         }
         
-        // إظهار رسالة الخطأ مع التفاصيل
-        window.app.notifyError(`${errorMessage}\n\n${errorDetails}\n\n💡 يمكنك المحاولة مرة أخرى بعد بضع دقائق أو استخدام البيانات المحفوظة محلياً.`, 'خطأ في التحديث', 10000);
+        window.app.notifyError(errorMessage, 8000);
         
         // Try to restore backup if available
         const backupData = localStorage.getItem('channels_backup');
@@ -8717,24 +7277,13 @@ async function updateChannels() {
             }
         }
         
-        // إضافة خيار العمل في وضع عدم الاتصال
+        // Show additional help
         setTimeout(() => {
-            const hasLocalData = window.app.channels && window.app.channels.length > 0;
-            const localDataCount = hasLocalData ? window.app.channels.length : 0;
-            
-            let helpMessage = '💡 نصائح لحل المشكلة:\n';
-            helpMessage += '• تأكد من اتصالك بالإنترنت\n';
-            helpMessage += '• حاول تحديث الصفحة\n';
-            helpMessage += '• جرب استخدام متصفح آخر\n';
-            helpMessage += '• انتظر بضع دقائق ثم حاول مرة أخرى\n\n';
-            
-            if (hasLocalData) {
-                helpMessage += `📱 يمكنك الاستمرار في استخدام التطبيق مع ${localDataCount} قناة محفوظة محلياً.`;
-            } else {
-                helpMessage += '⚠️ لا توجد بيانات محلية متاحة. يرجى المحاولة مرة أخرى لاحقاً.';
-            }
-            
-            window.app.notifyInfo(helpMessage, 'مساعدة في حل المشكلة', 15000);
+            window.app.notifyInfo(
+                'يمكنك المحاولة مرة أخرى أو التحقق من اتصال الإنترنت',
+                'مساعدة',
+                5000
+            );
         }, 2000);
     }
 }

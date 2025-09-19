@@ -5,13 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.youtube.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; media-src 'self' https: blob:; connect-src 'self' https: wss:; frame-src 'self' https://www.youtube.com https://youtube.com; child-src 'self' https://www.youtube.com https://youtube.com; object-src 'none'; base-uri 'self'; form-action 'self';">
     
-    <!-- Security Headers -->
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
-    
     <!-- PWA Meta Tags -->
     <meta name="application-name" content="ANON TV">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -102,8 +95,7 @@
                         <span class="theme-slider"></span>
                     </label>
                     
-                    <button class="sidebar-toggle-btn desktop-only" onclick="app.toggleSidebar()" 
-                            aria-label="فتح/إغلاق القائمة الجانبية" tabindex="0">
+                    <button class="sidebar-toggle-btn desktop-only" onclick="app.toggleSidebar()">
                         <i class="fas fa-bars"></i>
                     </button>
                 </div>
@@ -514,14 +506,6 @@
                         <span class="slider"></span>
                     </label>
                 </div>
-                <div class="setting-item">
-                    <label for="autoUpdate">تحديث تلقائي للقنوات</label>
-                    <label class="switch">
-                        <input type="checkbox" id="autoUpdate" checked>
-                        <span class="slider"></span>
-                    </label>
-                    <small class="setting-description">فحص وتحديث القنوات تلقائياً عند فتح الموقع</small>
-                </div>
 
                 <div class="setting-item">
                     <label for="volume">مستوى الصوت</label>
@@ -680,9 +664,6 @@
             <div class="modal-header">
                 <h3>لوحة التحكم - مزود الخدمة</h3>
                 <div class="admin-header-actions">
-                    <button class="reset-session-btn" onclick="app.resetSession()" title="إعادة تعيين الجلسة">
-                        <i class="fas fa-sync-alt"></i>
-                    </button>
                     <button class="logout-btn" onclick="app.logoutFromAdmin()" title="تسجيل الخروج من مزود الخدمة">
                         <i class="fas fa-sign-out-alt"></i>
                     </button>
@@ -1367,27 +1348,17 @@
 
     <!-- HLS.js Library for video streaming -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    
-    <!-- bcrypt Library for advanced password hashing -->
-    <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
     <script>
-        // Check if security libraries loaded successfully
+        // Check if HLS.js loaded successfully
         window.addEventListener('load', function() {
-            // Check HLS.js
             if (typeof Hls === 'undefined') {
                 console.error('❌ فشل في تحميل مكتبة HLS.js');
+                // Show notification to user
                 if (window.app && window.app.notifyError) {
                     window.app.notifyError('فشل في تحميل مكتبة تشغيل الفيديو - تحقق من اتصال الإنترنت');
                 }
             } else {
                 console.log('✅ تم تحميل مكتبة HLS.js بنجاح');
-            }
-            
-            // Check bcrypt
-            if (typeof bcrypt === 'undefined') {
-                console.warn('⚠️ فشل في تحميل مكتبة bcrypt - سيتم استخدام SHA-256 كبديل');
-            } else {
-                console.log('✅ تم تحميل مكتبة bcrypt بنجاح');
             }
         });
 
@@ -1447,25 +1418,6 @@
                 window.app.notifySuccess('تم تثبيت التطبيق بنجاح! يمكنك الآن الوصول إليه من الشاشة الرئيسية');
             }
         });
-
-        // Listen for Service Worker messages
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.addEventListener('message', event => {
-                const { type, message } = event.data;
-                
-                if (type === 'CACHE_ERROR') {
-                    console.warn('⚠️ Service Worker Cache Error:', message);
-                    if (window.app && window.app.notifyWarning) {
-                        window.app.notifyWarning(message, 'تحذير التخزين المؤقت', 5000);
-                    }
-                } else if (type === 'SYNC_ERROR') {
-                    console.warn('⚠️ Service Worker Sync Error:', message);
-                    if (window.app && window.app.notifyError) {
-                        window.app.notifyError(message, 'خطأ المزامنة', 5000);
-                    }
-                }
-            });
-        }
 
         // Check if app is already installed
         window.addEventListener('load', () => {
