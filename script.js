@@ -8214,26 +8214,21 @@ function performMobileSearch(query) {
         return;
     }
     
-    searchResults.innerHTML = `
-        <div class="search-results-header">
-            <span class="results-count">تم العثور على ${results.length} قناة</span>
-        </div>
-        ${results.map(channel => {
-            console.log('إنشاء عنصر بحث للقناة:', channel.name, 'مع ID:', channel.id);
-            return `
-            <div class="search-result-item" onclick="selectChannelFromSearch(${channel.id})">
-                <div class="search-result-logo">
-                    <img src="${channel.logo || 'https://via.placeholder.com/40x40/333/fff?text=' + channel.name.charAt(0)}" 
-                         alt="${channel.name}" onerror="this.src='https://via.placeholder.com/40x40/333/fff?text=' + this.alt.charAt(0)">
-                </div>
-                <div class="search-result-info">
-                    <h4>${channel.name}</h4>
-                    <p>${channel.country}</p>
-                </div>
+    searchResults.innerHTML = results.map(channel => {
+        console.log('إنشاء عنصر بحث للقناة:', channel.name, 'مع ID:', channel.id);
+        return `
+        <div class="search-result-item" onclick="selectChannelFromSearch(${channel.id})">
+            <div class="search-result-logo">
+                <img src="${channel.logo || 'https://via.placeholder.com/40x40/333/fff?text=' + channel.name.charAt(0)}" 
+                     alt="${channel.name}" onerror="this.src='https://via.placeholder.com/40x40/333/fff?text=' + this.alt.charAt(0)">
             </div>
-        `;
-        }).join('')}
+            <div class="search-result-info">
+                <h4>${channel.name}</h4>
+                <p>${channel.country}</p>
+            </div>
+        </div>
     `;
+    }).join('');
 }
 
 function selectChannelFromSearch(channelId) {
