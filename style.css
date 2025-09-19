@@ -11953,7 +11953,10 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
     max-height: 80vh;
     overflow: hidden;
+<<<<<<< HEAD
     -webkit-tap-highlight-color: transparent;
+=======
+>>>>>>> parent of 50943ef (تعديل البحث)
 }
 
 .search-popup-header {
