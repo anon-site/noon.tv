@@ -300,16 +300,6 @@
       "status": "active"
     },
     {
-      "id": 29,
-      "name": "الأقصى",
-      "url": "http://167.172.161.13/hls/feedspare/6udfi7v8a3eof6nlps6e9ovfrs65c7l7.m3u8",
-      "logo": "https://iili.io/Kz8auGp.png",
-      "category": "news",
-      "country": "فلسطين",
-      "type": "hls",
-      "status": "inactive"
-    },
-    {
       "id": 30,
       "name": "وطن",
       "url": "https://htvmada.mada.ps:4443/wattan/index.m3u8?v=6db2fbd3",
@@ -780,6 +770,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-19T22:36:21.904Z",
+  "lastModified": "2025-09-19T22:39:08.300Z",
   "version": "1.0"
 }
