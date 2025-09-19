@@ -693,7 +693,7 @@
       "id": 95,
       "name": "Guitar Music",
       "url": "https://www.youtube.com/watch?v=BPcUxivZHuU",
-      "logo": "https://cdn1.iconfinder.com/data/icons/games-and-fun-1/100/games_and_fun_guitar-4-512.png",
+      "logo": "https://static.vecteezy.com/system/resources/thumbnails/055/155/574/small/radio-podcast-live-png.png",
       "category": "music",
       "country": "عالمية",
       "type": "youtube",
@@ -734,13 +734,7 @@
     "animationsEnabled": false,
     "compactMode": true,
     "highContrast": false,
-    "borderRadius": "rounded",
-    "enableTranslation": true,
-    "translationSpeed": "normal",
-    "translationAccuracy": "medium",
-    "translationPosition": "bottom",
-    "translationSize": "medium",
-    "translationOpacity": 0.8
+    "borderRadius": "rounded"
   },
   "categories": [
     {
@@ -787,6 +781,11 @@
       "key": "kids",
       "name": "أطفال",
       "icon": "fas fa-child"
+    },
+    {
+      "key": "series",
+      "name": "مسلسلات",
+      "icon": "fas fa-tv"
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
@@ -800,7 +799,7 @@
       "country": "عالمية",
       "type": "youtube",
       "status": "active",
-      "deletedAt": "2025-09-19T20:32:59.122Z",
+      "deletedAt": "2025-09-19T20:44:50.152Z",
       "deletedBy": "local"
     },
     {
@@ -812,10 +811,10 @@
       "country": "عالمية",
       "type": "youtube",
       "status": "active",
-      "deletedAt": "2025-09-19T20:33:01.559Z",
+      "deletedAt": "2025-09-19T20:44:52.902Z",
       "deletedBy": "local"
     }
   ],
-  "lastModified": "2025-09-19T21:24:11.586Z",
+  "lastModified": "2025-09-19T20:44:59.966Z",
   "version": "1.0"
 }

@@ -8398,6 +8398,9 @@ input:checked + .enhanced-slider:before {
     padding-top: 1.5rem;
     border-top: 1px solid var(--border-color);
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .reset-settings-btn {
@@ -8412,6 +8415,7 @@ input:checked + .enhanced-slider:before {
     font-family: inherit;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
     margin: 0 auto;
 }
@@ -8421,7 +8425,6 @@ input:checked + .enhanced-slider:before {
     box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
 }
 
-<<<<<<< HEAD
 .delete-cookies-btn {
     background: linear-gradient(45deg, #f59e0b, #d97706);
     color: white;
@@ -8466,8 +8469,6 @@ input:checked + .enhanced-slider:before {
     box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
 }
 
-=======
->>>>>>> parent of 4297761 (نفل زر الكوكيز)
 /* Color Theme Variants */
 body[data-color-theme="blue"] {
     --highlight-color: #3b82f6;
@@ -10171,6 +10172,11 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     }
     
     .reset-settings-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .delete-cookies-btn {
         width: 100%;
         justify-content: center;
     }
@@ -11947,10 +11953,20 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
     max-height: 80vh;
     overflow: hidden;
-<<<<<<< HEAD
     -webkit-tap-highlight-color: transparent;
-=======
->>>>>>> parent of 50943ef (تعديل البحث)
+}
+
+@media (max-width: 768px) {
+    .search-popup-content {
+        top: 5px;
+        width: 95%;
+        max-height: 95vh;
+        border-radius: 12px;
+    }
+    
+    .search-popup-body {
+        padding: 15px;
+    }
 }
 
 .search-popup-header {
@@ -12033,6 +12049,21 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
 .search-results {
     max-height: 400px;
     overflow-y: auto;
+    padding-bottom: 20px;
+}
+
+.search-results-header {
+    padding: 8px 12px;
+    background: var(--secondary-color);
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 8px;
+    border-radius: 8px;
+}
+
+.results-count {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
 }
 
 .search-result-item {
@@ -12046,6 +12077,10 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     margin-bottom: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
+}
+
+.search-result-item:last-child {
+    margin-bottom: 20px;
 }
 
 .search-result-item:hover {
@@ -12330,7 +12365,43 @@ body[data-theme="light"] .scroll-to-top-btn:hover {
 /* تحسينات إضافية لشعارات البحث في الهاتف */
 @media (max-width: 768px) {
     .search-results {
-        max-height: 450px;
+        max-height: calc(100vh - 180px);
+        min-height: 200px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: var(--highlight-color) transparent;
+        padding-bottom: 50px;
+        scroll-padding-bottom: 20px;
+    }
+    
+    .search-results::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    .search-results::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    
+    .search-results::-webkit-scrollbar-thumb {
+        background: var(--highlight-color);
+        border-radius: 3px;
+    }
+    
+    .search-results::-webkit-scrollbar-thumb:hover {
+        background: var(--highlight-color);
+        opacity: 0.8;
+    }
+    
+    .search-results-header {
+        padding: 12px 16px;
+        margin-bottom: 12px;
+        border-radius: 12px;
+    }
+    
+    .results-count {
+        font-size: 1rem;
+        font-weight: 600;
     }
     
     .search-result-logo {
@@ -12343,6 +12414,10 @@ body[data-theme="light"] .scroll-to-top-btn:hover {
     .search-result-item {
         padding: 16px;
         gap: 16px;
+    }
+    
+    .search-result-item:last-child {
+        margin-bottom: 30px;
     }
     
     .search-result-info h4 {
