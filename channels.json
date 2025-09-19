@@ -1,6 +1,36 @@
 {
   "channels": [
     {
+      "id": 14,
+      "name": "Alaraby TV",
+      "url": "https://live.kwikmotion.com/alaraby1live/alaraby_abr/playlist.m3u8",
+      "logo": "https://www.alaraby.com/themes/custom/arabytv/logo.png",
+      "category": "news",
+      "country": "قطر",
+      "type": "hls",
+      "status": "active"
+    },
+    {
+      "id": 15,
+      "name": "Alaraby 2",
+      "url": "https://alarabyta.cdn.octivid.com/alaraby2n/smil:alaraby2n.stream.smil/chunklist.m3u8",
+      "logo": "https://media0084.elcinema.com/tvguide/1382_1.png",
+      "category": "entertainment",
+      "country": "قطر",
+      "type": "hls",
+      "status": "active"
+    },
+    {
+      "id": 3,
+      "name": "الجزيرة",
+      "logo": "https://iili.io/Kzk3dKP.png",
+      "url": "https://live-hls-apps-aja-fa.getaj.net/AJA/index.m3u8",
+      "category": "news",
+      "country": "قطر",
+      "type": "hls",
+      "status": "active"
+    },
+    {
       "id": 77,
       "name": "وطن مصر",
       "url": "https://rp.tactivemedia.com/watantv_source/live/playlist.m3u8",
@@ -107,36 +137,6 @@
       "logo": "https://iili.io/Kz83mkF.png",
       "category": "religious",
       "country": "السعودية",
-      "type": "hls",
-      "status": "active"
-    },
-    {
-      "id": 14,
-      "name": "Alaraby TV",
-      "url": "https://live.kwikmotion.com/alaraby1live/alaraby_abr/playlist.m3u8",
-      "logo": "https://www.alaraby.com/themes/custom/arabytv/logo.png",
-      "category": "news",
-      "country": "قطر",
-      "type": "hls",
-      "status": "active"
-    },
-    {
-      "id": 15,
-      "name": "Alaraby 2",
-      "url": "https://alarabyta.cdn.octivid.com/alaraby2n/smil:alaraby2n.stream.smil/chunklist.m3u8",
-      "logo": "https://media0084.elcinema.com/tvguide/1382_1.png",
-      "category": "entertainment",
-      "country": "قطر",
-      "type": "hls",
-      "status": "active"
-    },
-    {
-      "id": 3,
-      "name": "الجزيرة",
-      "logo": "https://iili.io/Kzk3dKP.png",
-      "url": "https://live-hls-apps-aja-fa.getaj.net/AJA/index.m3u8",
-      "category": "news",
-      "country": "قطر",
       "type": "hls",
       "status": "active"
     },
@@ -760,6 +760,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-19T23:35:54.932Z",
+  "lastModified": "2025-09-20T01:01:32.067Z",
   "version": "1.0"
 }
