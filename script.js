@@ -2498,6 +2498,10 @@ class ArabicTVApp {
         this.renderChannels();
         this.renderAdminChannels();
         
+        // تحديث عدد القنوات تلقائياً
+        this.updateChannelStats();
+        this.updateSidebarCounts();
+        
         this.resetAddChannelForm();
         this.showNotification('success', 'تم إضافة القناة', 'تم إضافة القناة بنجاح وحفظها!');
         
@@ -2695,6 +2699,10 @@ class ArabicTVApp {
         this.renderChannels();
         this.renderAdminChannels();
         
+        // تحديث عدد القنوات تلقائياً
+        this.updateChannelStats();
+        this.updateSidebarCounts();
+        
         // Reset editing state and form
         this.resetAddChannelForm();
         
@@ -2743,6 +2751,10 @@ class ArabicTVApp {
             // Re-render channels
             this.renderChannels();
             this.renderAdminChannels();
+            
+            // تحديث عدد القنوات تلقائياً
+            this.updateChannelStats();
+            this.updateSidebarCounts();
             
             // Show success notification
             this.showNotification('success', 'تم حذف القناة', `تم حذف قناة "${channel.name}" بنجاح`);
@@ -6634,6 +6646,10 @@ class ArabicTVApp {
             // Re-render channels
             this.renderChannels();
             this.renderAdminChannels();
+            
+            // تحديث عدد القنوات تلقائياً
+            this.updateChannelStats();
+            this.updateSidebarCounts();
             
             // Show success notification
             this.showNotification('success', 'تم حذف القناة', `تم حذف قناة "${channel.name}" بنجاح`);
