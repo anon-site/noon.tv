@@ -12,7 +12,16 @@ class ArabicTVApp {
         this.isLoggedIn = false;
         // كلمة المرور مشفرة بـ SHA-256 Hash (أكثر أماناً)
         // قراءة كلمة المرور من localStorage أو استخدام الافتراضية
-        this.adminPassword = localStorage.getItem('anon_tv_admin_password') || '3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657'; // كلمة مرور @admin123 مشفرة بـ SHA-256
+        this.adminPassword = localStorage.getItem('anon_tv_admin_password');
+        // إزالة كلمة المرور الافتراضية المكشوفة للأمان
+        
+        // إذا لم تكن هناك كلمة مرور محفوظة، إظهار نافذة إعداد كلمة المرور الأولى
+        if (!this.adminPassword) {
+            this.showInitialPasswordSetup();
+        }
+
+        // تنظيف الجلسات القديمة عند بدء التطبيق
+        this.cleanupOldSessions();
         
         // نظام حماية متقدم من هجمات Brute Force
         this.loginAttempts = JSON.parse(localStorage.getItem('anon_tv_login_attempts')) || {
@@ -546,6 +555,8 @@ class ArabicTVApp {
             });
         }
 
+        // إضافة دعم للكيبورد للعناصر التفاعلية
+        this.addKeyboardSupport();
 
         // New customization controls
         const zoomLevelSlider = document.getElementById('zoomLevel');
@@ -888,22 +899,52 @@ class ArabicTVApp {
         // إنشاء placeholder محسن للشعار
         const logoPlaceholder = this.createLogoPlaceholder(channel);
         
-        card.innerHTML = `
-            <img src="${channel.logo}" alt="${channel.name}" class="channel-logo" 
-                 onerror="this.src='${logoPlaceholder}'; this.classList.add('placeholder-logo');">
-            <div class="channel-info">
-                <h3 class="channel-name">${channel.name}</h3>
-                <div class="channel-meta">
-                    <span class="channel-country">${channel.country}</span>
-                    <span class="channel-category">${this.getCategoryName(channel.category)}</span>
-                </div>
-            </div>
-            <div class="play-overlay">
-                <button class="play-btn">
-                    <i class="fas fa-play"></i>
-                </button>
-            </div>
-        `;
+        // إنشاء العناصر بشكل آمن بدلاً من استخدام innerHTML
+        const img = document.createElement('img');
+        img.src = channel.logo;
+        img.alt = channel.name;
+        img.className = 'channel-logo';
+        img.loading = 'lazy'; // إضافة lazy loading للأداء
+        img.onerror = function() {
+            this.src = logoPlaceholder;
+            this.classList.add('placeholder-logo');
+        };
+        
+        const channelInfo = document.createElement('div');
+        channelInfo.className = 'channel-info';
+        
+        const channelName = document.createElement('h3');
+        channelName.className = 'channel-name';
+        channelName.textContent = channel.name;
+        
+        const channelMeta = document.createElement('div');
+        channelMeta.className = 'channel-meta';
+        
+        const countrySpan = document.createElement('span');
+        countrySpan.className = 'channel-country';
+        countrySpan.textContent = channel.country;
+        
+        const categorySpan = document.createElement('span');
+        categorySpan.className = 'channel-category';
+        categorySpan.textContent = this.getCategoryName(channel.category);
+        
+        channelMeta.appendChild(countrySpan);
+        channelMeta.appendChild(categorySpan);
+        channelInfo.appendChild(channelName);
+        channelInfo.appendChild(channelMeta);
+        
+        const playOverlay = document.createElement('div');
+        playOverlay.className = 'play-overlay';
+        
+        const playBtn = document.createElement('button');
+        playBtn.className = 'play-btn';
+        playBtn.innerHTML = '<i class="fas fa-play"></i>';
+        
+        playOverlay.appendChild(playBtn);
+        
+        card.appendChild(img);
+        card.appendChild(channelInfo);
+        card.appendChild(playOverlay);
 
         card.addEventListener('click', () => this.playChannel(channel));
         return card;
@@ -2101,12 +2142,152 @@ class ArabicTVApp {
     // دالة للتحقق من الجلسات المتعددة
     checkConcurrentSessions() {
         const savedToken = localStorage.getItem('anon_tv_session_token');
-        if (savedToken && savedToken !== this.sessionToken) {
-            // جلسة أخرى نشطة
-            this.forceLogout('تم اكتشاف جلسة أخرى نشطة');
+        const savedActivity = localStorage.getItem('anon_tv_last_activity');
+        
+        // إذا لم توجد جلسة محفوظة، السماح بتسجيل الدخول
+        if (!savedToken || !savedActivity) {
+            return true;
+        }
+        
+        // التحقق من أن الجلسة المحفوظة حديثة (أقل من 30 دقيقة)
+        const lastActivity = parseInt(savedActivity);
+        const isRecent = (Date.now() - lastActivity) < this.sessionTimeout;
+        
+        // إذا كانت الجلسة قديمة، السماح بتسجيل الدخول الجديد
+        if (!isRecent) {
+            console.log('الجلسة السابقة منتهية الصلاحية، السماح بتسجيل الدخول الجديد');
+            this.clearSessionData();
+            return true;
+        }
+        
+        // إذا كانت الجلسة حديثة ورمز الجلسة مختلف، منع تسجيل الدخول
+        if (savedToken !== this.sessionToken) {
+            this.notifyWarning('يوجد جلسة نشطة أخرى. يرجى تسجيل الخروج من الجلسة الأخرى أولاً.');
             return false;
         }
+        
         return true;
+    }
+
+    // إظهار نافذة إعداد كلمة المرور الأولى
+    showInitialPasswordSetup() {
+        const modal = document.createElement('div');
+        modal.className = 'modal active';
+        modal.innerHTML = `
+            <div class="modal-content initial-password-setup">
+                <div class="modal-header">
+                    <h3>إعداد كلمة المرور الأولى</h3>
+                </div>
+                <div class="modal-body">
+                    <p>مرحباً بك في ANON TV! يرجى تعيين كلمة مرور آمنة للوصول إلى لوحة التحكم.</p>
+                    <div class="form-group">
+                        <label for="initialPassword">كلمة المرور الجديدة</label>
+                        <input type="password" id="initialPassword" placeholder="أدخل كلمة مرور قوية" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmInitialPassword">تأكيد كلمة المرور</label>
+                        <input type="password" id="confirmInitialPassword" placeholder="أعد إدخال كلمة المرور" required>
+                    </div>
+                    <div class="password-requirements">
+                        <h4>متطلبات كلمة المرور:</h4>
+                        <ul>
+                            <li>8 أحرف على الأقل</li>
+                            <li>حرف كبير واحد على الأقل</li>
+                            <li>حرف صغير واحد على الأقل</li>
+                            <li>رقم واحد على الأقل</li>
+                            <li>رمز خاص واحد على الأقل</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="app.setInitialPassword()">تعيين كلمة المرور</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+
+    // تعيين كلمة المرور الأولى
+    async setInitialPassword() {
+        const password = document.getElementById('initialPassword').value;
+        const confirmPassword = document.getElementById('confirmInitialPassword').value;
+        
+        if (!password || !confirmPassword) {
+            this.notifyError('يرجى ملء جميع الحقول');
+            return;
+        }
+        
+        if (password !== confirmPassword) {
+            this.notifyError('كلمة المرور غير متطابقة');
+            return;
+        }
+        
+        if (!this.validatePasswordStrength(password)) {
+            this.notifyError('كلمة المرور لا تلبي المتطلبات');
+            return;
+        }
+        
+        try {
+            const hashedPassword = await this.hashPassword(password);
+            localStorage.setItem('anon_tv_admin_password', hashedPassword);
+            this.adminPassword = hashedPassword;
+            
+            // إغلاق النافذة
+            const modal = document.querySelector('.initial-password-setup').closest('.modal');
+            modal.remove();
+            
+            this.notifySuccess('تم تعيين كلمة المرور بنجاح! يمكنك الآن الوصول إلى لوحة التحكم.');
+        } catch (error) {
+            this.notifyError('حدث خطأ أثناء تعيين كلمة المرور');
+        }
+    }
+
+    // التحقق من قوة كلمة المرور
+    validatePasswordStrength(password) {
+        const minLength = 8;
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasLowerCase = /[a-z]/.test(password);
+        const hasNumbers = /\d/.test(password);
+        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+        
+        return password.length >= minLength && 
+               hasUpperCase && 
+               hasLowerCase && 
+               hasNumbers && 
+               hasSpecialChar;
+    }
+
+    // التحقق من صحة بيانات القناة
+    validateChannelData(channel) {
+        const errors = [];
+        
+        if (!channel.name || channel.name.trim().length < 2) {
+            errors.push('اسم القناة يجب أن يكون على الأقل حرفين');
+        }
+        
+        if (!channel.url || !this.isValidUrl(channel.url)) {
+            errors.push('رابط القناة غير صحيح');
+        }
+        
+        if (!channel.category || !this.categories.find(cat => cat.key === channel.category)) {
+            errors.push('فئة القناة غير صحيحة');
+        }
+        
+        if (!channel.country || channel.country.trim().length < 2) {
+            errors.push('اسم البلد يجب أن يكون على الأقل حرفين');
+        }
+        
+        return errors;
+    }
+
+    // التحقق من صحة الرابط
+    isValidUrl(url) {
+        try {
+            const urlObj = new URL(url);
+            return ['http:', 'https:'].includes(urlObj.protocol);
+        } catch {
+            return false;
+        }
     }
 
     async loginToAdmin() {
@@ -2246,6 +2427,28 @@ class ArabicTVApp {
         this.sessionToken = this.generateSessionToken();
     }
 
+    // تنظيف الجلسات القديمة عند بدء التطبيق
+    cleanupOldSessions() {
+        try {
+            const savedActivity = localStorage.getItem('anon_tv_last_activity');
+            const savedToken = localStorage.getItem('anon_tv_session_token');
+            
+            if (savedActivity && savedToken) {
+                const lastActivity = parseInt(savedActivity);
+                const isRecent = (Date.now() - lastActivity) < this.sessionTimeout;
+                
+                // إذا كانت الجلسة قديمة، تنظيفها
+                if (!isRecent) {
+                    console.log('تنظيف الجلسة القديمة عند بدء التطبيق');
+                    this.clearSessionData();
+                    localStorage.removeItem('anon_tv_login_state');
+                }
+            }
+        } catch (error) {
+            console.warn('خطأ في تنظيف الجلسات القديمة:', error);
+        }
+    }
+
     logoutFromAdmin() {
         this.isLoggedIn = false;
         this.stopSessionMonitoring(); // إيقاف مراقبة الجلسة
@@ -2274,8 +2477,9 @@ class ArabicTVApp {
         try {
             const savedState = localStorage.getItem('anon_tv_login_state');
             const savedActivity = localStorage.getItem('anon_tv_last_activity');
+            const savedToken = localStorage.getItem('anon_tv_session_token');
             
-            if (savedState && savedActivity) {
+            if (savedState && savedActivity && savedToken) {
                 const loginData = JSON.parse(savedState);
                 const lastActivity = parseInt(savedActivity);
                 
@@ -2283,18 +2487,27 @@ class ArabicTVApp {
                 const isRecent = (Date.now() - loginData.timestamp) < this.sessionTimeout;
                 const isActivityRecent = (Date.now() - lastActivity) < this.sessionTimeout;
                 
-                if (isRecent && isActivityRecent && loginData.isLoggedIn) {
+                // التحقق من صحة رمز الجلسة
+                const isValidToken = this.validateSessionToken(savedToken);
+                
+                if (isRecent && isActivityRecent && loginData.isLoggedIn && isValidToken) {
                     this.isLoggedIn = true;
                     this.lastActivity = lastActivity;
+                    this.sessionToken = savedToken; // استعادة رمز الجلسة
                     this.toggleChannelActions(true);
                     this.toggleAdminBadge(true); // إظهار Admin badge عند تحميل الحالة
                     this.startSessionMonitoring(); // بدء مراقبة الجلسة
-                    console.log('تم استعادة حالة تسجيل الدخول');
+                    console.log('تم استعادة حالة تسجيل الدخول بنجاح');
                     return true;
+                } else {
+                    // إذا كانت الجلسة منتهية الصلاحية أو غير صحيحة، تنظيف البيانات
+                    console.log('الجلسة منتهية الصلاحية أو غير صحيحة، تنظيف البيانات');
+                    this.clearSessionData();
                 }
             }
         } catch (error) {
             console.warn('لا يمكن تحميل حالة تسجيل الدخول:', error);
+            this.clearSessionData();
         }
         
         // إذا لم تكن هناك حالة محفوظة أو انتهت صلاحيتها
@@ -2822,7 +3035,48 @@ class ArabicTVApp {
             }
         } catch (error) {
             console.error('خطأ في حفظ القنوات:', error);
-            this.notifyError('خطأ في حفظ القنوات! يرجى المحاولة مرة أخرى.');
+            
+            // معالجة أفضل لأخطاء التخزين
+            if (error.name === 'QuotaExceededError') {
+                this.notifyError('مساحة التخزين ممتلئة. يرجى حذف بعض البيانات أو استخدام وضع عدم الاتصال.');
+                this.clearOldData();
+            } else if (error.name === 'SecurityError') {
+                this.notifyError('لا يمكن حفظ البيانات بسبب إعدادات الأمان في المتصفح. يرجى التحقق من إعدادات الخصوصية.');
+            } else {
+                this.notifyError('فشل في حفظ القنوات! يرجى المحاولة مرة أخرى.');
+            }
+        }
+    }
+
+    // حذف البيانات القديمة لتوفير مساحة
+    clearOldData() {
+        try {
+            // حذف النسخ الاحتياطية القديمة
+            const keysToRemove = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.includes('backup') && key.includes('old')) {
+                    keysToRemove.push(key);
+                }
+            }
+            
+            keysToRemove.forEach(key => localStorage.removeItem(key));
+            
+            // حذف بيانات الجلسات القديمة
+            const oldSessionKeys = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.includes('session') && key.includes('old')) {
+                    oldSessionKeys.push(key);
+                }
+            }
+            
+            oldSessionKeys.forEach(key => localStorage.removeItem(key));
+            
+            console.log('✅ تم حذف البيانات القديمة لتوفير مساحة');
+            this.notifyInfo('تم حذف البيانات القديمة. يمكنك المحاولة مرة أخرى.');
+        } catch (error) {
+            console.error('فشل في حذف البيانات القديمة:', error);
         }
     }
 
@@ -5750,6 +6004,100 @@ class ArabicTVApp {
         }
     }
 
+    // تنظيف جميع الـ timers عند إغلاق التطبيق
+    cleanup() {
+        this.stopNewsTicker();
+        this.stopTimeUpdate();
+        
+        // تنظيف أي timers أخرى
+        if (this.updateInterval) {
+            clearInterval(this.updateInterval);
+            this.updateInterval = null;
+        }
+        
+        if (this.sessionMonitor) {
+            clearInterval(this.sessionMonitor);
+            this.sessionMonitor = null;
+        }
+        
+        // تنظيف HLS instance
+        if (this.hls) {
+            this.hls.destroy();
+            this.hls = null;
+        }
+        
+        console.log('✅ تم تنظيف جميع الموارد');
+    }
+
+    // إضافة دعم للكيبورد للعناصر التفاعلية
+    addKeyboardSupport() {
+        // دعم الكيبورد للأزرار
+        document.addEventListener('keydown', (e) => {
+            // ESC لإغلاق النوافذ المنبثقة
+            if (e.key === 'Escape') {
+                this.closeAllModals();
+            }
+            
+            // Enter أو Space للأزرار المحددة
+            if (e.key === 'Enter' || e.key === ' ') {
+                const activeElement = document.activeElement;
+                if (activeElement && activeElement.classList.contains('channel-card')) {
+                    e.preventDefault();
+                    const channelId = parseInt(activeElement.dataset.channelId);
+                    if (channelId) {
+                        this.playChannel(channelId);
+                    }
+                }
+            }
+            
+            // مفاتيح التنقل السريع
+            if (e.ctrlKey || e.metaKey) {
+                switch (e.key) {
+                    case 'k':
+                        e.preventDefault();
+                        this.toggleSearch();
+                        break;
+                    case 'f':
+                        e.preventDefault();
+                        this.toggleFavorites();
+                        break;
+                    case 's':
+                        e.preventDefault();
+                        this.toggleSidebar();
+                        break;
+                }
+            }
+        });
+
+        // إضافة tabindex للعناصر التفاعلية
+        const interactiveElements = document.querySelectorAll('.channel-card, .sidebar-action-btn, .play-btn');
+        interactiveElements.forEach(element => {
+            if (!element.hasAttribute('tabindex')) {
+                element.setAttribute('tabindex', '0');
+            }
+        });
+    }
+
+    // إغلاق جميع النوافذ المنبثقة
+    closeAllModals() {
+        const modals = document.querySelectorAll('.modal.active');
+        modals.forEach(modal => {
+            modal.classList.remove('active');
+        });
+    }
+
+    // إعادة تعيين الجلسة في حالة وجود مشاكل
+    resetSession() {
+        console.log('إعادة تعيين الجلسة...');
+        this.isLoggedIn = false;
+        this.stopSessionMonitoring();
+        this.clearSessionData();
+        localStorage.removeItem('anon_tv_login_state');
+        this.toggleChannelActions(false);
+        this.toggleAdminBadge(false);
+        this.notifyInfo('تم إعادة تعيين الجلسة. يمكنك تسجيل الدخول مرة أخرى.');
+    }
+
     updateNewsContent() {
         const newsItems = [
             'عاجل: القمة العربية تناقش أهم القضايا الإقليمية والدولية',
@@ -6767,38 +7115,91 @@ class ArabicTVApp {
         const statusClass = isActive ? 'active' : 'inactive';
         const statusIcon = isActive ? 'fas fa-circle' : 'fas fa-circle';
         
-        card.innerHTML = `
-            <img src="${channel.logo}" alt="${channel.name}" class="channel-logo" 
-                 onerror="this.src='${logoPlaceholder}'; this.classList.add('placeholder-logo');">
-            <div class="channel-info">
-                <div class="channel-title-row">
-                    <h3 class="channel-name">${channel.name}</h3>
-                    <div class="channel-status-indicator ${statusClass}" title="${isActive ? 'القناة تعمل' : 'القناة لا تعمل'}">
-                        <i class="${statusIcon}"></i>
-                    </div>
-                </div>
-                <div class="channel-meta">
-                    <span class="channel-country">${channel.country}</span>
-                    <span class="channel-category">${this.getCategoryName(channel.category)}</span>
-                </div>
-            </div>
-            <div class="play-overlay">
-                <button class="play-btn">
-                    <i class="fas fa-play"></i>
-                </button>
-            </div>
-            <button class="favorite-btn ${favoritedClass}" onclick="app.toggleFavorite(${channel.id}, event)">
-                <i class="${heartClass}"></i>
-            </button>
-            <div class="channel-actions" ${!this.isLoggedIn ? 'style="display: none;"' : ''}>
-                <button class="channel-edit-btn" onclick="app.editChannelFromCard(${channel.id}, event)" title="تعديل القناة">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="channel-delete-btn" onclick="app.deleteChannel(${channel.id}, event)" title="حذف القناة">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        `;
+        // إنشاء العناصر بشكل آمن بدلاً من استخدام innerHTML
+        const img = document.createElement('img');
+        img.src = channel.logo;
+        img.alt = channel.name;
+        img.className = 'channel-logo';
+        img.loading = 'lazy'; // إضافة lazy loading للأداء
+        img.onerror = function() {
+            this.src = logoPlaceholder;
+            this.classList.add('placeholder-logo');
+        };
+        
+        const channelInfo = document.createElement('div');
+        channelInfo.className = 'channel-info';
+        
+        const channelTitleRow = document.createElement('div');
+        channelTitleRow.className = 'channel-title-row';
+        
+        const channelName = document.createElement('h3');
+        channelName.className = 'channel-name';
+        channelName.textContent = channel.name;
+        
+        const statusIndicator = document.createElement('div');
+        statusIndicator.className = `channel-status-indicator ${statusClass}`;
+        statusIndicator.title = isActive ? 'القناة تعمل' : 'القناة لا تعمل';
+        statusIndicator.innerHTML = `<i class="${statusIcon}"></i>`;
+        
+        channelTitleRow.appendChild(channelName);
+        channelTitleRow.appendChild(statusIndicator);
+        
+        const channelMeta = document.createElement('div');
+        channelMeta.className = 'channel-meta';
+        
+        const countrySpan = document.createElement('span');
+        countrySpan.className = 'channel-country';
+        countrySpan.textContent = channel.country;
+        
+        const categorySpan = document.createElement('span');
+        categorySpan.className = 'channel-category';
+        categorySpan.textContent = this.getCategoryName(channel.category);
+        
+        channelMeta.appendChild(countrySpan);
+        channelMeta.appendChild(categorySpan);
+        channelInfo.appendChild(channelTitleRow);
+        channelInfo.appendChild(channelMeta);
+        
+        const playOverlay = document.createElement('div');
+        playOverlay.className = 'play-overlay';
+        
+        const playBtn = document.createElement('button');
+        playBtn.className = 'play-btn';
+        playBtn.innerHTML = '<i class="fas fa-play"></i>';
+        
+        playOverlay.appendChild(playBtn);
+        
+        const favoriteBtn = document.createElement('button');
+        favoriteBtn.className = `favorite-btn ${favoritedClass}`;
+        favoriteBtn.innerHTML = `<i class="${heartClass}"></i>`;
+        favoriteBtn.onclick = (event) => this.toggleFavorite(channel.id, event);
+        
+        const channelActions = document.createElement('div');
+        channelActions.className = 'channel-actions';
+        if (!this.isLoggedIn) {
+            channelActions.style.display = 'none';
+        }
+        
+        const editBtn = document.createElement('button');
+        editBtn.className = 'channel-edit-btn';
+        editBtn.title = 'تعديل القناة';
+        editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+        editBtn.onclick = (event) => this.editChannelFromCard(channel.id, event);
+        
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'channel-delete-btn';
+        deleteBtn.title = 'حذف القناة';
+        deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+        deleteBtn.onclick = (event) => this.deleteChannel(channel.id, event);
+        
+        channelActions.appendChild(editBtn);
+        channelActions.appendChild(deleteBtn);
+        
+        card.appendChild(img);
+        card.appendChild(channelInfo);
+        card.appendChild(playOverlay);
+        card.appendChild(favoriteBtn);
+        card.appendChild(channelActions);
 
         card.addEventListener('click', () => this.playChannel(channel));
         return card;

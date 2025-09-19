@@ -3299,6 +3299,35 @@ body[data-theme="light"] .password-input-wrapper input::placeholder {
     gap: 8px;
 }
 
+.reset-session-btn {
+    background: linear-gradient(45deg, #17a2b8, #138496);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.reset-session-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(23, 162, 184, 0.4);
+}
+
+/* Light theme for reset session button */
+body[data-theme="light"] .reset-session-btn {
+    background: linear-gradient(45deg, #17a2b8, #138496);
+}
+
+body[data-theme="light"] .reset-session-btn:hover {
+    box-shadow: 0 6px 20px rgba(23, 162, 184, 0.3);
+}
+
 .logout-btn {
     background: linear-gradient(45deg, #ef4444, #dc2626);
     color: white;

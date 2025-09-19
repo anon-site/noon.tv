@@ -102,7 +102,8 @@
                         <span class="theme-slider"></span>
                     </label>
                     
-                    <button class="sidebar-toggle-btn desktop-only" onclick="app.toggleSidebar()">
+                    <button class="sidebar-toggle-btn desktop-only" onclick="app.toggleSidebar()" 
+                            aria-label="فتح/إغلاق القائمة الجانبية" tabindex="0">
                         <i class="fas fa-bars"></i>
                     </button>
                 </div>
@@ -679,6 +680,9 @@
             <div class="modal-header">
                 <h3>لوحة التحكم - مزود الخدمة</h3>
                 <div class="admin-header-actions">
+                    <button class="reset-session-btn" onclick="app.resetSession()" title="إعادة تعيين الجلسة">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
                     <button class="logout-btn" onclick="app.logoutFromAdmin()" title="تسجيل الخروج من مزود الخدمة">
                         <i class="fas fa-sign-out-alt"></i>
                     </button>
