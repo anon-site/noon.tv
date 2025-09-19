@@ -8357,46 +8357,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeMobileBottomNav();
 });
 
-// Helper function to validate JSON and provide detailed error information
-function validateJSON(jsonString, context = '') {
-    try {
-        const parsed = JSON.parse(jsonString);
-        return { valid: true, data: parsed, error: null };
-    } catch (error) {
-        let detailedError = {
-            message: error.message,
-            position: null,
-            context: '',
-            suggestion: ''
-        };
-        
-        // Extract position if available
-        const positionMatch = error.message.match(/position (\d+)/);
-        if (positionMatch) {
-            detailedError.position = parseInt(positionMatch[1]);
-            
-            // Get context around the error
-            const start = Math.max(0, detailedError.position - 100);
-            const end = Math.min(jsonString.length, detailedError.position + 100);
-            detailedError.context = jsonString.substring(start, end);
-            
-            // Try to identify the issue
-            const charAtError = jsonString[detailedError.position];
-            if (charAtError === "'") {
-                detailedError.suggestion = 'يبدو أن هناك اقتباس مفرد بدلاً من اقتباس مزدوج';
-            } else if (charAtError === ',') {
-                detailedError.suggestion = 'يبدو أن هناك فاصلة زائدة أو مفقودة';
-            } else if (charAtError === '{' || charAtError === '}') {
-                detailedError.suggestion = 'يبدو أن هناك مشكلة في الأقواس المتعرجة';
-            } else if (charAtError === '[' || charAtError === ']') {
-                detailedError.suggestion = 'يبدو أن هناك مشكلة في الأقواس المربعة';
-            }
-        }
-        
-        return { valid: false, data: null, error: detailedError };
-    }
-}
-
 // Update Channels Function
 async function updateChannels() {
     if (!window.app) {
@@ -8405,6 +8365,7 @@ async function updateChannels() {
     }
 
     try {
+<<<<<<< HEAD
         console.log('🔄 بدء تحديث القنوات...');
         
         // Fetch channels from GitHub with timeout and retry logic
@@ -8475,37 +8436,19 @@ async function updateChannels() {
                 throw new Error(`فشل في جلب البيانات من جميع المصادر. آخر خطأ: ${lastError?.message || 'غير معروف'}`);
             }
         }
+=======
+        // Fetch channels from GitHub
+        const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json');
+>>>>>>> parent of 4297761 (نفل زر الكوكيز)
         
         if (!response.ok) {
-            throw new Error(`خطأ في جلب البيانات: ${response.status} ${response.statusText}`);
+            throw new Error(`خطأ في جلب البيانات: ${response.status}`);
         }
         
-        // Get response text first to debug
-        const responseText = await response.text();
-        console.log('📥 تم جلب البيانات من GitHub، حجم البيانات:', responseText.length, 'حرف');
-        
-        // Validate JSON before parsing
-        const validation = validateJSON(responseText, 'GitHub channels data');
-        
-        if (!validation.valid) {
-            console.error('❌ خطأ في تحليل JSON:');
-            console.error('الرسالة:', validation.error.message);
-            console.error('الموضع:', validation.error.position);
-            console.error('السياق:', validation.error.context);
-            if (validation.error.suggestion) {
-                console.error('الاقتراح:', validation.error.suggestion);
-            }
-            
-            throw new Error(`خطأ في تنسيق JSON: ${validation.error.message}`);
-        }
-        
-        const data = validation.data;
-        
-        if (!data || typeof data !== 'object') {
-            throw new Error('البيانات المستلمة ليست كائن صحيح');
-        }
+        const data = await response.json();
         
         if (!data.channels || !Array.isArray(data.channels)) {
+<<<<<<< HEAD
             throw new Error('تنسيق البيانات غير صحيح - لا توجد قنوات في البيانات');
         }
         
@@ -8560,6 +8503,9 @@ async function updateChannels() {
         if (invalidChannels.length > 0) {
             console.warn('⚠️ تم العثور على قنوات غير صحيحة:', invalidChannels.length);
             console.warn('القنوات غير الصحيحة:', invalidChannels);
+=======
+            throw new Error('تنسيق البيانات غير صحيح');
+>>>>>>> parent of 4297761 (نفل زر الكوكيز)
         }
         
         // Update channels in the app
@@ -8656,11 +8602,13 @@ async function updateChannels() {
         
         // Log confirmation that data was saved
         console.log('✅ تم حفظ القنوات المحدثة في localStorage بنجاح');
-        console.log('✅ تم تحديث القنوات بنجاح:', data.channels.length, 'قناة');
+        
+        console.log('تم تحديث القنوات بنجاح:', data.channels.length, 'قناة');
         
     } catch (error) {
-        console.error('❌ خطأ في تحديث القنوات:', error);
+        console.error('خطأ في تحديث القنوات:', error);
         
+<<<<<<< HEAD
         // Show detailed error notification with specific guidance
         let errorMessage = 'فشل في تحديث القنوات';
         let errorDetails = '';
@@ -8731,6 +8679,10 @@ async function updateChannels() {
             
             window.app.notifyInfo(helpMessage, 'مساعدة في حل المشكلة', 15000);
         }, 2000);
+=======
+        // Show error notification
+        window.app.notifyError(`فشل في تحديث القنوات: ${error.message}`, 5000);
+>>>>>>> parent of 4297761 (نفل زر الكوكيز)
     }
 }
 
