@@ -2966,17 +2966,19 @@ class ArabicTVApp {
             const data = await this.downloadFromRepository();
             
             if (data) {
-                // Compare versions and merge data
-                const shouldUpdate = this.shouldUpdateFromRemote(data);
+                // مقارنة البيانات وتحديد ما إذا كان هناك تغييرات مهمة
+                const hasSignificantChanges = this.hasSignificantRemoteChanges(data);
                 
-                if (shouldUpdate) {
+                if (hasSignificantChanges) {
+                    console.log('🔄 تم اكتشاف تغييرات مهمة في السحابة - بدء الدمج الذكي');
                     await this.mergeRemoteData(data);
                     this.remoteStorage.lastSync = new Date().toISOString();
                     this.saveRemoteStorageSettings();
-                    this.notifySuccess('تم تحديث البيانات من المستودع!');
                     return true;
                 } else {
-                    console.log('البيانات المحلية أحدث من المستودع');
+                    console.log('✅ البيانات المحلية والسحابية متطابقة - لا حاجة للتحديث');
+                    this.remoteStorage.lastSync = new Date().toISOString();
+                    this.saveRemoteStorageSettings();
                     return false;
                 }
             } else {
@@ -3241,6 +3243,38 @@ class ArabicTVApp {
         return remoteTime > localTime;
     }
 
+    // دالة للتحقق من وجود تغييرات مهمة في السحابة
+    hasSignificantRemoteChanges(remoteData) {
+        if (!remoteData.channels || !Array.isArray(remoteData.channels)) {
+            return false;
+        }
+
+        const localChannelIds = new Set(this.channels.map(ch => ch.id));
+        const remoteChannelIds = new Set(remoteData.channels.map(ch => ch.id));
+        
+        // التحقق من القنوات الجديدة في السحابة
+        const newRemoteChannels = remoteData.channels.filter(ch => !localChannelIds.has(ch.id));
+        
+        // التحقق من القنوات المحذوفة من السحابة
+        const removedFromRemote = this.channels.filter(ch => !remoteChannelIds.has(ch.id));
+        
+        // التحقق من القنوات المعدلة
+        const modifiedChannels = remoteData.channels.filter(remoteChannel => {
+            const localChannel = this.channels.find(ch => ch.id === remoteChannel.id);
+            return localChannel && JSON.stringify(localChannel) !== JSON.stringify(remoteChannel);
+        });
+
+        const hasChanges = newRemoteChannels.length > 0 || removedFromRemote.length > 0 || modifiedChannels.length > 0;
+        
+        console.log(`🔍 فحص التغييرات في السحابة:`);
+        console.log(`- قنوات جديدة في السحابة: ${newRemoteChannels.length}`);
+        console.log(`- قنوات محذوفة من السحابة: ${removedFromRemote.length}`);
+        console.log(`- قنوات معدلة: ${modifiedChannels.length}`);
+        console.log(`- يوجد تغييرات مهمة: ${hasChanges}`);
+
+        return hasChanges;
+    }
+
     async mergeRemoteData(remoteData) {
         // Check for conflicts
         const hasConflicts = await this.detectConflicts(remoteData);
@@ -3257,11 +3291,35 @@ class ArabicTVApp {
         };
 
         try {
-            // Update channels
+            // دمج القنوات بذكاء بدلاً من الاستبدال المباشر
             if (remoteData.channels && Array.isArray(remoteData.channels)) {
-                this.channels = remoteData.channels;
+                const mergedChannels = this.mergeChannels(this.channels, remoteData.channels);
+                this.channels = mergedChannels;
                 this.filteredChannels = [...this.channels];
                 this.saveChannelsToStorage();
+                
+                // إظهار تقرير عن الدمج
+                const localChannelIds = new Set(this.channels.map(ch => ch.id));
+                const remoteChannelIds = new Set(remoteData.channels.map(ch => ch.id));
+                const addedFromRemote = remoteData.channels.filter(ch => !localChannelIds.has(ch.id));
+                const localOnly = this.channels.filter(ch => !remoteChannelIds.has(ch.id));
+                
+                console.log(`📊 دمج القنوات:`);
+                console.log(`- القنوات المحلية: ${this.channels.length}`);
+                console.log(`- القنوات من السحابة: ${remoteData.channels.length}`);
+                console.log(`- القنوات المضافة من السحابة: ${addedFromRemote.length}`);
+                console.log(`- القنوات المحلية فقط: ${localOnly.length}`);
+                
+                if (addedFromRemote.length > 0 || localOnly.length > 0) {
+                    let message = `تم دمج القنوات بنجاح! العدد الإجمالي: ${this.channels.length}`;
+                    if (addedFromRemote.length > 0) {
+                        message += `\nتم إضافة ${addedFromRemote.length} قناة من السحابة`;
+                    }
+                    if (localOnly.length > 0) {
+                        message += `\nتم الاحتفاظ بـ ${localOnly.length} قناة محلية`;
+                    }
+                    this.notifySuccess(message, 'دمج مكتمل', 5000);
+                }
             }
 
             // Update favorites
@@ -3475,14 +3533,29 @@ class ArabicTVApp {
     mergeChannels(localChannels, remoteChannels) {
         const merged = [...localChannels];
         const localIds = new Set(localChannels.map(ch => ch.id));
+        const localChannelsMap = new Map(localChannels.map(ch => [ch.id, ch]));
 
-        // Add remote channels that don't exist locally
+        // معالجة القنوات من السحابة
         remoteChannels.forEach(remoteChannel => {
             if (!localIds.has(remoteChannel.id)) {
+                // قناة جديدة من السحابة - إضافتها
                 merged.push(remoteChannel);
+                console.log(`➕ إضافة قناة جديدة من السحابة: ${remoteChannel.name}`);
+            } else {
+                // قناة موجودة محلياً - مقارنة المحتوى
+                const localChannel = localChannelsMap.get(remoteChannel.id);
+                if (JSON.stringify(localChannel) !== JSON.stringify(remoteChannel)) {
+                    // القناة معدلة في السحابة - تحديثها
+                    const index = merged.findIndex(ch => ch.id === remoteChannel.id);
+                    if (index !== -1) {
+                        merged[index] = remoteChannel;
+                        console.log(`🔄 تحديث قناة من السحابة: ${remoteChannel.name}`);
+                    }
+                }
             }
         });
 
+        console.log(`📊 نتيجة الدمج: ${merged.length} قناة إجمالية`);
         return merged;
     }
 
