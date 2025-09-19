@@ -90,6 +90,11 @@ class ArabicTVApp {
             this.renderChannels();
         }, 100);
         this.bindEvents();
+        
+        // فحص حالة التخزين للتأكد من سلامة البيانات
+        setTimeout(() => {
+            this.checkStorageHealth();
+        }, 500);
         this.bindRemoteStorageEvents();
         
         // Check for updates after a short delay
@@ -145,11 +150,25 @@ class ArabicTVApp {
             }
             const data = await response.json();
             
-            // لا نحمل القنوات من JSON file - نبدأ بقائمة فارغة
-            console.log('تم تخطي تحميل القنوات من channels.json - سيتم البدء بقائمة فارغة');
+            // تحميل القنوات من JSON file كبديل إذا لم توجد في localStorage
+            if (data.channels && Array.isArray(data.channels) && data.channels.length > 0) {
+                this.channels = data.channels;
+                this.filteredChannels = [...data.channels];
+                console.log('تم تحميل القنوات من channels.json:', this.channels.length, 'قناة');
+                
+                // حفظ القنوات في localStorage لضمان عدم فقدانها
+                this.saveChannelsToStorage();
+            } else {
+                console.log('لا توجد قنوات في channels.json - سيتم البدء بقائمة فارغة');
+            }
             
-            // لا نحمل الفئات من JSON file - يجب أن تأتي من localStorage
-            console.log('تم تخطي تحميل الفئات من channels.json - سيتم تحميلها من localStorage');
+            // تحميل الفئات من JSON file إذا لم توجد في localStorage
+            if (data.categories && Array.isArray(data.categories) && data.categories.length > 0) {
+                this.categories = data.categories;
+                console.log('تم تحميل الفئات من channels.json:', this.categories.length, 'فئة');
+            } else {
+                console.log('لا توجد فئات في channels.json - سيتم استخدام الفئات الافتراضية');
+            }
             
             // Load settings from JSON file
             if (data.settings && typeof data.settings === 'object') {
@@ -188,6 +207,39 @@ class ArabicTVApp {
             console.error('❌ خطأ في Local Storage:', error);
             alert('تحذير: لا يمكن حفظ الإعدادات! قد يكون المتصفح في وضع الخصوصية أو مساحة التخزين ممتلئة.');
             return false;
+        }
+    }
+
+    // دالة لفحص حالة التخزين والتأكد من وجود القنوات
+    checkStorageHealth() {
+        try {
+            const savedChannels = localStorage.getItem('arabicTVChannels');
+            const backupChannels = localStorage.getItem('channels_backup');
+            
+            console.log('🔍 فحص حالة التخزين:');
+            console.log('- القنوات المحفوظة:', savedChannels ? 'موجودة' : 'غير موجودة');
+            console.log('- النسخة الاحتياطية:', backupChannels ? 'موجودة' : 'غير موجودة');
+            
+            if (savedChannels) {
+                const channels = JSON.parse(savedChannels);
+                console.log('- عدد القنوات المحفوظة:', channels.length);
+            }
+            
+            if (backupChannels) {
+                const backup = JSON.parse(backupChannels);
+                console.log('- عدد القنوات في النسخة الاحتياطية:', backup.count);
+                console.log('- تاريخ النسخة الاحتياطية:', backup.timestamp);
+            }
+            
+            return {
+                hasMainChannels: !!savedChannels,
+                hasBackup: !!backupChannels,
+                mainCount: savedChannels ? JSON.parse(savedChannels).length : 0,
+                backupCount: backupChannels ? JSON.parse(backupChannels).count : 0
+            };
+        } catch (error) {
+            console.error('❌ خطأ في فحص حالة التخزين:', error);
+            return { hasMainChannels: false, hasBackup: false, mainCount: 0, backupCount: 0 };
         }
     }
 
@@ -2688,6 +2740,16 @@ class ArabicTVApp {
             console.log('تم حفظ القنوات بنجاح:', this.channels.length, 'قناة');
             console.log('بيانات القنوات المحفوظة:', this.channels);
             
+            // إنشاء نسخة احتياطية تلقائياً
+            const backupData = {
+                channels: this.channels,
+                timestamp: new Date().toISOString(),
+                count: this.channels.length,
+                source: 'auto_backup'
+            };
+            localStorage.setItem('channels_backup', JSON.stringify(backupData));
+            console.log('تم إنشاء نسخة احتياطية تلقائية');
+            
             // تحقق من نجاح الحفظ
             const verifyChannels = localStorage.getItem('arabicTVChannels');
             if (verifyChannels === channelsData) {
@@ -2723,6 +2785,7 @@ class ArabicTVApp {
                 const parsedChannels = JSON.parse(savedChannels);
                 if (parsedChannels && parsedChannels.length > 0) {
                     this.channels = parsedChannels;
+                    this.filteredChannels = [...parsedChannels];
                     console.log('تم تحميل القنوات المحفوظة:', this.channels.length, 'قناة');
                     // تحديث عداد القنوات
                     this.updateSidebarCounts();
@@ -2730,9 +2793,29 @@ class ArabicTVApp {
                 }
             }
             
-            // إذا لم توجد قنوات محفوظة، ابدأ بقائمة فارغة
-            console.log('لا توجد قنوات محفوظة، سيتم البدء بقائمة فارغة');
+            // إذا لم توجد قنوات محفوظة، تحقق من النسخة الاحتياطية
+            const backupChannels = localStorage.getItem('channels_backup');
+            if (backupChannels) {
+                try {
+                    const backupData = JSON.parse(backupChannels);
+                    if (backupData.channels && Array.isArray(backupData.channels) && backupData.channels.length > 0) {
+                        this.channels = backupData.channels;
+                        this.filteredChannels = [...backupData.channels];
+                        console.log('تم استعادة القنوات من النسخة الاحتياطية:', this.channels.length, 'قناة');
+                        // حفظ النسخة الاحتياطية كقنوات رئيسية
+                        this.saveChannelsToStorage();
+                        this.updateSidebarCounts();
+                        return;
+                    }
+                } catch (backupError) {
+                    console.error('خطأ في تحليل النسخة الاحتياطية:', backupError);
+                }
+            }
+            
+            // إذا لم توجد قنوات محفوظة أو نسخة احتياطية، ابدأ بقائمة فارغة
+            console.log('لا توجد قنوات محفوظة أو نسخة احتياطية، سيتم البدء بقائمة فارغة');
             this.channels = [];
+            this.filteredChannels = [];
             // تحديث عداد القنوات
             this.updateSidebarCounts();
         
@@ -2740,6 +2823,7 @@ class ArabicTVApp {
             console.error('خطأ في تحميل القنوات المحفوظة:', error);
             console.log('سيتم البدء بقائمة فارغة');
             this.channels = [];
+            this.filteredChannels = [];
             // تحديث عداد القنوات
             this.updateSidebarCounts();
         }
