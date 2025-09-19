@@ -654,7 +654,13 @@
     "animationsEnabled": false,
     "compactMode": true,
     "highContrast": false,
-    "borderRadius": "rounded"
+    "borderRadius": "rounded",
+    "enableTranslation": true,
+    "translationSpeed": "normal",
+    "translationAccuracy": "medium",
+    "translationPosition": "bottom",
+    "translationSize": "medium",
+    "translationOpacity": 0.8
   },
   "categories": [
     {
@@ -704,6 +710,32 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-18T14:09:47.187Z",
+  "deletedChannels": [
+    {
+      "id": 93,
+      "name": "African Wildlife",
+      "url": "https://www.youtube.com/watch?v=p8wt6jUjgB4",
+      "logo": "https://static.vecteezy.com/system/resources/previews/047/493/607/non_2x/a-collection-of-different-animals-free-png.png",
+      "category": "entertainment",
+      "country": "عالمية",
+      "type": "youtube",
+      "status": "active",
+      "deletedAt": "2025-09-19T20:32:59.122Z",
+      "deletedBy": "local"
+    },
+    {
+      "id": 92,
+      "name": "مستر بين",
+      "url": "https://www.youtube.com/watch?v=amzgpxDsJjQ",
+      "logo": "https://www.pngplay.com/wp-content/uploads/12/Mr.-Bean-Transparent-Clip-Art-Background.png",
+      "category": "entertainment",
+      "country": "عالمية",
+      "type": "youtube",
+      "status": "active",
+      "deletedAt": "2025-09-19T20:33:01.559Z",
+      "deletedBy": "local"
+    }
+  ],
+  "lastModified": "2025-09-19T22:23:06.340Z",
   "version": "1.0"
 }
