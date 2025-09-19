@@ -693,7 +693,7 @@
       "id": 95,
       "name": "Guitar Music",
       "url": "https://www.youtube.com/watch?v=BPcUxivZHuU",
-      "logo": "https://static.vecteezy.com/system/resources/thumbnails/055/155/574/small/radio-podcast-live-png.png",
+      "logo": "https://cdn1.iconfinder.com/data/icons/games-and-fun-1/100/games_and_fun_guitar-4-512.png",
       "category": "music",
       "country": "عالمية",
       "type": "youtube",
@@ -787,11 +787,6 @@
       "key": "kids",
       "name": "أطفال",
       "icon": "fas fa-child"
-    },
-    {
-      "key": "series",
-      "name": "مسلسلات",
-      "icon": "fas fa-tv"
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
@@ -821,6 +816,6 @@
       "deletedBy": "local"
     }
   ],
-  "lastModified": "2025-09-19T21:12:51.867Z",
+  "lastModified": "2025-09-19T21:24:05.575Z",
   "version": "1.0"
 }
