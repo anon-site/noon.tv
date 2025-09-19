@@ -718,6 +718,16 @@
       "country": "Spain",
       "type": "hls",
       "status": "active"
+    },
+    {
+      "id": 102,
+      "name": "السنافر",
+      "url": "https://www.youtube.com/watch?v=ZtlLvu8H1OY",
+      "logo": "https://smurfs.do.am/img/logo/logo.png",
+      "category": "kids",
+      "country": "قطر",
+      "type": "youtube",
+      "status": "active"
     }
   ],
   "favorites": [],
@@ -799,6 +809,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-20T02:33:19.238Z",
+  "lastModified": "2025-09-20T02:34:42.635Z",
   "version": "1.0"
 }
