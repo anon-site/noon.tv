@@ -734,7 +734,13 @@
     "animationsEnabled": false,
     "compactMode": true,
     "highContrast": false,
-    "borderRadius": "rounded"
+    "borderRadius": "rounded",
+    "enableTranslation": true,
+    "translationSpeed": "normal",
+    "translationAccuracy": "medium",
+    "translationPosition": "bottom",
+    "translationSize": "medium",
+    "translationOpacity": 0.8
   },
   "categories": [
     {
@@ -799,7 +805,7 @@
       "country": "عالمية",
       "type": "youtube",
       "status": "active",
-      "deletedAt": "2025-09-19T20:44:50.152Z",
+      "deletedAt": "2025-09-19T20:32:59.122Z",
       "deletedBy": "local"
     },
     {
@@ -811,10 +817,10 @@
       "country": "عالمية",
       "type": "youtube",
       "status": "active",
-      "deletedAt": "2025-09-19T20:44:52.902Z",
+      "deletedAt": "2025-09-19T20:33:01.559Z",
       "deletedBy": "local"
     }
   ],
-  "lastModified": "2025-09-19T20:44:59.966Z",
+  "lastModified": "2025-09-19T21:08:24.876Z",
   "version": "1.0"
 }
