@@ -651,11 +651,11 @@
     },
     {
       "id": 95,
-      "name": "Guitar Music",
+      "name": "Spanish Guitar",
       "url": "https://www.youtube.com/watch?v=BPcUxivZHuU",
-      "logo": "https://cdn1.iconfinder.com/data/icons/games-and-fun-1/100/games_and_fun_guitar-4-512.png",
+      "logo": "https://iili.io/K7EBEHg.png",
       "category": "music",
-      "country": "عالمية",
+      "country": "Spain",
       "type": "youtube",
       "status": "active"
     },
@@ -677,6 +677,16 @@
       "category": "news",
       "country": "USA",
       "type": "hls",
+      "status": "active"
+    },
+    {
+      "id": 98,
+      "name": "Classical Guitar",
+      "url": "https://www.youtube.com/watch?v=mLVBNUG5gP4",
+      "logo": "https://cdn1.iconfinder.com/data/icons/games-and-fun-1/100/games_and_fun_guitar-4-512.png",
+      "category": "music",
+      "country": "Spain",
+      "type": "youtube",
       "status": "active"
     }
   ],
@@ -750,6 +760,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-19T23:08:13.012Z",
+  "lastModified": "2025-09-19T23:18:10.891Z",
   "version": "1.0"
 }
