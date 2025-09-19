@@ -680,26 +680,6 @@
       "status": "active"
     },
     {
-      "id": 92,
-      "name": "مستر بين",
-      "url": "https://www.youtube.com/watch?v=amzgpxDsJjQ",
-      "logo": "https://www.pngplay.com/wp-content/uploads/12/Mr.-Bean-Transparent-Clip-Art-Background.png",
-      "category": "entertainment",
-      "country": "عالمية",
-      "type": "youtube",
-      "status": "active"
-    },
-    {
-      "id": 93,
-      "name": "African Wildlife",
-      "url": "https://www.youtube.com/watch?v=p8wt6jUjgB4",
-      "logo": "https://static.vecteezy.com/system/resources/previews/047/493/607/non_2x/a-collection-of-different-animals-free-png.png",
-      "category": "entertainment",
-      "country": "عالمية",
-      "type": "youtube",
-      "status": "active"
-    },
-    {
       "id": 94,
       "name": "Wildlife",
       "url": "https://www.youtube.com/watch?v=daqB3i9WYIY",
@@ -738,6 +718,26 @@
       "country": "USA",
       "type": "hls",
       "status": "active"
+    },
+    {
+      "id": 92,
+      "name": "مستر بين",
+      "url": "https://www.youtube.com/watch?v=amzgpxDsJjQ",
+      "logo": "https://www.pngplay.com/wp-content/uploads/12/Mr.-Bean-Transparent-Clip-Art-Background.png",
+      "category": "entertainment",
+      "country": "عالمية",
+      "type": "youtube",
+      "status": "active"
+    },
+    {
+      "id": 93,
+      "name": "African Wildlife",
+      "url": "https://www.youtube.com/watch?v=p8wt6jUjgB4",
+      "logo": "https://static.vecteezy.com/system/resources/previews/047/493/607/non_2x/a-collection-of-different-animals-free-png.png",
+      "category": "entertainment",
+      "country": "عالمية",
+      "type": "youtube",
+      "status": "active"
     }
   ],
   "favorites": [],
@@ -754,7 +754,13 @@
     "animationsEnabled": false,
     "compactMode": true,
     "highContrast": false,
-    "borderRadius": "rounded"
+    "borderRadius": "rounded",
+    "enableTranslation": true,
+    "translationSpeed": "normal",
+    "translationAccuracy": "medium",
+    "translationPosition": "bottom",
+    "translationSize": "medium",
+    "translationOpacity": 0.8
   },
   "categories": [
     {
@@ -809,6 +815,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-19T20:24:36.096Z",
+  "lastModified": "2025-09-19T20:29:25.803Z",
   "version": "1.0"
 }
