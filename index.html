@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.youtube.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; media-src 'self' https: blob:; connect-src 'self' https: wss:; frame-src 'self' https://www.youtube.com https://youtube.com; child-src 'self' https://www.youtube.com https://youtube.com; object-src 'none'; base-uri 'self'; form-action 'self';">
     
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+    
     <!-- PWA Meta Tags -->
     <meta name="application-name" content="ANON TV">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -631,6 +638,10 @@
               </div>
               <h3>تسجيل الدخول</h3>
               <p>أدخل كلمة المرور للوصول إلى لوحة التحكم - مزود الخدمة</p>
+              <div class="security-warning" style="background: #ff6b6b; color: white; padding: 10px; border-radius: 5px; margin: 10px 0; font-size: 0.9rem;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>تحذير أمني:</strong> يرجى تغيير كلمة المرور الافتراضية فوراً من إعدادات الأمان
+              </div>
           </div>
           <div class="login-form">
               <div class="input-group">
@@ -1348,17 +1359,27 @@
 
     <!-- HLS.js Library for video streaming -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    
+    <!-- bcrypt Library for advanced password hashing -->
+    <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
     <script>
-        // Check if HLS.js loaded successfully
+        // Check if security libraries loaded successfully
         window.addEventListener('load', function() {
+            // Check HLS.js
             if (typeof Hls === 'undefined') {
                 console.error('❌ فشل في تحميل مكتبة HLS.js');
-                // Show notification to user
                 if (window.app && window.app.notifyError) {
                     window.app.notifyError('فشل في تحميل مكتبة تشغيل الفيديو - تحقق من اتصال الإنترنت');
                 }
             } else {
                 console.log('✅ تم تحميل مكتبة HLS.js بنجاح');
+            }
+            
+            // Check bcrypt
+            if (typeof bcrypt === 'undefined') {
+                console.warn('⚠️ فشل في تحميل مكتبة bcrypt - سيتم استخدام SHA-256 كبديل');
+            } else {
+                console.log('✅ تم تحميل مكتبة bcrypt بنجاح');
             }
         });
 

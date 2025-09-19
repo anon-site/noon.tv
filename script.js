@@ -13,6 +13,21 @@ class ArabicTVApp {
         // كلمة المرور مشفرة بـ SHA-256 Hash (أكثر أماناً)
         // قراءة كلمة المرور من localStorage أو استخدام الافتراضية
         this.adminPassword = localStorage.getItem('anon_tv_admin_password') || '3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657'; // كلمة مرور @admin123 مشفرة بـ SHA-256
+        
+        // نظام حماية متقدم من هجمات Brute Force
+        this.loginAttempts = JSON.parse(localStorage.getItem('anon_tv_login_attempts')) || {
+            count: 0,
+            lastAttempt: 0,
+            lockoutUntil: 0
+        };
+        this.maxLoginAttempts = 5;
+        this.lockoutDuration = 15 * 60 * 1000; // 15 دقيقة
+        this.sessionTimeout = 30 * 60 * 1000; // 30 دقيقة
+        this.lastActivity = Date.now();
+        
+        // نظام حماية الجلسات المتقدم
+        this.sessionToken = this.generateSessionToken();
+        this.maxConcurrentSessions = 1; // جلسة واحدة فقط
         this.settings = {
             autoQuality: true,
             autoplay: true,
@@ -1496,31 +1511,110 @@ class ArabicTVApp {
     }
 
     // دالة لتشفير كلمة المرور باستخدام SHA-256
+    // دالة تشفير كلمة المرور باستخدام bcrypt (أكثر أماناً)
     async hashPassword(password) {
-        const encoder = new TextEncoder();
-        const data = encoder.encode(password);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        try {
+            // استخدام bcrypt إذا كان متاحاً
+            if (typeof bcrypt !== 'undefined') {
+                return await new Promise((resolve, reject) => {
+                    bcrypt.hash(password, 12, (err, hash) => {
+                        if (err) reject(err);
+                        else resolve(hash);
+                    });
+                });
+            } else {
+                // العودة إلى SHA-256 كبديل
+                console.warn('bcrypt غير متاح، استخدام SHA-256');
+                const encoder = new TextEncoder();
+                const data = encoder.encode(password);
+                const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            }
+        } catch (error) {
+            console.error('خطأ في تشفير كلمة المرور:', error);
+            throw error;
+        }
     }
 
-    // دالة للتحقق من صحة كلمة المرور
+    // دالة للتحقق من كلمة المرور باستخدام bcrypt
+    async verifyPassword(password, hash) {
+        try {
+            // استخدام bcrypt إذا كان متاحاً
+            if (typeof bcrypt !== 'undefined') {
+                return await new Promise((resolve, reject) => {
+                    bcrypt.compare(password, hash, (err, result) => {
+                        if (err) reject(err);
+                        else resolve(result);
+                    });
+                });
+            } else {
+                // العودة إلى SHA-256 كبديل
+                const hashedPassword = await this.hashPassword(password);
+                return hashedPassword === hash;
+            }
+        } catch (error) {
+            console.error('خطأ في التحقق من كلمة المرور:', error);
+            return false;
+        }
+    }
+
+    // دالة للتحقق من صحة كلمة المرور (محسنة)
     validatePassword(password) {
         // تنظيف المدخل من المسافات الزائدة
         password = password.trim();
         
-        // التحقق من الطول (8-50 حرف)
-        if (password.length < 8 || password.length > 50) {
+        // التحقق من الطول (8-128 حرف)
+        if (password.length < 8 || password.length > 128) {
             return false;
         }
         
-        // التحقق من عدم احتواء رموز خطيرة
-        const dangerousChars = /[<>'"&]/;
+        // التحقق من عدم احتواء رموز خطيرة أو أحرف خاصة غير مرغوبة
+        const dangerousChars = /[<>'"&\\]/;
         if (dangerousChars.test(password)) {
             return false;
         }
         
+        // التحقق من عدم احتواء مسافات في البداية أو النهاية
+        if (password !== password.trim()) {
+            return false;
+        }
+        
+        // التحقق من عدم احتواء أحرف التحكم
+        const controlChars = /[\x00-\x1F\x7F]/;
+        if (controlChars.test(password)) {
+            return false;
+        }
+        
         return true;
+    }
+
+    // دالة للتحقق من صحة المدخلات العامة
+    sanitizeInput(input) {
+        if (typeof input !== 'string') {
+            return '';
+        }
+        
+        // إزالة الأحرف الخطيرة
+        return input
+            .replace(/[<>'"&\\]/g, '')
+            .replace(/[\x00-\x1F\x7F]/g, '')
+            .trim();
+    }
+
+    // دالة للتحقق من صحة URL
+    validateURL(url) {
+        try {
+            const urlObj = new URL(url);
+            // التحقق من البروتوكولات المسموحة
+            const allowedProtocols = ['http:', 'https:', 'rtmp:', 'rtmps:'];
+            if (!allowedProtocols.includes(urlObj.protocol)) {
+                return false;
+            }
+            return true;
+        } catch (error) {
+            return false;
+        }
     }
 
     // دالة لتقييم قوة كلمة المرور
@@ -1672,8 +1766,8 @@ class ArabicTVApp {
         const confirmPassword = document.getElementById('confirmPassword').value;
         
         // التحقق من كلمة المرور الحالية
-        const currentHashedPassword = await this.hashPassword(currentPassword);
-        if (currentHashedPassword !== this.adminPassword) {
+        const isValidCurrentPassword = await this.verifyPassword(currentPassword, this.adminPassword);
+        if (!isValidCurrentPassword) {
             this.notifyError('كلمة المرور الحالية غير صحيحة');
             return;
         }
@@ -1849,46 +1943,228 @@ class ArabicTVApp {
         sessionStatus.textContent = this.isLoggedIn ? 'نشطة' : 'غير نشطة';
     }
 
+    // دالة للتحقق من حالة الحظر
+    isAccountLocked() {
+        const now = Date.now();
+        if (this.loginAttempts.lockoutUntil > now) {
+            return true;
+        }
+        return false;
+    }
+
+    // دالة لحساب الوقت المتبقي للحظر
+    getRemainingLockoutTime() {
+        const now = Date.now();
+        const remaining = this.loginAttempts.lockoutUntil - now;
+        if (remaining > 0) {
+            const minutes = Math.ceil(remaining / (1000 * 60));
+            return minutes;
+        }
+        return 0;
+    }
+
+    // دالة لتسجيل محاولة دخول فاشلة
+    recordFailedLoginAttempt() {
+        const now = Date.now();
+        this.loginAttempts.count++;
+        this.loginAttempts.lastAttempt = now;
+        
+        // إذا تجاوز عدد المحاولات الحد المسموح
+        if (this.loginAttempts.count >= this.maxLoginAttempts) {
+            this.loginAttempts.lockoutUntil = now + this.lockoutDuration;
+            this.notifyError(`تم حظر الحساب لمدة ${this.lockoutDuration / (1000 * 60)} دقيقة بسبب محاولات دخول متعددة فاشلة`);
+        }
+        
+        localStorage.setItem('anon_tv_login_attempts', JSON.stringify(this.loginAttempts));
+    }
+
+    // دالة لإعادة تعيين محاولات الدخول عند النجاح
+    resetLoginAttempts() {
+        this.loginAttempts = {
+            count: 0,
+            lastAttempt: 0,
+            lockoutUntil: 0
+        };
+        localStorage.setItem('anon_tv_login_attempts', JSON.stringify(this.loginAttempts));
+    }
+
+    // دالة للتحقق من انتهاء صلاحية الجلسة
+    isSessionExpired() {
+        const now = Date.now();
+        return (now - this.lastActivity) > this.sessionTimeout;
+    }
+
+    // دالة لتوليد رمز جلسة فريد
+    generateSessionToken() {
+        const timestamp = Date.now().toString(36);
+        const random = Math.random().toString(36).substring(2);
+        return `${timestamp}_${random}`;
+    }
+
+    // دالة للتحقق من صحة رمز الجلسة
+    validateSessionToken(token) {
+        return token === this.sessionToken;
+    }
+
+    // دالة لتحديث آخر نشاط
+    updateLastActivity() {
+        this.lastActivity = Date.now();
+        localStorage.setItem('anon_tv_last_activity', this.lastActivity.toString());
+        localStorage.setItem('anon_tv_session_token', this.sessionToken);
+    }
+
+    // دالة للتحقق من الجلسات المتعددة
+    checkConcurrentSessions() {
+        const savedToken = localStorage.getItem('anon_tv_session_token');
+        if (savedToken && savedToken !== this.sessionToken) {
+            // جلسة أخرى نشطة
+            this.forceLogout('تم اكتشاف جلسة أخرى نشطة');
+            return false;
+        }
+        return true;
+    }
+
     async loginToAdmin() {
         const password = document.getElementById('adminPassword').value;
         const errorElement = document.getElementById('loginError');
         
+        // التحقق من حالة الحظر
+        if (this.isAccountLocked()) {
+            const remainingTime = this.getRemainingLockoutTime();
+            errorElement.style.display = 'flex';
+            errorElement.querySelector('span').textContent = `الحساب محظور لمدة ${remainingTime} دقيقة أخرى`;
+            this.notifyError(`الحساب محظور لمدة ${remainingTime} دقيقة أخرى`);
+            return;
+        }
+        
         // التحقق من صحة كلمة المرور
         if (!this.validatePassword(password)) {
+            this.recordFailedLoginAttempt();
             errorElement.style.display = 'flex';
+            errorElement.querySelector('span').textContent = 'كلمة المرور غير صحيحة أو تحتوي على رموز غير مسموحة';
             document.getElementById('adminPassword').value = '';
             document.getElementById('adminPassword').focus();
             this.notifyError('كلمة المرور غير صحيحة أو تحتوي على رموز غير مسموحة');
             return;
         }
         
-        // تشفير كلمة المرور المدخلة ومقارنتها مع المخزنة
-        const hashedPassword = await this.hashPassword(password);
+        // التحقق من كلمة المرور باستخدام bcrypt
+        const isValidPassword = await this.verifyPassword(password, this.adminPassword);
         
-        // رسائل التشخيص (يمكن حذفها لاحقاً)
-        console.log('كلمة المرور المدخلة:', password);
-        console.log('كلمة المرور المشفرة:', hashedPassword);
-        console.log('كلمة المرور المخزنة:', this.adminPassword);
-        console.log('هل تتطابق؟', hashedPassword === this.adminPassword);
-        
-        if (hashedPassword === this.adminPassword) {
+        if (isValidPassword) {
+            // التحقق من الجلسات المتعددة
+            if (!this.checkConcurrentSessions()) {
+                return;
+            }
+            
+            // نجح تسجيل الدخول
             this.isLoggedIn = true;
+            this.resetLoginAttempts(); // إعادة تعيين محاولات الدخول
+            this.updateLastActivity(); // تحديث آخر نشاط
             this.saveLoginState(); // حفظ حالة تسجيل الدخول
             this.closeLoginModal();
             this.toggleChannelActions(true);
             this.toggleAdminBadge(true); // إظهار Admin badge
             this.openAdminPanel();
             this.notifySuccess('مرحباً بك في لوحة التحكم - مزود الخدمة');
+            
+            // بدء مراقبة انتهاء صلاحية الجلسة
+            this.startSessionMonitoring();
         } else {
+            // فشل تسجيل الدخول
+            this.recordFailedLoginAttempt();
             errorElement.style.display = 'flex';
+            errorElement.querySelector('span').textContent = 'كلمة المرور غير صحيحة';
             document.getElementById('adminPassword').value = '';
             document.getElementById('adminPassword').focus();
             this.notifyError('كلمة المرور غير صحيحة');
         }
     }
 
+    // دالة لبدء مراقبة انتهاء صلاحية الجلسة
+    startSessionMonitoring() {
+        // إيقاف المراقبة السابقة إن وجدت
+        if (this.sessionMonitor) {
+            clearInterval(this.sessionMonitor);
+        }
+        
+        // بدء مراقبة جديدة كل دقيقة
+        this.sessionMonitor = setInterval(() => {
+            if (this.isLoggedIn) {
+                // التحقق من انتهاء صلاحية الجلسة
+                if (this.isSessionExpired()) {
+                    this.forceLogout('انتهت صلاحية الجلسة بسبب عدم النشاط');
+                    return;
+                }
+                
+                // التحقق من صحة رمز الجلسة
+                const savedToken = localStorage.getItem('anon_tv_session_token');
+                if (!this.validateSessionToken(savedToken)) {
+                    this.forceLogout('تم اكتشاف تلاعب في رمز الجلسة');
+                    return;
+                }
+            }
+        }, 60000); // كل دقيقة
+        
+        // مراقبة النشاط على الصفحة
+        this.setupActivityMonitoring();
+    }
+
+    // دالة لإيقاف مراقبة الجلسة
+    stopSessionMonitoring() {
+        if (this.sessionMonitor) {
+            clearInterval(this.sessionMonitor);
+            this.sessionMonitor = null;
+        }
+    }
+
+    // دالة لمراقبة النشاط على الصفحة
+    setupActivityMonitoring() {
+        const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
+        
+        const updateActivity = () => {
+            if (this.isLoggedIn) {
+                this.updateLastActivity();
+            }
+        };
+        
+        // إزالة المستمعين السابقين
+        if (this.activityListeners) {
+            this.activityListeners.forEach(({ event, listener }) => {
+                document.removeEventListener(event, listener);
+            });
+        }
+        
+        // إضافة مستمعين جدد
+        this.activityListeners = events.map(event => {
+            const listener = updateActivity;
+            document.addEventListener(event, listener, true);
+            return { event, listener };
+        });
+    }
+
+    // دالة لتسجيل خروج إجباري
+    forceLogout(reason = 'انتهت صلاحية الجلسة') {
+        this.isLoggedIn = false;
+        this.stopSessionMonitoring();
+        this.saveLoginState();
+        this.closeAdminPanel();
+        this.toggleChannelActions(false);
+        this.toggleAdminBadge(false);
+        this.notifyWarning(`تم تسجيل الخروج: ${reason}`);
+    }
+
+    // دالة لتنظيف بيانات الجلسة
+    clearSessionData() {
+        localStorage.removeItem('anon_tv_session_token');
+        localStorage.removeItem('anon_tv_last_activity');
+        this.sessionToken = this.generateSessionToken();
+    }
+
     logoutFromAdmin() {
         this.isLoggedIn = false;
+        this.stopSessionMonitoring(); // إيقاف مراقبة الجلسة
+        this.clearSessionData(); // تنظيف بيانات الجلسة
         this.saveLoginState(); // حفظ حالة تسجيل الخروج
         this.closeAdminPanel();
         this.toggleChannelActions(false);
@@ -1912,14 +2188,23 @@ class ArabicTVApp {
     loadLoginState() {
         try {
             const savedState = localStorage.getItem('anon_tv_login_state');
-            if (savedState) {
+            const savedActivity = localStorage.getItem('anon_tv_last_activity');
+            
+            if (savedState && savedActivity) {
                 const loginData = JSON.parse(savedState);
-                // التحقق من أن البيانات حديثة (أقل من 24 ساعة)
-                const isRecent = (Date.now() - loginData.timestamp) < (24 * 60 * 60 * 1000);
-                if (isRecent && loginData.isLoggedIn) {
+                const lastActivity = parseInt(savedActivity);
+                
+                // التحقق من أن البيانات حديثة (أقل من 30 دقيقة)
+                const isRecent = (Date.now() - loginData.timestamp) < this.sessionTimeout;
+                const isActivityRecent = (Date.now() - lastActivity) < this.sessionTimeout;
+                
+                if (isRecent && isActivityRecent && loginData.isLoggedIn) {
                     this.isLoggedIn = true;
+                    this.lastActivity = lastActivity;
                     this.toggleChannelActions(true);
                     this.toggleAdminBadge(true); // إظهار Admin badge عند تحميل الحالة
+                    this.startSessionMonitoring(); // بدء مراقبة الجلسة
+                    console.log('تم استعادة حالة تسجيل الدخول');
                     return true;
                 }
             }
