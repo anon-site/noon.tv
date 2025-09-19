@@ -97,10 +97,20 @@ class ArabicTVApp {
         }, 500);
         this.bindRemoteStorageEvents();
         
-        // Check for updates after a short delay
+        // Check for updates after a short delay (only if auto-update is enabled)
         setTimeout(() => {
-            this.checkForUpdates();
+            if (this.settings.autoUpdate !== false) { // Default to true
+                this.checkForUpdates();
+            }
         }, 2000);
+        
+        // فحص دوري للتحديثات كل 30 دقيقة (إذا كان التحديث التلقائي مفعل)
+        if (this.settings.autoUpdate !== false) {
+            setInterval(() => {
+                console.log('🔄 فحص دوري للتحديثات...');
+                this.checkForUpdates();
+            }, 30 * 60 * 1000); // 30 دقيقة
+        }
         this.setupMobileSearch();
         this.setupPictureInPictureEvents();
         this.checkAndSetupPictureInPicture();
@@ -323,6 +333,12 @@ class ArabicTVApp {
                 console.log('تشغيل تلقائي:', this.settings.autoplay);
             }
             
+            const autoUpdateEl = document.getElementById('autoUpdate');
+            if (autoUpdateEl) {
+                autoUpdateEl.checked = this.settings.autoUpdate !== false; // Default to true
+                console.log('تحديث تلقائي:', this.settings.autoUpdate);
+            }
+            
             const volumeEl = document.getElementById('volume');
             if (volumeEl) {
                 volumeEl.value = this.settings.volume;
@@ -483,6 +499,19 @@ class ArabicTVApp {
             this.settings.autoplay = e.target.checked;
             this.saveSettings();
             console.log('تم تغيير التشغيل التلقائي إلى:', e.target.checked);
+        });
+
+        document.getElementById('autoUpdate').addEventListener('change', (e) => {
+            this.settings.autoUpdate = e.target.checked;
+            this.saveSettings();
+            console.log('تم تغيير التحديث التلقائي إلى:', e.target.checked);
+            
+            // إظهار رسالة توضيحية
+            if (e.target.checked) {
+                this.notifyInfo('تم تفعيل التحديث التلقائي - سيتم فحص التحديثات عند فتح الموقع');
+            } else {
+                this.notifyInfo('تم إلغاء التحديث التلقائي - يمكنك التحديث يدوياً من زر "تحديث القنوات"');
+            }
         });
 
         document.getElementById('volume').addEventListener('input', (e) => {
@@ -6145,15 +6174,17 @@ class ArabicTVApp {
     // Check for updates
     async checkForUpdates() {
         try {
-            console.log('🔍 فحص التحديثات...');
+            console.log('🔍 فحص التحديثات التلقائي...');
             
             // Get local data info
-            const localData = localStorage.getItem('tvChannels');
-            const localUpdateTime = localStorage.getItem('lastUpdateTime');
+            const localData = localStorage.getItem('arabicTVChannels');
+            const localUpdateTime = localStorage.getItem('arabicTVLastSaved');
             
+            // إذا لم توجد بيانات محلية، قم بالتحديث التلقائي
             if (!localData || !localUpdateTime) {
-                console.log('📥 لا توجد بيانات محلية، سيتم تحميل البيانات لأول مرة');
-                return false;
+                console.log('📥 لا توجد بيانات محلية، سيتم التحديث التلقائي لأول مرة');
+                await this.performAutoUpdate();
+                return true;
             }
 
             // Fetch remote data info
@@ -6174,23 +6205,116 @@ class ArabicTVApp {
             console.log('📅 آخر تحديث سحابي:', remoteDate.toLocaleString('ar'));
 
             if (remoteDate > localDate) {
-                console.log('🆕 يوجد تحديث جديد متاح!');
-                this.showUpdateAvailableNotification(remoteDate);
+                console.log('🆕 يوجد تحديث جديد متاح! سيتم التحديث التلقائي...');
                 
-                // إذا كانت المزامنة السحابية مفعلة، قم بإشعار المستخدم بإمكانية المزامنة التلقائية
-                if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
-                    console.log('💡 يمكن تحديث القنوات ومزامنتها تلقائياً مع السحابة');
+                // تحديث تلقائي في الخلفية
+                const updateResult = await this.performAutoUpdate();
+                
+                if (updateResult.success) {
+                    // إظهار إشعار نجاح التحديث
+                    this.showAutoUpdateSuccessNotification(updateResult.newChannelsCount, updateResult.addedChannels, updateResult.removedChannels);
+                } else {
+                    // إظهار إشعار فشل التحديث
+                    this.showAutoUpdateErrorNotification(updateResult.error);
                 }
                 
                 return true;
             } else {
-                console.log('✅ البيانات محدثة');
+                console.log('✅ البيانات محدثة - لا توجد تحديثات جديدة');
                 return false;
             }
 
         } catch (error) {
             console.error('خطأ في فحص التحديثات:', error);
             return false;
+        }
+    }
+
+    // دالة التحديث التلقائي في الخلفية
+    async performAutoUpdate() {
+        try {
+            console.log('🔄 بدء التحديث التلقائي...');
+            
+            // إظهار مؤشر بصري خفيف للتحديث
+            this.showUpdateIndicator();
+            
+            // حفظ القنوات الحالية للمقارنة
+            const currentChannels = [...this.channels];
+            const currentChannelIds = new Set(currentChannels.map(ch => ch.id));
+            
+            // جلب البيانات الجديدة من GitHub
+            const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json');
+            
+            if (!response.ok) {
+                throw new Error(`خطأ في جلب البيانات: ${response.status} ${response.statusText}`);
+            }
+            
+            const responseText = await response.text();
+            const validation = validateJSON(responseText, 'GitHub channels data');
+            
+            if (!validation.valid) {
+                throw new Error(`خطأ في تنسيق JSON: ${validation.error.message}`);
+            }
+            
+            const data = validation.data;
+            
+            if (!data || !data.channels || !Array.isArray(data.channels)) {
+                throw new Error('تنسيق البيانات غير صحيح');
+            }
+            
+            // مقارنة القنوات الجديدة مع الموجودة
+            const newChannels = data.channels;
+            const newChannelIds = new Set(newChannels.map(ch => ch.id));
+            
+            // تحديد القنوات المضافة والمحذوفة
+            const addedChannels = newChannels.filter(ch => !currentChannelIds.has(ch.id));
+            const removedChannels = currentChannels.filter(ch => !newChannelIds.has(ch.id));
+            
+            console.log(`📊 مقارنة القنوات:`);
+            console.log(`- القنوات الحالية: ${currentChannels.length}`);
+            console.log(`- القنوات الجديدة: ${newChannels.length}`);
+            console.log(`- القنوات المضافة: ${addedChannels.length}`);
+            console.log(`- القنوات المحذوفة: ${removedChannels.length}`);
+            
+            // تحديث القنوات في التطبيق
+            this.channels = newChannels;
+            this.filteredChannels = [...newChannels];
+            
+            // حفظ التحديثات
+            this.saveChannelsToStorage();
+            
+            // تطبيق الفلاتر الحالية
+            this.applyAllFilters();
+            
+            // تحديث الإحصائيات
+            this.updateChannelStats();
+            this.updateSidebarCounts();
+            
+            // إعادة عرض القنوات
+            this.renderChannels();
+            
+            // تحديث وقت التحديث
+            this.updateLastUpdateTime();
+            
+            // إخفاء مؤشر التحديث
+            this.hideUpdateIndicator();
+            
+            console.log('✅ تم التحديث التلقائي بنجاح');
+            
+            return {
+                success: true,
+                newChannelsCount: newChannels.length,
+                addedChannels: addedChannels,
+                removedChannels: removedChannels,
+                hasChanges: addedChannels.length > 0 || removedChannels.length > 0
+            };
+            
+        } catch (error) {
+            console.error('❌ خطأ في التحديث التلقائي:', error);
+            return {
+                success: false,
+                error: error.message
+            };
         }
     }
 
@@ -6212,6 +6336,82 @@ class ArabicTVApp {
         setTimeout(() => {
             this.highlightUpdateButton();
         }, 1000);
+    }
+
+    // إشعار نجاح التحديث التلقائي
+    showAutoUpdateSuccessNotification(newCount, addedChannels, removedChannels) {
+        const hasChanges = addedChannels.length > 0 || removedChannels.length > 0;
+        
+        if (!hasChanges) {
+            // لا توجد تغييرات، لا نعرض إشعار
+            console.log('✅ تم فحص التحديثات - لا توجد تغييرات جديدة');
+            return;
+        }
+        
+        let message = `تم تحديث القنوات تلقائياً! العدد الجديد: ${newCount}`;
+        
+        if (addedChannels.length > 0) {
+            message += `\nتم إضافة ${addedChannels.length} قناة جديدة`;
+            if (addedChannels.length <= 3) {
+                message += `: ${addedChannels.map(ch => ch.name).join(', ')}`;
+            }
+        }
+        
+        if (removedChannels.length > 0) {
+            message += `\nتم حذف ${removedChannels.length} قناة`;
+        }
+        
+        // إشعار نجاح مع تفاصيل التحديث
+        this.notifySuccess(message, 'تحديث تلقائي مكتمل', 6000);
+        
+        // إضافة تأثير بصري خفيف
+        setTimeout(() => {
+            this.addUpdateGlowEffect();
+        }, 1000);
+    }
+    
+    // إشعار فشل التحديث التلقائي
+    showAutoUpdateErrorNotification(error) {
+        const message = `فشل التحديث التلقائي: ${error}\nيمكنك المحاولة يدوياً من زر "تحديث القنوات"`;
+        this.notifyWarning(message, 'فشل التحديث التلقائي', 8000);
+    }
+    
+    // تأثير بصري خفيف عند التحديث
+    addUpdateGlowEffect() {
+        const channelsGrid = document.getElementById('channelsGrid');
+        if (channelsGrid) {
+            channelsGrid.style.transition = 'box-shadow 0.5s ease';
+            channelsGrid.style.boxShadow = '0 0 20px rgba(102, 126, 234, 0.3)';
+            
+            setTimeout(() => {
+                channelsGrid.style.boxShadow = '';
+            }, 2000);
+        }
+    }
+    
+    // مؤشر بصري للتحديث التلقائي
+    showUpdateIndicator() {
+        const updateTimeText = document.getElementById('updateTimeText');
+        if (updateTimeText) {
+            updateTimeText.innerHTML = `
+                <div class="update-indicator auto-update">
+                    <i class="fas fa-sync-alt fa-spin"></i>
+                    <span>جاري التحديث التلقائي...</span>
+                </div>
+            `;
+        }
+    }
+    
+    // إخفاء مؤشر التحديث
+    hideUpdateIndicator() {
+        const updateTimeText = document.getElementById('updateTimeText');
+        if (updateTimeText) {
+            updateTimeText.innerHTML = `
+                <i class="fas fa-clock"></i>
+                تحديث: <span id="lastUpdateTime">-</span>
+            `;
+            this.displayLastUpdateTime();
+        }
     }
 
     // Reset update indicator
