@@ -728,6 +728,16 @@
       "country": "عالمية",
       "type": "hls",
       "status": "active"
+    },
+    {
+      "id": 97,
+      "name": "Movies!",
+      "url": "https://dvrfl03.bozztv.com/hdirect/hdirect-ovair1-movies!/index.m3u8",
+      "logo": "https://png.pngtree.com/element_pic/16/11/18/4f829e85866bd52d062ca58b4e1ecef5.png",
+      "category": "news",
+      "country": "USA",
+      "type": "hls",
+      "status": "active"
     }
   ],
   "favorites": [],
@@ -799,6 +809,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-19T19:50:50.041Z",
+  "lastModified": "2025-09-19T19:57:32.602Z",
   "version": "1.0"
 }
