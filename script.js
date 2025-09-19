@@ -7737,6 +7737,31 @@ async function updateChannels() {
             console.log('💾 تم إنشاء نسخة احتياطية من القنوات الحالية:', currentChannels.length, 'قناة');
         }
         
+        // مقارنة القنوات الجديدة مع الموجودة لتحديد التغييرات
+        const newChannels = data.channels;
+        const currentChannelIds = new Set(currentChannels.map(ch => ch.id));
+        const newChannelIds = new Set(newChannels.map(ch => ch.id));
+        
+        // تحديد القنوات المضافة والمحذوفة والمعدلة
+        const addedChannels = newChannels.filter(ch => !currentChannelIds.has(ch.id));
+        const removedChannels = currentChannels.filter(ch => !newChannelIds.has(ch.id));
+        
+        // تحديد القنوات المعدلة (نفس الـ ID لكن محتوى مختلف)
+        const modifiedChannels = newChannels.filter(newChannel => {
+            const currentChannel = currentChannels.find(ch => ch.id === newChannel.id);
+            return currentChannel && JSON.stringify(currentChannel) !== JSON.stringify(newChannel);
+        });
+        
+        const hasChanges = addedChannels.length > 0 || removedChannels.length > 0 || modifiedChannels.length > 0;
+        
+        console.log(`📊 مقارنة القنوات:`);
+        console.log(`- القنوات الحالية: ${currentChannels.length}`);
+        console.log(`- القنوات الجديدة: ${newChannels.length}`);
+        console.log(`- القنوات المضافة: ${addedChannels.length}`);
+        console.log(`- القنوات المحذوفة: ${removedChannels.length}`);
+        console.log(`- القنوات المعدلة: ${modifiedChannels.length}`);
+        console.log(`- يوجد تغييرات: ${hasChanges}`);
+        
         // Validate each channel has required fields
         const invalidChannels = data.channels.filter(channel => 
             !channel.name || !channel.url || !channel.category
@@ -7778,26 +7803,65 @@ async function updateChannels() {
             window.app.syncToRemote().then(syncSuccess => {
                 if (syncSuccess) {
                     console.log('✅ تمت المزامنة السحابية بنجاح');
-                    setTimeout(() => {
-                        window.app.notifySuccess('تم تحديث القنوات ومزامنتها مع جميع الأجهزة المتصلة!');
-                    }, 1000);
+                    // إظهار إشعار فقط عند وجود تغييرات
+                    if (hasChanges) {
+                        setTimeout(() => {
+                            let message = `تم تحديث القنوات ومزامنتها مع جميع الأجهزة المتصلة!`;
+                            if (addedChannels.length > 0) {
+                                message += `\nتم إضافة ${addedChannels.length} قناة جديدة`;
+                                if (addedChannels.length <= 3) {
+                                    message += `: ${addedChannels.map(ch => ch.name).join(', ')}`;
+                                }
+                            }
+                            if (removedChannels.length > 0) {
+                                message += `\nتم حذف ${removedChannels.length} قناة`;
+                            }
+                            if (modifiedChannels.length > 0) {
+                                message += `\nتم تعديل ${modifiedChannels.length} قناة`;
+                            }
+                            window.app.notifySuccess(message, 'تحديث مكتمل', 6000);
+                        }, 1000);
+                    } else {
+                        console.log('✅ لا توجد تغييرات جديدة - تم فحص التحديثات بنجاح');
+                    }
                 } else {
                     console.log('⚠️ فشلت المزامنة السحابية');
+                    if (hasChanges) {
+                        setTimeout(() => {
+                            window.app.notifyWarning('تم تحديث القنوات محلياً، لكن فشلت المزامنة مع السحابة. يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.');
+                        }, 1000);
+                    }
+                }
+            }).catch(syncError => {
+                console.error('❌ خطأ في المزامنة السحابية:', syncError);
+                if (hasChanges) {
                     setTimeout(() => {
                         window.app.notifyWarning('تم تحديث القنوات محلياً، لكن فشلت المزامنة مع السحابة. يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.');
                     }, 1000);
                 }
-            }).catch(syncError => {
-                console.error('❌ خطأ في المزامنة السحابية:', syncError);
-                setTimeout(() => {
-                    window.app.notifyWarning('تم تحديث القنوات محلياً، لكن فشلت المزامنة مع السحابة. يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.');
-                }, 1000);
             });
         } else {
-            // Show success notification
-            setTimeout(() => {
-                window.app.notifySuccess(`تم تحديث القنوات بنجاح! تم تحميل ${data.channels.length} قناة جديدة.`);
-            }, 500);
+            // إظهار إشعار فقط عند وجود تغييرات
+            if (hasChanges) {
+                setTimeout(() => {
+                    let message = `تم تحديث القنوات بنجاح! العدد الجديد: ${data.channels.length}`;
+                    if (addedChannels.length > 0) {
+                        message += `\nتم إضافة ${addedChannels.length} قناة جديدة`;
+                        if (addedChannels.length <= 3) {
+                            message += `: ${addedChannels.map(ch => ch.name).join(', ')}`;
+                        }
+                    }
+                    if (removedChannels.length > 0) {
+                        message += `\nتم حذف ${removedChannels.length} قناة`;
+                    }
+                    if (modifiedChannels.length > 0) {
+                        message += `\nتم تعديل ${modifiedChannels.length} قناة`;
+                    }
+                    window.app.notifySuccess(message, 'تحديث مكتمل', 6000);
+                }, 500);
+            } else {
+                console.log('✅ لا توجد تغييرات جديدة - تم فحص التحديثات بنجاح');
+            }
         }
         
         // Log confirmation that data was saved
