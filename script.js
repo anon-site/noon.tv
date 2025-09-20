@@ -1898,6 +1898,11 @@ class ArabicTVApp {
         this.notifyInfo('تم تسجيل الخروج من مزود الخدمة');
     }
 
+    // Check if admin is logged in (method for external calls)
+    isAdminLoggedIn() {
+        return this.isLoggedIn;
+    }
+
     // حفظ حالة تسجيل الدخول في localStorage
     saveLoginState() {
         try {
