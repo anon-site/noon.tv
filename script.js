@@ -195,8 +195,6 @@ class ArabicTVApp {
         }
         this.applySettings();
         
-        // إظهار وقت التحديث إذا كان من المدير
-        this.displayLastUpdateTime();
     }
 
     loadAdminPassword() {
@@ -2140,11 +2138,12 @@ class ArabicTVApp {
         this.updateChannelStats();
         this.updateSidebarCounts();
         
+        // تحديث وقت آخر تحديث
+        this.setLastUpdateTime();
+        
         this.resetAddChannelForm();
         this.showNotification('success', 'تم إضافة القناة', 'تم إضافة القناة بنجاح وحفظها!');
         
-        // تحديث وقت التحديث عند إضافة قناة من لوحة التحكم
-        this.updateLastUpdateTime();
         
         // إظهار رسالة توضيحية أن التحديث من المدير
         setTimeout(() => {
@@ -2346,13 +2345,14 @@ class ArabicTVApp {
         this.updateChannelStats();
         this.updateSidebarCounts();
         
+        // تحديث وقت آخر تحديث
+        this.setLastUpdateTime();
+        
         // Reset editing state and form
         this.resetAddChannelForm();
         
         this.showNotification('success', 'تم تحديث القناة', 'تم تحديث القناة وحفظ التغييرات بنجاح!');
         
-        // تحديث وقت التحديث عند تعديل قناة من لوحة التحكم
-        this.updateLastUpdateTime();
         
         // إظهار رسالة توضيحية أن التحديث من المدير
         setTimeout(() => {
@@ -2404,11 +2404,12 @@ class ArabicTVApp {
             this.updateChannelStats();
             this.updateSidebarCounts();
             
+            // تحديث وقت آخر تحديث
+            this.setLastUpdateTime();
+            
             // Show success notification
             this.showNotification('success', 'تم حذف القناة', `تم حذف قناة "${channel.name}" بنجاح`);
             
-            // تحديث وقت التحديث عند حذف قناة من لوحة التحكم
-            this.updateLastUpdateTime();
             
             // إظهار رسالة توضيحية أن التحديث من المدير
             setTimeout(() => {
@@ -3214,6 +3215,9 @@ class ArabicTVApp {
                     this.filteredChannels = [...this.channels];
                     this.renderChannels();
                     this.updateChannelStats();
+                    
+                    // تحديث وقت آخر تحديث
+                    this.setLastUpdateTime();
                     
                     this.notifySuccess('تم تحديث البيانات بنجاح!', 'تحديث مكتمل');
                     
@@ -4063,7 +4067,10 @@ class ArabicTVApp {
             // Refresh UI
             this.loadRemoteStorageUI();
             this.renderChannels();
-            this.updateChannelCount();
+            this.updateChannelStats();
+            
+            // تحديث وقت آخر تحديث
+            this.setLastUpdateTime();
             
             this.notifySuccess('تم استعادة النسخة الاحتياطية بنجاح!');
             
@@ -4407,6 +4414,9 @@ class ArabicTVApp {
                         this.filteredChannels = [...this.channels];
                         this.renderChannels();
                         this.updateChannelStats();
+                        
+                        // تحديث وقت آخر تحديث
+                        this.setLastUpdateTime();
                         
                         this.notifySuccess('تم تحديث البيانات بنجاح!', 'تحديث مكتمل');
                         
@@ -4893,8 +4903,6 @@ class ArabicTVApp {
             
             this.notifySuccess('تم حفظ الترتيب الجديد للقنوات بنجاح!');
             
-            // تحديث وقت التحديث عند حفظ ترتيب القنوات من لوحة التحكم
-            this.updateLastUpdateTime();
             
             // إظهار رسالة توضيحية أن التحديث من المدير
             setTimeout(() => {
@@ -5727,10 +5735,36 @@ class ArabicTVApp {
             channelCountElement.textContent = this.filteredChannels.length;
         }
         
-        // تحديث الوقت المعروض من البيانات المحفوظة (بدون تحديث الوقت الحالي)
-        this.displayLastUpdateTime();
+        // تحديث وقت آخر تحديث
+        this.updateLastUpdateTime();
         
         this.updateBreadcrumbs();
+    }
+    
+    updateLastUpdateTime() {
+        const lastUpdateElement = document.getElementById('lastUpdateTime');
+        if (lastUpdateElement) {
+            const lastUpdate = localStorage.getItem('lastChannelUpdate');
+            if (lastUpdate) {
+                const updateDate = new Date(lastUpdate);
+                const formattedDate = updateDate.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                lastUpdateElement.textContent = formattedDate;
+            } else {
+                lastUpdateElement.textContent = 'Never';
+            }
+        }
+    }
+    
+    setLastUpdateTime() {
+        const now = new Date().toISOString();
+        localStorage.setItem('lastChannelUpdate', now);
+        this.updateLastUpdateTime();
     }
     
     // Initialize footer functionality
@@ -5767,59 +5801,7 @@ class ArabicTVApp {
         });
     }
     
-    updateLastUpdateTime() {
-        const lastUpdateTimeElement = document.getElementById('lastUpdateTime');
-        const updateTimeText = document.getElementById('updateTimeText');
-        
-        if (lastUpdateTimeElement && updateTimeText) {
-            const now = new Date();
-            const timeString = now.toLocaleString('en-US', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false
-            });
-            lastUpdateTimeElement.textContent = timeString;
-            
-            // حفظ الوقت في localStorage مع تحديد أن التحديث من المدير
-            localStorage.setItem('lastUpdateTime', now.toISOString());
-            localStorage.setItem('isAdminUpdate', 'true');
-            
-            // إظهار وقت التحديث
-            updateTimeText.style.display = 'flex';
-        }
-    }
     
-    displayLastUpdateTime() {
-        const lastUpdateTimeElement = document.getElementById('lastUpdateTime');
-        const updateTimeText = document.getElementById('updateTimeText');
-        
-        if (lastUpdateTimeElement && updateTimeText) {
-            const savedTime = localStorage.getItem('lastUpdateTime');
-            const isAdminUpdate = localStorage.getItem('isAdminUpdate') === 'true';
-            
-            if (savedTime && isAdminUpdate) {
-                const updateDate = new Date(savedTime);
-                const timeString = updateDate.toLocaleString('en-US', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: false
-                });
-                lastUpdateTimeElement.textContent = timeString;
-                updateTimeText.style.display = 'flex'; // إظهار وقت التحديث
-            } else {
-                lastUpdateTimeElement.textContent = '-';
-                updateTimeText.style.display = 'none'; // إخفاء وقت التحديث
-            }
-        }
-    }
 
     // Check for updates
     async checkForUpdates() {
@@ -5854,7 +5836,6 @@ class ArabicTVApp {
 
             if (remoteDate > localDate) {
                 console.log('🆕 يوجد تحديث جديد متاح!');
-                this.showUpdateAvailableNotification(remoteDate);
                 
                 // إذا كانت المزامنة السحابية مفعلة، قم بإشعار المستخدم بإمكانية المزامنة التلقائية
                 if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
@@ -5873,39 +5854,7 @@ class ArabicTVApp {
         }
     }
 
-    // Show update available notification
-    showUpdateAvailableNotification(remoteDate) {
-        const updateTimeText = document.getElementById('updateTimeText');
-        if (updateTimeText) {
-            // Add update indicator
-            updateTimeText.innerHTML = `
-                <div class="update-indicator">
-                    <i class="fas fa-sync-alt"></i>
-                    <span>تحديث جديد متاح!</span>
-                    <button onclick="updateChannels()">تحديث الآن</button>
-                </div>
-            `;
-        }
 
-        // Add pulse effect to update button
-        setTimeout(() => {
-            this.highlightUpdateButton();
-        }, 1000);
-    }
-
-    // Reset update indicator
-    resetUpdateIndicator() {
-        const updateTimeText = document.getElementById('updateTimeText');
-        if (updateTimeText) {
-            // Reset to normal display
-            updateTimeText.innerHTML = `
-                <i class="fas fa-clock"></i>
-                تحديث: <span id="lastUpdateTime">-</span>
-            `;
-            // عرض الوقت المحفوظ فقط
-            this.displayLastUpdateTime();
-        }
-    }
 
     // Enhanced Channel Card Creation (Override existing method)
     createChannelCard(channel) {
@@ -6044,6 +5993,9 @@ class ArabicTVApp {
             // تحديث عدد القنوات في الشريط العلوي والجانبي
             this.updateChannelStats();
             this.updateSidebarCounts();
+            
+            // تحديث وقت آخر تحديث
+            this.setLastUpdateTime();
             
             // Show success notification
             this.showNotification('success', 'تم حذف القناة', `تم حذف قناة "${channel.name}" بنجاح`);
@@ -7843,15 +7795,13 @@ async function updateChannels() {
         // Update channel statistics
         window.app.updateChannelStats();
         
+        // تحديث وقت آخر تحديث
+        window.app.setLastUpdateTime();
+        
         // Reload the channels display
         window.app.renderChannels();
         window.app.updateSidebarCounts();
         
-        // لا نحدث وقت التحديث هنا لأن هذا تحديث تلقائي وليس من المدير
-        // window.app.updateLastUpdateTime();
-        
-        // Reset update indicator
-        window.app.resetUpdateIndicator();
         
         // المزامنة التلقائية مع السحابة بعد التحديث من GitHub
         if (window.app.remoteStorage.enabled && window.app.remoteStorage.autoSync) {
