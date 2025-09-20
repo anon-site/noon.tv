@@ -725,8 +725,18 @@
       "url": "https://www.youtube.com/watch?v=ZtlLvu8H1OY",
       "logo": "https://smurfs.do.am/img/logo/logo.png",
       "category": "kids",
-      "country": "قطر",
+      "country": "عالمية",
       "type": "youtube",
+      "status": "active"
+    },
+    {
+      "id": 103,
+      "name": "سبيستون",
+      "url": "https://streams.spacetoon.com/live/stchannel/smil:livesmil.smil/playlist.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/2/2b/Spacetoon_logo.png",
+      "category": "kids",
+      "country": "عالمية",
+      "type": "hls",
       "status": "active"
     }
   ],
@@ -809,6 +819,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-20T02:34:42.635Z",
+  "lastModified": "2025-09-20T02:44:09.049Z",
   "version": "1.0"
 }
