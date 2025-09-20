@@ -7718,8 +7718,28 @@ async function updateChannels() {
         return;
     }
 
+    // فحص إضافي للتأكد من أن window.app محمل بشكل صحيح
+    if (typeof window.app.isAdminLoggedIn !== 'function') {
+        console.error('دالة isAdminLoggedIn غير موجودة في window.app');
+        console.error('window.app:', window.app);
+        console.error('window.app.isAdminLoggedIn:', window.app.isAdminLoggedIn);
+        return;
+    }
+
+    // فحص إضافي للتأكد من أن جميع الدوال المطلوبة موجودة
+    const requiredMethods = ['saveChannelsToStorage', 'applyAllFilters', 'updateChannelStats', 'setLastUpdateTime', 'renderChannels', 'updateSidebarCounts', 'notifySuccess', 'notifyError', 'notifyWarning', 'notifyInfo'];
+    const missingMethods = requiredMethods.filter(method => typeof window.app[method] !== 'function');
+    
+    if (missingMethods.length > 0) {
+        console.error('الدوال التالية غير موجودة في window.app:', missingMethods);
+        console.error('window.app:', window.app);
+        return;
+    }
+
     try {
         console.log('🔄 بدء تحديث القنوات...');
+        console.log('✅ window.app محمل بشكل صحيح:', !!window.app);
+        console.log('✅ دالة isAdminLoggedIn موجودة:', typeof window.app.isAdminLoggedIn === 'function');
         
         // Fetch channels from GitHub
         const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json');
@@ -7809,7 +7829,7 @@ async function updateChannels() {
         
         
         // المزامنة التلقائية مع السحابة بعد التحديث من GitHub
-        if (window.app.remoteStorage.enabled && window.app.remoteStorage.autoSync) {
+        if (window.app.remoteStorage && window.app.remoteStorage.enabled && window.app.remoteStorage.autoSync) {
             console.log('🔄 بدء المزامنة السحابية بعد التحديث من GitHub...');
             window.app.syncToRemote().then(syncSuccess => {
                 if (syncSuccess) {
@@ -7830,10 +7850,12 @@ async function updateChannels() {
                 }, 1000);
             });
         } else {
-            // Show success notification
-            setTimeout(() => {
+        // Show success notification
+        setTimeout(() => {
+            if (window.app && typeof window.app.notifySuccess === 'function') {
                 window.app.notifySuccess(`تم تحديث القنوات بنجاح! تم تحميل ${data.channels.length} قناة جديدة.`);
-            }, 500);
+            }
+        }, 500);
         }
         
         // Log confirmation that data was saved
@@ -7853,7 +7875,11 @@ async function updateChannels() {
             errorMessage += `: ${error.message}`;
         }
         
-        window.app.notifyError(errorMessage, 8000);
+        if (window.app && typeof window.app.notifyError === 'function') {
+            window.app.notifyError(errorMessage, 8000);
+        } else {
+            console.error('خطأ في تحديث القنوات:', errorMessage);
+        }
         
         // Try to restore backup if available
         const backupData = localStorage.getItem('channels_backup');
@@ -7870,11 +7896,13 @@ async function updateChannels() {
                     window.app.updateSidebarCounts();
                     
                     setTimeout(() => {
-                        window.app.notifyInfo(
-                            `تم استعادة النسخة الاحتياطية (${backup.count} قناة)`,
-                            'استعادة النسخة الاحتياطية',
-                            5000
-                        );
+                        if (window.app && typeof window.app.notifyInfo === 'function') {
+                            window.app.notifyInfo(
+                                `تم استعادة النسخة الاحتياطية (${backup.count} قناة)`,
+                                'استعادة النسخة الاحتياطية',
+                                5000
+                            );
+                        }
                     }, 3000);
                 }
             } catch (backupError) {
@@ -7884,11 +7912,13 @@ async function updateChannels() {
         
         // Show additional help
         setTimeout(() => {
-            window.app.notifyInfo(
-                'يمكنك المحاولة مرة أخرى أو التحقق من اتصال الإنترنت',
-                'مساعدة',
-                5000
-            );
+            if (window.app && typeof window.app.notifyInfo === 'function') {
+                window.app.notifyInfo(
+                    'يمكنك المحاولة مرة أخرى أو التحقق من اتصال الإنترنت',
+                    'مساعدة',
+                    5000
+                );
+            }
         }, 2000);
     }
 }
