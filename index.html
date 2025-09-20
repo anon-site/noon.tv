@@ -1457,9 +1457,10 @@
     </button>
 
     <!-- PWA Conflict Resolution Button -->
-    <button class="pwa-conflict-btn" id="pwaConflictBtn" onclick="resolvePWAConflict()" title="إزالة التطبيق المتعارض" style="display: none;">
+    <button class="pwa-conflict-btn" id="pwaConflictBtn" onclick="resolvePWAConflict()" title="إزالة التطبيق المتعارض - سيتم حذف التطبيقات الأخرى من نفس الموقع" style="display: none;">
         <i class="fas fa-exclamation-triangle"></i>
         <span>إزالة التطبيق المتعارض</span>
+        <small>حل المشكلة</small>
     </button>
 
     <!-- PWA Install Banner -->
@@ -1537,13 +1538,40 @@
             e.preventDefault();
             deferredPrompt = e;
             
-            // Show install button/banner only for TV app
-            if (window.location.pathname.includes('/TV-AR/')) {
-                console.log('📱 PWA: TV app install prompt captured');
-                showInstallPrompt();
+            // Check for conflicts first
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(registrations => {
+                    let hasConflicts = false;
+                    
+                    registrations.forEach(registration => {
+                        if (registration.scope.includes('anon-site.github.io') && 
+                            !registration.scope.includes('TV-AR') &&
+                            registration.scope !== window.location.origin + '/TV-AR/') {
+                            hasConflicts = true;
+                        }
+                    });
+                    
+                    // Show install button/banner only for TV app and if no conflicts
+                    if (window.location.pathname.includes('/TV-AR/') && !hasConflicts) {
+                        console.log('📱 PWA: TV app install prompt captured - no conflicts');
+                        showInstallPrompt();
+                    } else if (hasConflicts) {
+                        console.log('📱 PWA: Conflicts detected, hiding install prompt');
+                        hideInstallPrompt();
+                    } else {
+                        console.log('📱 PWA: Not TV app, hiding install prompt');
+                        hideInstallPrompt();
+                    }
+                });
             } else {
-                console.log('📱 PWA: Not TV app, hiding install prompt');
-                hideInstallPrompt();
+                // Show install button/banner only for TV app
+                if (window.location.pathname.includes('/TV-AR/')) {
+                    console.log('📱 PWA: TV app install prompt captured');
+                    showInstallPrompt();
+                } else {
+                    console.log('📱 PWA: Not TV app, hiding install prompt');
+                    hideInstallPrompt();
+                }
             }
         });
 
@@ -1747,33 +1775,47 @@
         async function resolvePWAConflict() {
             if ('serviceWorker' in navigator) {
                 try {
+                    // Show loading message
+                    if (window.app && window.app.notifyInfo) {
+                        window.app.notifyInfo('جاري إزالة التطبيقات المتعارضة...', 3000);
+                    }
+                    
                     const registrations = await navigator.serviceWorker.getRegistrations();
                     let conflictsFound = false;
+                    let removedCount = 0;
                     
                     for (const registration of registrations) {
+                        // More specific check for conflicts
                         if (registration.scope.includes('anon-site.github.io') && 
-                            !registration.scope.includes('TV-AR')) {
+                            !registration.scope.includes('TV-AR') &&
+                            registration.scope !== window.location.origin + '/TV-AR/') {
                             console.log('🔧 PWA: Unregistering conflicting service worker:', registration.scope);
                             await registration.unregister();
                             conflictsFound = true;
+                            removedCount++;
                         }
                     }
                     
                     if (conflictsFound) {
-                        // Clear all caches
+                        // Clear all conflicting caches
                         const cacheNames = await caches.keys();
+                        let deletedCaches = 0;
+                        
                         for (const cacheName of cacheNames) {
-                            if (cacheName.includes('anon-tv') && !cacheName.includes('anon-tv-app')) {
+                            // Delete caches that are not for the current TV app
+                            if ((cacheName.includes('anon-tv') && !cacheName.includes('anon-tv-app')) ||
+                                (cacheName.includes('anon-site') && !cacheName.includes('TV-AR'))) {
                                 await caches.delete(cacheName);
                                 console.log('🗑️ PWA: Deleted conflicting cache:', cacheName);
+                                deletedCaches++;
                             }
                         }
                         
-                        // Show success message
+                        // Show detailed success message
                         if (window.app && window.app.notifySuccess) {
                             window.app.notifySuccess(
-                                'تم إزالة التطبيق المتعارض بنجاح! يمكنك الآن تثبيت تطبيق ANON TV.',
-                                5000
+                                `تم إزالة ${removedCount} تطبيق متعارض و ${deletedCaches} ذاكرة تخزين مؤقت. يمكنك الآن تثبيت تطبيق ANON TV.`,
+                                6000
                             );
                         }
                         
@@ -1782,24 +1824,35 @@
                         const installBtn = document.getElementById('pwaInstallBtn');
                         
                         if (conflictBtn) conflictBtn.style.display = 'none';
-                        if (installBtn) installBtn.style.display = 'flex';
+                        if (installBtn && deferredPrompt) installBtn.style.display = 'flex';
+                        
+                        // Clear any stored conflict flags
+                        localStorage.removeItem('pwa-conflict-detected');
                         
                         // Reload page to ensure clean state
                         setTimeout(() => {
                             window.location.reload();
-                        }, 2000);
+                        }, 3000);
                         
                     } else {
                         if (window.app && window.app.notifyInfo) {
                             window.app.notifyInfo('لا توجد تطبيقات متعارضة.');
                         }
+                        
+                        // Hide conflict button anyway
+                        const conflictBtn = document.getElementById('pwaConflictBtn');
+                        if (conflictBtn) conflictBtn.style.display = 'none';
                     }
                     
                 } catch (error) {
                     console.error('❌ PWA: Failed to resolve conflicts:', error);
                     if (window.app && window.app.notifyError) {
-                        window.app.notifyError('فشل في إزالة التطبيق المتعارض. حاول مرة أخرى.');
+                        window.app.notifyError('فشل في إزالة التطبيق المتعارض. حاول مرة أخرى أو أعد تحميل الصفحة.');
                     }
+                }
+            } else {
+                if (window.app && window.app.notifyError) {
+                    window.app.notifyError('المتصفح لا يدعم Service Workers.');
                 }
             }
         }
@@ -1809,13 +1862,16 @@
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.getRegistrations().then(registrations => {
                     let hasConflicts = false;
+                    let conflictDetails = [];
                     
                     registrations.forEach(registration => {
-                        // Check for conflicting registrations
+                        // Check for conflicting registrations - more specific check
                         if (registration.scope.includes('anon-site.github.io') && 
-                            !registration.scope.includes('TV-AR')) {
-                            console.log('⚠️ PWA: Found conflicting PWA installation');
+                            !registration.scope.includes('TV-AR') &&
+                            registration.scope !== window.location.origin + '/TV-AR/') {
+                            console.log('⚠️ PWA: Found conflicting PWA installation:', registration.scope);
                             hasConflicts = true;
+                            conflictDetails.push(registration.scope);
                         }
                     });
                     
@@ -1826,14 +1882,25 @@
                             conflictBtn.style.display = 'flex';
                         }
                         
-                        // Show warning message
+                        // Show more informative warning message
                         if (window.app && window.app.notifyWarning) {
                             window.app.notifyWarning(
-                                'تم اكتشاف تطبيق متعارض مثبت من نفس الموقع. اضغط على زر "إزالة التطبيق المتعارض" لحل المشكلة.',
-                                8000
+                                `⚠️ تم اكتشاف تطبيق متعارض مثبت من نفس الموقع (${conflictDetails.length} تطبيق). هذا يمنع تثبيت تطبيق ANON TV. اضغط على زر "إزالة التطبيق المتعارض" لحل المشكلة.`,
+                                12000
                             );
                         }
+                        
+                        // Store conflict flag for later reference
+                        localStorage.setItem('pwa-conflict-detected', 'true');
+                    } else {
+                        // No conflicts found, hide conflict button
+                        const conflictBtn = document.getElementById('pwaConflictBtn');
+                        if (conflictBtn) {
+                            conflictBtn.style.display = 'none';
+                        }
                     }
+                }).catch(error => {
+                    console.error('❌ PWA: Error checking for conflicts:', error);
                 });
             }
             
