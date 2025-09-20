@@ -18,6 +18,11 @@
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="theme-color" content="#667eea">
     
+    <!-- Cache Control Meta Tags -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <!-- Open Graph Meta Tags -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="ANON TV - القنوات الفضائية العربية">
@@ -62,7 +67,7 @@
     <link rel="mask-icon" href="./icons/safari-pinned-tab.svg" color="#667eea">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2.1.0">
 </head>
 <body>
     <!-- Header -->
@@ -1432,7 +1437,7 @@
             <div class="footer-bottom">
                 <div class="footer-copyright">
                     <p>&copy; 2025 ANON TV. جميع الحقوق محفوظة.</p>
-                    <p class="footer-version">الإصدار  : 2.0.1<span id="appVersion"></span></p>
+                    <p class="footer-version">الإصدار  : 2.1.0<span id="appVersion"></span></p>
                 </div>
                 <div class="footer-legal">
                     <a href="#" class="legal-link">سياسة الخصوصية</a>
@@ -1859,7 +1864,60 @@
             }
         });
     </script>
-    <script src="script.js"></script>
+    <script src="script.js?v=2.1.0"></script>
+    
+    <!-- Force Cache Refresh Script -->
+    <script>
+        // Force refresh CSS and JS files
+        function forceRefreshAssets() {
+            const timestamp = new Date().getTime();
+            
+            // Refresh CSS
+            const cssLink = document.querySelector('link[href*="style.css"]');
+            if (cssLink) {
+                cssLink.href = cssLink.href.split('?')[0] + '?v=' + timestamp;
+            }
+            
+            // Refresh JS
+            const jsScript = document.querySelector('script[src*="script.js"]');
+            if (jsScript) {
+                const newScript = document.createElement('script');
+                newScript.src = jsScript.src.split('?')[0] + '?v=' + timestamp;
+                document.head.appendChild(newScript);
+                jsScript.remove();
+            }
+        }
+        
+        // Check if we need to force refresh (for GitHub Pages)
+        if (window.location.hostname.includes('github.io') || window.location.hostname.includes('github.com')) {
+            // Add a small delay to ensure page is loaded
+            setTimeout(() => {
+                console.log('🔄 GitHub Pages detected - forcing asset refresh');
+                forceRefreshAssets();
+            }, 1000);
+        }
+        
+        // Add manual refresh button for debugging
+        if (window.location.search.includes('debug=true')) {
+            const refreshBtn = document.createElement('button');
+            refreshBtn.innerHTML = '🔄 Refresh Assets';
+            refreshBtn.style.cssText = `
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                z-index: 9999;
+                background: #ff6b6b;
+                color: white;
+                border: none;
+                padding: 10px 15px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 12px;
+            `;
+            refreshBtn.onclick = forceRefreshAssets;
+            document.body.appendChild(refreshBtn);
+        }
+    </script>
 </body>
 </html>
 
