@@ -68,6 +68,7 @@ class ArabicTVApp {
         this.filteredChannels = [...this.channels]; // Ensure filtered channels match loaded channels
         this.loadSettings();
         this.loadAdminPassword(); // تحميل كلمة المرور المحفوظة
+        this.loadLastUpdateTime(); // تحميل آخر تحديث محفوظ
         this.loadLoginState(); // تحميل حالة تسجيل الدخول بعد تحميل البيانات
         this.renderChannels(); // عرض القنوات بعد تحميل حالة تسجيل الدخول
         // إعادة عرض القنوات مرة أخرى لضمان ظهور الأيقونات بشكل صحيح
@@ -2141,8 +2142,6 @@ class ArabicTVApp {
         this.resetAddChannelForm();
         this.showNotification('success', 'تم إضافة القناة', 'تم إضافة القناة بنجاح وحفظها!');
         
-        // تحديث وقت التحديث عند إضافة قناة من لوحة التحكم
-        this.updateLastUpdateTime();
         
         // المزامنة التلقائية مع السحابة
         if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
@@ -2340,8 +2339,6 @@ class ArabicTVApp {
         
         this.showNotification('success', 'تم تحديث القناة', 'تم تحديث القناة وحفظ التغييرات بنجاح!');
         
-        // تحديث وقت التحديث عند تعديل قناة من لوحة التحكم
-        this.updateLastUpdateTime();
         
         // المزامنة التلقائية مع السحابة
         if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
@@ -2388,8 +2385,6 @@ class ArabicTVApp {
             // Show success notification
             this.showNotification('success', 'تم حذف القناة', `تم حذف قناة "${channel.name}" بنجاح`);
             
-            // تحديث وقت التحديث عند حذف قناة من لوحة التحكم
-            this.updateLastUpdateTime();
             
             // المزامنة التلقائية مع السحابة
             if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
@@ -2539,6 +2534,8 @@ class ArabicTVApp {
             if (success) {
                 this.remoteStorage.lastSync = new Date().toISOString();
                 this.saveRemoteStorageSettings();
+                // تحديث آخر تحديث عند نجاح المزامنة
+                this.updateLastUpdateTime();
                 this.notifySuccess('تم رفع البيانات إلى المستودع بنجاح!');
                 return true;
             } else {
@@ -3518,6 +3515,9 @@ class ArabicTVApp {
             
             // Then sync to remote
             await this.syncToRemote();
+            
+            // تحديث آخر تحديث عند نجاح المزامنة اليدوية
+            this.updateLastUpdateTime();
             
             this.notifySuccess('تمت المزامنة بنجاح!');
             this.updateSyncStatus();
@@ -4869,8 +4869,6 @@ class ArabicTVApp {
             
             this.notifySuccess('تم حفظ الترتيب الجديد للقنوات بنجاح!');
             
-            // تحديث وقت التحديث عند حفظ ترتيب القنوات من لوحة التحكم
-            this.updateLastUpdateTime();
             
             // المزامنة التلقائية مع السحابة
             if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
@@ -5698,10 +5696,54 @@ class ArabicTVApp {
             channelCountElement.textContent = this.filteredChannels.length;
         }
         
-        // تحديث الوقت المعروض من البيانات المحفوظة (بدون تحديث الوقت الحالي)
-        this.displayLastUpdateTime();
-        
         this.updateBreadcrumbs();
+    }
+    
+    // تحديث وقت آخر تحديث
+    updateLastUpdateTime() {
+        const lastUpdateElement = document.getElementById('lastUpdate');
+        if (lastUpdateElement) {
+            const now = new Date();
+            
+            // التاريخ الميلادي بتنسيق dd/mm/yyyy
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            // عرض التاريخ بتنسيق dd/mm/yyyy    hh:mm:ss مع ألوان مختلفة
+            lastUpdateElement.innerHTML = `${day}/${month}/${year}    <span class="time-part">${hours}:${minutes}:${seconds}</span>`;
+            
+            // حفظ آخر تحديث في التخزين المحلي
+            localStorage.setItem('lastUpdateTime', now.toISOString());
+        }
+    }
+    
+    // تحميل آخر تحديث محفوظ
+    loadLastUpdateTime() {
+        const lastUpdateElement = document.getElementById('lastUpdate');
+        if (lastUpdateElement) {
+            const savedTime = localStorage.getItem('lastUpdateTime');
+            if (savedTime) {
+                const savedDate = new Date(savedTime);
+                
+                // التاريخ الميلادي بتنسيق dd/mm/yyyy
+                const day = String(savedDate.getDate()).padStart(2, '0');
+                const month = String(savedDate.getMonth() + 1).padStart(2, '0');
+                const year = savedDate.getFullYear();
+                const hours = String(savedDate.getHours()).padStart(2, '0');
+                const minutes = String(savedDate.getMinutes()).padStart(2, '0');
+                const seconds = String(savedDate.getSeconds()).padStart(2, '0');
+                
+                // عرض التاريخ المحفوظ بتنسيق dd/mm/yyyy    hh:mm:ss مع ألوان مختلفة
+                lastUpdateElement.innerHTML = `${day}/${month}/${year}    <span class="time-part">${hours}:${minutes}:${seconds}</span>`;
+            } else {
+                // إذا لم يكن هناك تاريخ محفوظ، استخدم التاريخ الحالي
+                this.updateLastUpdateTime();
+            }
+        }
     }
     
     // Initialize footer functionality
@@ -5738,47 +5780,7 @@ class ArabicTVApp {
         });
     }
     
-    updateLastUpdateTime() {
-        const lastUpdateTimeElement = document.getElementById('lastUpdateTime');
-        if (lastUpdateTimeElement) {
-            const now = new Date();
-            const timeString = now.toLocaleString('en-US', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false
-            });
-            lastUpdateTimeElement.textContent = timeString;
-            
-            // حفظ الوقت في localStorage
-            localStorage.setItem('lastUpdateTime', now.toISOString());
-        }
-    }
     
-    displayLastUpdateTime() {
-        const lastUpdateTimeElement = document.getElementById('lastUpdateTime');
-        if (lastUpdateTimeElement) {
-            const savedTime = localStorage.getItem('lastUpdateTime');
-            if (savedTime) {
-                const updateDate = new Date(savedTime);
-                const timeString = updateDate.toLocaleString('en-US', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: false
-                });
-                lastUpdateTimeElement.textContent = timeString;
-            } else {
-                lastUpdateTimeElement.textContent = '-';
-            }
-        }
-    }
 
     // Check for updates
     async checkForUpdates() {
@@ -5787,9 +5789,8 @@ class ArabicTVApp {
             
             // Get local data info
             const localData = localStorage.getItem('tvChannels');
-            const localUpdateTime = localStorage.getItem('lastUpdateTime');
             
-            if (!localData || !localUpdateTime) {
+            if (!localData) {
                 console.log('📥 لا توجد بيانات محلية، سيتم تحميل البيانات لأول مرة');
                 return false;
             }
@@ -5833,38 +5834,7 @@ class ArabicTVApp {
     }
 
     // Show update available notification
-    showUpdateAvailableNotification(remoteDate) {
-        const updateTimeText = document.getElementById('updateTimeText');
-        if (updateTimeText) {
-            // Add update indicator
-            updateTimeText.innerHTML = `
-                <div class="update-indicator">
-                    <i class="fas fa-sync-alt"></i>
-                    <span>تحديث جديد متاح!</span>
-                    <button onclick="updateChannels()">تحديث الآن</button>
-                </div>
-            `;
-        }
 
-        // Add pulse effect to update button
-        setTimeout(() => {
-            this.highlightUpdateButton();
-        }, 1000);
-    }
-
-    // Reset update indicator
-    resetUpdateIndicator() {
-        const updateTimeText = document.getElementById('updateTimeText');
-        if (updateTimeText) {
-            // Reset to normal display
-            updateTimeText.innerHTML = `
-                <i class="fas fa-clock"></i>
-                تحديث: <span id="lastUpdateTime">-</span>
-            `;
-            // عرض الوقت المحفوظ فقط
-            this.displayLastUpdateTime();
-        }
-    }
 
     // Enhanced Channel Card Creation (Override existing method)
     createChannelCard(channel) {
@@ -7201,15 +7171,13 @@ async function updateChannels() {
         // Update channel statistics
         window.app.updateChannelStats();
         
+        // تحديث آخر تحديث سيتم في دالة المزامنة السحابية
+        
         // Reload the channels display
         window.app.renderChannels();
         window.app.updateSidebarCounts();
         
-        // تحديث الوقت عند التحديث من لوحة التحكم فقط
-        window.app.updateLastUpdateTime();
         
-        // Reset update indicator
-        window.app.resetUpdateIndicator();
         
         // المزامنة التلقائية مع السحابة بعد التحديث من GitHub
         if (window.app.remoteStorage.enabled && window.app.remoteStorage.autoSync) {
@@ -7217,6 +7185,8 @@ async function updateChannels() {
             window.app.syncToRemote().then(syncSuccess => {
                 if (syncSuccess) {
                     console.log('✅ تمت المزامنة السحابية بنجاح');
+                    // تحديث آخر تحديث عند نجاح المزامنة السحابية
+                    window.app.updateLastUpdateTime();
                     setTimeout(() => {
                         window.app.notifySuccess('تم تحديث القنوات ومزامنتها مع جميع الأجهزة المتصلة!');
                     }, 1000);

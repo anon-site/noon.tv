@@ -5610,8 +5610,28 @@ body[data-theme="light"] .notification-close:hover {
     font-size: 0.85rem;
 }
 
+.last-update-text {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin-right: 1rem;
+}
+
 .stats-text strong {
     color: var(--highlight-color);
+}
+
+.last-update-text strong {
+    color: var(--highlight-color);
+}
+
+.update-date {
+    color: var(--highlight-color);
+    font-weight: 600;
+}
+
+.update-date .time-part {
+    color: #ff6b6b;
+    font-weight: 700;
 }
 
 .update-time-text {
@@ -9098,6 +9118,11 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     
     .stats-text {
         font-size: 0.75rem;
+    }
+    
+    .last-update-text {
+        font-size: 0.7rem;
+        margin-right: 0.5rem;
     }
     
     .update-time-text {
