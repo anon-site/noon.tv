@@ -194,6 +194,9 @@ class ArabicTVApp {
             console.log('سيتم استخدام الإعدادات الافتراضية');
         }
         this.applySettings();
+        
+        // إظهار وقت التحديث إذا كان من المدير
+        this.displayLastUpdateTime();
     }
 
     loadAdminPassword() {
@@ -2143,6 +2146,11 @@ class ArabicTVApp {
         // تحديث وقت التحديث عند إضافة قناة من لوحة التحكم
         this.updateLastUpdateTime();
         
+        // إظهار رسالة توضيحية أن التحديث من المدير
+        setTimeout(() => {
+            this.notifyInfo('تم تحديث وقت التحديث في الشريط العلوي', 2000);
+        }, 1000);
+        
         // المزامنة التلقائية مع السحابة
         if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
             this.syncToRemote().catch(error => {
@@ -2346,6 +2354,11 @@ class ArabicTVApp {
         // تحديث وقت التحديث عند تعديل قناة من لوحة التحكم
         this.updateLastUpdateTime();
         
+        // إظهار رسالة توضيحية أن التحديث من المدير
+        setTimeout(() => {
+            this.notifyInfo('تم تحديث وقت التحديث في الشريط العلوي', 2000);
+        }, 1000);
+        
         // المزامنة التلقائية مع السحابة
         if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
             this.syncToRemote().catch(error => {
@@ -2396,6 +2409,11 @@ class ArabicTVApp {
             
             // تحديث وقت التحديث عند حذف قناة من لوحة التحكم
             this.updateLastUpdateTime();
+            
+            // إظهار رسالة توضيحية أن التحديث من المدير
+            setTimeout(() => {
+                this.notifyInfo('تم تحديث وقت التحديث في الشريط العلوي', 2000);
+            }, 1000);
             
             // المزامنة التلقائية مع السحابة
             if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
@@ -4878,6 +4896,11 @@ class ArabicTVApp {
             // تحديث وقت التحديث عند حفظ ترتيب القنوات من لوحة التحكم
             this.updateLastUpdateTime();
             
+            // إظهار رسالة توضيحية أن التحديث من المدير
+            setTimeout(() => {
+                this.notifyInfo('تم تحديث وقت التحديث في الشريط العلوي', 2000);
+            }, 1000);
+            
             // المزامنة التلقائية مع السحابة
             if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
                 this.syncToRemote().catch(error => {
@@ -5746,7 +5769,9 @@ class ArabicTVApp {
     
     updateLastUpdateTime() {
         const lastUpdateTimeElement = document.getElementById('lastUpdateTime');
-        if (lastUpdateTimeElement) {
+        const updateTimeText = document.getElementById('updateTimeText');
+        
+        if (lastUpdateTimeElement && updateTimeText) {
             const now = new Date();
             const timeString = now.toLocaleString('en-US', {
                 year: 'numeric',
@@ -5759,16 +5784,24 @@ class ArabicTVApp {
             });
             lastUpdateTimeElement.textContent = timeString;
             
-            // حفظ الوقت في localStorage
+            // حفظ الوقت في localStorage مع تحديد أن التحديث من المدير
             localStorage.setItem('lastUpdateTime', now.toISOString());
+            localStorage.setItem('isAdminUpdate', 'true');
+            
+            // إظهار وقت التحديث
+            updateTimeText.style.display = 'flex';
         }
     }
     
     displayLastUpdateTime() {
         const lastUpdateTimeElement = document.getElementById('lastUpdateTime');
-        if (lastUpdateTimeElement) {
+        const updateTimeText = document.getElementById('updateTimeText');
+        
+        if (lastUpdateTimeElement && updateTimeText) {
             const savedTime = localStorage.getItem('lastUpdateTime');
-            if (savedTime) {
+            const isAdminUpdate = localStorage.getItem('isAdminUpdate') === 'true';
+            
+            if (savedTime && isAdminUpdate) {
                 const updateDate = new Date(savedTime);
                 const timeString = updateDate.toLocaleString('en-US', {
                     year: 'numeric',
@@ -5780,8 +5813,10 @@ class ArabicTVApp {
                     hour12: false
                 });
                 lastUpdateTimeElement.textContent = timeString;
+                updateTimeText.style.display = 'flex'; // إظهار وقت التحديث
             } else {
                 lastUpdateTimeElement.textContent = '-';
+                updateTimeText.style.display = 'none'; // إخفاء وقت التحديث
             }
         }
     }
@@ -7812,8 +7847,8 @@ async function updateChannels() {
         window.app.renderChannels();
         window.app.updateSidebarCounts();
         
-        // تحديث الوقت عند التحديث من لوحة التحكم فقط
-        window.app.updateLastUpdateTime();
+        // لا نحدث وقت التحديث هنا لأن هذا تحديث تلقائي وليس من المدير
+        // window.app.updateLastUpdateTime();
         
         // Reset update indicator
         window.app.resetUpdateIndicator();
