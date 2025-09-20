@@ -1751,19 +1751,30 @@
                     let conflictsFound = false;
                     
                     for (const registration of registrations) {
+                        // Check for any conflicting registrations from the same domain
                         if (registration.scope.includes('anon-site.github.io') && 
                             !registration.scope.includes('TV-AR')) {
                             console.log('🔧 PWA: Unregistering conflicting service worker:', registration.scope);
                             await registration.unregister();
                             conflictsFound = true;
                         }
+                        
+                        // Also check for old ANON TV registrations
+                        if (registration.scope.includes('anon-tv') && 
+                            !registration.scope.includes('anon-tv-ar')) {
+                            console.log('🔧 PWA: Unregistering old ANON TV service worker:', registration.scope);
+                            await registration.unregister();
+                            conflictsFound = true;
+                        }
                     }
                     
                     if (conflictsFound) {
-                        // Clear all caches
+                        // Clear all conflicting caches
                         const cacheNames = await caches.keys();
                         for (const cacheName of cacheNames) {
-                            if (cacheName.includes('anon-tv') && !cacheName.includes('anon-tv-app')) {
+                            // Remove old caches that don't match our new naming
+                            if ((cacheName.includes('anon-tv') && !cacheName.includes('anon-tv-ar')) ||
+                                (cacheName.includes('anon-site') && !cacheName.includes('TV-AR'))) {
                                 await caches.delete(cacheName);
                                 console.log('🗑️ PWA: Deleted conflicting cache:', cacheName);
                             }
@@ -1815,6 +1826,13 @@
                         if (registration.scope.includes('anon-site.github.io') && 
                             !registration.scope.includes('TV-AR')) {
                             console.log('⚠️ PWA: Found conflicting PWA installation');
+                            hasConflicts = true;
+                        }
+                        
+                        // Also check for old ANON TV registrations
+                        if (registration.scope.includes('anon-tv') && 
+                            !registration.scope.includes('anon-tv-ar')) {
+                            console.log('⚠️ PWA: Found old ANON TV installation');
                             hasConflicts = true;
                         }
                     });
