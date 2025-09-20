@@ -5,24 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.youtube.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; media-src 'self' https: blob:; connect-src 'self' https: wss:; frame-src 'self' https://www.youtube.com https://youtube.com; child-src 'self' https://www.youtube.com https://youtube.com; object-src 'none'; base-uri 'self'; form-action 'self';">
     
-    <!-- PWA Meta Tags -->
-    <meta name="application-name" content="ANON TV">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="ANON TV">
     <meta name="description" content="منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="msapplication-config" content="./browserconfig.xml">
-    <meta name="msapplication-TileColor" content="#667eea">
-    <meta name="msapplication-tap-highlight" content="no">
-    <meta name="theme-color" content="#667eea">
     
     <!-- Open Graph Meta Tags -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="ANON TV - القنوات الفضائية العربية">
     <meta property="og:description" content="منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات">
-    <meta property="og:image" content="./icons/icon-512x512.png">
+    <meta property="og:image" content="favicon.svg">
     <meta property="og:url" content="/TV-AR/">
     <meta property="og:site_name" content="ANON TV">
     <meta property="og:locale" content="ar_SA">
@@ -31,35 +20,12 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="ANON TV - القنوات الفضائية العربية">
     <meta name="twitter:description" content="منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات">
-    <meta name="twitter:image" content="./icons/icon-512x512.png">
+    <meta name="twitter:image" content="favicon.svg">
     
     <title>ANON TV - القنوات الفضائية العربية</title>
     
-    <!-- Favicon and App Icons -->
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    
-    <!-- Apple Touch Icons -->
-    <link rel="apple-touch-icon" sizes="57x57" href="./icons/apple-touch-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="./icons/apple-touch-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="./icons/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="./icons/apple-touch-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="./icons/apple-touch-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="./icons/apple-touch-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="./icons/apple-touch-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="./icons/apple-touch-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon-180x180.png">
-    
-    <!-- Android Icons -->
-    <link rel="icon" type="image/png" sizes="192x192" href="./icons/android-chrome-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="./icons/android-chrome-512x512.png">
-    
-    <!-- Manifest -->
-    <link rel="manifest" href="./site.webmanifest">
-    
-    <!-- Mask Icon for Safari -->
-    <link rel="mask-icon" href="./icons/safari-pinned-tab.svg" color="#667eea">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -1312,39 +1278,6 @@
         <i class="fas fa-chevron-up"></i>
     </button>
 
-    <!-- PWA Install Button -->
-    <button class="pwa-install-btn" id="pwaInstallBtn" onclick="installPWA()" title="تثبيت التطبيق" style="display: none;">
-        <i class="fas fa-download"></i>
-        <span>تثبيت التطبيق</span>
-    </button>
-
-    <!-- PWA Conflict Resolution Button -->
-    <button class="pwa-conflict-btn" id="pwaConflictBtn" onclick="resolvePWAConflict()" title="إزالة التطبيق المتعارض" style="display: none;">
-        <i class="fas fa-exclamation-triangle"></i>
-        <span>إزالة التطبيق المتعارض</span>
-    </button>
-
-    <!-- PWA Install Banner -->
-    <div class="pwa-install-banner" id="pwaInstallBanner" style="display: none;">
-        <div class="banner-content">
-            <div class="banner-icon">
-                <i class="fas fa-mobile-alt"></i>
-            </div>
-            <div class="banner-text">
-                <h4>تثبيت ANON TV</h4>
-                <p>احصل على تجربة أفضل مع تطبيق التلفزيون المثبت على جهازك</p>
-            </div>
-            <div class="banner-actions">
-                <button class="banner-install-btn" onclick="installPWA()">
-                    <i class="fas fa-download"></i>
-                    تثبيت
-                </button>
-                <button class="banner-dismiss-btn" onclick="dismissInstallBanner()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        </div>
-    </div>
 
     <!-- HLS.js Library for video streaming -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
@@ -1362,218 +1295,6 @@
             }
         });
 
-        // PWA Installation and Service Worker
-        let deferredPrompt;
-        let isInstalled = false;
-
-        // Register Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', async () => {
-                try {
-                    const registration = await navigator.serviceWorker.register('./sw.js');
-                    console.log('✅ Service Worker registered successfully:', registration);
-                    
-                    // Check for updates
-                    registration.addEventListener('updatefound', () => {
-                        const newWorker = registration.installing;
-                        newWorker.addEventListener('statechange', () => {
-                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                // New content is available, show update notification
-                                showUpdateNotification();
-                            }
-                        });
-                    });
-                } catch (error) {
-                    console.error('❌ Service Worker registration failed:', error);
-                }
-            });
-        }
-
-        // Listen for beforeinstallprompt event
-        window.addEventListener('beforeinstallprompt', (e) => {
-            console.log('📱 PWA: Install prompt triggered');
-            
-            // Always prevent default and handle manually for TV app
-            e.preventDefault();
-            deferredPrompt = e;
-            
-            // Show install button/banner only for TV app
-            if (window.location.pathname.includes('/TV-AR/')) {
-                console.log('📱 PWA: TV app install prompt captured');
-                showInstallPrompt();
-            } else {
-                console.log('📱 PWA: Not TV app, hiding install prompt');
-                hideInstallPrompt();
-            }
-        });
-
-        // Listen for appinstalled event
-        window.addEventListener('appinstalled', (e) => {
-            console.log('🎉 PWA: App installed successfully');
-            isInstalled = true;
-            hideInstallPrompt();
-            
-            // Show success notification
-            if (window.app && window.app.notifySuccess) {
-                window.app.notifySuccess('تم تثبيت التطبيق بنجاح! يمكنك الآن الوصول إليه من الشاشة الرئيسية');
-            }
-        });
-
-        // Check if app is already installed
-        window.addEventListener('load', () => {
-            if (window.matchMedia('(display-mode: standalone)').matches || 
-                window.navigator.standalone === true) {
-                console.log('📱 PWA: App is running in standalone mode');
-                
-                // Check if this is the TV app specifically
-                if (window.location.pathname.includes('/TV-AR/') || 
-                    window.location.search.includes('source=pwa')) {
-                    console.log('📱 PWA: TV app is running in standalone mode');
-                    isInstalled = true;
-                    hideInstallPrompt();
-                } else {
-                    console.log('📱 PWA: Different app is running in standalone mode');
-                }
-            }
-        });
-
-        // Install PWA function
-        async function installPWA() {
-            if (!deferredPrompt) {
-                // Fallback for browsers that don't support beforeinstallprompt
-                showInstallInstructions();
-                return;
-            }
-
-            try {
-                // Show the install prompt
-                deferredPrompt.prompt();
-                
-                // Wait for the user to respond to the prompt
-                const { outcome } = await deferredPrompt.userChoice;
-                
-                console.log(`📱 PWA: User choice: ${outcome}`);
-                
-                if (outcome === 'accepted') {
-                    console.log('✅ PWA: User accepted the install prompt');
-                } else {
-                    console.log('❌ PWA: User dismissed the install prompt');
-                }
-                
-                // Clear the deferredPrompt
-                deferredPrompt = null;
-                hideInstallPrompt();
-                
-            } catch (error) {
-                console.error('❌ PWA: Install failed:', error);
-                showInstallInstructions();
-            }
-        }
-
-        // Show install prompt
-        function showInstallPrompt() {
-            if (isInstalled) return;
-            
-            // Double check we're on the TV app
-            if (!window.location.pathname.includes('/TV-AR/')) {
-                console.log('📱 PWA: Not on TV app, hiding install prompt');
-                return;
-            }
-            
-            const installBtn = document.getElementById('pwaInstallBtn');
-            const installBanner = document.getElementById('pwaInstallBanner');
-            
-            // Show install button in header
-            if (installBtn) {
-                installBtn.style.display = 'flex';
-            }
-            
-            // Show install banner after a delay
-            setTimeout(() => {
-                if (installBanner && !localStorage.getItem('pwa-banner-dismissed')) {
-                    installBanner.style.display = 'block';
-                }
-            }, 5000); // Show after 5 seconds
-        }
-
-        // Hide install prompt
-        function hideInstallPrompt() {
-            const installBtn = document.getElementById('pwaInstallBtn');
-            const installBanner = document.getElementById('pwaInstallBanner');
-            
-            if (installBtn) {
-                installBtn.style.display = 'none';
-            }
-            
-            if (installBanner) {
-                installBanner.style.display = 'none';
-            }
-        }
-
-        // Dismiss install banner
-        function dismissInstallBanner() {
-            const installBanner = document.getElementById('pwaInstallBanner');
-            if (installBanner) {
-                installBanner.style.display = 'none';
-                localStorage.setItem('pwa-banner-dismissed', 'true');
-            }
-        }
-
-        // Show install instructions for unsupported browsers
-        function showInstallInstructions() {
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-            const isAndroid = /Android/.test(navigator.userAgent);
-            
-            let instructions = '';
-            
-            if (isIOS) {
-                instructions = `
-                    <div class="install-instructions">
-                        <h4>📱 تثبيت على iOS:</h4>
-                        <ol>
-                            <li>اضغط على زر المشاركة في Safari</li>
-                            <li>اختر "إضافة إلى الشاشة الرئيسية"</li>
-                            <li>اضغط "إضافة"</li>
-                        </ol>
-                    </div>
-                `;
-            } else if (isAndroid) {
-                instructions = `
-                    <div class="install-instructions">
-                        <h4>🤖 تثبيت على Android:</h4>
-                        <ol>
-                            <li>اضغط على القائمة في Chrome</li>
-                            <li>اختر "إضافة إلى الشاشة الرئيسية"</li>
-                            <li>اضغط "إضافة"</li>
-                        </ol>
-                    </div>
-                `;
-            } else {
-                instructions = `
-                    <div class="install-instructions">
-                        <h4>💻 تثبيت على الكمبيوتر:</h4>
-                        <ol>
-                            <li>اضغط على أيقونة التثبيت في شريط العنوان</li>
-                            <li>أو استخدم قائمة المتصفح: "تثبيت التطبيق"</li>
-                        </ol>
-                    </div>
-                `;
-            }
-            
-            if (window.app && window.app.showModal) {
-                window.app.showModal('تعليمات التثبيت', instructions);
-            }
-        }
-
-        // Show update notification
-        function showUpdateNotification() {
-            if (window.app && window.app.notifyInfo) {
-                window.app.notifyInfo('تحديث جديد متاح! اضغط هنا لتحديث التطبيق', () => {
-                    window.location.reload();
-                });
-            }
-        }
-
         // Handle offline/online status
         window.addEventListener('online', () => {
             console.log('🌐 Connection restored');
@@ -1586,133 +1307,6 @@
             console.log('📴 Connection lost');
             if (window.app && window.app.notifyWarning) {
                 window.app.notifyWarning('فقدان الاتصال بالإنترنت - يمكنك الاستمرار في استخدام التطبيق');
-            }
-        });
-
-        // Request notification permission (disabled - only request when needed)
-        function requestNotificationPermission() {
-            if ('Notification' in window && Notification.permission === 'default') {
-                Notification.requestPermission().then(permission => {
-                    if (permission === 'granted') {
-                        console.log('✅ Notification permission granted');
-                    }
-                });
-            }
-        }
-
-        // Note: Notification permission is now only requested when explicitly needed
-        // No automatic permission request on page load or click
-
-        // Function to resolve PWA conflicts
-        async function resolvePWAConflict() {
-            if ('serviceWorker' in navigator) {
-                try {
-                    const registrations = await navigator.serviceWorker.getRegistrations();
-                    let conflictsFound = false;
-                    
-                    for (const registration of registrations) {
-                        if (registration.scope.includes('anon-site.github.io') && 
-                            !registration.scope.includes('TV-AR')) {
-                            console.log('🔧 PWA: Unregistering conflicting service worker:', registration.scope);
-                            await registration.unregister();
-                            conflictsFound = true;
-                        }
-                    }
-                    
-                    if (conflictsFound) {
-                        // Clear all caches
-                        const cacheNames = await caches.keys();
-                        for (const cacheName of cacheNames) {
-                            if (cacheName.includes('anon-tv') && !cacheName.includes('anon-tv-app')) {
-                                await caches.delete(cacheName);
-                                console.log('🗑️ PWA: Deleted conflicting cache:', cacheName);
-                            }
-                        }
-                        
-                        // Show success message
-                        if (window.app && window.app.notifySuccess) {
-                            window.app.notifySuccess(
-                                'تم إزالة التطبيق المتعارض بنجاح! يمكنك الآن تثبيت تطبيق ANON TV.',
-                                5000
-                            );
-                        }
-                        
-                        // Hide conflict button and show install button
-                        const conflictBtn = document.getElementById('pwaConflictBtn');
-                        const installBtn = document.getElementById('pwaInstallBtn');
-                        
-                        if (conflictBtn) conflictBtn.style.display = 'none';
-                        if (installBtn) installBtn.style.display = 'flex';
-                        
-                        // Reload page to ensure clean state
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 2000);
-                        
-                    } else {
-                        if (window.app && window.app.notifyInfo) {
-                            window.app.notifyInfo('لا توجد تطبيقات متعارضة.');
-                        }
-                    }
-                    
-                } catch (error) {
-                    console.error('❌ PWA: Failed to resolve conflicts:', error);
-                    if (window.app && window.app.notifyError) {
-                        window.app.notifyError('فشل في إزالة التطبيق المتعارض. حاول مرة أخرى.');
-                    }
-                }
-            }
-        }
-
-        // Check for conflicting PWA installations and show conflict resolution button
-        window.addEventListener('load', () => {
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.getRegistrations().then(registrations => {
-                    let hasConflicts = false;
-                    
-                    registrations.forEach(registration => {
-                        // Check for conflicting registrations
-                        if (registration.scope.includes('anon-site.github.io') && 
-                            !registration.scope.includes('TV-AR')) {
-                            console.log('⚠️ PWA: Found conflicting PWA installation');
-                            hasConflicts = true;
-                        }
-                    });
-                    
-                    if (hasConflicts) {
-                        // Show conflict resolution button
-                        const conflictBtn = document.getElementById('pwaConflictBtn');
-                        if (conflictBtn) {
-                            conflictBtn.style.display = 'flex';
-                        }
-                        
-                        // Show warning message
-                        if (window.app && window.app.notifyWarning) {
-                            window.app.notifyWarning(
-                                'تم اكتشاف تطبيق متعارض مثبت من نفس الموقع. اضغط على زر "إزالة التطبيق المتعارض" لحل المشكلة.',
-                                8000
-                            );
-                        }
-                    }
-                });
-            }
-            
-            // Check if we're in standalone mode but not the TV app
-            if (window.matchMedia('(display-mode: standalone)').matches || 
-                window.navigator.standalone === true) {
-                if (!window.location.pathname.includes('/TV-AR/')) {
-                    console.log('⚠️ PWA: Running in standalone mode but not TV app');
-                    
-                    // Redirect to TV app
-                    if (window.app && window.app.notifyInfo) {
-                        window.app.notifyInfo(
-                            'يبدو أنك تستخدم تطبيق آخر. اضغط هنا للانتقال إلى تطبيق ANON TV.',
-                            () => {
-                                window.location.href = '/TV-AR/';
-                            }
-                        );
-                    }
-                }
             }
         });
     </script>
