@@ -743,7 +743,7 @@
       "id": 104,
       "name": "& Filx",
       "url": "https://edge3-moblive.yuppcdn.net/drm/smil:nflixdrm.smil/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/1/12/%26flix_logo.png",
+      "logo": "https://iili.io/K7Z1RHJ.png",
       "category": "movies",
       "country": "عالمية",
       "type": "hls",
@@ -814,6 +814,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-20T14:27:26.393Z",
+  "lastModified": "2025-09-20T14:33:29.755Z",
   "version": "1.0"
 }
