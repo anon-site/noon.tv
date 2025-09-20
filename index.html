@@ -1,1493 +1,0 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.youtube.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; media-src 'self' https: blob:; connect-src 'self' https: wss:; frame-src 'self' https://www.youtube.com https://youtube.com; child-src 'self' https://www.youtube.com https://youtube.com; object-src 'none'; base-uri 'self'; form-action 'self';">
-    
-    <!-- Basic Meta Tags -->
-    <meta name="description" content="منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات">
-    <meta name="theme-color" content="#667eea">
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="ANON TV - القنوات الفضائية العربية">
-    <meta property="og:description" content="منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات">
-    <meta property="og:image" content="./icons/icon-512x512.png">
-    <meta property="og:url" content="/TV-AR/">
-    <meta property="og:site_name" content="ANON TV">
-    <meta property="og:locale" content="ar_SA">
-    
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="ANON TV - القنوات الفضائية العربية">
-    <meta name="twitter:description" content="منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات">
-    <meta name="twitter:image" content="./icons/icon-512x512.png">
-    
-    <title>ANON TV - القنوات الفضائية العربية</title>
-    
-    <!-- Favicon and App Icons -->
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="site.webmanifest">
-    
-    <!-- Apple Touch Icons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon-180x180.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="./icons/apple-touch-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="./icons/apple-touch-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="./icons/apple-touch-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="./icons/apple-touch-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="./icons/apple-touch-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="./icons/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="./icons/apple-touch-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="57x57" href="./icons/apple-touch-icon-57x57.png">
-    
-    <!-- Apple Web App Meta Tags -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="ANON TV">
-    
-    <!-- Microsoft Tiles -->
-    <meta name="msapplication-config" content="browserconfig.xml">
-    <meta name="msapplication-TileColor" content="#667eea">
-    <meta name="msapplication-TileImage" content="./icons/ms-icon-144x144.png">
-    
-    
-    
-    
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <i class="fas fa-satellite-dish"></i>
-                    <h1>ANON TV</h1>
-                    <div class="admin-badge" id="adminBadge" style="display: none;">
-                        <i class="fas fa-crown"></i>
-                        <span>Admin</span>
-                    </div>
-                </div>
-                <div class="header-center desktop-only">
-                    <!-- Search Container in Header -->
-                    <div class="header-search-container">
-                        <input type="text" class="header-search-input" placeholder="البحث عن قناة..." id="searchInput">
-                        <i class="fas fa-search header-search-icon"></i>
-                    </div>
-                    
-                </div>
-
-                <div class="header-actions">
-                    <!-- Theme Toggle Switch -->
-                    <label class="theme-switch">
-                        <span class="sun"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="#ffd43b"><circle r="5" cy="12" cx="12"></circle><path d="m21 13h-1a1 1 0 0 1 0-2h1a1 1 0 0 1 0 2zm-17 0h-1a1 1 0 0 1 0-2h1a1 1 0 0 1 0 2zm13.66-5.66a1 1 0 0 1 -.66-.29 1 1 0 0 1 0-1.41l.71-.71a1 1 0 1 1 1.41 1.41l-.71.71a1 1 0 0 1 -.75.29zm-12.02 12.02a1 1 0 0 1 -.71-.29 1 1 0 0 1 0-1.41l.71-.66a1 1 0 0 1 1.41 1.41l-.71.71a1 1 0 0 1 -.7.24zm6.36-14.36a1 1 0 0 1 -1-1v-1a1 1 0 0 1 2 0v1a1 1 0 0 1 -1 1zm0 17a1 1 0 0 1 -1-1v-1a1 1 0 0 1 2 0v1a1 1 0 0 1 -1 1zm-5.66-14.66a1 1 0 0 1 -.7-.29l-.71-.71a1 1 0 0 1 1.41-1.41l.71.71a1 1 0 0 1 0 1.41 1 1 0 0 1 -.71.29zm12.02 12.02a1 1 0 0 1 -.7-.29l-.66-.71a1 1 0 0 1 1.36-1.36l.71.71a1 1 0 0 1 0 1.41 1 1 0 0 1 -.71.24z"></path></g></svg></span>
-                        <span class="moon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="m223.5 32c-123.5 0-223.5 100.3-223.5 224s100 224 223.5 224c60.6 0 115.5-24.2 155.8-63.4 5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6-96.9 0-175.5-78.8-175.5-176 0-65.8 36-123.1 89.3-153.3 6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"></path></svg></span>   
-                        <input type="checkbox" class="theme-input" id="themeToggle">
-                        <span class="theme-slider"></span>
-                    </label>
-                    
-                    <button class="sidebar-toggle-btn desktop-only" onclick="app.toggleSidebar()">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
-
-
-    
-
-
-    <!-- Breadcrumbs -->
-    <div class="breadcrumbs-container">
-        <div class="container">
-            <nav class="breadcrumbs" id="breadcrumbs">
-                <a href="#" class="breadcrumb-item active" data-category="all">
-                    <i class="fas fa-home"></i>
-                    الرئيسية
-                </a>
-                <span class="breadcrumb-separator">/</span>
-                <span class="breadcrumb-current" id="currentBreadcrumb">جميع القنوات</span>
-                <div class="channel-stats" id="channelStats">
-                    <span class="stats-text">عدد القنوات: <strong id="channelCount">0</strong></span>
-                    <span class="last-update-text">Last Update: <strong id="lastUpdateTime">-</strong></span>
-                </div>
-            </nav>
-        </div>
-    </div>
-
-
-    <!-- Desktop Sidebar -->
-    <div class="desktop-sidebar" id="desktopSidebar">
-        <div class="sidebar-header">
-            <div class="sidebar-logo">
-                <i class="fas fa-satellite-dish"></i>
-                <span class="sidebar-title">ANON TV</span>
-            </div>
-            <button class="sidebar-toggle-btn" onclick="app.toggleSidebar()">
-                <i class="fas fa-chevron-right"></i>
-            </button>
-        </div>
-        
-        <div class="sidebar-content">
-            <!-- TV Categories Section -->
-            <div class="sidebar-section">
-                <div class="sidebar-section-title">
-                    <i class="fas fa-tv"></i>
-                    <span>تلفزيون</span>
-                </div>
-                <div class="sidebar-nav-tabs">
-                    <button class="sidebar-nav-tab active" data-category="all">
-                        <i class="fas fa-th-large"></i>
-                        <span>جميع القنوات</span>
-                        <span class="tab-count" id="allCount">0</span>
-                    </button>
-                    <button class="sidebar-nav-tab" data-category="news">
-                        <i class="fas fa-newspaper"></i>
-                        <span>الأخبار</span>
-                        <span class="tab-count" id="newsCount">0</span>
-                    </button>
-                    <button class="sidebar-nav-tab" data-category="entertainment">
-                        <i class="fas fa-film"></i>
-                        <span>المنوعة</span>
-                        <span class="tab-count" id="entertainmentCount">0</span>
-                    </button>
-                    <button class="sidebar-nav-tab" data-category="sports">
-                        <i class="fas fa-futbol"></i>
-                        <span>الرياضة</span>
-                        <span class="tab-count" id="sportsCount">0</span>
-                    </button>
-                    <button class="sidebar-nav-tab" data-category="religious">
-                        <i class="fas fa-mosque"></i>
-                        <span>الدينية</span>
-                        <span class="tab-count" id="religiousCount">0</span>
-                    </button>
-                    <button class="sidebar-nav-tab" data-category="music">
-                        <i class="fas fa-music"></i>
-                        <span>الموسيقى</span>
-                        <span class="tab-count" id="musicCount">0</span>
-                    </button>
-                    <button class="sidebar-nav-tab" data-category="movies">
-                        <i class="fas fa-film"></i>
-                        <span>الأفلام</span>
-                        <span class="tab-count" id="moviesCount">0</span>
-                    </button>
-                    <button class="sidebar-nav-tab" data-category="documentary">
-                        <i class="fas fa-book-open"></i>
-                        <span>الوثائقية</span>
-                        <span class="tab-count" id="documentaryCount">0</span>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Favorites Section -->
-            <div class="sidebar-section">
-                <div class="sidebar-section-title">
-                    <i class="fas fa-heart"></i>
-                    <span>المفضلة</span>
-                </div>
-                <div class="sidebar-actions">
-                    <button class="sidebar-action-btn favorites-sidebar-btn" onclick="app.toggleFavorites()">
-                        <i class="fas fa-heart"></i>
-                        <span>عرض المفضلة</span>
-                        <span class="favorites-count" id="sidebarFavoritesCount">0</span>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Actions Section -->
-            <div class="sidebar-section">
-                <div class="sidebar-section-title">
-                    <i class="fas fa-tools"></i>
-                    <span>الأدوات</span>
-                </div>
-                <div class="sidebar-actions">
-                    <button class="sidebar-action-btn" onclick="openIPTVChecker()">
-                        <i class="fas fa-search"></i>
-                        <span>فحص الروابط</span>
-                    </button>
-                    <button class="sidebar-action-btn" onclick="openSettings()">
-                        <i class="fas fa-cog"></i>
-                        <span>الإعدادات</span>
-                    </button>
-                    <button class="sidebar-action-btn" onclick="openAdminPanel()">
-                        <i class="fas fa-user-shield"></i>
-                        <span>لوحة التحكم</span>
-                    </button>
-                    <button class="sidebar-action-btn" onclick="updateChannels()">
-                        <i class="fas fa-sync-alt"></i>
-                        <span>تحديث القنوات</span>
-                    </button>
-                </div>
-            </div>
-            
-        </div>
-    </div>
-
-    <!-- Mobile Bottom Navigation -->
-    <div class="mobile-bottom-nav" id="mobileBottomNav">
-        <button class="bottom-nav-btn" data-action="categories" onclick="toggleCategoriesDropdown()">
-            <i class="fas fa-th-large"></i>
-            <span>القائمة</span>
-        </button>
-        
-        <button class="bottom-nav-btn" data-action="favorites" onclick="app.toggleFavorites()">
-            <i class="fas fa-heart"></i>
-            <span>المفضلة</span>
-            <span class="favorites-badge" id="mobileFavoritesBadge">0</span>
-        </button>
-        
-        <button class="bottom-nav-btn active" data-action="home" onclick="app.showAllChannels()">
-            <i class="fas fa-home"></i>
-            <span>الرئيسية</span>
-        </button>
-        
-        <button class="bottom-nav-btn" data-action="search" onclick="toggleSearchPopup()">
-            <i class="fas fa-search"></i>
-            <span>البحث</span>
-        </button>
-        
-        <button class="bottom-nav-btn" data-action="more" onclick="toggleMoreMenu()">
-            <i class="fas fa-ellipsis-h"></i>
-            <span>المزيد</span>
-        </button>
-    </div>
-
-    <!-- Categories Dropdown -->
-    <div class="categories-dropdown" id="categoriesDropdown">
-        <div class="dropdown-header">
-            <h3>فئات القنوات</h3>
-            <button class="close-dropdown" onclick="closeCategoriesDropdown()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="dropdown-content">
-            <button class="category-item active" data-category="all" onclick="selectCategory('all')">
-                <i class="fas fa-th-large"></i>
-                <span>جميع القنوات</span>
-                <span class="category-count" id="mobileAllCount">0</span>
-            </button>
-            <button class="category-item" data-category="news" onclick="selectCategory('news')">
-                <i class="fas fa-newspaper"></i>
-                <span>الأخبار</span>
-                <span class="category-count" id="mobileNewsCount">0</span>
-            </button>
-            <button class="category-item" data-category="entertainment" onclick="selectCategory('entertainment')">
-                <i class="fas fa-film"></i>
-                <span>المنوعة</span>
-                <span class="category-count" id="mobileEntertainmentCount">0</span>
-            </button>
-            <button class="category-item" data-category="sports" onclick="selectCategory('sports')">
-                <i class="fas fa-futbol"></i>
-                <span>الرياضة</span>
-                <span class="category-count" id="mobileSportsCount">0</span>
-            </button>
-            <button class="category-item" data-category="religious" onclick="selectCategory('religious')">
-                <i class="fas fa-mosque"></i>
-                <span>الدينية</span>
-                <span class="category-count" id="mobileReligiousCount">0</span>
-            </button>
-            <button class="category-item" data-category="music" onclick="selectCategory('music')">
-                <i class="fas fa-music"></i>
-                <span>الموسيقى</span>
-                <span class="category-count" id="mobileMusicCount">0</span>
-            </button>
-            <button class="category-item" data-category="movies" onclick="selectCategory('movies')">
-                <i class="fas fa-film"></i>
-                <span>الأفلام</span>
-                <span class="category-count" id="mobileMoviesCount">0</span>
-            </button>
-            <button class="category-item" data-category="documentary" onclick="selectCategory('documentary')">
-                <i class="fas fa-book-open"></i>
-                <span>الوثائقية</span>
-                <span class="category-count" id="mobileDocumentaryCount">0</span>
-            </button>
-        </div>
-    </div>
-
-    <!-- Search Popup -->
-    <div class="search-popup" id="searchPopup">
-        <div class="search-popup-content">
-            <div class="search-popup-header">
-                <h3>البحث عن قناة</h3>
-                <button class="close-search" onclick="closeSearchPopup()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="search-popup-body">
-                <div class="search-input-container">
-                    <input type="text" class="search-popup-input" placeholder="اكتب اسم القناة..." id="searchPopupInput">
-                    <i class="fas fa-search search-icon"></i>
-                </div>
-                <div class="search-results" id="searchResults">
-                    <!-- Search results will appear here -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- More Menu -->
-    <div class="more-menu" id="moreMenu">
-        <div class="more-menu-content">
-            <button class="more-menu-item" onclick="updateChannels(); closeMoreMenu();">
-                <i class="fas fa-sync-alt"></i>
-                <span>تحديث</span>
-            </button>
-            <button class="more-menu-item" onclick="openSettings(); closeMoreMenu();">
-                <i class="fas fa-cog"></i>
-                <span>الإعدادات</span>
-            </button>
-            <button class="more-menu-item" onclick="openAdminPanel(); closeMoreMenu();">
-                <i class="fas fa-user-shield"></i>
-                <span>التحكم</span>
-            </button>
-        </div>
-    </div>
-
-    <!-- Mobile Overlay -->
-    <div class="mobile-overlay" id="mobileOverlay"></div>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="container">
-            <div class="channels-grid" id="channelsGrid">
-                <!-- Channels will be dynamically loaded here -->
-            </div>
-        </div>
-    </main>
-
-    <!-- Loading Spinner -->
-    <div class="loading" id="loading">
-        <div class="spinner"></div>
-        <p>جارٍ تحميل القنوات...</p>
-    </div>
-
-    <!-- Video Modal -->
-    <div class="modal" id="videoModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="channel-title-container">
-                    <h3 id="channelTitle">قناة</h3>
-                    <span class="channel-country" id="channelCountry">
-                        <i class="fas fa-flag"></i>
-                        <span class="country-text">-</span>
-                    </span>
-                </div>
-                <div class="modal-controls">
-                    <!-- Quality Display -->
-                    <div class="quality-display" id="qualityDisplay">
-                        <i class="fas fa-video"></i>
-                        <span id="currentQualityText">تلقائي</span>
-                    </div>
-                    <div class="quality-control-container">
-                        <button class="quality-btn" onclick="toggleQualityMenu()">
-                            <i class="fas fa-video"></i>
-                            <span id="qualityText">جودة البث</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </button>
-                        <div class="quality-menu" id="qualityMenu">
-                            <div class="quality-option active" data-quality="auto">
-                                <i class="fas fa-magic"></i>
-                                <span>تلقائي</span>
-                                <i class="fas fa-check quality-check"></i>
-                            </div>
-                            <div class="quality-option" data-quality="1080">
-                                <i class="fas fa-video"></i>
-                                <span>1080p - عالي جداً</span>
-                                <i class="fas fa-check quality-check"></i>
-                            </div>
-                            <div class="quality-option" data-quality="720">
-                                <i class="fas fa-video"></i>
-                                <span>720p - عالي</span>
-                                <i class="fas fa-check quality-check"></i>
-                            </div>
-                            <div class="quality-option" data-quality="480">
-                                <i class="fas fa-video"></i>
-                                <span>480p - متوسط</span>
-                                <i class="fas fa-check quality-check"></i>
-                            </div>
-                            <div class="quality-option" data-quality="360">
-                                <i class="fas fa-video"></i>
-                                <span>360p - توفير البيانات</span>
-                                <i class="fas fa-check quality-check"></i>
-                            </div>
-                            <div class="quality-option" data-quality="240">
-                                <i class="fas fa-video"></i>
-                                <span>240p - منخفض جداً</span>
-                                <i class="fas fa-check quality-check"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="pip-btn" onclick="togglePictureInPicture()" title="إخراج الشاشة خارج المتصفح">
-                        <i class="fas fa-external-link-alt"></i>
-                    </button>
-                    <button class="fullscreen-btn" onclick="toggleFullscreen()">
-                        <i class="fas fa-expand"></i>
-                    </button>
-                    <button class="close-btn" onclick="closeModal()">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="video-container">
-                <video id="videoPlayer" controls autoplay>
-                    <source id="videoSource" src="" type="application/x-mpegURL">
-                    متصفحك لا يدعم تشغيل الفيديو
-                </video>
-                <div class="video-loading" id="videoLoading">
-                    <div class="spinner"></div>
-                    <p>جارٍ تحميل البث...</p>
-                </div>
-                <!-- News Ticker -->
-                <div class="news-ticker" id="newsTicker">
-                    <div class="news-ticker-label">
-                        <i class="fas fa-newspaper"></i>
-                        آخر الأخبار
-                    </div>
-                    <div class="news-ticker-content">
-                        <div class="news-ticker-text" id="newsTickerText">
-                            عاجل: القمة العربية تناقش أهم القضايا الإقليمية والدولية • • • مؤتمر دولي حول التغيرات المناخية يبدأ أعماله في دبي • • • ارتفاع أسعار النفط في الأسواق العالمية • • • منتخب مصر يحقق فوزاً مهماً في تصفيات كأس العالم • • • افتتاح معرض الكتاب الدولي في الرياض • • • إنجازات جديدة في مجال الطاقة المتجددة بدول الخليج
-                        </div>
-                    </div>
-                </div>
-                <!-- Channel Logo Overlay -->
-                <div class="channel-logo-overlay" id="channelLogoOverlay">
-                    <img id="overlayLogo" src="" alt="شعار القناة">
-                </div>
-                <!-- Live Indicator -->
-                <div class="live-indicator">
-                    <span class="live-dot"></span>
-                    مباشر
-                </div>
-                
-                <!-- Ad Block Notification -->
-                <div class="ad-block-notification" id="adBlockNotification">
-                    <i class="fas fa-shield-alt"></i>
-                    تم تفعيل منع الإعلانات
-                </div>
-            </div>
-        </div>
-        <div class="modal-overlay"></div>
-    </div>
-
-    <!-- Settings Modal -->
-    <div class="modal" id="settingsModal">
-        <div class="modal-content settings-content">
-            <div class="modal-header">
-                <h3>الإعدادات</h3>
-                <button class="close-btn" onclick="closeSettings()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="settings-body">
-                <div class="setting-item">
-                    <label for="autoQuality">جودة تلقائية حسب سرعة الإنترنت</label>
-                    <label class="switch">
-                        <input type="checkbox" id="autoQuality" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="setting-item">
-                    <label for="autoplay">تشغيل تلقائي</label>
-                    <label class="switch">
-                        <input type="checkbox" id="autoplay" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-
-                <div class="setting-item">
-                    <label for="volume">مستوى الصوت</label>
-                    <input type="range" id="volume" min="0" max="100" value="100" class="volume-slider">
-                </div>
-                <div class="setting-item">
-                    <label for="theme">نمط التطبيق</label>
-                    <select id="theme" class="theme-select">
-                        <option value="dark">داكن</option>
-                        <option value="light">فاتح</option>
-                        <option value="auto">تلقائي</option>
-                    </select>
-                </div>
-                
-                <!-- Appearance Customization Section -->
-                <div class="settings-section">
-                    <h4 class="settings-section-title">🎨 تخصيص المظهر</h4>
-                    
-                    <div class="setting-item">
-                        <label for="zoomLevel">حجم المحتوى</label>
-                        <div class="zoom-control">
-                            <input type="range" id="zoomLevel" min="75" max="150" value="100" step="5" class="zoom-slider">
-                            <span id="zoomValue" class="zoom-value">100%</span>
-                        </div>
-                    </div>
-                    
-                    <div class="setting-item">
-                        <label for="colorTheme">نظام الألوان</label>
-                        <select id="colorTheme" class="color-theme-select">
-                            <option value="default">الافتراضي</option>
-                            <option value="blue">أزرق</option>
-                            <option value="green">أخضر</option>
-                            <option value="purple">بنفسجي</option>
-                            <option value="orange">برتقالي</option>
-                            <option value="red">أحمر</option>
-                        </select>
-                    </div>
-                    
-                    <div class="setting-item">
-                        <label for="fontSize">حجم النص</label>
-                        <select id="fontSize" class="font-size-select">
-                            <option value="small" selected>صغير</option>
-                            <option value="medium">متوسط</option>
-                            <option value="large">كبير</option>
-                            <option value="xlarge">كبير جداً</option>
-                        </select>
-                    </div>
-                    
-                    <div class="setting-item">
-                        <label for="borderRadius">شكل الحواف</label>
-                        <select id="borderRadius" class="border-radius-select">
-                            <option value="minimal">مربع</option>
-                            <option value="normal">عادي</option>
-                            <option value="rounded" selected>مدور</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <!-- Layout and Behavior Section -->
-                <div class="settings-section">
-                    <h4 class="settings-section-title">📐 التخطيط والسلوك</h4>
-                    
-                    <div class="setting-item">
-                        <label for="layoutMode">نمط العرض</label>
-                        <select id="layoutMode" class="layout-mode-select">
-                            <option value="grid">شبكة</option>
-                            <option value="list">قائمة</option>
-                            <option value="compact" selected>مضغوط</option>
-                        </select>
-                    </div>
-                    
-                    <div class="setting-item">
-                        <label for="compactMode">الوضع المضغوط</label>
-                        <label class="switch">
-                            <input type="checkbox" id="compactMode" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    
-                    <div class="setting-item">
-                        <label for="animationsEnabled">تفعيل الرسوم المتحركة</label>
-                        <label class="switch">
-                            <input type="checkbox" id="animationsEnabled">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    
-                    <div class="setting-item">
-                        <label for="highContrast">التباين العالي</label>
-                        <label class="switch">
-                            <input type="checkbox" id="highContrast">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                </div>
-                
-                <!-- Quick Actions -->
-                <div class="settings-actions">
-                    <button class="reset-settings-btn" onclick="app.resetCustomizations()">
-                        <i class="fas fa-undo"></i>
-                        إعادة تعيين التخصيصات
-                    </button>
-                    <button class="show-welcome-btn" onclick="app.showWelcomeModal()">
-                        <i class="fas fa-info-circle"></i>
-                        عرض رسالة الترحيب
-                    </button>
-                    <button class="delete-cookies-btn" onclick="app.deleteAllCookies()">
-                        <i class="fas fa-trash-alt"></i>
-                        حذف الكوكيز
-                    </button>
-                </div>
-            </div>
-        </div>
-      <div class="modal-overlay"></div>
-  </div>
-
-  <!-- Login Modal -->
-  <div class="modal" id="loginModal">
-      <div class="modal-content login-content">
-          <div class="login-header">
-              <div class="login-icon">
-                  <i class="fas fa-shield-alt"></i>
-              </div>
-              <h3>تسجيل الدخول</h3>
-              <p>أدخل كلمة المرور للوصول إلى لوحة التحكم - مزود الخدمة</p>
-          </div>
-          <div class="login-form">
-              <div class="input-group">
-                  <div class="password-input-wrapper">
-                      <input type="password" id="adminPassword" placeholder="كلمة المرور" autocomplete="current-password">
-                      <i class="fas fa-eye toggle-password" onclick="app.togglePasswordVisibility()"></i>
-                  </div>
-              </div>
-              <div class="login-actions">
-                  <button class="login-btn" onclick="app.loginToAdmin()">
-                      <i class="fas fa-sign-in-alt"></i>
-                      دخول
-                  </button>
-                  <button class="cancel-btn" onclick="app.closeLoginModal()">
-                      <i class="fas fa-times"></i>
-                      إلغاء
-                  </button>
-              </div>
-              <div class="login-error" id="loginError" style="display: none;">
-                  <i class="fas fa-exclamation-triangle"></i>
-                  <span>كلمة المرور غير صحيحة</span>
-              </div>
-          </div>
-      </div>
-      <div class="modal-overlay" onclick="app.closeLoginModal()"></div>
-  </div>
-
-  <!-- Admin Panel Modal -->
-    <div class="modal" id="adminModal">
-        <div class="modal-content admin-content">
-            <div class="modal-header">
-                <h3>لوحة التحكم - مزود الخدمة</h3>
-                <div class="admin-header-actions">
-                    <button class="logout-btn" onclick="app.logoutFromAdmin()" title="تسجيل الخروج من مزود الخدمة">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </button>
-                    <button class="close-btn" onclick="closeAdminPanel()">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="admin-layout">
-                <div class="admin-sidebar">
-                    <div class="admin-tabs">
-                        <button class="admin-tab active" data-tab="channels" onclick="app.switchAdminTab('channels')">
-                            <i class="fas fa-tv"></i>
-                            <span>إدارة القنوات</span>
-                        </button>
-                        <button class="admin-tab" data-tab="add" onclick="app.switchAdminTab('add')">
-                            <i class="fas fa-plus"></i>
-                            <span>إضافة قناة</span>
-                        </button>
-                        <button class="admin-tab" data-tab="categories" onclick="app.switchAdminTab('categories')">
-                            <i class="fas fa-tags"></i>
-                            <span>إدارة الفئات</span>
-                        </button>
-                        <button class="admin-tab" data-tab="settings" onclick="app.switchAdminTab('settings')">
-                            <i class="fas fa-cog"></i>
-                            <span>إعدادات عامة</span>
-                        </button>
-                        <button class="admin-tab" data-tab="analytics" onclick="app.switchAdminTab('analytics')">
-                            <i class="fas fa-chart-line"></i>
-                            <span>إحصائيات الزوار</span>
-                        </button>
-                        <button class="admin-tab" data-tab="security" onclick="app.switchAdminTab('security')">
-                            <i class="fas fa-shield-alt"></i>
-                            <span>الأمان</span>
-                        </button>
-                    </div>
-                </div>
-                <div class="admin-body">
-                <!-- Channels Management Tab -->
-                <div class="admin-tab-content active" id="channelsTab">
-                    <div class="save-order-container" id="saveOrderContainer" style="display: none;">
-                        <div class="save-order-actions">
-                            <button class="save-order-btn" id="saveOrderBtn" onclick="app.saveChannelsOrder()">
-                                <i class="fas fa-save"></i> حفظ الترتيب
-                            </button>
-                        </div>
-                    </div>
-                    <div class="admin-search">
-                        <input type="text" placeholder="البحث في القنوات..." id="adminSearchInput">
-                    </div>
-                    <div class="channels-list" id="adminChannelsList">
-                        <!-- Admin channels list will be loaded here -->
-                    </div>
-                </div>
-                
-                <!-- Add Channel Tab -->
-                <div class="admin-tab-content" id="addTab">
-                    <form class="add-channel-form" id="addChannelForm">
-                        <div class="form-row">
-                            <div class="form-column">
-                                <div class="form-group">
-                                    <label for="channelName">اسم القناة</label>
-                                    <input type="text" id="channelName" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="channelCategory">الفئة</label>
-                                    <select id="channelCategory" required>
-                                        <option value="news">الأخبار</option>
-                                        <option value="entertainment">المنوعة</option>
-                                        <option value="sports">الرياضة</option>
-                                        <option value="religious">الدينية</option>
-                                        <option value="music">الموسيقى</option>
-                                        <option value="movies">الأفلام</option>
-                                        <option value="documentary">الوثائقية</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="channelCountryInput">البلد</label>
-                                    <input type="text" id="channelCountryInput" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="channelStatus">حالة القناة</label>
-                                    <div class="status-toggle-container">
-                                        <label class="status-toggle active" data-status="active">
-                                            <i class="fas fa-circle status-icon active"></i>
-                                            <span>تعمل</span>
-                                        </label>
-                                        <label class="status-toggle" data-status="inactive">
-                                            <i class="fas fa-circle status-icon inactive"></i>
-                                            <span>لا تعمل</span>
-                                        </label>
-                                    </div>
-                                    <input type="hidden" id="channelStatus" value="active">
-                                </div>
-                            </div>
-                            
-                            <div class="form-column">
-                                <div class="form-group">
-                                    <label for="channelUrl" id="urlLabel">رابط البث</label>
-                                    <input type="url" id="channelUrl" required placeholder="أدخل رابط البث (HLS أو يوتيوب)" oninput="detectUrlType()">
-                                    <small id="urlHelp" class="form-help" style="color: #666; font-size: 0.85rem; margin-top: 0.25rem; display: block;">أدخل رابط البث المباشر أو رابط يوتيوب</small>
-                                    <div id="urlTypeIndicator" style="margin-top: 0.5rem; padding: 0.5rem; border-radius: 4px; display: none;">
-                                        <i id="urlTypeIcon" class="fas fa-info-circle"></i>
-                                        <span id="urlTypeText">نوع الرابط: </span>
-                                        <span id="urlTypeValue" style="font-weight: bold;"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="channelLogo">رابط الشعار</label>
-                                    <input type="url" id="channelLogo" placeholder="أدخل رابط الشعار">
-                                </div>
-                                <div class="form-group logo-upload-group">
-                                    <label for="logoUpload">أو رفع شعار من الجهاز</label>
-                                    <div class="logo-upload-container">
-                                        <input type="file" id="logoUpload" accept="image/*" style="display: none;">
-                                        <button type="button" class="logo-upload-btn" onclick="document.getElementById('logoUpload').click()">
-                                            <i class="fas fa-upload"></i>
-                                            <span>اختر شعار</span>
-                                        </button>
-                                        <div class="logo-preview" id="logoPreview" style="display: none;">
-                                            <img id="logoPreviewImg" src="" alt="معاينة الشعار">
-                                            <button type="button" class="remove-logo-btn" onclick="removeLogoPreview()">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <small class="form-help">سيتم وضع رابط الصورة تلقائياً في حقل رابط الشعار عند الرفع</small>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-actions">
-                            <button type="button" class="reset-btn" onclick="resetChannelForm()">
-                                <i class="fas fa-undo"></i>
-                                تصفير
-                            </button>
-                            <button type="submit" class="add-btn">إضافة القناة</button>
-                        </div>
-                    </form>
-                </div>
-                
-                <!-- Categories Management Tab -->
-                <div class="admin-tab-content" id="categoriesTab">
-                    <div class="categories-management">
-                        <div class="categories-header">
-                            <h4>إدارة فئات القنوات</h4>
-                            <button class="add-category-btn" onclick="showAddCategoryForm()">
-                                <i class="fas fa-plus"></i>
-                                إضافة فئة جديدة
-                            </button>
-                        </div>
-                        
-                        <!-- Add/Edit Category Form -->
-                        <div class="category-form-container" id="categoryFormContainer" style="display: none;">
-                            <form class="category-form" id="categoryForm">
-                                <h5 id="categoryFormTitle">إضافة فئة جديدة</h5>
-                                <div class="form-group">
-                                    <label for="categoryKey">مفتاح الفئة (بالإنجليزية)</label>
-                                    <input type="text" id="categoryKey" required placeholder="news, sports, entertainment">
-                                    <small>يُستخدم في النظام - يجب أن يكون باللغة الإنجليزية بدون مسافات</small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="categoryName">اسم الفئة (بالعربية)</label>
-                                    <input type="text" id="categoryName" required placeholder="الأخبار، الرياضة، المنوعة">
-                                </div>
-                                <div class="form-group">
-                                    <label for="categoryIcon">أيقونة الفئة</label>
-                                    <select id="categoryIcon" required>
-                                        <option value="fas fa-newspaper">📰 الأخبار</option>
-                                        <option value="fas fa-tv">📺 المنوعة</option>
-                                        <option value="fas fa-futbol">⚽ الرياضة</option>
-                                        <option value="fas fa-pray">🕌 الدينية</option>
-                                        <option value="fas fa-music">🎵 الموسيقى</option>
-                                        <option value="fas fa-film">🎬 الأفلام</option>
-                                        <option value="fas fa-book-open">📖 الوثائقية</option>
-                                        <option value="fas fa-child">👶 الأطفال</option>
-                                        <option value="fas fa-graduation-cap">📚 التعليمية</option>
-                                        <option value="fas fa-utensils">🍽️ الطبخ</option>
-                                        <option value="fas fa-globe">🌍 الدولية</option>
-                                    </select>
-                                </div>
-                                <div class="form-actions">
-                                    <button type="submit" class="save-category-btn" id="saveCategoryBtn">
-                                        <i class="fas fa-save"></i>
-                                        حفظ الفئة
-                                    </button>
-                                    <button type="button" class="cancel-category-btn" onclick="hideCategoryForm()">
-                                        <i class="fas fa-times"></i>
-                                        إلغاء
-                                    </button>
-                                </div>
-                                <input type="hidden" id="editingCategoryIndex" value="-1">
-                            </form>
-                        </div>
-                        
-                        <!-- Categories List -->
-                        <div class="categories-list" id="categoriesList">
-                            <!-- Categories will be rendered here -->
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- General Settings Tab -->
-                <div class="admin-tab-content" id="settingsTab">
-                    
-                    
-                    <!-- Remote Storage Settings -->
-                    <div class="settings-section-card">
-                        <div class="settings-section-header">
-                            <i class="fas fa-cloud"></i>
-                            <h3>التخزين السحابي</h3>
-                        </div>
-                        <div class="settings-section-content">
-                            <div class="enhanced-setting-item">
-                                <div class="setting-label-group">
-                                    <label for="enableRemoteStorage">تفعيل التخزين السحابي</label>
-                                    <small>مزامنة البيانات مع GitHub أو GitLab</small>
-                                </div>
-                                <label class="enhanced-switch">
-                                    <input type="checkbox" id="enableRemoteStorage">
-                                    <span class="enhanced-slider"></span>
-                                </label>
-                            </div>
-                            
-                            <div class="remote-storage-config" id="remoteStorageConfig" style="display: none;">
-                                <div class="enhanced-setting-item">
-                                    <div class="setting-label-group">
-                                        <label for="storageProvider">مزود الخدمة</label>
-                                        <small>اختر منصة التخزين السحابي</small>
-                                    </div>
-                                    <select id="storageProvider" class="enhanced-select">
-                                        <option value="github">GitHub</option>
-                                        <option value="gitlab">GitLab</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="enhanced-setting-item">
-                                    <div class="setting-label-group">
-                                        <label for="repositoryUrl">رابط المستودع</label>
-                                        <small>مثل: username/repository-name</small>
-                                    </div>
-                                    <input type="text" id="repositoryUrl" placeholder="username/repository-name" class="enhanced-input">
-                                </div>
-                                
-                                <div class="enhanced-setting-item">
-                                    <div class="setting-label-group">
-                                        <label for="accessToken">رمز الوصول (Token)</label>
-                                        <small>يمكنك إنشاء رمز وصول من إعدادات حسابك</small>
-                                    </div>
-                                    <input type="password" id="accessToken" placeholder="أدخل رمز الوصول الشخصي" class="enhanced-input">
-                                </div>
-                                
-                                <div class="enhanced-setting-item">
-                                    <div class="setting-label-group">
-                                        <label for="branchName">اسم الفرع</label>
-                                        <small>اسم الفرع في المستودع</small>
-                                    </div>
-                                    <input type="text" id="branchName" value="main" placeholder="main" class="enhanced-input">
-                                </div>
-                                
-                                <div class="enhanced-setting-item">
-                                    <div class="setting-label-group">
-                                        <label for="autoSync">مزامنة تلقائية</label>
-                                        <small>مزامنة البيانات تلقائياً عند التغيير</small>
-                                    </div>
-                                    <label class="enhanced-switch">
-                                        <input type="checkbox" id="autoSync" checked>
-                                        <span class="enhanced-slider"></span>
-                                    </label>
-                                </div>
-                                
-                                <div class="remote-storage-actions">
-                                    <button class="test-connection-btn" onclick="app.testConnection()">
-                                        <i class="fas fa-link"></i>
-                                        اختبار الاتصال
-                                    </button>
-                                    <button class="save-remote-settings-btn" onclick="app.saveRemoteStorageSettingsUI()">
-                                        <i class="fas fa-save"></i>
-                                        حفظ الإعدادات
-                                    </button>
-                                    <button class="sync-now-btn" onclick="app.manualSync()">
-                                        <i class="fas fa-sync-alt"></i>
-                                        مزامنة الآن
-                                    </button>
-                                </div>
-                                
-                                <div class="sync-status" id="syncStatus">
-                                    <p><strong>حالة المزامنة:</strong> <span id="syncStatusText">غير محدد</span></p>
-                                    <p><strong>آخر مزامنة:</strong> <span id="lastSyncTime">لم يتم</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Diagnostic Tools Section -->
-                    <div class="settings-section-card">
-                        <div class="settings-section-header">
-                            <i class="fas fa-tools"></i>
-                            <h3>أدوات التشخيص</h3>
-                        </div>
-                        <div class="settings-section-content">
-                            <div class="diagnostic-tools-grid">
-                                <button class="enhanced-diagnostic-btn diagnostic-btn" onclick="debugStorage()">
-                                    <i class="fas fa-stethoscope"></i>
-                                    <span>تشخيص التخزين</span>
-                                    <small>فحص حالة البيانات المحفوظة</small>
-                                </button>
-                                <button class="enhanced-diagnostic-btn diagnostic-btn" onclick="app.runSystemDiagnostic()">
-                                    <i class="fas fa-clipboard-check"></i>
-                                    <span>فحص شامل للنظام</span>
-                                    <small>تشخيص كامل للتطبيق والأداء</small>
-                                </button>
-                                <button class="enhanced-diagnostic-btn export-btn" onclick="app.exportChannels()">
-                                    <i class="fas fa-download"></i>
-                                    <span>تصدير القنوات</span>
-                                    <small>حفظ نسخة احتياطية</small>
-                                </button>
-                                <button class="enhanced-diagnostic-btn import-btn" onclick="app.importChannels()">
-                                    <i class="fas fa-upload"></i>
-                                    <span>استيراد القنوات</span>
-                                    <small>استعادة من النسخة الاحتياطية</small>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <input type="file" id="importFileInput" accept=".json" style="display: none;" />
-                </div>
-                
-                <!-- Analytics Tab -->
-                <div class="admin-tab-content" id="analyticsTab">
-                    <div class="analytics-dashboard">
-                        <div class="analytics-header">
-                            <h3><i class="fas fa-chart-line"></i> إحصائيات الزوار</h3>
-                            <div class="analytics-controls">
-                                <button class="refresh-analytics-btn" onclick="app.refreshAnalytics()">
-                                    <i class="fas fa-sync-alt"></i>
-                                    تحديث البيانات
-                                </button>
-                                <button class="export-analytics-btn" onclick="app.exportAnalytics()">
-                                    <i class="fas fa-download"></i>
-                                    تصدير البيانات
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- Summary Cards -->
-                        <div class="analytics-summary">
-                            <div class="summary-card">
-                                <div class="summary-icon">
-                                    <i class="fas fa-users"></i>
-                                </div>
-                                <div class="summary-content">
-                                    <h4>إجمالي الزوار</h4>
-                                    <span class="summary-number" id="totalVisitors">0</span>
-                                    <small class="summary-change" id="visitorsChange">+0% من الأمس</small>
-                                </div>
-                            </div>
-                            
-                            <div class="summary-card">
-                                <div class="summary-icon">
-                                    <i class="fas fa-eye"></i>
-                                </div>
-                                <div class="summary-content">
-                                    <h4>مشاهدات الصفحة</h4>
-                                    <span class="summary-number" id="totalPageViews">0</span>
-                                    <small class="summary-change" id="pageViewsChange">+0% من الأمس</small>
-                                </div>
-                            </div>
-                            
-                            <div class="summary-card">
-                                <div class="summary-icon">
-                                    <i class="fas fa-clock"></i>
-                                </div>
-                                <div class="summary-content">
-                                    <h4>متوسط مدة الجلسة</h4>
-                                    <span class="summary-number" id="avgSessionDuration">0 دقيقة</span>
-                                    <small class="summary-change" id="sessionDurationChange">+0% من الأمس</small>
-                                </div>
-                            </div>
-                            
-                            <div class="summary-card">
-                                <div class="summary-icon">
-                                    <i class="fas fa-globe"></i>
-                                </div>
-                                <div class="summary-content">
-                                    <h4>الزوار الجدد</h4>
-                                    <span class="summary-number" id="newVisitors">0</span>
-                                    <small class="summary-change" id="newVisitorsChange">+0% من الأمس</small>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Charts Section -->
-                        <div class="analytics-charts">
-                            <div class="chart-container">
-                                <div class="chart-header">
-                                    <h4><i class="fas fa-chart-area"></i> الزوار حسب الوقت</h4>
-                                    <div class="chart-controls">
-                                        <select id="timeRange" onchange="app.updateTimeRange()">
-                                            <option value="24h">آخر 24 ساعة</option>
-                                            <option value="7d" selected>آخر 7 أيام</option>
-                                            <option value="30d">آخر 30 يوم</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="chart-content">
-                                    <canvas id="visitorsChart" width="400" height="200"></canvas>
-                                </div>
-                            </div>
-                            
-                            <div class="chart-container">
-                                <div class="chart-header">
-                                    <h4><i class="fas fa-map-marker-alt"></i> الزوار حسب البلد</h4>
-                                </div>
-                                <div class="chart-content">
-                                    <div class="countries-list" id="countriesList">
-                                        <!-- Countries will be populated here -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Detailed Analytics -->
-                        <div class="analytics-details">
-                            <div class="details-section">
-                                <h4><i class="fas fa-desktop"></i> مصادر الزوار</h4>
-                                <div class="sources-list" id="sourcesList">
-                                    <!-- Sources will be populated here -->
-                                </div>
-                            </div>
-                            
-                            <div class="details-section">
-                                <h4><i class="fas fa-clock"></i> أوقات الذروة</h4>
-                                <div class="peak-hours" id="peakHours">
-                                    <!-- Peak hours will be populated here -->
-                                </div>
-                            </div>
-                            
-                            <div class="details-section">
-                                <h4><i class="fas fa-mobile-alt"></i> أنواع الأجهزة</h4>
-                                <div class="device-stats" id="deviceStats">
-                                    <!-- Device stats will be populated here -->
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Real-time Visitors -->
-                        <div class="realtime-section">
-                            <h4><i class="fas fa-circle" style="color: #4CAF50;"></i> الزوار المباشرون</h4>
-                            <div class="realtime-visitors" id="realtimeVisitors">
-                                <div class="realtime-item">
-                                    <div class="visitor-info">
-                                        <span class="visitor-location">جاري التحميل...</span>
-                                        <span class="visitor-time">-</span>
-                                    </div>
-                                    <div class="visitor-status">
-                                        <span class="status-dot"></span>
-                                        <span class="status-text">نشط</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Security Tab -->
-                <div class="admin-tab-content" id="securityTab">
-                    <div class="security-settings">
-                        <div class="security-section">
-                            <div class="security-header">
-                                <div class="security-icon-wrapper">
-                                    <i class="fas fa-shield-alt"></i>
-                                </div>
-                                <div class="security-title-group">
-                                    <h3>تغيير كلمة المرور</h3>
-                                    <p>قم بتغيير كلمة مرور الإدارة لضمان أمان أفضل</p>
-                                </div>
-                            </div>
-                            
-                            <form class="change-password-form" id="changePasswordForm">
-                                <div class="form-group">
-                                    <label for="currentPassword">
-                                        <i class="fas fa-lock"></i>
-                                        كلمة المرور الحالية
-                                        <i class="fas fa-eye toggle-current-password" onclick="app.toggleCurrentPasswordVisibility()"></i>
-                                    </label>
-                                    <div class="password-input-wrapper">
-                                        <input type="password" id="currentPassword" required placeholder="أدخل كلمة المرور الحالية">
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="newPassword">
-                                        <i class="fas fa-key"></i>
-                                        كلمة المرور الجديدة
-                                        <i class="fas fa-eye toggle-new-password" onclick="app.toggleNewPasswordVisibility()"></i>
-                                    </label>
-                                    <div class="password-input-wrapper">
-                                        <input type="password" id="newPassword" required placeholder="أدخل كلمة المرور الجديدة">
-                                    </div>
-                                    <div class="password-strength" id="passwordStrength">
-                                        <div class="strength-indicator">
-                                            <div class="strength-bar">
-                                                <div class="strength-fill" id="strengthFill"></div>
-                                            </div>
-                                            <span class="strength-text" id="strengthText">أدخل كلمة مرور</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="confirmPassword">
-                                        <i class="fas fa-check-double"></i>
-                                        تأكيد كلمة المرور
-                                        <i class="fas fa-eye toggle-confirm-password" onclick="app.toggleConfirmPasswordVisibility()"></i>
-                                    </label>
-                                    <div class="password-input-wrapper">
-                                        <input type="password" id="confirmPassword" required placeholder="أعد إدخال كلمة المرور الجديدة">
-                                    </div>
-                                    <div class="password-match" id="passwordMatch">
-                                        <i class="fas fa-check-circle match-icon" id="matchIcon"></i>
-                                        <span class="match-text" id="matchText">تطابق كلمة المرور</span>
-                                    </div>
-                                </div>
-                                
-                                <div class="password-requirements">
-                                    <div class="requirements-header">
-                                        <i class="fas fa-info-circle"></i>
-                                        <h4>متطلبات كلمة المرور</h4>
-                                    </div>
-                                    <ul class="requirements-list">
-                                        <li class="requirement-item" id="req-length">
-                                            <i class="fas fa-circle requirement-icon"></i>
-                                            <span>8 أحرف على الأقل</span>
-                                        </li>
-                                        <li class="requirement-item" id="req-uppercase">
-                                            <i class="fas fa-circle requirement-icon"></i>
-                                            <span>حرف كبير واحد على الأقل</span>
-                                        </li>
-                                        <li class="requirement-item" id="req-lowercase">
-                                            <i class="fas fa-circle requirement-icon"></i>
-                                            <span>حرف صغير واحد على الأقل</span>
-                                        </li>
-                                        <li class="requirement-item" id="req-number">
-                                            <i class="fas fa-circle requirement-icon"></i>
-                                            <span>رقم واحد على الأقل</span>
-                                        </li>
-                                        <li class="requirement-item" id="req-special">
-                                            <i class="fas fa-circle requirement-icon"></i>
-                                            <span>رمز خاص واحد على الأقل</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                
-                                <div class="form-actions">
-                                    <button type="submit" class="change-password-btn" id="changePasswordBtn">
-                                        <i class="fas fa-shield-alt"></i>
-                                        <span>تغيير كلمة المرور</span>
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                        
-                        <div class="security-section">
-                            <div class="security-header">
-                                <i class="fas fa-info-circle"></i>
-                                <h3>معلومات الأمان</h3>
-                            </div>
-                            
-                            <div class="security-info">
-                                <div class="info-item">
-                                    <i class="fas fa-shield-alt"></i>
-                                    <div class="info-content">
-                                        <h4>تشفير آمن</h4>
-                                        <p>كلمات المرور مشفرة باستخدام SHA-256 Hash</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="info-item">
-                                    <i class="fas fa-clock"></i>
-                                    <div class="info-content">
-                                        <h4>آخر تغيير</h4>
-                                        <p id="lastPasswordChange">لم يتم تغييرها من قبل</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="info-item">
-                                    <i class="fas fa-user-shield"></i>
-                                    <div class="info-content">
-                                        <h4>حالة الجلسة</h4>
-                                        <p id="sessionStatus">نشطة</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal-overlay"></div>
-    </div>
-
-    <!-- Storage Diagnostic Modal -->
-    <div class="modal" id="diagnosticModal">
-        <div class="modal-content diagnostic-content">
-            <div class="modal-header">
-                <h3>📊 تشخيص التخزين</h3>
-                <button class="close-btn" onclick="closeDiagnosticModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="diagnostic-body">
-                <div class="diagnostic-section">
-                    <h4><i class="fas fa-memory"></i> الذاكرة والفلاتر</h4>
-                    <div class="diagnostic-item">
-                        <span class="diagnostic-label">محملة/مفلترة:</span>
-                        <span class="diagnostic-value" id="memoryChannelsCount">-</span> / <span class="diagnostic-value" id="filteredChannelsCount">-</span>
-                    </div>
-                    <div class="diagnostic-item">
-                        <span class="diagnostic-label">الفئة النشطة:</span>
-                        <span class="diagnostic-value" id="activeCategory">-</span>
-                    </div>
-                </div>
-
-                <div class="diagnostic-section">
-                    <h4><i class="fas fa-database"></i> التخزين والحفظ</h4>
-                    <div class="diagnostic-item">
-                        <span class="diagnostic-label">محفوظة/حجم:</span>
-                        <span class="diagnostic-value" id="savedChannelsCount">-</span> (<span class="diagnostic-value" id="dataSize">-</span>)
-                    </div>
-                    <div class="diagnostic-item">
-                        <span class="diagnostic-label">التزامن:</span>
-                        <span class="diagnostic-value" id="syncStatus">-</span>
-                    </div>
-                    <div class="diagnostic-item">
-                        <span class="diagnostic-label">آخر حفظ:</span>
-                        <span class="diagnostic-value" id="lastSaved">-</span>
-                    </div>
-                </div>
-
-                <div class="diagnostic-actions">
-                    <button class="diagnostic-btn export-btn" onclick="app.exportChannels()">
-                        <i class="fas fa-download"></i> تصدير
-                    </button>
-                    <button class="diagnostic-btn refresh-btn" onclick="refreshDiagnostic()">
-                        <i class="fas fa-sync-alt"></i> تحديث
-                    </button>
-                    <button class="diagnostic-btn console-btn" onclick="openConsoleInfo()">
-                        <i class="fas fa-terminal"></i> Console
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="modal-overlay"></div>
-    </div>
-
-    <!-- Welcome Modal -->
-    <div class="modal" id="welcomeModal">
-        <div class="modal-content welcome-content">
-            <div class="welcome-header">
-                <div class="welcome-icon">
-                    <i class="fas fa-satellite-dish"></i>
-                </div>
-                <h2>مرحباً بك في ANON TV!</h2>
-                <p>منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات مع مزامنة سحابية متطورة</p>
-            </div>
-            
-            <div class="welcome-body">
-                <div class="welcome-step">
-                    <div class="step-icon">
-                        <i class="fas fa-sync-alt"></i>
-                    </div>
-                    <div class="step-content">
-                        <h4>تحديث القنوات التلقائي</h4>
-                        <p>يتم فحص التحديثات تلقائياً عند تحميل التطبيق. يمكنك تحديث القنوات يدوياً من خلال زر "تحديث القنوات" في القائمة الجانبية أو من قائمة "المزيد" في الهاتف</p>
-                    </div>
-                </div>
-                
-                <div class="welcome-step">
-                    <div class="step-icon">
-                        <i class="fas fa-cloud"></i>
-                    </div>
-                    <div class="step-content">
-                        <h4>المزامنة السحابية المتطورة</h4>
-                        <p>احفظ قنواتك وإعداداتك في السحابة مع دعم GitHub/GitLab. تتم المزامنة تلقائياً عند إضافة أو تعديل القنوات، ويمكنك الوصول لبياناتك من أي جهاز</p>
-                    </div>
-                </div>
-                
-                <div class="welcome-step">
-                    <div class="step-icon">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <div class="step-content">
-                        <h4>البحث السريع</h4>
-                        <p>استخدم شريط البحث في الأعلى للعثور على القنوات بسرعة، أو استخدم قائمة الفئات لتصفح القنوات حسب النوع (أخبار، رياضة، منوعة، إلخ)</p>
-                    </div>
-                </div>
-                
-                <div class="welcome-step">
-                    <div class="step-icon">
-                        <i class="fas fa-cog"></i>
-                    </div>
-                    <div class="step-content">
-                        <h4>تخصيص التجربة</h4>
-                        <p>اضبط جودة البث، حجم النص، نظام الألوان، والوضع الليلي من خلال الإعدادات. يمكنك أيضاً تخصيص ترتيب القنوات حسب رغبتك</p>
-                    </div>
-                </div>
-                
-                <div class="welcome-step">
-                    <div class="step-icon">
-                        <i class="fas fa-heart"></i>
-                    </div>
-                    <div class="step-content">
-                        <h4>المفضلة والإدارة</h4>
-                        <p>احفظ القنوات المفضلة للوصول السريع، أو أضف قنوات جديدة من لوحة التحكم. يمكنك أيضاً تصدير واستيراد قوائم القنوات مع مزامنة تلقائية للتغييرات</p>
-                    </div>
-                </div>
-                
-                <div class="welcome-step">
-                    <div class="step-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <div class="step-content">
-                        <h4>متوافق مع جميع الأجهزة</h4>
-                        <p>يعمل التطبيق بسلاسة على الهواتف والأجهزة اللوحية وأجهزة الكمبيوتر. يمكنك أيضاً استخدام وضع الشاشة المنفصلة (Picture-in-Picture)</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="welcome-footer">
-                <button class="welcome-btn secondary" onclick="app.closeWelcomeModal()">
-                    <i class="fas fa-times"></i>
-                    إغلاق
-                </button>
-            </div>
-        </div>
-        <div class="modal-overlay"></div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <div class="footer-logo">
-                        <i class="fas fa-satellite-dish"></i>
-                        <h3>ANON TV</h3>
-                    </div>
-                    <p class="footer-description">
-                        منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات
-                    </p>
-                    <div class="footer-social">
-                        <a href="#" class="social-link" title="GitHub">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <a href="#" class="social-link" title="Twitter">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="social-link" title="Telegram">
-                            <i class="fab fa-telegram"></i>
-                        </a>
-                        <a href="#" class="social-link" title="Discord">
-                            <i class="fab fa-discord"></i>
-                        </a>
-                    </div>
-                </div>
-                
-            </div>
-            
-            <div class="footer-bottom">
-                <div class="footer-copyright">
-                    <p>&copy; 2025 ANON TV. جميع الحقوق محفوظة.</p>
-                    <p class="footer-version">الإصدار  : 2.0.1<span id="appVersion"></span></p>
-                </div>
-                <div class="footer-legal">
-                    <a href="#" class="legal-link">سياسة الخصوصية</a>
-                    <span class="separator">|</span>
-                    <a href="#" class="legal-link" onclick="openIPTVChecker()">فحص الروابط</a>
-                    <span class="separator">|</span>
-                    <a href="#" class="legal-link">اتصل بنا</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Notifications Container -->
-    <div class="notifications-container" id="notificationsContainer"></div>
-
-    <!-- Scroll to Top Button -->
-    <button class="scroll-to-top-btn" id="scrollToTopBtn" onclick="scrollToTop()" title="الصعود إلى الأعلى">
-        <i class="fas fa-chevron-up"></i>
-    </button>
-
-
-    <!-- HLS.js Library for video streaming -->
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <!-- Chart.js Library for analytics charts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@latest"></script>
-    <script>
-        // Check if HLS.js loaded successfully
-        window.addEventListener('load', function() {
-            if (typeof Hls === 'undefined') {
-                console.error('❌ فشل في تحميل مكتبة HLS.js');
-                // Show notification to user
-                if (window.app && window.app.notifyError) {
-                    window.app.notifyError('فشل في تحميل مكتبة تشغيل الفيديو - تحقق من اتصال الإنترنت');
-                }
-            } else {
-                console.log('✅ تم تحميل مكتبة HLS.js بنجاح');
-            }
-        });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    </script>
-    <script src="script.js"></script>
-</body>
-</html>
-
-
