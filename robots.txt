@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /TV-AR/
+Allow: /TV-AR/iptv-checker.html
+Disallow: /TV-AR/admin/
+Disallow: /TV-AR/channels.json
+Disallow: /TV-AR/icons/
+Disallow: /TV-AR/screenshots/
+
+# Crawl-delay for better server performance
+Crawl-delay: 1
+
+# Sitemap
+Sitemap: https://anon-site.github.io/TV-AR/sitemap.xml
