@@ -2931,6 +2931,11 @@ class ArabicTVApp {
             this.renderAdminChannels();
             this.updateFavoritesCount();
             
+            // تحديث وقت آخر تحديث فقط إذا كان المستخدم إدارة
+            if (this.isAdminLoggedIn()) {
+                this.setLastUpdateTime();
+            }
+            
         } catch (error) {
             console.error('خطأ في دمج البيانات، استعادة النسخة الاحتياطية:', error);
             
@@ -3080,6 +3085,11 @@ class ArabicTVApp {
         this.renderChannels();
         this.renderAdminChannels();
         this.updateFavoritesCount();
+        
+        // تحديث وقت آخر تحديث فقط إذا كان المستخدم إدارة
+        if (this.isAdminLoggedIn()) {
+            this.setLastUpdateTime();
+        }
     }
 
     async smartMerge(remoteData) {
@@ -3104,6 +3114,11 @@ class ArabicTVApp {
         this.renderChannels();
         this.renderAdminChannels();
         this.updateFavoritesCount();
+        
+        // تحديث وقت آخر تحديث فقط إذا كان المستخدم إدارة
+        if (this.isAdminLoggedIn()) {
+            this.setLastUpdateTime();
+        }
     }
 
     mergeChannels(localChannels, remoteChannels) {
@@ -3216,7 +3231,7 @@ class ArabicTVApp {
                     this.renderChannels();
                     this.updateChannelStats();
                     
-                    // تحديث وقت آخر تحديث
+                    // تحديث وقت آخر تحديث فقط إذا كان المستخدم إدارة
                     this.setLastUpdateTime();
                     
                     this.notifySuccess('تم تحديث البيانات بنجاح!', 'تحديث مكتمل');
@@ -4069,7 +4084,7 @@ class ArabicTVApp {
             this.renderChannels();
             this.updateChannelStats();
             
-            // تحديث وقت آخر تحديث
+            // تحديث وقت آخر تحديث فقط إذا كان المستخدم إدارة
             this.setLastUpdateTime();
             
             this.notifySuccess('تم استعادة النسخة الاحتياطية بنجاح!');
@@ -4415,7 +4430,7 @@ class ArabicTVApp {
                         this.renderChannels();
                         this.updateChannelStats();
                         
-                        // تحديث وقت آخر تحديث
+                        // تحديث وقت آخر تحديث فقط إذا كان المستخدم إدارة
                         this.setLastUpdateTime();
                         
                         this.notifySuccess('تم تحديث البيانات بنجاح!', 'تحديث مكتمل');
@@ -5762,9 +5777,12 @@ class ArabicTVApp {
     }
     
     setLastUpdateTime() {
-        const now = new Date().toISOString();
-        localStorage.setItem('lastChannelUpdate', now);
-        this.updateLastUpdateTime();
+        // تحديث وقت آخر تحديث فقط إذا كان المستخدم إدارة
+        if (this.isAdminLoggedIn()) {
+            const now = new Date().toISOString();
+            localStorage.setItem('lastChannelUpdate', now);
+            this.updateLastUpdateTime();
+        }
     }
     
     // Initialize footer functionality
@@ -7795,8 +7813,10 @@ async function updateChannels() {
         // Update channel statistics
         window.app.updateChannelStats();
         
-        // تحديث وقت آخر تحديث
-        window.app.setLastUpdateTime();
+        // تحديث وقت آخر تحديث فقط إذا كان المستخدم إدارة
+        if (window.app.isAdminLoggedIn()) {
+            window.app.setLastUpdateTime();
+        }
         
         // Reload the channels display
         window.app.renderChannels();
