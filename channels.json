@@ -674,7 +674,7 @@
       "name": "Movies!",
       "url": "https://dvrfl03.bozztv.com/hdirect/hdirect-ovair1-movies!/index.m3u8",
       "logo": "https://png.pngtree.com/element_pic/16/11/18/4f829e85866bd52d062ca58b4e1ecef5.png",
-      "category": "news",
+      "category": "movies",
       "country": "USA",
       "type": "hls",
       "status": "active"
@@ -738,6 +738,16 @@
       "country": "عالمية",
       "type": "hls",
       "status": "active"
+    },
+    {
+      "id": 104,
+      "name": "& Filx",
+      "url": "https://edge3-moblive.yuppcdn.net/drm/smil:nflixdrm.smil/index.m3u8",
+      "logo": "https://static.wikia.nocookie.net/logopedia/images/f/f9/%26flix_HD_%282025%29.svg/revision/latest?cb=20250608142349",
+      "category": "movies",
+      "country": "عالمية",
+      "type": "hls",
+      "status": "active"
     }
   ],
   "favorites": [],
@@ -754,22 +764,7 @@
     "animationsEnabled": false,
     "compactMode": true,
     "highContrast": false,
-    "borderRadius": "rounded",
-    "enableNotifications": true,
-    "autoUpdateChannels": true,
-    "rememberLastChannel": true,
-    "showChannelLogos": true,
-    "enablePictureInPicture": true,
-    "enableAnalytics": false,
-    "saveWatchHistory": true,
-    "enableCloudSync": false,
-    "clearDataOnExit": false,
-    "enableTranslation": true,
-    "translationSpeed": "normal",
-    "translationAccuracy": "medium",
-    "translationPosition": "bottom",
-    "translationSize": "medium",
-    "translationOpacity": 0.8
+    "borderRadius": "rounded"
   },
   "categories": [
     {
@@ -819,6 +814,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-20T02:44:09.049Z",
+  "lastModified": "2025-09-20T03:58:13.481Z",
   "version": "1.0"
 }
