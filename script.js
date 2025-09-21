@@ -5795,10 +5795,68 @@ class ArabicTVApp {
             
             // Get local data info
             const localData = localStorage.getItem('tvChannels');
+            const arabicTVData = localStorage.getItem('arabicTVChannels');
+            const isFirstVisit = !localData && !arabicTVData && this.channels.length === 0;
             
-            if (!localData) {
-                console.log('📥 لا توجد بيانات محلية، سيتم تحميل البيانات لأول مرة');
-                return false;
+            // Check if local data is corrupted or empty
+            let isDataCorrupted = false;
+            if (localData) {
+                try {
+                    const parsedData = JSON.parse(localData);
+                    if (!parsedData.channels || !Array.isArray(parsedData.channels) || parsedData.channels.length === 0) {
+                        isDataCorrupted = true;
+                    }
+                } catch (e) {
+                    isDataCorrupted = true;
+                }
+            }
+            
+            if (arabicTVData) {
+                try {
+                    const parsedData = JSON.parse(arabicTVData);
+                    if (!Array.isArray(parsedData) || parsedData.length === 0) {
+                        isDataCorrupted = true;
+                    }
+                } catch (e) {
+                    isDataCorrupted = true;
+                }
+            }
+            
+            if (isFirstVisit || isDataCorrupted) {
+                const reason = isFirstVisit ? 'أول زيارة للموقع' : 'البيانات المحلية تالفة أو فارغة';
+                console.log(`📥 ${reason}، سيتم تحديث القنوات تلقائياً...`);
+                
+                // Show loading notification
+                this.notifyInfo('جارٍ تحديث القنوات...', 'تحديث تلقائي', 3000);
+                
+                // Update channels automatically
+                try {
+                    await updateChannels();
+                    this.notifySuccess('تم تحديث القنوات بنجاح!', 'تحديث مكتمل', 4000);
+                    return true;
+                } catch (updateError) {
+                    console.error('❌ فشل في التحديث التلقائي:', updateError);
+                    this.notifyError('فشل في تحديث القنوات تلقائياً', 'خطأ في التحديث', 5000);
+                    return false;
+                }
+            }
+
+            // Check if we have very few channels (less than 10) and update automatically
+            if (this.channels.length < 10) {
+                console.log('📥 عدد القنوات قليل جداً، سيتم تحديث القنوات تلقائياً...');
+                
+                // Show loading notification
+                this.notifyInfo('جارٍ تحديث القنوات...', 'تحديث تلقائي', 3000);
+                
+                try {
+                    await updateChannels();
+                    this.notifySuccess('تم تحديث القنوات بنجاح!', 'تحديث مكتمل', 4000);
+                    return true;
+                } catch (updateError) {
+                    console.error('❌ فشل في التحديث التلقائي:', updateError);
+                    this.notifyError('فشل في تحديث القنوات تلقائياً', 'خطأ في التحديث', 5000);
+                    return false;
+                }
             }
 
             // Fetch remote data info
@@ -5818,16 +5876,39 @@ class ArabicTVApp {
             console.log('📅 آخر تحديث محلي:', localDate.toLocaleString('ar'));
             console.log('📅 آخر تحديث سحابي:', remoteDate.toLocaleString('ar'));
 
+            // Check if local data is very old (more than 7 days)
+            const daysSinceLastUpdate = (new Date() - localDate) / (1000 * 60 * 60 * 24);
+            
             if (remoteDate > localDate) {
                 console.log('🆕 يوجد تحديث جديد متاح!');
-                this.showUpdateAvailableNotification(remoteDate);
                 
-                // إذا كانت المزامنة السحابية مفعلة، قم بإشعار المستخدم بإمكانية المزامنة التلقائية
-                if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
-                    console.log('💡 يمكن تحديث القنوات ومزامنتها تلقائياً مع السحابة');
+                // If data is very old (more than 7 days), update automatically
+                if (daysSinceLastUpdate > 7) {
+                    console.log('📥 البيانات قديمة جداً، سيتم تحديث القنوات تلقائياً...');
+                    
+                    // Show loading notification
+                    this.notifyInfo('جارٍ تحديث القنوات...', 'تحديث تلقائي', 3000);
+                    
+                    try {
+                        await updateChannels();
+                        this.notifySuccess('تم تحديث القنوات بنجاح!', 'تحديث مكتمل', 4000);
+                        return true;
+                    } catch (updateError) {
+                        console.error('❌ فشل في التحديث التلقائي:', updateError);
+                        this.notifyError('فشل في تحديث القنوات تلقائياً', 'خطأ في التحديث', 5000);
+                        return false;
+                    }
+                } else {
+                    // Show notification for manual update
+                    this.showUpdateAvailableNotification(remoteDate);
+                    
+                    // إذا كانت المزامنة السحابية مفعلة، قم بإشعار المستخدم بإمكانية المزامنة التلقائية
+                    if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
+                        console.log('💡 يمكن تحديث القنوات ومزامنتها تلقائياً مع السحابة');
+                    }
+                    
+                    return true;
                 }
-                
-                return true;
             } else {
                 console.log('✅ البيانات محدثة');
                 return false;
@@ -5835,7 +5916,22 @@ class ArabicTVApp {
 
         } catch (error) {
             console.error('خطأ في فحص التحديثات:', error);
-            return false;
+            
+            // If there's an error checking updates, try to update automatically
+            console.log('📥 خطأ في فحص التحديثات، سيتم تحديث القنوات تلقائياً...');
+            
+            // Show loading notification
+            this.notifyInfo('جارٍ تحديث القنوات...', 'تحديث تلقائي', 3000);
+            
+            try {
+                await updateChannels();
+                this.notifySuccess('تم تحديث القنوات بنجاح!', 'تحديث مكتمل', 4000);
+                return true;
+            } catch (updateError) {
+                console.error('❌ فشل في التحديث التلقائي:', updateError);
+                this.notifyError('فشل في تحديث القنوات تلقائياً', 'خطأ في التحديث', 5000);
+                return false;
+            }
         }
     }
 
