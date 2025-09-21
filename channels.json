@@ -682,11 +682,11 @@
     },
     {
       "id": 106,
-      "name": "طه",
-      "url": "https://media1.livaat.com/static/TAHA_TV/playlist.m3u8",
-      "logo": "https://iili.io/KYPgGqB.png",
+      "name": "Roya Kids",
+      "url": "https://playlist.fasttvcdn.com/pl/ptllxjd03j6g9oxxjdfapg/roya-kids-originals/playlist.m3u8",
+      "logo": "https://royakids.tv/gallery/logo1.png",
       "category": "kids",
-      "country": "لبنان",
+      "country": "الاردن",
       "type": "hls",
       "status": "active"
     }
@@ -756,6 +756,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-21T23:46:38.224Z",
+  "lastModified": "2025-09-21T23:50:28.874Z",
   "version": "1.0"
 }
