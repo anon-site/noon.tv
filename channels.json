@@ -679,6 +679,16 @@
       "country": "قطر",
       "type": "hls",
       "status": "active"
+    },
+    {
+      "id": 105,
+      "name": "ماجد أطفال",
+      "url": "https://test.elahmad.net/https://vo-live-media.cdb.cdn.orange.com/Content/Channel/MajidChildrenChannel/HLS/stream_01/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Majid_TV_logo_2023.svg/1200px-Majid_TV_logo_2023.svg.png",
+      "category": "kids",
+      "country": "عالمية",
+      "type": "hls",
+      "status": "active"
     }
   ],
   "favorites": [],
@@ -746,6 +756,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-21T20:08:13.576Z",
+  "lastModified": "2025-09-21T20:16:13.700Z",
   "version": "1.0"
 }
