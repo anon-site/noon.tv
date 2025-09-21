@@ -6786,6 +6786,12 @@ function setupChannelBarTouchSupport(scrollContainer) {
     let lastTime = 0;
     let animationId = 0;
     let touchStartTime = 0;
+    let isDesktopTouch = false;
+
+    // Detect if this is a desktop touch device (laptop with touchscreen)
+    const isDesktop = window.innerWidth > 768;
+    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    isDesktopTouch = isDesktop && hasTouch;
 
     scrollContainer.addEventListener('touchstart', (e) => {
         startX = e.touches[0].clientX;
@@ -6796,6 +6802,12 @@ function setupChannelBarTouchSupport(scrollContainer) {
         velocity = 0;
         lastTime = Date.now();
         touchStartTime = Date.now();
+        
+        // Add visual feedback for desktop touch
+        if (isDesktopTouch) {
+            scrollContainer.style.cursor = 'grabbing';
+            scrollContainer.classList.add('touch-active');
+        }
         
         // Cancel any ongoing animation
         if (animationId) {
@@ -6812,8 +6824,9 @@ function setupChannelBarTouchSupport(scrollContainer) {
         const diffX = Math.abs(currentX - startX);
         const diffY = Math.abs(currentY - startY);
 
-        // More strict horizontal scroll detection
-        if (diffX > diffY && diffX > 20) {
+        // More sensitive horizontal scroll detection for desktop touch
+        const threshold = isDesktopTouch ? 15 : 20;
+        if (diffX > diffY && diffX > threshold) {
             isScrolling = true;
             isDragging = true;
             e.preventDefault();
@@ -6845,15 +6858,16 @@ function setupChannelBarTouchSupport(scrollContainer) {
             velocity = scrollDiff / timeDiff;
         }
 
-        // Only apply momentum for quick swipes, not slow drags
-        const isQuickSwipe = totalTouchTime < 300 && Math.abs(diffX) > 30;
+        // Enhanced momentum for desktop touch devices
+        const isQuickSwipe = totalTouchTime < (isDesktopTouch ? 400 : 300) && Math.abs(diffX) > (isDesktopTouch ? 20 : 30);
         
-        if (isQuickSwipe && isDragging && Math.abs(velocity) > 0.2) {
-            // Apply reduced momentum for quick swipes only
-            applyMomentumScroll(scrollContainer, velocity * 0.2);
-        } else if (Math.abs(diffX) > 30) {
-            // For slow drags, use smaller scroll amounts
-            const scrollAmount = window.innerWidth <= 768 ? 80 : 150;
+        if (isQuickSwipe && isDragging && Math.abs(velocity) > 0.1) {
+            // Apply enhanced momentum for desktop touch
+            const momentumMultiplier = isDesktopTouch ? 0.4 : 0.2;
+            applyMomentumScroll(scrollContainer, velocity * momentumMultiplier);
+        } else if (Math.abs(diffX) > (isDesktopTouch ? 20 : 30)) {
+            // For slow drags, use enhanced scroll amounts for desktop touch
+            const scrollAmount = isDesktopTouch ? 200 : (window.innerWidth <= 768 ? 80 : 150);
             if (diffX > 0) {
                 scrollContainer.scrollBy({
                     left: scrollAmount,
@@ -6867,21 +6881,27 @@ function setupChannelBarTouchSupport(scrollContainer) {
             }
         }
 
+        // Reset state and visual feedback
         startX = 0;
         startY = 0;
         isScrolling = false;
         isDragging = false;
         velocity = 0;
+        
+        if (isDesktopTouch) {
+            scrollContainer.style.cursor = 'grab';
+            scrollContainer.classList.remove('touch-active');
+        }
     }, { passive: true });
 
-    // Momentum scrolling function with much more control
+    // Enhanced momentum scrolling function for desktop touch
     function applyMomentumScroll(container, initialVelocity) {
-        // Very reduced momentum to prevent overshooting
-        const velocityMultiplier = window.innerWidth <= 768 ? 0.1 : 0.2;
+        // Enhanced momentum for desktop touch devices
+        const velocityMultiplier = isDesktopTouch ? 0.3 : (window.innerWidth <= 768 ? 0.1 : 0.2);
         let currentVelocity = initialVelocity * velocityMultiplier;
-        // High friction for quick stopping
-        const friction = window.innerWidth <= 768 ? 0.8 : 0.85;
-        const minVelocity = 0.02; // Very low threshold for early stopping
+        // Adjusted friction for desktop touch
+        const friction = isDesktopTouch ? 0.92 : (window.innerWidth <= 768 ? 0.8 : 0.85);
+        const minVelocity = isDesktopTouch ? 0.05 : 0.02; // Adjusted threshold for desktop touch
 
         function animate() {
             if (Math.abs(currentVelocity) < minVelocity) {
@@ -6902,34 +6922,67 @@ function setupChannelBarMouseDrag(scrollContainer) {
     let isDragging = false;
     let startX = 0;
     let scrollLeft = 0;
+    let isDesktopTouch = false;
+
+    // Detect if this is a desktop touch device
+    const isDesktop = window.innerWidth > 768;
+    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    isDesktopTouch = isDesktop && hasTouch;
 
     scrollContainer.addEventListener('mousedown', (e) => {
         isDragging = true;
         startX = e.pageX - scrollContainer.offsetLeft;
         scrollLeft = scrollContainer.scrollLeft;
         scrollContainer.style.cursor = 'grabbing';
+        
+        // Add visual feedback for desktop touch
+        if (isDesktopTouch) {
+            scrollContainer.classList.add('mouse-drag-active');
+        }
+        
         e.preventDefault();
     });
 
     scrollContainer.addEventListener('mouseleave', () => {
         isDragging = false;
         scrollContainer.style.cursor = 'grab';
+        
+        if (isDesktopTouch) {
+            scrollContainer.classList.remove('mouse-drag-active');
+        }
     });
 
     scrollContainer.addEventListener('mouseup', () => {
         isDragging = false;
         scrollContainer.style.cursor = 'grab';
+        
+        if (isDesktopTouch) {
+            scrollContainer.classList.remove('mouse-drag-active');
+        }
     });
 
     scrollContainer.addEventListener('mousemove', (e) => {
         if (!isDragging) return;
         e.preventDefault();
         const x = e.pageX - scrollContainer.offsetLeft;
-        // Further reduced speed for better control
-        const multiplier = window.innerWidth <= 768 ? 1.5 : 3;
+        // Enhanced speed for desktop touch devices
+        const multiplier = isDesktopTouch ? 4 : (window.innerWidth <= 768 ? 1.5 : 3);
         const walk = (x - startX) * multiplier;
         scrollContainer.scrollLeft = scrollLeft - walk;
     });
+
+    // Enhanced hover effects for desktop touch
+    if (isDesktopTouch) {
+        scrollContainer.addEventListener('mouseenter', () => {
+            scrollContainer.style.cursor = 'grab';
+        });
+        
+        scrollContainer.addEventListener('mouseleave', () => {
+            if (!isDragging) {
+                scrollContainer.style.cursor = 'grab';
+            }
+        });
+    }
 }
 
 function scrollToCurrentChannel() {
@@ -6959,11 +7012,16 @@ function setupChannelBarWheelScroll() {
     const scrollContainer = document.getElementById('channelBarScroll');
     if (!scrollContainer) return;
 
+    // Detect if this is a desktop touch device
+    const isDesktop = window.innerWidth > 768;
+    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const isDesktopTouch = isDesktop && hasTouch;
+
     scrollContainer.addEventListener('wheel', (e) => {
         // Always allow horizontal scroll when hovering over the channel bar
         e.preventDefault();
-        // Further reduced speed for better control
-        const multiplier = window.innerWidth <= 768 ? 1 : 2;
+        // Enhanced speed for desktop touch devices
+        const multiplier = isDesktopTouch ? 3 : (window.innerWidth <= 768 ? 1 : 2);
         scrollContainer.scrollBy({
             left: e.deltaY * multiplier,
             behavior: 'smooth'
@@ -6974,14 +7032,26 @@ function setupChannelBarWheelScroll() {
     scrollContainer.addEventListener('wheel', (e) => {
         if (e.shiftKey) {
             e.preventDefault();
-            // Further reduced speed for better control
-            const multiplier = window.innerWidth <= 768 ? 2 : 4;
+            // Enhanced speed for desktop touch devices
+            const multiplier = isDesktopTouch ? 6 : (window.innerWidth <= 768 ? 2 : 4);
             scrollContainer.scrollBy({
                 left: e.deltaY * multiplier,
                 behavior: 'smooth'
             });
         }
     }, { passive: false });
+
+    // Add visual feedback for wheel scrolling on desktop touch
+    if (isDesktopTouch) {
+        let wheelTimeout;
+        scrollContainer.addEventListener('wheel', () => {
+            scrollContainer.classList.add('wheel-scrolling');
+            clearTimeout(wheelTimeout);
+            wheelTimeout = setTimeout(() => {
+                scrollContainer.classList.remove('wheel-scrolling');
+            }, 150);
+        });
+    }
 }
 
 function resetChannelForm() {

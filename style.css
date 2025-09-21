@@ -8888,6 +8888,68 @@ body[data-theme="light"] .legal-link:hover {
     }
 }
 
+/* Desktop touch optimizations */
+@media (min-width: 769px) {
+    .channel-bar-scroll {
+        /* Enhanced desktop touch scrolling */
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        overscroll-behavior-y: none;
+        
+        /* Better desktop touch response */
+        touch-action: pan-x;
+        
+        /* Smooth cursor transitions */
+        cursor: grab;
+        transition: cursor 0.2s ease;
+    }
+    
+    .channel-bar-scroll.touch-active {
+        cursor: grabbing;
+    }
+    
+    .channel-bar-scroll.mouse-drag-active {
+        cursor: grabbing;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+    }
+    
+    .channel-bar-scroll.wheel-scrolling {
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 8px;
+        transition: background 0.15s ease;
+    }
+    
+    .channel-bar-item {
+        /* Enhanced desktop touch targets */
+        min-height: 48px;
+        min-width: 48px;
+        
+        /* Better desktop touch feedback */
+        transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+        
+        /* Improved hover states for desktop touch */
+        cursor: pointer;
+        
+        /* Prevent text selection during touch */
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    
+    .channel-bar-item:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-3px) scale(1.08);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    }
+    
+    .channel-bar-item:active {
+        transform: scale(0.98);
+        background-color: rgba(255, 255, 255, 0.3);
+    }
+}
+
 .channel-bar-scroll::-webkit-scrollbar {
     display: none;
 }
