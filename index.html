@@ -605,6 +605,14 @@
                             <span class="slider"></span>
                         </label>
                     </div>
+                    
+                    <div class="setting-item">
+                        <label for="showAutoNotifications">الإشعارات التلقائية</label>
+                        <label class="switch">
+                            <input type="checkbox" id="showAutoNotifications">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
                 </div>
                 
                 <!-- Quick Actions -->
@@ -620,6 +628,14 @@
                     <button class="delete-cookies-btn" onclick="app.deleteAllCookies()">
                         <i class="fas fa-trash-alt"></i>
                         حذف الكوكيز
+                    </button>
+                    <button class="test-notifications-btn" onclick="app.testNotifications()">
+                        <i class="fas fa-bell"></i>
+                        اختبار الإشعارات
+                    </button>
+                    <button class="reset-notifications-btn" onclick="app.resetNotifications()">
+                        <i class="fas fa-bell-slash"></i>
+                        إعادة تعيين الإشعارات
                     </button>
                 </div>
             </div>

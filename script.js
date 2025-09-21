@@ -27,7 +27,8 @@ class ArabicTVApp {
             animationsEnabled: false,
             compactMode: true,
             highContrast: false,
-            borderRadius: 'rounded' // minimal, normal, rounded
+            borderRadius: 'rounded', // minimal, normal, rounded
+            showAutoNotifications: false // التحكم في الإشعارات التلقائية
         };
         this.filteredChannels = [...this.channels];
         this.currentCategory = 'all';
@@ -78,9 +79,9 @@ class ArabicTVApp {
         this.bindEvents();
         this.bindRemoteStorageEvents();
         
-        // Check for updates after a short delay
+        // Check for updates after a short delay (with notification control)
         setTimeout(() => {
-            this.checkForUpdates();
+            this.checkForUpdates(true); // Pass true to indicate this is automatic check
         }, 2000);
         this.setupMobileSearch();
         this.setupPictureInPictureEvents();
@@ -203,10 +204,11 @@ class ArabicTVApp {
                 this.adminPassword = savedPassword;
                 console.log('تم تحميل كلمة المرور المحفوظة');
                 
-                // تحذير المستخدم إذا لم تكن المزامنة السحابية مفعلة
-                if (!this.remoteStorage.enabled) {
+                // تحذير المستخدم إذا لم تكن المزامنة السحابية مفعلة (فقط عند عدم إظهار الإشعار من قبل)
+                if (!this.remoteStorage.enabled && !localStorage.getItem('passwordWarningShown')) {
                     setTimeout(() => {
                         this.notifyWarning('كلمة المرور محفوظة محلياً فقط. فعّل المزامنة السحابية لاستخدامها على جميع الأجهزة');
+                        localStorage.setItem('passwordWarningShown', 'true');
                     }, 3000);
                 }
             } else {
@@ -284,6 +286,7 @@ class ArabicTVApp {
             this.applyCompactMode();
             this.applyHighContrast();
             this.applyBorderRadius();
+            this.applyAutoNotifications();
             
             console.log('✅ تم تطبيق جميع الإعدادات بنجاح');
             
@@ -397,6 +400,29 @@ class ArabicTVApp {
         if (document.getElementById('borderRadius')) {
             document.getElementById('borderRadius').value = borderRadius;
         }
+    }
+
+    applyAutoNotifications() {
+        const showAutoNotifications = this.settings.showAutoNotifications;
+        
+        if (document.getElementById('showAutoNotifications')) {
+            document.getElementById('showAutoNotifications').checked = showAutoNotifications;
+        }
+    }
+
+    resetNotifications() {
+        // إعادة تعيين الإشعارات المحفوظة
+        localStorage.removeItem('passwordWarningShown');
+        localStorage.removeItem('welcomeShown');
+        localStorage.removeItem('hasVisitedBefore');
+        localStorage.removeItem('lastUpdateCheck');
+        
+        // إعادة تعيين إعداد الإشعارات التلقائية
+        this.settings.showAutoNotifications = false;
+        this.saveSettings();
+        this.applyAutoNotifications();
+        
+        this.notifySuccess('تم إعادة تعيين جميع الإشعارات! ستظهر الإشعارات مرة أخرى عند الحاجة.');
     }
 
     bindEvents() {
@@ -518,6 +544,15 @@ class ArabicTVApp {
                 this.settings.borderRadius = e.target.value;
                 this.saveSettings();
                 this.applyBorderRadius();
+            });
+        }
+
+        const showAutoNotificationsCheckbox = document.getElementById('showAutoNotifications');
+        if (showAutoNotificationsCheckbox) {
+            showAutoNotificationsCheckbox.addEventListener('change', (e) => {
+                this.settings.showAutoNotifications = e.target.checked;
+                this.saveSettings();
+                this.applyAutoNotifications();
             });
         }
 
@@ -3167,6 +3202,10 @@ class ArabicTVApp {
         this.settings.compactMode = true;
         this.settings.highContrast = false;
         this.settings.borderRadius = 'rounded';
+        this.settings.showAutoNotifications = false;
+        
+        // إعادة تعيين الإشعارات المحفوظة
+        localStorage.removeItem('passwordWarningShown');
         
         // Save and apply
         this.saveSettings();
@@ -4634,6 +4673,7 @@ class ArabicTVApp {
 
     // نظام الإشعارات الجميل
     showNotification(title, message, type = 'info', duration = 4000) {
+        console.log('🔔 إظهار إشعار:', { title, message, type, duration });
         const container = document.getElementById('notificationsContainer');
         if (!container) return;
 
@@ -4686,6 +4726,31 @@ class ArabicTVApp {
         this.limitNotifications();
 
         return notificationId;
+    }
+
+    // دالة اختبار الإشعارات
+    testNotifications() {
+        console.log('🧪 اختبار الإشعارات...');
+        
+        // اختبار إشعار نجاح
+        setTimeout(() => {
+            this.showNotification('نجح الاختبار!', 'الإشعارات تعمل بشكل صحيح', 'success', 3000);
+        }, 500);
+        
+        // اختبار إشعار تحذير
+        setTimeout(() => {
+            this.showNotification('تحذير', 'هذا إشعار تحذير للاختبار', 'warning', 3000);
+        }, 1500);
+        
+        // اختبار إشعار خطأ
+        setTimeout(() => {
+            this.showNotification('خطأ', 'هذا إشعار خطأ للاختبار', 'error', 3000);
+        }, 2500);
+        
+        // اختبار إشعار معلومات
+        setTimeout(() => {
+            this.showNotification('معلومات', 'هذا إشعار معلومات للاختبار', 'info', 3000);
+        }, 3500);
     }
 
     closeNotification(notificationId) {
@@ -5789,7 +5854,7 @@ class ArabicTVApp {
     
 
     // Check for updates
-    async checkForUpdates() {
+    async checkForUpdates(isAutomaticCheck = false) {
         try {
             console.log('🔍 فحص التحديثات...');
             
@@ -5797,6 +5862,10 @@ class ArabicTVApp {
             const localData = localStorage.getItem('tvChannels');
             const arabicTVData = localStorage.getItem('arabicTVChannels');
             const isFirstVisit = !localData && !arabicTVData && this.channels.length === 0;
+            
+            // Check if this is the first visit ever
+            const hasVisitedBefore = localStorage.getItem('hasVisitedBefore');
+            const isFirstEverVisit = !hasVisitedBefore;
             
             // Check if local data is corrupted or empty
             let isDataCorrupted = false;
@@ -5826,17 +5895,32 @@ class ArabicTVApp {
                 const reason = isFirstVisit ? 'أول زيارة للموقع' : 'البيانات المحلية تالفة أو فارغة';
                 console.log(`📥 ${reason}، سيتم تحديث القنوات تلقائياً...`);
                 
-                // Show loading notification
-                this.notifyInfo('جارٍ تحديث القنوات...', 'تحديث تلقائي', 3000);
+                // Show loading notification only for first ever visit
+                if (isFirstEverVisit) {
+                    this.notifyInfo('جارٍ تحديث القنوات...', 'تحديث تلقائي', 3000);
+                }
                 
                 // Update channels automatically
                 try {
                     await updateChannels();
-                    this.notifySuccess('تم تحديث القنوات بنجاح!', 'تحديث مكتمل', 4000);
+                    
+                    // Show success notification only for first ever visit
+                    if (isFirstEverVisit) {
+                        this.notifySuccess('تم تحديث القنوات بنجاح!', 'تحديث مكتمل', 4000);
+                    }
+                    
+                    // Mark that user has visited before
+                    if (isFirstEverVisit) {
+                        localStorage.setItem('hasVisitedBefore', 'true');
+                        localStorage.setItem('lastUpdateCheck', new Date().toISOString());
+                    }
+                    
                     return true;
                 } catch (updateError) {
                     console.error('❌ فشل في التحديث التلقائي:', updateError);
-                    this.notifyError('فشل في تحديث القنوات تلقائياً', 'خطأ في التحديث', 5000);
+                    if (isFirstEverVisit) {
+                        this.notifyError('فشل في تحديث القنوات تلقائياً', 'خطأ في التحديث', 5000);
+                    }
                     return false;
                 }
             }
@@ -5845,16 +5929,31 @@ class ArabicTVApp {
             if (this.channels.length < 10) {
                 console.log('📥 عدد القنوات قليل جداً، سيتم تحديث القنوات تلقائياً...');
                 
-                // Show loading notification
-                this.notifyInfo('جارٍ تحديث القنوات...', 'تحديث تلقائي', 3000);
+                // Show loading notification only for first ever visit
+                if (isFirstEverVisit) {
+                    this.notifyInfo('جارٍ تحديث القنوات...', 'تحديث تلقائي', 3000);
+                }
                 
                 try {
                     await updateChannels();
-                    this.notifySuccess('تم تحديث القنوات بنجاح!', 'تحديث مكتمل', 4000);
+                    
+                    // Show success notification only for first ever visit
+                    if (isFirstEverVisit) {
+                        this.notifySuccess('تم تحديث القنوات بنجاح!', 'تحديث مكتمل', 4000);
+                    }
+                    
+                    // Mark that user has visited before
+                    if (isFirstEverVisit) {
+                        localStorage.setItem('hasVisitedBefore', 'true');
+                        localStorage.setItem('lastUpdateCheck', new Date().toISOString());
+                    }
+                    
                     return true;
                 } catch (updateError) {
                     console.error('❌ فشل في التحديث التلقائي:', updateError);
-                    this.notifyError('فشل في تحديث القنوات تلقائياً', 'خطأ في التحديث', 5000);
+                    if (isFirstEverVisit) {
+                        this.notifyError('فشل في تحديث القنوات تلقائياً', 'خطأ في التحديث', 5000);
+                    }
                     return false;
                 }
             }
@@ -5882,29 +5981,47 @@ class ArabicTVApp {
             if (remoteDate > localDate) {
                 console.log('🆕 يوجد تحديث جديد متاح!');
                 
+                // Check if this is a real new update (not just first visit)
+                const lastUpdateCheck = localStorage.getItem('lastUpdateCheck');
+                const hasRealUpdate = lastUpdateCheck && new Date(remoteLastModified) > new Date(lastUpdateCheck);
+                
                 // If data is very old (more than 7 days), update automatically
                 if (daysSinceLastUpdate > 7) {
                     console.log('📥 البيانات قديمة جداً، سيتم تحديث القنوات تلقائياً...');
                     
-                    // Show loading notification
-                    this.notifyInfo('جارٍ تحديث القنوات...', 'تحديث تلقائي', 3000);
+                    // Show loading notification only if there's a real update
+                    if (hasRealUpdate) {
+                        this.notifyInfo('جارٍ تحديث القنوات...', 'تحديث تلقائي', 3000);
+                    }
                     
                     try {
                         await updateChannels();
-                        this.notifySuccess('تم تحديث القنوات بنجاح!', 'تحديث مكتمل', 4000);
+                        
+                        // Show success notification only if there's a real update
+                        if (hasRealUpdate) {
+                            this.notifySuccess('تم تحديث القنوات بنجاح!', 'تحديث مكتمل', 4000);
+                        }
+                        
+                        // Update last check time
+                        localStorage.setItem('lastUpdateCheck', new Date().toISOString());
+                        
                         return true;
                     } catch (updateError) {
                         console.error('❌ فشل في التحديث التلقائي:', updateError);
-                        this.notifyError('فشل في تحديث القنوات تلقائياً', 'خطأ في التحديث', 5000);
+                        if (hasRealUpdate) {
+                            this.notifyError('فشل في تحديث القنوات تلقائياً', 'خطأ في التحديث', 5000);
+                        }
                         return false;
                     }
                 } else {
-                    // Show notification for manual update
-                    this.showUpdateAvailableNotification(remoteDate);
-                    
-                    // إذا كانت المزامنة السحابية مفعلة، قم بإشعار المستخدم بإمكانية المزامنة التلقائية
-                    if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
-                        console.log('💡 يمكن تحديث القنوات ومزامنتها تلقائياً مع السحابة');
+                    // Show notification for manual update only if there's a real update
+                    if (hasRealUpdate) {
+                        this.showUpdateAvailableNotification(remoteDate);
+                        
+                        // إذا كانت المزامنة السحابية مفعلة، قم بإشعار المستخدم بإمكانية المزامنة التلقائية
+                        if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
+                            console.log('💡 يمكن تحديث القنوات ومزامنتها تلقائياً مع السحابة');
+                        }
                     }
                     
                     return true;
@@ -5920,22 +6037,86 @@ class ArabicTVApp {
             // If there's an error checking updates, try to update automatically
             console.log('📥 خطأ في فحص التحديثات، سيتم تحديث القنوات تلقائياً...');
             
-            // Show loading notification
-            this.notifyInfo('جارٍ تحديث القنوات...', 'تحديث تلقائي', 3000);
+            // Check if this is first visit or notifications are enabled
+            const hasVisitedBefore = localStorage.getItem('hasVisitedBefore');
+            const isFirstEverVisit = !hasVisitedBefore;
+            
+            // Show loading notification only for first ever visit
+            if (isFirstEverVisit) {
+                this.notifyInfo('جارٍ تحديث القنوات...', 'تحديث تلقائي', 3000);
+            }
             
             try {
                 await updateChannels();
-                this.notifySuccess('تم تحديث القنوات بنجاح!', 'تحديث مكتمل', 4000);
+                
+                // Show success notification only for first ever visit
+                if (isFirstEverVisit) {
+                    this.notifySuccess('تم تحديث القنوات بنجاح!', 'تحديث مكتمل', 4000);
+                }
+                
+                // Mark that user has visited before
+                if (isFirstEverVisit) {
+                    localStorage.setItem('hasVisitedBefore', 'true');
+                    localStorage.setItem('lastUpdateCheck', new Date().toISOString());
+                }
+                
                 return true;
             } catch (updateError) {
                 console.error('❌ فشل في التحديث التلقائي:', updateError);
-                this.notifyError('فشل في تحديث القنوات تلقائياً', 'خطأ في التحديث', 5000);
+                if (isFirstEverVisit) {
+                    this.notifyError('فشل في تحديث القنوات تلقائياً', 'خطأ في التحديث', 5000);
+                }
                 return false;
             }
         }
     }
 
     // Show update available notification
+    showUpdateAvailableNotification(remoteDate) {
+        const notification = document.createElement('div');
+        notification.className = 'notification update-available';
+        notification.innerHTML = `
+            <div class="notification-content">
+                <div class="notification-icon">
+                    <i class="fas fa-download"></i>
+                </div>
+                <div class="notification-text">
+                    <h4>تحديث جديد متاح!</h4>
+                    <p>تم العثور على تحديث جديد للقنوات. اضغط هنا لتحديث البيانات.</p>
+                    <small>آخر تحديث: ${new Date(remoteDate).toLocaleString('ar-SA')}</small>
+                </div>
+                <div class="notification-actions">
+                    <button class="btn-primary" onclick="updateChannels(); app.closeNotification(this)">
+                        <i class="fas fa-sync-alt"></i>
+                        تحديث الآن
+                    </button>
+                    <button class="btn-secondary" onclick="app.closeNotification(this)">
+                        <i class="fas fa-times"></i>
+                        لاحقاً
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('notificationsContainer').appendChild(notification);
+        
+        // إظهار الإشعار مع تأثير
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 100);
+        
+        // إخفاء الإشعار تلقائياً بعد 15 ثانية
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }
+        }, 15000);
+    }
 
 
     // Enhanced Channel Card Creation (Override existing method)
