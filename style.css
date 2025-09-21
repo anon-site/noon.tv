@@ -153,11 +153,11 @@ body[data-theme="auto"] {
         color: #1d4ed8;
     }
     
-    body[data-theme="auto"] .channel-bar-item.active {
-        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-        border-color: #1d4ed8;
-        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
-    }
+body[data-theme="auto"] .channel-bar-item.active {
+    background: rgba(59, 130, 246, 0.9);
+    border-color: #3b82f6;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+}
     
     body[data-theme="auto"] .channel-bar-item .channel-category {
         color: #64748b;
@@ -169,11 +169,16 @@ body[data-theme="auto"] {
         border: 1px solid rgba(226, 232, 240, 0.5);
     }
     
-    body[data-theme="auto"] .channel-bar-item.active .channel-category {
-        color: rgba(255, 255, 255, 0.9);
-        background: rgba(255, 255, 255, 0.2);
-        border-color: rgba(255, 255, 255, 0.3);
-    }
+body[data-theme="auto"] .channel-bar-item.active .channel-name {
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 600;
+}
+
+body[data-theme="auto"] .channel-bar-item.active .channel-category {
+    color: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
+}
 }
 
 /* تحسين الألوان للوضع الفاتح - العناصر المحددة */
@@ -412,7 +417,6 @@ body[data-theme="light"] .channel-bar-item:hover {
     background: rgba(255, 255, 255, 0.95);
     border-color: #3b82f6;
     box-shadow: 0 4px 15px rgba(59, 130, 246, 0.15);
-    transform: translateY(-2px) scale(1.05);
 }
 
 body[data-theme="light"] .channel-bar-item:hover .channel-category {
@@ -422,10 +426,9 @@ body[data-theme="light"] .channel-bar-item:hover .channel-category {
 }
 
 body[data-theme="light"] .channel-bar-item.active {
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-    border-color: #1d4ed8;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
-    transform: scale(1.1);
+    background: rgba(59, 130, 246, 0.9);
+    border-color: #3b82f6;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
 }
 
 body[data-theme="light"] .channel-bar-item .channel-name {
@@ -433,7 +436,8 @@ body[data-theme="light"] .channel-bar-item .channel-name {
 }
 
 body[data-theme="light"] .channel-bar-item.active .channel-name {
-    color: #ffffff;
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 600;
 }
 
 body[data-theme="light"] .channel-bar-item .channel-category {
@@ -447,9 +451,9 @@ body[data-theme="light"] .channel-bar-item .channel-category {
 }
 
 body[data-theme="light"] .channel-bar-item.active .channel-category {
-    color: rgba(255, 255, 255, 0.9);
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 body[data-theme="light"] .channel-bar-controls {
@@ -467,7 +471,6 @@ body[data-theme="light"] .channel-bar-btn:hover {
     background: rgba(59, 130, 246, 0.1);
     border-color: #3b82f6;
     color: #1d4ed8;
-    transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
 }
 
@@ -482,7 +485,6 @@ body[data-theme="light"] .scroll-indicator:hover {
     background: rgba(59, 130, 246, 0.15);
     color: #1d4ed8;
     border-color: #3b82f6;
-    transform: translateY(-50%) scale(1.1);
     box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
 }
 
@@ -492,7 +494,7 @@ body[data-theme="light"] .scroll-indicator:hover {
 .channel-bar-item,
 .channel-bar-btn,
 .scroll-indicator {
-    transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
 
 body[data-theme="light"] .mobile-sidebar-header {
@@ -9109,11 +9111,10 @@ body[data-theme="light"] .legal-link:hover {
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.8));
-    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.9);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     transform: translateY(100%);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease, border-color 0.3s ease;
+    transition: transform 0.2s ease;
     z-index: 20;
     max-height: 40vh;
     overflow: hidden;
@@ -9130,6 +9131,10 @@ body[data-theme="light"] .legal-link:hover {
         border-radius: 0;
         /* Ensure it's above video player */
         z-index: 25;
+        /* Optimized for mobile performance */
+        will-change: transform;
+        transform: translateY(100%);
+        transition: transform 0.15s ease;
     }
 }
 
@@ -9184,12 +9189,10 @@ body[data-theme="light"] .legal-link:hover {
     scrollbar-width: none;
     -ms-overflow-style: none;
     scroll-behavior: smooth;
-    cursor: grab;
     user-select: none;
     /* Mobile optimizations */
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
 }
 
 .channel-bar-scroll:active {
@@ -9202,18 +9205,17 @@ body[data-theme="light"] .legal-link:hover {
         /* Enhanced touch scrolling */
         -webkit-overflow-scrolling: touch;
         overscroll-behavior-x: contain;
-        scroll-snap-type: x mandatory;
         /* Smooth momentum */
         scroll-behavior: auto;
         /* Prevent overscroll */
         overscroll-behavior-y: none;
         /* Better touch control */
         touch-action: pan-x;
+        /* Optimized for mobile performance */
+        will-change: scroll-position;
     }
     
     .channel-bar-item {
-        /* Snap to items for better mobile experience */
-        scroll-snap-align: center;
         /* Better touch targets */
         min-height: 44px;
         min-width: 44px;
@@ -9222,6 +9224,8 @@ body[data-theme="light"] .legal-link:hover {
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
+        /* Optimized for mobile performance */
+        will-change: auto;
     }
 }
 
@@ -9329,11 +9333,14 @@ body[data-theme="light"] .legal-link:hover {
 }
 
 .channel-bar-item.active {
-    background: linear-gradient(135deg, var(--highlight-color), var(--accent-color));
+    background: rgba(233, 69, 96, 0.9);
     border-color: var(--highlight-color);
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3), 0 8px 25px rgba(233, 69, 96, 0.3);
-    transform: scale(1.1);
-    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 8px rgba(233, 69, 96, 0.2);
+}
+
+.channel-bar-item.active .channel-name {
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 600;
 }
 
 .channel-bar-scroll-indicators {

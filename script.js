@@ -7007,8 +7007,8 @@ function setupChannelBarScroll() {
     // Scroll indicators click events
     if (leftIndicator) {
         leftIndicator.addEventListener('click', () => {
-            // Further reduced scroll amount for better control
-            const scrollAmount = window.innerWidth <= 768 ? 120 : 300;
+            // Optimized scroll amount for smoother desktop experience
+            const scrollAmount = window.innerWidth <= 768 ? 120 : 200;
             scrollContainer.scrollBy({
                 left: -scrollAmount,
                 behavior: 'smooth'
@@ -7018,8 +7018,8 @@ function setupChannelBarScroll() {
 
     if (rightIndicator) {
         rightIndicator.addEventListener('click', () => {
-            // Further reduced scroll amount for better control
-            const scrollAmount = window.innerWidth <= 768 ? 120 : 300;
+            // Optimized scroll amount for smoother desktop experience
+            const scrollAmount = window.innerWidth <= 768 ? 120 : 200;
             scrollContainer.scrollBy({
                 left: scrollAmount,
                 behavior: 'smooth'
@@ -7040,8 +7040,14 @@ function setupChannelBarScroll() {
         }
     }
 
-    // Listen for scroll events
-    scrollContainer.addEventListener('scroll', updateScrollIndicators);
+    // Listen for scroll events - optimized with throttling
+    let scrollTimeout;
+    scrollContainer.addEventListener('scroll', () => {
+        if (scrollTimeout) {
+            clearTimeout(scrollTimeout);
+        }
+        scrollTimeout = setTimeout(updateScrollIndicators, 16); // ~60fps
+    });
     
     // Initial check
     updateScrollIndicators();
@@ -7274,12 +7280,15 @@ function scrollToCurrentChannel() {
         const containerRect = scrollContainer.getBoundingClientRect();
         const scrollLeft = scrollContainer.scrollLeft;
         
-        // Calculate position to center the current channel
+        // Calculate position to center the current channel - optimized
         const targetScrollLeft = scrollLeft + (itemRect.left - containerRect.left) - (containerRect.width / 2) + (itemRect.width / 2);
         
+        // Use requestAnimationFrame for smoother animation
+        requestAnimationFrame(() => {
         scrollContainer.scrollTo({
             left: targetScrollLeft,
             behavior: 'smooth'
+            });
         });
     }
 }
@@ -7297,8 +7306,8 @@ function setupChannelBarWheelScroll() {
     scrollContainer.addEventListener('wheel', (e) => {
         // Always allow horizontal scroll when hovering over the channel bar
         e.preventDefault();
-        // Enhanced speed for desktop touch devices
-        const multiplier = isDesktopTouch ? 3 : (window.innerWidth <= 768 ? 1 : 2);
+        // Optimized speed for smoother desktop experience
+        const multiplier = isDesktopTouch ? 2 : (window.innerWidth <= 768 ? 1 : 1.5);
         scrollContainer.scrollBy({
             left: e.deltaY * multiplier,
             behavior: 'smooth'
@@ -7309,8 +7318,8 @@ function setupChannelBarWheelScroll() {
     scrollContainer.addEventListener('wheel', (e) => {
         if (e.shiftKey) {
             e.preventDefault();
-            // Enhanced speed for desktop touch devices
-            const multiplier = isDesktopTouch ? 6 : (window.innerWidth <= 768 ? 2 : 4);
+            // Optimized speed for smoother desktop experience
+            const multiplier = isDesktopTouch ? 3 : (window.innerWidth <= 768 ? 2 : 2.5);
             scrollContainer.scrollBy({
                 left: e.deltaY * multiplier,
                 behavior: 'smooth'
