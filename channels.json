@@ -626,7 +626,7 @@
       "url": "https://aegis-cloudfront-1.tubi.video/6009b36d-1660-4a24-b1b9-f4d3371b352e/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/sco/thumb/5/56/Real_Madrid_CF.svg/732px-Real_Madrid_CF.svg.png",
       "category": "sports",
-      "country": "Spain",
+      "country": "اسبانيا",
       "type": "hls",
       "status": "active"
     },
@@ -636,7 +636,7 @@
       "url": "https://d1cctoeg0n48w5.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-mnixw9wn5ugmv/TeledeporteES.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/3/36/Tve_teledeporte.png",
       "category": "sports",
-      "country": "Spain",
+      "country": "اسبانيا",
       "type": "hls",
       "status": "active"
     },
@@ -662,11 +662,21 @@
     },
     {
       "id": 104,
-      "name": "المجد للأطفال",
-      "url": "https://games1.elahmad.xyz/tv755_www.elahmad.com_almajd_kids/index.m3u8?token=905c37cfc9f0243d2e2482220e18228e7346717f-f4435f729049efec3359222b1a859de5-1758459268-1758448468",
-      "logo": "https://iili.io/KYk52CQ.png",
+      "name": "Zoo Moo",
+      "url": "https://cdn4.skygo.mn/live/disk1/Zoomoo/HLSv3-FTA/Zoomoo.m3u8",
+      "logo": "https://images.squarespace-cdn.com/content/v1/5c4104e7af209609ea6f281b/b440d39b-935e-4b40-9b6d-edc3d94f11b9/Primary+Logo.png",
       "category": "kids",
-      "country": "قطر",
+      "country": "أستراليا",
+      "type": "hls",
+      "status": "active"
+    },
+    {
+      "id": 105,
+      "name": "TeenNick",
+      "url": "https://fl7.moveonjoy.com/Teen_Nick/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/f/f7/TeenNick_2023_Alternative_Logo.png",
+      "category": "kids",
+      "country": "USA",
       "type": "hls",
       "status": "active"
     }
@@ -736,6 +746,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-21T23:31:06.116Z",
+  "lastModified": "2025-09-21T23:40:03.726Z",
   "version": "1.0"
 }
