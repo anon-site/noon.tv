@@ -669,6 +669,16 @@
       "country": "عالمية",
       "type": "hls",
       "status": "active"
+    },
+    {
+      "id": 104,
+      "name": "المجد للأطفال",
+      "url": "https://games1.elahmad.xyz/tv755_www.elahmad.com_almajd_kids/index.m3u8?token=905c37cfc9f0243d2e2482220e18228e7346717f-f4435f729049efec3359222b1a859de5-1758459268-1758448468",
+      "logo": "https://iili.io/KYk52CQ.png",
+      "category": "kids",
+      "country": "قطر",
+      "type": "hls",
+      "status": "active"
     }
   ],
   "favorites": [],
@@ -685,7 +695,8 @@
     "animationsEnabled": false,
     "compactMode": true,
     "highContrast": false,
-    "borderRadius": "rounded"
+    "borderRadius": "rounded",
+    "showAutoNotifications": false
   },
   "categories": [
     {
@@ -735,6 +746,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-21T03:25:15.669Z",
+  "lastModified": "2025-09-21T20:08:13.576Z",
   "version": "1.0"
 }
