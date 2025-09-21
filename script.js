@@ -980,6 +980,9 @@ class ArabicTVApp {
         
         // Use default video controls
         document.getElementById('videoPlayer').controls = true;
+        
+        // Setup channel bar event listeners
+        this.setupChannelBarEvents();
     }
 
     async loadVideoStream(url, type = 'hls') {
@@ -6116,6 +6119,114 @@ class ArabicTVApp {
         );
     }
 
+    // Setup Channel Bar Events
+    setupChannelBarEvents() {
+        const videoContainer = document.querySelector('.video-container');
+        const channelBar = document.getElementById('channelBar');
+        
+        if (!videoContainer || !channelBar) return;
+
+        let hideTimeout;
+        let isChannelBarVisible = false;
+
+        // Show channel bar on mouse move over video container
+        videoContainer.addEventListener('mousemove', () => {
+            if (!isChannelBarVisible) {
+                showChannelBar();
+                isChannelBarVisible = true;
+            }
+            
+            // Clear existing timeout
+            clearTimeout(hideTimeout);
+            
+            // Set new timeout to hide after 3 seconds of no movement
+            hideTimeout = setTimeout(() => {
+                hideChannelBar();
+                isChannelBarVisible = false;
+            }, 3000);
+        });
+
+        // Keep channel bar visible when mouse is over it
+        channelBar.addEventListener('mouseenter', () => {
+            clearTimeout(hideTimeout);
+        });
+
+        // Keep channel bar visible when interacting with it
+        channelBar.addEventListener('mousemove', () => {
+            clearTimeout(hideTimeout);
+        });
+
+        // Hide channel bar when mouse leaves the channel bar
+        channelBar.addEventListener('mouseleave', () => {
+            hideChannelBar();
+            isChannelBarVisible = false;
+        });
+
+        // Hide channel bar when mouse leaves video container
+        videoContainer.addEventListener('mouseleave', () => {
+            clearTimeout(hideTimeout);
+            hideChannelBar();
+            isChannelBarVisible = false;
+        });
+
+        // Show channel bar on touch (mobile)
+        videoContainer.addEventListener('touchstart', () => {
+            if (!isChannelBarVisible) {
+                showChannelBar();
+                isChannelBarVisible = true;
+                
+                // Auto-hide after 5 seconds on mobile
+                setTimeout(() => {
+                    hideChannelBar();
+                    isChannelBarVisible = false;
+                }, 5000);
+            }
+        });
+
+        // Setup wheel scroll for channel bar
+        setupChannelBarWheelScroll();
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('videoModal').classList.contains('active')) {
+                switch(e.key.toLowerCase()) {
+                    case 'arrowleft':
+                        e.preventDefault();
+                        previousChannel();
+                        break;
+                    case 'arrowright':
+                        e.preventDefault();
+                        nextChannel();
+                        break;
+                    case 'pageup':
+                        e.preventDefault();
+                        // Jump 5 channels back
+                        jumpChannels(-5);
+                        break;
+                    case 'pagedown':
+                        e.preventDefault();
+                        // Jump 5 channels forward
+                        jumpChannels(5);
+                        break;
+                    case 'c':
+                        e.preventDefault();
+                        if (isChannelBarVisible) {
+                            hideChannelBar();
+                            isChannelBarVisible = false;
+                        } else {
+                            showChannelBar();
+                            isChannelBarVisible = true;
+                        }
+                        break;
+                    case 'home':
+                        e.preventDefault();
+                        scrollToCurrentChannel();
+                        break;
+                }
+            }
+        });
+    }
+
     // Check and setup Picture-in-Picture support
     checkAndSetupPictureInPicture() {
         const isSupported = this.checkPictureInPictureSupport();
@@ -6478,6 +6589,312 @@ function openIPTVChecker() {
 
 function closeModal() {
     app.closeModal();
+}
+
+// Channel Bar Functions
+function showChannelBar() {
+    const channelBar = document.getElementById('channelBar');
+    if (channelBar) {
+        channelBar.classList.add('show');
+        loadChannelBarContent();
+        // No auto-hide - will hide only when mouse leaves
+    }
+}
+
+function hideChannelBar() {
+    const channelBar = document.getElementById('channelBar');
+    if (channelBar) {
+        channelBar.classList.remove('show');
+    }
+}
+
+function loadChannelBarContent() {
+    const channelBarContent = document.getElementById('channelBarContent');
+    const channelBarCount = document.getElementById('channelBarCount');
+    if (!channelBarContent || !app.channels) return;
+
+    // Clear existing content
+    channelBarContent.innerHTML = '';
+
+    // Get current category or all channels
+    const currentCategory = app.currentCategory || 'all';
+    let channelsToShow = app.channels;
+
+    if (currentCategory !== 'all') {
+        channelsToShow = app.channels.filter(channel => channel.category === currentCategory);
+    }
+
+    // Update channel count
+    if (channelBarCount) {
+        channelBarCount.textContent = channelsToShow.length;
+    }
+
+    // Show all channels (no limit for horizontal scroll)
+    channelsToShow.forEach((channel, index) => {
+        const channelItem = document.createElement('div');
+        channelItem.className = 'channel-bar-item';
+        channelItem.dataset.channelId = channel.id;
+        
+        if (app.currentChannel && channel.id === app.currentChannel.id) {
+            channelItem.classList.add('active');
+        }
+
+        channelItem.innerHTML = `
+            <img src="${channel.logo || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjMzMzIi8+CjxwYXRoIGQ9Ik0yMCAxMEMyNi42MjcgMTAgMzIgMTUuMzczIDMyIDIyQzMyIDI4LjYyNyAyNi42MjcgMzQgMjAgMzRDMTMuMzczIDM0IDggMjguNjI3IDggMjJDMCAxNS4zNzMgMTMuMzczIDEwIDIwIDEwWiIgZmlsbD0iI2ZmZiIvPgo8L3N2Zz4K'}" 
+                 alt="${channel.name}" 
+                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjMzMzIi8+CjxwYXRoIGQ9Ik0yMCAxMEMyNi42MjcgMTAgMzIgMTUuMzczIDMyIDIyQzMyIDI4LjYyNyAyNi42MjcgMzQgMjAgMzRDMTMuMzczIDM0IDggMjguNjI3IDggMjJDMCAxNS4zNzMgMTMuMzczIDEwIDIwIDEwWiIgZmlsbD0iI2ZmZiIvPgo8L3N2Zz4K'">
+            <p class="channel-name">${channel.name}</p>
+            <p class="channel-category">${getCategoryName(channel.category)}</p>
+        `;
+
+        channelItem.addEventListener('click', () => {
+            app.playChannel(channel);
+            hideChannelBar();
+        });
+
+        channelBarContent.appendChild(channelItem);
+    });
+
+    // Setup scroll functionality
+    setupChannelBarScroll();
+}
+
+function getCategoryName(category) {
+    const categoryNames = {
+        'news': 'أخبار',
+        'entertainment': 'منوعة',
+        'sports': 'رياضة',
+        'religious': 'دينية',
+        'music': 'موسيقى',
+        'movies': 'أفلام',
+        'documentary': 'وثائقية'
+    };
+    return categoryNames[category] || category;
+}
+
+function previousChannel() {
+    if (!app.channels || !app.currentChannel) return;
+
+    const currentIndex = app.channels.findIndex(channel => channel.id === app.currentChannel.id);
+    if (currentIndex > 0) {
+        const previousChannel = app.channels[currentIndex - 1];
+        app.playChannel(previousChannel);
+        // Don't hide channel bar for faster navigation
+        // hideChannelBar();
+    }
+}
+
+function nextChannel() {
+    if (!app.channels || !app.currentChannel) return;
+
+    const currentIndex = app.channels.findIndex(channel => channel.id === app.currentChannel.id);
+    if (currentIndex < app.channels.length - 1) {
+        const nextChannel = app.channels[currentIndex + 1];
+        app.playChannel(nextChannel);
+        // Don't hide channel bar for faster navigation
+        // hideChannelBar();
+    }
+}
+
+function jumpChannels(steps) {
+    if (!app.channels || !app.currentChannel) return;
+
+    const currentIndex = app.channels.findIndex(channel => channel.id === app.currentChannel.id);
+    const newIndex = currentIndex + steps;
+    
+    if (newIndex >= 0 && newIndex < app.channels.length) {
+        const targetChannel = app.channels[newIndex];
+        app.playChannel(targetChannel);
+    }
+}
+
+// Channel Bar Scroll Functions
+function setupChannelBarScroll() {
+    const scrollContainer = document.getElementById('channelBarScroll');
+    const leftIndicator = document.getElementById('scrollLeftIndicator');
+    const rightIndicator = document.getElementById('scrollRightIndicator');
+    
+    if (!scrollContainer) return;
+
+    // Scroll indicators click events
+    if (leftIndicator) {
+        leftIndicator.addEventListener('click', () => {
+            scrollContainer.scrollBy({
+                left: -600,
+                behavior: 'smooth'
+            });
+        });
+    }
+
+    if (rightIndicator) {
+        rightIndicator.addEventListener('click', () => {
+            scrollContainer.scrollBy({
+                left: 600,
+                behavior: 'smooth'
+            });
+        });
+    }
+
+    // Update scroll indicators visibility
+    function updateScrollIndicators() {
+        const scrollLeft = scrollContainer.scrollLeft;
+        const maxScrollLeft = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+
+        if (leftIndicator) {
+            leftIndicator.style.opacity = scrollLeft > 0 ? '1' : '0';
+        }
+        if (rightIndicator) {
+            rightIndicator.style.opacity = scrollLeft < maxScrollLeft ? '1' : '0';
+        }
+    }
+
+    // Listen for scroll events
+    scrollContainer.addEventListener('scroll', updateScrollIndicators);
+    
+    // Initial check
+    updateScrollIndicators();
+
+    // Setup touch/swipe support
+    setupChannelBarTouchSupport(scrollContainer);
+    
+    // Setup mouse drag support
+    setupChannelBarMouseDrag(scrollContainer);
+}
+
+function setupChannelBarTouchSupport(scrollContainer) {
+    let startX = 0;
+    let startY = 0;
+    let isScrolling = false;
+
+    scrollContainer.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        isScrolling = false;
+    }, { passive: true });
+
+    scrollContainer.addEventListener('touchmove', (e) => {
+        if (!startX || !startY) return;
+
+        const currentX = e.touches[0].clientX;
+        const currentY = e.touches[0].clientY;
+        const diffX = Math.abs(currentX - startX);
+        const diffY = Math.abs(currentY - startY);
+
+        // Determine if this is a horizontal scroll
+        if (diffX > diffY && diffX > 10) {
+            isScrolling = true;
+            e.preventDefault();
+        }
+    }, { passive: false });
+
+    scrollContainer.addEventListener('touchend', (e) => {
+        if (!isScrolling || !startX) return;
+
+        const endX = e.changedTouches[0].clientX;
+        const diffX = startX - endX;
+
+        // Swipe threshold
+        if (Math.abs(diffX) > 20) {
+            const scrollAmount = 500;
+            if (diffX > 0) {
+                // Swipe left - scroll right
+                scrollContainer.scrollBy({
+                    left: scrollAmount,
+                    behavior: 'smooth'
+                });
+            } else {
+                // Swipe right - scroll left
+                scrollContainer.scrollBy({
+                    left: -scrollAmount,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        startX = 0;
+        startY = 0;
+        isScrolling = false;
+    }, { passive: true });
+}
+
+function setupChannelBarMouseDrag(scrollContainer) {
+    let isDragging = false;
+    let startX = 0;
+    let scrollLeft = 0;
+
+    scrollContainer.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.pageX - scrollContainer.offsetLeft;
+        scrollLeft = scrollContainer.scrollLeft;
+        scrollContainer.style.cursor = 'grabbing';
+        e.preventDefault();
+    });
+
+    scrollContainer.addEventListener('mouseleave', () => {
+        isDragging = false;
+        scrollContainer.style.cursor = 'grab';
+    });
+
+    scrollContainer.addEventListener('mouseup', () => {
+        isDragging = false;
+        scrollContainer.style.cursor = 'grab';
+    });
+
+    scrollContainer.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const x = e.pageX - scrollContainer.offsetLeft;
+        const walk = (x - startX) * 4; // Ultra fast scroll speed multiplier
+        scrollContainer.scrollLeft = scrollLeft - walk;
+    });
+}
+
+function scrollToCurrentChannel() {
+    const channelBarContent = document.getElementById('channelBarContent');
+    const scrollContainer = document.getElementById('channelBarScroll');
+    
+    if (!channelBarContent || !scrollContainer || !app.currentChannel) return;
+
+    const currentChannelItem = channelBarContent.querySelector(`[data-channel-id="${app.currentChannel.id}"]`);
+    if (currentChannelItem) {
+        const itemRect = currentChannelItem.getBoundingClientRect();
+        const containerRect = scrollContainer.getBoundingClientRect();
+        const scrollLeft = scrollContainer.scrollLeft;
+        
+        // Calculate position to center the current channel
+        const targetScrollLeft = scrollLeft + (itemRect.left - containerRect.left) - (containerRect.width / 2) + (itemRect.width / 2);
+        
+        scrollContainer.scrollTo({
+            left: targetScrollLeft,
+            behavior: 'smooth'
+        });
+    }
+}
+
+// Mouse wheel horizontal scroll
+function setupChannelBarWheelScroll() {
+    const scrollContainer = document.getElementById('channelBarScroll');
+    if (!scrollContainer) return;
+
+    scrollContainer.addEventListener('wheel', (e) => {
+        // Always allow horizontal scroll when hovering over the channel bar
+        e.preventDefault();
+        scrollContainer.scrollBy({
+            left: e.deltaY * 3, // Much faster scroll
+            behavior: 'smooth'
+        });
+    }, { passive: false });
+
+    // Also support shift + wheel for even faster control
+    scrollContainer.addEventListener('wheel', (e) => {
+        if (e.shiftKey) {
+            e.preventDefault();
+            scrollContainer.scrollBy({
+                left: e.deltaY * 6, // Ultra fast scroll with shift
+                behavior: 'smooth'
+            });
+        }
+    }, { passive: false });
 }
 
 function resetChannelForm() {

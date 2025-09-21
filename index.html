@@ -393,6 +393,9 @@
                             </div>
                         </div>
                     </div>
+                    <button class="channels-btn" onclick="showChannelBar()" title="عرض القنوات">
+                        <i class="fas fa-tv"></i>
+                    </button>
                     <button class="pip-btn" onclick="togglePictureInPicture()" title="إخراج الشاشة خارج المتصفح">
                         <i class="fas fa-external-link-alt"></i>
                     </button>
@@ -439,6 +442,45 @@
                 <div class="ad-block-notification" id="adBlockNotification">
                     <i class="fas fa-shield-alt"></i>
                     تم تفعيل منع الإعلانات
+                </div>
+                
+                <!-- Channel Bar -->
+                <div class="channel-bar" id="channelBar">
+                    <div class="channel-bar-header">
+                        <h4>القنوات المتاحة</h4>
+                        <div class="channel-bar-info">
+                            <span id="channelBarCount">0</span> قناة
+                        </div>
+                        <button class="channel-bar-close" onclick="hideChannelBar()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="channel-bar-container">
+                        <div class="channel-bar-scroll" id="channelBarScroll">
+                            <div class="channel-bar-content" id="channelBarContent">
+                                <!-- Channels will be loaded here -->
+                            </div>
+                        </div>
+                        <div class="channel-bar-scroll-indicators">
+                            <div class="scroll-indicator left" id="scrollLeftIndicator">
+                                <i class="fas fa-chevron-left"></i>
+                            </div>
+                            <div class="scroll-indicator right" id="scrollRightIndicator">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="channel-bar-controls">
+                        <button class="channel-bar-btn" onclick="previousChannel()" title="القناة السابقة">
+                            <i class="fas fa-step-backward"></i>
+                        </button>
+                        <button class="channel-bar-btn" onclick="nextChannel()" title="القناة التالية">
+                            <i class="fas fa-step-forward"></i>
+                        </button>
+                        <button class="channel-bar-btn" onclick="scrollToCurrentChannel()" title="الانتقال للقناة الحالية">
+                            <i class="fas fa-crosshairs"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

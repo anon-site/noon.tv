@@ -8766,6 +8766,308 @@ body[data-theme="light"] .legal-link:hover {
     }
 }
 
+/* Channel Bar */
+.channel-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.8));
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 20;
+    max-height: 40vh;
+    overflow: hidden;
+}
+
+.channel-bar.show {
+    transform: translateY(0);
+}
+
+.channel-bar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.channel-bar-header h4 {
+    color: #fff;
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.channel-bar-info {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    margin: 0 12px;
+}
+
+.channel-bar-close {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.channel-bar-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.channel-bar-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.channel-bar-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
+    cursor: grab;
+    user-select: none;
+}
+
+.channel-bar-scroll:active {
+    cursor: grabbing;
+}
+
+.channel-bar-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.channel-bar-content {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    min-width: max-content;
+    transition: transform 0.3s ease;
+}
+
+.channel-bar-item {
+    flex-shrink: 0;
+    width: 100px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.channel-bar-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.channel-bar-item.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.channel-bar-scroll-indicators {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.scroll-indicator {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 0.8rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.scroll-indicator.left {
+    left: 8px;
+}
+
+.scroll-indicator.right {
+    right: 8px;
+}
+
+.scroll-indicator:hover {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+.channel-bar-container:hover .scroll-indicator {
+    opacity: 1;
+}
+
+.channel-bar-item img {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    object-fit: cover;
+    margin-bottom: 6px;
+}
+
+.channel-bar-item .channel-name {
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.channel-bar-item .channel-category {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.7rem;
+    margin-top: 2px;
+}
+
+.channel-bar-controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.channel-bar-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.channel-bar-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.channel-bar-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Channels Button */
+.channels-btn {
+    background: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.channels-btn:hover {
+    background: var(--primary-color);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+/* Responsive Channel Bar */
+@media (max-width: 768px) {
+    .channel-bar-content {
+        gap: 8px;
+        padding: 12px;
+    }
+    
+    .channel-bar-item {
+        width: 80px;
+        padding: 6px;
+    }
+    
+    .channel-bar-item img {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .channel-bar-item .channel-name {
+        font-size: 0.75rem;
+    }
+    
+    .channel-bar-item .channel-category {
+        font-size: 0.65rem;
+    }
+    
+    .scroll-indicator {
+        width: 28px;
+        height: 28px;
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .channel-bar-content {
+        gap: 6px;
+        padding: 8px;
+    }
+    
+    .channel-bar-item {
+        width: 70px;
+        padding: 4px;
+    }
+    
+    .channel-bar-item img {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .channel-bar-item .channel-name {
+        font-size: 0.7rem;
+    }
+    
+    .channel-bar-item .channel-category {
+        font-size: 0.6rem;
+    }
+    
+    .scroll-indicator {
+        width: 24px;
+        height: 24px;
+        font-size: 0.6rem;
+    }
+    
+    .scroll-indicator.left {
+        left: 4px;
+    }
+    
+    .scroll-indicator.right {
+        right: 4px;
+    }
+}
+
 /* High Contrast Mode */
 body.high-contrast {
     --text-primary: #ffffff;
