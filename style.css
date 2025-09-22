@@ -4017,6 +4017,14 @@ body[data-theme="light"] .logout-btn:hover {
     color: var(--text-primary);
 }
 
+.setting-description {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+    display: block;
+    font-style: italic;
+}
+
 /* Switch Toggle */
 .switch {
     position: relative;

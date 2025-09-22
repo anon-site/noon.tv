@@ -28,7 +28,8 @@ class ArabicTVApp {
             compactMode: true,
             highContrast: false,
             borderRadius: 'rounded', // minimal, normal, rounded
-            showAutoNotifications: false // التحكم في الإشعارات التلقائية
+            showAutoNotifications: false, // التحكم في الإشعارات التلقائية
+            backgroundAudio: true // تشغيل الصوت في الخلفية
         };
         this.filteredChannels = [...this.channels];
         this.currentCategory = 'all';
@@ -983,10 +984,28 @@ class ArabicTVApp {
     }
 
     async playChannel(channel) {
+        // Prevent multiple simultaneous channel loads
+        if (this.isLoadingChannel) {
+            console.log('Channel loading in progress, skipping...');
+            return;
+        }
+        
+        // If same channel is already playing, don't reload
+        if (this.currentChannel && this.currentChannel.id === channel.id) {
+            console.log('Same channel already playing, skipping...');
+            return;
+        }
+        
+        this.isLoadingChannel = true;
         this.currentChannel = channel;
         this.showVideoModal(channel);
         const type = channel.type || (this.isYouTubeUrl(channel.url) ? 'youtube' : 'hls');
-        await this.loadVideoStream(channel.url, type);
+        
+        try {
+            await this.loadVideoStream(channel.url, type);
+        } finally {
+            this.isLoadingChannel = false;
+        }
         
         // Channel bar remains visible when playing a channel for better navigation
     }
@@ -1039,6 +1058,50 @@ class ArabicTVApp {
         this.updateActiveChannelInBar(channel);
     }
 
+    stopCurrentVideo() {
+        const video = document.getElementById('videoPlayer');
+        const source = document.getElementById('videoSource');
+        
+        try {
+            // Pause and reset video
+            if (video) {
+                video.pause();
+                video.currentTime = 0;
+                video.src = '';
+                video.load();
+                video.style.display = 'block'; // Show video element
+            }
+            
+            // Clear source
+            if (source) {
+                source.src = '';
+            }
+            
+            // Destroy HLS instance if exists
+            if (this.hls) {
+                this.hls.destroy();
+                this.hls = null;
+            }
+            
+            // Clear YouTube player if exists
+            if (this.youtubePlayer) {
+                this.youtubePlayer.destroy();
+                this.youtubePlayer = null;
+            }
+            
+            // Remove YouTube iframe if exists
+            const youtubeIframe = document.getElementById('youtubePlayer');
+            if (youtubeIframe) {
+                youtubeIframe.src = '';
+                youtubeIframe.remove();
+            }
+            
+            console.log('Current video stopped successfully');
+        } catch (error) {
+            console.error('Error stopping current video:', error);
+        }
+    }
+
     async loadVideoStream(url, type = 'hls') {
         const video = document.getElementById('videoPlayer');
         const source = document.getElementById('videoSource');
@@ -1049,6 +1112,9 @@ class ArabicTVApp {
             if (!url || url.trim() === '') {
                 throw new Error('رابط الفيديو فارغ أو غير صحيح');
             }
+
+            // Stop current video completely to prevent conflicts
+            this.stopCurrentVideo();
 
             // Show loading
             loading.style.display = 'flex';
@@ -1066,8 +1132,10 @@ class ArabicTVApp {
 
             // HLS streaming
             if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+                // Ensure previous HLS instance is destroyed
                 if (this.hls) {
                     this.hls.destroy();
+                    this.hls = null;
                 }
 
                 this.hls = new Hls({
@@ -1106,6 +1174,9 @@ class ArabicTVApp {
                     
                     // Initialize quality display
                     this.updateQualityDisplayFromHLS();
+                    
+                    // Setup Media Session for background audio
+                    setupMediaSession();
                 });
 
                 this.hls.on(Hls.Events.ERROR, (event, data) => {
@@ -1148,6 +1219,12 @@ class ArabicTVApp {
                 if (this.settings.autoplay) {
                     video.play().catch(console.error);
                 }
+                
+                // Update quality display for native HLS
+                this.updateQualityDisplayFromNativeHLS();
+                
+                // Setup Media Session for background audio
+                setupMediaSession();
             } else if (typeof Hls === 'undefined') {
                 throw new Error('مكتبة HLS.js غير محملة - تحقق من اتصال الإنترنت');
             } else {
@@ -1156,11 +1233,27 @@ class ArabicTVApp {
 
             // Set volume
             video.volume = this.settings.volume / 100;
+            
+            // Enable background audio if setting is enabled
+            if (this.settings.backgroundAudio) {
+                video.setAttribute('playsinline', 'true');
+                video.setAttribute('webkit-playsinline', 'true');
+                video.setAttribute('x5-playsinline', 'true');
+                video.setAttribute('x5-video-player-type', 'h5');
+                video.setAttribute('x5-video-player-fullscreen', 'false');
+            }
 
         } catch (error) {
             console.error('Error loading video:', error);
             this.showVideoError(`خطأ في تحميل الفيديو: ${error.message}`);
             this.handleVideoError();
+        }
+    }
+
+    updateQualityDisplayFromNativeHLS() {
+        const qualityDisplay = document.getElementById('currentQualityText');
+        if (qualityDisplay) {
+            qualityDisplay.textContent = 'تلقائي (Safari)';
         }
     }
 
@@ -1286,6 +1379,13 @@ class ArabicTVApp {
             const videoId = this.getYouTubeVideoId(url);
             if (!videoId) {
                 throw new Error('رابط اليوتيوب غير صحيح - تحقق من الرابط');
+            }
+
+            // Stop any existing YouTube player
+            const existingIframe = document.getElementById('youtubePlayer');
+            if (existingIframe) {
+                existingIframe.src = '';
+                existingIframe.remove();
             }
 
             // Hide the video element and show iframe
@@ -8279,6 +8379,128 @@ function setupScrollToTopButton() {
 // Initialize scroll to top button when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     setupScrollToTopButton();
+    
+    // Setup background audio setting handler
+    const backgroundAudioToggle = document.getElementById('backgroundAudio');
+    if (backgroundAudioToggle && window.app) {
+        backgroundAudioToggle.addEventListener('change', function(e) {
+            window.app.settings.backgroundAudio = e.target.checked;
+            window.app.saveSettings();
+            
+            // Apply changes to current video if playing
+            const video = document.getElementById('videoPlayer');
+            if (video && window.app.currentChannel) {
+                if (e.target.checked) {
+                    video.setAttribute('playsinline', 'true');
+                    video.setAttribute('webkit-playsinline', 'true');
+                    video.setAttribute('x5-playsinline', 'true');
+                    video.setAttribute('x5-video-player-type', 'h5');
+                    video.setAttribute('x5-video-player-fullscreen', 'false');
+                    setupMediaSession();
+                    console.log('تم تفعيل تشغيل الصوت في الخلفية');
+                } else {
+                    console.log('تم إلغاء تفعيل تشغيل الصوت في الخلفية');
+                }
+            }
+        });
+    }
 });
+
+// Media Session API for background audio support
+function setupMediaSession() {
+    if (!('mediaSession' in navigator)) {
+        console.log('Media Session API غير مدعوم في هذا المتصفح');
+        return;
+    }
+
+    const video = document.getElementById('videoPlayer');
+    if (!video || !app.currentChannel) {
+        return;
+    }
+
+    const channel = app.currentChannel;
+    
+    // Set media metadata
+    navigator.mediaSession.metadata = new MediaMetadata({
+        title: channel.name,
+        artist: channel.country || 'قناة فضائية',
+        album: 'ANON TV',
+        artwork: channel.logo ? [
+            { src: channel.logo, sizes: '96x96', type: 'image/png' },
+            { src: channel.logo, sizes: '128x128', type: 'image/png' },
+            { src: channel.logo, sizes: '192x192', type: 'image/png' },
+            { src: channel.logo, sizes: '256x256', type: 'image/png' },
+            { src: channel.logo, sizes: '384x384', type: 'image/png' },
+            { src: channel.logo, sizes: '512x512', type: 'image/png' }
+        ] : [
+            { src: 'favicon.svg', sizes: '96x96', type: 'image/svg+xml' }
+        ]
+    });
+
+    // Set action handlers
+    navigator.mediaSession.setActionHandler('play', () => {
+        video.play();
+    });
+
+    navigator.mediaSession.setActionHandler('pause', () => {
+        video.pause();
+    });
+
+    navigator.mediaSession.setActionHandler('stop', () => {
+        video.pause();
+        video.currentTime = 0;
+    });
+
+    navigator.mediaSession.setActionHandler('seekbackward', (details) => {
+        const skipTime = details.seekOffset || 10;
+        video.currentTime = Math.max(video.currentTime - skipTime, 0);
+    });
+
+    navigator.mediaSession.setActionHandler('seekforward', (details) => {
+        const skipTime = details.seekOffset || 10;
+        video.currentTime = Math.min(video.currentTime + skipTime, video.duration || 0);
+    });
+
+    navigator.mediaSession.setActionHandler('seekto', (details) => {
+        if (details.seekTime !== undefined) {
+            video.currentTime = details.seekTime;
+        }
+    });
+
+    // Update playback state
+    navigator.mediaSession.playbackState = video.paused ? 'paused' : 'playing';
+
+    // Listen for video events to update media session
+    video.addEventListener('play', () => {
+        navigator.mediaSession.playbackState = 'playing';
+    });
+
+    video.addEventListener('pause', () => {
+        navigator.mediaSession.playbackState = 'paused';
+    });
+
+    video.addEventListener('ended', () => {
+        navigator.mediaSession.playbackState = 'none';
+    });
+
+    console.log('تم إعداد Media Session API لتشغيل الصوت في الخلفية');
+}
+
+// Service Worker message handling
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('message', event => {
+        const video = document.getElementById('videoPlayer');
+        if (!video) return;
+
+        switch (event.data.action) {
+            case 'play':
+                video.play();
+                break;
+            case 'pause':
+                video.pause();
+                break;
+        }
+    });
+}
 
 
