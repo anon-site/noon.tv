@@ -636,26 +636,51 @@
                 
                 <!-- Quick Actions -->
                 <div class="settings-actions">
-                    <button class="reset-settings-btn" onclick="app.resetCustomizations()">
-                        <i class="fas fa-undo"></i>
-                        إعادة تعيين التخصيصات
-                    </button>
-                    <button class="show-welcome-btn" onclick="app.showWelcomeModal()">
-                        <i class="fas fa-info-circle"></i>
-                        عرض رسالة الترحيب
-                    </button>
-                    <button class="delete-cookies-btn" onclick="app.deleteAllCookies()">
-                        <i class="fas fa-trash-alt"></i>
-                        حذف الكوكيز
-                    </button>
-                    <button class="test-notifications-btn" onclick="app.testNotifications()">
-                        <i class="fas fa-bell"></i>
-                        اختبار الإشعارات
-                    </button>
-                    <button class="reset-notifications-btn" onclick="app.resetNotifications()">
-                        <i class="fas fa-bell-slash"></i>
-                        إعادة تعيين الإشعارات
-                    </button>
+                    <div class="settings-actions-grid">
+                        <!-- إدارة التطبيق -->
+                        <div class="settings-button-group">
+                            <div class="settings-button-group-title">
+                                <i class="fas fa-cogs"></i>
+                                إدارة التطبيق
+                            </div>
+                            <button class="reset-settings-btn" onclick="app.resetCustomizations()">
+                                <i class="fas fa-undo"></i>
+                                إعادة تعيين التخصيصات
+                            </button>
+                            <button class="show-welcome-btn" onclick="app.showWelcomeModal()">
+                                <i class="fas fa-info-circle"></i>
+                                عرض رسالة الترحيب
+                            </button>
+                        </div>
+                        
+                        <!-- إدارة البيانات -->
+                        <div class="settings-button-group">
+                            <div class="settings-button-group-title">
+                                <i class="fas fa-database"></i>
+                                إدارة البيانات
+                            </div>
+                            <button class="delete-cookies-btn" onclick="app.deleteAllCookies()">
+                                <i class="fas fa-trash-alt"></i>
+                                حذف الكوكيز
+                            </button>
+                        </div>
+                        
+                        <!-- الإشعارات -->
+                        <div class="settings-button-group">
+                            <div class="settings-button-group-title">
+                                <i class="fas fa-bell"></i>
+                                الإشعارات
+                            </div>
+                            <button class="test-notifications-btn" onclick="app.testNotifications()">
+                                <i class="fas fa-bell"></i>
+                                اختبار الإشعارات
+                            </button>
+                            <button class="reset-notifications-btn" onclick="app.resetNotifications()">
+                                <i class="fas fa-bell-slash"></i>
+                                إعادة تعيين الإشعارات
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
