@@ -3305,7 +3305,7 @@ body[data-theme="light"] .password-input-wrapper input::placeholder {
         height: auto;
         display: flex;
         flex-direction: column;
-        margin: 1vh auto 15vh auto;
+        margin: 2vh auto 25vh auto;
     }
     
     .modal {
@@ -9140,6 +9140,34 @@ body[data-theme="light"] .legal-link:hover {
 
 .channel-bar.show {
     transform: translateY(0);
+}
+
+/* Keep channel bar visible on mobile when shown */
+@media (max-width: 768px) {
+    .channel-bar.show {
+        transform: translateY(0);
+        /* Prevent auto-hide on mobile */
+        pointer-events: auto;
+        /* Ensure it stays visible */
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+/* Channel bar toggle button styles */
+.channels-btn {
+    transition: all 0.3s ease;
+}
+
+.channels-btn.active {
+    background: var(--highlight-color);
+    color: white;
+    box-shadow: 0 0 10px rgba(233, 69, 96, 0.5);
+}
+
+.channels-btn.active:hover {
+    background: var(--highlight-color);
+    transform: scale(1.05);
 }
 
 .channel-bar-header {

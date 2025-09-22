@@ -987,6 +987,8 @@ class ArabicTVApp {
         this.showVideoModal(channel);
         const type = channel.type || (this.isYouTubeUrl(channel.url) ? 'youtube' : 'hls');
         await this.loadVideoStream(channel.url, type);
+        
+        // Channel bar remains visible when playing a channel for better navigation
     }
 
     showVideoModal(channel) {
@@ -1002,6 +1004,20 @@ class ArabicTVApp {
         
         // Show video loading
         document.getElementById('videoLoading').style.display = 'flex';
+        
+        // Auto-show channel bar on mobile
+        if (window.innerWidth <= 768) {
+            setTimeout(() => {
+                const channelBar = document.getElementById('channelBar');
+                const channelsBtn = document.querySelector('.channels-btn');
+                if (channelBar && !channelBar.classList.contains('show')) {
+                    showChannelBar();
+                    if (channelsBtn) {
+                        channelsBtn.classList.add('active');
+                    }
+                }
+            }, 100);
+        }
         
         // News ticker is now disabled by default
         // if (this.settings.showNewsTicker) {
@@ -6409,40 +6425,26 @@ class ArabicTVApp {
 
         let isChannelBarVisible = false;
 
-        // Show channel bar on mouse move over video container
-        videoContainer.addEventListener('mousemove', () => {
-            if (!isChannelBarVisible) {
-                showChannelBar();
-                isChannelBarVisible = true;
-            }
-        });
-
-        // Show channel bar on touch (mobile)
-        videoContainer.addEventListener('touchstart', () => {
-            if (!isChannelBarVisible) {
-                showChannelBar();
-                isChannelBarVisible = true;
-            }
-        });
-
-        // Hide channel bar when clicking outside of it
+        // Hide channel bar when clicking outside of it (only on desktop)
         modal.addEventListener('click', (e) => {
-            // Check if click is outside the channel bar
-            if (isChannelBarVisible && !channelBar.contains(e.target) && !videoContainer.contains(e.target)) {
-                hideChannelBar();
-                isChannelBarVisible = false;
-            }
-        });
-
-        // Hide channel bar when clicking on modal overlay
-        const modalOverlay = document.querySelector('.modal-overlay');
-        if (modalOverlay) {
-            modalOverlay.addEventListener('click', () => {
-                if (isChannelBarVisible) {
+            // Check if click is outside the channel bar and not on the toggle button
+            if (isChannelBarVisible && !channelBar.contains(e.target) && !videoContainer.contains(e.target) && !e.target.closest('.channels-btn')) {
+                // Only hide on desktop, keep visible on mobile
+                if (window.innerWidth > 768) {
                     hideChannelBar();
                     isChannelBarVisible = false;
                 }
-            });
+            }
+        });
+
+        // Auto-show channel bar on mobile when modal opens
+        if (window.innerWidth <= 768) {
+            setTimeout(() => {
+            if (!isChannelBarVisible) {
+                showChannelBar();
+                isChannelBarVisible = true;
+            }
+            }, 500);
         }
 
         // Setup wheel scroll for channel bar
@@ -6472,13 +6474,8 @@ class ArabicTVApp {
                         break;
                     case 'c':
                         e.preventDefault();
-                        if (isChannelBarVisible) {
-                            hideChannelBar();
-                            isChannelBarVisible = false;
-                        } else {
-                            showChannelBar();
-                            isChannelBarVisible = true;
-                        }
+                        toggleChannelBar();
+                        isChannelBarVisible = !isChannelBarVisible;
                         break;
                     case 'home':
                         e.preventDefault();
@@ -6487,8 +6484,11 @@ class ArabicTVApp {
                     case 'escape':
                         e.preventDefault();
                         if (isChannelBarVisible) {
+                            // Only hide on desktop, keep visible on mobile
+                            if (window.innerWidth > 768) {
                             hideChannelBar();
                             isChannelBarVisible = false;
+                            }
                         }
                         break;
                 }
@@ -6881,17 +6881,50 @@ function closeModal() {
 // Channel Bar Functions
 function showChannelBar() {
     const channelBar = document.getElementById('channelBar');
+    const channelsBtn = document.querySelector('.channels-btn');
+    
     if (channelBar) {
         channelBar.classList.add('show');
         loadChannelBarContent();
+        // Update button state
+        if (channelsBtn) {
+            channelsBtn.classList.add('active');
+        }
         // No auto-hide - will hide only when mouse leaves
     }
 }
 
 function hideChannelBar() {
     const channelBar = document.getElementById('channelBar');
+    const channelsBtn = document.querySelector('.channels-btn');
+    
     if (channelBar) {
         channelBar.classList.remove('show');
+        // Update button state
+        if (channelsBtn) {
+            channelsBtn.classList.remove('active');
+        }
+    }
+}
+
+function toggleChannelBar() {
+    const channelBar = document.getElementById('channelBar');
+    const channelsBtn = document.querySelector('.channels-btn');
+    
+    if (channelBar) {
+        if (channelBar.classList.contains('show')) {
+            hideChannelBar();
+            // Update button state
+            if (channelsBtn) {
+                channelsBtn.classList.remove('active');
+            }
+        } else {
+            showChannelBar();
+            // Update button state
+            if (channelsBtn) {
+                channelsBtn.classList.add('active');
+            }
+        }
     }
 }
 
