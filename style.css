@@ -791,7 +791,6 @@ body[data-theme="light"] .admin-badge {
 body[data-theme="light"] .admin-badge i {
     color: #3b82f6;
 }
-
 .container {
     max-width: 1400px;
     margin: 0 auto;
@@ -1591,7 +1590,6 @@ body[data-theme="light"] .sidebar-nav-tab.active .tab-count {
     transform: translateX(-1px) scale(0.98);
     box-shadow: 0 2px 10px rgba(233, 69, 96, 0.3);
 }
-
 .mobile-tv-dropdown-btn i {
     font-size: 1.1rem;
     width: 20px;
@@ -1903,6 +1901,7 @@ body[data-theme="light"] .sidebar-nav-tab.active .tab-count {
         padding: 0.7rem 0.75rem;
         margin: 1px;
         width: calc(100% - 2px);
+        border-radius: 6px;
     }
     
     .mobile-tv-dropdown-item i {
@@ -2383,7 +2382,6 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
     background: transparent;
     overscroll-behavior: none;
 }
-
 .channels-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -3182,7 +3180,6 @@ body[data-theme="light"] .cancel-btn {
     border-color: #e2e8f0;
     color: #1e293b;
 }
-
 body[data-theme="light"] .cancel-btn:hover {
     background: #f1f5f9;
     border-color: #cbd5e1;
@@ -3980,7 +3977,6 @@ body[data-theme="light"] .logout-btn:hover {
     border-radius: 10px;
     margin: 2px;
 }
-
 .settings-body::-webkit-scrollbar-thumb,
 .admin-body::-webkit-scrollbar-thumb,
 .diagnostic-content::-webkit-scrollbar-thumb,
@@ -4741,7 +4737,6 @@ body[data-theme="light"] .password-requirements {
     background: #f8fafc;
     border-color: rgba(0, 0, 0, 0.1);
 }
-
 /* تحسينات للشاشات الصغيرة */
 @media (max-width: 768px) {
     .security-header {
@@ -5533,7 +5528,6 @@ body[data-theme="light"] .password-requirements {
 .scroll-to-top-btn:hover i {
     transform: translateY(-2px);
 }
-
 .notification {
     background: var(--background-dark);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -6328,7 +6322,6 @@ body[data-theme="light"] .favorite-btn {
     color: #64748b;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
-
 body[data-theme="light"] .favorite-btn:hover {
     background: #3b82f6;
     border-color: rgba(255, 255, 255, 0.4);
@@ -7120,7 +7113,6 @@ body[data-theme="light"] .mobile-sidebar-nav-tab.active {
 .favorites-mobile-btn:hover .favorites-count {
     background: rgba(255, 255, 255, 0.3);
 }
-
 /* Mobile Filter Dropdown */
 
 
@@ -7919,7 +7911,6 @@ body[data-theme="light"] .diagnostic-tool-btn.import-btn:hover {
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
-
 .sync-status p {
     margin: 0.5rem 0;
     color: var(--text-secondary);
@@ -8718,7 +8709,6 @@ body[data-font-size="xlarge"] {
 body[data-font-size="xlarge"] .logo h1 {
     font-size: 2.5rem;
 }
-
 body[data-font-size="xlarge"] .channel-name {
     font-size: 1.4rem;
 }
@@ -9509,7 +9499,6 @@ body[data-theme="light"] .legal-link:hover {
     color: #fff;
     transform: translateY(-1px);
 }
-
 /* Responsive Channel Bar */
 @media (max-width: 768px) {
     .channel-bar-content {
@@ -9848,7 +9837,6 @@ body[data-theme="light"] .enhanced-save-btn {
 body[data-theme="light"] .enhanced-save-btn:hover {
     background: linear-gradient(45deg, #2563eb, #1e40af);
 }
-
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
@@ -10647,7 +10635,6 @@ body[data-theme="light"] .enhanced-save-btn:hover {
         flex: 1;
         padding: 1rem;
     }
-    
     .admin-channel-item {
         flex-direction: column;
         align-items: flex-start;
@@ -11448,7 +11435,6 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     align-items: center;
     gap: 8px;
 }
-
 /* Repository Input Container */
 .repository-input-container {
     position: relative;
@@ -12248,7 +12234,6 @@ body[data-theme="light"] .cookie-delete-btn:hover {
     font-weight: 600;
     margin: 0 0 0.5rem 0;
 }
-
 .step-content p {
     color: var(--text-secondary);
     font-size: 1rem;
@@ -13034,7 +13019,6 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
     padding: 20px;
     font-style: italic;
 }
-
 /* More Menu */
 .more-menu {
     position: fixed;
@@ -13475,7 +13459,3 @@ body[data-theme="light"] .more-menu-item:hover {
         justify-content: center;
     }
 }
-
-
-
-

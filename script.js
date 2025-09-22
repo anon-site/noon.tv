@@ -794,7 +794,6 @@ class ArabicTVApp {
                 });
             });
     }
-
     renderChannels() {
         const grid = document.getElementById('channelsGrid');
         if (!grid) {
@@ -1593,7 +1592,6 @@ class ArabicTVApp {
     closeSettings() {
         document.getElementById('settingsModal').classList.remove('active');
     }
-
     openAdminPanel() {
         if (!this.isLoggedIn) {
             this.showLoginModal();
@@ -2369,7 +2367,6 @@ class ArabicTVApp {
         // Note: updateChannelCategoryOptions() is called in switchAdminTab() 
         // to ensure proper timing and avoid conflicts
     }
-
     editChannel(id, event) {
         // Prevent event propagation if event is provided
         if (event) {
@@ -3134,7 +3131,6 @@ class ArabicTVApp {
             });
         });
     }
-
     createConflictResolutionModal(remoteData) {
         const modal = document.createElement('div');
         modal.className = 'modal active';
@@ -3926,7 +3922,6 @@ class ArabicTVApp {
             this.notifyError('فشل في جلب المستودعات. تحقق من اسم المستخدم ورمز الوصول');
         }
     }
-
     displayRepositorySuggestions(repositories) {
         const suggestionsContainer = document.getElementById('repoSuggestions');
         
@@ -4675,7 +4670,6 @@ class ArabicTVApp {
         // Populate modal with diagnostic data
         this.updateDiagnosticData();
     }
-
     updateDiagnosticData() {
         // Memory state
         document.getElementById('memoryChannelsCount').textContent = this.channels.length;
@@ -5438,7 +5432,6 @@ class ArabicTVApp {
         qualityMenu.classList.remove('show');
         qualityBtn.classList.remove('open');
     }
-
     // Set video quality
     setVideoQuality(quality) {
         // Remove active class from all options
@@ -6233,8 +6226,6 @@ class ArabicTVApp {
             }
         }, 15000);
     }
-
-
     // Enhanced Channel Card Creation (Override existing method)
     createChannelCard(channel) {
         const card = document.createElement('div');
@@ -7027,7 +7018,6 @@ function toggleChannelBar() {
         }
     }
 }
-
 function loadChannelBarContent() {
     const channelBarContent = document.getElementById('channelBarContent');
     const channelBarCount = document.getElementById('channelBarCount');
@@ -7431,44 +7421,27 @@ function setupChannelBarWheelScroll() {
     const scrollContainer = document.getElementById('channelBarScroll');
     if (!scrollContainer) return;
 
-    // Detect if this is a desktop touch device
-    const isDesktop = window.innerWidth > 768;
-    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    const isDesktopTouch = isDesktop && hasTouch;
-
+    // دعم التمرير بالعجلة (للديسكتوب)
     scrollContainer.addEventListener('wheel', (e) => {
-        // Always allow horizontal scroll when hovering over the channel bar
         e.preventDefault();
-        // Optimized speed for smoother desktop experience
-        const multiplier = isDesktopTouch ? 2 : (window.innerWidth <= 768 ? 1 : 1.5);
+        const multiplier = (window.innerWidth <= 768) ? 1.2 : 1.5;
         scrollContainer.scrollBy({
             left: e.deltaY * multiplier,
             behavior: 'smooth'
         });
     }, { passive: false });
 
-    // Also support shift + wheel for even faster control
-    scrollContainer.addEventListener('wheel', (e) => {
-        if (e.shiftKey) {
-            e.preventDefault();
-            // Optimized speed for smoother desktop experience
-            const multiplier = isDesktopTouch ? 3 : (window.innerWidth <= 768 ? 2 : 2.5);
-            scrollContainer.scrollBy({
-                left: e.deltaY * multiplier,
-                behavior: 'smooth'
-            });
-        }
-    }, { passive: false });
-
-    // Add visual feedback for wheel scrolling on desktop touch
-    if (isDesktopTouch) {
-        let wheelTimeout;
-        scrollContainer.addEventListener('wheel', () => {
-            scrollContainer.classList.add('wheel-scrolling');
-            clearTimeout(wheelTimeout);
-            wheelTimeout = setTimeout(() => {
-                scrollContainer.classList.remove('wheel-scrolling');
-            }, 150);
+    // إضافة معالجة لأحداث اللمس للسلاسة الإضافية على الموبايل
+    if ('ontouchstart' in window) {
+        let touchStartX = 0;
+        scrollContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+        });
+        scrollContainer.addEventListener('touchmove', (e) => {
+            const touchMoveX = e.touches[0].clientX;
+            const deltaX = touchStartX - touchMoveX;
+            scrollContainer.scrollLeft += deltaX;
+            touchStartX = touchMoveX;
         });
     }
 }
@@ -7815,7 +7788,6 @@ function updateBottomNavActiveState(activeAction) {
         activeBtn.classList.add('active');
     }
 }
-
 function updateMobileCategoryCounts() {
     if (!window.app) return;
     
@@ -8502,5 +8474,3 @@ if ('serviceWorker' in navigator) {
         }
     });
 }
-
-
