@@ -769,6 +769,16 @@
       "type": "hls",
       "status": "active",
       "isLocal": false
+    },
+    {
+      "id": 108,
+      "name": "Testona3333333",
+      "url": "http://line.4k-soy.cc:80/557714/A9FC62/1443944",
+      "logo": "http://line.4k-soy.cc:80/557714/A9FC62/1443944",
+      "category": "news",
+      "country": "عالمية",
+      "type": "unknown",
+      "status": "active"
     }
   ],
   "favorites": [],
@@ -837,6 +847,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-22T17:38:09.312Z",
+  "lastModified": "2025-09-22T17:39:56.935Z",
   "version": "1.0"
 }
