@@ -7548,6 +7548,49 @@ function togglePictureInPicture() {
     app.togglePictureInPicture();
 }
 
+// Website Fullscreen Toggle Function
+function toggleWebsiteFullscreen() {
+    if (!document.fullscreenElement) {
+        // Enter fullscreen
+        document.documentElement.requestFullscreen().then(() => {
+            console.log('تم تفعيل وضع الشاشة الكاملة');
+            // Change icon to compress
+            const btn = document.querySelector('.fullscreen-toggle-btn i');
+            if (btn) {
+                btn.className = 'fas fa-compress';
+            }
+        }).catch(err => {
+            console.error('خطأ في تفعيل وضع الشاشة الكاملة:', err);
+            app.notifyError('فشل في تفعيل وضع الشاشة الكاملة');
+        });
+    } else {
+        // Exit fullscreen
+        document.exitFullscreen().then(() => {
+            console.log('تم إلغاء وضع الشاشة الكاملة');
+            // Change icon back to expand
+            const btn = document.querySelector('.fullscreen-toggle-btn i');
+            if (btn) {
+                btn.className = 'fas fa-expand';
+            }
+        }).catch(err => {
+            console.error('خطأ في إلغاء وضع الشاشة الكاملة:', err);
+            app.notifyError('فشل في إلغاء وضع الشاشة الكاملة');
+        });
+    }
+}
+
+// Listen for fullscreen change events
+document.addEventListener('fullscreenchange', function() {
+    const btn = document.querySelector('.fullscreen-toggle-btn i');
+    if (btn) {
+        if (document.fullscreenElement) {
+            btn.className = 'fas fa-compress';
+        } else {
+            btn.className = 'fas fa-expand';
+        }
+    }
+});
+
 function saveGeneralSettings() {
     app.saveGeneralSettings();
 }
