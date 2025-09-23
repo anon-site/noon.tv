@@ -157,6 +157,145 @@ class ArabicTVApp {
         }
     }
 
+    // Parse M3U8 playlist and extract individual channel streams
+    async parseM3U8Playlist(playlistUrl) {
+        try {
+            console.log('تحليل قائمة التشغيل M3U8:', playlistUrl);
+            
+            const response = await fetch(playlistUrl);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const playlistText = await response.text();
+            const lines = playlistText.split('\n');
+            const channels = [];
+            let currentChannel = null;
+            let channelId = 1000; // Starting ID for parsed channels
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                
+                // Check for channel info line (#EXTINF:)
+                if (line.startsWith('#EXTINF:')) {
+                    currentChannel = this.parseExtinfLine(line);
+                }
+                // Check for stream URL line
+                else if (line && !line.startsWith('#') && currentChannel) {
+                    currentChannel.url = line;
+                    currentChannel.id = channelId++;
+                    currentChannel.type = 'hls';
+                    currentChannel.status = 'active';
+                    currentChannel.isLocal = false;
+                    
+                    // Add default logo if not provided
+                    if (!currentChannel.logo) {
+                        currentChannel.logo = `https://via.placeholder.com/150x150/4A90E2/FFFFFF?text=${encodeURIComponent(currentChannel.name.substring(0, 2))}`;
+                    }
+                    
+                    channels.push({ ...currentChannel });
+                    currentChannel = null;
+                }
+            }
+            
+            console.log(`تم تحليل ${channels.length} قناة من قائمة التشغيل`);
+            return channels;
+            
+        } catch (error) {
+            console.error('خطأ في تحليل قائمة التشغيل M3U8:', error);
+            throw error;
+        }
+    }
+
+    // Parse EXTINF line to extract channel information
+    parseExtinfLine(extinfLine) {
+        const channel = {
+            name: 'قناة غير معروفة',
+            country: 'غير محدد',
+            category: 'entertainment',
+            logo: null
+        };
+        
+        try {
+            // Extract attributes from EXTINF line
+            const attributes = {};
+            const attributeRegex = /(\w+)="([^"]*)"/g;
+            let match;
+            
+            while ((match = attributeRegex.exec(extinfLine)) !== null) {
+                attributes[match[1]] = match[2];
+            }
+            
+            // Extract channel name (after the last comma)
+            const lastCommaIndex = extinfLine.lastIndexOf(',');
+            if (lastCommaIndex !== -1) {
+                channel.name = extinfLine.substring(lastCommaIndex + 1).trim();
+            }
+            
+            // Map attributes
+            if (attributes['tvg-name']) {
+                channel.name = attributes['tvg-name'];
+            }
+            if (attributes['tvg-country']) {
+                channel.country = attributes['tvg-country'];
+            }
+            if (attributes['tvg-logo']) {
+                channel.logo = attributes['tvg-logo'];
+            }
+            if (attributes['group-title']) {
+                const groupTitle = attributes['group-title'].toLowerCase();
+                if (groupTitle.includes('news') || groupTitle.includes('أخبار')) {
+                    channel.category = 'news';
+                } else if (groupTitle.includes('sport') || groupTitle.includes('رياضة')) {
+                    channel.category = 'sports';
+                } else if (groupTitle.includes('movie') || groupTitle.includes('فيلم')) {
+                    channel.category = 'movies';
+                } else if (groupTitle.includes('music') || groupTitle.includes('موسيقى')) {
+                    channel.category = 'music';
+                } else if (groupTitle.includes('kids') || groupTitle.includes('أطفال')) {
+                    channel.category = 'kids';
+                } else if (groupTitle.includes('religious') || groupTitle.includes('ديني')) {
+                    channel.category = 'religious';
+                } else if (groupTitle.includes('documentary') || groupTitle.includes('وثائقي')) {
+                    channel.category = 'documentary';
+                } else {
+                    channel.category = 'entertainment';
+                }
+            }
+            
+        } catch (error) {
+            console.warn('خطأ في تحليل سطر EXTINF:', error);
+        }
+        
+        return channel;
+    }
+
+    // Add function to load channels from M3U8 playlist
+    async loadChannelsFromM3U8(playlistUrl) {
+        try {
+            const parsedChannels = await this.parseM3U8Playlist(playlistUrl);
+            
+            // Add parsed channels to existing channels
+            this.channels = [...this.channels, ...parsedChannels];
+            this.filteredChannels = [...this.channels];
+            
+            // Save to localStorage
+            this.saveChannels();
+            
+            // Re-render channels
+            this.renderChannels();
+            
+            this.notifySuccess(`تم تحميل ${parsedChannels.length} قناة من قائمة التشغيل بنجاح!`);
+            
+            return parsedChannels;
+            
+        } catch (error) {
+            console.error('خطأ في تحميل قائمة التشغيل M3U8:', error);
+            this.notifyError('فشل في تحميل قائمة التشغيل. تحقق من صحة الرابط.');
+            throw error;
+        }
+    }
+
     testLocalStorage() {
         try {
             const testKey = 'test-storage';
@@ -2142,6 +2281,11 @@ class ArabicTVApp {
         // Update category options when switching to add tab
         if (tab === 'add') {
             this.updateChannelCategoryOptions();
+        }
+        
+        // Setup playlist form when switching to playlist tab
+        if (tab === 'playlist') {
+            this.setupPlaylistForm();
         }
 
         // Reset form when switching to add tab (unless we're editing)
@@ -6924,6 +7068,82 @@ class ArabicTVApp {
         }
     }
 
+    // Setup playlist form functionality
+    setupPlaylistForm() {
+        const form = document.getElementById('playlistForm');
+        if (!form) return;
+
+        // Remove existing event listeners to avoid duplicates
+        const newForm = form.cloneNode(true);
+        form.parentNode.replaceChild(newForm, form);
+
+        // Add form submit event
+        newForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handlePlaylistSubmit();
+        });
+    }
+
+    // Handle playlist form submission
+    async handlePlaylistSubmit() {
+        const playlistUrl = document.getElementById('playlistUrl').value.trim();
+        const playlistName = document.getElementById('playlistName').value.trim();
+
+        if (!playlistUrl) {
+            this.notifyError('يرجى إدخال رابط قائمة التشغيل');
+            return;
+        }
+
+        // Show loading status
+        this.showPlaylistStatus('جاري تحميل قائمة التشغيل...', 'loading');
+
+        try {
+            const loadedChannels = await this.loadChannelsFromM3U8(playlistUrl);
+            
+            // Add playlist name prefix if provided
+            if (playlistName && loadedChannels.length > 0) {
+                loadedChannels.forEach(channel => {
+                    channel.name = `[${playlistName}] ${channel.name}`;
+                });
+                
+                // Re-save with updated names
+                this.saveChannels();
+                this.renderChannels();
+            }
+
+            this.showPlaylistStatus(`تم تحميل ${loadedChannels.length} قناة بنجاح!`, 'success');
+            
+            // Clear form
+            document.getElementById('playlistUrl').value = '';
+            document.getElementById('playlistName').value = '';
+
+        } catch (error) {
+            console.error('خطأ في تحميل قائمة التشغيل:', error);
+            this.showPlaylistStatus('فشل في تحميل قائمة التشغيل. تحقق من صحة الرابط.', 'error');
+        }
+    }
+
+    // Show playlist status
+    showPlaylistStatus(message, type = 'info') {
+        const statusElement = document.getElementById('playlistStatus');
+        const statusText = document.getElementById('playlistStatusText');
+        
+        if (statusElement && statusText) {
+            statusElement.style.display = 'block';
+            statusText.textContent = message;
+            
+            // Update status styling based on type
+            statusElement.className = `playlist-status ${type}`;
+            
+            // Auto-hide after 5 seconds for success messages
+            if (type === 'success') {
+                setTimeout(() => {
+                    statusElement.style.display = 'none';
+                }, 5000);
+            }
+        }
+    }
+
     // Show all channels and scroll to top
     showAllChannels() {
         // Filter to show all channels
@@ -8056,6 +8276,44 @@ function initializeMobileBottomNav() {
     if (window.app) {
         updateMobileCategoryCounts();
         updateMobileFavoritesBadge();
+    }
+}
+
+// Global helper functions for playlist functionality
+function setPlaylistUrl(url) {
+    const urlInput = document.getElementById('playlistUrl');
+    if (urlInput) {
+        urlInput.value = url;
+        urlInput.focus();
+    }
+}
+
+async function testPlaylistUrl() {
+    const urlInput = document.getElementById('playlistUrl');
+    if (!urlInput || !urlInput.value.trim()) {
+        if (window.app) {
+            window.app.notifyError('يرجى إدخال رابط قائمة التشغيل أولاً');
+        }
+        return;
+    }
+
+    const url = urlInput.value.trim();
+    
+    if (window.app) {
+        window.app.showPlaylistStatus('جاري اختبار الرابط...', 'loading');
+        
+        try {
+            // Test if URL is accessible
+            const response = await fetch(url, { method: 'HEAD' });
+            if (response.ok) {
+                window.app.showPlaylistStatus('الرابط صحيح ومتاح!', 'success');
+            } else {
+                window.app.showPlaylistStatus(`الرابط غير متاح (${response.status})`, 'error');
+            }
+        } catch (error) {
+            console.error('خطأ في اختبار الرابط:', error);
+            window.app.showPlaylistStatus('فشل في الوصول للرابط. تحقق من صحة الرابط.', 'error');
+        }
     }
 }
 

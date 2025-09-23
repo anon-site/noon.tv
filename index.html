@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.youtube.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; media-src 'self' https: blob:; connect-src 'self' https: wss:; frame-src 'self' https://www.youtube.com https://youtube.com; child-src 'self' https://www.youtube.com https://youtube.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.youtube.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; media-src 'self' https: http: blob:; connect-src 'self' https: http: wss:; frame-src 'self' https://www.youtube.com https://youtube.com; child-src 'self' https://www.youtube.com https://youtube.com; object-src 'none'; base-uri 'self'; form-action 'self';">
     
     <meta name="description" content="منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات">
     
@@ -753,6 +753,10 @@
                             <i class="fas fa-plus"></i>
                             <span>إضافة قناة</span>
                         </button>
+                        <button class="admin-tab" data-tab="playlist" onclick="app.switchAdminTab('playlist')">
+                            <i class="fas fa-list"></i>
+                            <span>تحميل قائمة تشغيل</span>
+                        </button>
                         <button class="admin-tab" data-tab="categories" onclick="app.switchAdminTab('categories')">
                             <i class="fas fa-tags"></i>
                             <span>إدارة الفئات</span>
@@ -870,6 +874,62 @@
                             <button type="submit" class="add-btn">إضافة القناة</button>
                         </div>
                     </form>
+                </div>
+                
+                <!-- Playlist Loader Tab -->
+                <div class="admin-tab-content" id="playlistTab">
+                    <div class="playlist-loader">
+                        <div class="playlist-header">
+                            <h4>تحميل قائمة تشغيل M3U8</h4>
+                            <p>أدخل رابط قائمة التشغيل M3U8 لتحميل القنوات تلقائياً</p>
+                        </div>
+                        
+                        <form class="playlist-form" id="playlistForm">
+                            <div class="form-group">
+                                <label for="playlistUrl">رابط قائمة التشغيل M3U8</label>
+                                <input type="url" id="playlistUrl" required placeholder="https://example.com/playlist.m3u8">
+                                <small class="form-help">أدخل رابط قائمة التشغيل M3U8 الصحيح</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="playlistName">اسم القائمة (اختياري)</label>
+                                <input type="text" id="playlistName" placeholder="مثال: قنوات عربية">
+                                <small class="form-help">سيتم استخدام هذا الاسم لتحديد القنوات المحملة</small>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="test-playlist-btn" onclick="testPlaylistUrl()">
+                                    <i class="fas fa-search"></i>
+                                    اختبار الرابط
+                                </button>
+                                <button type="submit" class="load-playlist-btn">
+                                    <i class="fas fa-download"></i>
+                                    تحميل القنوات
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <div class="playlist-status" id="playlistStatus" style="display: none;">
+                            <div class="status-content">
+                                <i class="fas fa-info-circle"></i>
+                                <span id="playlistStatusText">جاري التحليل...</span>
+                            </div>
+                        </div>
+                        
+                        <div class="playlist-examples">
+                            <h5>أمثلة على روابط قوائم التشغيل:</h5>
+                            <div class="example-links">
+                                <button class="example-link" onclick="setPlaylistUrl('https://list.iptvcat.com/my_list/s/0194021aeb7245562f6d82a8a05dd666.m3u8')">
+                                    <i class="fas fa-link"></i>
+                                    IPTVCat - قائمة تجريبية
+                                </button>
+                                <button class="example-link" onclick="setPlaylistUrl('https://raw.githubusercontent.com/iptv-org/iptv/master/streams/ar.m3u')">
+                                    <i class="fas fa-link"></i>
+                                    IPTV-org - قنوات عربية
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Categories Management Tab -->

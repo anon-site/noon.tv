@@ -1,6 +1,17 @@
 {
   "channels": [
     {
+      "id": 999,
+      "name": "Al Jadeed (تجريبي)",
+      "url": "http://185.9.2.18/chid_391/mono.m3u8?checkedby:iptvcat.com",
+      "logo": "https://via.placeholder.com/150x150/FF6B6B/FFFFFF?text=Al+Jadeed",
+      "category": "news",
+      "country": "لبنان",
+      "type": "hls",
+      "status": "active",
+      "isLocal": false
+    },
+    {
       "id": 33,
       "name": "إقرأ",
       "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv3/playlist.m3u8",
