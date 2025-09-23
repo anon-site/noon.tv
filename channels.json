@@ -749,6 +749,26 @@
       "isLocal": false
     },
     {
+      "id": 109,
+      "name": "Disney Junior East",
+      "url": "https://fl7.moveonjoy.com/DISNEY_JR/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/2024_Disney_Jr._Logo.svg/1280px-2024_Disney_Jr._Logo.svg.png",
+      "category": "kids",
+      "country": "USA",
+      "type": "hls",
+      "status": "active"
+    },
+    {
+      "id": 108,
+      "name": "Disney XD",
+      "url": "https://fl7.moveonjoy.com/DISNEY_XD/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/2015_Disney_XD_logo.svg/1280px-2015_Disney_XD_logo.svg.png",
+      "category": "kids",
+      "country": "USA",
+      "type": "hls",
+      "status": "active"
+    },
+    {
       "id": 106,
       "name": "Roya Kids",
       "url": "https://playlist.fasttvcdn.com/pl/ptllxjd03j6g9oxxjdfapg/roya-kids-originals/playlist.m3u8",
@@ -769,16 +789,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false
-    },
-    {
-      "id": 108,
-      "name": "Disney XD",
-      "url": "https://fl7.moveonjoy.com/DISNEY_XD/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/2015_Disney_XD_logo.svg/1280px-2015_Disney_XD_logo.svg.png",
-      "category": "kids",
-      "country": "USA",
-      "type": "hls",
-      "status": "active"
     }
   ],
   "favorites": [],
@@ -847,6 +857,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-23T18:59:43.821Z",
+  "lastModified": "2025-09-23T19:09:38.320Z",
   "version": "1.0"
 }
