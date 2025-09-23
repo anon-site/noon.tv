@@ -1123,18 +1123,18 @@ class ArabicTVApp {
                 <p>جارٍ تحميل البث...</p>
             `;
 
-            // Apply CORS proxy for GitHub Pages if needed
-            let processedUrl = url;
-            if (this.isGitHubPages() && url.includes('.m3u8')) {
-                processedUrl = this.applyCorsProxy(url);
-                console.log('تم تطبيق CORS Proxy:', processedUrl);
-            }
-
             // Check if it's a YouTube URL
             if (type === 'youtube' || this.isYouTubeUrl(url)) {
                 const currentQuality = this.getCurrentQuality();
                 await this.loadYouTubeVideo(url, currentQuality);
                 return;
+            }
+
+            // Apply CORS proxy for GitHub Pages if needed
+            let finalUrl = url;
+            if (this.isGitHubPages() && url.includes('.m3u8')) {
+                finalUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+                console.log('تم تطبيق CORS Proxy للرابط:', url);
             }
 
             // HLS streaming
@@ -1154,13 +1154,6 @@ class ArabicTVApp {
                     maxBufferSize: 60 * 1000 * 1000,
                     maxBufferHole: 0.5,
                     highBufferWatchdogPeriod: 2,
-                    xhrSetup: (xhr, url) => {
-                        // Apply CORS proxy for segment requests if needed
-                        if (this.isGitHubPages() && url.includes('.m3u8')) {
-                            const proxyUrl = this.applyCorsProxy(url);
-                            xhr.open('GET', proxyUrl, true);
-                        }
-                    },
                     nudgeOffset: 0.1,
                     nudgeMaxRetry: 3,
                     maxFragLookUpTolerance: 0.20,
@@ -1177,7 +1170,7 @@ class ArabicTVApp {
                     startFragPrefetch: true
                 });
 
-                this.hls.loadSource(processedUrl);
+                this.hls.loadSource(finalUrl);
                 this.hls.attachMedia(video);
 
                 this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -1195,14 +1188,6 @@ class ArabicTVApp {
 
                 this.hls.on(Hls.Events.ERROR, (event, data) => {
                     console.error('HLS Error:', data);
-                    
-                    // Try alternative CORS proxy if network error
-                    if (data.type === Hls.ErrorTypes.NETWORK_ERROR && this.isGitHubPages()) {
-                        console.log('محاولة استخدام وكيل CORS بديل...');
-                        const alternativeUrl = this.applyAlternativeCorsProxy(url);
-                        this.hls.loadSource(alternativeUrl);
-                        return;
-                    }
                     
                     // Show specific error messages
                     if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
@@ -1234,7 +1219,7 @@ class ArabicTVApp {
 
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 // Native HLS support (Safari)
-                source.src = processedUrl;
+                source.src = finalUrl;
                 video.load();
                 loading.style.display = 'none';
                 
@@ -6982,51 +6967,6 @@ class ArabicTVApp {
                window.location.hostname.includes('netlify.app') ||
                window.location.hostname.includes('vercel.app');
     }
-
-    // Apply CORS proxy to URL
-    applyCorsProxy(url) {
-        // List of CORS proxy services (rotating for reliability)
-        const proxies = [
-            'https://api.allorigins.win/raw?url=',
-            'https://corsproxy.io/?',
-            'https://thingproxy.freeboard.io/fetch/',
-            'https://cors-anywhere.herokuapp.com/'
-        ];
-
-        // Use a random proxy for better reliability
-        const randomIndex = Math.floor(Math.random() * proxies.length);
-        const proxy = proxies[randomIndex];
-        
-        // Encode the URL
-        const encodedUrl = encodeURIComponent(url);
-        
-        // Return proxied URL
-        return proxy + encodedUrl;
-    }
-
-    // Alternative CORS proxy method using a different service
-    applyAlternativeCorsProxy(url) {
-        // Using allorigins service
-        return `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-    }
-
-    // Show video error message
-    showVideoError(message) {
-        const loading = document.getElementById('videoLoading');
-        loading.innerHTML = `
-            <div class="error-icon">❌</div>
-            <p>${message}</p>
-            <button onclick="app.retryVideoLoad()" class="retry-btn">إعادة المحاولة</button>
-        `;
-        loading.style.display = 'flex';
-    }
-
-    // Retry video loading
-    retryVideoLoad() {
-        if (this.currentChannel) {
-            this.loadVideoStream(this.currentChannel.url, this.currentChannel.type);
-        }
-    }
 }
 
 // Global functions for inline event handlers
@@ -7048,10 +6988,6 @@ function closeAdminPanel() {
 
 function openIPTVChecker() {
     window.location.href = 'iptv-checker.html';
-}
-
-function openCorsProxy() {
-    window.location.href = 'cors-proxy.html';
 }
 
 function closeModal() {
