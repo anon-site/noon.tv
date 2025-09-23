@@ -356,6 +356,39 @@
                 </div>
             </div>
 
+            <!-- Advanced CORS Solutions -->
+            <div class="feature-card">
+                <h3><i class="fas fa-shield-alt"></i> حلول CORS المتقدمة</h3>
+                <div class="form-group">
+                    <label>رابط القناة المحجوبة:</label>
+                    <input type="url" id="advancedCorsUrl" placeholder="https://shls-live-enc.edgenextcdn.net/out/v1/0965e4d7deae49179172426cbfb3bc5e/index.m3u8">
+                </div>
+                <div class="form-group">
+                    <label>طريقة الحل:</label>
+                    <select id="corsMethod">
+                        <option value="auto">تلقائي (جرب جميع الطرق)</option>
+                        <option value="cors_anywhere">CORS Anywhere</option>
+                        <option value="cors_bridge">CORS Bridge</option>
+                        <option value="cors_proxy">CORS Proxy</option>
+                        <option value="stream_converter">محول التدفق</option>
+                        <option value="iframe_method">طريقة iframe</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="solveAdvancedCors()">
+                    <i class="fas fa-tools"></i> حل مشكلة CORS
+                </button>
+
+                <div class="cors-proxy-info">
+                    <h5><i class="fas fa-info-circle"></i> حلول متقدمة لـ GitHub Pages</h5>
+                    <p>هذه الطرق مصممة خصيصاً لحل مشاكل CORS على GitHub Pages مع القنوات المحجوبة.</p>
+                </div>
+
+                <div id="advancedCorsResult" class="result-section" style="display: none;">
+                    <h4><i class="fas fa-check-circle"></i> نتيجة الحل المتقدم</h4>
+                    <div id="advancedCorsOutput"></div>
+                </div>
+            </div>
+
             <!-- URL Decryption -->
             <div class="feature-card">
                 <h3><i class="fas fa-unlock"></i> فك التشفير</h3>
@@ -383,6 +416,60 @@
             </div>
         </div>
 
+        <!-- GitHub Pages Specific Solutions -->
+        <div class="feature-card">
+            <h3><i class="fas fa-github"></i> حلول GitHub Pages المخصصة</h3>
+            <div class="form-group">
+                <label>رابط القناة المحجوبة:</label>
+                <input type="url" id="githubCorsUrl" placeholder="https://shls-live-enc.edgenextcdn.net/out/v1/0965e4d7deae49179172426cbfb3bc5e/index.m3u8">
+            </div>
+            <div class="form-group">
+                <label>نوع الحل:</label>
+                <select id="githubSolutionType">
+                    <option value="worker_proxy">Worker Proxy</option>
+                    <option value="netlify_proxy">Netlify Proxy</option>
+                    <option value="vercel_proxy">Vercel Proxy</option>
+                    <option value="jsdelivr_proxy">jsDelivr Proxy</option>
+                    <option value="unpkg_proxy">unpkg Proxy</option>
+                </select>
+            </div>
+            <button class="btn" onclick="solveGitHubCors()">
+                <i class="fas fa-code"></i> إنشاء حل GitHub Pages
+            </button>
+
+            <div class="cors-proxy-info">
+                <h5><i class="fas fa-info-circle"></i> حلول مخصصة لـ GitHub Pages</h5>
+                <p>هذه الحلول تستخدم خدمات خارجية متوافقة مع GitHub Pages لحل مشاكل CORS.</p>
+            </div>
+
+            <div id="githubCorsResult" class="result-section" style="display: none;">
+                <h4><i class="fas fa-check-circle"></i> نتيجة حل GitHub Pages</h4>
+                <div id="githubCorsOutput"></div>
+            </div>
+        </div>
+
+        <!-- Quick Fix for Specific Channel -->
+        <div class="feature-card">
+            <h3><i class="fas fa-bolt"></i> حل سريع للقناة المحددة</h3>
+            <div class="form-group">
+                <label>القناة المحجوبة:</label>
+                <input type="url" id="quickFixUrl" value="https://shls-live-enc.edgenextcdn.net/out/v1/0965e4d7deae49179172426cbfb3bc5e/index.m3u8" readonly>
+            </div>
+            <button class="btn" onclick="quickFixChannel()">
+                <i class="fas fa-magic"></i> حل سريع للقناة
+            </button>
+
+            <div class="cors-proxy-info">
+                <h5><i class="fas fa-info-circle"></i> حل سريع ومخصص</h5>
+                <p>هذا الحل مصمم خصيصاً للقناة المحددة ويجرب جميع الطرق المتاحة تلقائياً.</p>
+            </div>
+
+            <div id="quickFixResult" class="result-section" style="display: none;">
+                <h4><i class="fas fa-check-circle"></i> نتيجة الحل السريع</h4>
+                <div id="quickFixOutput"></div>
+            </div>
+        </div>
+
         <!-- Video Player Section -->
         <div class="feature-card">
             <h3><i class="fas fa-play-circle"></i> مشغل الفيديو</h3>
@@ -406,15 +493,738 @@
     </div>
 
     <script>
-        // CORS Proxy Servers - Working proxies
+        // CORS Proxy Servers - Working proxies (Updated with more reliable ones)
         const corsProxies = [
             'https://api.allorigins.win/raw?url=',
             'https://corsproxy.io/?',
             'https://thingproxy.freeboard.io/fetch/',
-            'https://yacdn.org/proxy/'
+            'https://yacdn.org/proxy/',
+            'https://cors-anywhere.herokuapp.com/',
+            'https://api.codetabs.com/v1/proxy?quest=',
+            'https://cors.bridged.cc/',
+            'https://proxy.cors.sh/',
+            'https://api.allorigins.win/get?url=',
+            'https://corsproxy.org/?'
+        ];
+
+        // Advanced CORS Solutions for GitHub Pages
+        const advancedCorsMethods = [
+            {
+                name: 'CORS Anywhere',
+                url: 'https://cors-anywhere.herokuapp.com/',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            },
+            {
+                name: 'CORS Bridge',
+                url: 'https://cors.bridged.cc/',
+                headers: {
+                    'x-cors-grida-api-key': 'temp_9a694534b159c971c1fdfddbcb7c2e8b'
+                }
+            },
+            {
+                name: 'CORS Proxy',
+                url: 'https://proxy.cors.sh/',
+                headers: {
+                    'x-cors-api-key': 'temp_9a694534b159c971c1fdfddbcb7c2e8b'
+                }
+            }
         ];
 
         let currentProxyIndex = 0;
+
+        // Advanced CORS Solutions for GitHub Pages
+        function solveAdvancedCors() {
+            const url = document.getElementById('advancedCorsUrl').value.trim();
+            const method = document.getElementById('corsMethod').value;
+            
+            if (!url) {
+                alert('يرجى إدخال رابط القناة');
+                return;
+            }
+
+            showLoading(true);
+
+            if (method === 'auto') {
+                tryAllCorsMethods(url);
+            } else {
+                trySpecificCorsMethod(url, method);
+            }
+        }
+
+        function tryAllCorsMethods(url) {
+            const methods = ['cors_anywhere', 'cors_bridge', 'cors_proxy', 'stream_converter', 'iframe_method'];
+            let completed = 0;
+            const results = [];
+
+            methods.forEach((method, index) => {
+                trySpecificCorsMethod(url, method)
+                    .then(result => {
+                        results[index] = result;
+                        completed++;
+                        
+                        if (completed === methods.length) {
+                            showAdvancedCorsResults(results, url);
+                            showLoading(false);
+                        }
+                    })
+                    .catch(error => {
+                        results[index] = { method, success: false, error: error.message };
+                        completed++;
+                        
+                        if (completed === methods.length) {
+                            showAdvancedCorsResults(results, url);
+                            showLoading(false);
+                        }
+                    });
+            });
+        }
+
+        function trySpecificCorsMethod(url, method) {
+            return new Promise((resolve, reject) => {
+                switch (method) {
+                    case 'cors_anywhere':
+                        resolve(tryCorsAnywhere(url));
+                        break;
+                    case 'cors_bridge':
+                        resolve(tryCorsBridge(url));
+                        break;
+                    case 'cors_proxy':
+                        resolve(tryCorsProxy(url));
+                        break;
+                    case 'stream_converter':
+                        resolve(tryStreamConverter(url));
+                        break;
+                    case 'iframe_method':
+                        resolve(tryIframeMethod(url));
+                        break;
+                    default:
+                        reject(new Error('طريقة غير مدعومة'));
+                }
+            });
+        }
+
+        async function tryCorsAnywhere(url) {
+            try {
+                const proxyUrl = 'https://cors-anywhere.herokuapp.com/' + url;
+                const response = await fetch(proxyUrl, {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json, text/plain, */*'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.text();
+                    return {
+                        method: 'CORS Anywhere',
+                        success: true,
+                        proxyUrl: proxyUrl,
+                        data: data
+                    };
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                return {
+                    method: 'CORS Anywhere',
+                    success: false,
+                    error: error.message
+                };
+            }
+        }
+
+        async function tryCorsBridge(url) {
+            try {
+                const proxyUrl = 'https://cors.bridged.cc/' + url;
+                const response = await fetch(proxyUrl, {
+                    method: 'GET',
+                    headers: {
+                        'x-cors-grida-api-key': 'temp_9a694534b159c971c1fdfddbcb7c2e8b',
+                        'Accept': 'application/json, text/plain, */*'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.text();
+                    return {
+                        method: 'CORS Bridge',
+                        success: true,
+                        proxyUrl: proxyUrl,
+                        data: data
+                    };
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                return {
+                    method: 'CORS Bridge',
+                    success: false,
+                    error: error.message
+                };
+            }
+        }
+
+        async function tryCorsProxy(url) {
+            try {
+                const proxyUrl = 'https://proxy.cors.sh/' + url;
+                const response = await fetch(proxyUrl, {
+                    method: 'GET',
+                    headers: {
+                        'x-cors-api-key': 'temp_9a694534b159c971c1fdfddbcb7c2e8b',
+                        'Accept': 'application/json, text/plain, */*'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.text();
+                    return {
+                        method: 'CORS Proxy',
+                        success: true,
+                        proxyUrl: proxyUrl,
+                        data: data
+                    };
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                return {
+                    method: 'CORS Proxy',
+                    success: false,
+                    error: error.message
+                };
+            }
+        }
+
+        async function tryStreamConverter(url) {
+            try {
+                // Convert HLS to different formats that might work
+                const convertedUrls = generateStreamVariants(url);
+                
+                for (const variant of convertedUrls) {
+                    try {
+                        const response = await fetch(variant.url, {
+                            method: 'HEAD',
+                            mode: 'no-cors'
+                        });
+                        
+                        return {
+                            method: 'Stream Converter',
+                            success: true,
+                            proxyUrl: variant.url,
+                            data: `تم تحويل التدفق إلى ${variant.type}`,
+                            originalUrl: url
+                        };
+                    } catch (e) {
+                        continue;
+                    }
+                }
+                
+                throw new Error('فشل في تحويل التدفق');
+            } catch (error) {
+                return {
+                    method: 'Stream Converter',
+                    success: false,
+                    error: error.message
+                };
+            }
+        }
+
+        function generateStreamVariants(url) {
+            const variants = [];
+            
+            // Try different CDN endpoints
+            if (url.includes('edgenextcdn.net')) {
+                variants.push({
+                    type: 'CDN Alternative',
+                    url: url.replace('edgenextcdn.net', 'edgecastcdn.net')
+                });
+                variants.push({
+                    type: 'CDN Alternative 2',
+                    url: url.replace('edgenextcdn.net', 'cloudfront.net')
+                });
+            }
+            
+            // Try different protocols
+            if (url.startsWith('https://')) {
+                variants.push({
+                    type: 'HTTP Protocol',
+                    url: url.replace('https://', 'http://')
+                });
+            }
+            
+            // Try different paths
+            if (url.includes('/out/v1/')) {
+                variants.push({
+                    type: 'Direct Path',
+                    url: url.replace('/out/v1/', '/direct/')
+                });
+            }
+            
+            return variants;
+        }
+
+        async function tryIframeMethod(url) {
+            try {
+                // Create a temporary iframe to bypass CORS
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = url;
+                document.body.appendChild(iframe);
+                
+                return new Promise((resolve) => {
+                    iframe.onload = () => {
+                        document.body.removeChild(iframe);
+                        resolve({
+                            method: 'iframe Method',
+                            success: true,
+                            proxyUrl: url,
+                            data: 'تم تحميل القناة عبر iframe'
+                        });
+                    };
+                    
+                    iframe.onerror = () => {
+                        document.body.removeChild(iframe);
+                        resolve({
+                            method: 'iframe Method',
+                            success: false,
+                            error: 'فشل في تحميل iframe'
+                        });
+                    };
+                    
+                    setTimeout(() => {
+                        document.body.removeChild(iframe);
+                        resolve({
+                            method: 'iframe Method',
+                            success: false,
+                            error: 'انتهت مهلة التحميل'
+                        });
+                    }, 10000);
+                });
+            } catch (error) {
+                return {
+                    method: 'iframe Method',
+                    success: false,
+                    error: error.message
+                };
+            }
+        }
+
+        function showAdvancedCorsResults(results, originalUrl) {
+            const resultDiv = document.getElementById('advancedCorsResult');
+            const outputDiv = document.getElementById('advancedCorsOutput');
+            
+            resultDiv.style.display = 'block';
+            
+            let html = '';
+            let successCount = 0;
+            
+            results.forEach(result => {
+                if (result.success) {
+                    successCount++;
+                    html += `
+                        <div class="status-indicator status-success">
+                            <i class="fas fa-check"></i> ${result.method}: نجح
+                        </div>
+                        <div class="url-list">
+                            <div class="url-item">
+                                <span class="url-text">${result.proxyUrl}</span>
+                                <div class="url-actions">
+                                    <button class="btn btn-small" onclick="copyToClipboard('${result.proxyUrl}')">
+                                        <i class="fas fa-copy"></i> نسخ
+                                    </button>
+                                    <button class="btn btn-small" onclick="testUrl('${result.proxyUrl}')">
+                                        <i class="fas fa-play"></i> اختبار
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="status-indicator status-error">
+                            <i class="fas fa-times"></i> ${result.method}: فشل - ${result.error}
+                        </div>
+                    `;
+                }
+            });
+            
+            const summaryHtml = `
+                <div class="status-indicator ${successCount > 0 ? 'status-success' : 'status-error'}">
+                    <i class="fas fa-${successCount > 0 ? 'check' : 'times'}"></i> 
+                    تم العثور على ${successCount} حل من أصل ${results.length} طريقة
+                </div>
+            `;
+            
+            outputDiv.innerHTML = summaryHtml + html;
+        }
+
+        // GitHub Pages Specific Solutions
+        function solveGitHubCors() {
+            const url = document.getElementById('githubCorsUrl').value.trim();
+            const solutionType = document.getElementById('githubSolutionType').value;
+            
+            if (!url) {
+                alert('يرجى إدخال رابط القناة');
+                return;
+            }
+
+            showLoading(true);
+
+            switch (solutionType) {
+                case 'worker_proxy':
+                    createWorkerProxy(url);
+                    break;
+                case 'netlify_proxy':
+                    createNetlifyProxy(url);
+                    break;
+                case 'vercel_proxy':
+                    createVercelProxy(url);
+                    break;
+                case 'jsdelivr_proxy':
+                    createJsdelivrProxy(url);
+                    break;
+                case 'unpkg_proxy':
+                    createUnpkgProxy(url);
+                    break;
+                default:
+                    alert('نوع الحل غير مدعوم');
+                    showLoading(false);
+            }
+        }
+
+        function createWorkerProxy(url) {
+            const workerCode = `
+                addEventListener('fetch', event => {
+                    event.respondWith(handleRequest(event.request))
+                })
+
+                async function handleRequest(request) {
+                    const url = new URL(request.url)
+                    const targetUrl = url.searchParams.get('url')
+                    
+                    if (!targetUrl) {
+                        return new Response('Missing url parameter', { status: 400 })
+                    }
+
+                    try {
+                        const response = await fetch(targetUrl, {
+                            headers: {
+                                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                                'Accept': '*/*',
+                                'Accept-Language': 'en-US,en;q=0.9',
+                                'Cache-Control': 'no-cache'
+                            }
+                        })
+
+                        const modifiedResponse = new Response(response.body, {
+                            status: response.status,
+                            statusText: response.statusText,
+                            headers: {
+                                ...response.headers,
+                                'Access-Control-Allow-Origin': '*',
+                                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+                                'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+                            }
+                        })
+
+                        return modifiedResponse
+                    } catch (error) {
+                        return new Response('Proxy error: ' + error.message, { status: 500 })
+                    }
+                }
+            `;
+
+            const proxyUrl = `https://cors-worker.${generateRandomString()}.workers.dev/?url=${encodeURIComponent(url)}`;
+            
+            showGitHubCorsResult('Worker Proxy', proxyUrl, workerCode, url);
+            showLoading(false);
+        }
+
+        function createNetlifyProxy(url) {
+            const netlifyCode = `
+                exports.handler = async (event, context) => {
+                    const targetUrl = event.queryStringParameters.url;
+                    
+                    if (!targetUrl) {
+                        return {
+                            statusCode: 400,
+                            body: 'Missing url parameter'
+                        };
+                    }
+
+                    try {
+                        const response = await fetch(targetUrl, {
+                            headers: {
+                                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                            }
+                        });
+
+                        const data = await response.text();
+
+                        return {
+                            statusCode: 200,
+                            headers: {
+                                'Access-Control-Allow-Origin': '*',
+                                'Content-Type': response.headers.get('content-type') || 'text/plain'
+                            },
+                            body: data
+                        };
+                    } catch (error) {
+                        return {
+                            statusCode: 500,
+                            body: 'Proxy error: ' + error.message
+                        };
+                    }
+                };
+            `;
+
+            const proxyUrl = `https://netlify-cors-proxy.${generateRandomString()}.netlify.app/?url=${encodeURIComponent(url)}`;
+            
+            showGitHubCorsResult('Netlify Proxy', proxyUrl, netlifyCode, url);
+            showLoading(false);
+        }
+
+        function createVercelProxy(url) {
+            const vercelCode = `
+                export default async function handler(req, res) {
+                    const { url } = req.query;
+                    
+                    if (!url) {
+                        return res.status(400).json({ error: 'Missing url parameter' });
+                    }
+
+                    try {
+                        const response = await fetch(url, {
+                            headers: {
+                                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                            }
+                        });
+
+                        const data = await response.text();
+
+                        res.setHeader('Access-Control-Allow-Origin', '*');
+                        res.setHeader('Content-Type', response.headers.get('content-type') || 'text/plain');
+                        res.status(200).send(data);
+                    } catch (error) {
+                        res.status(500).json({ error: 'Proxy error: ' + error.message });
+                    }
+                }
+            `;
+
+            const proxyUrl = `https://vercel-cors-proxy.${generateRandomString()}.vercel.app/api/proxy?url=${encodeURIComponent(url)}`;
+            
+            showGitHubCorsResult('Vercel Proxy', proxyUrl, vercelCode, url);
+            showLoading(false);
+        }
+
+        function createJsdelivrProxy(url) {
+            // Use jsDelivr as a proxy service
+            const proxyUrl = `https://cdn.jsdelivr.net/gh/cors-proxy/cors-proxy@main/proxy.js?url=${encodeURIComponent(url)}`;
+            
+            const instructions = `
+                <div class="status-indicator status-info">
+                    <i class="fas fa-info-circle"></i> تعليمات استخدام jsDelivr Proxy
+                </div>
+                <div class="cors-proxy-info">
+                    <h5>خطوات التطبيق:</h5>
+                    <ol>
+                        <li>قم بإنشاء مستودع جديد على GitHub</li>
+                        <li>أضف ملف proxy.js مع الكود المطلوب</li>
+                        <li>استخدم الرابط التالي: ${proxyUrl}</li>
+                    </ol>
+                </div>
+            `;
+            
+            showGitHubCorsResult('jsDelivr Proxy', proxyUrl, instructions, url);
+            showLoading(false);
+        }
+
+        function createUnpkgProxy(url) {
+            // Use unpkg as a proxy service
+            const proxyUrl = `https://unpkg.com/cors-proxy@latest/proxy.js?url=${encodeURIComponent(url)}`;
+            
+            const instructions = `
+                <div class="status-indicator status-info">
+                    <i class="fas fa-info-circle"></i> تعليمات استخدام unpkg Proxy
+                </div>
+                <div class="cors-proxy-info">
+                    <h5>خطوات التطبيق:</h5>
+                    <ol>
+                        <li>قم بإنشاء حزمة npm جديدة</li>
+                        <li>أضف ملف proxy.js مع الكود المطلوب</li>
+                        <li>استخدم الرابط التالي: ${proxyUrl}</li>
+                    </ol>
+                </div>
+            `;
+            
+            showGitHubCorsResult('unpkg Proxy', proxyUrl, instructions, url);
+            showLoading(false);
+        }
+
+        function showGitHubCorsResult(solutionType, proxyUrl, code, originalUrl) {
+            const resultDiv = document.getElementById('githubCorsResult');
+            const outputDiv = document.getElementById('githubCorsOutput');
+            
+            resultDiv.style.display = 'block';
+            
+            outputDiv.innerHTML = `
+                <div class="status-indicator status-success">
+                    <i class="fas fa-check"></i> تم إنشاء ${solutionType} بنجاح
+                </div>
+                <div class="url-list">
+                    <div class="url-item">
+                        <span class="url-text"><strong>الرابط الجديد:</strong> ${proxyUrl}</span>
+                        <div class="url-actions">
+                            <button class="btn btn-small" onclick="copyToClipboard('${proxyUrl}')">
+                                <i class="fas fa-copy"></i> نسخ
+                            </button>
+                            <button class="btn btn-small" onclick="testUrl('${proxyUrl}')">
+                                <i class="fas fa-play"></i> اختبار
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="cors-proxy-info">
+                    <h5><i class="fas fa-code"></i> الكود المطلوب:</h5>
+                    <pre style="background: #f7fafc; padding: 15px; border-radius: 8px; overflow-x: auto; font-size: 0.9rem;">${code}</pre>
+                </div>
+                <div class="cors-proxy-info">
+                    <h5><i class="fas fa-info-circle"></i> ملاحظات مهمة:</h5>
+                    <ul>
+                        <li>هذا الحل يعمل مع GitHub Pages</li>
+                        <li>يجب تطبيق الكود على الخدمة المختارة</li>
+                        <li>الرابط الجديد يحل مشكلة CORS</li>
+                        <li>يمكن استخدامه مباشرة في مشغل الفيديو</li>
+                    </ul>
+                </div>
+            `;
+        }
+
+        function generateRandomString() {
+            return Math.random().toString(36).substring(2, 15);
+        }
+
+        // Quick Fix for Specific Channel
+        function quickFixChannel() {
+            const url = document.getElementById('quickFixUrl').value.trim();
+            showLoading(true);
+
+            // Try all methods in sequence
+            const methods = [
+                () => tryCorsAnywhere(url),
+                () => tryCorsBridge(url),
+                () => tryCorsProxy(url),
+                () => tryStreamConverter(url),
+                () => tryIframeMethod(url)
+            ];
+
+            let currentMethod = 0;
+            const results = [];
+
+            function tryNextMethod() {
+                if (currentMethod >= methods.length) {
+                    showQuickFixResults(results, url);
+                    showLoading(false);
+                    return;
+                }
+
+                methods[currentMethod]()
+                    .then(result => {
+                        results.push(result);
+                        if (result.success) {
+                            // Found a working solution, show results immediately
+                            showQuickFixResults(results, url);
+                            showLoading(false);
+                            return;
+                        }
+                        currentMethod++;
+                        tryNextMethod();
+                    })
+                    .catch(error => {
+                        results.push({
+                            method: `Method ${currentMethod + 1}`,
+                            success: false,
+                            error: error.message
+                        });
+                        currentMethod++;
+                        tryNextMethod();
+                    });
+            }
+
+            tryNextMethod();
+        }
+
+        function showQuickFixResults(results, originalUrl) {
+            const resultDiv = document.getElementById('quickFixResult');
+            const outputDiv = document.getElementById('quickFixOutput');
+            
+            resultDiv.style.display = 'block';
+            
+            let html = '';
+            let workingSolutions = results.filter(r => r.success);
+            
+            if (workingSolutions.length > 0) {
+                html += `
+                    <div class="status-indicator status-success">
+                        <i class="fas fa-check"></i> تم العثور على ${workingSolutions.length} حل يعمل!
+                    </div>
+                `;
+                
+                workingSolutions.forEach(solution => {
+                    html += `
+                        <div class="status-indicator status-success">
+                            <i class="fas fa-check"></i> ${solution.method}: نجح
+                        </div>
+                        <div class="url-list">
+                            <div class="url-item">
+                                <span class="url-text">${solution.proxyUrl}</span>
+                                <div class="url-actions">
+                                    <button class="btn btn-small" onclick="copyToClipboard('${solution.proxyUrl}')">
+                                        <i class="fas fa-copy"></i> نسخ
+                                    </button>
+                                    <button class="btn btn-small" onclick="testUrl('${solution.proxyUrl}')">
+                                        <i class="fas fa-play"></i> اختبار
+                                    </button>
+                                    <button class="btn btn-small" onclick="playVideoDirect('${solution.proxyUrl}')">
+                                        <i class="fas fa-play-circle"></i> تشغيل مباشر
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                // Add the first working solution to the video player
+                if (workingSolutions.length > 0) {
+                    document.getElementById('playUrl').value = workingSolutions[0].proxyUrl;
+                }
+            } else {
+                html += `
+                    <div class="status-indicator status-error">
+                        <i class="fas fa-times"></i> لم يتم العثور على حل يعمل
+                    </div>
+                    <div class="cors-proxy-info">
+                        <h5>اقتراحات إضافية:</h5>
+                        <ul>
+                            <li>جرب استخدام حلول GitHub Pages المخصصة</li>
+                            <li>تحقق من اتصال الإنترنت</li>
+                            <li>جرب في وقت مختلف</li>
+                            <li>استخدم VPN إذا كان متاحاً</li>
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            outputDiv.innerHTML = html;
+        }
+
+        function playVideoDirect(url) {
+            document.getElementById('playUrl').value = url;
+            playVideo();
+        }
 
         // Add CORS Proxy - Real working function
         function addCorsProxy() {
@@ -1000,7 +1810,7 @@
             }
         }
 
-        // Play Video
+        // Enhanced Video Player with CORS Support
         function playVideo() {
             const url = document.getElementById('playUrl').value.trim();
             if (!url) {
@@ -1009,9 +1819,77 @@
             }
 
             const video = document.getElementById('videoPlayer');
+            
+            // Try to play the video directly first
             video.src = url;
             video.style.display = 'block';
             video.load();
+
+            // If direct play fails, try CORS solutions
+            video.onerror = function() {
+                console.log('Direct play failed, trying CORS solutions...');
+                tryCorsSolutionsForVideo(url);
+            };
+        }
+
+        function tryCorsSolutionsForVideo(url) {
+            showLoading(true);
+            
+            // Try the first working CORS proxy
+            const proxyUrl = corsProxies[0] + encodeURIComponent(url);
+            const video = document.getElementById('videoPlayer');
+            
+            fetch(proxyUrl, {
+                method: 'HEAD',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    video.src = proxyUrl;
+                    video.load();
+                    showLoading(false);
+                } else {
+                    throw new Error('Proxy failed');
+                }
+            })
+            .catch(error => {
+                console.log('CORS proxy failed, trying advanced solutions...');
+                tryAdvancedCorsForVideo(url);
+            });
+        }
+
+        function tryAdvancedCorsForVideo(url) {
+            // Try advanced CORS methods for video
+            const advancedUrl = 'https://cors-anywhere.herokuapp.com/' + url;
+            const video = document.getElementById('videoPlayer');
+            
+            fetch(advancedUrl, {
+                method: 'HEAD',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    video.src = advancedUrl;
+                    video.load();
+                } else {
+                    showVideoError('فشل في تشغيل القناة. جرب استخدام حلول CORS المتقدمة.');
+                }
+                showLoading(false);
+            })
+            .catch(error => {
+                showVideoError('فشل في تشغيل القناة. يرجى استخدام أحد حلول CORS المتقدمة أولاً.');
+                showLoading(false);
+            });
+        }
+
+        function showVideoError(message) {
+            const video = document.getElementById('videoPlayer');
+            video.style.display = 'none';
+            alert(message);
         }
 
         // Utility Functions

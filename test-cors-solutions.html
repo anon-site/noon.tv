@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار حلول CORS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>اختبار حلول CORS للقناة المحددة</h1>
+    
+    <div class="test-container">
+        <h2>القناة المحددة:</h2>
+        <p><strong>https://shls-live-enc.edgenextcdn.net/out/v1/0965e4d7deae49179172426cbfb3bc5e/index.m3u8</strong></p>
+        
+        <button onclick="testAllSolutions()">اختبار جميع الحلول</button>
+        <button onclick="testSpecificSolution('cors-anywhere')">اختبار CORS Anywhere</button>
+        <button onclick="testSpecificSolution('cors-bridge')">اختبار CORS Bridge</button>
+        <button onclick="testSpecificSolution('cors-proxy')">اختبار CORS Proxy</button>
+    </div>
+
+    <div class="test-container">
+        <h2>نتائج الاختبار:</h2>
+        <div id="testResults"></div>
+    </div>
+
+    <script>
+        const targetUrl = 'https://shls-live-enc.edgenextcdn.net/out/v1/0965e4d7deae49179172426cbfb3bc5e/index.m3u8';
+        
+        const corsMethods = {
+            'cors-anywhere': {
+                name: 'CORS Anywhere',
+                url: 'https://cors-anywhere.herokuapp.com/',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            },
+            'cors-bridge': {
+                name: 'CORS Bridge',
+                url: 'https://cors.bridged.cc/',
+                headers: {
+                    'x-cors-grida-api-key': 'temp_9a694534b159c971c1fdfddbcb7c2e8b'
+                }
+            },
+            'cors-proxy': {
+                name: 'CORS Proxy',
+                url: 'https://proxy.cors.sh/',
+                headers: {
+                    'x-cors-api-key': 'temp_9a694534b159c971c1fdfddbcb7c2e8b'
+                }
+            }
+        };
+
+        function testAllSolutions() {
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.innerHTML = '<p>جاري اختبار جميع الحلول...</p>';
+            
+            let completed = 0;
+            const results = [];
+            
+            Object.keys(corsMethods).forEach(methodKey => {
+                testSpecificSolution(methodKey)
+                    .then(result => {
+                        results.push(result);
+                        completed++;
+                        
+                        if (completed === Object.keys(corsMethods).length) {
+                            displayResults(results);
+                        }
+                    })
+                    .catch(error => {
+                        results.push({
+                            method: corsMethods[methodKey].name,
+                            success: false,
+                            error: error.message
+                        });
+                        completed++;
+                        
+                        if (completed === Object.keys(corsMethods).length) {
+                            displayResults(results);
+                        }
+                    });
+            });
+        }
+
+        function testSpecificSolution(methodKey) {
+            return new Promise((resolve, reject) => {
+                const method = corsMethods[methodKey];
+                const proxyUrl = method.url + targetUrl;
+                
+                fetch(proxyUrl, {
+                    method: 'HEAD',
+                    headers: method.headers
+                })
+                .then(response => {
+                    if (response.ok) {
+                        resolve({
+                            method: method.name,
+                            success: true,
+                            proxyUrl: proxyUrl,
+                            status: response.status
+                        });
+                    } else {
+                        resolve({
+                            method: method.name,
+                            success: false,
+                            error: `HTTP ${response.status}`,
+                            proxyUrl: proxyUrl
+                        });
+                    }
+                })
+                .catch(error => {
+                    resolve({
+                        method: method.name,
+                        success: false,
+                        error: error.message,
+                        proxyUrl: proxyUrl
+                    });
+                });
+            });
+        }
+
+        function displayResults(results) {
+            const resultsDiv = document.getElementById('testResults');
+            let html = '';
+            
+            results.forEach(result => {
+                const className = result.success ? 'success' : 'error';
+                const icon = result.success ? '✅' : '❌';
+                
+                html += `
+                    <div class="test-result ${className}">
+                        <strong>${icon} ${result.method}</strong><br>
+                        ${result.success ? 
+                            `✅ نجح - الرابط: ${result.proxyUrl}` : 
+                            `❌ فشل - السبب: ${result.error}`
+                        }
+                    </div>
+                `;
+            });
+            
+            const successCount = results.filter(r => r.success).length;
+            const summaryClass = successCount > 0 ? 'success' : 'error';
+            
+            html = `
+                <div class="test-result ${summaryClass}">
+                    <strong>ملخص النتائج:</strong> ${successCount} من أصل ${results.length} حل يعمل
+                </div>
+            ` + html;
+            
+            resultsDiv.innerHTML = html;
+        }
+
+        // Auto-test on page load
+        window.onload = function() {
+            setTimeout(() => {
+                testAllSolutions();
+            }, 1000);
+        };
+    </script>
+</body>
+</html>
