@@ -2557,10 +2557,16 @@ class ArabicTVApp {
 
     saveChannelsToStorage() {
         try {
-            const channelsData = JSON.stringify(this.channels);
+            // إضافة وقت آخر تعديل لكل قناة قبل الحفظ
+            const channelsWithTimestamp = this.channels.map(channel => ({
+                ...channel,
+                lastModified: channel.lastModified || new Date().toISOString()
+            }));
+            
+            const channelsData = JSON.stringify(channelsWithTimestamp);
             localStorage.setItem('arabicTVChannels', channelsData);
             console.log('تم حفظ القنوات بنجاح:', this.channels.length, 'قناة');
-            console.log('بيانات القنوات المحفوظة:', this.channels);
+            console.log('بيانات القنوات المحفوظة:', channelsWithTimestamp);
             
             // تحقق من نجاح الحفظ
             const verifyChannels = localStorage.getItem('arabicTVChannels');
@@ -2596,7 +2602,11 @@ class ArabicTVApp {
             if (savedChannels) {
                 const parsedChannels = JSON.parse(savedChannels);
                 if (parsedChannels && parsedChannels.length > 0) {
-                    this.channels = parsedChannels;
+                    // ضمان وجود الطوابع الزمنية للقنوات القديمة
+                    this.channels = parsedChannels.map(channel => ({
+                        ...channel,
+                        lastModified: channel.lastModified || new Date().toISOString()
+                    }));
                     console.log('تم تحميل القنوات المحفوظة:', this.channels.length, 'قناة');
                     // تحديث عداد القنوات
                     this.updateSidebarCounts();
@@ -3004,6 +3014,39 @@ class ArabicTVApp {
         return remoteTime > localTime;
     }
 
+    // دمج القنوات بذكاء لحماية التغييرات المحلية
+    mergeChannels(localChannels, remoteChannels) {
+        const mergedChannels = [...localChannels];
+        const localChannelIds = new Set(localChannels.map(ch => ch.id));
+        
+        // إضافة القنوات الجديدة من السحابة التي لا توجد محلياً
+        remoteChannels.forEach(remoteChannel => {
+            if (!localChannelIds.has(remoteChannel.id)) {
+                mergedChannels.push(remoteChannel);
+                console.log('تم إضافة قناة جديدة من السحابة:', remoteChannel.name);
+            } else {
+                // تحديث القنوات الموجودة إذا كانت السحابة أحدث
+                const localChannel = localChannels.find(ch => ch.id === remoteChannel.id);
+                if (localChannel && remoteChannel.lastModified && localChannel.lastModified) {
+                    const remoteTime = new Date(remoteChannel.lastModified);
+                    const localTime = new Date(localChannel.lastModified);
+                    
+                    if (remoteTime > localTime) {
+                        // استبدال القناة المحلية بالسحابية إذا كانت أحدث
+                        const index = mergedChannels.findIndex(ch => ch.id === remoteChannel.id);
+                        mergedChannels[index] = remoteChannel;
+                        console.log('تم تحديث قناة من السحابة:', remoteChannel.name);
+                    } else {
+                        console.log('القناة المحلية أحدث، تم الاحتفاظ بها:', localChannel.name);
+                    }
+                }
+            }
+        });
+        
+        console.log(`تم دمج القنوات: ${localChannels.length} محلية + ${remoteChannels.length} سحابية = ${mergedChannels.length} إجمالي`);
+        return mergedChannels;
+    }
+
     async mergeRemoteData(remoteData) {
         // Check for conflicts
         const hasConflicts = await this.detectConflicts(remoteData);
@@ -3020,9 +3063,9 @@ class ArabicTVApp {
         };
 
         try {
-            // Update channels
+            // Merge channels instead of replacing them completely
             if (remoteData.channels && Array.isArray(remoteData.channels)) {
-                this.channels = remoteData.channels;
+                this.channels = this.mergeChannels(this.channels, remoteData.channels);
                 this.filteredChannels = [...this.channels];
                 this.saveChannelsToStorage();
             }
@@ -3073,22 +3116,61 @@ class ArabicTVApp {
     }
 
     async detectConflicts(remoteData) {
-        // Check if there are significant differences
+        // تحسين آلية كشف التعارضات لحماية التغييرات المحلية
         const localChannelsCount = this.channels.length;
         const remoteChannelsCount = remoteData.channels ? remoteData.channels.length : 0;
         
-        // Consider it a conflict if:
-        // 1. Channel counts differ significantly (more than 10% difference)
-        // 2. Both local and remote have been modified recently
+        // إذا كانت القنوات المحلية أكثر من السحابية، فهذا يعني إضافة قنوات محلياً
+        if (localChannelsCount > remoteChannelsCount) {
+            const localChannelIds = new Set(this.channels.map(ch => ch.id));
+            const remoteChannelIds = new Set(remoteData.channels ? remoteData.channels.map(ch => ch.id) : []);
+            
+            // حساب عدد القنوات الجديدة المحلية
+            const newLocalChannels = localChannelsCount - remoteChannelIds.size;
+            
+            // إذا كان هناك قنوات جديدة محلية، اعتبر هذا تعارضاً لحمايتها
+            if (newLocalChannels > 0) {
+                console.log(`تم اكتشاف ${newLocalChannels} قناة جديدة محلية - سيتم حمايتها من الاستبدال`);
+                return true;
+            }
+        }
+        
+        // فحص التعديلات على القنوات الموجودة
+        if (remoteData.channels && this.channels.length > 0) {
+            const localChannelIds = new Set(this.channels.map(ch => ch.id));
+            const remoteChannelIds = new Set(remoteData.channels.map(ch => ch.id));
+            
+            // فحص القنوات المشتركة للتعديلات المتضاربة
+            for (const localChannel of this.channels) {
+                if (remoteChannelIds.has(localChannel.id)) {
+                    const remoteChannel = remoteData.channels.find(ch => ch.id === localChannel.id);
+                    
+                    // إذا كان هناك تعديلات محلية حديثة على قناة موجودة في السحابة
+                    if (localChannel.lastModified && remoteChannel.lastModified) {
+                        const localTime = new Date(localChannel.lastModified);
+                        const remoteTime = new Date(remoteChannel.lastModified);
+                        const timeDiff = Math.abs(localTime - remoteTime);
+                        
+                        // إذا كان التعديل المحلي أحدث من السحابي بساعة أو أقل، اعتبر هذا تعارضاً
+                        if (localTime > remoteTime && timeDiff < 3600000) {
+                            console.log(`تعارض في القناة ${localChannel.name}: التعديل المحلي أحدث من السحابي`);
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        
+        // فحص الاختلافات الكبيرة في العدد (أكثر من 20% بدلاً من 10%)
         const countDifference = Math.abs(localChannelsCount - remoteChannelsCount);
-        const significantDifference = countDifference > Math.max(localChannelsCount, remoteChannelsCount) * 0.1;
+        const significantDifference = countDifference > Math.max(localChannelsCount, remoteChannelsCount) * 0.2;
         
         const localLastModified = this.getLocalLastModified();
         const remoteLastModified = new Date(remoteData.lastModified || 0);
         const timeDifference = Math.abs(localLastModified - remoteLastModified);
         
-        // Consider conflict if both were modified within the last hour and have significant differences
-        return significantDifference && timeDifference < 3600000; // 1 hour in milliseconds
+        // اعتبار التعارض فقط إذا كان هناك اختلاف كبير وكلاهما تم تعديله مؤخراً
+        return significantDifference && timeDifference < 1800000; // 30 دقيقة بدلاً من ساعة
     }
 
     getLocalLastModified() {
