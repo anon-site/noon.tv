@@ -1061,6 +1061,37 @@ body[data-theme="light"] .admin-badge i {
     font-size: 1.2rem;
 }
 
+/* Mobile Fullscreen Toggle Button */
+.mobile-fullscreen-toggle-btn {
+    background: linear-gradient(45deg, #4f46e5, #7c3aed);
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+    min-width: 44px;
+    height: 44px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile-fullscreen-toggle-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+}
+
+.mobile-fullscreen-toggle-btn:active {
+    transform: translateY(0);
+}
+
+.mobile-fullscreen-toggle-btn i {
+    font-size: 1.1rem;
+}
+
 .mobile-menu-btn {
     display: none;
     background: transparent;
@@ -2141,6 +2172,10 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
     
     .header-actions .fullscreen-toggle-btn {
         display: none;
+    }
+    
+    .header-actions .mobile-fullscreen-toggle-btn {
+        display: flex;
     }
 }
 
@@ -7166,6 +7201,11 @@ body[data-theme="light"] .mobile-sidebar-nav-tab.active {
     display: flex;
 }
 
+/* Mobile Only Elements */
+.mobile-only {
+    display: none;
+}
+
 /* Light Theme for Mobile Elements */
 
 
@@ -7243,6 +7283,20 @@ body[data-theme="light"] .fullscreen-toggle-btn:hover {
     background: linear-gradient(135deg, #1d4ed8, #1e40af);
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+/* Light theme for mobile fullscreen toggle button */
+body[data-theme="light"] .mobile-fullscreen-toggle-btn {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+    border: 1px solid #1d4ed8;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+body[data-theme="light"] .mobile-fullscreen-toggle-btn:hover {
+    background: linear-gradient(135deg, #1d4ed8, #1e40af);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
 }
 
 body[data-theme="light"] .mobile-menu-btn {

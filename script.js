@@ -7554,10 +7554,14 @@ function toggleWebsiteFullscreen() {
         // Enter fullscreen
         document.documentElement.requestFullscreen().then(() => {
             console.log('تم تفعيل وضع الشاشة الكاملة');
-            // Change icon to compress
-            const btn = document.querySelector('.fullscreen-toggle-btn i');
-            if (btn) {
-                btn.className = 'fas fa-compress';
+            // Change icon to compress for both desktop and mobile buttons
+            const desktopBtn = document.querySelector('.fullscreen-toggle-btn i');
+            const mobileBtn = document.querySelector('.mobile-fullscreen-toggle-btn i');
+            if (desktopBtn) {
+                desktopBtn.className = 'fas fa-compress';
+            }
+            if (mobileBtn) {
+                mobileBtn.className = 'fas fa-compress';
             }
         }).catch(err => {
             console.error('خطأ في تفعيل وضع الشاشة الكاملة:', err);
@@ -7567,10 +7571,14 @@ function toggleWebsiteFullscreen() {
         // Exit fullscreen
         document.exitFullscreen().then(() => {
             console.log('تم إلغاء وضع الشاشة الكاملة');
-            // Change icon back to expand
-            const btn = document.querySelector('.fullscreen-toggle-btn i');
-            if (btn) {
-                btn.className = 'fas fa-expand';
+            // Change icon back to expand for both desktop and mobile buttons
+            const desktopBtn = document.querySelector('.fullscreen-toggle-btn i');
+            const mobileBtn = document.querySelector('.mobile-fullscreen-toggle-btn i');
+            if (desktopBtn) {
+                desktopBtn.className = 'fas fa-expand';
+            }
+            if (mobileBtn) {
+                mobileBtn.className = 'fas fa-expand';
             }
         }).catch(err => {
             console.error('خطأ في إلغاء وضع الشاشة الكاملة:', err);
@@ -7581,12 +7589,24 @@ function toggleWebsiteFullscreen() {
 
 // Listen for fullscreen change events
 document.addEventListener('fullscreenchange', function() {
-    const btn = document.querySelector('.fullscreen-toggle-btn i');
-    if (btn) {
-        if (document.fullscreenElement) {
-            btn.className = 'fas fa-compress';
-        } else {
-            btn.className = 'fas fa-expand';
+    const desktopBtn = document.querySelector('.fullscreen-toggle-btn i');
+    const mobileBtn = document.querySelector('.mobile-fullscreen-toggle-btn i');
+    
+    if (document.fullscreenElement) {
+        // Entered fullscreen
+        if (desktopBtn) {
+            desktopBtn.className = 'fas fa-compress';
+        }
+        if (mobileBtn) {
+            mobileBtn.className = 'fas fa-compress';
+        }
+    } else {
+        // Exited fullscreen
+        if (desktopBtn) {
+            desktopBtn.className = 'fas fa-expand';
+        }
+        if (mobileBtn) {
+            mobileBtn.className = 'fas fa-expand';
         }
     }
 });
