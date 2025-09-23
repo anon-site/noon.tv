@@ -1606,6 +1606,11 @@ class ArabicTVApp {
         // Update category options to ensure latest categories are available
         this.updateChannelCategoryOptions();
         
+        // Initialize proxy tools
+        if (typeof initializeProxyTools === 'function') {
+            initializeProxyTools();
+        }
+        
         // إعادة ربط أحداث التبويبات عند فتح لوحة التحكم
         setTimeout(() => {
             this.bindAdminTabEvents();
@@ -2127,6 +2132,14 @@ class ArabicTVApp {
         const activeContent = document.getElementById(`${tab}Tab`);
         if (activeContent) {
             activeContent.classList.add('active');
+        }
+        
+        // Update proxy preview when switching to tools tab
+        if (tab === 'tools' && typeof updateProxyPreview === 'function') {
+            setTimeout(() => {
+                updateProxyPreview();
+                updateUrlStats();
+            }, 100);
         }
 
         // Load categories when switching to categories tab
@@ -8646,6 +8659,380 @@ if ('serviceWorker' in navigator) {
                 break;
         }
     });
+}
+
+// ========================================
+// Proxy Tools Functions - أدوات الوكيل
+// ========================================
+
+// Proxy configuration object
+const proxyConfig = {
+    enabled: false,
+    url: '',
+    mode: 'all', // 'all' or 'selected'
+    appliedChannels: new Set()
+};
+
+// Initialize proxy tools when admin panel opens
+function initializeProxyTools() {
+    loadProxySettings();
+    bindProxyEvents();
+    updateProxyStatus();
+    updateUrlStats();
+    updateProxyPreview();
+}
+
+// Load proxy settings from localStorage
+function loadProxySettings() {
+    const saved = localStorage.getItem('proxySettings');
+    if (saved) {
+        const settings = JSON.parse(saved);
+        proxyConfig.enabled = settings.enabled || false;
+        proxyConfig.url = settings.url || '';
+        proxyConfig.mode = settings.mode || 'all';
+        proxyConfig.appliedChannels = new Set(settings.appliedChannels || []);
+    }
+    
+    // Update UI
+    const enableCheckbox = document.getElementById('enableProxy');
+    const proxyUrlInput = document.getElementById('proxyUrl');
+    const proxyModeSelect = document.getElementById('proxyMode');
+    const proxyConfigDiv = document.getElementById('proxyConfig');
+    
+    if (enableCheckbox) enableCheckbox.checked = proxyConfig.enabled;
+    if (proxyUrlInput) proxyUrlInput.value = proxyConfig.url;
+    if (proxyModeSelect) proxyModeSelect.value = proxyConfig.mode;
+    
+    if (proxyConfigDiv) {
+        proxyConfigDiv.style.display = proxyConfig.enabled ? 'block' : 'none';
+    }
+    
+    updateProxyPreview();
+}
+
+// Save proxy settings to localStorage
+function saveProxySettings() {
+    const settings = {
+        enabled: proxyConfig.enabled,
+        url: proxyConfig.url,
+        mode: proxyConfig.mode,
+        appliedChannels: Array.from(proxyConfig.appliedChannels)
+    };
+    localStorage.setItem('proxySettings', JSON.stringify(settings));
+}
+
+// Bind proxy-related events
+function bindProxyEvents() {
+    const enableCheckbox = document.getElementById('enableProxy');
+    const proxyUrlInput = document.getElementById('proxyUrl');
+    const proxyModeSelect = document.getElementById('proxyMode');
+    
+    if (enableCheckbox) {
+        enableCheckbox.addEventListener('change', function() {
+            proxyConfig.enabled = this.checked;
+            const proxyConfigDiv = document.getElementById('proxyConfig');
+            if (proxyConfigDiv) {
+                proxyConfigDiv.style.display = this.checked ? 'block' : 'none';
+            }
+            saveProxySettings();
+            updateProxyStatus();
+        });
+    }
+    
+    if (proxyUrlInput) {
+        proxyUrlInput.addEventListener('input', function() {
+            proxyConfig.url = this.value.trim();
+            updateProxyPreview();
+            saveProxySettings();
+        });
+    }
+    
+    if (proxyModeSelect) {
+        proxyModeSelect.addEventListener('change', function() {
+            proxyConfig.mode = this.value;
+            saveProxySettings();
+        });
+    }
+}
+
+// Update proxy preview
+function updateProxyPreview() {
+    const previewDiv = document.getElementById('proxyPreview');
+    const originalUrlSpan = document.getElementById('originalUrl');
+    const proxiedUrlSpan = document.getElementById('proxiedUrl');
+    
+    if (!previewDiv || !originalUrlSpan || !proxiedUrlSpan) return;
+    
+    // Use a real channel URL if available, otherwise use example
+    let exampleUrl = 'https://example.com/stream.m3u8';
+    
+    if (window.app && window.app.channels && window.app.channels.length > 0) {
+        // Find first channel with a valid URL
+        const channelWithUrl = window.app.channels.find(channel => 
+            channel.url && channel.url.trim() !== ''
+        );
+        
+        if (channelWithUrl) {
+            exampleUrl = channelWithUrl.url;
+        }
+    }
+    
+    originalUrlSpan.textContent = exampleUrl;
+    
+    if (proxyConfig.url && proxyConfig.enabled) {
+        const proxiedUrl = proxyConfig.url.replace(/\/$/, '') + '/' + exampleUrl;
+        proxiedUrlSpan.textContent = proxiedUrl;
+        previewDiv.style.display = 'block';
+    } else {
+        previewDiv.style.display = 'none';
+    }
+}
+
+// Update proxy status display
+function updateProxyStatus() {
+    const statusText = document.getElementById('proxyStatusText');
+    const currentProxyUrl = document.getElementById('currentProxyUrl');
+    
+    if (statusText) {
+        statusText.textContent = proxyConfig.enabled ? 'مفعل' : 'غير مفعل';
+        statusText.style.color = proxyConfig.enabled ? '#10b981' : '#ef4444';
+    }
+    
+    if (currentProxyUrl) {
+        currentProxyUrl.textContent = proxyConfig.enabled ? proxyConfig.url : 'لا يوجد';
+    }
+}
+
+// Test proxy connection
+function testProxy() {
+    if (!proxyConfig.url) {
+        app.notifyError('يرجى إدخال رابط الوكيل أولاً');
+        return;
+    }
+    
+    app.notifyInfo('جارٍ اختبار الوكيل...');
+    
+    const testUrl = proxyConfig.url.replace(/\/$/, '') + '/https://httpbin.org/get';
+    
+    fetch(testUrl, {
+        method: 'GET',
+        mode: 'cors'
+    })
+    .then(response => {
+        if (response.ok) {
+            app.notifySuccess('الوكيل يعمل بشكل صحيح!');
+        } else {
+            app.notifyError('الوكيل لا يستجيب بشكل صحيح');
+        }
+    })
+    .catch(error => {
+        console.error('Proxy test error:', error);
+        app.notifyError('فشل في اختبار الوكيل - تحقق من الرابط');
+    });
+}
+
+// Apply proxy to channels
+function applyProxy() {
+    if (!proxyConfig.enabled || !proxyConfig.url) {
+        app.notifyError('يرجى تفعيل الوكيل وإدخال الرابط أولاً');
+        return;
+    }
+    
+    if (!window.app || !window.app.channels) {
+        app.notifyError('لا توجد قنوات متاحة للتعديل');
+        return;
+    }
+    
+    let channelsToUpdate = [];
+    
+    if (proxyConfig.mode === 'all') {
+        channelsToUpdate = window.app.channels.filter(channel => 
+            channel.url && !channel.url.startsWith(proxyConfig.url)
+        );
+    } else {
+        // For selected mode, you can implement channel selection UI later
+        channelsToUpdate = window.app.channels.filter(channel => 
+            channel.url && !channel.url.startsWith(proxyConfig.url)
+        );
+    }
+    
+    if (channelsToUpdate.length === 0) {
+        app.notifyInfo('جميع القنوات تستخدم الوكيل بالفعل');
+        return;
+    }
+    
+    // Apply proxy to channels
+    const proxyBase = proxyConfig.url.replace(/\/$/, '');
+    let updatedCount = 0;
+    
+    channelsToUpdate.forEach(channel => {
+        if (channel.url && !channel.url.startsWith(proxyBase)) {
+            const originalUrl = channel.url;
+            channel.url = proxyBase + '/' + originalUrl;
+            proxyConfig.appliedChannels.add(channel.id);
+            updatedCount++;
+        }
+    });
+    
+    // Save changes
+    window.app.saveChannels();
+    saveProxySettings();
+    
+    app.notifySuccess(`تم تطبيق الوكيل على ${updatedCount} قناة بنجاح`);
+    updateProxyStatus();
+    updateUrlStats();
+}
+
+// Remove proxy from channels
+function removeProxy() {
+    if (!proxyConfig.enabled || !proxyConfig.url) {
+        app.notifyError('لا يوجد وكيل مفعل لإزالته');
+        return;
+    }
+    
+    if (!window.app || !window.app.channels) {
+        app.notifyError('لا توجد قنوات متاحة للتعديل');
+        return;
+    }
+    
+    const proxyBase = proxyConfig.url.replace(/\/$/, '');
+    let updatedCount = 0;
+    
+    window.app.channels.forEach(channel => {
+        if (channel.url && channel.url.startsWith(proxyBase + '/')) {
+            const originalUrl = channel.url.replace(proxyBase + '/', '');
+            channel.url = originalUrl;
+            proxyConfig.appliedChannels.delete(channel.id);
+            updatedCount++;
+        }
+    });
+    
+    // Save changes
+    window.app.saveChannels();
+    saveProxySettings();
+    
+    app.notifySuccess(`تم إزالة الوكيل من ${updatedCount} قناة بنجاح`);
+    updateProxyStatus();
+    updateUrlStats();
+}
+
+// Update URL statistics
+function updateUrlStats() {
+    if (!window.app || !window.app.channels) return;
+    
+    const totalUrls = document.getElementById('totalUrls');
+    const validUrls = document.getElementById('validUrls');
+    const brokenUrls = document.getElementById('brokenUrls');
+    
+    if (!totalUrls || !validUrls || !brokenUrls) return;
+    
+    const channels = window.app.channels;
+    const total = channels.length;
+    let valid = 0;
+    let broken = 0;
+    
+    channels.forEach(channel => {
+        if (channel.url) {
+            try {
+                new URL(channel.url);
+                valid++;
+            } catch {
+                broken++;
+            }
+        } else {
+            broken++;
+        }
+    });
+    
+    totalUrls.textContent = total;
+    validUrls.textContent = valid;
+    brokenUrls.textContent = broken;
+}
+
+// Bulk update URLs
+function bulkUpdateUrls() {
+    app.notifyInfo('ميزة التحديث الجماعي قيد التطوير');
+}
+
+// Validate all URLs
+function validateAllUrls() {
+    if (!window.app || !window.app.channels) {
+        app.notifyError('لا توجد قنوات للفحص');
+        return;
+    }
+    
+    app.notifyInfo('جارٍ فحص جميع الروابط...');
+    
+    const channels = window.app.channels;
+    let validCount = 0;
+    let invalidCount = 0;
+    let checkedCount = 0;
+    
+    const checkUrl = async (channel) => {
+        if (!channel.url) {
+            invalidCount++;
+            checkedCount++;
+            return;
+        }
+        
+        try {
+            const response = await fetch(channel.url, {
+                method: 'HEAD',
+                mode: 'no-cors'
+            });
+            validCount++;
+        } catch (error) {
+            invalidCount++;
+        }
+        
+        checkedCount++;
+        
+        if (checkedCount === channels.length) {
+            app.notifySuccess(`تم فحص ${channels.length} رابط: ${validCount} صحيح، ${invalidCount} معطل`);
+            updateUrlStats();
+        }
+    };
+    
+    channels.forEach(channel => {
+        setTimeout(() => checkUrl(channel), Math.random() * 1000);
+    });
+}
+
+// Export URL list
+function exportUrlList() {
+    if (!window.app || !window.app.channels) {
+        app.notifyError('لا توجد قنوات للتصدير');
+        return;
+    }
+    
+    const channels = window.app.channels;
+    const urlList = channels.map(channel => ({
+        name: channel.name,
+        url: channel.url,
+        category: channel.category,
+        country: channel.country
+    }));
+    
+    const dataStr = JSON.stringify(urlList, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(dataBlob);
+    link.download = `channels-urls-${new Date().toISOString().split('T')[0]}.json`;
+    link.click();
+    
+    app.notifySuccess('تم تصدير قائمة الروابط بنجاح');
+}
+
+// Add proxy methods to app object
+if (window.app) {
+    window.app.testProxy = testProxy;
+    window.app.applyProxy = applyProxy;
+    window.app.removeProxy = removeProxy;
+    window.app.bulkUpdateUrls = bulkUpdateUrls;
+    window.app.validateAllUrls = validateAllUrls;
+    window.app.exportUrlList = exportUrlList;
+    window.app.initializeProxyTools = initializeProxyTools;
 }
 
 

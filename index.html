@@ -770,6 +770,10 @@
                             <i class="fas fa-shield-alt"></i>
                             <span>الأمان</span>
                         </button>
+                        <button class="admin-tab" data-tab="tools" onclick="app.switchAdminTab('tools')">
+                            <i class="fas fa-tools"></i>
+                            <span>الأدوات</span>
+                        </button>
                     </div>
                 </div>
                 <div class="admin-body">
@@ -1185,6 +1189,142 @@
                                     <div class="info-content">
                                         <h4>حالة الجلسة</h4>
                                         <p id="sessionStatus">نشطة</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tools Tab -->
+                <div class="admin-tab-content" id="toolsTab">
+                    <div class="tools-settings">
+                        <!-- Proxy Settings Section -->
+                        <div class="settings-section-card">
+                            <div class="settings-section-header">
+                                <i class="fas fa-globe"></i>
+                                <h3>إعدادات الوكيل (Proxy)</h3>
+                            </div>
+                            <div class="settings-section-content">
+                                <div class="enhanced-setting-item">
+                                    <div class="setting-label-group">
+                                        <label for="enableProxy">تفعيل الوكيل</label>
+                                        <small>استخدام وكيل لحل مشاكل CORS عند الاستضافة على GitHub</small>
+                                    </div>
+                                    <label class="enhanced-switch">
+                                        <input type="checkbox" id="enableProxy">
+                                        <span class="enhanced-slider"></span>
+                                    </label>
+                                </div>
+                                
+                                <div class="proxy-config" id="proxyConfig" style="display: none;">
+                                    <div class="enhanced-setting-item">
+                                        <div class="setting-label-group">
+                                            <label for="proxyUrl">رابط الوكيل</label>
+                                            <small>أدخل رابط خدمة الوكيل (مثل: https://cors-anywhere.herokuapp.com/)</small>
+                                        </div>
+                                        <input type="url" id="proxyUrl" placeholder="https://cors-anywhere.herokuapp.com/" class="enhanced-input">
+                                    </div>
+                                    
+                                    <div class="enhanced-setting-item">
+                                        <div class="setting-label-group">
+                                            <label for="proxyMode">نطاق التطبيق</label>
+                                            <small>اختر نطاق تطبيق الوكيل</small>
+                                        </div>
+                                        <select id="proxyMode" class="enhanced-select">
+                                            <option value="all">جميع القنوات</option>
+                                            <option value="selected">قنوات محددة</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="proxy-preview" id="proxyPreview" style="display: none;">
+                                        <div class="preview-header">
+                                            <i class="fas fa-eye"></i>
+                                            <h4>معاينة التغيير</h4>
+                                        </div>
+                                        <div class="preview-content">
+                                            <div class="preview-item">
+                                                <label>الرابط الأصلي:</label>
+                                                <code id="originalUrl">سيتم عرض رابط قناة حقيقي هنا</code>
+                                            </div>
+                                            <div class="preview-item">
+                                                <label>الرابط مع الوكيل:</label>
+                                                <code id="proxiedUrl">سيتم عرض الرابط مع الوكيل هنا</code>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="proxy-actions">
+                                        <button class="test-proxy-btn" onclick="app.testProxy()">
+                                            <i class="fas fa-link"></i>
+                                            اختبار الوكيل
+                                        </button>
+                                        <button class="apply-proxy-btn" onclick="app.applyProxy()">
+                                            <i class="fas fa-check"></i>
+                                            تطبيق الوكيل
+                                        </button>
+                                        <button class="remove-proxy-btn" onclick="app.removeProxy()">
+                                            <i class="fas fa-times"></i>
+                                            إزالة الوكيل
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="proxy-status" id="proxyStatus">
+                                        <p><strong>حالة الوكيل:</strong> <span id="proxyStatusText">غير مفعل</span></p>
+                                        <p><strong>الوكيل المستخدم:</strong> <span id="currentProxyUrl">لا يوجد</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Channel URL Management Section -->
+                        <div class="settings-section-card">
+                            <div class="settings-section-header">
+                                <i class="fas fa-link"></i>
+                                <h3>إدارة روابط القنوات</h3>
+                            </div>
+                            <div class="settings-section-content">
+                                <div class="url-management-tools">
+                                    <div class="tool-group">
+                                        <h4>أدوات الروابط</h4>
+                                        <div class="tool-buttons">
+                                            <button class="enhanced-tool-btn" onclick="app.bulkUpdateUrls()">
+                                                <i class="fas fa-edit"></i>
+                                                <span>تحديث جماعي للروابط</span>
+                                                <small>تعديل روابط متعددة في نفس الوقت</small>
+                                            </button>
+                                            <button class="enhanced-tool-btn" onclick="app.validateAllUrls()">
+                                                <i class="fas fa-check-circle"></i>
+                                                <span>فحص جميع الروابط</span>
+                                                <small>التحقق من صحة جميع روابط القنوات</small>
+                                            </button>
+                                            <button class="enhanced-tool-btn" onclick="app.exportUrlList()">
+                                                <i class="fas fa-download"></i>
+                                                <span>تصدير قائمة الروابط</span>
+                                                <small>حفظ جميع روابط القنوات في ملف</small>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="tool-group">
+                                        <h4>إحصائيات الروابط</h4>
+                                        <div class="url-stats" id="urlStats">
+                                            <div class="stat-item">
+                                                <i class="fas fa-link"></i>
+                                                <span class="stat-label">إجمالي الروابط:</span>
+                                                <span class="stat-value" id="totalUrls">0</span>
+                                            </div>
+                                            <div class="stat-item">
+                                                <i class="fas fa-check-circle"></i>
+                                                <span class="stat-label">روابط صحيحة:</span>
+                                                <span class="stat-value" id="validUrls">0</span>
+                                            </div>
+                                            <div class="stat-item">
+                                                <i class="fas fa-exclamation-triangle"></i>
+                                                <span class="stat-label">روابط معطلة:</span>
+                                                <span class="stat-value" id="brokenUrls">0</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
