@@ -1130,13 +1130,6 @@ class ArabicTVApp {
                 return;
             }
 
-            // Apply CORS proxy for GitHub Pages if needed
-            let finalUrl = url;
-            if (this.isGitHubPages() && url.includes('.m3u8')) {
-                finalUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-                console.log('تم تطبيق CORS Proxy للرابط:', url);
-            }
-
             // HLS streaming
             if (typeof Hls !== 'undefined' && Hls.isSupported()) {
                 // Ensure previous HLS instance is destroyed
@@ -1170,7 +1163,7 @@ class ArabicTVApp {
                     startFragPrefetch: true
                 });
 
-                this.hls.loadSource(finalUrl);
+                this.hls.loadSource(url);
                 this.hls.attachMedia(video);
 
                 this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -1219,7 +1212,7 @@ class ArabicTVApp {
 
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 // Native HLS support (Safari)
-                source.src = finalUrl;
+                source.src = url;
                 video.load();
                 loading.style.display = 'none';
                 
@@ -6957,15 +6950,6 @@ class ArabicTVApp {
                 btn.classList.add('active');
             }
         });
-    }
-
-    // Check if running on GitHub Pages
-    isGitHubPages() {
-        return window.location.hostname.includes('github.io') || 
-               window.location.hostname.includes('github.com') ||
-               window.location.hostname.includes('pages.dev') ||
-               window.location.hostname.includes('netlify.app') ||
-               window.location.hostname.includes('vercel.app');
     }
 }
 
