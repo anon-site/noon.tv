@@ -772,11 +772,11 @@
     },
     {
       "id": 108,
-      "name": "MBC",
-      "url": "https://shls-live-enc.edgenextcdn.net/out/v1/0965e4d7deae49179172426cbfb3bc5e/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/8/81/Mbc1logo.png",
-      "category": "entertainment",
-      "country": "الامارات",
+      "name": "Disney XD",
+      "url": "https://fl7.moveonjoy.com/DISNEY_XD/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/2015_Disney_XD_logo.svg/1280px-2015_Disney_XD_logo.svg.png",
+      "category": "kids",
+      "country": "USA",
       "type": "hls",
       "status": "active"
     }
@@ -847,6 +847,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-23T18:54:37.996Z",
+  "lastModified": "2025-09-23T18:59:43.821Z",
   "version": "1.0"
 }
