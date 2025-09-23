@@ -1,17 +1,6 @@
 {
   "channels": [
     {
-      "id": 999,
-      "name": "Al Jadeed (تجريبي)",
-      "url": "http://185.9.2.18/chid_391/mono.m3u8?checkedby:iptvcat.com",
-      "logo": "https://via.placeholder.com/150x150/FF6B6B/FFFFFF?text=Al+Jadeed",
-      "category": "news",
-      "country": "لبنان",
-      "type": "hls",
-      "status": "active",
-      "isLocal": false
-    },
-    {
       "id": 33,
       "name": "إقرأ",
       "url": "https://playlist.fasttvcdn.com/pl/dlkqw1ftuvuuzkcb4pxdcg/Iqraafasttv3/playlist.m3u8",
@@ -783,42 +772,12 @@
     },
     {
       "id": 108,
-      "name": "MBC 3",
-      "url": "https://tgn.bozztv.com/eshgtv-trn09/ga-mchannel3/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/MBC_3_Transparent_Background_Logo.png/500px-MBC_3_Transparent_Background_Logo.png",
-      "category": "kids",
-      "country": "الامارات",
-      "type": "hls",
-      "status": "active"
-    },
-    {
-      "id": 109,
-      "name": "MBC 4",
-      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-4/24f134f1cd63db9346439e96b86ca6ed/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/MBC_4_Logo.svg/1016px-MBC_4_Logo.svg.png",
-      "category": "entertainment",
-      "country": "الامارات",
-      "type": "hls",
-      "status": "active"
-    },
-    {
-      "id": 110,
-      "name": "MBC",
-      "url": "https://mbc1-enc.edgenextcdn.net/out/v1/0965e4d7deae49179172426cbfb3bc5e/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/8/81/Mbc1logo.png",
-      "category": "entertainment",
-      "country": "الامارات",
-      "type": "hls",
-      "status": "active"
-    },
-    {
-      "id": 111,
-      "name": "MBC دراما",
-      "url": "https://mbc1-enc.edgenextcdn.net/out/v1/b0b3a0e6750d4408bb86d703d5feffd1/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e9/MBC_Drama_Logo.svg",
-      "category": "entertainment",
-      "country": "الامارات",
-      "type": "hls",
+      "name": "Testona3333333",
+      "url": "http://line.4k-soy.cc:80/557714/A9FC62/1443944",
+      "logo": "http://line.4k-soy.cc:80/557714/A9FC62/1443944",
+      "category": "news",
+      "country": "عالمية",
+      "type": "unknown",
       "status": "active"
     }
   ],
@@ -888,6 +847,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-22T22:14:41.442Z",
+  "lastModified": "2025-09-22T17:39:57.008Z",
   "version": "1.0"
 }
