@@ -8949,79 +8949,231 @@ function updateUrlStats() {
     brokenUrls.textContent = broken;
 }
 
-// Bulk update URLs
-function bulkUpdateUrls() {
-    app.notifyInfo('ميزة التحديث الجماعي قيد التطوير');
+// Set proxy service from quick selection
+function setProxyService(serviceUrl) {
+    const proxyUrlInput = document.getElementById('proxyUrl');
+    const enableCheckbox = document.getElementById('enableProxy');
+    
+    if (proxyUrlInput) {
+        proxyUrlInput.value = serviceUrl;
+        proxyConfig.url = serviceUrl;
+    }
+    
+    if (enableCheckbox) {
+        enableCheckbox.checked = true;
+        proxyConfig.enabled = true;
+        
+        const proxyConfigDiv = document.getElementById('proxyConfig');
+        if (proxyConfigDiv) {
+            proxyConfigDiv.style.display = 'block';
+        }
+    }
+    
+    saveProxySettings();
+    updateProxyStatus();
+    updateProxyPreview();
+    
+    app.notifySuccess(`تم تعيين خدمة الوكيل: ${serviceUrl}`);
 }
 
-// Validate all URLs
-function validateAllUrls() {
+// Quick fix CORS for broken channels
+function quickFixCORS() {
     if (!window.app || !window.app.channels) {
         app.notifyError('لا توجد قنوات للفحص');
         return;
     }
     
-    app.notifyInfo('جارٍ فحص جميع الروابط...');
+    if (!proxyConfig.enabled || !proxyConfig.url) {
+        app.notifyError('يرجى تفعيل الوكيل أولاً');
+        return;
+    }
+    
+    app.notifyInfo('جارٍ فحص القنوات المعطلة وتطبيق الوكيل...');
     
     const channels = window.app.channels;
-    let validCount = 0;
-    let invalidCount = 0;
+    const proxyBase = proxyConfig.url.replace(/\/$/, '');
+    let fixedCount = 0;
     let checkedCount = 0;
     
-    const checkUrl = async (channel) => {
+    const checkAndFixChannel = async (channel) => {
         if (!channel.url) {
-            invalidCount++;
             checkedCount++;
             return;
         }
         
         try {
+            // Test if channel works without proxy
             const response = await fetch(channel.url, {
                 method: 'HEAD',
-                mode: 'no-cors'
+                mode: 'no-cors',
+                timeout: 5000
             });
-            validCount++;
+            
+            // If it doesn't work, apply proxy
+            if (!response.ok) {
+                if (!channel.url.startsWith(proxyBase)) {
+                    const originalUrl = channel.url;
+                    channel.url = proxyBase + '/' + originalUrl;
+                    proxyConfig.appliedChannels.add(channel.id);
+                    fixedCount++;
+                }
+            }
         } catch (error) {
-            invalidCount++;
+            // Channel is broken, apply proxy
+            if (!channel.url.startsWith(proxyBase)) {
+                const originalUrl = channel.url;
+                channel.url = proxyBase + '/' + originalUrl;
+                proxyConfig.appliedChannels.add(channel.id);
+                fixedCount++;
+            }
         }
         
         checkedCount++;
         
         if (checkedCount === channels.length) {
-            app.notifySuccess(`تم فحص ${channels.length} رابط: ${validCount} صحيح، ${invalidCount} معطل`);
-            updateUrlStats();
+            // Save changes
+            window.app.saveChannels();
+            saveProxySettings();
+            
+            app.notifySuccess(`تم إصلاح ${fixedCount} قناة معطلة بنجاح!`);
+            updateProxyStatus();
         }
     };
     
     channels.forEach(channel => {
-        setTimeout(() => checkUrl(channel), Math.random() * 1000);
+        setTimeout(() => checkAndFixChannel(channel), Math.random() * 500);
     });
 }
 
-// Export URL list
-function exportUrlList() {
+// Test all channels to identify broken ones
+function testAllChannels() {
     if (!window.app || !window.app.channels) {
-        app.notifyError('لا توجد قنوات للتصدير');
+        app.notifyError('لا توجد قنوات للفحص');
+        return;
+    }
+    
+    app.notifyInfo('جارٍ اختبار جميع القنوات...');
+    
+    const channels = window.app.channels;
+    let workingCount = 0;
+    let brokenCount = 0;
+    let checkedCount = 0;
+    const brokenChannels = [];
+    
+    const testChannel = async (channel) => {
+        if (!channel.url) {
+            brokenCount++;
+            brokenChannels.push(channel.name);
+            checkedCount++;
+            return;
+        }
+        
+        // Special handling for EdgeNext URLs (like the one you provided)
+        const isEdgeNextUrl = channel.url.includes('edgenextcdn.net') || 
+                             channel.url.includes('shls-live-enc');
+        
+        try {
+            const response = await fetch(channel.url, {
+                method: 'HEAD',
+                mode: 'no-cors',
+                timeout: 5000
+            });
+            
+            if (response.ok) {
+                workingCount++;
+            } else {
+                brokenCount++;
+                brokenChannels.push(channel.name);
+            }
+        } catch (error) {
+            brokenCount++;
+            brokenChannels.push(channel.name);
+            
+            // If it's an EdgeNext URL, suggest using proxy
+            if (isEdgeNextUrl) {
+                console.log(`EdgeNext URL detected: ${channel.url} - This URL typically needs CORS proxy`);
+            }
+        }
+        
+        checkedCount++;
+        
+        if (checkedCount === channels.length) {
+            let message = `تم فحص ${channels.length} قناة:\n`;
+            message += `✅ تعمل: ${workingCount}\n`;
+            message += `❌ معطلة: ${brokenCount}`;
+            
+            if (brokenChannels.length > 0) {
+                message += `\n\nالقنوات المعطلة:\n${brokenChannels.slice(0, 5).join(', ')}`;
+                if (brokenChannels.length > 5) {
+                    message += `\nو ${brokenChannels.length - 5} قناة أخرى...`;
+                }
+            }
+            
+            app.notifyInfo(message);
+            
+            if (brokenCount > 0) {
+                setTimeout(() => {
+                    if (confirm(`تم العثور على ${brokenCount} قناة معطلة. هل تريد إصلاحها تلقائياً باستخدام الوكيل؟`)) {
+                        quickFixCORS();
+                    }
+                }, 2000);
+            }
+        }
+    };
+    
+    channels.forEach(channel => {
+        setTimeout(() => testChannel(channel), Math.random() * 300);
+    });
+}
+
+// Auto-detect and fix EdgeNext URLs
+function autoFixEdgeNextUrls() {
+    if (!window.app || !window.app.channels) {
+        app.notifyError('لا توجد قنوات للفحص');
         return;
     }
     
     const channels = window.app.channels;
-    const urlList = channels.map(channel => ({
-        name: channel.name,
-        url: channel.url,
-        category: channel.category,
-        country: channel.country
-    }));
+    const edgeNextUrls = channels.filter(channel => 
+        channel.url && (
+            channel.url.includes('edgenextcdn.net') || 
+            channel.url.includes('shls-live-enc') ||
+            channel.url.includes('edge-next')
+        )
+    );
     
-    const dataStr = JSON.stringify(urlList, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    if (edgeNextUrls.length === 0) {
+        app.notifyInfo('لم يتم العثور على روابط EdgeNext');
+        return;
+    }
     
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(dataBlob);
-    link.download = `channels-urls-${new Date().toISOString().split('T')[0]}.json`;
-    link.click();
+    app.notifyInfo(`تم العثور على ${edgeNextUrls.length} رابط EdgeNext. هذه الروابط تحتاج وكيل للعمل على GitHub Pages.`);
     
-    app.notifySuccess('تم تصدير قائمة الروابط بنجاح');
+    if (confirm(`هل تريد تطبيق الوكيل على ${edgeNextUrls.length} رابط EdgeNext؟`)) {
+        if (!proxyConfig.enabled || !proxyConfig.url) {
+            app.notifyError('يرجى تفعيل الوكيل أولاً');
+            return;
+        }
+        
+        const proxyBase = proxyConfig.url.replace(/\/$/, '');
+        let fixedCount = 0;
+        
+        edgeNextUrls.forEach(channel => {
+            if (!channel.url.startsWith(proxyBase)) {
+                const originalUrl = channel.url;
+                channel.url = proxyBase + '/' + originalUrl;
+                proxyConfig.appliedChannels.add(channel.id);
+                fixedCount++;
+            }
+        });
+        
+        // Save changes
+        window.app.saveChannels();
+        saveProxySettings();
+        
+        app.notifySuccess(`تم تطبيق الوكيل على ${fixedCount} رابط EdgeNext بنجاح!`);
+        updateProxyStatus();
+    }
 }
 
 // Add proxy methods to app object
@@ -9033,6 +9185,10 @@ if (window.app) {
     window.app.validateAllUrls = validateAllUrls;
     window.app.exportUrlList = exportUrlList;
     window.app.initializeProxyTools = initializeProxyTools;
+    window.app.setProxyService = setProxyService;
+    window.app.quickFixCORS = quickFixCORS;
+    window.app.testAllChannels = testAllChannels;
+    window.app.autoFixEdgeNextUrls = autoFixEdgeNextUrls;
 }
 
 

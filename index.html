@@ -1277,58 +1277,80 @@
                             </div>
                         </div>
                         
-                        <!-- Channel URL Management Section -->
+                        <!-- Auto CORS Fix Section -->
                         <div class="settings-section-card">
                             <div class="settings-section-header">
-                                <i class="fas fa-link"></i>
-                                <h3>إدارة روابط القنوات</h3>
+                                <i class="fas fa-magic"></i>
+                                <h3>حل مشاكل CORS التلقائي</h3>
                             </div>
                             <div class="settings-section-content">
-                                <div class="url-management-tools">
-                                    <div class="tool-group">
-                                        <h4>أدوات الروابط</h4>
-                                        <div class="tool-buttons">
-                                            <button class="enhanced-tool-btn" onclick="app.bulkUpdateUrls()">
-                                                <i class="fas fa-edit"></i>
-                                                <span>تحديث جماعي للروابط</span>
-                                                <small>تعديل روابط متعددة في نفس الوقت</small>
-                                            </button>
-                                            <button class="enhanced-tool-btn" onclick="app.validateAllUrls()">
-                                                <i class="fas fa-check-circle"></i>
-                                                <span>فحص جميع الروابط</span>
-                                                <small>التحقق من صحة جميع روابط القنوات</small>
-                                            </button>
-                                            <button class="enhanced-tool-btn" onclick="app.exportUrlList()">
-                                                <i class="fas fa-download"></i>
-                                                <span>تصدير قائمة الروابط</span>
-                                                <small>حفظ جميع روابط القنوات في ملف</small>
-                                            </button>
+                                <div class="cors-fix-info">
+                                    <div class="info-box">
+                                        <i class="fas fa-info-circle"></i>
+                                        <p>بعض القنوات لا تعمل على GitHub Pages بسبب مشاكل CORS. يمكنك استخدام خدمات الوكيل المجانية التالية:</p>
+                                    </div>
+                                    
+                                    <div class="proxy-services">
+                                        <h4>خدمات الوكيل المجانية:</h4>
+                                        <div class="service-list">
+                                            <div class="service-item" onclick="setProxyService('https://cors-anywhere.herokuapp.com/')">
+                                                <div class="service-info">
+                                                    <strong>CORS Anywhere</strong>
+                                                    <small>خدمة مجانية موثوقة</small>
+                                                </div>
+                                                <button class="use-service-btn">
+                                                    <i class="fas fa-check"></i>
+                                                    استخدام
+                                                </button>
+                                            </div>
+                                            
+                                            <div class="service-item" onclick="setProxyService('https://api.allorigins.win/raw?url=')">
+                                                <div class="service-info">
+                                                    <strong>AllOrigins</strong>
+                                                    <small>خدمة بديلة سريعة</small>
+                                                </div>
+                                                <button class="use-service-btn">
+                                                    <i class="fas fa-check"></i>
+                                                    استخدام
+                                                </button>
+                                            </div>
+                                            
+                                            <div class="service-item" onclick="setProxyService('https://thingproxy.freeboard.io/fetch/')">
+                                                <div class="service-info">
+                                                    <strong>ThingProxy</strong>
+                                                    <small>خدمة مجانية مستقرة</small>
+                                                </div>
+                                                <button class="use-service-btn">
+                                                    <i class="fas fa-check"></i>
+                                                    استخدام
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                     
-                                    <div class="tool-group">
-                                        <h4>إحصائيات الروابط</h4>
-                                        <div class="url-stats" id="urlStats">
-                                            <div class="stat-item">
-                                                <i class="fas fa-link"></i>
-                                                <span class="stat-label">إجمالي الروابط:</span>
-                                                <span class="stat-value" id="totalUrls">0</span>
-                                            </div>
-                                            <div class="stat-item">
-                                                <i class="fas fa-check-circle"></i>
-                                                <span class="stat-label">روابط صحيحة:</span>
-                                                <span class="stat-value" id="validUrls">0</span>
-                                            </div>
-                                            <div class="stat-item">
-                                                <i class="fas fa-exclamation-triangle"></i>
-                                                <span class="stat-label">روابط معطلة:</span>
-                                                <span class="stat-value" id="brokenUrls">0</span>
-                                            </div>
-                                        </div>
+                                    <div class="quick-actions">
+                                        <button class="quick-fix-btn" onclick="app.quickFixCORS()">
+                                            <i class="fas fa-bolt"></i>
+                                            <span>إصلاح سريع للقنوات المعطلة</span>
+                                            <small>تطبيق الوكيل على القنوات التي لا تعمل</small>
+                                        </button>
+                                        
+                                        <button class="test-all-channels-btn" onclick="app.testAllChannels()">
+                                            <i class="fas fa-play-circle"></i>
+                                            <span>اختبار جميع القنوات</span>
+                                            <small>فحص القنوات التي تحتاج وكيل</small>
+                                        </button>
+                                        
+                                        <button class="edge-next-fix-btn" onclick="app.autoFixEdgeNextUrls()">
+                                            <i class="fas fa-satellite-dish"></i>
+                                            <span>إصلاح روابط EdgeNext</span>
+                                            <small>تطبيق الوكيل على روابط edgenextcdn.net</small>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
                 </div>
