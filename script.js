@@ -61,6 +61,11 @@ class ArabicTVApp {
     }
 
     init() {
+        // Check if running on GitHub Pages and show warning
+        if (this.isGitHubPages()) {
+            this.showGitHubPagesWarning();
+        }
+        
         this.testLocalStorage(); // Test if localStorage is working
         this.loadRemoteStorageSettings(); // Load remote storage configuration
         this.loadCategories(); // Load categories first
@@ -1130,6 +1135,11 @@ class ArabicTVApp {
                 return;
             }
 
+            // Handle CORS issues for GitHub Pages
+            if (this.isGitHubPages() && url.includes('.m3u8')) {
+                url = await this.resolveCORSProxy(url);
+            }
+
             // HLS streaming
             if (typeof Hls !== 'undefined' && Hls.isSupported()) {
                 // Ensure previous HLS instance is destroyed
@@ -1184,11 +1194,19 @@ class ArabicTVApp {
                     
                     // Show specific error messages
                     if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
-                        this.showVideoError('خطأ في الشبكة - تحقق من اتصال الإنترنت');
+                        if (this.isGitHubPages()) {
+                            this.showVideoError('خطأ في الشبكة - GitHub Pages لا يدعم تشغيل روابط M3U8 مباشرة. جرب استخدام خادم محلي أو استضافة أخرى.');
+                        } else {
+                            this.showVideoError('خطأ في الشبكة - تحقق من اتصال الإنترنت');
+                        }
                     } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
                         this.showVideoError('خطأ في تنسيق الفيديو - الرابط قد يكون غير صحيح');
                     } else if (data.details === Hls.ErrorDetails.MANIFEST_LOAD_ERROR) {
-                        this.showVideoError('لا يمكن تحميل قائمة التشغيل - الرابط غير متاح');
+                        if (this.isGitHubPages()) {
+                            this.showVideoError('لا يمكن تحميل قائمة التشغيل - GitHub Pages لا يدعم HLS. استخدم خادم محلي أو استضافة أخرى.');
+                        } else {
+                            this.showVideoError('لا يمكن تحميل قائمة التشغيل - الرابط غير متاح');
+                        }
                     } else if (data.details === Hls.ErrorDetails.MANIFEST_LOAD_TIMEOUT) {
                         this.showVideoError('انتهت مهلة تحميل قائمة التشغيل - الخادم بطيء');
                     }
@@ -1296,6 +1314,90 @@ class ArabicTVApp {
             const type = this.currentChannel.type || 'hls';
             this.loadVideoStream(this.currentChannel.url, type);
         }
+    }
+
+    // Check if running on GitHub Pages
+    isGitHubPages() {
+        return window.location.hostname.includes('github.io') || 
+               window.location.hostname.includes('github.com') ||
+               window.location.hostname.includes('pages.dev') ||
+               window.location.hostname.includes('netlify.app');
+    }
+
+    // Resolve CORS proxy for M3U8 URLs
+    async resolveCORSProxy(url) {
+        const corsProxies = [
+            'https://cors-anywhere.herokuapp.com/',
+            'https://api.allorigins.win/raw?url=',
+            'https://corsproxy.io/?',
+            'https://thingproxy.freeboard.io/fetch/',
+            'https://api.codetabs.com/v1/proxy?quest='
+        ];
+
+        // Try each proxy until one works
+        for (const proxy of corsProxies) {
+            try {
+                const proxyUrl = proxy + encodeURIComponent(url);
+                console.log(`Trying CORS proxy: ${proxy}`);
+                
+                // Test if the proxy works
+                const response = await fetch(proxyUrl, {
+                    method: 'HEAD',
+                    mode: 'cors',
+                    timeout: 5000
+                });
+                
+                if (response.ok) {
+                    console.log(`✅ CORS proxy working: ${proxy}`);
+                    return proxyUrl;
+                }
+            } catch (error) {
+                console.log(`❌ CORS proxy failed: ${proxy}`, error);
+                continue;
+            }
+        }
+        
+        // If all proxies fail, return original URL
+        console.warn('⚠️ All CORS proxies failed, using original URL');
+        return url;
+    }
+
+    // Alternative method using iframe for problematic URLs
+    async loadVideoWithIframe(url) {
+        const videoContainer = document.querySelector('.video-container');
+        const videoPlayer = document.getElementById('videoPlayer');
+        
+        // Hide original video player
+        videoPlayer.style.display = 'none';
+        
+        // Create iframe for video
+        const iframe = document.createElement('iframe');
+        iframe.src = url;
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+        iframe.style.position = 'absolute';
+        iframe.style.top = '0';
+        iframe.style.left = '0';
+        
+        videoContainer.appendChild(iframe);
+        
+        // Show loading message
+        const loading = document.getElementById('videoLoading');
+        loading.style.display = 'none';
+        
+        return iframe;
+    }
+
+    // Show warning for GitHub Pages users
+    showGitHubPagesWarning() {
+        setTimeout(() => {
+            this.notifyWarning(`
+                ⚠️ تحذير: أنت تستخدم GitHub Pages<br>
+                قد لا تعمل بعض روابط M3U8 بسبب قيود الأمان<br>
+                <small>للحصول على أفضل تجربة، استخدم خادم محلي أو استضافة أخرى</small>
+            `, 10000);
+        }, 2000);
     }
 
     // Detect URL type automatically
