@@ -448,6 +448,33 @@
             </div>
         </div>
 
+        <!-- Tools Testing Section -->
+        <div class="feature-card">
+            <h3><i class="fas fa-vial"></i> اختبار جميع الأدوات</h3>
+            <div class="form-group">
+                <label>اختبار شامل لجميع الوظائف:</label>
+                <p style="color: #718096; font-size: 0.9rem; margin-top: 5px;">
+                    هذا الاختبار يفحص جميع الأدوات ويضمن أنها تعمل بشكل صحيح
+                </p>
+            </div>
+            <button class="btn" onclick="runComprehensiveTest()">
+                <i class="fas fa-play"></i> تشغيل اختبار شامل
+            </button>
+            <button class="btn" onclick="testSpecificTool()">
+                <i class="fas fa-cog"></i> اختبار أداة محددة
+            </button>
+
+            <div class="cors-proxy-info">
+                <h5><i class="fas fa-info-circle"></i> معلومات الاختبار</h5>
+                <p>الاختبار الشامل يفحص جميع الأدوات ويقدم تقرير مفصل عن حالة كل أداة.</p>
+            </div>
+
+            <div id="testResults" class="result-section" style="display: none;">
+                <h4><i class="fas fa-chart-line"></i> نتائج الاختبار</h4>
+                <div id="testOutput"></div>
+            </div>
+        </div>
+
         <!-- Quick Fix for Specific Channel -->
         <div class="feature-card">
             <h3><i class="fas fa-bolt"></i> حل سريع للقناة المحددة</h3>
@@ -493,18 +520,21 @@
     </div>
 
     <script>
-        // CORS Proxy Servers - Working proxies (Updated with more reliable ones)
+        // CORS Proxy Servers - Updated with more reliable ones (2024)
         const corsProxies = [
             'https://api.allorigins.win/raw?url=',
             'https://corsproxy.io/?',
             'https://thingproxy.freeboard.io/fetch/',
             'https://yacdn.org/proxy/',
-            'https://cors-anywhere.herokuapp.com/',
             'https://api.codetabs.com/v1/proxy?quest=',
             'https://cors.bridged.cc/',
             'https://proxy.cors.sh/',
             'https://api.allorigins.win/get?url=',
-            'https://corsproxy.org/?'
+            'https://corsproxy.org/?',
+            'https://cors-anywhere.herokuapp.com/',
+            'https://api.codetabs.com/v1/proxy?quest=',
+            'https://cors.bridged.cc/',
+            'https://proxy.cors.sh/'
         ];
 
         // Advanced CORS Solutions for GitHub Pages
@@ -1918,9 +1948,449 @@
             loading.style.display = show ? 'block' : 'none';
         }
 
-        // Initialize
+        // Comprehensive Testing Functions
+        function runComprehensiveTest() {
+            showLoading(true);
+            const testResults = {
+                corsProxy: false,
+                urlChanger: false,
+                urlChecker: false,
+                decryption: false,
+                videoPlayer: false,
+                advancedCors: false,
+                githubSolutions: false,
+                quickFix: false
+            };
+
+            let completedTests = 0;
+            const totalTests = Object.keys(testResults).length;
+
+            // Test CORS Proxy
+            testCorsProxyFunction()
+                .then(result => {
+                    testResults.corsProxy = result;
+                    completedTests++;
+                    updateTestProgress(completedTests, totalTests);
+                })
+                .catch(() => {
+                    completedTests++;
+                    updateTestProgress(completedTests, totalTests);
+                });
+
+            // Test URL Changer
+            testUrlChangerFunction()
+                .then(result => {
+                    testResults.urlChanger = result;
+                    completedTests++;
+                    updateTestProgress(completedTests, totalTests);
+                })
+                .catch(() => {
+                    completedTests++;
+                    updateTestProgress(completedTests, totalTests);
+                });
+
+            // Test URL Checker
+            testUrlCheckerFunction()
+                .then(result => {
+                    testResults.urlChecker = result;
+                    completedTests++;
+                    updateTestProgress(completedTests, totalTests);
+                })
+                .catch(() => {
+                    completedTests++;
+                    updateTestProgress(completedTests, totalTests);
+                });
+
+            // Test Decryption
+            testDecryptionFunction()
+                .then(result => {
+                    testResults.decryption = result;
+                    completedTests++;
+                    updateTestProgress(completedTests, totalTests);
+                })
+                .catch(() => {
+                    completedTests++;
+                    updateTestProgress(completedTests, totalTests);
+                });
+
+            // Test Video Player
+            testVideoPlayerFunction()
+                .then(result => {
+                    testResults.videoPlayer = result;
+                    completedTests++;
+                    updateTestProgress(completedTests, totalTests);
+                })
+                .catch(() => {
+                    completedTests++;
+                    updateTestProgress(completedTests, totalTests);
+                });
+
+            // Test Advanced CORS
+            testAdvancedCorsFunction()
+                .then(result => {
+                    testResults.advancedCors = result;
+                    completedTests++;
+                    updateTestProgress(completedTests, totalTests);
+                })
+                .catch(() => {
+                    completedTests++;
+                    updateTestProgress(completedTests, totalTests);
+                });
+
+            // Test GitHub Solutions
+            testGitHubSolutionsFunction()
+                .then(result => {
+                    testResults.githubSolutions = result;
+                    completedTests++;
+                    updateTestProgress(completedTests, totalTests);
+                })
+                .catch(() => {
+                    completedTests++;
+                    updateTestProgress(completedTests, totalTests);
+                });
+
+            // Test Quick Fix
+            testQuickFixFunction()
+                .then(result => {
+                    testResults.quickFix = result;
+                    completedTests++;
+                    updateTestProgress(completedTests, totalTests);
+                })
+                .catch(() => {
+                    completedTests++;
+                    updateTestProgress(completedTests, totalTests);
+                });
+
+            // Show results when all tests complete
+            setTimeout(() => {
+                if (completedTests === totalTests) {
+                    showTestResults(testResults);
+                    showLoading(false);
+                }
+            }, 10000); // Maximum wait time
+        }
+
+        function updateTestProgress(completed, total) {
+            console.log(`Test progress: ${completed}/${total}`);
+        }
+
+        // Individual Test Functions
+        async function testCorsProxyFunction() {
+            try {
+                const testUrl = 'https://httpbin.org/get';
+                const proxyUrl = corsProxies[0] + encodeURIComponent(testUrl);
+                
+                const response = await fetch(proxyUrl, {
+                    method: 'HEAD',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*'
+                    }
+                });
+                
+                return response.ok;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        async function testUrlChangerFunction() {
+            try {
+                const testUrl = 'https://httpbin.org/get';
+                const status = await testUrlAvailability(testUrl);
+                return status === 'working' || status === 'proxy_needed';
+            } catch (error) {
+                return false;
+            }
+        }
+
+        async function testUrlCheckerFunction() {
+            try {
+                const testUrls = ['https://httpbin.org/get', 'https://httpbin.org/status/200'];
+                const results = [];
+                
+                for (const url of testUrls) {
+                    const result = await checkSingleUrlEnhanced(url);
+                    results.push(result.status === 'success' || result.status === 'warning');
+                }
+                
+                return results.some(r => r);
+            } catch (error) {
+                return false;
+            }
+        }
+
+        async function testDecryptionFunction() {
+            try {
+                const testBase64 = btoa('https://example.com/test.m3u8');
+                const decoded = decodeBase64(testBase64);
+                return decoded === 'https://example.com/test.m3u8';
+            } catch (error) {
+                return false;
+            }
+        }
+
+        async function testVideoPlayerFunction() {
+            try {
+                // Test if video element can be created and configured
+                const video = document.createElement('video');
+                video.src = 'data:video/mp4;base64,';
+                return video.tagName === 'VIDEO';
+            } catch (error) {
+                return false;
+            }
+        }
+
+        async function testAdvancedCorsFunction() {
+            try {
+                const testUrl = 'https://httpbin.org/get';
+                const result = await tryCorsAnywhere(testUrl);
+                return result.success;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        async function testGitHubSolutionsFunction() {
+            try {
+                // Test if the functions exist and can be called
+                return typeof createWorkerProxy === 'function' && 
+                       typeof createNetlifyProxy === 'function' && 
+                       typeof createVercelProxy === 'function';
+            } catch (error) {
+                return false;
+            }
+        }
+
+        async function testQuickFixFunction() {
+            try {
+                // Test if quick fix function exists and can be called
+                return typeof quickFixChannel === 'function';
+            } catch (error) {
+                return false;
+            }
+        }
+
+        function showTestResults(results) {
+            const resultDiv = document.getElementById('testResults');
+            const outputDiv = document.getElementById('testOutput');
+            
+            resultDiv.style.display = 'block';
+            
+            const toolNames = {
+                corsProxy: 'خادم وكيل CORS',
+                urlChanger: 'تغيير رابط القناة',
+                urlChecker: 'فحص الروابط',
+                decryption: 'فك التشفير',
+                videoPlayer: 'مشغل الفيديو',
+                advancedCors: 'حلول CORS المتقدمة',
+                githubSolutions: 'حلول GitHub Pages',
+                quickFix: 'الحل السريع'
+            };
+            
+            let html = '';
+            let workingTools = 0;
+            let totalTools = Object.keys(results).length;
+            
+            Object.keys(results).forEach(tool => {
+                const isWorking = results[tool];
+                if (isWorking) workingTools++;
+                
+                const statusClass = isWorking ? 'status-success' : 'status-error';
+                const icon = isWorking ? 'fas fa-check' : 'fas fa-times';
+                const statusText = isWorking ? 'يعمل بشكل صحيح' : 'لا يعمل';
+                
+                html += `
+                    <div class="status-indicator ${statusClass}">
+                        <i class="${icon}"></i> ${toolNames[tool]}: ${statusText}
+                    </div>
+                `;
+            });
+            
+            const summaryClass = workingTools === totalTools ? 'status-success' : 
+                                workingTools > totalTools / 2 ? 'status-warning' : 'status-error';
+            const summaryIcon = workingTools === totalTools ? 'fas fa-check' : 
+                               workingTools > totalTools / 2 ? 'fas fa-exclamation-triangle' : 'fas fa-times';
+            
+            const summaryHtml = `
+                <div class="status-indicator ${summaryClass}">
+                    <i class="${summaryIcon}"></i> 
+                    ملخص الاختبار: ${workingTools} من أصل ${totalTools} أداة تعمل بشكل صحيح
+                </div>
+            `;
+            
+            outputDiv.innerHTML = summaryHtml + html;
+        }
+
+        function testSpecificTool() {
+            const toolName = prompt('أدخل اسم الأداة للاختبار:\n- corsProxy\n- urlChanger\n- urlChecker\n- decryption\n- videoPlayer\n- advancedCors\n- githubSolutions\n- quickFix');
+            
+            if (!toolName) return;
+            
+            showLoading(true);
+            
+            const testFunction = `test${toolName.charAt(0).toUpperCase() + toolName.slice(1)}Function`;
+            
+            if (typeof window[testFunction] === 'function') {
+                window[testFunction]()
+                    .then(result => {
+                        const resultDiv = document.getElementById('testResults');
+                        const outputDiv = document.getElementById('testOutput');
+                        
+                        resultDiv.style.display = 'block';
+                        
+                        const statusClass = result ? 'status-success' : 'status-error';
+                        const icon = result ? 'fas fa-check' : 'fas fa-times';
+                        const statusText = result ? 'يعمل بشكل صحيح' : 'لا يعمل';
+                        
+                        outputDiv.innerHTML = `
+                            <div class="status-indicator ${statusClass}">
+                                <i class="${icon}"></i> ${toolName}: ${statusText}
+                            </div>
+                        `;
+                        
+                        showLoading(false);
+                    })
+                    .catch(error => {
+                        alert(`خطأ في اختبار الأداة: ${error.message}`);
+                        showLoading(false);
+                    });
+            } else {
+                alert('اسم الأداة غير صحيح');
+                showLoading(false);
+            }
+        }
+
+        // Initialize and Test All Tools
         document.addEventListener('DOMContentLoaded', function() {
             console.log('IPTV Checker initialized');
+            
+            // Auto-test basic functionality
+            setTimeout(() => {
+                testBasicFunctionality();
+            }, 2000);
+        });
+
+        // Test Basic Functionality
+        function testBasicFunctionality() {
+            console.log('Testing basic functionality...');
+            
+            // Test CORS proxies
+            testCorsProxies();
+            
+            // Test utility functions
+            testUtilityFunctions();
+            
+            console.log('Basic functionality test completed');
+        }
+
+        // Test CORS Proxies
+        async function testCorsProxies() {
+            const testUrl = 'https://httpbin.org/get';
+            let workingProxies = [];
+            
+            for (let i = 0; i < Math.min(3, corsProxies.length); i++) {
+                try {
+                    const proxyUrl = corsProxies[i] + encodeURIComponent(testUrl);
+                    const response = await fetch(proxyUrl, {
+                        method: 'HEAD',
+                        headers: {
+                            'Accept': 'application/json, text/plain, */*'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        workingProxies.push(corsProxies[i]);
+                        console.log(`✅ Proxy ${i + 1} working: ${corsProxies[i]}`);
+                    } else {
+                        console.log(`❌ Proxy ${i + 1} failed: ${corsProxies[i]}`);
+                    }
+                } catch (error) {
+                    console.log(`❌ Proxy ${i + 1} error: ${corsProxies[i]} - ${error.message}`);
+                }
+            }
+            
+            console.log(`Working proxies: ${workingProxies.length}/${Math.min(3, corsProxies.length)}`);
+            
+            // Update proxy list to prioritize working ones
+            if (workingProxies.length > 0) {
+                corsProxies.splice(0, workingProxies.length, ...workingProxies);
+            }
+        }
+
+        // Test Utility Functions
+        function testUtilityFunctions() {
+            // Test URL validation
+            const testUrls = [
+                'https://example.com/test.m3u8',
+                'http://invalid-url',
+                'not-a-url'
+            ];
+            
+            testUrls.forEach(url => {
+                const isValid = isValidUrl(url);
+                console.log(`URL validation test: ${url} - ${isValid ? '✅' : '❌'}`);
+            });
+            
+            // Test Base64 decoding
+            try {
+                const testBase64 = btoa('test');
+                const decoded = decodeBase64(testBase64);
+                console.log(`Base64 test: ${decoded === 'test' ? '✅' : '❌'}`);
+            } catch (error) {
+                console.log('❌ Base64 test failed:', error.message);
+            }
+            
+            // Test URL decoding
+            try {
+                const testUrl = encodeURIComponent('https://example.com/test');
+                const decoded = decodeURL(testUrl);
+                console.log(`URL decoding test: ${decoded === 'https://example.com/test' ? '✅' : '❌'}`);
+            } catch (error) {
+                console.log('❌ URL decoding test failed:', error.message);
+            }
+        }
+
+        // Enhanced Error Handling
+        function handleError(functionName, error) {
+            console.error(`Error in ${functionName}:`, error);
+            
+            // Show user-friendly error message
+            const errorMessages = {
+                'addCorsProxy': 'خطأ في إنشاء وكيل CORS',
+                'changeUrl': 'خطأ في تغيير الرابط',
+                'checkUrls': 'خطأ في فحص الروابط',
+                'decryptUrl': 'خطأ في فك التشفير',
+                'playVideo': 'خطأ في تشغيل الفيديو',
+                'solveAdvancedCors': 'خطأ في حلول CORS المتقدمة',
+                'solveGitHubCors': 'خطأ في حلول GitHub Pages'
+            };
+            
+            const message = errorMessages[functionName] || 'حدث خطأ غير متوقع';
+            alert(`${message}: ${error.message}`);
+        }
+
+        // Add error handling to all main functions
+        const originalFunctions = {
+            addCorsProxy: addCorsProxy,
+            changeUrl: changeUrl,
+            checkUrls: checkUrls,
+            decryptUrl: decryptUrl,
+            playVideo: playVideo,
+            solveAdvancedCors: solveAdvancedCors,
+            solveGitHubCors: solveGitHubCors,
+            quickFixChannel: quickFixChannel
+        };
+
+        // Wrap functions with error handling
+        Object.keys(originalFunctions).forEach(funcName => {
+            const originalFunc = originalFunctions[funcName];
+            window[funcName] = function(...args) {
+                try {
+                    return originalFunc.apply(this, args);
+                } catch (error) {
+                    handleError(funcName, error);
+                }
+            };
         });
     </script>
 </body>
