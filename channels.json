@@ -762,7 +762,7 @@
       "id": 110,
       "name": "Disney Channel East",
       "url": "https://fl7.moveonjoy.com/DISNEY/index.m3u8",
-      "logo": "https://static.wikia.nocookie.net/dreamlogos/images/5/5f/Disney_Channel_2014_Logo.png/revision/latest?cb=20210121064730",
+      "logo": "https://iili.io/KcdkPON.png",
       "category": "kids",
       "country": "USA",
       "type": "hls",
@@ -867,6 +867,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-23T19:18:31.097Z",
+  "lastModified": "2025-09-23T19:23:44.432Z",
   "version": "1.0"
 }
