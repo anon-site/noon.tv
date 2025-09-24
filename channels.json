@@ -802,11 +802,41 @@
     },
     {
       "id": 111,
-      "name": "MBC Test",
-      "url": "https://shls-live-enc.edgenextcdn.net/out/v1/e4d7deaecbfb3bc5e/index.m3u8",
+      "name": "MBC",
+      "url": "https://tgn.bozztv.com/eshgtv-trn09/ga-mchannel1/index.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/8/81/Mbc1logo.png",
       "category": "entertainment",
       "country": "الامارات",
+      "type": "hls",
+      "status": "active"
+    },
+    {
+      "id": 112,
+      "name": "MBC 3",
+      "url": "https://tgn.bozztv.com/eshgtv-trn09/ga-mchannel3/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/6/62/MBC_3_Transparent_Background_Logo.png",
+      "category": "kids",
+      "country": "الامارات",
+      "type": "hls",
+      "status": "active"
+    },
+    {
+      "id": 113,
+      "name": "MBC 4",
+      "url": "https://tgn.bozztv.com/eshgtv-trn09/ga-mchannel4/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/MBC_4_Logo.svg/867px-MBC_4_Logo.svg.png",
+      "category": "entertainment",
+      "country": "الامارات",
+      "type": "hls",
+      "status": "active"
+    },
+    {
+      "id": 114,
+      "name": "MBC 5",
+      "url": "https://tgn.bozztv.com/eshgtv-trn09/ga-mchannel5/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/0/0f/MBC5_logo.png",
+      "category": "entertainment",
+      "country": "المغرب",
       "type": "hls",
       "status": "active"
     }
@@ -877,6 +907,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-23T10:48:09.176Z",
+  "lastModified": "2025-09-24T22:19:06.787Z",
   "version": "1.0"
 }
