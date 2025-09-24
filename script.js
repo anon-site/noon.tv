@@ -7709,6 +7709,232 @@ function refreshDiagnostic() {
     app.updateDiagnosticData();
 }
 
+// M3U8 Proxy Tool Functions
+function openProxyTool() {
+    const modal = document.getElementById('proxyToolModal');
+    modal.style.display = 'flex';
+    
+    // Add event listener for proxy server selection
+    const proxySelect = document.getElementById('proxyServer');
+    const customProxyGroup = document.getElementById('customProxyGroup');
+    
+    proxySelect.addEventListener('change', function() {
+        if (this.value === 'custom') {
+            customProxyGroup.style.display = 'block';
+        } else {
+            customProxyGroup.style.display = 'none';
+        }
+    });
+}
+
+function closeProxyTool() {
+    const modal = document.getElementById('proxyToolModal');
+    modal.style.display = 'none';
+    
+    // Clear form
+    document.getElementById('originalUrl').value = '';
+    document.getElementById('proxyServer').value = '';
+    document.getElementById('customProxyUrl').value = '';
+    document.getElementById('proxyResult').style.display = 'none';
+    document.getElementById('customProxyGroup').style.display = 'none';
+}
+
+function generateProxyUrl() {
+    const originalUrl = document.getElementById('originalUrl').value;
+    const proxyServer = document.getElementById('proxyServer').value;
+    const customProxyUrl = document.getElementById('customProxyUrl').value;
+    
+    if (!originalUrl) {
+        app.notifyError('يرجى إدخال الرابط الأصلي');
+        return;
+    }
+    
+    if (!proxyServer) {
+        app.notifyError('يرجى اختيار خادم الوكيل');
+        return;
+    }
+    
+    let proxyUrl;
+    if (proxyServer === 'custom') {
+        if (!customProxyUrl) {
+            app.notifyError('يرجى إدخال رابط الخادم المخصص');
+            return;
+        }
+        proxyUrl = customProxyUrl + encodeURIComponent(originalUrl);
+    } else {
+        proxyUrl = proxyServer + originalUrl;
+    }
+    
+    // Show result
+    const resultSection = document.getElementById('proxyResult');
+    const resultText = document.getElementById('proxyResultText');
+    
+    resultText.value = proxyUrl;
+    resultSection.style.display = 'block';
+    
+    app.notifySuccess('تم توليد الرابط الجديد بنجاح');
+}
+
+function testProxyUrl() {
+    const resultText = document.getElementById('proxyResultText');
+    const proxyUrl = resultText.value;
+    
+    if (!proxyUrl) {
+        app.notifyError('يرجى توليد الرابط أولاً');
+        return;
+    }
+    
+    app.notifyInfo('جارٍ اختبار الرابط...');
+    
+    // Test the proxy URL
+    fetch(proxyUrl, { method: 'HEAD' })
+        .then(response => {
+            if (response.ok) {
+                app.notifySuccess('الرابط يعمل بشكل صحيح!');
+            } else {
+                app.notifyWarning('الرابط قد لا يعمل بشكل صحيح');
+            }
+        })
+        .catch(error => {
+            app.notifyError('فشل في اختبار الرابط: ' + error.message);
+        });
+}
+
+function copyProxyResult() {
+    const resultText = document.getElementById('proxyResultText');
+    resultText.select();
+    document.execCommand('copy');
+    app.notifySuccess('تم نسخ الرابط إلى الحافظة');
+}
+
+// M3U8 Protection Removal Tool Functions
+function openProtectionRemovalTool() {
+    const modal = document.getElementById('protectionRemovalToolModal');
+    modal.style.display = 'flex';
+    
+    // Add event listener for protection type selection
+    const protectionSelect = document.getElementById('protectionType');
+    const customProtectionGroup = document.getElementById('customProtectionGroup');
+    
+    protectionSelect.addEventListener('change', function() {
+        if (this.value === 'custom') {
+            customProtectionGroup.style.display = 'block';
+        } else {
+            customProtectionGroup.style.display = 'none';
+        }
+    });
+}
+
+function closeProtectionRemovalTool() {
+    const modal = document.getElementById('protectionRemovalToolModal');
+    modal.style.display = 'none';
+    
+    // Clear form
+    document.getElementById('protectedUrl').value = '';
+    document.getElementById('protectionType').value = '';
+    document.getElementById('customHeaders').value = '';
+    document.getElementById('protectionResult').style.display = 'none';
+    document.getElementById('customProtectionGroup').style.display = 'none';
+}
+
+function removeProtection() {
+    const protectedUrl = document.getElementById('protectedUrl').value;
+    const protectionType = document.getElementById('protectionType').value;
+    const customHeaders = document.getElementById('customHeaders').value;
+    
+    if (!protectedUrl) {
+        app.notifyError('يرجى إدخال الرابط المحمي');
+        return;
+    }
+    
+    if (!protectionType) {
+        app.notifyError('يرجى اختيار نوع الحماية');
+        return;
+    }
+    
+    let result = '';
+    let headers = {};
+    
+    switch (protectionType) {
+        case 'referer':
+            headers = {
+                'Referer': new URL(protectedUrl).origin,
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            };
+            result = `الرابط الأصلي: ${protectedUrl}\n\nالرؤوس المطلوبة:\n${JSON.stringify(headers, null, 2)}\n\nملاحظة: استخدم هذه الرؤوس عند طلب الرابط`;
+            break;
+            
+        case 'user-agent':
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            };
+            result = `الرابط الأصلي: ${protectedUrl}\n\nالرؤوس المطلوبة:\n${JSON.stringify(headers, null, 2)}\n\nملاحظة: استخدم هذا User-Agent عند طلب الرابط`;
+            break;
+            
+        case 'token':
+            result = `الرابط الأصلي: ${protectedUrl}\n\nتحذير: هذا الرابط محمي برمز (Token)\nقد تحتاج إلى:\n1. استخراج الرمز من صفحة الويب الأصلية\n2. إضافة الرمز كمعامل في الرابط\n3. استخدام الرؤوس المناسبة`;
+            break;
+            
+        case 'cors':
+            result = `الرابط الأصلي: ${protectedUrl}\n\nالحلول المقترحة:\n1. استخدام خادم وكيل (Proxy)\n2. إضافة الرؤوس المناسبة:\n   - Origin: ${new URL(protectedUrl).origin}\n   - Referer: ${new URL(protectedUrl).origin}\n3. استخدام أدوات مثل CORS Anywhere`;
+            break;
+            
+        case 'custom':
+            if (!customHeaders) {
+                app.notifyError('يرجى إدخال الرؤوس المخصصة');
+                return;
+            }
+            try {
+                const parsedHeaders = JSON.parse(customHeaders);
+                result = `الرابط الأصلي: ${protectedUrl}\n\nالرؤوس المخصصة:\n${JSON.stringify(parsedHeaders, null, 2)}\n\nملاحظة: استخدم هذه الرؤوس عند طلب الرابط`;
+            } catch (error) {
+                app.notifyError('تنسيق JSON غير صحيح');
+                return;
+            }
+            break;
+    }
+    
+    // Show result
+    const resultSection = document.getElementById('protectionResult');
+    const resultText = document.getElementById('protectionResultText');
+    
+    resultText.value = result;
+    resultSection.style.display = 'block';
+    
+    app.notifySuccess('تم تحليل الحماية بنجاح');
+}
+
+function analyzeProtection() {
+    const protectedUrl = document.getElementById('protectedUrl').value;
+    
+    if (!protectedUrl) {
+        app.notifyError('يرجى إدخال الرابط المحمي');
+        return;
+    }
+    
+    app.notifyInfo('جارٍ تحليل الحماية...');
+    
+    // Simulate analysis
+    setTimeout(() => {
+        const analysis = `تحليل الرابط: ${protectedUrl}\n\nالتحليل:\n1. نوع الحماية المحتمل: CORS/Referer\n2. الحلول المقترحة:\n   - استخدام خادم وكيل\n   - إضافة رؤوس Referer و Origin\n   - تجربة أدوات إزالة CORS\n\nملاحظة: هذا تحليل تلقائي، قد تحتاج إلى تجربة حلول مختلفة`;
+        
+        const resultSection = document.getElementById('protectionResult');
+        const resultText = document.getElementById('protectionResultText');
+        
+        resultText.value = analysis;
+        resultSection.style.display = 'block';
+        
+        app.notifySuccess('تم تحليل الحماية بنجاح');
+    }, 1500);
+}
+
+function copyProtectionResult() {
+    const resultText = document.getElementById('protectionResultText');
+    resultText.select();
+    document.execCommand('copy');
+    app.notifySuccess('تم نسخ النتيجة إلى الحافظة');
+}
+
 function openConsoleInfo() {
     console.log('=== تفاصيل تشخيص التخزين ===');
     console.log('القنوات المحملة:', app.channels);

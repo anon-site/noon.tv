@@ -770,6 +770,10 @@
                             <i class="fas fa-shield-alt"></i>
                             <span>الأمان</span>
                         </button>
+                        <button class="admin-tab" data-tab="tools" onclick="app.switchAdminTab('tools')">
+                            <i class="fas fa-tools"></i>
+                            <span>الأدوات</span>
+                        </button>
                     </div>
                 </div>
                 <div class="admin-body">
@@ -1191,10 +1195,212 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- Tools Tab -->
+                <div class="admin-tab-content" id="toolsTab">
+                    <div class="tools-section">
+                        <div class="tools-header">
+                            <div class="tools-icon-wrapper">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            <div class="tools-title-group">
+                                <h3>أدوات الإدارة</h3>
+                                <p>مجموعة من الأدوات المفيدة لإدارة النظام</p>
+                            </div>
+                        </div>
+                        
+                        <div class="tools-content">
+                            <div class="tools-grid">
+                                <!-- M3U8 Proxy Tool -->
+                                <div class="tool-card" onclick="openProxyTool()">
+                                    <div class="tool-icon">
+                                        <i class="fas fa-exchange-alt"></i>
+                                    </div>
+                                    <h4>تغيير وكيل M3U8</h4>
+                                    <p>تغيير وكيل الخادم لروابط البث المباشر</p>
+                                    <div class="tool-status">
+                                        <span class="status-indicator"></span>
+                                        <span class="status-text">جاهز</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- M3U8 Protection Removal Tool -->
+                                <div class="tool-card" onclick="openProtectionRemovalTool()">
+                                    <div class="tool-icon">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <h4>إزالة حماية M3U8</h4>
+                                    <p>إزالة الحماية والقيود من روابط البث</p>
+                                    <div class="tool-status">
+                                        <span class="status-indicator"></span>
+                                        <span class="status-text">جاهز</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Placeholder for future tools -->
+                                <div class="tool-placeholder">
+                                    <div class="tool-icon">
+                                        <i class="fas fa-plus"></i>
+                                    </div>
+                                    <h4>أداة جديدة</h4>
+                                    <p>سيتم إضافة الأدوات هنا لاحقاً</p>
+                                </div>
+                                
+                                <div class="tool-placeholder">
+                                    <div class="tool-icon">
+                                        <i class="fas fa-plus"></i>
+                                    </div>
+                                    <h4>أداة جديدة</h4>
+                                    <p>سيتم إضافة الأدوات هنا لاحقاً</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 </div>
             </div>
         </div>
         <div class="modal-overlay"></div>
+    </div>
+
+    <!-- M3U8 Proxy Tool Modal -->
+    <div class="modal" id="proxyToolModal">
+        <div class="modal-content tool-modal-content">
+            <div class="modal-header">
+                <div class="tool-modal-header">
+                    <div class="tool-modal-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <div class="tool-modal-title">
+                        <h3>تغيير وكيل M3U8</h3>
+                        <p>تغيير وكيل الخادم لروابط البث المباشر</p>
+                    </div>
+                </div>
+                <button class="close-btn" onclick="closeProxyTool()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="tool-modal-body">
+                <div class="tool-form">
+                    <div class="form-group">
+                        <label for="originalUrl">الرابط الأصلي</label>
+                        <input type="url" id="originalUrl" placeholder="أدخل رابط M3U8 الأصلي" class="tool-input">
+                        <small class="form-help">مثال: https://example.com/playlist.m3u8</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="proxyServer">خادم الوكيل</label>
+                        <select id="proxyServer" class="tool-select">
+                            <option value="">اختر خادم الوكيل</option>
+                            <option value="https://cors-anywhere.herokuapp.com/">CORS Anywhere</option>
+                            <option value="https://api.allorigins.win/raw?url=">AllOrigins</option>
+                            <option value="https://thingproxy.freeboard.io/fetch/">ThingProxy</option>
+                            <option value="https://corsproxy.io/?">CORS Proxy</option>
+                            <option value="custom">خادم مخصص</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="customProxyGroup" style="display: none;">
+                        <label for="customProxyUrl">رابط الخادم المخصص</label>
+                        <input type="url" id="customProxyUrl" placeholder="أدخل رابط الخادم المخصص" class="tool-input">
+                        <small class="form-help">يجب أن ينتهي بـ = أو ?url=</small>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="tool-btn primary" onclick="generateProxyUrl()">
+                            <i class="fas fa-magic"></i>
+                            توليد الرابط الجديد
+                        </button>
+                        <button class="tool-btn secondary" onclick="testProxyUrl()">
+                            <i class="fas fa-play"></i>
+                            اختبار الرابط
+                        </button>
+                    </div>
+                    
+                    <div class="result-section" id="proxyResult" style="display: none;">
+                        <h4>النتيجة:</h4>
+                        <div class="result-box">
+                            <textarea id="proxyResultText" readonly class="result-textarea"></textarea>
+                            <button class="copy-btn" onclick="copyProxyResult()">
+                                <i class="fas fa-copy"></i>
+                                نسخ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-overlay" onclick="closeProxyTool()"></div>
+    </div>
+
+    <!-- M3U8 Protection Removal Tool Modal -->
+    <div class="modal" id="protectionRemovalToolModal">
+        <div class="modal-content tool-modal-content">
+            <div class="modal-header">
+                <div class="tool-modal-header">
+                    <div class="tool-modal-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="tool-modal-title">
+                        <h3>إزالة حماية M3U8</h3>
+                        <p>إزالة الحماية والقيود من روابط البث</p>
+                    </div>
+                </div>
+                <button class="close-btn" onclick="closeProtectionRemovalTool()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="tool-modal-body">
+                <div class="tool-form">
+                    <div class="form-group">
+                        <label for="protectedUrl">الرابط المحمي</label>
+                        <input type="url" id="protectedUrl" placeholder="أدخل رابط M3U8 المحمي" class="tool-input">
+                        <small class="form-help">مثال: https://example.com/protected/playlist.m3u8</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="protectionType">نوع الحماية</label>
+                        <select id="protectionType" class="tool-select">
+                            <option value="">اختر نوع الحماية</option>
+                            <option value="referer">Referer Protection</option>
+                            <option value="user-agent">User-Agent Protection</option>
+                            <option value="token">Token Protection</option>
+                            <option value="cors">CORS Protection</option>
+                            <option value="custom">حماية مخصصة</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="customProtectionGroup" style="display: none;">
+                        <label for="customHeaders">رؤوس مخصصة</label>
+                        <textarea id="customHeaders" placeholder="أدخل الرؤوس المخصصة (JSON format)" class="tool-textarea"></textarea>
+                        <small class="form-help">مثال: {"Referer": "https://example.com", "User-Agent": "Custom Agent"}</small>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="tool-btn primary" onclick="removeProtection()">
+                            <i class="fas fa-unlock"></i>
+                            إزالة الحماية
+                        </button>
+                        <button class="tool-btn secondary" onclick="analyzeProtection()">
+                            <i class="fas fa-search"></i>
+                            تحليل الحماية
+                        </button>
+                    </div>
+                    
+                    <div class="result-section" id="protectionResult" style="display: none;">
+                        <h4>النتيجة:</h4>
+                        <div class="result-box">
+                            <textarea id="protectionResultText" readonly class="result-textarea"></textarea>
+                            <button class="copy-btn" onclick="copyProtectionResult()">
+                                <i class="fas fa-copy"></i>
+                                نسخ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-overlay" onclick="closeProtectionRemovalTool()"></div>
     </div>
 
     <!-- Storage Diagnostic Modal -->
