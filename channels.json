@@ -938,6 +938,36 @@
       "type": "hls",
       "status": "inactive",
       "lastModified": "2025-09-24T23:40:56.300Z"
+    },
+    {
+      "id": 117,
+      "name": "المجد قرآن",
+      "url": "https://games1.elahmad.xyz/tv756_www.elahmad.com_almajd_quran/index.m3u8?token=d7aeaf7daf2b0f824fc5490797c9003f8ea1f345-95f83f4394ad875c3d657142c18ab439-1758736822-1758726022",
+      "logo": "https://almajdtv.com/wp-content/uploads/2021/08/Quran_Cover.png",
+      "category": "religious",
+      "country": "السعودية",
+      "type": "hls",
+      "status": "inactive"
+    },
+    {
+      "id": 118,
+      "name": "الجديد",
+      "url": "https://samaflix.com:12103/channel7/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/1/17/Al_Jadeed.PNG",
+      "category": "entertainment",
+      "country": "لبنان",
+      "type": "hls",
+      "status": "inactive"
+    },
+    {
+      "id": 119,
+      "name": "دبي",
+      "url": "https://dmieigthvllta.cdn.mgmlcdn.com/dubaitvht/smil:dubaitv.stream.smil/chunklist.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/a/ac/DUBAI_TELEVISION_LOGO_2004-2009.png",
+      "category": "entertainment",
+      "country": "الامارات",
+      "type": "hls",
+      "status": "inactive"
     }
   ],
   "favorites": [],
@@ -1006,6 +1036,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-25T01:03:42.696Z",
+  "lastModified": "2025-09-25T01:22:25.492Z",
   "version": "1.0"
 }
