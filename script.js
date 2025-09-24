@@ -81,9 +81,10 @@ class ArabicTVApp {
         this.bindRemoteStorageEvents();
         
         // Check for updates after a short delay (with notification control)
-        setTimeout(() => {
-            this.checkForUpdates(true); // Pass true to indicate this is automatic check
-        }, 2000);
+        // Disabled automatic updates - user must manually update channels
+        // setTimeout(() => {
+        //     this.checkForUpdates(true); // Pass true to indicate this is automatic check
+        // }, 2000);
         this.setupMobileSearch();
         this.setupPictureInPictureEvents();
         this.checkAndSetupPictureInPicture();
@@ -6091,69 +6092,38 @@ class ArabicTVApp {
             
             if (isFirstVisit || isDataCorrupted) {
                 const reason = isFirstVisit ? 'أول زيارة للموقع' : 'البيانات المحلية تالفة أو فارغة';
-                console.log(`📥 ${reason}، سيتم تحديث القنوات تلقائياً...`);
+                console.log(`📥 ${reason}، يمكنك تحديث القنوات يدوياً من زر "تحديث القنوات"`);
                 
-                // Show loading notification only for first ever visit
+                // Show notification to inform user they can update manually
                 if (isFirstEverVisit) {
-                    this.notifyInfo('جارٍ تحديث القنوات...', 'تحديث تلقائي', 3000);
+                    this.notifyInfo('يمكنك تحديث القنوات يدوياً من زر "تحديث القنوات"', 'تحديث يدوي', 5000);
                 }
                 
-                // Update channels automatically
-                try {
-                    await updateChannels();
-                    
-                    // Show success notification only for first ever visit
-                    if (isFirstEverVisit) {
-                        this.notifySuccess('تم تحديث القنوات بنجاح!', 'تحديث مكتمل', 4000);
-                    }
-                    
-                    // Mark that user has visited before
-                    if (isFirstEverVisit) {
-                        localStorage.setItem('hasVisitedBefore', 'true');
-                        localStorage.setItem('lastUpdateCheck', new Date().toISOString());
-                    }
-                    
-                    return true;
-                } catch (updateError) {
-                    console.error('❌ فشل في التحديث التلقائي:', updateError);
-                    if (isFirstEverVisit) {
-                        this.notifyError('فشل في تحديث القنوات تلقائياً', 'خطأ في التحديث', 5000);
-                    }
-                    return false;
+                // Mark that user has visited before
+                if (isFirstEverVisit) {
+                    localStorage.setItem('hasVisitedBefore', 'true');
+                    localStorage.setItem('lastUpdateCheck', new Date().toISOString());
                 }
+                
+                return false; // Don't auto-update, let user decide
             }
 
-            // Check if we have very few channels (less than 10) and update automatically
+            // Check if we have very few channels (less than 10) - inform user they can update manually
             if (this.channels.length < 10) {
-                console.log('📥 عدد القنوات قليل جداً، سيتم تحديث القنوات تلقائياً...');
+                console.log('📥 عدد القنوات قليل جداً، يمكنك تحديث القنوات يدوياً من زر "تحديث القنوات"');
                 
-                // Show loading notification only for first ever visit
+                // Show notification to inform user they can update manually
                 if (isFirstEverVisit) {
-                    this.notifyInfo('جارٍ تحديث القنوات...', 'تحديث تلقائي', 3000);
+                    this.notifyInfo('عدد القنوات قليل، يمكنك تحديث القنوات يدوياً من زر "تحديث القنوات"', 'تحديث يدوي', 5000);
                 }
                 
-                try {
-                    await updateChannels();
-                    
-                    // Show success notification only for first ever visit
-                    if (isFirstEverVisit) {
-                        this.notifySuccess('تم تحديث القنوات بنجاح!', 'تحديث مكتمل', 4000);
-                    }
-                    
-                    // Mark that user has visited before
-                    if (isFirstEverVisit) {
-                        localStorage.setItem('hasVisitedBefore', 'true');
-                        localStorage.setItem('lastUpdateCheck', new Date().toISOString());
-                    }
-                    
-                    return true;
-                } catch (updateError) {
-                    console.error('❌ فشل في التحديث التلقائي:', updateError);
-                    if (isFirstEverVisit) {
-                        this.notifyError('فشل في تحديث القنوات تلقائياً', 'خطأ في التحديث', 5000);
-                    }
-                    return false;
+                // Mark that user has visited before
+                if (isFirstEverVisit) {
+                    localStorage.setItem('hasVisitedBefore', 'true');
+                    localStorage.setItem('lastUpdateCheck', new Date().toISOString());
                 }
+                
+                return false; // Don't auto-update, let user decide
             }
 
             // Fetch remote data info
@@ -6183,34 +6153,19 @@ class ArabicTVApp {
                 const lastUpdateCheck = localStorage.getItem('lastUpdateCheck');
                 const hasRealUpdate = lastUpdateCheck && new Date(remoteLastModified) > new Date(lastUpdateCheck);
                 
-                // If data is very old (more than 7 days), update automatically
+                // If data is very old (more than 7 days), inform user they can update manually
                 if (daysSinceLastUpdate > 7) {
-                    console.log('📥 البيانات قديمة جداً، سيتم تحديث القنوات تلقائياً...');
+                    console.log('📥 البيانات قديمة جداً، يمكنك تحديث القنوات يدوياً من زر "تحديث القنوات"');
                     
-                    // Show loading notification only if there's a real update
+                    // Show notification to inform user they can update manually
                     if (hasRealUpdate) {
-                        this.notifyInfo('جارٍ تحديث القنوات...', 'تحديث تلقائي', 3000);
+                        this.notifyInfo('البيانات قديمة، يمكنك تحديث القنوات يدوياً من زر "تحديث القنوات"', 'تحديث يدوي', 5000);
                     }
                     
-                    try {
-                        await updateChannels();
-                        
-                        // Show success notification only if there's a real update
-                        if (hasRealUpdate) {
-                            this.notifySuccess('تم تحديث القنوات بنجاح!', 'تحديث مكتمل', 4000);
-                        }
-                        
-                        // Update last check time
-                        localStorage.setItem('lastUpdateCheck', new Date().toISOString());
-                        
-                        return true;
-                    } catch (updateError) {
-                        console.error('❌ فشل في التحديث التلقائي:', updateError);
-                        if (hasRealUpdate) {
-                            this.notifyError('فشل في تحديث القنوات تلقائياً', 'خطأ في التحديث', 5000);
-                        }
-                        return false;
-                    }
+                    // Update last check time
+                    localStorage.setItem('lastUpdateCheck', new Date().toISOString());
+                    
+                    return false; // Don't auto-update, let user decide
                 } else {
                     // Show notification for manual update only if there's a real update
                     if (hasRealUpdate) {
@@ -6232,40 +6187,25 @@ class ArabicTVApp {
         } catch (error) {
             console.error('خطأ في فحص التحديثات:', error);
             
-            // If there's an error checking updates, try to update automatically
-            console.log('📥 خطأ في فحص التحديثات، سيتم تحديث القنوات تلقائياً...');
+            // If there's an error checking updates, inform user they can update manually
+            console.log('📥 خطأ في فحص التحديثات، يمكنك تحديث القنوات يدوياً من زر "تحديث القنوات"');
             
             // Check if this is first visit or notifications are enabled
             const hasVisitedBefore = localStorage.getItem('hasVisitedBefore');
             const isFirstEverVisit = !hasVisitedBefore;
             
-            // Show loading notification only for first ever visit
+            // Show notification to inform user they can update manually
             if (isFirstEverVisit) {
-                this.notifyInfo('جارٍ تحديث القنوات...', 'تحديث تلقائي', 3000);
+                this.notifyInfo('خطأ في فحص التحديثات، يمكنك تحديث القنوات يدوياً من زر "تحديث القنوات"', 'تحديث يدوي', 5000);
             }
             
-            try {
-                await updateChannels();
-                
-                // Show success notification only for first ever visit
-                if (isFirstEverVisit) {
-                    this.notifySuccess('تم تحديث القنوات بنجاح!', 'تحديث مكتمل', 4000);
-                }
-                
-                // Mark that user has visited before
-                if (isFirstEverVisit) {
-                    localStorage.setItem('hasVisitedBefore', 'true');
-                    localStorage.setItem('lastUpdateCheck', new Date().toISOString());
-                }
-                
-                return true;
-            } catch (updateError) {
-                console.error('❌ فشل في التحديث التلقائي:', updateError);
-                if (isFirstEverVisit) {
-                    this.notifyError('فشل في تحديث القنوات تلقائياً', 'خطأ في التحديث', 5000);
-                }
-                return false;
+            // Mark that user has visited before
+            if (isFirstEverVisit) {
+                localStorage.setItem('hasVisitedBefore', 'true');
+                localStorage.setItem('lastUpdateCheck', new Date().toISOString());
             }
+            
+            return false; // Don't auto-update, let user decide
         }
     }
 
