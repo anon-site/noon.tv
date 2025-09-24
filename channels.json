@@ -839,6 +839,26 @@
       "country": "المغرب",
       "type": "hls",
       "status": "active"
+    },
+    {
+      "id": 115,
+      "name": "MBC Drama",
+      "url": "https://mbc1-enc.edgenextcdn.net/out/v1/b0b3a0e6750d4408bb86d703d5feffd1/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e9/MBC_Drama_Logo.svg",
+      "category": "entertainment",
+      "country": "الامارات",
+      "type": "hls",
+      "status": "active"
+    },
+    {
+      "id": 116,
+      "name": "MBC 2",
+      "url": "https://top1new.newkso.ru/top1/aflam16/mono.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/MBC2_Logo.svg/1494px-MBC2_Logo.svg.png",
+      "category": "entertainment",
+      "country": "الامارات",
+      "type": "hls",
+      "status": "inactive"
     }
   ],
   "favorites": [],
@@ -907,6 +927,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-24T22:19:06.787Z",
+  "lastModified": "2025-09-24T22:39:24.782Z",
   "version": "1.0"
 }
