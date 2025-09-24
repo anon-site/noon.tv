@@ -936,7 +936,7 @@
       "category": "movies",
       "country": "السعودية",
       "type": "hls",
-      "status": "inactive",
+      "status": "active",
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -947,7 +947,7 @@
       "category": "entertainment",
       "country": "السعودية",
       "type": "hls",
-      "status": "inactive"
+      "status": "active"
     },
     {
       "id": 118,
@@ -957,7 +957,7 @@
       "category": "entertainment",
       "country": "لبنان",
       "type": "hls",
-      "status": "inactive"
+      "status": "active"
     },
     {
       "id": 119,
@@ -967,7 +967,7 @@
       "category": "entertainment",
       "country": "الامارات",
       "type": "hls",
-      "status": "inactive"
+      "status": "active"
     },
     {
       "id": 120,
@@ -1046,6 +1046,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-25T01:40:58.802Z",
+  "lastModified": "2025-09-25T01:46:16.260Z",
   "version": "1.0"
 }
