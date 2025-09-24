@@ -766,10 +766,6 @@
                             <i class="fas fa-cog"></i>
                             <span>إعدادات عامة</span>
                         </button>
-                        <button class="admin-tab" data-tab="tools" onclick="app.switchAdminTab('tools')">
-                            <i class="fas fa-tools"></i>
-                            <span>أدوات الروابط</span>
-                        </button>
                         <button class="admin-tab" data-tab="security" onclick="app.switchAdminTab('security')">
                             <i class="fas fa-shield-alt"></i>
                             <span>الأمان</span>
@@ -1061,126 +1057,6 @@
                         </div>
                     </div>
                     <input type="file" id="importFileInput" accept=".json" style="display: none;" />
-                </div>
-                
-                <!-- Tools Tab -->
-                <div class="admin-tab-content" id="toolsTab">
-                    <div class="tools-container">
-                        <div class="tools-header">
-                            <h3><i class="fas fa-tools"></i> أدوات إصلاح الروابط</h3>
-                            <p>أدوات متقدمة لحل مشاكل الروابط المحجوبة أو التي لا تعمل على GitHub</p>
-                        </div>
-                        
-                        <!-- URL Fixer Section -->
-                        <div class="tools-section">
-                            <div class="tools-section-header">
-                                <i class="fas fa-link"></i>
-                                <h4>إصلاح الروابط</h4>
-                            </div>
-                            <div class="tools-section-content">
-                                <div class="tool-item">
-                                    <div class="tool-header">
-                                        <h5><i class="fas fa-server"></i> إضافة وكيل CORS</h5>
-                                        <p>حل مشاكل الروابط المحجوبة باستخدام خوادم وكيلة</p>
-                                    </div>
-                                    <div class="tool-form">
-                                        <div class="form-group">
-                                            <label for="originalLink">الرابط الأصلي:</label>
-                                            <input type="url" id="originalLink" placeholder="https://shls-live-enc.edgenextcdn.net/out/v1/0965e4d7deae49179172426cbfb3bc5e/index.m3u8" value="https://shls-live-enc.edgenextcdn.net/out/v1/0965e4d7deae49179172426cbfb3bc5e/index.m3u8">
-                                        </div>
-                                        <button class="tool-btn" onclick="app.fixLinkWithProxy()">
-                                            <i class="fas fa-magic"></i> إصلاح الرابط
-                                        </button>
-                                        <div id="proxyResult" class="tool-result" style="display: none;">
-                                            <div class="result-content" id="proxyResultContent"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="tool-item">
-                                    <div class="tool-header">
-                                        <h5><i class="fas fa-exchange-alt"></i> تحويل HTTP إلى HTTPS</h5>
-                                        <p>تحويل الروابط من HTTP إلى HTTPS لحل مشاكل الأمان</p>
-                                    </div>
-                                    <div class="tool-form">
-                                        <div class="form-group">
-                                            <label for="httpLink">الرابط HTTP:</label>
-                                            <input type="url" id="httpLink" placeholder="http://example.com/channel.m3u8">
-                                        </div>
-                                        <button class="tool-btn" onclick="app.convertToHttps()">
-                                            <i class="fas fa-shield-alt"></i> تحويل إلى HTTPS
-                                        </button>
-                                        <div id="httpsResult" class="tool-result" style="display: none;">
-                                            <div class="result-content" id="httpsResultContent"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="tool-item">
-                                    <div class="tool-header">
-                                        <h5><i class="fas fa-search"></i> فحص صحة الرابط</h5>
-                                        <p>فحص ما إذا كان الرابط يعمل أم لا</p>
-                                    </div>
-                                    <div class="tool-form">
-                                        <div class="form-group">
-                                            <label for="checkLink">الرابط للفحص:</label>
-                                            <input type="url" id="checkLink" placeholder="https://example.com/channel.m3u8">
-                                        </div>
-                                        <button class="tool-btn" onclick="app.checkLinkHealth()">
-                                            <i class="fas fa-heartbeat"></i> فحص الرابط
-                                        </button>
-                                        <div id="healthResult" class="tool-result" style="display: none;">
-                                            <div class="result-content" id="healthResultContent"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Proxy Servers Section -->
-                        <div class="tools-section">
-                            <div class="tools-section-header">
-                                <i class="fas fa-server"></i>
-                                <h4>خوادم الوكيل المتاحة</h4>
-                            </div>
-                            <div class="tools-section-content">
-                                <div class="proxy-servers-grid" id="proxyServersGrid">
-                                    <!-- Proxy servers will be loaded here -->
-                                </div>
-                                <button class="tool-btn secondary" onclick="app.testAllProxies()">
-                                    <i class="fas fa-vial"></i> اختبار جميع الخوادم
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- Quick Actions -->
-                        <div class="tools-section">
-                            <div class="tools-section-header">
-                                <i class="fas fa-bolt"></i>
-                                <h4>إجراءات سريعة</h4>
-                            </div>
-                            <div class="tools-section-content">
-                                <div class="quick-actions-grid">
-                                    <button class="quick-action-btn" onclick="app.openIPTVChecker()">
-                                        <i class="fas fa-tv"></i>
-                                        <span>فتح فاحص IPTV</span>
-                                    </button>
-                                    <button class="quick-action-btn" onclick="app.bulkFixLinks()">
-                                        <i class="fas fa-tools"></i>
-                                        <span>إصلاح جميع الروابط</span>
-                                    </button>
-                                    <button class="quick-action-btn" onclick="app.exportWorkingLinks()">
-                                        <i class="fas fa-download"></i>
-                                        <span>تصدير الروابط العاملة</span>
-                                    </button>
-                                    <button class="quick-action-btn" onclick="app.clearBrokenLinks()">
-                                        <i class="fas fa-trash"></i>
-                                        <span>حذف الروابط المعطلة</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 
                 <!-- Security Tab -->
