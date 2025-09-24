@@ -2144,10 +2144,308 @@ class ArabicTVApp {
             this.updateChannelCategoryOptions();
         }
 
+        // Load proxy servers when switching to tools tab
+        if (tab === 'tools') {
+            this.testAllProxies();
+        }
+
         // Reset form when switching to add tab (unless we're editing)
         // This should be after updateChannelCategoryOptions to ensure categories are loaded
         if (tab === 'add' && !this.editingChannelId) {
             this.resetAddChannelForm();
+        }
+    }
+
+    // Tools Tab Functions
+    fixLinkWithProxy() {
+        const originalLink = document.getElementById('originalLink').value.trim();
+        if (!originalLink) {
+            this.showToolResult('proxyResult', 'error', 'يرجى إدخال الرابط الأصلي');
+            return;
+        }
+
+        this.showToolResult('proxyResult', 'info', 'جاري إصلاح الرابط...');
+        
+        // قائمة خوادم الوكيل المتاحة
+        const proxyServers = [
+            'https://api.allorigins.win/raw?url=',
+            'https://corsproxy.io/?',
+            'https://thingproxy.freeboard.io/fetch/',
+            'https://yacdn.org/proxy/',
+            'https://cors-anywhere.herokuapp.com/',
+            'https://api.codetabs.com/v1/proxy?quest='
+        ];
+
+        this.tryProxyServers(originalLink, proxyServers, 0);
+    }
+
+    tryProxyServers(originalLink, proxyServers, index) {
+        if (index >= proxyServers.length) {
+            this.showToolResult('proxyResult', 'error', 'جميع خوادم الوكيل فشلت في العمل');
+            return;
+        }
+
+        const proxyUrl = proxyServers[index] + encodeURIComponent(originalLink);
+        
+        fetch(proxyUrl, {
+            method: 'HEAD',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                this.showToolResult('proxyResult', 'success', 
+                    `تم إصلاح الرابط بنجاح!<br><br>
+                    <strong>الرابط الأصلي:</strong><br>
+                    <code style="word-break: break-all; background: #f8f9fa; padding: 5px; border-radius: 3px;">${originalLink}</code><br><br>
+                    <strong>الرابط المُصلح:</strong><br>
+                    <code style="word-break: break-all; background: #d4edda; padding: 5px; border-radius: 3px;">${proxyUrl}</code><br><br>
+                    <button onclick="navigator.clipboard.writeText('${proxyUrl}')" style="background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">
+                        <i class="fas fa-copy"></i> نسخ الرابط المُصلح
+                    </button>`);
+            } else {
+                throw new Error(`HTTP ${response.status}`);
+            }
+        })
+        .catch(error => {
+            console.log(`Proxy ${index + 1} failed: ${error.message}`);
+            this.tryProxyServers(originalLink, proxyServers, index + 1);
+        });
+    }
+
+    convertToHttps() {
+        const httpLink = document.getElementById('httpLink').value.trim();
+        if (!httpLink) {
+            this.showToolResult('httpsResult', 'error', 'يرجى إدخال الرابط HTTP');
+            return;
+        }
+
+        if (!httpLink.startsWith('http://')) {
+            this.showToolResult('httpsResult', 'warning', 'الرابط المدخل ليس رابط HTTP');
+            return;
+        }
+
+        const httpsLink = httpLink.replace('http://', 'https://');
+        
+        // اختبار الرابط الجديد
+        fetch(httpsLink, {
+            method: 'HEAD',
+            mode: 'no-cors'
+        })
+        .then(() => {
+            this.showToolResult('httpsResult', 'success', 
+                `تم تحويل الرابط بنجاح!<br><br>
+                <strong>الرابط الأصلي (HTTP):</strong><br>
+                <code style="word-break: break-all; background: #f8d7da; padding: 5px; border-radius: 3px;">${httpLink}</code><br><br>
+                <strong>الرابط الجديد (HTTPS):</strong><br>
+                <code style="word-break: break-all; background: #d4edda; padding: 5px; border-radius: 3px;">${httpsLink}</code><br><br>
+                <button onclick="navigator.clipboard.writeText('${httpsLink}')" style="background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">
+                    <i class="fas fa-copy"></i> نسخ الرابط الآمن
+                </button>`);
+        })
+        .catch(() => {
+            this.showToolResult('httpsResult', 'warning', 
+                `تم تحويل الرابط ولكن قد لا يعمل:<br><br>
+                <strong>الرابط الأصلي:</strong><br>
+                <code style="word-break: break-all; background: #f8d7da; padding: 5px; border-radius: 3px;">${httpLink}</code><br><br>
+                <strong>الرابط المحول:</strong><br>
+                <code style="word-break: break-all; background: #fff3cd; padding: 5px; border-radius: 3px;">${httpsLink}</code><br><br>
+                <small>جرب استخدام أداة إضافة وكيل CORS بدلاً من ذلك</small>`);
+        });
+    }
+
+    checkLinkHealth() {
+        const checkLink = document.getElementById('checkLink').value.trim();
+        if (!checkLink) {
+            this.showToolResult('healthResult', 'error', 'يرجى إدخال الرابط للفحص');
+            return;
+        }
+
+        this.showToolResult('healthResult', 'info', 'جاري فحص الرابط...');
+        
+        const timeout = setTimeout(() => {
+            this.showToolResult('healthResult', 'warning', 
+                `انتهت مهلة الفحص:<br><br>
+                <strong>الرابط:</strong><br>
+                <code style="word-break: break-all; background: #fff3cd; padding: 5px; border-radius: 3px;">${checkLink}</code><br><br>
+                <small>الرابط قد يكون بطيئاً أو محجوباً</small>`);
+        }, 10000);
+
+        // اختبار مباشر أولاً
+        fetch(checkLink, {
+            method: 'HEAD',
+            mode: 'no-cors'
+        })
+        .then(() => {
+            clearTimeout(timeout);
+            this.showToolResult('healthResult', 'success', 
+                `الرابط يعمل بشكل ممتاز! ✅<br><br>
+                <strong>الرابط:</strong><br>
+                <code style="word-break: break-all; background: #d4edda; padding: 5px; border-radius: 3px;">${checkLink}</code><br><br>
+                <small>يمكن استخدام هذا الرابط مباشرة</small>`);
+        })
+        .catch(() => {
+            // اختبار مع وكيل CORS
+            const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(checkLink);
+            fetch(proxyUrl, {
+                method: 'HEAD',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*'
+                }
+            })
+            .then(response => {
+                clearTimeout(timeout);
+                if (response.ok) {
+                    this.showToolResult('healthResult', 'warning', 
+                        `الرابط يعمل مع وكيل CORS ⚠️<br><br>
+                        <strong>الرابط الأصلي:</strong><br>
+                        <code style="word-break: break-all; background: #fff3cd; padding: 5px; border-radius: 3px;">${checkLink}</code><br><br>
+                        <strong>الرابط مع الوكيل:</strong><br>
+                        <code style="word-break: break-all; background: #d1ecf1; padding: 5px; border-radius: 3px;">${proxyUrl}</code><br><br>
+                        <small>استخدم أداة إضافة وكيل CORS لإصلاح هذا الرابط</small>`);
+                } else {
+                    throw new Error('Proxy failed');
+                }
+            })
+            .catch(() => {
+                clearTimeout(timeout);
+                this.showToolResult('healthResult', 'error', 
+                    `الرابط لا يعمل ❌<br><br>
+                    <strong>الرابط:</strong><br>
+                    <code style="word-break: break-all; background: #f8d7da; padding: 5px; border-radius: 3px;">${checkLink}</code><br><br>
+                    <small>هذا الرابط معطل أو محجوب تماماً</small>`);
+            });
+        });
+    }
+
+    showToolResult(resultId, type, message) {
+        const resultDiv = document.getElementById(resultId);
+        const contentDiv = document.getElementById(resultId + 'Content');
+        
+        resultDiv.style.display = 'block';
+        resultDiv.className = `tool-result result-${type}`;
+        contentDiv.innerHTML = message;
+    }
+
+    testAllProxies() {
+        const proxyServers = [
+            { name: 'AllOrigins', url: 'https://api.allorigins.win/raw?url=' },
+            { name: 'CORS Proxy', url: 'https://corsproxy.io/?' },
+            { name: 'ThingProxy', url: 'https://thingproxy.freeboard.io/fetch/' },
+            { name: 'YACDN', url: 'https://yacdn.org/proxy/' },
+            { name: 'CORS Anywhere', url: 'https://cors-anywhere.herokuapp.com/' },
+            { name: 'CodeTabs', url: 'https://api.codetabs.com/v1/proxy?quest=' }
+        ];
+
+        const grid = document.getElementById('proxyServersGrid');
+        grid.innerHTML = '';
+
+        proxyServers.forEach((proxy, index) => {
+            const proxyItem = document.createElement('div');
+            proxyItem.className = 'proxy-server-item testing';
+            proxyItem.innerHTML = `
+                <div class="proxy-server-name">${proxy.name}</div>
+                <div class="proxy-server-status testing">جاري الاختبار...</div>
+            `;
+            grid.appendChild(proxyItem);
+
+            // اختبار الخادم
+            const testUrl = proxy.url + encodeURIComponent('https://httpbin.org/get');
+            fetch(testUrl, {
+                method: 'HEAD',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    proxyItem.className = 'proxy-server-item working';
+                    proxyItem.querySelector('.proxy-server-status').className = 'proxy-server-status working';
+                    proxyItem.querySelector('.proxy-server-status').textContent = 'يعمل';
+                } else {
+                    throw new Error('Failed');
+                }
+            })
+            .catch(() => {
+                proxyItem.className = 'proxy-server-item not-working';
+                proxyItem.querySelector('.proxy-server-status').className = 'proxy-server-status not-working';
+                proxyItem.querySelector('.proxy-server-status').textContent = 'لا يعمل';
+            });
+        });
+    }
+
+    openIPTVChecker() {
+        window.open('iptv-checker.html', '_blank');
+    }
+
+    bulkFixLinks() {
+        const channels = this.getChannels();
+        let fixedCount = 0;
+        let totalCount = channels.length;
+
+        this.notifyInfo('جاري إصلاح جميع الروابط...');
+
+        channels.forEach((channel, index) => {
+            setTimeout(() => {
+                if (channel.url && !channel.url.includes('corsproxy.io') && !channel.url.includes('allorigins.win')) {
+                    const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(channel.url);
+                    channel.url = proxyUrl;
+                    fixedCount++;
+                }
+                
+                if (index === totalCount - 1) {
+                    this.saveChannels();
+                    this.notifySuccess(`تم إصلاح ${fixedCount} رابط من أصل ${totalCount}`);
+                }
+            }, index * 100);
+        });
+    }
+
+    exportWorkingLinks() {
+        const channels = this.getChannels();
+        const workingChannels = channels.filter(channel => 
+            channel.url && (
+                channel.url.includes('corsproxy.io') || 
+                channel.url.includes('allorigins.win') ||
+                channel.url.startsWith('https://')
+            )
+        );
+
+        const exportData = {
+            channels: workingChannels,
+            exportDate: new Date().toISOString(),
+            totalCount: workingChannels.length
+        };
+
+        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `working-channels-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+
+        this.notifySuccess(`تم تصدير ${workingChannels.length} رابط عاملاً`);
+    }
+
+    clearBrokenLinks() {
+        if (confirm('هل أنت متأكد من حذف جميع الروابط المعطلة؟')) {
+            const channels = this.getChannels();
+            const workingChannels = channels.filter(channel => 
+                channel.url && (
+                    channel.url.includes('corsproxy.io') || 
+                    channel.url.includes('allorigins.win') ||
+                    channel.url.startsWith('https://')
+                )
+            );
+
+            const deletedCount = channels.length - workingChannels.length;
+            this.channels = workingChannels;
+            this.saveChannels();
+            this.loadChannels();
+            this.notifySuccess(`تم حذف ${deletedCount} رابط معطل`);
         }
     }
 
@@ -7707,232 +8005,6 @@ function closeDiagnosticModal() {
 
 function refreshDiagnostic() {
     app.updateDiagnosticData();
-}
-
-// M3U8 Proxy Tool Functions
-function openProxyTool() {
-    const modal = document.getElementById('proxyToolModal');
-    modal.style.display = 'flex';
-    
-    // Add event listener for proxy server selection
-    const proxySelect = document.getElementById('proxyServer');
-    const customProxyGroup = document.getElementById('customProxyGroup');
-    
-    proxySelect.addEventListener('change', function() {
-        if (this.value === 'custom') {
-            customProxyGroup.style.display = 'block';
-        } else {
-            customProxyGroup.style.display = 'none';
-        }
-    });
-}
-
-function closeProxyTool() {
-    const modal = document.getElementById('proxyToolModal');
-    modal.style.display = 'none';
-    
-    // Clear form
-    document.getElementById('originalUrl').value = '';
-    document.getElementById('proxyServer').value = '';
-    document.getElementById('customProxyUrl').value = '';
-    document.getElementById('proxyResult').style.display = 'none';
-    document.getElementById('customProxyGroup').style.display = 'none';
-}
-
-function generateProxyUrl() {
-    const originalUrl = document.getElementById('originalUrl').value;
-    const proxyServer = document.getElementById('proxyServer').value;
-    const customProxyUrl = document.getElementById('customProxyUrl').value;
-    
-    if (!originalUrl) {
-        app.notifyError('يرجى إدخال الرابط الأصلي');
-        return;
-    }
-    
-    if (!proxyServer) {
-        app.notifyError('يرجى اختيار خادم الوكيل');
-        return;
-    }
-    
-    let proxyUrl;
-    if (proxyServer === 'custom') {
-        if (!customProxyUrl) {
-            app.notifyError('يرجى إدخال رابط الخادم المخصص');
-            return;
-        }
-        proxyUrl = customProxyUrl + encodeURIComponent(originalUrl);
-    } else {
-        proxyUrl = proxyServer + originalUrl;
-    }
-    
-    // Show result
-    const resultSection = document.getElementById('proxyResult');
-    const resultText = document.getElementById('proxyResultText');
-    
-    resultText.value = proxyUrl;
-    resultSection.style.display = 'block';
-    
-    app.notifySuccess('تم توليد الرابط الجديد بنجاح');
-}
-
-function testProxyUrl() {
-    const resultText = document.getElementById('proxyResultText');
-    const proxyUrl = resultText.value;
-    
-    if (!proxyUrl) {
-        app.notifyError('يرجى توليد الرابط أولاً');
-        return;
-    }
-    
-    app.notifyInfo('جارٍ اختبار الرابط...');
-    
-    // Test the proxy URL
-    fetch(proxyUrl, { method: 'HEAD' })
-        .then(response => {
-            if (response.ok) {
-                app.notifySuccess('الرابط يعمل بشكل صحيح!');
-            } else {
-                app.notifyWarning('الرابط قد لا يعمل بشكل صحيح');
-            }
-        })
-        .catch(error => {
-            app.notifyError('فشل في اختبار الرابط: ' + error.message);
-        });
-}
-
-function copyProxyResult() {
-    const resultText = document.getElementById('proxyResultText');
-    resultText.select();
-    document.execCommand('copy');
-    app.notifySuccess('تم نسخ الرابط إلى الحافظة');
-}
-
-// M3U8 Protection Removal Tool Functions
-function openProtectionRemovalTool() {
-    const modal = document.getElementById('protectionRemovalToolModal');
-    modal.style.display = 'flex';
-    
-    // Add event listener for protection type selection
-    const protectionSelect = document.getElementById('protectionType');
-    const customProtectionGroup = document.getElementById('customProtectionGroup');
-    
-    protectionSelect.addEventListener('change', function() {
-        if (this.value === 'custom') {
-            customProtectionGroup.style.display = 'block';
-        } else {
-            customProtectionGroup.style.display = 'none';
-        }
-    });
-}
-
-function closeProtectionRemovalTool() {
-    const modal = document.getElementById('protectionRemovalToolModal');
-    modal.style.display = 'none';
-    
-    // Clear form
-    document.getElementById('protectedUrl').value = '';
-    document.getElementById('protectionType').value = '';
-    document.getElementById('customHeaders').value = '';
-    document.getElementById('protectionResult').style.display = 'none';
-    document.getElementById('customProtectionGroup').style.display = 'none';
-}
-
-function removeProtection() {
-    const protectedUrl = document.getElementById('protectedUrl').value;
-    const protectionType = document.getElementById('protectionType').value;
-    const customHeaders = document.getElementById('customHeaders').value;
-    
-    if (!protectedUrl) {
-        app.notifyError('يرجى إدخال الرابط المحمي');
-        return;
-    }
-    
-    if (!protectionType) {
-        app.notifyError('يرجى اختيار نوع الحماية');
-        return;
-    }
-    
-    let result = '';
-    let headers = {};
-    
-    switch (protectionType) {
-        case 'referer':
-            headers = {
-                'Referer': new URL(protectedUrl).origin,
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-            };
-            result = `الرابط الأصلي: ${protectedUrl}\n\nالرؤوس المطلوبة:\n${JSON.stringify(headers, null, 2)}\n\nملاحظة: استخدم هذه الرؤوس عند طلب الرابط`;
-            break;
-            
-        case 'user-agent':
-            headers = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-            };
-            result = `الرابط الأصلي: ${protectedUrl}\n\nالرؤوس المطلوبة:\n${JSON.stringify(headers, null, 2)}\n\nملاحظة: استخدم هذا User-Agent عند طلب الرابط`;
-            break;
-            
-        case 'token':
-            result = `الرابط الأصلي: ${protectedUrl}\n\nتحذير: هذا الرابط محمي برمز (Token)\nقد تحتاج إلى:\n1. استخراج الرمز من صفحة الويب الأصلية\n2. إضافة الرمز كمعامل في الرابط\n3. استخدام الرؤوس المناسبة`;
-            break;
-            
-        case 'cors':
-            result = `الرابط الأصلي: ${protectedUrl}\n\nالحلول المقترحة:\n1. استخدام خادم وكيل (Proxy)\n2. إضافة الرؤوس المناسبة:\n   - Origin: ${new URL(protectedUrl).origin}\n   - Referer: ${new URL(protectedUrl).origin}\n3. استخدام أدوات مثل CORS Anywhere`;
-            break;
-            
-        case 'custom':
-            if (!customHeaders) {
-                app.notifyError('يرجى إدخال الرؤوس المخصصة');
-                return;
-            }
-            try {
-                const parsedHeaders = JSON.parse(customHeaders);
-                result = `الرابط الأصلي: ${protectedUrl}\n\nالرؤوس المخصصة:\n${JSON.stringify(parsedHeaders, null, 2)}\n\nملاحظة: استخدم هذه الرؤوس عند طلب الرابط`;
-            } catch (error) {
-                app.notifyError('تنسيق JSON غير صحيح');
-                return;
-            }
-            break;
-    }
-    
-    // Show result
-    const resultSection = document.getElementById('protectionResult');
-    const resultText = document.getElementById('protectionResultText');
-    
-    resultText.value = result;
-    resultSection.style.display = 'block';
-    
-    app.notifySuccess('تم تحليل الحماية بنجاح');
-}
-
-function analyzeProtection() {
-    const protectedUrl = document.getElementById('protectedUrl').value;
-    
-    if (!protectedUrl) {
-        app.notifyError('يرجى إدخال الرابط المحمي');
-        return;
-    }
-    
-    app.notifyInfo('جارٍ تحليل الحماية...');
-    
-    // Simulate analysis
-    setTimeout(() => {
-        const analysis = `تحليل الرابط: ${protectedUrl}\n\nالتحليل:\n1. نوع الحماية المحتمل: CORS/Referer\n2. الحلول المقترحة:\n   - استخدام خادم وكيل\n   - إضافة رؤوس Referer و Origin\n   - تجربة أدوات إزالة CORS\n\nملاحظة: هذا تحليل تلقائي، قد تحتاج إلى تجربة حلول مختلفة`;
-        
-        const resultSection = document.getElementById('protectionResult');
-        const resultText = document.getElementById('protectionResultText');
-        
-        resultText.value = analysis;
-        resultSection.style.display = 'block';
-        
-        app.notifySuccess('تم تحليل الحماية بنجاح');
-    }, 1500);
-}
-
-function copyProtectionResult() {
-    const resultText = document.getElementById('protectionResultText');
-    resultText.select();
-    document.execCommand('copy');
-    app.notifySuccess('تم نسخ النتيجة إلى الحافظة');
 }
 
 function openConsoleInfo() {
