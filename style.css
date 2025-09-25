@@ -18472,6 +18472,32 @@ body.animations-disabled * {
 
 }
 
+.footer-design a {
+
+    color: var(--text-primary);
+
+    text-decoration: underline;
+
+    font-weight: bold;
+
+    transition: all 0.3s ease;
+
+    text-decoration-color: var(--highlight-color);
+
+    text-decoration-thickness: 2px;
+
+}
+
+.footer-design a:hover {
+
+    color: var(--highlight-color);
+
+    text-decoration-color: var(--text-primary);
+
+    transform: translateY(-1px);
+
+}
+
 
 
 .footer-version {
