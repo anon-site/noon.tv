@@ -947,7 +947,8 @@
       "category": "entertainment",
       "country": "السعودية",
       "type": "hls",
-      "status": "active"
+      "status": "active",
+      "lastModified": "2025-09-25T04:37:10.393Z"
     },
     {
       "id": 118,
@@ -957,7 +958,8 @@
       "category": "entertainment",
       "country": "لبنان",
       "type": "hls",
-      "status": "active"
+      "status": "active",
+      "lastModified": "2025-09-25T04:37:10.393Z"
     },
     {
       "id": 119,
@@ -967,7 +969,8 @@
       "category": "entertainment",
       "country": "الامارات",
       "type": "hls",
-      "status": "active"
+      "status": "active",
+      "lastModified": "2025-09-25T04:37:10.393Z"
     },
     {
       "id": 120,
@@ -1046,6 +1049,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-25T01:46:16.260Z",
+  "lastModified": "2025-09-26T09:30:50.523Z",
   "version": "1.0"
 }
