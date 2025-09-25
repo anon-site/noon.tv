@@ -936,18 +936,18 @@
       "category": "movies",
       "country": "السعودية",
       "type": "hls",
-      "status": "inactive",
+      "status": "active",
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
       "id": 117,
-      "name": "المجد قرآن",
-      "url": "https://games1.elahmad.xyz/tv756_www.elahmad.com_almajd_quran/index.m3u8?token=d7aeaf7daf2b0f824fc5490797c9003f8ea1f345-95f83f4394ad875c3d657142c18ab439-1758736822-1758726022",
-      "logo": "https://almajdtv.com/wp-content/uploads/2021/08/Quran_Cover.png",
-      "category": "religious",
+      "name": "الخليج",
+      "url": "https://mn-nl.mncdn.com/khalij/khalij/playlist.m3u8",
+      "logo": "https://iili.io/KAv9q7V.png",
+      "category": "entertainment",
       "country": "السعودية",
       "type": "hls",
-      "status": "inactive"
+      "status": "active"
     },
     {
       "id": 118,
@@ -957,7 +957,7 @@
       "category": "entertainment",
       "country": "لبنان",
       "type": "hls",
-      "status": "inactive"
+      "status": "active"
     },
     {
       "id": 119,
@@ -966,6 +966,16 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/a/ac/DUBAI_TELEVISION_LOGO_2004-2009.png",
       "category": "entertainment",
       "country": "الامارات",
+      "type": "hls",
+      "status": "active"
+    },
+    {
+      "id": 120,
+      "name": "MBC Iraq",
+      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-iraq/e38c44b1b43474e1c39cb5b90203691e/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/MBC_Iraq.svg/2560px-MBC_Iraq.svg.png",
+      "category": "entertainment",
+      "country": "العراق",
       "type": "hls",
       "status": "inactive"
     }
@@ -1036,6 +1046,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-25T01:22:25.492Z",
+  "lastModified": "2025-09-25T01:46:16.260Z",
   "version": "1.0"
 }
