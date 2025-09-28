@@ -748,48 +748,12 @@
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
-      "id": 89,
-      "name": "طيور الجنة",
-      "url": "https://www.youtube.com/watch?v=UcQPvoO4wzk",
-      "logo": "https://upload.wikimedia.org/wikipedia/ar/thumb/2/21/%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D8%A7%D8%A9_%D8%B7%D9%8A%D9%88%D8%B1_%D8%A7%D9%84%D8%AC%D9%86%D8%A9.svg/280px-%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D8%A7%D8%A9_%D8%B7%D9%8A%D9%88%D8%B1_%D8%A7%D9%84%D8%AC%D9%86%D8%A9.svg.png",
-      "category": "kids",
-      "country": "قطر",
-      "type": "youtube",
-      "status": "active",
-      "isLocal": false,
-      "lastModified": "2025-09-24T23:40:56.300Z"
-    },
-    {
-      "id": 91,
-      "name": "توم وجيري",
-      "url": "https://live20.bozztv.com/giatvplayout7/giatv-208314/playlist.m3u8",
-      "logo": "https://www.pngarts.com/files/4/Tom-And-Jerry-PNG-High-Quality-Image.png",
-      "category": "kids",
-      "country": "عالمية",
-      "type": "hls",
-      "status": "active",
-      "isLocal": false,
-      "lastModified": "2025-09-24T23:40:56.300Z"
-    },
-    {
       "id": 94,
       "name": "Wildlife",
       "url": "https://www.youtube.com/watch?v=daqB3i9WYIY",
       "logo": "https://cdn-icons-png.flaticon.com/512/8653/8653081.png",
       "category": "entertainment",
       "country": "عالمية",
-      "type": "youtube",
-      "status": "active",
-      "isLocal": false,
-      "lastModified": "2025-09-24T23:40:56.300Z"
-    },
-    {
-      "id": 95,
-      "name": "Spanish Guitar",
-      "url": "https://www.youtube.com/watch?v=BPcUxivZHuU",
-      "logo": "https://iili.io/K7EBEHg.png",
-      "category": "music",
-      "country": "Spain",
       "type": "youtube",
       "status": "active",
       "isLocal": false,
@@ -815,18 +779,6 @@
       "category": "movies",
       "country": "USA",
       "type": "hls",
-      "status": "active",
-      "isLocal": false,
-      "lastModified": "2025-09-24T23:40:56.300Z"
-    },
-    {
-      "id": 98,
-      "name": "Classical Guitar",
-      "url": "https://www.youtube.com/watch?v=mLVBNUG5gP4",
-      "logo": "https://cdn1.iconfinder.com/data/icons/games-and-fun-1/100/games_and_fun_guitar-4-512.png",
-      "category": "music",
-      "country": "Spain",
-      "type": "youtube",
       "status": "active",
       "isLocal": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
@@ -862,6 +814,52 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/3/36/Tve_teledeporte.png",
       "category": "sports",
       "country": "اسبانيا",
+      "type": "hls",
+      "status": "active",
+      "isLocal": false,
+      "lastModified": "2025-09-24T23:40:56.300Z"
+    },
+    {
+      "id": 119,
+      "name": "دبي",
+      "url": "https://dmieigthvllta.cdn.mgmlcdn.com/dubaitvht/smil:dubaitv.stream.smil/chunklist.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/a/ac/DUBAI_TELEVISION_LOGO_2004-2009.png",
+      "category": "entertainment",
+      "country": "الامارات",
+      "type": "hls",
+      "status": "active",
+      "lastModified": "2025-09-25T04:37:10.393Z"
+    },
+    {
+      "id": 120,
+      "name": "Baby shark",
+      "url": "https://c0c65b821b3542c3a4dca92702f59944.mediatailor.us-east-1.amazonaws.com/v1/master/04fd913bb278d8775298c26fdca9d9841f37601f/RakutenTV-eu_BabySharkTV/playlist.m3u8",
+      "logo": "https://i.imgur.com/SbBKr8L.png",
+      "category": "kids",
+      "country": "عالمية",
+      "type": "hls",
+      "status": "active",
+      "lastModified": "2025-09-28T23:21:38.547Z"
+    },
+    {
+      "id": 89,
+      "name": "طيور الجنة",
+      "url": "https://www.youtube.com/watch?v=UcQPvoO4wzk",
+      "logo": "https://upload.wikimedia.org/wikipedia/ar/thumb/2/21/%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D8%A7%D8%A9_%D8%B7%D9%8A%D9%88%D8%B1_%D8%A7%D9%84%D8%AC%D9%86%D8%A9.svg/280px-%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D8%A7%D8%A9_%D8%B7%D9%8A%D9%88%D8%B1_%D8%A7%D9%84%D8%AC%D9%86%D8%A9.svg.png",
+      "category": "kids",
+      "country": "قطر",
+      "type": "youtube",
+      "status": "active",
+      "isLocal": false,
+      "lastModified": "2025-09-24T23:40:56.300Z"
+    },
+    {
+      "id": 91,
+      "name": "توم وجيري",
+      "url": "https://live20.bozztv.com/giatvplayout7/giatv-208314/playlist.m3u8",
+      "logo": "https://www.pngarts.com/files/4/Tom-And-Jerry-PNG-High-Quality-Image.png",
+      "category": "kids",
+      "country": "عالمية",
       "type": "hls",
       "status": "active",
       "isLocal": false,
@@ -984,26 +982,28 @@
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
-      "id": 119,
-      "name": "دبي",
-      "url": "https://dmieigthvllta.cdn.mgmlcdn.com/dubaitvht/smil:dubaitv.stream.smil/chunklist.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/a/ac/DUBAI_TELEVISION_LOGO_2004-2009.png",
-      "category": "entertainment",
-      "country": "الامارات",
-      "type": "hls",
+      "id": 95,
+      "name": "Spanish Guitar",
+      "url": "https://www.youtube.com/watch?v=BPcUxivZHuU",
+      "logo": "https://iili.io/K7EBEHg.png",
+      "category": "music",
+      "country": "Spain",
+      "type": "youtube",
       "status": "active",
-      "lastModified": "2025-09-25T04:37:10.393Z"
+      "isLocal": false,
+      "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
-      "id": 120,
-      "name": "Baby shark",
-      "url": "https://c0c65b821b3542c3a4dca92702f59944.mediatailor.us-east-1.amazonaws.com/v1/master/04fd913bb278d8775298c26fdca9d9841f37601f/RakutenTV-eu_BabySharkTV/playlist.m3u8",
-      "logo": "https://i.imgur.com/SbBKr8L.png",
-      "category": "kids",
-      "country": "عالمية",
-      "type": "hls",
+      "id": 98,
+      "name": "Classical Guitar",
+      "url": "https://www.youtube.com/watch?v=mLVBNUG5gP4",
+      "logo": "https://cdn1.iconfinder.com/data/icons/games-and-fun-1/100/games_and_fun_guitar-4-512.png",
+      "category": "music",
+      "country": "Spain",
+      "type": "youtube",
       "status": "active",
-      "lastModified": "2025-09-28T23:21:38.547Z"
+      "isLocal": false,
+      "lastModified": "2025-09-24T23:40:56.300Z"
     }
   ],
   "favorites": [],
@@ -1072,6 +1072,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-29T02:59:54.950Z",
+  "lastModified": "2025-09-29T03:11:07.592Z",
   "version": "1.0"
 }
