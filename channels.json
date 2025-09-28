@@ -981,7 +981,7 @@
       "country": "عالمية",
       "type": "hls",
       "status": "active",
-      "lastModified": "2025-09-28T23:21:38.547Z"
+      "lastModified": "2025-09-28T23:27:03.108Z"
     },
     {
       "id": 121,
@@ -992,7 +992,7 @@
       "country": "عالمية",
       "type": "hls",
       "status": "active",
-      "lastModified": "2025-09-28T23:21:38.547Z"
+      "lastModified": "2025-09-28T23:27:03.108Z"
     },
     {
       "id": 122,
@@ -1071,6 +1071,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-28T23:39:12.819Z",
+  "lastModified": "2025-09-28T23:39:30.472Z",
   "version": "1.0"
 }
