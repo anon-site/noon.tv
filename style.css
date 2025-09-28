@@ -18682,6 +18682,218 @@ body[data-theme="light"] .legal-link:hover {
 
 }
 
+/* Inline App Download Section Styles */
+
+.app-download-inline {
+
+    margin-top: 1rem;
+
+    padding: 1rem;
+
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(59, 130, 246, 0.05));
+
+    border-radius: 8px;
+
+    border: 1px solid rgba(16, 185, 129, 0.1);
+
+}
+
+.app-download-content {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 1rem;
+
+}
+
+.download-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 0.5rem;
+
+    flex: 1;
+
+}
+
+.download-text {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 0.5rem;
+
+    color: var(--text-primary);
+
+    font-weight: 600;
+
+    font-size: 0.9rem;
+
+}
+
+.download-text i {
+
+    color: var(--highlight-color);
+
+    font-size: 1rem;
+
+}
+
+.download-features {
+
+    display: flex;
+
+    gap: 0.5rem;
+
+    flex-wrap: wrap;
+
+}
+
+.feature-badge {
+
+    background: rgba(16, 185, 129, 0.1);
+
+    color: #10b981;
+
+    padding: 0.25rem 0.5rem;
+
+    border-radius: 4px;
+
+    font-size: 0.75rem;
+
+    font-weight: 500;
+
+}
+
+.download-btn-inline {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 0.5rem;
+
+    background: linear-gradient(135deg, var(--highlight-color), #10b981);
+
+    color: white;
+
+    text-decoration: none;
+
+    padding: 0.5rem 1rem;
+
+    border-radius: 6px;
+
+    font-weight: 600;
+
+    font-size: 0.85rem;
+
+    transition: all 0.3s ease;
+
+    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+
+    white-space: nowrap;
+
+}
+
+.download-btn-inline:hover {
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 3px 8px rgba(59, 130, 246, 0.4);
+
+    color: white;
+
+}
+
+.download-btn-inline i {
+
+    font-size: 0.9rem;
+
+}
+
+/* Light theme for inline app download */
+
+body[data-theme="light"] .app-download-inline {
+
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.03), rgba(59, 130, 246, 0.03));
+
+    border-color: rgba(16, 185, 129, 0.08);
+
+}
+
+body[data-theme="light"] .download-text i {
+
+    color: #3b82f6;
+
+}
+
+body[data-theme="light"] .feature-badge {
+
+    background: rgba(16, 185, 129, 0.08);
+
+    color: #059669;
+
+}
+
+/* Mobile responsive for inline app download */
+
+@media (max-width: 768px) {
+
+    .app-download-content {
+
+        flex-direction: column;
+
+        gap: 0.75rem;
+
+        text-align: center;
+
+    }
+
+    .download-info {
+
+        align-items: center;
+
+    }
+
+    .download-features {
+
+        justify-content: center;
+
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .app-download-inline {
+
+        padding: 0.75rem;
+
+    }
+
+    .download-text {
+
+        font-size: 0.85rem;
+
+    }
+
+    .download-btn-inline {
+
+        padding: 0.5rem 0.75rem;
+
+        font-size: 0.8rem;
+
+    }
+
+}
+
 
 
 /* YouTube Ad Blocking Styles */
