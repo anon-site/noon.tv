@@ -812,7 +812,7 @@
       "category": "kids",
       "country": "USA",
       "type": "hls",
-      "status": "active",
+      "status": "inactive",
       "isLocal": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
@@ -824,13 +824,13 @@
       "category": "kids",
       "country": "USA",
       "type": "hls",
-      "status": "active",
+      "status": "inactive",
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
       "id": 110,
       "name": "Disney Channel East",
-      "url": "https://fl7.moveonjoy.com/DISNEY/index.m3u8",
+      "url": "https://cache1a.netplus.ch/tok_eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOiIxNzU5MTAyOTAzIiwic2lwIjoiIiwicGF0aCI6Ii9saXZlL2Vkcy9kaXNuZXljaGFubmVsZGUvYnJvd3Nlci1ITFM4LyIsInNlc3Npb25fY2RuX2lkIjoiZTgzM2Y3OGJkMWY5ZjllMiIsInNlc3Npb25faWQiOiIiLCJjbGllbnRfaWQiOiIiLCJkZXZpY2VfaWQiOiIiLCJtYXhfc2Vzc2lvbnMiOjAsInNlc3Npb25fZHVyYXRpb24iOjAsInVybCI6Imh0dHBzOi8vMTAuMC4yMjkuMjIiLCJzZXNzaW9uX3RpbWVvdXQiOjAsImF1ZCI6IjUzIiwic291cmNlcyI6Wzg0XX0=.wCwW44vbZZOyltiQXYGnX1hT78AIQgsUPSRGGCcx5-qfUOaZYdvoYy0ghXGKc20y7Q0q1B45NYSAaLZSbFfefg==/live/eds/disneychannelde/browser-HLS8/disneychannelde.m3u8",
       "logo": "https://iili.io/KcdkPON.png",
       "category": "kids",
       "country": "USA",
@@ -846,7 +846,7 @@
       "category": "kids",
       "country": "USA",
       "type": "hls",
-      "status": "active",
+      "status": "inactive",
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -1039,6 +1039,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-26T09:31:24.516Z",
+  "lastModified": "2025-09-28T19:47:07.572Z",
   "version": "1.0"
 }
