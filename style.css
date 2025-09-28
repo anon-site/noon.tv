@@ -14914,6 +14914,26 @@ body[data-theme="light"] .mobile-nav-tab.active .tab-count {
 
 }
 
+/* Light theme for mobile TV dropdown tab counts */
+
+body[data-theme="light"] .mobile-tv-dropdown-item .tab-count {
+
+    background: rgba(59, 130, 246, 0.15);
+
+    color: #1d4ed8;
+
+}
+
+/* Light theme for mobile sidebar tab counts */
+
+body[data-theme="light"] .mobile-sidebar-nav-tab .tab-count {
+
+    background: rgba(59, 130, 246, 0.15);
+
+    color: #1d4ed8;
+
+}
+
 
 
 
@@ -27181,6 +27201,24 @@ body[data-theme="light"] .categories-dropdown .category-item:hover {
 body[data-theme="light"] .categories-dropdown .category-item.active {
 
     background: #3b82f6;
+
+    color: white;
+
+}
+
+/* Light theme for category counts in dropdown */
+
+body[data-theme="light"] .categories-dropdown .category-count {
+
+    background: rgba(59, 130, 246, 0.15);
+
+    color: #1d4ed8;
+
+}
+
+body[data-theme="light"] .categories-dropdown .category-item.active .category-count {
+
+    background: rgba(255, 255, 255, 0.3);
 
     color: white;
 
