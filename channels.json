@@ -818,13 +818,13 @@
     },
     {
       "id": 109,
-      "name": "Disney Junior East",
-      "url": "https://fl7.moveonjoy.com/DISNEY_JR/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/2024_Disney_Jr._Logo.svg/1280px-2024_Disney_Jr._Logo.svg.png",
+      "name": "Disney International",
+      "url": "https://live.dinesh29.com.np/stream/jiotvplus/disneyinternationalhd/master.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c7/DIHDlogo.png",
       "category": "kids",
       "country": "USA",
       "type": "hls",
-      "status": "inactive",
+      "status": "active",
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -981,6 +981,16 @@
       "country": "عالمية",
       "type": "hls",
       "status": "active"
+    },
+    {
+      "id": 121,
+      "name": "Dove TV",
+      "url": "https://linear-896.frequency.stream/dist/xumo/896/hls/master/playlist.m3u8",
+      "logo": "https://iili.io/KEdh4yJ.webp",
+      "category": "entertainment",
+      "country": "عالمية",
+      "type": "hls",
+      "status": "active"
     }
   ],
   "favorites": [],
@@ -1049,6 +1059,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-28T23:12:27.003Z",
+  "lastModified": "2025-09-28T23:23:12.097Z",
   "version": "1.0"
 }
