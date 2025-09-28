@@ -663,11 +663,11 @@
     {
       "id": 91,
       "name": "توم وجيري",
-      "url": "https://www.youtube.com/watch?v=rEKifG2XUZg",
+      "url": "https://live20.bozztv.com/giatvplayout7/giatv-208314/playlist.m3u8",
       "logo": "https://www.pngarts.com/files/4/Tom-And-Jerry-PNG-High-Quality-Image.png",
       "category": "kids",
       "country": "عالمية",
-      "type": "youtube",
+      "type": "hls",
       "status": "active",
       "isLocal": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
@@ -971,6 +971,16 @@
       "type": "hls",
       "status": "active",
       "lastModified": "2025-09-25T04:37:10.393Z"
+    },
+    {
+      "id": 120,
+      "name": "Baby shark",
+      "url": "https://c0c65b821b3542c3a4dca92702f59944.mediatailor.us-east-1.amazonaws.com/v1/master/04fd913bb278d8775298c26fdca9d9841f37601f/RakutenTV-eu_BabySharkTV/playlist.m3u8",
+      "logo": "https://i.imgur.com/SbBKr8L.png",
+      "category": "kids",
+      "country": "عالمية",
+      "type": "hls",
+      "status": "active"
     }
   ],
   "favorites": [],
@@ -1039,6 +1049,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-28T21:45:56.272Z",
+  "lastModified": "2025-09-28T23:12:27.003Z",
   "version": "1.0"
 }
