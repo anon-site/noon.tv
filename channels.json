@@ -1004,6 +1004,16 @@
       "status": "active",
       "isLocal": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+    },
+    {
+      "id": 123,
+      "name": "Ifilm AR",
+      "url": "https://live.presstv.ir/hls/ifilmar.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/7/7b/%D9%84%D9%88%DA%AF%D9%88%DB%8C_%D8%A2%DB%8C_%D9%81%DB%8C%D9%84%D9%85.png",
+      "category": "entertainment",
+      "country": "ايران",
+      "type": "hls",
+      "status": "active"
     }
   ],
   "favorites": [],
@@ -1072,6 +1082,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-30T06:59:58.823Z",
+  "lastModified": "2025-09-30T07:50:14.731Z",
   "version": "1.0"
 }
