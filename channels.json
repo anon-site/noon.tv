@@ -114,14 +114,14 @@
     {
       "id": 113,
       "name": "MBC 4",
-      "url": "https://tgn.bozztv.com/eshgtv-trn09/ga-mchannel4/index.m3u8",
+      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-4/24f134f1cd63db9346439e96b86ca6ed/index.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/MBC_4_Logo.svg/867px-MBC_4_Logo.svg.png",
       "category": "entertainment",
       "country": "الامارات",
       "type": "hls",
       "status": "active",
       "lastModified": "2025-09-24T23:40:56.300Z",
-      "vpn": false
+      "vpn": true
     },
     {
       "id": 114,
@@ -1235,6 +1235,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-02T03:46:35.427Z",
+  "lastModified": "2025-10-02T08:25:10.368Z",
   "version": "1.0"
 }
