@@ -81,6 +81,17 @@
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
+      "id": 112,
+      "name": "MBC 3",
+      "url": "https://tgn.bozztv.com/eshgtv-trn09/ga-mchannel3/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/6/62/MBC_3_Transparent_Background_Logo.png",
+      "category": "kids",
+      "country": "الامارات",
+      "type": "hls",
+      "status": "active",
+      "lastModified": "2025-09-24T23:40:56.300Z"
+    },
+    {
       "id": 113,
       "name": "MBC 4",
       "url": "https://tgn.bozztv.com/eshgtv-trn09/ga-mchannel4/index.m3u8",
@@ -168,18 +179,6 @@
       "logo": "https://www.istiqama.tv/wp-content/uploads/2024/05/cropped-Channel-Logo-2024-scaled.png",
       "category": "religious",
       "country": "عُمان",
-      "type": "hls",
-      "status": "active",
-      "isLocal": false,
-      "lastModified": "2025-09-24T23:40:56.300Z"
-    },
-    {
-      "id": 78,
-      "name": "المعارف",
-      "url": "https://672a3a5c8e335.streamlock.net/AlMaaref/smil:almaareflive.smil/playlist.m3u8",
-      "logo": "https://iili.io/KREneEX.png",
-      "category": "religious",
-      "country": "قطر",
       "type": "hls",
       "status": "active",
       "isLocal": false,
@@ -570,18 +569,6 @@
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
-      "id": 72,
-      "name": "الكوفية",
-      "url": "https://customer-9vqui33qma2rownb.cloudflarestream.com/7792e558fe54e23bdd4b462ec275cdba/manifest/video.m3u8",
-      "logo": "https://iili.io/KubCsz7.png",
-      "category": "entertainment",
-      "country": "فلسطين",
-      "type": "hls",
-      "status": "inactive",
-      "isLocal": false,
-      "lastModified": "2025-09-24T23:40:56.300Z"
-    },
-    {
       "id": 73,
       "name": "TRT العربية",
       "url": "https://tv-trtarabi.medya.trt.com.tr/master.m3u8",
@@ -594,48 +581,12 @@
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
-      "id": 74,
-      "name": "DMC",
-      "url": "https://bcovlive-a.akamaihd.net/ba3169004d40484b9ff29e194964c9e8/eu-west-1/6057955906001/playlist.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/9/94/Logo_DMC_TV_2015.png",
-      "category": "entertainment",
-      "country": "مصر",
-      "type": "hls",
-      "status": "inactive",
-      "isLocal": false,
-      "lastModified": "2025-09-24T23:40:56.300Z"
-    },
-    {
       "id": 75,
       "name": "PNC دراما",
       "url": "https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/pnc-drama/master.m3u8",
       "logo": "https://iili.io/KubvvAg.png",
       "category": "entertainment",
       "country": "مصر",
-      "type": "hls",
-      "status": "active",
-      "isLocal": false,
-      "lastModified": "2025-09-24T23:40:56.300Z"
-    },
-    {
-      "id": 76,
-      "name": "ON e",
-      "url": "https://bcovlive-a.akamaihd.net/3dc60bab470f4c9fbf00408ecb7c3d7a/eu-west-1/6057955906001/playlist_dvr.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/0/06/ON_logo.png",
-      "category": "entertainment",
-      "country": "مصر",
-      "type": "hls",
-      "status": "inactive",
-      "isLocal": false,
-      "lastModified": "2025-09-24T23:40:56.300Z"
-    },
-    {
-      "id": 78,
-      "name": "المعارف",
-      "url": "https://672a3a5c8e335.streamlock.net/AlMaaref/smil:almaareflive.smil/playlist.m3u8",
-      "logo": "https://iili.io/KREneEX.png",
-      "category": "religious",
-      "country": "قطر",
       "type": "hls",
       "status": "active",
       "isLocal": false,
@@ -897,7 +848,8 @@
       "category": "kids",
       "country": "USA",
       "type": "hls",
-      "status": "active"
+      "status": "active",
+      "lastModified": "2025-10-01T20:03:33.025Z"
     },
     {
       "id": 106,
@@ -921,17 +873,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "lastModified": "2025-09-24T23:40:56.300Z"
-    },
-    {
-      "id": 112,
-      "name": "MBC 3",
-      "url": "https://tgn.bozztv.com/eshgtv-trn09/ga-mchannel3/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/6/62/MBC_3_Transparent_Background_Logo.png",
-      "category": "kids",
-      "country": "الامارات",
-      "type": "hls",
-      "status": "active",
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -1069,6 +1010,66 @@
       "type": "hls",
       "status": "active",
       "lastModified": "2025-09-30T07:56:07.537Z"
+    },
+    {
+      "id": 78,
+      "name": "المعارف",
+      "url": "https://672a3a5c8e335.streamlock.net/AlMaaref/smil:almaareflive.smil/playlist.m3u8",
+      "logo": "https://iili.io/KREneEX.png",
+      "category": "religious",
+      "country": "قطر",
+      "type": "hls",
+      "status": "active",
+      "isLocal": false,
+      "lastModified": "2025-09-24T23:40:56.300Z"
+    },
+    {
+      "id": 72,
+      "name": "الكوفية",
+      "url": "https://customer-9vqui33qma2rownb.cloudflarestream.com/7792e558fe54e23bdd4b462ec275cdba/manifest/video.m3u8",
+      "logo": "https://iili.io/KubCsz7.png",
+      "category": "entertainment",
+      "country": "فلسطين",
+      "type": "hls",
+      "status": "inactive",
+      "isLocal": false,
+      "lastModified": "2025-09-24T23:40:56.300Z"
+    },
+    {
+      "id": 74,
+      "name": "DMC",
+      "url": "https://bcovlive-a.akamaihd.net/ba3169004d40484b9ff29e194964c9e8/eu-west-1/6057955906001/playlist.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/9/94/Logo_DMC_TV_2015.png",
+      "category": "entertainment",
+      "country": "مصر",
+      "type": "hls",
+      "status": "inactive",
+      "isLocal": false,
+      "lastModified": "2025-09-24T23:40:56.300Z"
+    },
+    {
+      "id": 76,
+      "name": "ON e",
+      "url": "https://bcovlive-a.akamaihd.net/3dc60bab470f4c9fbf00408ecb7c3d7a/eu-west-1/6057955906001/playlist_dvr.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/0/06/ON_logo.png",
+      "category": "entertainment",
+      "country": "مصر",
+      "type": "hls",
+      "status": "inactive",
+      "isLocal": false,
+      "lastModified": "2025-09-24T23:40:56.300Z"
+    },
+    {
+      "id": 78,
+      "name": "المعارف",
+      "url": "https://672a3a5c8e335.streamlock.net/AlMaaref/smil:almaareflive.smil/playlist.m3u8",
+      "logo": "https://iili.io/KREneEX.png",
+      "category": "religious",
+      "country": "قطر",
+      "type": "hls",
+      "status": "active",
+      "isLocal": false,
+      "lastModified": "2025-09-24T23:40:56.300Z"
     }
   ],
   "favorites": [],
@@ -1137,6 +1138,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-01T19:28:40.354Z",
+  "lastModified": "2025-10-01T20:06:13.751Z",
   "version": "1.0"
 }
