@@ -826,7 +826,12 @@ class ArabicTVApp {
         // إنشاء placeholder محسن للشعار
         const logoPlaceholder = this.createLogoPlaceholder(channel);
         
+        // العثور على رقم القناة (الفهرس + 1)
+        const channelIndex = this.channels.findIndex(ch => ch.id === channel.id);
+        const channelNumber = channelIndex + 1;
+        
         card.innerHTML = `
+            <div class="channel-number">${channelNumber}</div>
             <img src="${channel.logo}" alt="${channel.name}" class="channel-logo" 
                  onerror="this.src='${logoPlaceholder}'; this.classList.add('placeholder-logo');">
             <div class="channel-info">
@@ -2238,7 +2243,14 @@ class ArabicTVApp {
 
         items.forEach(item => {
             const name = item.querySelector('h4').textContent.toLowerCase();
-            const shouldShow = name.includes(searchTerm);
+            const channelId = parseInt(item.dataset.channelId);
+            
+            // العثور على رقم القناة
+            const channelIndex = this.channels.findIndex(ch => ch.id === channelId);
+            const channelNumber = channelIndex + 1;
+            
+            const shouldShow = name.includes(searchTerm) || 
+                              channelNumber.toString().includes(searchTerm);
             item.style.display = shouldShow ? 'flex' : 'none';
         });
     }
@@ -5882,8 +5894,13 @@ class ArabicTVApp {
         if (searchInput && searchInput.value.trim()) {
             const searchTerm = searchInput.value.toLowerCase().trim();
             filtered = filtered.filter(channel => {
+                // العثور على رقم القناة
+                const channelIndex = this.channels.findIndex(ch => ch.id === channel.id);
+                const channelNumber = channelIndex + 1;
+                
                 return channel.name.toLowerCase().includes(searchTerm) ||
-                       channel.country.toLowerCase().includes(searchTerm);
+                       channel.country.toLowerCase().includes(searchTerm) ||
+                       channelNumber.toString().includes(searchTerm);
             });
             console.log('بعد تصفية البحث:', filtered.length);
         }
@@ -6275,7 +6292,12 @@ class ArabicTVApp {
         const statusClass = isActive ? 'active' : 'inactive';
         const statusIcon = isActive ? 'fas fa-circle' : 'fas fa-circle';
         
+        // العثور على رقم القناة (الفهرس + 1)
+        const channelIndex = this.channels.findIndex(ch => ch.id === channel.id);
+        const channelNumber = channelIndex + 1;
+        
         card.innerHTML = `
+            <div class="channel-number">${channelNumber}</div>
             <img src="${channel.logo}" alt="${channel.name}" class="channel-logo" 
                  onerror="this.src='${logoPlaceholder}'; this.classList.add('placeholder-logo');">
             <div class="channel-info">
@@ -7959,10 +7981,15 @@ function setupMobileSearch() {
 function performMobileSearch(query) {
     if (!window.app) return;
     
-    const results = window.app.channels.filter(channel => 
-        channel.name.toLowerCase().includes(query.toLowerCase()) ||
-        channel.country.toLowerCase().includes(query.toLowerCase())
-    );
+    const results = window.app.channels.filter(channel => {
+        // العثور على رقم القناة
+        const channelIndex = window.app.channels.findIndex(ch => ch.id === channel.id);
+        const channelNumber = channelIndex + 1;
+        
+        return channel.name.toLowerCase().includes(query.toLowerCase()) ||
+               channel.country.toLowerCase().includes(query.toLowerCase()) ||
+               channelNumber.toString().includes(query);
+    });
     
     const searchResults = document.getElementById('searchResults');
     if (!searchResults) return;
@@ -7978,6 +8005,10 @@ function performMobileSearch(query) {
         </div>
         ${results.map(channel => {
             console.log('إنشاء عنصر بحث للقناة:', channel.name, 'مع ID:', channel.id);
+            // العثور على رقم القناة
+            const channelIndex = window.app.channels.findIndex(ch => ch.id === channel.id);
+            const channelNumber = channelIndex + 1;
+            
             return `
             <div class="search-result-item" onclick="selectChannelFromSearch(${channel.id})">
                 <div class="search-result-logo">
@@ -7986,7 +8017,7 @@ function performMobileSearch(query) {
                 </div>
                 <div class="search-result-info">
                     <h4>${channel.name}</h4>
-                    <p>${channel.country}</p>
+                    <p>${channel.country} • رقم ${channelNumber}</p>
                 </div>
             </div>
         `;

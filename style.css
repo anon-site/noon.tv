@@ -4944,7 +4944,15 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
 
     }
 
-    
+    /* Channel number adjustments for mobile */
+    .channel-number {
+        top: 50px;
+        right: 10px;
+        font-size: 0.75rem;
+        padding: 3px 6px;
+        min-width: 20px;
+        border-radius: 10px;
+    }
 
     .channel-card {
 
@@ -5052,6 +5060,16 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
 
     }
 
+    /* Channel number adjustments for small screens */
+    .channel-number {
+        top: 45px;
+        right: 8px;
+        font-size: 0.7rem;
+        padding: 2px 5px;
+        min-width: 18px;
+        border-radius: 8px;
+    }
+
     
 
     .channel-logo {
@@ -5118,6 +5136,16 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
 
     }
 
+    /* Channel number adjustments for extra small screens */
+    .channel-number {
+        top: 40px;
+        right: 6px;
+        font-size: 0.65rem;
+        padding: 2px 4px;
+        min-width: 16px;
+        border-radius: 6px;
+    }
+
     
 
     .channel-logo {
@@ -5180,6 +5208,16 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
 
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 
+    }
+
+    /* Channel number adjustments for very small screens */
+    .channel-number {
+        top: 35px;
+        right: 5px;
+        font-size: 0.6rem;
+        padding: 1px 3px;
+        min-width: 14px;
+        border-radius: 4px;
     }
 
     
@@ -5280,6 +5318,41 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
 
     border-color: var(--highlight-color);
 
+}
+
+/* Channel Number Styles */
+.channel-number {
+    position: absolute;
+    top: 60px;
+    right: 12px;
+    background: var(--highlight-color);
+    color: white;
+    font-weight: bold;
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    border-radius: 12px;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    min-width: 24px;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.channel-card:hover .channel-number {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark theme adjustments for channel numbers */
+body[data-theme="dark"] .channel-number {
+    background: var(--accent-color);
+    color: white;
+}
+
+/* Light theme adjustments for channel numbers */
+body[data-theme="light"] .channel-number {
+    background: var(--highlight-color);
+    color: white;
 }
 
 
