@@ -81,6 +81,17 @@
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
+      "id": 112,
+      "name": "MBC 3",
+      "url": "https://tgn.bozztv.com/eshgtv-trn09/ga-mchannel3/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/6/62/MBC_3_Transparent_Background_Logo.png",
+      "category": "kids",
+      "country": "الامارات",
+      "type": "hls",
+      "status": "active",
+      "lastModified": "2025-09-24T23:40:56.300Z"
+    },
+    {
       "id": 113,
       "name": "MBC 4",
       "url": "https://tgn.bozztv.com/eshgtv-trn09/ga-mchannel4/index.m3u8",
@@ -853,17 +864,6 @@
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
-      "id": 112,
-      "name": "MBC 3",
-      "url": "https://tgn.bozztv.com/eshgtv-trn09/ga-mchannel3/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/6/62/MBC_3_Transparent_Background_Logo.png",
-      "category": "kids",
-      "country": "الامارات",
-      "type": "hls",
-      "status": "active",
-      "lastModified": "2025-09-24T23:40:56.300Z"
-    },
-    {
       "id": 95,
       "name": "Spanish Guitar",
       "url": "https://www.youtube.com/watch?v=BPcUxivZHuU",
@@ -1066,6 +1066,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-01T20:08:44.359Z",
+  "lastModified": "2025-10-01T20:10:27.277Z",
   "version": "1.0"
 }
