@@ -81,6 +81,17 @@
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
+      "id": 133,
+      "name": "MBC 2",
+      "url": "https://tgn.bozztv.com/eshgtv-trn09/ga-mchannel2/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/5/50/MBC2_Logo.png",
+      "category": "movies",
+      "country": "الامارات",
+      "type": "hls",
+      "status": "active",
+      "lastModified": "2025-10-02T00:50:06.463Z"
+    },
+    {
       "id": 112,
       "name": "MBC 3",
       "url": "https://tgn.bozztv.com/eshgtv-trn09/ga-mchannel3/index.m3u8",
@@ -1007,7 +1018,8 @@
       "category": "news",
       "country": "قطر",
       "type": "hls",
-      "status": "active"
+      "status": "active",
+      "lastModified": "2025-10-02T00:50:06.463Z"
     },
     {
       "id": 130,
@@ -1017,7 +1029,8 @@
       "category": "entertainment",
       "country": "لبنان",
       "type": "hls",
-      "status": "active"
+      "status": "active",
+      "lastModified": "2025-10-02T00:50:06.463Z"
     },
     {
       "id": 131,
@@ -1027,7 +1040,8 @@
       "category": "entertainment",
       "country": "لبنان",
       "type": "hls",
-      "status": "active"
+      "status": "active",
+      "lastModified": "2025-10-02T00:50:06.463Z"
     },
     {
       "id": 132,
@@ -1037,7 +1051,8 @@
       "category": "entertainment",
       "country": "ليبيا",
       "type": "hls",
-      "status": "active"
+      "status": "active",
+      "lastModified": "2025-10-02T00:50:06.463Z"
     }
   ],
   "favorites": [],
@@ -1106,6 +1121,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-01T20:56:45.496Z",
+  "lastModified": "2025-10-02T00:51:46.406Z",
   "version": "1.0"
 }
