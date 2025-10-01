@@ -119,9 +119,9 @@
       "category": "entertainment",
       "country": "الامارات",
       "type": "hls",
-      "status": "active",
+      "status": "inactive",
       "lastModified": "2025-09-24T23:40:56.300Z",
-      "vpn": false
+      "vpn": true
     },
     {
       "id": 114,
@@ -1235,6 +1235,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-02T08:35:20.225Z",
+  "lastModified": "2025-10-02T08:40:41.990Z",
   "version": "1.0"
 }
