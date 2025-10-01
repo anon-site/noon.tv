@@ -121,7 +121,7 @@
       "type": "hls",
       "status": "active",
       "lastModified": "2025-09-24T23:40:56.300Z",
-      "vpn": true
+      "vpn": false
     },
     {
       "id": 114,
@@ -1235,6 +1235,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-02T08:25:10.368Z",
+  "lastModified": "2025-10-02T08:27:12.753Z",
   "version": "1.0"
 }
