@@ -870,24 +870,34 @@
     {
       "id": 110,
       "name": "Disney Channel East",
-      "url": "https://cache1a.netplus.ch/tok_eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOiIxNzU5MTAyOTAzIiwic2lwIjoiIiwicGF0aCI6Ii9saXZlL2Vkcy9kaXNuZXljaGFubmVsZGUvYnJvd3Nlci1ITFM4LyIsInNlc3Npb25fY2RuX2lkIjoiZTgzM2Y3OGJkMWY5ZjllMiIsInNlc3Npb25faWQiOiIiLCJjbGllbnRfaWQiOiIiLCJkZXZpY2VfaWQiOiIiLCJtYXhfc2Vzc2lvbnMiOjAsInNlc3Npb25fZHVyYXRpb24iOjAsInVybCI6Imh0dHBzOi8vMTAuMC4yMjkuMjIiLCJzZXNzaW9uX3RpbWVvdXQiOjAsImF1ZCI6IjUzIiwic291cmNlcyI6Wzg0XX0=.wCwW44vbZZOyltiQXYGnX1hT78AIQgsUPSRGGCcx5-qfUOaZYdvoYy0ghXGKc20y7Q0q1B45NYSAaLZSbFfefg==/live/eds/disneychannelde/browser-HLS8/disneychannelde.m3u8",
+      "url": "https://e3.thetvapp.to/hls/DisneyChannelEast/tracks-v2a1/mono.m3u8",
       "logo": "https://iili.io/KcdkPON.png",
       "category": "kids",
       "country": "USA",
       "type": "hls",
-      "status": "inactive",
+      "status": "active",
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
       "id": 108,
-      "name": "Disney XD",
-      "url": "https://fl7.moveonjoy.com/DISNEY_XD/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/2015_Disney_XD_logo.svg/1280px-2015_Disney_XD_logo.svg.png",
+      "name": "Disney Junior East",
+      "url": "https://fl25.moveonjoy.com/DISNEY_JR/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/2024_Disney_Jr._Logo.svg/1280px-2024_Disney_Jr._Logo.svg.png",
       "category": "kids",
       "country": "USA",
       "type": "hls",
-      "status": "inactive",
+      "status": "active",
       "lastModified": "2025-09-24T23:40:56.300Z"
+    },
+    {
+      "id": 128,
+      "name": "Disney XD",
+      "url": "https://fl25.moveonjoy.com/DISNEY_XD/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c2/2009_Disney_XD_logo.png",
+      "category": "kids",
+      "country": "USA",
+      "type": "hls",
+      "status": "active"
     },
     {
       "id": 106,
@@ -1002,7 +1012,8 @@
       "category": "entertainment",
       "country": "ايران",
       "type": "hls",
-      "status": "active"
+      "status": "active",
+      "lastModified": "2025-09-30T07:56:07.537Z"
     },
     {
       "id": 124,
@@ -1012,7 +1023,8 @@
       "category": "movies",
       "country": "USA",
       "type": "hls",
-      "status": "active"
+      "status": "active",
+      "lastModified": "2025-09-30T07:56:07.537Z"
     },
     {
       "id": 122,
@@ -1033,7 +1045,8 @@
       "category": "movies",
       "country": "UK",
       "type": "hls",
-      "status": "active"
+      "status": "active",
+      "lastModified": "2025-09-30T07:56:07.537Z"
     },
     {
       "id": 126,
@@ -1043,7 +1056,8 @@
       "category": "movies",
       "country": "UK",
       "type": "hls",
-      "status": "active"
+      "status": "active",
+      "lastModified": "2025-09-30T07:56:07.537Z"
     },
     {
       "id": 127,
@@ -1053,7 +1067,8 @@
       "category": "movies",
       "country": "UK",
       "type": "hls",
-      "status": "active"
+      "status": "active",
+      "lastModified": "2025-09-30T07:56:07.537Z"
     }
   ],
   "favorites": [],
@@ -1122,6 +1137,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-09-30T07:57:01.464Z",
+  "lastModified": "2025-10-01T19:28:40.354Z",
   "version": "1.0"
 }
