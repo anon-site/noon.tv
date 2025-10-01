@@ -9,7 +9,6 @@
       "country": "السعودية",
       "type": "hls",
       "status": "active",
-      "vpn": false,
       "lastModified": "2025-09-25T04:37:10.393Z"
     },
     {
@@ -22,7 +21,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -35,7 +33,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -48,7 +45,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -60,7 +56,6 @@
       "country": "السعودية",
       "type": "hls",
       "status": "active",
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -72,7 +67,6 @@
       "country": "السعودية",
       "type": "hls",
       "status": "active",
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -84,7 +78,6 @@
       "country": "الامارات",
       "type": "hls",
       "status": "active",
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -108,7 +101,6 @@
       "country": "الامارات",
       "type": "hls",
       "status": "active",
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -120,7 +112,6 @@
       "country": "الامارات",
       "type": "hls",
       "status": "active",
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -132,7 +123,6 @@
       "country": "المغرب",
       "type": "hls",
       "status": "active",
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -148,6 +138,18 @@
       "lastModified": "2025-10-02T01:19:26.605Z"
     },
     {
+      "id": 135,
+      "name": "MBC Action",
+      "url": "https://shls-mbcdramaksa-ak.akamaized.net/out/v1/84ab37e99d6e4b16b33c6600f94f6ccb/index_8.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/2/2f/MBC_Action_Logo.svg",
+      "category": "entertainment",
+      "country": "الامارات",
+      "type": "hls",
+      "status": "inactive",
+      "vpn": false,
+      "lastModified": "2025-10-02T02:21:40.501Z"
+    },
+    {
       "id": 118,
       "name": "الجديد",
       "url": "https://samaflix.com:12103/channel7/index.m3u8",
@@ -156,7 +158,6 @@
       "country": "لبنان",
       "type": "hls",
       "status": "active",
-      "vpn": false,
       "lastModified": "2025-09-25T04:37:10.393Z"
     },
     {
@@ -169,7 +170,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -182,7 +182,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -195,7 +194,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -208,7 +206,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -221,7 +218,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -234,7 +230,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -247,7 +242,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -260,7 +254,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -273,7 +266,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -286,7 +278,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -299,7 +290,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -312,7 +302,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -325,7 +314,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -338,7 +326,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -351,7 +338,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -364,7 +350,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -377,7 +362,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -390,7 +374,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -403,7 +386,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -416,7 +398,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -429,7 +410,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -442,7 +422,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -455,7 +434,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -468,7 +446,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -481,7 +458,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -494,7 +470,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -507,7 +482,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -520,7 +494,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -533,7 +506,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -546,7 +518,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -559,7 +530,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -572,7 +542,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -585,7 +554,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -598,7 +566,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -611,7 +578,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -624,7 +590,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -637,7 +602,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -650,7 +614,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -663,7 +626,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -676,7 +638,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -689,7 +650,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -702,7 +662,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -715,7 +674,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -728,7 +686,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -741,7 +698,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -754,7 +710,6 @@
       "type": "youtube",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -767,7 +722,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -780,7 +734,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -793,7 +746,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -805,7 +757,6 @@
       "country": "الامارات",
       "type": "hls",
       "status": "active",
-      "vpn": false,
       "lastModified": "2025-09-25T04:37:10.393Z"
     },
     {
@@ -818,7 +769,6 @@
       "type": "youtube",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -831,7 +781,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -844,7 +793,6 @@
       "type": "youtube",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -857,7 +805,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -870,7 +817,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -883,7 +829,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -895,7 +840,6 @@
       "country": "USA",
       "type": "hls",
       "status": "active",
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -907,7 +851,6 @@
       "country": "USA",
       "type": "hls",
       "status": "active",
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -919,7 +862,6 @@
       "country": "USA",
       "type": "hls",
       "status": "active",
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -943,7 +885,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -956,7 +897,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -969,7 +909,6 @@
       "type": "youtube",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -982,7 +921,6 @@
       "type": "youtube",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -1017,7 +955,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -1030,7 +967,6 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
-      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -1108,7 +1044,6 @@
       "country": "قطر",
       "type": "hls",
       "status": "active",
-      "vpn": false,
       "lastModified": "2025-10-02T00:50:06.463Z"
     },
     {
@@ -1120,7 +1055,6 @@
       "country": "لبنان",
       "type": "hls",
       "status": "active",
-      "vpn": false,
       "lastModified": "2025-10-02T00:50:06.463Z"
     },
     {
@@ -1132,7 +1066,6 @@
       "country": "لبنان",
       "type": "hls",
       "status": "active",
-      "vpn": false,
       "lastModified": "2025-10-02T00:50:06.463Z"
     },
     {
@@ -1144,7 +1077,6 @@
       "country": "ليبيا",
       "type": "hls",
       "status": "active",
-      "vpn": false,
       "lastModified": "2025-10-02T00:50:06.463Z"
     }
   ],
@@ -1170,68 +1102,50 @@
     {
       "key": "all",
       "name": "جميع القنوات",
-      "icon": "fas fa-th",
-      "vpn": false,
-      "lastModified": "2025-09-24T23:40:56.300Z"
+      "icon": "fas fa-th"
     },
     {
       "key": "news",
       "name": "الأخبار",
-      "icon": "fas fa-newspaper",
-      "vpn": false,
-      "lastModified": "2025-09-24T23:40:56.300Z"
+      "icon": "fas fa-newspaper"
     },
     {
       "key": "entertainment",
       "name": "المنوعة",
       "icon": "fas fa-tv"
-      "vpn": false,
-      "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
       "key": "sports",
       "name": "الرياضة",
       "icon": "fas fa-futbol"
-      "vpn": false,
-      "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
       "key": "religious",
       "name": "الدينية",
-      "icon": "fas fa-pray",
-      "vpn": false,
-      "lastModified": "2025-09-24T23:40:56.300Z"
+      "icon": "fas fa-pray"
     },
     {
       "key": "music",
       "name": "الموسيقى",
-      "icon": "fas fa-music",
-      "vpn": false,
-      "lastModified": "2025-09-24T23:40:56.300Z"
+      "icon": "fas fa-music"
     },
     {
       "key": "movies",
       "name": "الأفلام",
-      "icon": "fas fa-film",
-      "vpn": false,
-      "lastModified": "2025-09-24T23:40:56.300Z"
+      "icon": "fas fa-film"
     },
     {
       "key": "documentary",
       "name": "الوثائقية",
-      "icon": "fas fa-book-open",
-      "vpn": false,
-      "lastModified": "2025-09-24T23:40:56.300Z"
+      "icon": "fas fa-book-open"
     },
     {
       "key": "kids",
       "name": "أطفال",
-      "icon": "fas fa-child",
-      "vpn": false,
-      "lastModified": "2025-09-24T23:40:56.300Z"
+      "icon": "fas fa-child"
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-02T01:23:10.810Z",
+  "lastModified": "2025-10-02T02:24:13.670Z",
   "version": "1.0"
 }
