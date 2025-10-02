@@ -96,7 +96,8 @@
       "country": "الامارات",
       "type": "hls",
       "status": "active",
-      "lastModified": "2025-10-02T00:50:06.463Z"
+      "lastModified": "2025-10-02T00:50:06.463Z",
+      "vpn": true
     },
     {
       "id": 112,
@@ -133,6 +134,18 @@
       "status": "active",
       "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+    },
+    {
+      "id": 134,
+      "name": "MBC Drama",
+      "url": "https://mbc1-enc.edgenextcdn.net/out/v1/b0b3a0e6750d4408bb86d703d5feffd1/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e9/MBC_Drama_Logo.svg",
+      "category": "entertainment",
+      "country": "الامارات",
+      "type": "hls",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-02T01:19:26.605Z"
     },
     {
       "id": 118,
@@ -1218,6 +1231,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-02T00:51:46.406Z",
+  "lastModified": "2025-10-02T01:23:10.810Z",
   "version": "1.0"
 }
