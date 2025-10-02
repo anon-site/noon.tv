@@ -1194,14 +1194,14 @@
     },
     {
       "id": 138,
-      "name": "Testona3333333",
-      "url": "https://games1.elahmad.xyz/tv757_www.elahmad.com_art_hekayat1/index.m3u8?token=ac5fa0381332ac21014a69c7eace747f42b36619-cf4bfbcec08ee34e7722024ea93a03bf-1759379683-1759368883",
-      "logo": "https://cdn1.iptvcdn.tv/mcnc/ROTANA_KIDS/chunks.m3u8?&token=demo",
-      "category": "entertainment",
-      "country": "USA",
+      "name": "ART Cinema",
+      "url": "https://games1.elahmad.xyz/tv757_www.elahmad.com_art_cinema/index.m3u8?token=323acf6f42e092196ce9e06c11eb3f9c3138aae9-0187f5939502ab24ed78d1c2400faebe-1759379921-1759369121",
+      "logo": "https://media0084.elcinema.com/tvguide/1195_1.png",
+      "category": "movies",
+      "country": "السعودية",
       "type": "hls",
       "status": "active",
-      "vpn": false,
+      "vpn": true,
       "lastModified": "2025-10-02T11:00:54.017Z"
     }
   ],
@@ -1271,6 +1271,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-02T11:40:00.575Z",
+  "lastModified": "2025-10-02T11:45:58.078Z",
   "version": "1.0"
 }
