@@ -121,6 +121,12 @@ class ArabicTVApp {
     }
 
     async loadDataFromFile() {
+        // Only load from file if no channels are already loaded from localStorage
+        if (this.channels && this.channels.length > 0) {
+            console.log('القنوات محملة بالفعل من localStorage، تخطي تحميل channels.json');
+            return;
+        }
+        
         try {
             const response = await fetch('channels.json');
             if (!response.ok) {
@@ -128,36 +134,11 @@ class ArabicTVApp {
             }
             const data = await response.json();
             
-            // Load channels from JSON file if no channels are loaded from localStorage
-            if (!this.channels || this.channels.length === 0) {
-                if (data.channels && Array.isArray(data.channels)) {
-                    this.channels = data.channels.map(channel => ({
-                        ...channel,
-                        lastModified: channel.lastModified || new Date().toISOString()
-                    }));
-                    console.log('تم تحميل القنوات من channels.json:', this.channels.length, 'قناة');
-                    
-                    // Save to localStorage for future use
-                    this.saveChannelsToStorage();
-                } else {
-                    console.log('لا توجد قنوات في channels.json - سيتم البدء بقائمة فارغة');
-                }
-            } else {
-                console.log('القنوات محملة بالفعل من localStorage، تخطي تحميل channels.json');
-            }
+            // لا نحمل القنوات من JSON file - نبدأ بقائمة فارغة
+            console.log('تم تخطي تحميل القنوات من channels.json - سيتم البدء بقائمة فارغة');
             
-            // Load categories from JSON file if no categories are loaded
-            if (!this.categories || Object.keys(this.categories).length === 0) {
-                if (data.categories && typeof data.categories === 'object') {
-                    this.categories = { ...this.categories, ...data.categories };
-                    console.log('تم تحميل الفئات من channels.json');
-                    this.saveCategories();
-                } else {
-                    console.log('لا توجد فئات في channels.json - سيتم استخدام الفئات الافتراضية');
-                }
-            } else {
-                console.log('الفئات محملة بالفعل من localStorage، تخطي تحميل الفئات من channels.json');
-            }
+            // لا نحمل الفئات من JSON file - يجب أن تأتي من localStorage
+            console.log('تم تخطي تحميل الفئات من channels.json - سيتم تحميلها من localStorage');
             
             // Load settings from JSON file
             if (data.settings && typeof data.settings === 'object') {
