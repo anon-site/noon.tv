@@ -114,14 +114,14 @@
     {
       "id": 113,
       "name": "MBC 4",
-      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-4/24f134f1cd63db9346439e96b86ca6ed/index.m3u8",
+      "url": "https://tgn.bozztv.com/eshgtv-trn09/ga-mchannel4/index.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/MBC_4_Logo.svg/867px-MBC_4_Logo.svg.png",
       "category": "entertainment",
       "country": "الامارات",
       "type": "hls",
-      "status": "inactive",
+      "status": "active",
       "lastModified": "2025-09-24T23:40:56.300Z",
-      "vpn": true
+      "vpn": false
     },
     {
       "id": 114,
@@ -143,8 +143,8 @@
       "category": "entertainment",
       "country": "الامارات",
       "type": "hls",
-      "status": "inactive",
-      "vpn": true,
+      "status": "active",
+      "vpn": false,
       "lastModified": "2025-10-02T01:19:26.605Z"
     },
     {
@@ -785,7 +785,7 @@
     {
       "id": 100,
       "name": "Real Madrid",
-      "url": "https://aegis-cloudfront-1.tubi.video/6009b36d-1660-4a24-b1b9-f4d3371b352e/playlist.m3u8",
+      "url": "https://rmtv.akamaized.net/hls/live/2043153/rmtv-es-web/master.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/sco/thumb/5/56/Real_Madrid_CF.svg/732px-Real_Madrid_CF.svg.png",
       "category": "sports",
       "country": "اسبانيا",
@@ -797,16 +797,16 @@
     },
     {
       "id": 101,
-      "name": "Teledeporte",
-      "url": "https://d1cctoeg0n48w5.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-mnixw9wn5ugmv/TeledeporteES.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/3/36/Tve_teledeporte.png",
-      "category": "sports",
-      "country": "اسبانيا",
+      "name": "دبي زمان",
+      "url": "https://dmiffthftl.cdn.mangomolo.com/dubaizaman/smil:dubaizaman.stream.smil/chunklist.m3u8",
+      "logo": "https://media0084.elcinema.com/tvguide/1283_1.png",
+      "category": "entertainment",
+      "country": "الامارات",
       "type": "hls",
       "status": "active",
       "isLocal": false,
       "lastModified": "2025-09-24T23:40:56.300Z",
-      "vpn": false
+      "vpn": true
     },
     {
       "id": 119,
@@ -1167,6 +1167,30 @@
       "status": "active",
       "lastModified": "2025-10-02T00:50:06.463Z",
       "vpn": false
+    },
+    {
+      "id": 136,
+      "name": "كويت الاخبار",
+      "url": "https://kwtkbta.cdn.mangomolo.com/kb/smil:kb.stream.smil/chunklist.m3u8",
+      "logo": "https://kuwaitnews.com/wp-content/uploads/2021/04/logo-1.png",
+      "category": "news",
+      "country": "الكويت",
+      "type": "hls",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-02T10:02:07.893Z"
+    },
+    {
+      "id": 137,
+      "name": "فلسطين اليوم",
+      "url": "https://live.paltodaytv.com/paltv/live/playlist.m3u8",
+      "logo": "https://paltodaytv.com/style/assets/images/logo.png",
+      "category": "news",
+      "country": "فلسطين",
+      "type": "hls",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-02T10:02:07.893Z"
     }
   ],
   "favorites": [],
@@ -1235,6 +1259,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-02T08:40:41.990Z",
+  "lastModified": "2025-10-02T10:20:20.173Z",
   "version": "1.0"
 }
