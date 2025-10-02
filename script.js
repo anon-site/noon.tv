@@ -900,7 +900,7 @@ class ArabicTVApp {
                 <div class="channel-meta">
                     <span class="channel-country">${channel.country}</span>
                     <span class="channel-category">${this.getCategoryName(channel.category)}</span>
-                    ${channel.vpn ? '<span class="channel-vpn-badge"><i class="fas fa-shield-alt"></i> VPN</span>' : ''}
+                    ${channel.vpn === true ? '<span class="channel-vpn-badge"><i class="fas fa-shield-alt"></i> VPN</span>' : ''}
                 </div>
             </div>
             <div class="play-overlay">
@@ -1088,7 +1088,7 @@ class ArabicTVApp {
         countryText.textContent = channel.country || '-';
         
         // Show/hide VPN indicator
-        if (channel.vpn) {
+        if (channel.vpn === true) {
             vpnIndicator.style.display = 'flex';
         } else {
             vpnIndicator.style.display = 'none';
@@ -7196,7 +7196,7 @@ function loadChannelBarContent() {
                  onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjMzMzIi8+CjxwYXRoIGQ9Ik0yMCAxMEMyNi42MjcgMTAgMzIgMTUuMzczIDMyIDIyQzMyIDI4LjYyNyAyNi42MjcgMzQgMjAgMzRDMTMuMzczIDM0IDggMjguNjI3IDggMjJDMCAxNS4zNzMgMTMuMzczIDEwIDIwIDEwWiIgZmlsbD0iI2ZmZiIvPgo8L3N2Zz4K'">
             <p class="channel-name">${channel.name}</p>
             <p class="channel-category">${getCategoryName(channel.category)}</p>
-            ${channel.vpn ? '<span class="channel-bar-vpn-badge"><i class="fas fa-shield-alt"></i></span>' : ''}
+            ${channel.vpn === true ? '<span class="channel-bar-vpn-badge"><i class="fas fa-shield-alt"></i></span>' : ''}
         `;
 
         channelItem.addEventListener('click', () => {
@@ -8242,7 +8242,16 @@ document.addEventListener('DOMContentLoaded', () => {
 // Helper function to validate JSON and provide detailed error information
 function validateJSON(jsonString, context = '') {
     try {
-        const parsed = JSON.parse(jsonString);
+        // First, try to clean up common JSON issues
+        let cleanedJson = jsonString.trim();
+        
+        // Remove any BOM characters
+        cleanedJson = cleanedJson.replace(/^\uFEFF/, '');
+        
+        // Try to fix common comma issues
+        cleanedJson = cleanedJson.replace(/,(\s*[}\]])/g, '$1');
+        
+        const parsed = JSON.parse(cleanedJson);
         return { valid: true, data: parsed, error: null };
     } catch (error) {
         let detailedError = {
@@ -8272,6 +8281,10 @@ function validateJSON(jsonString, context = '') {
                 detailedError.suggestion = 'يبدو أن هناك مشكلة في الأقواس المتعرجة';
             } else if (charAtError === '[' || charAtError === ']') {
                 detailedError.suggestion = 'يبدو أن هناك مشكلة في الأقواس المربعة';
+            } else if (charAtError === ':') {
+                detailedError.suggestion = 'يبدو أن هناك مشكلة في النقطتين';
+            } else {
+                detailedError.suggestion = 'تحقق من التنسيق حول هذا الموضع';
             }
         }
         
@@ -8289,6 +8302,9 @@ async function updateChannels() {
     try {
         console.log('🔄 بدء تحديث القنوات...');
         
+        // Show loading notification for users
+        window.app.notifyInfo('جارٍ تحديث القنوات من الخادم...', 'تحديث القنوات', 3000);
+        
         // Fetch channels from GitHub
         const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json');
         
@@ -8300,8 +8316,11 @@ async function updateChannels() {
         const responseText = await response.text();
         console.log('📥 تم جلب البيانات من GitHub، حجم البيانات:', responseText.length, 'حرف');
         
+        // Clean up the response text to handle potential formatting issues
+        const cleanedResponseText = responseText.trim();
+        
         // Validate JSON before parsing
-        const validation = validateJSON(responseText, 'GitHub channels data');
+        const validation = validateJSON(cleanedResponseText, 'GitHub channels data');
         
         if (!validation.valid) {
             console.error('❌ خطأ في تحليل JSON:');
@@ -8343,7 +8362,7 @@ async function updateChannels() {
             console.log('💾 تم إنشاء نسخة احتياطية من القنوات الحالية:', currentChannels.length, 'قناة');
         }
         
-        // Validate each channel has required fields
+        // Validate each channel has required fields and ensure VPN property exists
         const invalidChannels = data.channels.filter(channel => 
             !channel.name || !channel.url || !channel.category
         );
@@ -8352,6 +8371,12 @@ async function updateChannels() {
             console.warn('⚠️ تم العثور على قنوات غير صحيحة:', invalidChannels.length);
             console.warn('القنوات غير الصحيحة:', invalidChannels);
         }
+        
+        // Ensure all channels have VPN property set correctly
+        data.channels = data.channels.map(channel => ({
+            ...channel,
+            vpn: channel.vpn === true || channel.vpn === 'true' || false
+        }));
         
         // Update channels in the app
         window.app.channels = data.channels;
@@ -8402,7 +8427,7 @@ async function updateChannels() {
         } else {
             // Show success notification
             setTimeout(() => {
-                window.app.notifySuccess(`تم تحديث القنوات بنجاح! تم تحميل ${data.channels.length} قناة جديدة.`);
+                window.app.notifySuccess(`تم تحديث القنوات بنجاح! تم تحميل ${data.channels.length} قناة جديدة.`, 'تحديث مكتمل', 5000);
             }, 500);
         }
         
@@ -8413,17 +8438,28 @@ async function updateChannels() {
     } catch (error) {
         console.error('❌ خطأ في تحديث القنوات:', error);
         
-        // Show detailed error notification
+        // Show user-friendly error notification
         let errorMessage = 'فشل في تحديث القنوات';
+        let errorTitle = 'خطأ في التحديث';
+        
         if (error.message.includes('JSON')) {
-            errorMessage += ': خطأ في تنسيق البيانات';
-        } else if (error.message.includes('fetch')) {
-            errorMessage += ': مشكلة في الاتصال بالإنترنت';
+            errorMessage = 'خطأ في تنسيق البيانات المستلمة من الخادم';
+            errorTitle = 'خطأ في البيانات';
+        } else if (error.message.includes('fetch') || error.message.includes('network')) {
+            errorMessage = 'مشكلة في الاتصال بالإنترنت. يرجى التحقق من اتصالك والمحاولة مرة أخرى';
+            errorTitle = 'مشكلة في الاتصال';
+        } else if (error.message.includes('404')) {
+            errorMessage = 'لم يتم العثور على ملف القنوات على الخادم';
+            errorTitle = 'ملف غير موجود';
+        } else if (error.message.includes('403') || error.message.includes('401')) {
+            errorMessage = 'لا يمكن الوصول إلى ملف القنوات. قد يكون هناك مشكلة في الصلاحيات';
+            errorTitle = 'مشكلة في الصلاحيات';
         } else {
-            errorMessage += `: ${error.message}`;
+            errorMessage = 'حدث خطأ غير متوقع أثناء تحديث القنوات';
+            errorTitle = 'خطأ غير متوقع';
         }
         
-        window.app.notifyError(errorMessage, 8000);
+        window.app.notifyError(errorMessage, errorTitle, 6000);
         
         // Try to restore backup if available
         const backupData = localStorage.getItem('channels_backup');
@@ -8455,7 +8491,7 @@ async function updateChannels() {
         // Show additional help
         setTimeout(() => {
             window.app.notifyInfo(
-                'يمكنك المحاولة مرة أخرى أو التحقق من اتصال الإنترنت',
+                'يمكنك المحاولة مرة أخرى أو التحقق من اتصال الإنترنت. إذا استمرت المشكلة، يرجى المحاولة لاحقاً.',
                 'مساعدة',
                 5000
             );

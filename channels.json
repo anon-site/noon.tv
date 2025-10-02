@@ -1198,36 +1198,37 @@
     {
       "key": "religious",
       "name": "الدينية",
-      "icon": "fas fa-pray"
+      "icon": "fas fa-pray",
       "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
       "key": "music",
       "name": "الموسيقى",
-      "icon": "fas fa-music"
+      "icon": "fas fa-music",
       "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
       "key": "movies",
       "name": "الأفلام",
-      "icon": "fas fa-film"
+      "icon": "fas fa-film",
       "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
       "key": "documentary",
       "name": "الوثائقية",
-      "icon": "fas fa-book-open"
+      "icon": "fas fa-book-open",
       "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
       "key": "kids",
       "name": "أطفال",
-      "icon": "fas fa-child"
-      "vpn": false
+      "icon": "fas fa-child",
+      "vpn": false,
+      "lastModified": "2025-09-24T23:40:56.300Z"
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
