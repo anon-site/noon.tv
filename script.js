@@ -1064,6 +1064,12 @@ class ArabicTVApp {
             return;
         }
         
+        // Check if channel is inactive
+        if (channel.status === 'inactive') {
+            this.showInactiveChannelMessage(channel);
+            return;
+        }
+        
         this.isLoadingChannel = true;
         this.currentChannel = channel;
         this.showVideoModal(channel);
@@ -1133,6 +1139,54 @@ class ArabicTVApp {
         
         // Update active channel in channel bar if it's visible
         this.updateActiveChannelInBar(channel);
+    }
+
+    showInactiveChannelMessage(channel) {
+        const modal = document.getElementById('videoModal');
+        const title = document.getElementById('channelTitle');
+        const countryText = document.querySelector('.country-text');
+        const vpnIndicator = document.getElementById('channelVpnIndicator');
+        const loading = document.getElementById('videoLoading');
+        
+        // Set channel info
+        title.textContent = channel.name;
+        countryText.textContent = channel.country || '-';
+        
+        // Hide VPN indicator for inactive channels
+        vpnIndicator.style.display = 'none';
+        
+        // Show modal
+        modal.classList.add('active');
+        
+        // Show inactive channel message
+        loading.style.display = 'flex';
+        loading.innerHTML = `
+            <div class="error-icon" style="font-size: 3rem; color: #ff6b6b; margin-bottom: 1rem;">
+                <i class="fas fa-pause-circle"></i>
+            </div>
+            <p style="color: #ff6b6b; font-size: 1.1rem; margin-bottom: 1rem; text-align: center;">
+                القناة متوقفة من المصدر سيتم إصلاحها أو استبدال السيرفر قريباً
+            </p>
+            <div style="background: rgba(255, 107, 107, 0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0; border-right: 4px solid #ff6b6b;">
+                <p style="color: #666; font-size: 0.9rem; margin: 0;">
+                    <i class="fas fa-info-circle" style="margin-left: 0.5rem;"></i>
+                    هذه القناة غير متاحة حالياً من المصدر. يرجى المحاولة لاحقاً أو اختيار قناة أخرى
+                </p>
+            </div>
+            <button onclick="closeModal()" style="
+                background: #ff6b6b; 
+                color: white; 
+                border: none; 
+                padding: 0.75rem 1.5rem; 
+                border-radius: 6px; 
+                cursor: pointer; 
+                font-size: 0.9rem;
+                margin-top: 1rem;
+            ">إغلاق</button>
+        `;
+        
+        // Hide video player
+        document.getElementById('videoPlayer').style.display = 'none';
     }
 
     stopCurrentVideo() {
@@ -1383,6 +1437,35 @@ class ArabicTVApp {
 
     handleVideoError() {
         const loading = document.getElementById('videoLoading');
+        
+        // Check if current channel is inactive
+        if (this.currentChannel && this.currentChannel.status === 'inactive') {
+            loading.innerHTML = `
+                <div class="error-icon" style="font-size: 3rem; color: #ff6b6b; margin-bottom: 1rem;">
+                    <i class="fas fa-pause-circle"></i>
+                </div>
+                <p style="color: #ff6b6b; font-size: 1.1rem; margin-bottom: 1rem; text-align: center;">
+                    القناة متوقفة من المصدر سيتم إصلاحها أو استبدال السيرفر قريباً
+                </p>
+                <div style="background: rgba(255, 107, 107, 0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0; border-right: 4px solid #ff6b6b;">
+                    <p style="color: #666; font-size: 0.9rem; margin: 0;">
+                        <i class="fas fa-info-circle" style="margin-left: 0.5rem;"></i>
+                        هذه القناة غير متاحة حالياً من المصدر. يرجى المحاولة لاحقاً أو اختيار قناة أخرى
+                    </p>
+                </div>
+                <button onclick="closeModal()" style="
+                    background: #ff6b6b; 
+                    color: white; 
+                    border: none; 
+                    padding: 0.75rem 1.5rem; 
+                    border-radius: 6px; 
+                    cursor: pointer; 
+                    font-size: 0.9rem;
+                    margin-top: 1rem;
+                ">إغلاق</button>
+            `;
+            return;
+        }
         
         // Check if current channel requires VPN
         if (this.currentChannel && this.currentChannel.vpn === true) {
