@@ -638,6 +638,24 @@ class ArabicTVApp {
         });
     }
 
+    bindVpnToggleEvents() {
+        // إزالة الأحداث السابقة لتجنب التكرار
+        document.querySelectorAll('.vpn-toggle').forEach(toggle => {
+            const newToggle = toggle.cloneNode(true);
+            toggle.parentNode.replaceChild(newToggle, toggle);
+        });
+        
+        // ربط الأحداث الجديدة
+        document.querySelectorAll('.vpn-toggle').forEach(toggle => {
+            toggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const vpn = toggle.dataset.vpn === 'true';
+                this.setChannelVpn(vpn);
+            });
+        });
+    }
+
     setChannelStatus(status) {
         // تحديث القيمة المخفية
         const statusInput = document.getElementById('channelStatus');
@@ -647,6 +665,17 @@ class ArabicTVApp {
         
         // تحديث واجهة المستخدم
         this.updateStatusToggleUI(status);
+    }
+
+    setChannelVpn(vpn) {
+        // تحديث القيمة المخفية
+        const vpnInput = document.getElementById('channelVpn');
+        if (vpnInput) {
+            vpnInput.value = vpn.toString();
+        }
+        
+        // تحديث واجهة المستخدم
+        this.updateVpnToggleUI(vpn);
     }
 
     updateStatusToggleUI(status) {
@@ -677,6 +706,38 @@ class ArabicTVApp {
                     icon.classList.add('active');
                 } else {
                     icon.classList.add('inactive');
+                }
+            }
+        });
+    }
+
+    updateVpnToggleUI(vpn) {
+        // التأكد من وجود العناصر
+        const toggles = document.querySelectorAll('.vpn-toggle');
+        if (toggles.length === 0) {
+            return;
+        }
+        
+        // إزالة الكلاس النشط من جميع التبديلات
+        toggles.forEach(toggle => {
+            toggle.classList.remove('active');
+        });
+        
+        // إضافة الكلاس النشط للتبديل المحدد
+        const activeToggle = document.querySelector(`[data-vpn="${vpn}"]`);
+        if (activeToggle) {
+            activeToggle.classList.add('active');
+        }
+        
+        // تحديث الأيقونات
+        document.querySelectorAll('.vpn-icon').forEach(icon => {
+            const toggle = icon.closest('.vpn-toggle');
+            if (toggle) {
+                const toggleVpn = toggle.dataset.vpn === 'true';
+                if (toggleVpn === vpn) {
+                    icon.style.color = '';
+                } else {
+                    icon.style.color = 'var(--text-muted)';
                 }
             }
         });
@@ -839,6 +900,7 @@ class ArabicTVApp {
                 <div class="channel-meta">
                     <span class="channel-country">${channel.country}</span>
                     <span class="channel-category">${this.getCategoryName(channel.category)}</span>
+                    ${channel.vpn ? '<span class="channel-vpn-badge"><i class="fas fa-shield-alt"></i> VPN</span>' : ''}
                 </div>
             </div>
             <div class="play-overlay">
@@ -1020,9 +1082,18 @@ class ArabicTVApp {
         const modal = document.getElementById('videoModal');
         const title = document.getElementById('channelTitle');
         const countryText = document.querySelector('.country-text');
+        const vpnIndicator = document.getElementById('channelVpnIndicator');
         
         title.textContent = channel.name;
         countryText.textContent = channel.country || '-';
+        
+        // Show/hide VPN indicator
+        if (channel.vpn) {
+            vpnIndicator.style.display = 'flex';
+        } else {
+            vpnIndicator.style.display = 'none';
+        }
+        
         // Channel logo overlay is now hidden
         
         modal.classList.add('active');
@@ -1616,6 +1687,7 @@ class ArabicTVApp {
         setTimeout(() => {
             this.bindAdminTabEvents();
             this.bindStatusToggleEvents();
+            this.bindVpnToggleEvents();
         }, 50);
     }
 
@@ -2290,6 +2362,9 @@ class ArabicTVApp {
         // Get status from form
         const status = document.getElementById('channelStatus').value || 'active';
         
+        // Get VPN requirement from form
+        const vpn = document.getElementById('channelVpn').value === 'true';
+        
         // Add new channel
         const newChannel = {
             id: Math.max(...this.channels.map(c => c.id), 0) + 1, // Generate proper unique ID
@@ -2299,7 +2374,8 @@ class ArabicTVApp {
             category: category,
             country: country,
             type: type,
-            status: status
+            status: status,
+            vpn: vpn
         };
 
         this.channels.push(newChannel);
@@ -2349,6 +2425,9 @@ class ArabicTVApp {
         
         // Reset status toggle
         this.updateStatusToggleUI('active');
+        
+        // Reset VPN toggle
+        this.updateVpnToggleUI(false);
         
         // Reset button text and class
         const submitBtn = document.querySelector('#addChannelForm button[type="submit"]');
@@ -2421,10 +2500,12 @@ class ArabicTVApp {
             
             // Re-bind status toggle events for the new form
             this.bindStatusToggleEvents();
+            this.bindVpnToggleEvents();
             
             // Update status toggle UI after binding events
             setTimeout(() => {
                 this.updateStatusToggleUI(channel.status || 'active');
+                this.updateVpnToggleUI(channel.vpn || false);
             }, 100);
         }, 300);
         
@@ -2486,6 +2567,9 @@ class ArabicTVApp {
         // Get status from form
         const status = document.getElementById('channelStatus').value || 'active';
         
+        // Get VPN requirement from form
+        const vpn = document.getElementById('channelVpn').value === 'true';
+        
         // Update the channel
         this.channels[channelIndex] = {
             ...this.channels[channelIndex],
@@ -2495,7 +2579,8 @@ class ArabicTVApp {
             category: category,
             country: country,
             type: type,
-            status: status
+            status: status,
+            vpn: vpn
         };
 
         // Save and refresh
@@ -6377,7 +6462,9 @@ class ArabicTVApp {
             // Update status toggle UI
             setTimeout(() => {
                 this.bindStatusToggleEvents();
+                this.bindVpnToggleEvents();
                 this.updateStatusToggleUI(channel.status || 'active');
+                this.updateVpnToggleUI(channel.vpn || false);
             }, 100);
         }, 100);
     }
@@ -7109,6 +7196,7 @@ function loadChannelBarContent() {
                  onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjMzMzIi8+CjxwYXRoIGQ9Ik0yMCAxMEMyNi42MjcgMTAgMzIgMTUuMzczIDMyIDIyQzMyIDI4LjYyNyAyNi42MjcgMzQgMjAgMzRDMTMuMzczIDM0IDggMjguNjI3IDggMjJDMCAxNS4zNzMgMTMuMzczIDEwIDIwIDEwWiIgZmlsbD0iI2ZmZiIvPgo8L3N2Zz4K'">
             <p class="channel-name">${channel.name}</p>
             <p class="channel-category">${getCategoryName(channel.category)}</p>
+            ${channel.vpn ? '<span class="channel-bar-vpn-badge"><i class="fas fa-shield-alt"></i></span>' : ''}
         `;
 
         channelItem.addEventListener('click', () => {

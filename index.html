@@ -363,10 +363,16 @@
             <div class="modal-header">
                 <div class="channel-title-container">
                     <h3 id="channelTitle">قناة</h3>
-                    <span class="channel-country" id="channelCountry">
-                        <i class="fas fa-flag"></i>
-                        <span class="country-text">-</span>
-                    </span>
+                    <div class="channel-info-row">
+                        <span class="channel-country" id="channelCountry">
+                            <i class="fas fa-flag"></i>
+                            <span class="country-text">-</span>
+                        </span>
+                        <span class="channel-vpn-indicator" id="channelVpnIndicator" style="display: none;">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>يتطلب VPN</span>
+                        </span>
+                    </div>
                 </div>
                 <div class="modal-controls">
                     <!-- Quality Display -->
@@ -829,6 +835,20 @@
                                         </label>
                                     </div>
                                     <input type="hidden" id="channelStatus" value="active">
+                                </div>
+                                <div class="form-group">
+                                    <label for="channelVpn">يتطلب VPN</label>
+                                    <div class="vpn-toggle-container">
+                                        <label class="vpn-toggle" data-vpn="false">
+                                            <i class="fas fa-globe vpn-icon"></i>
+                                            <span>لا يتطلب</span>
+                                        </label>
+                                        <label class="vpn-toggle active" data-vpn="true">
+                                            <i class="fas fa-shield-alt vpn-icon"></i>
+                                            <span>يتطلب VPN</span>
+                                        </label>
+                                    </div>
+                                    <input type="hidden" id="channelVpn" value="true">
                                 </div>
                             </div>
                             

@@ -9,7 +9,11 @@
       "country": "السعودية",
       "type": "hls",
       "status": "active",
+      "vpn": false,
+      "vpn": false,
       "lastModified": "2025-09-25T04:37:10.393Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 3,
@@ -21,7 +25,11 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 14,
@@ -33,7 +41,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 15,
@@ -45,7 +56,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 116,
@@ -56,7 +70,10 @@
       "country": "السعودية",
       "type": "hls",
       "status": "active",
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 115,
@@ -67,7 +84,10 @@
       "country": "السعودية",
       "type": "hls",
       "status": "active",
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 111,
@@ -78,7 +98,10 @@
       "country": "الامارات",
       "type": "hls",
       "status": "active",
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 112,
@@ -89,7 +112,10 @@
       "country": "الامارات",
       "type": "hls",
       "status": "active",
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 113,
@@ -100,7 +126,10 @@
       "country": "الامارات",
       "type": "hls",
       "status": "active",
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 114,
@@ -111,7 +140,10 @@
       "country": "المغرب",
       "type": "hls",
       "status": "active",
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 118,
@@ -122,7 +154,10 @@
       "country": "لبنان",
       "type": "hls",
       "status": "active",
+      "vpn": false,
       "lastModified": "2025-09-25T04:37:10.393Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 77,
@@ -134,7 +169,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 33,
@@ -146,7 +184,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 34,
@@ -158,7 +199,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 55,
@@ -170,7 +214,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 43,
@@ -182,7 +229,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 23,
@@ -194,7 +244,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 57,
@@ -206,7 +259,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 56,
@@ -218,7 +274,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 82,
@@ -230,7 +289,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 9,
@@ -242,7 +304,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 10,
@@ -254,7 +319,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 21,
@@ -266,7 +334,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 22,
@@ -278,7 +349,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 31,
@@ -290,7 +364,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 62,
@@ -302,7 +379,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 18,
@@ -314,7 +394,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 20,
@@ -326,7 +409,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 26,
@@ -338,7 +424,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 28,
@@ -350,7 +439,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 30,
@@ -362,7 +454,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 44,
@@ -374,7 +469,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 46,
@@ -386,7 +484,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 48,
@@ -398,7 +499,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 49,
@@ -410,7 +514,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 50,
@@ -422,7 +529,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 51,
@@ -434,7 +544,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 53,
@@ -446,7 +559,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 54,
@@ -458,7 +574,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 59,
@@ -470,7 +589,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 60,
@@ -482,7 +604,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 61,
@@ -494,7 +619,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 63,
@@ -506,7 +634,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 65,
@@ -518,7 +649,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 66,
@@ -530,7 +664,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 67,
@@ -542,7 +679,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 70,
@@ -554,7 +694,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 73,
@@ -566,7 +709,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 75,
@@ -578,7 +724,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 79,
@@ -590,7 +739,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 80,
@@ -602,7 +754,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 81,
@@ -614,7 +769,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 83,
@@ -626,7 +784,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 84,
@@ -638,7 +799,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 87,
@@ -650,7 +814,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 88,
@@ -662,7 +829,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 94,
@@ -674,7 +844,10 @@
       "type": "youtube",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 99,
@@ -686,7 +859,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 100,
@@ -698,7 +874,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 101,
@@ -710,7 +889,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 119,
@@ -721,7 +903,10 @@
       "country": "الامارات",
       "type": "hls",
       "status": "active",
+      "vpn": false,
       "lastModified": "2025-09-25T04:37:10.393Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 89,
@@ -733,7 +918,10 @@
       "type": "youtube",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 91,
@@ -745,7 +933,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 102,
@@ -757,7 +948,10 @@
       "type": "youtube",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 103,
@@ -769,7 +963,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 104,
@@ -781,7 +978,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 105,
@@ -793,7 +993,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 109,
@@ -804,7 +1007,10 @@
       "country": "USA",
       "type": "hls",
       "status": "active",
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 110,
@@ -815,7 +1021,10 @@
       "country": "USA",
       "type": "hls",
       "status": "active",
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 108,
@@ -826,7 +1035,10 @@
       "country": "USA",
       "type": "hls",
       "status": "active",
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 128,
@@ -838,6 +1050,8 @@
       "type": "hls",
       "status": "active",
       "lastModified": "2025-10-01T20:08:15.639Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 106,
@@ -849,7 +1063,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 107,
@@ -861,7 +1078,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 95,
@@ -873,7 +1093,10 @@
       "type": "youtube",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 98,
@@ -885,7 +1108,10 @@
       "type": "youtube",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 120,
@@ -897,6 +1123,8 @@
       "type": "hls",
       "status": "active",
       "lastModified": "2025-09-28T23:21:38.547Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 121,
@@ -908,6 +1136,8 @@
       "type": "hls",
       "status": "active",
       "lastModified": "2025-09-28T23:21:38.547Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 97,
@@ -919,7 +1149,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 96,
@@ -931,7 +1164,10 @@
       "type": "hls",
       "status": "active",
       "isLocal": false,
+      "vpn": false,
       "lastModified": "2025-09-24T23:40:56.300Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 123,
@@ -943,6 +1179,8 @@
       "type": "hls",
       "status": "active",
       "lastModified": "2025-09-30T07:56:07.537Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 124,
@@ -954,6 +1192,8 @@
       "type": "hls",
       "status": "active",
       "lastModified": "2025-09-30T07:56:07.537Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 122,
@@ -965,6 +1205,8 @@
       "type": "hls",
       "status": "active",
       "lastModified": "2025-09-28T23:39:12.688Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 125,
@@ -976,6 +1218,8 @@
       "type": "hls",
       "status": "active",
       "lastModified": "2025-09-30T07:56:07.537Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 126,
@@ -987,6 +1231,8 @@
       "type": "hls",
       "status": "active",
       "lastModified": "2025-09-30T07:56:07.537Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 127,
@@ -998,6 +1244,8 @@
       "type": "hls",
       "status": "active",
       "lastModified": "2025-09-30T07:56:07.537Z"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 129,
@@ -1008,6 +1256,8 @@
       "country": "قطر",
       "type": "hls",
       "status": "active"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 130,
@@ -1018,6 +1268,8 @@
       "country": "لبنان",
       "type": "hls",
       "status": "active"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 131,
@@ -1028,6 +1280,8 @@
       "country": "لبنان",
       "type": "hls",
       "status": "active"
+      "vpn": false
+      "vpn": false
     },
     {
       "id": 132,
@@ -1038,6 +1292,7 @@
       "country": "ليبيا",
       "type": "hls",
       "status": "active"
+      "vpn": false
     }
   ],
   "favorites": [],
@@ -1063,46 +1318,63 @@
       "key": "all",
       "name": "جميع القنوات",
       "icon": "fas fa-th"
+      "vpn": false
+      "vpn": false
     },
     {
       "key": "news",
       "name": "الأخبار",
       "icon": "fas fa-newspaper"
+      "vpn": false
+      "vpn": false
     },
     {
       "key": "entertainment",
       "name": "المنوعة",
       "icon": "fas fa-tv"
+      "vpn": false
+      "vpn": false
     },
     {
       "key": "sports",
       "name": "الرياضة",
       "icon": "fas fa-futbol"
+      "vpn": false
+      "vpn": false
     },
     {
       "key": "religious",
       "name": "الدينية",
       "icon": "fas fa-pray"
+      "vpn": false
+      "vpn": false
     },
     {
       "key": "music",
       "name": "الموسيقى",
       "icon": "fas fa-music"
+      "vpn": false
+      "vpn": false
     },
     {
       "key": "movies",
       "name": "الأفلام",
       "icon": "fas fa-film"
+      "vpn": false
+      "vpn": false
     },
     {
       "key": "documentary",
       "name": "الوثائقية",
       "icon": "fas fa-book-open"
+      "vpn": false
+      "vpn": false
     },
     {
       "key": "kids",
       "name": "أطفال",
       "icon": "fas fa-child"
+      "vpn": false
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
