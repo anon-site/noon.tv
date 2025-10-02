@@ -167,9 +167,9 @@
       "category": "entertainment",
       "country": "لبنان",
       "type": "hls",
-      "status": "inactive",
+      "status": "active",
       "lastModified": "2025-09-25T04:37:10.393Z",
-      "vpn": true
+      "vpn": false
     },
     {
       "id": 77,
@@ -1259,6 +1259,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-02T10:20:20.173Z",
+  "lastModified": "2025-10-02T10:33:59.627Z",
   "version": "1.0"
 }
