@@ -1173,20 +1173,33 @@ class ArabicTVApp {
                     هذه القناة غير متاحة حالياً من المصدر. يرجى المحاولة لاحقاً أو اختيار قناة أخرى
                 </p>
             </div>
-            <button onclick="closeModal()" style="
-                background: #ff6b6b; 
-                color: white; 
-                border: none; 
-                padding: 0.75rem 1.5rem; 
-                border-radius: 6px; 
-                cursor: pointer; 
-                font-size: 0.9rem;
-                margin-top: 1rem;
-            ">إغلاق</button>
+            <div style="display: flex; gap: 10px; margin-top: 1rem; justify-content: center;">
+                <button onclick="app.retryVideo()" style="
+                    background: #28a745; 
+                    color: white; 
+                    border: none; 
+                    padding: 0.75rem 1.5rem; 
+                    border-radius: 6px; 
+                    cursor: pointer; 
+                    font-size: 0.9rem;
+                ">إعادة المحاولة</button>
+                <button onclick="closeModal()" style="
+                    background: #ff6b6b; 
+                    color: white; 
+                    border: none; 
+                    padding: 0.75rem 1.5rem; 
+                    border-radius: 6px; 
+                    cursor: pointer; 
+                    font-size: 0.9rem;
+                ">إغلاق</button>
+            </div>
         `;
         
-        // Hide video player
-        document.getElementById('videoPlayer').style.display = 'none';
+        // Show video player for retry functionality
+        const video = document.getElementById('videoPlayer');
+        if (video) {
+            video.style.display = 'block';
+        }
     }
 
     stopCurrentVideo() {
@@ -1239,6 +1252,11 @@ class ArabicTVApp {
         const loading = document.getElementById('videoLoading');
 
         try {
+            // Ensure video player is visible
+            if (video) {
+                video.style.display = 'block';
+            }
+            
             // Validate URL
             if (!url || url.trim() === '') {
                 throw new Error('رابط الفيديو فارغ أو غير صحيح');
@@ -1453,17 +1471,33 @@ class ArabicTVApp {
                         هذه القناة غير متاحة حالياً من المصدر. يرجى المحاولة لاحقاً أو اختيار قناة أخرى
                     </p>
                 </div>
-                <button onclick="closeModal()" style="
-                    background: #ff6b6b; 
-                    color: white; 
-                    border: none; 
-                    padding: 0.75rem 1.5rem; 
-                    border-radius: 6px; 
-                    cursor: pointer; 
-                    font-size: 0.9rem;
-                    margin-top: 1rem;
-                ">إغلاق</button>
+                <div style="display: flex; gap: 10px; margin-top: 1rem; justify-content: center;">
+                    <button onclick="app.retryVideo()" style="
+                        background: #28a745; 
+                        color: white; 
+                        border: none; 
+                        padding: 0.75rem 1.5rem; 
+                        border-radius: 6px; 
+                        cursor: pointer; 
+                        font-size: 0.9rem;
+                    ">إعادة المحاولة</button>
+                    <button onclick="closeModal()" style="
+                        background: #ff6b6b; 
+                        color: white; 
+                        border: none; 
+                        padding: 0.75rem 1.5rem; 
+                        border-radius: 6px; 
+                        cursor: pointer; 
+                        font-size: 0.9rem;
+                    ">إغلاق</button>
+                </div>
             `;
+            
+            // Show video player for retry functionality
+            const video = document.getElementById('videoPlayer');
+            if (video) {
+                video.style.display = 'block';
+            }
             return;
         }
         
@@ -1510,6 +1544,18 @@ class ArabicTVApp {
 
     retryVideo() {
         if (this.currentChannel) {
+            // Show video player again
+            const video = document.getElementById('videoPlayer');
+            if (video) {
+                video.style.display = 'block';
+            }
+            
+            // Hide loading error message
+            const loading = document.getElementById('videoLoading');
+            if (loading) {
+                loading.style.display = 'none';
+            }
+            
             const type = this.currentChannel.type || 'hls';
             this.loadVideoStream(this.currentChannel.url, type);
         }
