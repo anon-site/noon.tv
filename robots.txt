@@ -1,16 +1,7 @@
 User-agent: *
-Allow: /
+Allow: /TV-AR/
+Disallow: /TV-AR/admin/
+Disallow: /TV-AR/channels.json
 
 # Sitemap
-Sitemap: https://your-domain.com/sitemap.xml
-
-# Disallow admin areas
-Disallow: /admin/
-Disallow: /api/
-Disallow: /*.json$
-
-# Allow important files
-Allow: /index.html
-Allow: /style.css
-Allow: /script.js
-Allow: /favicon.svg
+Sitemap: https://anon-site.github.io/TV-AR/sitemap.xml

@@ -1076,15 +1076,6 @@ class ArabicTVApp {
         const type = channel.type || (this.isYouTubeUrl(channel.url) ? 'youtube' : 'hls');
         
         try {
-            // Test URL availability before loading
-            if (!this.isYouTubeUrl(channel.url)) {
-                console.log('🔍 فحص توفر الرابط قبل التشغيل...');
-                const isAvailable = await this.testStreamUrl(channel.url);
-                if (!isAvailable) {
-                    console.log('⚠️ الرابط غير متاح، محاولة استخدام خادم وكيل...');
-                }
-            }
-            
             await this.loadVideoStream(channel.url, type);
         } finally {
             this.isLoadingChannel = false;
@@ -1288,13 +1279,6 @@ class ArabicTVApp {
                 return;
             }
 
-            // Try CORS proxy for blocked URLs
-            let finalUrl = url;
-            if (this.isBlockedUrl(url)) {
-                console.log('🔄 محاولة استخدام خادم وكيل CORS للرابط المحجوب');
-                finalUrl = this.getCorsProxyUrl(url);
-            }
-
             // HLS streaming
             if (typeof Hls !== 'undefined' && Hls.isSupported()) {
                 // Ensure previous HLS instance is destroyed
@@ -1328,7 +1312,7 @@ class ArabicTVApp {
                     startFragPrefetch: true
                 });
 
-                this.hls.loadSource(finalUrl);
+                this.hls.loadSource(url);
                 this.hls.attachMedia(video);
 
                 this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -1347,17 +1331,9 @@ class ArabicTVApp {
                 this.hls.on(Hls.Events.ERROR, (event, data) => {
                     console.error('HLS Error:', data);
                     
-                    // Try CORS proxy if direct URL failed
-                    if (data.type === Hls.ErrorTypes.NETWORK_ERROR && !finalUrl.includes('cors')) {
-                        console.log('🔄 محاولة استخدام خادم وكيل CORS بعد فشل الرابط المباشر');
-                        const proxyUrl = this.getCorsProxyUrl(url);
-                        this.hls.loadSource(proxyUrl);
-                        return;
-                    }
-                    
                     // Show specific error messages
                     if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
-                        this.showVideoError('خطأ في الشبكة - تحقق من اتصال الإنترنت أو جرب VPN');
+                        this.showVideoError('خطأ في الشبكة - تحقق من اتصال الإنترنت');
                     } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
                         this.showVideoError('خطأ في تنسيق الفيديو - الرابط قد يكون غير صحيح');
                     } else if (data.details === Hls.ErrorDetails.MANIFEST_LOAD_ERROR) {
@@ -1385,7 +1361,7 @@ class ArabicTVApp {
 
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 // Native HLS support (Safari)
-                source.src = finalUrl;
+                source.src = url;
                 video.load();
                 loading.style.display = 'none';
                 
@@ -7291,67 +7267,6 @@ class ArabicTVApp {
                 btn.classList.add('active');
             }
         });
-    }
-
-    // Helper functions for CORS proxy
-    isBlockedUrl(url) {
-        const blockedDomains = [
-            'mbc1-enc.edgenextcdn.net',
-            'mbc2-enc.edgenextcdn.net',
-            'mbc3-enc.edgenextcdn.net',
-            'mbc4-enc.edgenextcdn.net',
-            'mbc5-enc.edgenextcdn.net',
-            'mbc-drama-enc.edgenextcdn.net',
-            'mbc-action-enc.edgenextcdn.net',
-            'mbc-max-enc.edgenextcdn.net',
-            'mbc-bollywood-enc.edgenextcdn.net',
-            'mbc-2-enc.edgenextcdn.net',
-            'mbc-i-enc.edgenextcdn.net',
-            'mbc-1-enc.edgenextcdn.net'
-        ];
-        
-        try {
-            const urlObj = new URL(url);
-            return blockedDomains.some(domain => urlObj.hostname.includes(domain));
-        } catch (e) {
-            return false;
-        }
-    }
-
-    getCorsProxyUrl(url) {
-        // List of CORS proxy services
-        const corsProxies = [
-            'https://cors-anywhere.herokuapp.com/',
-            'https://api.allorigins.win/raw?url=',
-            'https://corsproxy.io/?',
-            'https://thingproxy.freeboard.io/fetch/'
-        ];
-        
-        // Use the first available proxy
-        const proxy = corsProxies[0];
-        return proxy + encodeURIComponent(url);
-    }
-
-    async testStreamUrl(url) {
-        try {
-            const response = await fetch(url, { 
-                method: 'HEAD',
-                mode: 'no-cors'
-            });
-            return true;
-        } catch (error) {
-            console.log('Direct URL failed, trying CORS proxy...');
-            try {
-                const proxyUrl = this.getCorsProxyUrl(url);
-                const response = await fetch(proxyUrl, { 
-                    method: 'HEAD'
-                });
-                return true;
-            } catch (proxyError) {
-                console.error('Both direct and proxy URLs failed:', proxyError);
-                return false;
-            }
-        }
     }
 }
 
