@@ -108,7 +108,7 @@
       "country": "الامارات",
       "type": "hls",
       "status": "active",
-      "vpn": false,
+      "vpn": true,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
@@ -120,7 +120,7 @@
       "country": "الامارات",
       "type": "hls",
       "status": "active",
-      "vpn": false,
+      "vpn": true,
       "lastModified": "2025-09-24T23:40:56.300Z"
     },
     {
