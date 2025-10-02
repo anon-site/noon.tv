@@ -1336,36 +1336,93 @@ class ArabicTVApp {
 
     showVideoError(message) {
         const loading = document.getElementById('videoLoading');
-        loading.innerHTML = `
-            <div class="error-icon" style="font-size: 3rem; color: #e94560; margin-bottom: 1rem;">
-                <i class="fas fa-exclamation-triangle"></i>
-            </div>
-            <p style="color: #e94560; font-size: 1.1rem; margin-bottom: 1rem;">${message}</p>
-            <button onclick="app.retryVideo()" style="
-                background: #e94560; 
-                color: white; 
-                border: none; 
-                padding: 0.5rem 1rem; 
-                border-radius: 5px; 
-                cursor: pointer;
-                font-size: 0.9rem;
-            ">إعادة المحاولة</button>
-        `;
+        
+        // Check if current channel requires VPN and show appropriate message
+        if (this.currentChannel && this.currentChannel.vpn === true) {
+            loading.innerHTML = `
+                <div class="error-icon" style="font-size: 3rem; color: #e94560; margin-bottom: 1rem;">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <p style="color: #e94560; font-size: 1.1rem; margin-bottom: 1rem; text-align: center;">
+                    يجب عليك تشغيل VPN لكي تعمل هذه القناة
+                </p>
+                <div style="background: rgba(233, 69, 96, 0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0; border-right: 4px solid #e94560;">
+                    <p style="color: #666; font-size: 0.9rem; margin: 0;">
+                        <i class="fas fa-info-circle" style="margin-left: 0.5rem;"></i>
+                        هذه القناة محجوبة في منطقتك الجغرافية وتتطلب استخدام VPN للوصول إليها
+                    </p>
+                </div>
+                <button onclick="app.retryVideo()" style="
+                    background: #e94560; 
+                    color: white; 
+                    border: none; 
+                    padding: 0.5rem 1rem; 
+                    border-radius: 5px; 
+                    cursor: pointer;
+                    font-size: 0.9rem;
+                ">إعادة المحاولة</button>
+            `;
+        } else {
+            loading.innerHTML = `
+                <div class="error-icon" style="font-size: 3rem; color: #e94560; margin-bottom: 1rem;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <p style="color: #e94560; font-size: 1.1rem; margin-bottom: 1rem;">${message}</p>
+                <button onclick="app.retryVideo()" style="
+                    background: #e94560; 
+                    color: white; 
+                    border: none; 
+                    padding: 0.5rem 1rem; 
+                    border-radius: 5px; 
+                    cursor: pointer;
+                    font-size: 0.9rem;
+                ">إعادة المحاولة</button>
+            `;
+        }
     }
 
     handleVideoError() {
         const loading = document.getElementById('videoLoading');
-        loading.innerHTML = `
-            <div class="spinner" style="border-top-color: #e94560;"></div>
-            <p style="color: #e94560;">خطأ في تحميل البث - جارٍ المحاولة مرة أخرى...</p>
-        `;
         
-        // Retry after 3 seconds
-        setTimeout(() => {
-            if (this.currentChannel) {
-                this.loadVideoStream(this.currentChannel.url);
-            }
-        }, 3000);
+        // Check if current channel requires VPN
+        if (this.currentChannel && this.currentChannel.vpn === true) {
+            loading.innerHTML = `
+                <div class="error-icon" style="font-size: 3rem; color: #e94560; margin-bottom: 1rem;">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <p style="color: #e94560; font-size: 1.1rem; margin-bottom: 1rem; text-align: center;">
+                    يجب عليك تشغيل VPN لكي تعمل هذه القناة
+                </p>
+                <div style="background: rgba(233, 69, 96, 0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0; border-right: 4px solid #e94560;">
+                    <p style="color: #666; font-size: 0.9rem; margin: 0;">
+                        <i class="fas fa-info-circle" style="margin-left: 0.5rem;"></i>
+                        هذه القناة محجوبة في منطقتك الجغرافية وتتطلب استخدام VPN للوصول إليها
+                    </p>
+                </div>
+                <button onclick="app.retryVideo()" style="
+                    background: #e94560; 
+                    color: white; 
+                    border: none; 
+                    padding: 0.75rem 1.5rem; 
+                    border-radius: 6px; 
+                    cursor: pointer; 
+                    font-size: 0.9rem;
+                    margin-top: 1rem;
+                ">إعادة المحاولة</button>
+            `;
+        } else {
+            loading.innerHTML = `
+                <div class="spinner" style="border-top-color: #e94560;"></div>
+                <p style="color: #e94560;">خطأ في تحميل البث - جارٍ المحاولة مرة أخرى...</p>
+            `;
+            
+            // Retry after 3 seconds only if not VPN required
+            setTimeout(() => {
+                if (this.currentChannel) {
+                    this.loadVideoStream(this.currentChannel.url);
+                }
+            }, 3000);
+        }
     }
 
     retryVideo() {
