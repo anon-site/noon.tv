@@ -18989,6 +18989,186 @@ body[data-theme="light"] .app-download-inline {
 
 }
 
+/* Urban VPN Download Section Styles */
+
+.vpn-download-inline {
+
+    margin-top: 0.75rem;
+
+    padding: 0.75rem;
+
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(16, 185, 129, 0.05));
+
+    border: 1px solid rgba(59, 130, 246, 0.1);
+
+    border-radius: 8px;
+
+    transition: all 0.3s ease;
+
+}
+
+.vpn-download-content {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 1rem;
+
+}
+
+.vpn-download-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 0.5rem;
+
+}
+
+.vpn-download-text {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 0.5rem;
+
+    color: var(--text-primary);
+
+    font-weight: 600;
+
+    font-size: 0.9rem;
+
+}
+
+.vpn-download-text i {
+
+    color: var(--highlight-color);
+
+    font-size: 1rem;
+
+}
+
+.vpn-download-features {
+
+    display: flex;
+
+    gap: 0.5rem;
+
+}
+
+.vpn-feature-badge {
+
+    background: rgba(59, 130, 246, 0.1);
+
+    color: var(--highlight-color);
+
+    padding: 0.2rem 0.5rem;
+
+    border-radius: 12px;
+
+    font-size: 0.7rem;
+
+    font-weight: 500;
+
+}
+
+.vpn-download-buttons {
+
+    display: flex;
+
+    gap: 0.5rem;
+
+}
+
+.vpn-download-btn {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 0.4rem;
+
+    padding: 0.5rem 0.75rem;
+
+    background: var(--background-secondary);
+
+    color: var(--text-primary);
+
+    text-decoration: none;
+
+    border-radius: 6px;
+
+    font-size: 0.8rem;
+
+    font-weight: 500;
+
+    transition: all 0.3s ease;
+
+    border: 1px solid var(--border-color);
+
+}
+
+.vpn-download-btn:hover {
+
+    background: var(--highlight-color);
+
+    color: white;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+
+}
+
+.vpn-download-btn i {
+
+    font-size: 0.9rem;
+
+}
+
+.chrome-btn:hover {
+
+    background: #4285f4;
+
+}
+
+.android-btn:hover {
+
+    background: #3ddc84;
+
+}
+
+/* Light theme for Urban VPN download */
+
+body[data-theme="light"] .vpn-download-inline {
+
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.03), rgba(16, 185, 129, 0.03));
+
+    border-color: rgba(59, 130, 246, 0.08);
+
+}
+
+body[data-theme="light"] .vpn-download-btn {
+
+    background: rgba(59, 130, 246, 0.05);
+
+    border-color: rgba(59, 130, 246, 0.1);
+
+}
+
+body[data-theme="light"] .vpn-download-btn:hover {
+
+    background: var(--highlight-color);
+
+    color: white;
+
+}
+
 body[data-theme="light"] .download-text i {
 
     color: #3b82f6;
@@ -19029,6 +19209,46 @@ body[data-theme="light"] .feature-badge {
 
     }
 
+    /* Urban VPN Mobile Styles */
+
+    .vpn-download-content {
+
+        flex-direction: column;
+
+        gap: 0.75rem;
+
+        text-align: center;
+
+    }
+
+    .vpn-download-info {
+
+        align-items: center;
+
+    }
+
+    .vpn-download-features {
+
+        justify-content: center;
+
+    }
+
+    .vpn-download-buttons {
+
+        width: 100%;
+
+        justify-content: center;
+
+    }
+
+    .vpn-download-btn {
+
+        flex: 1;
+
+        justify-content: center;
+
+    }
+
 }
 
 @media (max-width: 480px) {
@@ -19046,6 +19266,28 @@ body[data-theme="light"] .feature-badge {
     }
 
     .download-btn-inline {
+
+        padding: 0.5rem 0.75rem;
+
+        font-size: 0.8rem;
+
+    }
+
+    /* Urban VPN Small Screen Styles */
+
+    .vpn-download-inline {
+
+        padding: 0.75rem;
+
+    }
+
+    .vpn-download-text {
+
+        font-size: 0.85rem;
+
+    }
+
+    .vpn-download-btn {
 
         padding: 0.5rem 0.75rem;
 
