@@ -29,7 +29,8 @@ class ArabicTVApp {
             highContrast: false,
             borderRadius: 'rounded', // minimal, normal, rounded
             showAutoNotifications: false, // التحكم في الإشعارات التلقائية
-            backgroundAudio: true // تشغيل الصوت في الخلفية
+            backgroundAudio: true, // تشغيل الصوت في الخلفية
+            autoUpdateChannels: true // التحديث التلقائي للقنوات
         };
         this.filteredChannels = [...this.channels];
         this.currentCategory = 'all';
@@ -81,10 +82,10 @@ class ArabicTVApp {
         this.bindRemoteStorageEvents();
         
         // Check for updates after a short delay (with notification control)
-        // Disabled automatic updates - user must manually update channels
-        // setTimeout(() => {
-        //     this.checkForUpdates(true); // Pass true to indicate this is automatic check
-        // }, 2000);
+        // Enable automatic updates - check for updates when page loads
+        setTimeout(() => {
+            this.checkForUpdates(true); // Pass true to indicate this is automatic check
+        }, 2000);
         this.setupMobileSearch();
         this.setupPictureInPictureEvents();
         this.checkAndSetupPictureInPicture();
@@ -99,6 +100,9 @@ class ArabicTVApp {
                 }
             });
         }
+
+        // Add page reload detection for automatic updates
+        this.setupPageReloadDetection();
         this.syncMobileNavTabs();
         this.initializeNewFeatures(); // Initialize new navigation features (includes loadCategories)
         this.initializeFooter(); // Initialize footer functionality
@@ -289,6 +293,8 @@ class ArabicTVApp {
             this.applyHighContrast();
             this.applyBorderRadius();
             this.applyAutoNotifications();
+            this.applyBackgroundAudio();
+            this.applyAutoUpdateChannels();
             
             console.log('✅ تم تطبيق جميع الإعدادات بنجاح');
             
@@ -409,6 +415,22 @@ class ArabicTVApp {
         
         if (document.getElementById('showAutoNotifications')) {
             document.getElementById('showAutoNotifications').checked = showAutoNotifications;
+        }
+    }
+
+    applyBackgroundAudio() {
+        const backgroundAudio = this.settings.backgroundAudio;
+        
+        if (document.getElementById('backgroundAudio')) {
+            document.getElementById('backgroundAudio').checked = backgroundAudio;
+        }
+    }
+
+    applyAutoUpdateChannels() {
+        const autoUpdateChannels = this.settings.autoUpdateChannels;
+        
+        if (document.getElementById('autoUpdateChannels')) {
+            document.getElementById('autoUpdateChannels').checked = autoUpdateChannels;
         }
     }
 
@@ -555,6 +577,25 @@ class ArabicTVApp {
                 this.settings.showAutoNotifications = e.target.checked;
                 this.saveSettings();
                 this.applyAutoNotifications();
+            });
+        }
+
+        const backgroundAudioCheckbox = document.getElementById('backgroundAudio');
+        if (backgroundAudioCheckbox) {
+            backgroundAudioCheckbox.addEventListener('change', (e) => {
+                this.settings.backgroundAudio = e.target.checked;
+                this.saveSettings();
+                this.applyBackgroundAudio();
+            });
+        }
+
+        const autoUpdateChannelsCheckbox = document.getElementById('autoUpdateChannels');
+        if (autoUpdateChannelsCheckbox) {
+            autoUpdateChannelsCheckbox.addEventListener('change', (e) => {
+                this.settings.autoUpdateChannels = e.target.checked;
+                this.saveSettings();
+                this.applyAutoUpdateChannels();
+                console.log('تم تغيير التحديث التلقائي للقنوات إلى:', e.target.checked);
             });
         }
 
@@ -6340,10 +6381,63 @@ class ArabicTVApp {
     
     
 
+    // Setup page reload detection for automatic updates
+    setupPageReloadDetection() {
+        // Store timestamp when page loads
+        const pageLoadTime = Date.now();
+        sessionStorage.setItem('pageLoadTime', pageLoadTime.toString());
+        
+        // Check if this is a page reload (not first visit)
+        const lastPageLoadTime = sessionStorage.getItem('lastPageLoadTime');
+        const isPageReload = lastPageLoadTime && (pageLoadTime - parseInt(lastPageLoadTime)) < 5000;
+        
+        if (isPageReload) {
+            console.log('🔄 تم اكتشاف إعادة تحميل الصفحة - سيتم فحص التحديثات تلقائياً');
+            
+            // Show notification about automatic update check
+            setTimeout(() => {
+                this.notifyInfo('تم اكتشاف إعادة تحميل الصفحة - جاري فحص التحديثات...', 'تحديث تلقائي', 3000);
+            }, 1000);
+            
+            // Check for updates after a short delay
+            setTimeout(() => {
+                this.checkForUpdates(true);
+            }, 3000);
+        }
+        
+        // Store current load time for next check
+        sessionStorage.setItem('lastPageLoadTime', pageLoadTime.toString());
+        
+        // Listen for page visibility changes to trigger updates when user returns
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                // Page became visible - check if user was away for more than 5 minutes
+                const lastActiveTime = localStorage.getItem('lastActiveTime');
+                const currentTime = Date.now();
+                
+                if (lastActiveTime && (currentTime - parseInt(lastActiveTime)) > 300000) { // 5 minutes
+                    console.log('🔄 المستخدم عاد بعد غياب طويل - فحص التحديثات');
+                    setTimeout(() => {
+                        this.checkForUpdates(true);
+                    }, 2000);
+                }
+            } else {
+                // Page became hidden - store last active time
+                localStorage.setItem('lastActiveTime', Date.now().toString());
+            }
+        });
+    }
+
     // Check for updates
     async checkForUpdates(isAutomaticCheck = false) {
         try {
             console.log('🔍 فحص التحديثات...');
+            
+            // Check if auto-update is disabled
+            if (isAutomaticCheck && !this.settings.autoUpdateChannels) {
+                console.log('⏸️ التحديث التلقائي معطل من الإعدادات');
+                return false;
+            }
             
             // Get local data info
             const localData = localStorage.getItem('tvChannels');
@@ -6380,35 +6474,49 @@ class ArabicTVApp {
             
             if (isFirstVisit || isDataCorrupted) {
                 const reason = isFirstVisit ? 'أول زيارة للموقع' : 'البيانات المحلية تالفة أو فارغة';
-                console.log(`📥 ${reason}، يمكنك تحديث القنوات يدوياً من زر "تحديث القنوات"`);
+                console.log(`📥 ${reason}، سيتم تحديث القنوات تلقائياً`);
                 
-                // Show notification to inform user they can update manually
+                // Show notification about automatic update
                 if (isFirstEverVisit) {
-                    this.notifyInfo('يمكنك تحديث القنوات يدوياً من زر "تحديث القنوات"', 'تحديث يدوي', 5000);
+                    this.notifyInfo('أول زيارة للموقع - جاري تحديث القنوات تلقائياً...', 'تحديث تلقائي', 5000);
                 }
                 
                 // Mark that user has visited before
                 if (isFirstEverVisit) {
                     localStorage.setItem('hasVisitedBefore', 'true');
                     localStorage.setItem('lastUpdateCheck', new Date().toISOString());
+                }
+                
+                // Auto-update for first visit or corrupted data
+                if (isAutomaticCheck) {
+                    console.log('🔄 تحديث تلقائي للقنوات...');
+                    await updateChannels();
+                    return true;
                 }
                 
                 return false; // Don't auto-update, let user decide
             }
 
-            // Check if we have very few channels (less than 10) - inform user they can update manually
+            // Check if we have very few channels (less than 10) - auto-update
             if (this.channels.length < 10) {
-                console.log('📥 عدد القنوات قليل جداً، يمكنك تحديث القنوات يدوياً من زر "تحديث القنوات"');
+                console.log('📥 عدد القنوات قليل جداً، سيتم تحديث القنوات تلقائياً');
                 
-                // Show notification to inform user they can update manually
+                // Show notification about automatic update
                 if (isFirstEverVisit) {
-                    this.notifyInfo('عدد القنوات قليل، يمكنك تحديث القنوات يدوياً من زر "تحديث القنوات"', 'تحديث يدوي', 5000);
+                    this.notifyInfo('عدد القنوات قليل - جاري تحديث القنوات تلقائياً...', 'تحديث تلقائي', 5000);
                 }
                 
                 // Mark that user has visited before
                 if (isFirstEverVisit) {
                     localStorage.setItem('hasVisitedBefore', 'true');
                     localStorage.setItem('lastUpdateCheck', new Date().toISOString());
+                }
+                
+                // Auto-update for few channels
+                if (isAutomaticCheck) {
+                    console.log('🔄 تحديث تلقائي للقنوات...');
+                    await updateChannels();
+                    return true;
                 }
                 
                 return false; // Don't auto-update, let user decide
@@ -6441,17 +6549,24 @@ class ArabicTVApp {
                 const lastUpdateCheck = localStorage.getItem('lastUpdateCheck');
                 const hasRealUpdate = lastUpdateCheck && new Date(remoteLastModified) > new Date(lastUpdateCheck);
                 
-                // If data is very old (more than 7 days), inform user they can update manually
+                // If data is very old (more than 7 days), auto-update
                 if (daysSinceLastUpdate > 7) {
-                    console.log('📥 البيانات قديمة جداً، يمكنك تحديث القنوات يدوياً من زر "تحديث القنوات"');
+                    console.log('📥 البيانات قديمة جداً، سيتم تحديث القنوات تلقائياً');
                     
-                    // Show notification to inform user they can update manually
-                    if (hasRealUpdate) {
-                        this.notifyInfo('البيانات قديمة، يمكنك تحديث القنوات يدوياً من زر "تحديث القنوات"', 'تحديث يدوي', 5000);
+                    // Show notification about automatic update
+                    if (hasRealUpdate && isAutomaticCheck) {
+                        this.notifyInfo('البيانات قديمة - جاري تحديث القنوات تلقائياً...', 'تحديث تلقائي', 5000);
                     }
                     
                     // Update last check time
                     localStorage.setItem('lastUpdateCheck', new Date().toISOString());
+                    
+                    // Auto-update for old data
+                    if (isAutomaticCheck) {
+                        console.log('🔄 تحديث تلقائي للقنوات...');
+                        await updateChannels();
+                        return true;
+                    }
                     
                     return false; // Don't auto-update, let user decide
                 } else {
