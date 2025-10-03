@@ -150,7 +150,7 @@
     {
       "id": 134,
       "name": "MBC Drama",
-      "url": "https://mbc1-enc.edgenextcdn.net/out/v1/b0b3a0e6750d4408bb86d703d5feffd1/index.m3u8",
+      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-drama-usa/ea2f5db904aff224b7066e59c7f585a2/index.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e9/MBC_Drama_Logo.svg",
       "category": "entertainment",
       "country": "الامارات",
@@ -158,6 +158,17 @@
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-02T01:19:26.605Z"
+    },
+    {
+      "id": 138,
+      "name": "MBC Drama +",
+      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-plus-drama/e37251ec2aac8f6c98f75cd0fa37cd28/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/2/2a/MBC_Drama_Plus_TV_Channel_Logo.png",
+      "category": "entertainment",
+      "country": "السعودية",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
     },
     {
       "id": 135,
@@ -1235,6 +1246,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-03T17:31:10.441Z",
+  "lastModified": "2025-10-03T17:36:28.454Z",
   "version": "1.0"
 }
