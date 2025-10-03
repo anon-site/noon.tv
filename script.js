@@ -37,6 +37,8 @@ class ArabicTVApp {
         this.editingChannelId = null; // Track which channel is being edited
         this.notificationQueue = []; // Queue for notifications
         this.activeNotifications = new Set(); // Track active notifications
+        this.visibilityChangeListenerAdded = false; // Prevent duplicate visibility change listeners
+        this.isUpdatingChannels = false; // Prevent multiple simultaneous updates
         this.originalOrder = [...this.channels]; // Track original order for comparison
         this.hasOrderChanged = false; // Track if order has been modified
         this.isMobileSidebarOpen = false; // Track mobile sidebar state
@@ -6394,38 +6396,53 @@ class ArabicTVApp {
         if (isPageReload) {
             console.log('🔄 تم اكتشاف إعادة تحميل الصفحة - سيتم فحص التحديثات تلقائياً');
             
-            // Show notification about automatic update check
-            setTimeout(() => {
-                this.notifyInfo('تم اكتشاف إعادة تحميل الصفحة - جاري فحص التحديثات...', 'تحديث تلقائي', 3000);
-            }, 1000);
-            
-            // Check for updates after a short delay
-            setTimeout(() => {
-                this.checkForUpdates(true);
-            }, 3000);
+            // Only proceed if auto-update is enabled
+            if (this.settings.autoUpdateChannels) {
+                // Show notification about automatic update check
+                setTimeout(() => {
+                    this.notifyInfo('تم اكتشاف إعادة تحميل الصفحة - جاري فحص التحديثات...', 'تحديث تلقائي', 3000);
+                }, 1000);
+                
+                // Check for updates after a short delay
+                setTimeout(() => {
+                    this.checkForUpdates(true);
+                }, 3000);
+            } else {
+                console.log('⏸️ التحديث التلقائي معطل من الإعدادات - تم تخطي فحص التحديثات');
+            }
         }
         
         // Store current load time for next check
         sessionStorage.setItem('lastPageLoadTime', pageLoadTime.toString());
         
         // Listen for page visibility changes to trigger updates when user returns
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden) {
-                // Page became visible - check if user was away for more than 5 minutes
-                const lastActiveTime = localStorage.getItem('lastActiveTime');
-                const currentTime = Date.now();
-                
-                if (lastActiveTime && (currentTime - parseInt(lastActiveTime)) > 300000) { // 5 minutes
-                    console.log('🔄 المستخدم عاد بعد غياب طويل - فحص التحديثات');
-                    setTimeout(() => {
-                        this.checkForUpdates(true);
-                    }, 2000);
+        // Check if visibilitychange listener is already added to avoid duplicates
+        if (!this.visibilityChangeListenerAdded) {
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) {
+                    // Page became visible - check if user was away for more than 5 minutes
+                    const lastActiveTime = localStorage.getItem('lastActiveTime');
+                    const currentTime = Date.now();
+                    
+                    if (lastActiveTime && (currentTime - parseInt(lastActiveTime)) > 300000) { // 5 minutes
+                        console.log('🔄 المستخدم عاد بعد غياب طويل - فحص التحديثات');
+                        
+                        // Only proceed if auto-update is enabled
+                        if (this.settings.autoUpdateChannels) {
+                            setTimeout(() => {
+                                this.checkForUpdates(true);
+                            }, 2000);
+                        } else {
+                            console.log('⏸️ التحديث التلقائي معطل من الإعدادات - تم تخطي فحص التحديثات');
+                        }
+                    }
+                } else {
+                    // Page became hidden - store last active time
+                    localStorage.setItem('lastActiveTime', Date.now().toString());
                 }
-            } else {
-                // Page became hidden - store last active time
-                localStorage.setItem('lastActiveTime', Date.now().toString());
-            }
-        });
+            });
+            this.visibilityChangeListenerAdded = true;
+        }
     }
 
     // Check for updates
@@ -6438,6 +6455,14 @@ class ArabicTVApp {
                 console.log('⏸️ التحديث التلقائي معطل من الإعدادات');
                 return false;
             }
+            
+            // Prevent multiple simultaneous updates
+            if (this.isUpdatingChannels) {
+                console.log('⏸️ تحديث القنوات قيد التنفيذ بالفعل - تم تخطي هذا الطلب');
+                return false;
+            }
+            
+            this.isUpdatingChannels = true;
             
             // Get local data info
             const localData = localStorage.getItem('tvChannels');
@@ -6580,10 +6605,12 @@ class ArabicTVApp {
                         }
                     }
                     
+                    this.isUpdatingChannels = false;
                     return true;
                 }
             } else {
                 console.log('✅ البيانات محدثة');
+                this.isUpdatingChannels = false;
                 return false;
             }
 
@@ -6608,6 +6635,7 @@ class ArabicTVApp {
                 localStorage.setItem('lastUpdateCheck', new Date().toISOString());
             }
             
+            this.isUpdatingChannels = false;
             return false; // Don't auto-update, let user decide
         }
     }
