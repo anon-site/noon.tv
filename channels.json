@@ -1177,6 +1177,17 @@
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-02T10:02:07.893Z"
+    },
+    {
+      "id": 139,
+      "name": "الكوفية",
+      "url": "https://customer-9vqui33qma2rownb.cloudflarestream.com/7792e558fe54e23bdd4b462ec275cdba/manifest/video.m3u8",
+      "logo": "https://iili.io/KubCsz7.png",
+      "category": "entertainment",
+      "country": "فلسطين",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
     }
   ],
   "favorites": [],
@@ -1246,6 +1257,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-03T17:36:28.454Z",
+  "lastModified": "2025-10-03T17:50:02.408Z",
   "version": "1.0"
 }
