@@ -29,6 +29,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="simplified-effects.css">
 </head>
 <body>
     <!-- Header -->
@@ -523,44 +524,43 @@
                 </button>
             </div>
             <div class="settings-body">
-                <div class="setting-item">
-                    <label for="autoQuality">جودة تلقائية حسب سرعة الإنترنت</label>
-                    <label class="switch">
-                        <input type="checkbox" id="autoQuality" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="setting-item">
-                    <label for="autoplay">تشغيل تلقائي</label>
-                    <label class="switch">
-                        <input type="checkbox" id="autoplay" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-
-                <div class="setting-item">
-                    <label for="volume">مستوى الصوت</label>
-                    <input type="range" id="volume" min="0" max="100" value="100" class="volume-slider">
-                </div>
-                <div class="setting-item">
-                    <label for="theme">نمط التطبيق</label>
-                    <select id="theme" class="theme-select">
-                        <option value="dark">داكن</option>
-                        <option value="light">فاتح</option>
-                        <option value="auto">تلقائي</option>
-                    </select>
-                </div>
-                
-                <!-- Appearance Customization Section -->
+                <!-- Video & Audio Settings -->
                 <div class="settings-section">
-                    <h4 class="settings-section-title">🎨 تخصيص المظهر</h4>
+                    <h4 class="settings-section-title">🎬 إعدادات الفيديو والصوت</h4>
                     
                     <div class="setting-item">
-                        <label for="zoomLevel">حجم المحتوى</label>
-                        <div class="zoom-control">
-                            <input type="range" id="zoomLevel" min="75" max="150" value="100" step="5" class="zoom-slider">
-                            <span id="zoomValue" class="zoom-value">100%</span>
-                        </div>
+                        <label for="autoQuality">جودة تلقائية حسب سرعة الإنترنت</label>
+                        <label class="switch">
+                            <input type="checkbox" id="autoQuality" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="autoplay">تشغيل تلقائي</label>
+                        <label class="switch">
+                            <input type="checkbox" id="autoplay" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="volume">مستوى الصوت</label>
+                        <input type="range" id="volume" min="0" max="100" value="100" class="volume-slider">
+                    </div>
+                </div>
+                
+                <!-- Theme & Appearance -->
+                <div class="settings-section">
+                    <h4 class="settings-section-title">🎨 المظهر والثيم</h4>
+                    
+                    <div class="setting-item">
+                        <label for="theme">نمط التطبيق</label>
+                        <select id="theme" class="theme-select">
+                            <option value="dark">داكن</option>
+                            <option value="light">فاتح</option>
+                            <option value="auto">تلقائي</option>
+                        </select>
                     </div>
                     
                     <div class="setting-item">
@@ -573,6 +573,14 @@
                             <option value="orange">برتقالي</option>
                             <option value="red">أحمر</option>
                         </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="zoomLevel">حجم المحتوى</label>
+                        <div class="zoom-control">
+                            <input type="range" id="zoomLevel" min="75" max="150" value="100" step="5" class="zoom-slider">
+                            <span id="zoomValue" class="zoom-value">100%</span>
+                        </div>
                     </div>
                     
                     <div class="setting-item">
@@ -595,41 +603,9 @@
                     </div>
                 </div>
                 
-                <!-- System Behavior Section -->
+                <!-- Layout & Display -->
                 <div class="settings-section">
-                    <h4 class="settings-section-title">⚙️ سلوك النظام</h4>
-                    
-                    <div class="setting-item">
-                        <label for="autoUpdateEnabled">التحديث التلقائي للقنوات</label>
-                        <label class="switch">
-                            <input type="checkbox" id="autoUpdateEnabled" checked>
-                            <span class="slider"></span>
-                        </label>
-                        <small class="setting-description">تحديث القنوات تلقائياً عند فتح الموقع</small>
-                    </div>
-                    
-                    <div class="setting-item">
-                        <label for="showAutoNotifications">الإشعارات التلقائية</label>
-                        <label class="switch">
-                            <input type="checkbox" id="showAutoNotifications">
-                            <span class="slider"></span>
-                        </label>
-                        <small class="setting-description">عرض الإشعارات عند التحديثات والأحداث المهمة</small>
-                    </div>
-                    
-                    <div class="setting-item">
-                        <label for="backgroundAudio">تشغيل الصوت في الخلفية</label>
-                        <label class="switch">
-                            <input type="checkbox" id="backgroundAudio" checked>
-                            <span class="slider"></span>
-                        </label>
-                        <small class="setting-description">يسمح بتشغيل الصوت حتى عند الخروج من التطبيق</small>
-                    </div>
-                </div>
-                
-                <!-- Layout and Behavior Section -->
-                <div class="settings-section">
-                    <h4 class="settings-section-title">📐 التخطيط والسلوك</h4>
+                    <h4 class="settings-section-title">📐 التخطيط والعرض</h4>
                     
                     <div class="setting-item">
                         <label for="layoutMode">نمط العرض</label>
@@ -665,6 +641,20 @@
                     </div>
                 </div>
                 
+                <!-- System Settings -->
+                <div class="settings-section">
+                    <h4 class="settings-section-title">⚙️ إعدادات النظام</h4>
+                    
+                    <div class="setting-item">
+                        <label for="autoUpdateEnabled">التحديث التلقائي للقنوات</label>
+                        <label class="switch">
+                            <input type="checkbox" id="autoUpdateEnabled" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <small class="setting-description">تحديث القنوات تلقائياً عند فتح الموقع</small>
+                    </div>
+                </div>
+                
                 <!-- Quick Actions -->
                 <div class="settings-actions">
                     <div class="settings-actions-grid">
@@ -678,14 +668,6 @@
                                 <i class="fas fa-undo"></i>
                                 إعادة تعيين التخصيصات
                             </button>
-                            <button class="show-welcome-btn" onclick="app.showWelcomeModal()">
-                                <i class="fas fa-info-circle"></i>
-                                عرض رسالة الترحيب
-                            </button>
-                            <button class="disable-auto-update-btn" onclick="app.toggleAutoUpdate()" id="toggleAutoUpdateBtn">
-                                <i class="fas fa-sync-alt"></i>
-                                <span id="autoUpdateBtnText">إلغاء التحديث التلقائي</span>
-                            </button>
                         </div>
                         
                         <!-- إدارة البيانات -->
@@ -697,22 +679,6 @@
                             <button class="delete-cookies-btn" onclick="app.deleteAllCookies()">
                                 <i class="fas fa-trash-alt"></i>
                                 حذف الكوكيز
-                            </button>
-                        </div>
-                        
-                        <!-- الإشعارات -->
-                        <div class="settings-button-group">
-                            <div class="settings-button-group-title">
-                                <i class="fas fa-bell"></i>
-                                الإشعارات
-                            </div>
-                            <button class="test-notifications-btn" onclick="app.testNotifications()">
-                                <i class="fas fa-bell"></i>
-                                اختبار الإشعارات
-                            </button>
-                            <button class="reset-notifications-btn" onclick="app.resetNotifications()">
-                                <i class="fas fa-bell-slash"></i>
-                                إعادة تعيين الإشعارات
                             </button>
                         </div>
                     </div>

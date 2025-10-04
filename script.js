@@ -587,37 +587,6 @@ class ArabicTVApp {
         // Sidebar events
         this.bindSidebarEvents();
 
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            // منع الاختصارات عند الكتابة في حقول الإدخال
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.contentEditable === 'true') {
-                return;
-            }
-            
-            switch(e.key.toLowerCase()) {
-                case 'escape':
-                    this.closeModal();
-                    this.closeSettings();
-                    this.closeAdminPanel();
-                    // إغلاق القوائم المحمولة
-                    if (this.isMobileSidebarOpen) {
-                        this.closeMobileMenu();
-                    }
-                    if (this.isDesktopSidebarOpen) {
-                        this.toggleSidebar();
-                    }
-                    break;
-                case 'c':
-                    this.openAdminPanel();
-                    break;
-                case 's':
-                    this.openSettings();
-                    break;
-                case 'm':
-                    this.toggleSidebar();
-                    break;
-            }
-        });
     }
 
     bindAdminTabEvents() {
@@ -732,6 +701,12 @@ class ArabicTVApp {
     }
 
     updateVpnToggleUI(vpn) {
+        // تحديث القيمة المخفية أولاً
+        const vpnInput = document.getElementById('channelVpn');
+        if (vpnInput) {
+            vpnInput.value = vpn.toString();
+        }
+        
         // التأكد من وجود العناصر
         const toggles = document.querySelectorAll('.vpn-toggle');
         if (toggles.length === 0) {
@@ -2632,8 +2607,8 @@ class ArabicTVApp {
         // Reset status toggle
         this.updateStatusToggleUI('active');
         
-        // Reset VPN toggle
-        this.updateVpnToggleUI(false);
+        // Reset VPN toggle to default value (true)
+        this.updateVpnToggleUI(true);
         
         // Reset button text and class
         const submitBtn = document.querySelector('#addChannelForm button[type="submit"]');
@@ -3705,6 +3680,7 @@ class ArabicTVApp {
         this.settings.highContrast = false;
         this.settings.borderRadius = 'rounded';
         this.settings.showAutoNotifications = false;
+        this.settings.autoUpdateEnabled = true; // تفعيل التحديث التلقائي للقنوات
         
         // إعادة تعيين الإشعارات المحفوظة
         localStorage.removeItem('passwordWarningShown');
@@ -3712,6 +3688,9 @@ class ArabicTVApp {
         // Save and apply
         this.saveSettings();
         this.applySettings();
+        
+        // تحديث زر التحديث التلقائي في الواجهة
+        this.updateAutoUpdateButton();
         
         this.notifySuccess('تم إعادة تعيين جميع التخصيصات!');
         
@@ -6427,10 +6406,7 @@ class ArabicTVApp {
             updateChannels();
             this.isAutomaticUpdate = false; // Reset flag
             
-            // Show simple notification for automatic update
-            setTimeout(() => {
-                this.notifyInfo('تم تحديث القنوات تلقائياً', 'تحديث تلقائي', 2000);
-            }, 1000);
+            // Simple notification for automatic update will be shown by updateChannels function
         }, 2000);
     }
 
@@ -6826,50 +6802,6 @@ class ArabicTVApp {
         // Setup wheel scroll for channel bar
         setupChannelBarWheelScroll();
 
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            if (document.getElementById('videoModal').classList.contains('active')) {
-                switch(e.key.toLowerCase()) {
-                    case 'arrowleft':
-                        e.preventDefault();
-                        previousChannel();
-                        break;
-                    case 'arrowright':
-                        e.preventDefault();
-                        nextChannel();
-                        break;
-                    case 'pageup':
-                        e.preventDefault();
-                        // Jump 5 channels back
-                        jumpChannels(-5);
-                        break;
-                    case 'pagedown':
-                        e.preventDefault();
-                        // Jump 5 channels forward
-                        jumpChannels(5);
-                        break;
-                    case 'c':
-                        e.preventDefault();
-                        toggleChannelBar();
-                        isChannelBarVisible = !isChannelBarVisible;
-                        break;
-                    case 'home':
-                        e.preventDefault();
-                        scrollToCurrentChannel();
-                        break;
-                    case 'escape':
-                        e.preventDefault();
-                        if (isChannelBarVisible) {
-                            // Only hide on desktop, keep visible on mobile
-                            if (window.innerWidth > 768) {
-                            hideChannelBar();
-                            isChannelBarVisible = false;
-                            }
-                        }
-                        break;
-                }
-            }
-        });
     }
 
     // Update active channel in channel bar
@@ -8560,6 +8492,11 @@ async function updateChannels() {
                         setTimeout(() => {
                             window.app.notifySuccess('تم تحديث القنوات ومزامنتها مع جميع الأجهزة المتصلة!');
                         }, 1000);
+                    } else {
+                        // For automatic updates, show only the simple notification
+                        setTimeout(() => {
+                            window.app.notifyInfo('تم تحديث القنوات تلقائياً', 'تحديث تلقائي', 2000);
+                        }, 1000);
                     }
                 } else {
                     console.log('⚠️ فشلت المزامنة السحابية');
@@ -8582,6 +8519,11 @@ async function updateChannels() {
             if (!window.app.isAutomaticUpdate) {
                 setTimeout(() => {
                     window.app.notifySuccess(`تم تحديث القنوات بنجاح! تم تحميل ${data.channels.length} قناة جديدة.`, 'تحديث مكتمل', 5000);
+                }, 500);
+            } else {
+                // For automatic updates, show only the simple notification
+                setTimeout(() => {
+                    window.app.notifyInfo('تم تحديث القنوات تلقائياً', 'تحديث تلقائي', 2000);
                 }, 500);
             }
         }
