@@ -168,7 +168,8 @@
       "country": "السعودية",
       "type": "hls",
       "status": "inactive",
-      "vpn": true
+      "vpn": true,
+      "lastModified": "2025-10-04T03:12:20.334Z"
     },
     {
       "id": 135,
@@ -191,7 +192,8 @@
       "country": "السعودية",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-04T03:12:20.334Z"
     },
     {
       "id": 118,
@@ -1198,7 +1200,8 @@
       "country": "فلسطين",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-04T03:12:20.334Z"
     },
     {
       "id": 141,
@@ -1212,6 +1215,45 @@
       "isLocal": false,
       "lastModified": "2025-01-27T12:00:00.000Z",
       "vpn": false
+    },
+    {
+      "id": 142,
+      "name": "TNA Wrestling",
+      "url": "https://epg.provider.plex.tv/library/parts/5e20b730f2f8d5003d739db7-606605549dbfca002d2ae873.m3u8?includeAllStreams=1&X-Plex-Product=Plex+Mediaverse&X-Plex-Token=xK7U9RfFyckTeqzcUZfQ",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/b/b0/Total_Nonstop_Action_Wrestling_logo_2024.png",
+      "category": "sports",
+      "country": "USA",
+      "type": "hls",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-04T04:49:03.975Z"
+    },
+    {
+      "id": 143,
+      "name": "ART Cinema",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=art_cinema",
+      "logo": "https://ewsat.com/img/ART_CINEMA.png",
+
+      "category": "movies",
+      "country": "السعودية",
+      "type": "elahmad",
+      "status": "active",
+      "isLocal": false,
+      "lastModified": "2025-01-27T12:00:00.000Z",
+      "vpn": false
+    },
+    {
+      "id": 144,
+      "name": "ART Aflam 1",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=art_aflam_1",
+      "logo": "https://static.wikia.nocookie.net/logopedia/images/c/c9/ART_Aflam_1.png/revision/latest?cb=20100523131757",
+      "category": "movies",
+      "country": "السعودية",
+      "type": "hls",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-04T04:54:52.698Z"
+
     }
   ],
   "favorites": [],
@@ -1231,6 +1273,7 @@
     "borderRadius": "rounded",
     "showAutoNotifications": false,
     "backgroundAudio": true,
+    "autoUpdateEnabled": false,
     "autoUpdateChannels": true
   },
   "categories": [
@@ -1281,6 +1324,8 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-03T20:45:41.559Z",
+  "lastModified": "2025-10-04T05:05:17.866Z",
   "version": "1.0"
 }
+
+
