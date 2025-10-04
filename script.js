@@ -1068,7 +1068,7 @@ class ArabicTVApp {
         this.isLoadingChannel = true;
         this.currentChannel = channel;
         this.showVideoModal(channel);
-        const type = channel.type || (this.isYouTubeUrl(channel.url) ? 'youtube' : 'hls');
+        const type = channel.type || (this.isYouTubeUrl(channel.url) ? 'youtube' : (this.isElahmadUrl(channel.url) ? 'elahmad' : 'hls'));
         
         try {
             await this.loadVideoStream(channel.url, type);
@@ -1235,6 +1235,30 @@ class ArabicTVApp {
                 youtubeIframe.remove();
             }
             
+            // Remove elahmad iframe if exists
+            const elahmadIframe = document.getElementById('elahmadPlayer');
+            if (elahmadIframe) {
+                // إيقاف iframe فوراً
+                elahmadIframe.src = '';
+                elahmadIframe.style.display = 'none';
+                
+                // محاولة إيقاف الصوت
+                try {
+                    if (elahmadIframe.contentWindow) {
+                        elahmadIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                    }
+                } catch (e) {
+                    console.log('Cannot access iframe content');
+                }
+                
+                // إزالة iframe بعد تأخير قصير
+                setTimeout(() => {
+                    if (elahmadIframe && elahmadIframe.parentNode) {
+                        elahmadIframe.remove();
+                    }
+                }, 100);
+            }
+            
             console.log('Current video stopped successfully');
         } catch (error) {
             console.error('Error stopping current video:', error);
@@ -1271,6 +1295,12 @@ class ArabicTVApp {
             if (type === 'youtube' || this.isYouTubeUrl(url)) {
                 const currentQuality = this.getCurrentQuality();
                 await this.loadYouTubeVideo(url, currentQuality);
+                return;
+            }
+
+            // Check if it's an elahmad.com URL
+            if (type === 'elahmad' || this.isElahmadUrl(url)) {
+                await this.loadElahmadVideo(url);
                 return;
             }
 
@@ -1581,6 +1611,11 @@ class ArabicTVApp {
             iconClass = 'fab fa-youtube';
             typeText = 'يوتيوب';
             indicatorColor = '#ff0000';
+        } else if (this.isElahmadUrl(url)) {
+            urlType = 'elahmad';
+            iconClass = 'fas fa-tv';
+            typeText = 'ElAhmad TV';
+            indicatorColor = '#8e44ad';
         } else if (url.includes('.m3u8') || url.includes('playlist.m3u8') || url.includes('index.m3u8')) {
             urlType = 'hls';
             iconClass = 'fas fa-broadcast-tower';
@@ -1621,6 +1656,87 @@ class ArabicTVApp {
         const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
         const match = url.match(regExp);
         return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    // Check if URL is from elahmad.com
+    isElahmadUrl(url) {
+        const elahmadRegex = /^(https?:\/\/)?(www\.)?elahmad\.com/;
+        return elahmadRegex.test(url);
+    }
+
+    // Load elahmad.com iframe
+    async loadElahmadVideo(url) {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            // Validate URL
+            if (!url || url.trim() === '') {
+                throw new Error('رابط elahmad.com فارغ أو غير صحيح');
+            }
+
+            if (!this.isElahmadUrl(url)) {
+                throw new Error('رابط elahmad.com غير صحيح - تحقق من الرابط');
+            }
+
+            // Stop any existing iframe
+            const existingIframe = document.getElementById('elahmadPlayer');
+            if (existingIframe) {
+                // إيقاف iframe السابق فوراً
+                existingIframe.src = '';
+                existingIframe.style.display = 'none';
+                
+                // محاولة إيقاف الصوت
+                try {
+                    if (existingIframe.contentWindow) {
+                        existingIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                    }
+                } catch (e) {
+                    console.log('Cannot access existing iframe content');
+                }
+                
+                // إزالة iframe السابق
+                existingIframe.remove();
+            }
+
+            // Hide the video element and show iframe
+            video.style.display = 'none';
+            
+            // Create or update elahmad iframe
+            let iframe = document.getElementById('elahmadPlayer');
+            if (!iframe) {
+                iframe = document.createElement('iframe');
+                iframe.id = 'elahmadPlayer';
+                iframe.style.width = '100%';
+                iframe.style.height = '100%';
+                iframe.style.border = 'none';
+                iframe.allowFullscreen = true;
+                iframe.allow = 'autoplay; fullscreen; picture-in-picture; xr-spatial-tracking; encrypted-media';
+                
+                // Insert iframe after video element
+                video.parentNode.insertBefore(iframe, video.nextSibling);
+            }
+
+            // Set iframe source
+            iframe.src = url;
+            
+            // Hide loading
+            loading.style.display = 'none';
+            
+            // Show iframe
+            iframe.style.display = 'block';
+            
+            console.log('✅ تم تحميل iframe من elahmad.com بنجاح');
+            
+        } catch (error) {
+            console.error('❌ خطأ في تحميل iframe من elahmad.com:', error);
+            loading.innerHTML = `
+                <div class="error-icon">⚠️</div>
+                <p>خطأ في تحميل المحتوى</p>
+                <small>${error.message}</small>
+            `;
+            throw error;
+        }
     }
 
     // Load YouTube video using iframe
@@ -1770,6 +1886,22 @@ class ArabicTVApp {
         if (iframe) {
             iframe.style.display = 'none';
             iframe.src = '';
+        }
+        
+        // Hide elahmad iframe if exists
+        const elahmadIframe = document.getElementById('elahmadPlayer');
+        if (elahmadIframe) {
+            elahmadIframe.style.display = 'none';
+            elahmadIframe.src = '';
+            
+            // محاولة إيقاف الصوت
+            try {
+                if (elahmadIframe.contentWindow) {
+                    elahmadIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                }
+            } catch (e) {
+                console.log('Cannot access elahmad iframe content');
+            }
         }
         
         // Hide ad block notification

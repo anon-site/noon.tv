@@ -1199,6 +1199,19 @@
       "type": "hls",
       "status": "active",
       "vpn": false
+    },
+    {
+      "id": 141,
+      "name": "ART Cinema",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=art_cinema",
+      "logo": "https://www.elahmad.com/tv/images/art_cinema.png",
+      "category": "movies",
+      "country": "السعودية",
+      "type": "elahmad",
+      "status": "active",
+      "isLocal": false,
+      "lastModified": "2025-01-27T12:00:00.000Z",
+      "vpn": false
     }
   ],
   "favorites": [],
