@@ -29,7 +29,8 @@ class ArabicTVApp {
             highContrast: false,
             borderRadius: 'rounded', // minimal, normal, rounded
             showAutoNotifications: false, // التحكم في الإشعارات التلقائية
-            backgroundAudio: true // تشغيل الصوت في الخلفية
+            backgroundAudio: true, // تشغيل الصوت في الخلفية
+            autoUpdateEnabled: true // التحديث التلقائي للقنوات
         };
         this.filteredChannels = [...this.channels];
         this.currentCategory = 'all';
@@ -263,6 +264,12 @@ class ArabicTVApp {
                 console.log('أزرار التحكم المخصصة:', this.settings.showCustomControls);
             }
 
+            const autoUpdateEnabledEl = document.getElementById('autoUpdateEnabled');
+            if (autoUpdateEnabledEl) {
+                autoUpdateEnabledEl.checked = this.settings.autoUpdateEnabled;
+                console.log('التحديث التلقائي:', this.settings.autoUpdateEnabled);
+            }
+
             // Apply new customization settings
             this.applyZoomLevel();
             this.applyColorTheme();
@@ -274,6 +281,7 @@ class ArabicTVApp {
             this.applyBorderRadius();
             this.applyAutoNotifications();
             this.applyBackgroundAudio();
+            this.updateAutoUpdateButton();
             
             console.log('✅ تم تطبيق جميع الإعدادات بنجاح');
             
@@ -557,6 +565,16 @@ class ArabicTVApp {
                 this.settings.backgroundAudio = e.target.checked;
                 this.saveSettings();
                 this.applyBackgroundAudio();
+            });
+        }
+
+        const autoUpdateEnabledCheckbox = document.getElementById('autoUpdateEnabled');
+        if (autoUpdateEnabledCheckbox) {
+            autoUpdateEnabledCheckbox.addEventListener('change', (e) => {
+                this.settings.autoUpdateEnabled = e.target.checked;
+                this.saveSettings();
+                this.updateAutoUpdateButton();
+                console.log('تم تغيير التحديث التلقائي إلى:', e.target.checked);
             });
         }
 
@@ -3730,6 +3748,57 @@ class ArabicTVApp {
         }, 1000);
     }
 
+    // Toggle Auto Update Functionality
+    toggleAutoUpdate() {
+        const autoUpdateEnabled = document.getElementById('autoUpdateEnabled');
+        const toggleBtn = document.getElementById('toggleAutoUpdateBtn');
+        const btnText = document.getElementById('autoUpdateBtnText');
+        
+        if (autoUpdateEnabled && toggleBtn && btnText) {
+            // Toggle the setting
+            autoUpdateEnabled.checked = !autoUpdateEnabled.checked;
+            
+            // Update button appearance and text
+            if (autoUpdateEnabled.checked) {
+                toggleBtn.classList.remove('disabled');
+                btnText.textContent = 'إلغاء التحديث التلقائي';
+                this.notifySuccess('تم تفعيل التحديث التلقائي للقنوات');
+            } else {
+                toggleBtn.classList.add('disabled');
+                btnText.textContent = 'تفعيل التحديث التلقائي';
+                this.notifyWarning('تم إلغاء التحديث التلقائي للقنوات');
+            }
+            
+            // Save the setting
+            this.settings.autoUpdateEnabled = autoUpdateEnabled.checked;
+            this.saveSettings();
+            
+            console.log('التحديث التلقائي:', autoUpdateEnabled.checked ? 'مفعل' : 'معطل');
+        }
+    }
+
+    // Check if auto update is enabled
+    isAutoUpdateEnabled() {
+        return this.settings.autoUpdateEnabled !== false; // Default to true
+    }
+
+    // Update auto update button appearance
+    updateAutoUpdateButton() {
+        const toggleBtn = document.getElementById('toggleAutoUpdateBtn');
+        const btnText = document.getElementById('autoUpdateBtnText');
+        const autoUpdateEnabled = document.getElementById('autoUpdateEnabled');
+        
+        if (toggleBtn && btnText && autoUpdateEnabled) {
+            if (this.settings.autoUpdateEnabled) {
+                toggleBtn.classList.remove('disabled');
+                btnText.textContent = 'إلغاء التحديث التلقائي';
+            } else {
+                toggleBtn.classList.add('disabled');
+                btnText.textContent = 'تفعيل التحديث التلقائي';
+            }
+        }
+    }
+
     // Remote Storage UI Management
     bindRemoteStorageEvents() {
         // Enable/disable remote storage
@@ -6344,6 +6413,12 @@ class ArabicTVApp {
 
     // Simple auto-update on page load
     setupAutoUpdate() {
+        // Check if auto update is enabled before proceeding
+        if (!this.isAutoUpdateEnabled()) {
+            console.log('🚫 التحديث التلقائي معطل من قبل المستخدم');
+            return;
+        }
+        
         // Always update channels when page loads
         console.log('🔄 تحديث القنوات تلقائياً عند فتح الموقع...');
         
@@ -6359,10 +6434,16 @@ class ArabicTVApp {
         }, 2000);
     }
 
-    // Simple check for updates - always update channels
+    // Simple check for updates - check if auto update is enabled first
     async checkForUpdates(isAutomaticCheck = false) {
         try {
             console.log('🔍 فحص التحديثات...');
+            
+            // Check if auto update is enabled for automatic checks
+            if (isAutomaticCheck && !this.isAutoUpdateEnabled()) {
+                console.log('🚫 التحديث التلقائي معطل من قبل المستخدم');
+                return false;
+            }
             
             // Always update channels
             console.log('🔄 تحديث القنوات تلقائياً...');

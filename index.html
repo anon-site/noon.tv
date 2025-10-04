@@ -595,6 +595,38 @@
                     </div>
                 </div>
                 
+                <!-- System Behavior Section -->
+                <div class="settings-section">
+                    <h4 class="settings-section-title">⚙️ سلوك النظام</h4>
+                    
+                    <div class="setting-item">
+                        <label for="autoUpdateEnabled">التحديث التلقائي للقنوات</label>
+                        <label class="switch">
+                            <input type="checkbox" id="autoUpdateEnabled" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <small class="setting-description">تحديث القنوات تلقائياً عند فتح الموقع</small>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="showAutoNotifications">الإشعارات التلقائية</label>
+                        <label class="switch">
+                            <input type="checkbox" id="showAutoNotifications">
+                            <span class="slider"></span>
+                        </label>
+                        <small class="setting-description">عرض الإشعارات عند التحديثات والأحداث المهمة</small>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="backgroundAudio">تشغيل الصوت في الخلفية</label>
+                        <label class="switch">
+                            <input type="checkbox" id="backgroundAudio" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <small class="setting-description">يسمح بتشغيل الصوت حتى عند الخروج من التطبيق</small>
+                    </div>
+                </div>
+                
                 <!-- Layout and Behavior Section -->
                 <div class="settings-section">
                     <h4 class="settings-section-title">📐 التخطيط والسلوك</h4>
@@ -631,23 +663,6 @@
                             <span class="slider"></span>
                         </label>
                     </div>
-                    
-                <div class="setting-item">
-                    <label for="showAutoNotifications">الإشعارات التلقائية</label>
-                    <label class="switch">
-                        <input type="checkbox" id="showAutoNotifications">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                
-                <div class="setting-item">
-                    <label for="backgroundAudio">تشغيل الصوت في الخلفية</label>
-                    <label class="switch">
-                        <input type="checkbox" id="backgroundAudio" checked>
-                        <span class="slider"></span>
-                    </label>
-                    <small class="setting-description">يسمح بتشغيل الصوت حتى عند الخروج من التطبيق</small>
-                </div>
                 </div>
                 
                 <!-- Quick Actions -->
@@ -666,6 +681,10 @@
                             <button class="show-welcome-btn" onclick="app.showWelcomeModal()">
                                 <i class="fas fa-info-circle"></i>
                                 عرض رسالة الترحيب
+                            </button>
+                            <button class="disable-auto-update-btn" onclick="app.toggleAutoUpdate()" id="toggleAutoUpdateBtn">
+                                <i class="fas fa-sync-alt"></i>
+                                <span id="autoUpdateBtnText">إلغاء التحديث التلقائي</span>
                             </button>
                         </div>
                         
