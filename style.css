@@ -28560,3 +28560,204 @@ body[data-theme="light"] .more-menu-item:hover {
  b o d y [ d a t a - t h e m e = l i g h t ]   . t h e m e - s e l e c t ,   
  b o d y [ d a t a - t h e m e = l i g h t ]   . c o l o r - t h e m e - s e l e c t ,   
  b o d y [ d a t a - t h e m e = l i g h t ]   . f o n t - s i z e - s e l e c t ,   
+ 
+ /* إخفاء أدوات مشغل Aflam4You TV */
+#aflam4youPlayer {
+    /* إخفاء شريط الأدوات في iframe Aflam4You */
+    pointer-events: auto;
+}
+
+/* إخفاء أدوات التحكم في iframe Aflam4You */
+#aflam4youPlayer iframe {
+    /* إخفاء شريط الأدوات */
+    border: none !important;
+}
+
+/* إخفاء أدوات التحكم في محتوى Aflam4You */
+#aflam4youPlayer * {
+    /* إخفاء جميع أدوات التحكم */
+    -webkit-appearance: none !important;
+    appearance: none !important;
+}
+
+/* إخفاء شريط الأدوات السفلي في Aflam4You */
+#aflam4youPlayer video::-webkit-media-controls-panel,
+#aflam4youPlayer video::-webkit-media-controls-play-button,
+#aflam4youPlayer video::-webkit-media-controls-volume-slider,
+#aflam4youPlayer video::-webkit-media-controls-mute-button,
+#aflam4youPlayer video::-webkit-media-controls-timeline,
+#aflam4youPlayer video::-webkit-media-controls-current-time-display,
+#aflam4youPlayer video::-webkit-media-controls-time-remaining-display,
+#aflam4youPlayer video::-webkit-media-controls-fullscreen-button {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+/* إخفاء أدوات التحكم في جميع المتصفحات */
+#aflam4youPlayer video::-moz-media-controls,
+#aflam4youPlayer video::-moz-media-controls-panel,
+#aflam4youPlayer video::-moz-media-controls-play-button,
+#aflam4youPlayer video::-moz-media-controls-volume-slider,
+#aflam4youPlayer video::-moz-media-controls-mute-button,
+#aflam4youPlayer video::-moz-media-controls-timeline,
+#aflam4youPlayer video::-moz-media-controls-current-time-display,
+#aflam4youPlayer video::-moz-media-controls-time-remaining-display,
+#aflam4youPlayer video::-moz-media-controls-fullscreen-button {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+/* إخفاء أدوات التحكم في Edge */
+#aflam4youPlayer video::-ms-media-controls,
+#aflam4youPlayer video::-ms-media-controls-panel,
+#aflam4youPlayer video::-ms-media-controls-play-button,
+#aflam4youPlayer video::-ms-media-controls-volume-slider,
+#aflam4youPlayer video::-ms-media-controls-mute-button,
+#aflam4youPlayer video::-ms-media-controls-timeline,
+#aflam4youPlayer video::-ms-media-controls-current-time-display,
+#aflam4youPlayer video::-ms-media-controls-time-remaining-display,
+#aflam4youPlayer video::-ms-media-controls-fullscreen-button {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+/* إخفاء أدوات التحكم العامة */
+#aflam4youPlayer video[controls] {
+    /* إزالة خاصية controls من الفيديو */
+    -webkit-appearance: none !important;
+    appearance: none !important;
+}
+
+/* إخفاء أي عناصر تحكم أخرى */
+#aflam4youPlayer .controls,
+#aflam4youPlayer .player-controls,
+#aflam4youPlayer .video-controls,
+#aflam4youPlayer .media-controls,
+#aflam4youPlayer .play-controls,
+#aflam4youPlayer .volume-controls,
+#aflam4youPlayer .time-controls,
+#aflam4youPlayer .fullscreen-controls {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
+}
+
+/* إخفاء شريط التقدم */
+#aflam4youPlayer .progress-bar,
+#aflam4youPlayer .seek-bar,
+#aflam4youPlayer .timeline,
+#aflam4youPlayer .scrubber {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+/* إخفاء أزرار التشغيل والإيقاف */
+#aflam4youPlayer .play-button,
+#aflam4youPlayer .pause-button,
+#aflam4youPlayer .play-pause-button,
+#aflam4youPlayer .stop-button {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+/* إخفاء أزرار الصوت */
+#aflam4youPlayer .volume-button,
+#aflam4youPlayer .mute-button,
+#aflam4youPlayer .volume-slider,
+#aflam4youPlayer .volume-control {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+/* إخفاء أزرار الشاشة الكاملة */
+#aflam4youPlayer .fullscreen-button,
+#aflam4youPlayer .expand-button,
+#aflam4youPlayer .fullscreen-control {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+/* إخفاء معلومات الوقت */
+#aflam4youPlayer .time-display,
+#aflam4youPlayer .current-time,
+#aflam4youPlayer .duration,
+#aflam4youPlayer .time-remaining {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+/* إخفاء أي عناصر أخرى قد تظهر كأدوات تحكم */
+#aflam4youPlayer [class*="control"],
+#aflam4youPlayer [class*="button"],
+#aflam4youPlayer [class*="toolbar"],
+#aflam4youPlayer [class*="panel"],
+#aflam4youPlayer [id*="control"],
+#aflam4youPlayer [id*="button"],
+#aflam4youPlayer [id*="toolbar"],
+#aflam4youPlayer [id*="panel"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+/* التأكد من إخفاء الأدوات في جميع الحالات */
+#aflam4youPlayer video {
+    /* إزالة جميع أدوات التحكم */
+    controls: none !important;
+    -webkit-controls: none !important;
+    -moz-controls: none !important;
+    -ms-controls: none !important;
+}
+
+/* إخفاء الأدوات عند التمرير */
+#aflam4youPlayer:hover video::-webkit-media-controls-panel,
+#aflam4youPlayer:hover video::-webkit-media-controls-play-button,
+#aflam4youPlayer:hover video::-webkit-media-controls-volume-slider,
+#aflam4youPlayer:hover video::-webkit-media-controls-mute-button,
+#aflam4youPlayer:hover video::-webkit-media-controls-timeline,
+#aflam4youPlayer:hover video::-webkit-media-controls-current-time-display,
+#aflam4youPlayer:hover video::-webkit-media-controls-time-remaining-display,
+#aflam4youPlayer:hover video::-webkit-media-controls-fullscreen-button {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+/* إخفاء الأدوات عند التركيز */
+#aflam4youPlayer:focus video::-webkit-media-controls-panel,
+#aflam4youPlayer:focus video::-webkit-media-controls-play-button,
+#aflam4youPlayer:focus video::-webkit-media-controls-volume-slider,
+#aflam4youPlayer:focus video::-webkit-media-controls-mute-button,
+#aflam4youPlayer:focus video::-webkit-media-controls-timeline,
+#aflam4youPlayer:focus video::-webkit-media-controls-current-time-display,
+#aflam4youPlayer:focus video::-webkit-media-controls-time-remaining-display,
+#aflam4youPlayer:focus video::-webkit-media-controls-fullscreen-button {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+/* إخفاء الأدوات عند النقر */
+#aflam4youPlayer:active video::-webkit-media-controls-panel,
+#aflam4youPlayer:active video::-webkit-media-controls-play-button,
+#aflam4youPlayer:active video::-webkit-media-controls-volume-slider,
+#aflam4youPlayer:active video::-webkit-media-controls-mute-button,
+#aflam4youPlayer:active video::-webkit-media-controls-timeline,
+#aflam4youPlayer:active video::-webkit-media-controls-current-time-display,
+#aflam4youPlayer:active video::-webkit-media-controls-time-remaining-display,
+#aflam4youPlayer:active video::-webkit-media-controls-fullscreen-button {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}

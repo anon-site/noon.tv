@@ -1068,7 +1068,7 @@ class ArabicTVApp {
         this.isLoadingChannel = true;
         this.currentChannel = channel;
         this.showVideoModal(channel);
-        const type = channel.type || (this.isYouTubeUrl(channel.url) ? 'youtube' : (this.isElahmadUrl(channel.url) ? 'elahmad' : 'hls'));
+        const type = channel.type || (this.isYouTubeUrl(channel.url) ? 'youtube' : (this.isElahmadUrl(channel.url) ? 'elahmad' : (this.isAflam4youUrl(channel.url) ? 'aflam4you' : 'hls')));
         
         try {
             await this.loadVideoStream(channel.url, type);
@@ -1259,6 +1259,30 @@ class ArabicTVApp {
                 }, 100);
             }
             
+            // Remove aflam4you iframe if exists
+            const aflam4youIframe = document.getElementById('aflam4youPlayer');
+            if (aflam4youIframe) {
+                // إيقاف iframe فوراً
+                aflam4youIframe.src = '';
+                aflam4youIframe.style.display = 'none';
+                
+                // محاولة إيقاف الصوت
+                try {
+                    if (aflam4youIframe.contentWindow) {
+                        aflam4youIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                    }
+                } catch (e) {
+                    console.log('Cannot access aflam4you iframe content');
+                }
+                
+                // إزالة iframe بعد تأخير قصير
+                setTimeout(() => {
+                    if (aflam4youIframe && aflam4youIframe.parentNode) {
+                        aflam4youIframe.remove();
+                    }
+                }, 100);
+            }
+            
             console.log('Current video stopped successfully');
         } catch (error) {
             console.error('Error stopping current video:', error);
@@ -1301,6 +1325,12 @@ class ArabicTVApp {
             // Check if it's an elahmad.com URL
             if (type === 'elahmad' || this.isElahmadUrl(url)) {
                 await this.loadElahmadVideo(url);
+                return;
+            }
+
+            // Check if it's an aflam4you.net URL
+            if (type === 'aflam4you' || this.isAflam4youUrl(url)) {
+                await this.loadAflam4youVideo(url);
                 return;
             }
 
@@ -1616,6 +1646,11 @@ class ArabicTVApp {
             iconClass = 'fas fa-tv';
             typeText = 'ElAhmad TV';
             indicatorColor = '#8e44ad';
+        } else if (this.isAflam4youUrl(url)) {
+            urlType = 'aflam4you';
+            iconClass = 'fas fa-film';
+            typeText = 'Aflam4You';
+            indicatorColor = '#e74c3c';
         } else if (url.includes('.m3u8') || url.includes('playlist.m3u8') || url.includes('index.m3u8')) {
             urlType = 'hls';
             iconClass = 'fas fa-broadcast-tower';
@@ -1662,6 +1697,12 @@ class ArabicTVApp {
     isElahmadUrl(url) {
         const elahmadRegex = /^(https?:\/\/)?(www\.)?elahmad\.com/;
         return elahmadRegex.test(url);
+    }
+
+    // Check if URL is from aflam4you.net
+    isAflam4youUrl(url) {
+        const aflam4youRegex = /^(https?:\/\/)?(www\.)?direct\.aflam4you\.net/;
+        return aflam4youRegex.test(url);
     }
 
     // Load elahmad.com iframe
@@ -1730,6 +1771,198 @@ class ArabicTVApp {
             
         } catch (error) {
             console.error('❌ خطأ في تحميل iframe من elahmad.com:', error);
+            loading.innerHTML = `
+                <div class="error-icon">⚠️</div>
+                <p>خطأ في تحميل المحتوى</p>
+                <small>${error.message}</small>
+            `;
+            throw error;
+        }
+    }
+
+    // Load aflam4you.net iframe
+    async loadAflam4youVideo(url) {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            // Validate URL
+            if (!url || url.trim() === '') {
+                throw new Error('رابط aflam4you.net فارغ أو غير صحيح');
+            }
+
+            if (!this.isAflam4youUrl(url)) {
+                throw new Error('رابط aflam4you.net غير صحيح - تحقق من الرابط');
+            }
+
+            // Stop any existing iframe
+            const existingIframe = document.getElementById('aflam4youPlayer');
+            if (existingIframe) {
+                // إيقاف iframe السابق فوراً
+                existingIframe.src = '';
+                existingIframe.style.display = 'none';
+                
+                // محاولة إيقاف الصوت
+                try {
+                    if (existingIframe.contentWindow) {
+                        existingIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                    }
+                } catch (e) {
+                    console.log('Cannot access existing iframe content');
+                }
+                
+                // إزالة iframe السابق
+                existingIframe.remove();
+            }
+
+            // Hide the video element and show iframe
+            video.style.display = 'none';
+            
+            // Create or update aflam4you iframe
+            let iframe = document.getElementById('aflam4youPlayer');
+            if (!iframe) {
+                iframe = document.createElement('iframe');
+                iframe.id = 'aflam4youPlayer';
+                iframe.style.width = '100%';
+                iframe.style.height = '100%';
+                iframe.style.border = 'none';
+                iframe.allowFullscreen = true;
+                iframe.allow = 'autoplay; fullscreen; picture-in-picture; xr-spatial-tracking; encrypted-media';
+                
+                // إضافة معاملات إخفاء الأدوات للـ iframe
+                iframe.setAttribute('data-hide-controls', 'true');
+                iframe.setAttribute('data-no-controls', 'true');
+                iframe.setAttribute('data-disable-controls', 'true');
+                
+                // إضافة CSS classes لإخفاء الأدوات
+                iframe.classList.add('no-controls', 'hide-controls', 'disable-controls');
+                
+                // Insert iframe after video element
+                video.parentNode.insertBefore(iframe, video.nextSibling);
+            }
+
+            // إضافة معاملات إخفاء الأدوات للرابط
+            let finalUrl = url;
+            
+            // إضافة معاملات إخفاء الأدوات إذا لم تكن موجودة
+            if (!finalUrl.includes('controls=')) {
+                finalUrl += (finalUrl.includes('?') ? '&' : '?') + 'controls=0';
+            }
+            if (!finalUrl.includes('showinfo=')) {
+                finalUrl += '&showinfo=0';
+            }
+            if (!finalUrl.includes('modestbranding=')) {
+                finalUrl += '&modestbranding=1';
+            }
+            if (!finalUrl.includes('rel=')) {
+                finalUrl += '&rel=0';
+            }
+            if (!finalUrl.includes('iv_load_policy=')) {
+                finalUrl += '&iv_load_policy=3';
+            }
+            if (!finalUrl.includes('cc_load_policy=')) {
+                finalUrl += '&cc_load_policy=0';
+            }
+            if (!finalUrl.includes('fs=')) {
+                finalUrl += '&fs=0';
+            }
+            if (!finalUrl.includes('disablekb=')) {
+                finalUrl += '&disablekb=1';
+            }
+            if (!finalUrl.includes('enablejsapi=')) {
+                finalUrl += '&enablejsapi=0';
+            }
+            
+            // Set iframe source with hidden controls
+            iframe.src = finalUrl;
+            
+            // إضافة event listeners لإخفاء الأدوات بعد تحميل المحتوى
+            iframe.onload = function() {
+                try {
+                    // محاولة إخفاء الأدوات عبر JavaScript
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    if (iframeDoc) {
+                        // إخفاء جميع أدوات التحكم
+                        const controls = iframeDoc.querySelectorAll('.controls, .player-controls, .video-controls, .media-controls, .play-controls, .volume-controls, .time-controls, .fullscreen-controls');
+                        controls.forEach(control => {
+                            control.style.display = 'none';
+                            control.style.visibility = 'hidden';
+                            control.style.opacity = '0';
+                        });
+                        
+                        // إخفاء أشرطة التقدم
+                        const progressBars = iframeDoc.querySelectorAll('.progress-bar, .seek-bar, .timeline, .scrubber');
+                        progressBars.forEach(bar => {
+                            bar.style.display = 'none';
+                            bar.style.visibility = 'hidden';
+                            bar.style.opacity = '0';
+                        });
+                        
+                        // إخفاء أزرار التشغيل والإيقاف
+                        const playButtons = iframeDoc.querySelectorAll('.play-button, .pause-button, .play-pause-button, .stop-button');
+                        playButtons.forEach(button => {
+                            button.style.display = 'none';
+                            button.style.visibility = 'hidden';
+                            button.style.opacity = '0';
+                        });
+                        
+                        // إخفاء أزرار الصوت
+                        const volumeButtons = iframeDoc.querySelectorAll('.volume-button, .mute-button, .volume-slider, .volume-control');
+                        volumeButtons.forEach(button => {
+                            button.style.display = 'none';
+                            button.style.visibility = 'hidden';
+                            button.style.opacity = '0';
+                        });
+                        
+                        // إخفاء أزرار الشاشة الكاملة
+                        const fullscreenButtons = iframeDoc.querySelectorAll('.fullscreen-button, .expand-button, .fullscreen-control');
+                        fullscreenButtons.forEach(button => {
+                            button.style.display = 'none';
+                            button.style.visibility = 'hidden';
+                            button.style.opacity = '0';
+                        });
+                        
+                        // إخفاء معلومات الوقت
+                        const timeDisplays = iframeDoc.querySelectorAll('.time-display, .current-time, .duration, .time-remaining');
+                        timeDisplays.forEach(display => {
+                            display.style.display = 'none';
+                            display.style.visibility = 'hidden';
+                            display.style.opacity = '0';
+                        });
+                        
+                        // إخفاء أي عناصر أخرى قد تظهر كأدوات تحكم
+                        const allControls = iframeDoc.querySelectorAll('[class*="control"], [class*="button"], [class*="toolbar"], [class*="panel"], [id*="control"], [id*="button"], [id*="toolbar"], [id*="panel"]');
+                        allControls.forEach(control => {
+                            control.style.display = 'none';
+                            control.style.visibility = 'hidden';
+                            control.style.opacity = '0';
+                        });
+                        
+                        // إخفاء أدوات التحكم في الفيديو
+                        const videos = iframeDoc.querySelectorAll('video');
+                        videos.forEach(video => {
+                            video.controls = false;
+                            video.removeAttribute('controls');
+                            video.style.outline = 'none';
+                        });
+                        
+                        console.log('✅ تم إخفاء أدوات التحكم في iframe aflam4you');
+                    }
+                } catch (e) {
+                    console.log('⚠️ لا يمكن الوصول لمحتوى iframe لإخفاء الأدوات:', e.message);
+                }
+            };
+            
+            // Hide loading
+            loading.style.display = 'none';
+            
+            // Show iframe
+            iframe.style.display = 'block';
+            
+            console.log('✅ تم تحميل iframe من aflam4you.net بنجاح مع إخفاء الأدوات');
+            
+        } catch (error) {
+            console.error('❌ خطأ في تحميل iframe من aflam4you.net:', error);
             loading.innerHTML = `
                 <div class="error-icon">⚠️</div>
                 <p>خطأ في تحميل المحتوى</p>
@@ -1901,6 +2134,22 @@ class ArabicTVApp {
                 }
             } catch (e) {
                 console.log('Cannot access elahmad iframe content');
+            }
+        }
+        
+        // Hide aflam4you iframe if exists
+        const aflam4youIframe = document.getElementById('aflam4youPlayer');
+        if (aflam4youIframe) {
+            aflam4youIframe.style.display = 'none';
+            aflam4youIframe.src = '';
+            
+            // محاولة إيقاف الصوت
+            try {
+                if (aflam4youIframe.contentWindow) {
+                    aflam4youIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                }
+            } catch (e) {
+                console.log('Cannot access aflam4you iframe content');
             }
         }
         
