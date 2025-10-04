@@ -148,27 +148,50 @@
       "vpn": false
     },
     {
+      "id": 149,
+      "name": "MBC MAX",
+      "url": "https://www.elahmad.com/tv/live/shahid_shaka.php?id=mbc_max",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/3/32/MBC_Max_logo.png",
+      "category": "movies",
+      "country": "السعودية",
+      "type": "hls",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-04T05:21:29.734Z"
+    },
+    {
+      "id": 150,
+      "name": "MBC Variety",
+      "url": "https://www.elahmad.com/tv/radiant.php?id=mbc_variety",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Svg_mbc_variety_aaa60f39e8.svg/1200px-Svg_mbc_variety_aaa60f39e8.svg.png",
+      "category": "entertainment",
+      "country": "السعودية",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false
+    },
+    {
       "id": 134,
       "name": "MBC Drama",
-      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-drama-usa/ea2f5db904aff224b7066e59c7f585a2/index.m3u8",
+      "url": "https://www.elahmad.com/tv/live/shahid_shaka.php?id=mbc_drama",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e9/MBC_Drama_Logo.svg",
       "category": "entertainment",
       "country": "السعودية",
       "type": "hls",
-      "status": "inactive",
+      "status": "active",
       "vpn": false,
       "lastModified": "2025-10-02T01:19:26.605Z"
     },
     {
       "id": 138,
       "name": "MBC Drama +",
-      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-plus-drama/e37251ec2aac8f6c98f75cd0fa37cd28/index.m3u8",
+      "url": "https://www.elahmad.com/tv/live/shahid_shaka.php?id=mbc_drama_plus",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/2/2a/MBC_Drama_Plus_TV_Channel_Logo.png",
       "category": "entertainment",
       "country": "السعودية",
-      "type": "hls",
-      "status": "inactive",
-      "vpn": true,
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false,
       "lastModified": "2025-10-04T03:12:20.334Z"
     },
     {
@@ -1204,19 +1227,6 @@
       "lastModified": "2025-10-04T03:12:20.334Z"
     },
     {
-      "id": 141,
-      "name": "ART Cinema",
-      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=art_cinema",
-      "logo": "https://www.elahmad.com/tv/images/art_cinema.png",
-      "category": "movies",
-      "country": "السعودية",
-      "type": "elahmad",
-      "status": "active",
-      "isLocal": false,
-      "lastModified": "2025-01-27T12:00:00.000Z",
-      "vpn": false
-    },
-    {
       "id": 142,
       "name": "TNA Wrestling",
       "url": "https://epg.provider.plex.tv/library/parts/5e20b730f2f8d5003d739db7-606605549dbfca002d2ae873.m3u8?includeAllStreams=1&X-Plex-Product=Plex+Mediaverse&X-Plex-Token=xK7U9RfFyckTeqzcUZfQ",
@@ -1233,27 +1243,72 @@
       "name": "ART Cinema",
       "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=art_cinema",
       "logo": "https://ewsat.com/img/ART_CINEMA.png",
-
       "category": "movies",
       "country": "السعودية",
       "type": "elahmad",
       "status": "active",
-      "isLocal": false,
-      "lastModified": "2025-01-27T12:00:00.000Z",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-04T04:50:35.132Z"
     },
     {
       "id": 144,
       "name": "ART Aflam 1",
       "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=art_aflam_1",
-      "logo": "https://static.wikia.nocookie.net/logopedia/images/c/c9/ART_Aflam_1.png/revision/latest?cb=20100523131757",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c9/ART_Aflam_1.png",
       "category": "movies",
       "country": "السعودية",
       "type": "hls",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-04T04:54:52.698Z"
-
+    },
+    {
+      "id": 145,
+      "name": "ART Aflam 2",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=art_aflam_2",
+      "logo": "https://static.wikia.nocookie.net/logopedia/images/6/68/ART_MOVIES_2.png/revision/latest?cb=20150308150753",
+      "category": "movies",
+      "country": "السعودية",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-04T05:12:32.409Z"
+    },
+    {
+      "id": 146,
+      "name": "Rotana Kids",
+      "url": "https://www.elahmad.com/tv/watchtv.php?id=rotana_kids",
+      "logo": "https://www.elahmad.com/tv/watchtv.php?id=rotana_kids",
+      "category": "kids",
+      "country": "السعودية",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-04T05:16:20.909Z"
+    },
+    {
+      "id": 147,
+      "name": "Moonbug Kids",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=moonbug_kids",
+      "logo": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=moonbug_kids",
+      "category": "kids",
+      "country": "السعودية",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-04T05:21:29.734Z"
+    },
+    {
+      "id": 148,
+      "name": "ماجد",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=majid_tv",
+      "logo": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=majid_tv",
+      "category": "kids",
+      "country": "السعودية",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-04T05:21:29.734Z"
     }
   ],
   "favorites": [],
@@ -1274,6 +1329,7 @@
     "showAutoNotifications": false,
     "backgroundAudio": true,
     "autoUpdateEnabled": false,
+    "hideElahmadControls": true,
     "autoUpdateChannels": true
   },
   "categories": [
@@ -1324,8 +1380,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-04T05:05:17.866Z",
+  "lastModified": "2025-10-04T05:28:40.671Z",
   "version": "1.0"
 }
-
-
