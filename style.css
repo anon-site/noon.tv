@@ -28560,7 +28560,8 @@ body[data-theme="light"] .more-menu-item:hover {
  b o d y [ d a t a - t h e m e = l i g h t ]   . t h e m e - s e l e c t ,   
  b o d y [ d a t a - t h e m e = l i g h t ]   . c o l o r - t h e m e - s e l e c t ,   
  b o d y [ d a t a - t h e m e = l i g h t ]   . f o n t - s i z e - s e l e c t ,   
- 
+
+ 
  /* إخفاء أدوات مشغل Aflam4You TV */
 #aflam4youPlayer {
     /* إخفاء شريط الأدوات في iframe Aflam4You */
@@ -28760,4 +28761,90 @@ body[data-theme="light"] .more-menu-item:hover {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
+}
+
+/* أنماط رسائل الخطأ لـ aflam4you.net */
+.error-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.8;
+}
+
+.error-solutions {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.error-solutions p {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.error-solutions ul {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 1rem 0;
+}
+
+.error-solutions li {
+    padding: 0.25rem 0;
+    color: var(--text-secondary);
+    position: relative;
+    padding-right: 1.5rem;
+}
+
+.error-solutions li:before {
+    content: "•";
+    color: var(--highlight-color);
+    position: absolute;
+    right: 0;
+}
+
+.retry-btn, .open-external-btn {
+    background: var(--highlight-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 0.5rem 0.5rem 0.5rem 0;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.retry-btn:hover, .open-external-btn:hover {
+    background: #d63447;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(233, 69, 96, 0.3);
+}
+
+.open-external-btn {
+    background: var(--accent-color);
+}
+
+.open-external-btn:hover {
+    background: #0d2a4f;
+    box-shadow: 0 4px 12px rgba(15, 52, 96, 0.3);
+}
+
+/* تحسين رسائل الخطأ العامة */
+.video-loading .error-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+}
+
+.video-loading small {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    display: block;
 }

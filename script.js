@@ -1068,7 +1068,7 @@ class ArabicTVApp {
         this.isLoadingChannel = true;
         this.currentChannel = channel;
         this.showVideoModal(channel);
-        const type = channel.type || (this.isYouTubeUrl(channel.url) ? 'youtube' : (this.isElahmadUrl(channel.url) ? 'elahmad' : 'hls'));
+        const type = channel.type || (this.isYouTubeUrl(channel.url) ? 'youtube' : (this.isElahmadUrl(channel.url) ? 'elahmad' : (this.isAflamUrl(channel.url) ? 'aflam' : 'hls')));
         
         try {
             await this.loadVideoStream(channel.url, type);
@@ -1259,6 +1259,30 @@ class ArabicTVApp {
                 }, 100);
             }
             
+            // Remove aflam iframe if exists
+            const aflamIframe = document.getElementById('aflamPlayer');
+            if (aflamIframe) {
+                // إيقاف iframe فوراً
+                aflamIframe.src = '';
+                aflamIframe.style.display = 'none';
+                
+                // محاولة إيقاف الصوت
+                try {
+                    if (aflamIframe.contentWindow) {
+                        aflamIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                    }
+                } catch (e) {
+                    console.log('Cannot access aflam iframe content');
+                }
+                
+                // إزالة iframe بعد تأخير قصير
+                setTimeout(() => {
+                    if (aflamIframe && aflamIframe.parentNode) {
+                        aflamIframe.remove();
+                    }
+                }, 100);
+            }
+            
             console.log('Current video stopped successfully');
         } catch (error) {
             console.error('Error stopping current video:', error);
@@ -1301,6 +1325,12 @@ class ArabicTVApp {
             // Check if it's an elahmad.com URL
             if (type === 'elahmad' || this.isElahmadUrl(url)) {
                 await this.loadElahmadVideo(url);
+                return;
+            }
+
+            // Check if it's an aflam4you.net URL
+            if (type === 'aflam' || this.isAflamUrl(url)) {
+                await this.loadAflamVideo(url);
                 return;
             }
 
@@ -1616,6 +1646,11 @@ class ArabicTVApp {
             iconClass = 'fas fa-tv';
             typeText = 'ElAhmad TV';
             indicatorColor = '#8e44ad';
+        } else if (this.isAflamUrl(url)) {
+            urlType = 'aflam';
+            iconClass = 'fas fa-film';
+            typeText = 'Aflam4You';
+            indicatorColor = '#e74c3c';
         } else if (url.includes('.m3u8') || url.includes('playlist.m3u8') || url.includes('index.m3u8')) {
             urlType = 'hls';
             iconClass = 'fas fa-broadcast-tower';
@@ -1662,6 +1697,12 @@ class ArabicTVApp {
     isElahmadUrl(url) {
         const elahmadRegex = /^(https?:\/\/)?(www\.)?elahmad\.com/;
         return elahmadRegex.test(url);
+    }
+
+    // Check if URL is from aflam4you.net
+    isAflamUrl(url) {
+        const aflamRegex = /^(https?:\/\/)?(www\.)?direct\.aflam4you\.net/;
+        return aflamRegex.test(url);
     }
 
     // Load elahmad.com iframe
@@ -1736,6 +1777,438 @@ class ArabicTVApp {
                 <small>${error.message}</small>
             `;
             throw error;
+        }
+    }
+
+    // Extract direct stream URL from aflam4you.net page (Enhanced)
+    async extractAflamStreamUrl(pageUrl) {
+        try {
+            console.log('🔍 جاري استخراج رابط البث المباشر من:', pageUrl);
+            
+            // Try multiple CORS proxies
+            const proxies = [
+                `https://api.allorigins.win/get?url=${encodeURIComponent(pageUrl)}`,
+                `https://cors-anywhere.herokuapp.com/${pageUrl}`,
+                `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(pageUrl)}`
+            ];
+            
+            let htmlContent = '';
+            let lastError = null;
+            
+            // Try each proxy until one works
+            for (const proxyUrl of proxies) {
+                try {
+                    console.log('🔄 جاري المحاولة مع:', proxyUrl.split('?')[0]);
+                    const response = await fetch(proxyUrl, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    htmlContent = data.contents || data;
+                    
+                    if (htmlContent && htmlContent.length > 100) {
+                        console.log('✅ نجح التحميل مع:', proxyUrl.split('?')[0]);
+                        break;
+                    }
+                } catch (error) {
+                    console.log('❌ فشل مع:', proxyUrl.split('?')[0], error.message);
+                    lastError = error;
+                    continue;
+                }
+            }
+            
+            if (!htmlContent || htmlContent.length < 100) {
+                throw new Error('لا يمكن الوصول لمحتوى الصفحة من أي خادم وكيل');
+            }
+            
+            console.log('📄 تم تحميل المحتوى بنجاح، حجم:', htmlContent.length, 'حرف');
+            
+            // Enhanced patterns for finding stream URLs
+            const streamPatterns = [
+                // Pattern 1: Direct HLS URLs in quotes
+                /["'](https?:\/\/[^"'\s]+\.m3u8[^"'\s]*)["']/gi,
+                // Pattern 2: HLS URLs in video sources
+                /<source[^>]*src=["']([^"']*\.m3u8[^"']*)["'][^>]*>/gi,
+                // Pattern 3: HLS URLs in JavaScript variables
+                /(?:src|url|stream|hls|source)["\s]*[:=]["\s]*["']([^"']*\.m3u8[^"']*)["']/gi,
+                // Pattern 4: HLS URLs in data attributes
+                /data-[^=]*=["']([^"']*\.m3u8[^"']*)["']/gi,
+                // Pattern 5: HLS URLs in object/embed tags
+                /<(?:object|embed)[^>]*src=["']([^"']*\.m3u8[^"']*)["'][^>]*>/gi,
+                // Pattern 6: HLS URLs in iframe src
+                /<iframe[^>]*src=["']([^"']*\.m3u8[^"']*)["'][^>]*>/gi,
+                // Pattern 7: HLS URLs in player configurations
+                /(?:player|video|stream)["\s]*[:=]["\s]*["']([^"']*\.m3u8[^"']*)["']/gi,
+                // Pattern 8: HLS URLs in JSON-like structures
+                /"url"["\s]*:["\s]*["']([^"']*\.m3u8[^"']*)["']/gi,
+                // Pattern 9: HLS URLs in base64 encoded data
+                /data:application\/json;base64,[A-Za-z0-9+/=]+/gi
+            ];
+            
+            const foundStreams = new Set();
+            
+            // Extract streams using all patterns
+            streamPatterns.forEach((pattern, index) => {
+                let match;
+                while ((match = pattern.exec(htmlContent)) !== null) {
+                    const streamUrl = match[1] || match[0];
+                    if (streamUrl && streamUrl.includes('.m3u8')) {
+                        foundStreams.add(streamUrl);
+                        console.log(`🎯 تم العثور على رابط في النمط ${index + 1}:`, streamUrl);
+                    }
+                }
+            });
+            
+            // Also try to find URLs in script tags
+            const scriptMatches = htmlContent.match(/<script[^>]*>[\s\S]*?<\/script>/gi);
+            if (scriptMatches) {
+                scriptMatches.forEach(script => {
+                    const scriptStreams = script.match(/(https?:\/\/[^"'\s]+\.m3u8[^"'\s]*)/gi);
+                    if (scriptStreams) {
+                        scriptStreams.forEach(stream => foundStreams.add(stream));
+                    }
+                });
+            }
+            
+            // Convert Set to Array and filter valid URLs
+            const validStreams = Array.from(foundStreams).filter(url => {
+                try {
+                    const urlObj = new URL(url);
+                    return url.includes('.m3u8') && 
+                           !url.includes('placeholder') && 
+                           !url.includes('example') &&
+                           !url.includes('test') &&
+                           (urlObj.protocol === 'http:' || urlObj.protocol === 'https:');
+                } catch {
+                    return false;
+                }
+            });
+            
+            console.log('📊 إجمالي الروابط الموجودة:', foundStreams.size);
+            console.log('✅ الروابط الصحيحة:', validStreams.length);
+            
+            if (validStreams.length === 0) {
+                // Try to find any video-related URLs as fallback
+                const videoPatterns = [
+                    /(https?:\/\/[^"'\s]+\.(?:mp4|webm|avi|mov)[^"'\s]*)/gi,
+                    /(https?:\/\/[^"'\s]+\.(?:ts|m4s)[^"'\s]*)/gi
+                ];
+                
+                const videoUrls = new Set();
+                videoPatterns.forEach(pattern => {
+                    let match;
+                    while ((match = pattern.exec(htmlContent)) !== null) {
+                        videoUrls.add(match[1]);
+                    }
+                });
+                
+                if (videoUrls.size > 0) {
+                    console.log('🎥 تم العثور على روابط فيديو بديلة:', Array.from(videoUrls));
+                    return Array.from(videoUrls)[0];
+                }
+                
+                throw new Error('لم يتم العثور على رابط بث مباشر في الصفحة');
+            }
+            
+            // Return the first valid stream URL
+            const streamUrl = validStreams[0];
+            console.log('✅ تم العثور على رابط البث المباشر:', streamUrl);
+            
+            return streamUrl;
+            
+        } catch (error) {
+            console.error('❌ خطأ في استخراج رابط البث المباشر:', error);
+            throw new Error(`فشل في استخراج رابط البث المباشر: ${error.message}`);
+        }
+    }
+
+    // Load aflam4you.net video
+    async loadAflamVideo(url) {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            // Validate URL
+            if (!url || url.trim() === '') {
+                throw new Error('رابط aflam4you.net فارغ أو غير صحيح');
+            }
+
+            if (!this.isAflamUrl(url)) {
+                throw new Error('رابط aflam4you.net غير صحيح - تحقق من الرابط');
+            }
+
+            // Show loading with extraction message
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ استخراج رابط البث المباشر...</p>
+                <small>من aflam4you.net</small>
+            `;
+
+            try {
+                // Try to extract direct stream URL first
+                const streamUrl = await this.extractAflamStreamUrl(url);
+                
+                // Update loading message
+                loading.innerHTML = `
+                    <div class="spinner"></div>
+                    <p>جارٍ تحميل البث المباشر...</p>
+                    <small>جودة عالية</small>
+                `;
+
+                // Load the direct stream using HLS
+                await this.loadDirectStream(streamUrl);
+                
+            } catch (extractError) {
+                console.log('⚠️ فشل استخراج البث المباشر، جاري المحاولة مع iframe:', extractError.message);
+                
+                // Fallback to iframe method with improvements
+                await this.loadAflamIframe(url);
+            }
+            
+        } catch (error) {
+            console.error('❌ خطأ في تحميل aflam4you.net:', error);
+            this.showAflamError(error.message);
+            throw error;
+        }
+    }
+
+    // Load aflam4you.net using iframe (Fallback method)
+    async loadAflamIframe(url) {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            // Stop any existing iframe
+            const existingIframe = document.getElementById('aflamPlayer');
+            if (existingIframe) {
+                existingIframe.src = '';
+                existingIframe.style.display = 'none';
+                existingIframe.remove();
+            }
+
+            // Hide the video element and show iframe
+            video.style.display = 'none';
+            
+            // Update loading message
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ تحميل المحتوى...</p>
+                <small>من aflam4you.net</small>
+            `;
+            
+            // Create optimized iframe
+            const iframe = document.createElement('iframe');
+            iframe.id = 'aflamPlayer';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.border = 'none';
+            iframe.style.background = '#000';
+            iframe.allowFullscreen = true;
+            iframe.allow = 'autoplay; fullscreen; picture-in-picture; xr-spatial-tracking; encrypted-media';
+            iframe.sandbox = 'allow-scripts allow-same-origin allow-presentation allow-forms';
+            
+            // Add error handling
+            iframe.onerror = () => {
+                console.error('❌ خطأ في تحميل iframe من aflam4you.net');
+                this.showAflamError('فشل في تحميل المحتوى');
+            };
+            
+            iframe.onload = () => {
+                console.log('✅ تم تحميل iframe من aflam4you.net');
+                loading.style.display = 'none';
+                
+                // Check for blocking after a delay
+                setTimeout(() => {
+                    try {
+                        if (iframe.contentDocument && iframe.contentDocument.body) {
+                            const bodyText = iframe.contentDocument.body.textContent.toLowerCase();
+                            if (bodyText.includes('blocked') || bodyText.includes('contact the site owner')) {
+                                this.showAflamError('المحتوى محجوب من الموقع');
+                            }
+                        }
+                    } catch (e) {
+                        // Cross-origin error is expected for successful loads
+                        console.log('✅ iframe محمل بنجاح (Cross-origin)');
+                    }
+                }, 3000);
+            };
+            
+            // Insert iframe after video element
+            video.parentNode.insertBefore(iframe, video.nextSibling);
+            
+            // Set iframe source
+            iframe.src = url;
+            
+            // Show iframe
+            iframe.style.display = 'block';
+            
+        } catch (error) {
+            console.error('❌ خطأ في تحميل iframe من aflam4you.net:', error);
+            this.showAflamError(error.message);
+            throw error;
+        }
+    }
+
+    // Load direct HLS stream
+    async loadDirectStream(streamUrl) {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            // Show video element
+            video.style.display = 'block';
+            
+            // Hide any existing iframes
+            const aflamIframe = document.getElementById('aflamPlayer');
+            if (aflamIframe) {
+                aflamIframe.style.display = 'none';
+            }
+            
+            // Load HLS stream
+            if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+                // Destroy existing HLS instance
+                if (this.hls) {
+                    this.hls.destroy();
+                    this.hls = null;
+                }
+
+                this.hls = new Hls({
+                    enableWorker: true,
+                    lowLatencyMode: true,
+                    backBufferLength: 90,
+                    maxBufferLength: 0,
+                    maxMaxBufferLength: 600,
+                    maxBufferSize: 60 * 1000 * 1000,
+                    maxBufferHole: 0.5,
+                    highBufferWatchdogPeriod: 2,
+                    nudgeOffset: 0.1,
+                    nudgeMaxRetry: 3,
+                    maxFragLookUpTolerance: 0.20,
+                    liveSyncDurationCount: 3,
+                    liveMaxLatencyDurationCount: Infinity,
+                    liveDurationInfinity: true,
+                    enableSoftwareAES: true,
+                    manifestLoadingTimeOut: 10000,
+                    manifestLoadingMaxRetry: 1,
+                    manifestLoadingRetryDelay: 1000,
+                    fragLoadingTimeOut: 20000,
+                    fragLoadingMaxRetry: 6,
+                    fragLoadingRetryDelay: 1000,
+                    startFragPrefetch: true
+                });
+
+                this.hls.loadSource(streamUrl);
+                this.hls.attachMedia(video);
+
+                this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    loading.style.display = 'none';
+                    if (this.settings.autoplay) {
+                        video.play().catch(console.error);
+                    }
+                });
+
+                this.hls.on(Hls.Events.ERROR, (event, data) => {
+                    console.error('HLS Error:', data);
+                    if (data.fatal) {
+                        this.showStreamError('خطأ في تحميل البث المباشر');
+                    }
+                });
+
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // Native HLS support (Safari)
+                video.src = streamUrl;
+                loading.style.display = 'none';
+                if (this.settings.autoplay) {
+                    video.play().catch(console.error);
+                }
+            } else {
+                throw new Error('المتصفح لا يدعم تشغيل البث المباشر');
+            }
+            
+            console.log('✅ تم تحميل البث المباشر بنجاح:', streamUrl);
+            
+        } catch (error) {
+            console.error('❌ خطأ في تحميل البث المباشر:', error);
+            this.showStreamError(error.message);
+            throw error;
+        }
+    }
+
+    // Show stream error message
+    showStreamError(message) {
+        const loading = document.getElementById('videoLoading');
+        loading.style.display = 'flex';
+        loading.innerHTML = `
+            <div class="error-icon">⚠️</div>
+            <p>خطأ في البث المباشر</p>
+            <small>${message}</small>
+            <div class="error-solutions">
+                <button class="retry-btn" onclick="app.retryAflamLoad()">
+                    <i class="fas fa-redo"></i>
+                    إعادة المحاولة
+                </button>
+                <button class="open-external-btn" onclick="app.openAflamExternal()">
+                    <i class="fas fa-external-link-alt"></i>
+                    فتح في نافذة جديدة
+                </button>
+            </div>
+        `;
+    }
+
+    // Show aflam error message
+    showAflamError(errorMessage = '') {
+        const loading = document.getElementById('videoLoading');
+        const iframe = document.getElementById('aflamPlayer');
+        
+        if (iframe) {
+            iframe.style.display = 'none';
+        }
+        
+        loading.style.display = 'flex';
+        loading.innerHTML = `
+            <div class="error-icon">🚫</div>
+            <p>المحتوى محجوب</p>
+            <small>${errorMessage || 'لا يمكن تحميل المحتوى من aflam4you.net'}</small>
+            <div class="error-solutions">
+                <p><strong>الحلول المقترحة:</strong></p>
+                <ul>
+                    <li>تأكد من أن الموقع غير محجوب في منطقتك</li>
+                    <li>جرب استخدام VPN</li>
+                    <li>تحقق من الرابط في المتصفح مباشرة</li>
+                    <li>اتصل بمالك الموقع لحل المشكلة</li>
+                </ul>
+                <button class="retry-btn" onclick="app.retryAflamLoad()">
+                    <i class="fas fa-redo"></i>
+                    إعادة المحاولة
+                </button>
+                <button class="open-external-btn" onclick="app.openAflamExternal()">
+                    <i class="fas fa-external-link-alt"></i>
+                    فتح في نافذة جديدة
+                </button>
+            </div>
+        `;
+    }
+
+    // Retry aflam load
+    retryAflamLoad() {
+        if (this.currentChannel && this.currentChannel.url) {
+            this.loadAflamVideo(this.currentChannel.url);
+        }
+    }
+
+    // Open aflam in external window
+    openAflamExternal() {
+        if (this.currentChannel && this.currentChannel.url) {
+            window.open(this.currentChannel.url, '_blank', 'noopener,noreferrer');
         }
     }
 

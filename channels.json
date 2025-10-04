@@ -1,6 +1,19 @@
 {
   "channels": [
     {
+      "id": 999,
+      "name": "Bein Sport Max 1 - Aflam4You",
+      "url": "https://direct.aflam4you.net/bein-sport-max-1-kora-funding-tv_179.html",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/BeIN_Sports_logo.svg/1200px-BeIN_Sports_logo.svg.png",
+      "category": "sports",
+      "country": "قطر",
+      "type": "aflam",
+      "status": "active",
+      "isLocal": false,
+      "lastModified": "2025-01-27T12:00:00.000Z",
+      "vpn": false
+    },
+    {
       "id": 14,
       "name": "العربي",
       "url": "https://live.kwikmotion.com/alaraby1live/alaraby_abr/playlist.m3u8",
