@@ -102,11 +102,11 @@
     {
       "id": 133,
       "name": "MBC 2",
-      "url": "https://tgn.bozztv.com/eshgtv-trn09/ga-mchannel2/index.m3u8",
+      "url": "https://www.elahmad.com/tv/live/shahid_shaka.php?id=mbc2",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/5/50/MBC2_Logo.png",
       "category": "movies",
       "country": "السعودية",
-      "type": "hls",
+      "type": "elahmad",
       "status": "active",
       "lastModified": "2025-10-02T00:50:06.463Z",
       "vpn": false
@@ -168,7 +168,8 @@
       "country": "السعودية",
       "type": "elahmad",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-04T05:28:12.404Z"
     },
     {
       "id": 134,
@@ -209,11 +210,11 @@
     {
       "id": 140,
       "name": "MBC Iraq",
-      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-iraq/e38c44b1b43474e1c39cb5b90203691e/index.m3u8",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=mbciraq_tv_1",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/MBC_Iraq.svg/2560px-MBC_Iraq.svg.png",
       "category": "entertainment",
       "country": "السعودية",
-      "type": "hls",
+      "type": "elahmad",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-04T03:12:20.334Z"
@@ -1275,25 +1276,13 @@
       "lastModified": "2025-10-04T05:12:32.409Z"
     },
     {
-      "id": 146,
-      "name": "Rotana Kids",
-      "url": "https://www.elahmad.com/tv/watchtv.php?id=rotana_kids",
-      "logo": "https://www.elahmad.com/tv/watchtv.php?id=rotana_kids",
-      "category": "kids",
-      "country": "السعودية",
-      "type": "elahmad",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-10-04T05:16:20.909Z"
-    },
-    {
       "id": 147,
       "name": "Moonbug Kids",
       "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=moonbug_kids",
-      "logo": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=moonbug_kids",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/7/73/Moonbug_Kids.svg",
       "category": "kids",
       "country": "السعودية",
-      "type": "elahmad",
+      "type": "hls",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-04T05:21:29.734Z"
@@ -1302,10 +1291,10 @@
       "id": 148,
       "name": "ماجد",
       "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=majid_tv",
-      "logo": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=majid_tv",
+      "logo": "https://static.wikia.nocookie.net/logopedia/images/f/f7/Majid_2020.png/revision/latest?cb=20230724161933",
       "category": "kids",
       "country": "السعودية",
-      "type": "elahmad",
+      "type": "hls",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-04T05:21:29.734Z"
@@ -1380,6 +1369,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-04T05:28:40.671Z",
+  "lastModified": "2025-10-04T05:48:26.475Z",
   "version": "1.0"
 }
