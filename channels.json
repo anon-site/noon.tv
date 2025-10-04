@@ -1212,7 +1212,32 @@
       "country": "USA",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-04T04:49:03.975Z"
+    },
+    {
+      "id": 143,
+      "name": "ART Cinema",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=art_cinema",
+      "logo": "https://ewsat.com/img/ART_CINEMA.png",
+      "category": "movies",
+      "country": "السعودية",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-04T04:50:35.132Z"
+    },
+    {
+      "id": 144,
+      "name": "ART Aflam 1",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=art_aflam_1",
+      "logo": "https://static.wikia.nocookie.net/logopedia/images/c/c9/ART_Aflam_1.png/revision/latest?cb=20100523131757",
+      "category": "movies",
+      "country": "السعودية",
+      "type": "hls",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-04T04:54:52.698Z"
     }
   ],
   "favorites": [],
@@ -1283,6 +1308,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-04T04:20:19.815Z",
+  "lastModified": "2025-10-04T05:05:17.866Z",
   "version": "1.0"
 }
