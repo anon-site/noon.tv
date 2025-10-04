@@ -151,13 +151,24 @@
       "id": 149,
       "name": "MBC MAX",
       "url": "https://www.elahmad.com/tv/live/shahid_shaka.php?id=mbc_max",
-      "logo": "https://www.elahmad.com/tv/live/shahid_shaka.php?id=mbc_max",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/3/32/MBC_Max_logo.png",
       "category": "movies",
       "country": "السعودية",
-      "type": "elahmad",
+      "type": "hls",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-04T05:21:29.734Z"
+    },
+    {
+      "id": 150,
+      "name": "MBC Variety",
+      "url": "https://www.elahmad.com/tv/radiant.php?id=mbc_variety",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Svg_mbc_variety_aaa60f39e8.svg/1200px-Svg_mbc_variety_aaa60f39e8.svg.png",
+      "category": "entertainment",
+      "country": "السعودية",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false
     },
     {
       "id": 134,
@@ -1369,6 +1380,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-04T05:25:28.588Z",
+  "lastModified": "2025-10-04T05:28:40.671Z",
   "version": "1.0"
 }
