@@ -1334,6 +1334,18 @@
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-04T06:14:18.221Z"
+    },
+    {
+      "id": 154,
+      "name": "Bein 3",
+      "url": "https://direct.aflam4you.net/zremb472.php?vid=1&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "logo": "https://direct.aflam4you.net/zremb472.php?vid=1&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "category": "sports",
+      "country": "السعودية",
+      "type": "aflam",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-04T06:24:45.593Z"
     }
   ],
   "favorites": [],
@@ -1405,6 +1417,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-04T06:19:05.232Z",
+  "lastModified": "2025-10-04T06:32:19.265Z",
   "version": "1.0"
 }
