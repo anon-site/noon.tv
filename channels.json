@@ -1,19 +1,6 @@
 {
   "channels": [
     {
-      "id": 999,
-      "name": "Bein Sport Max 1 - Aflam4You",
-      "url": "https://direct.aflam4you.net/bein-sport-max-1-kora-funding-tv_179.html",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/BeIN_Sports_logo.svg/1200px-BeIN_Sports_logo.svg.png",
-      "category": "sports",
-      "country": "قطر",
-      "type": "aflam",
-      "status": "active",
-      "isLocal": false,
-      "lastModified": "2025-01-27T12:00:00.000Z",
-      "vpn": false
-    },
-    {
       "id": 14,
       "name": "العربي",
       "url": "https://live.kwikmotion.com/alaraby1live/alaraby_abr/playlist.m3u8",
@@ -1311,6 +1298,42 @@
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-04T05:21:29.734Z"
+    },
+    {
+      "id": 151,
+      "name": "الجزيرة الوثائقية",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=aljazeeradoc2",
+      "logo": "https://upload.wikimedia.org/wikipedia/ar/e/e6/Al_Jazeera_Doc.png",
+      "category": "documentary",
+      "country": "قطر",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-04T05:53:52.119Z"
+    },
+    {
+      "id": 152,
+      "name": "Bein 1",
+      "url": "https://direct.aflam4you.net/zremb472.php?vid=179&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "logo": "https://bhzqcb.6670391863.store:8443/hls/cosjzd7el0.m3u8?s=MUqNT0kllPUWm-MhfZwkfw&e=1759578659",
+      "category": "sports",
+      "country": "السعودية",
+      "type": "aflam",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-04T05:53:52.119Z"
+    },
+    {
+      "id": 153,
+      "name": "Bein 2",
+      "url": "https://direct.aflam4you.net/zremb472.php?vid=2&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "logo": "https://direct.aflam4you.net/zremb472.php?vid=2&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "category": "sports",
+      "country": "السعودية",
+      "type": "aflam",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-04T06:14:18.221Z"
     }
   ],
   "favorites": [],
@@ -1382,6 +1405,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-04T05:48:26.475Z",
+  "lastModified": "2025-10-04T06:19:05.232Z",
   "version": "1.0"
 }
