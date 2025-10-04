@@ -1197,11 +1197,195 @@ class ArabicTVApp {
         }
     }
 
+    // دالة لإيقاف البث مؤقتاً عند إخفاء الصفحة
+    pauseCurrentVideo() {
+        try {
+            const video = document.getElementById('videoPlayer');
+            if (video && !video.paused) {
+                video.pause();
+                console.log('⏸️ تم إيقاف الفيديو مؤقتاً');
+            }
+            
+            // إيقاف aflam iframe مؤقتاً
+            const aflamIframe = document.getElementById('aflamPlayer');
+            if (aflamIframe) {
+                try {
+                    if (aflamIframe.contentWindow) {
+                        aflamIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                    }
+                } catch (e) {
+                    console.log('Cannot pause aflam iframe');
+                }
+            }
+            
+            // إيقاف elahmad iframe مؤقتاً
+            const elahmadIframe = document.getElementById('elahmadPlayer');
+            if (elahmadIframe) {
+                try {
+                    if (elahmadIframe.contentWindow) {
+                        elahmadIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                    }
+                } catch (e) {
+                    console.log('Cannot pause elahmad iframe');
+                }
+            }
+            
+        } catch (error) {
+            console.log('Error pausing current video:', error);
+        }
+    }
+    
+    // دالة لاستئناف البث عند إظهار الصفحة
+    resumeCurrentVideo() {
+        try {
+            const video = document.getElementById('videoPlayer');
+            if (video && video.paused && this.currentChannel) {
+                video.play().catch(console.error);
+                console.log('▶️ تم استئناف الفيديو');
+            }
+            
+            // استئناف aflam iframe
+            const aflamIframe = document.getElementById('aflamPlayer');
+            if (aflamIframe) {
+                try {
+                    if (aflamIframe.contentWindow) {
+                        aflamIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                    }
+                } catch (e) {
+                    console.log('Cannot resume aflam iframe');
+                }
+            }
+            
+            // استئناف elahmad iframe
+            const elahmadIframe = document.getElementById('elahmadPlayer');
+            if (elahmadIframe) {
+                try {
+                    if (elahmadIframe.contentWindow) {
+                        elahmadIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                    }
+                } catch (e) {
+                    console.log('Cannot resume elahmad iframe');
+                }
+            }
+            
+        } catch (error) {
+            console.log('Error resuming current video:', error);
+        }
+    }
+
+    // دالة مساعدة لتنظيف جميع أنواع البث
+    cleanupAllMedia() {
+        console.log('🧹 تنظيف جميع أنواع البث...');
+        
+        // تنظيف aflam iframe
+        const aflamIframe = document.getElementById('aflamPlayer');
+        if (aflamIframe) {
+            console.log('🛑 تنظيف aflam iframe...');
+            aflamIframe.src = '';
+            aflamIframe.style.display = 'none';
+            
+            try {
+                if (aflamIframe.contentWindow) {
+                    aflamIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                    aflamIframe.contentWindow.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
+                    aflamIframe.contentWindow.postMessage('{"event":"command","func":"pause","args":""}', '*');
+                }
+            } catch (e) {
+                console.log('Cannot access aflam iframe content');
+            }
+            
+            try {
+                if (aflamIframe.parentNode) {
+                    aflamIframe.remove();
+                }
+            } catch (removeError) {
+                console.log('Error removing aflam iframe:', removeError);
+            }
+        }
+        
+        // تنظيف elahmad iframe
+        const elahmadIframe = document.getElementById('elahmadPlayer');
+        if (elahmadIframe) {
+            console.log('🛑 تنظيف elahmad iframe...');
+            elahmadIframe.src = '';
+            elahmadIframe.style.display = 'none';
+            
+            try {
+                if (elahmadIframe.contentWindow) {
+                    elahmadIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                }
+            } catch (e) {
+                console.log('Cannot access elahmad iframe content');
+            }
+            
+            try {
+                if (elahmadIframe.parentNode) {
+                    elahmadIframe.remove();
+                }
+            } catch (removeError) {
+                console.log('Error removing elahmad iframe:', removeError);
+            }
+        }
+        
+        // تنظيف YouTube iframe
+        const youtubeIframe = document.getElementById('youtubePlayer');
+        if (youtubeIframe) {
+            console.log('🛑 تنظيف YouTube iframe...');
+            youtubeIframe.src = '';
+            youtubeIframe.style.display = 'none';
+            
+            try {
+                if (youtubeIframe.parentNode) {
+                    youtubeIframe.remove();
+                }
+            } catch (removeError) {
+                console.log('Error removing YouTube iframe:', removeError);
+            }
+        }
+        
+        // تنظيف إضافي للذاكرة
+        try {
+            // إيقاف جميع العناصر الصوتية والفيديو في الصفحة
+            const allVideos = document.querySelectorAll('video');
+            allVideos.forEach(video => {
+                if (!video.paused) {
+                    video.pause();
+                }
+                video.currentTime = 0;
+                video.src = '';
+            });
+            
+            const allAudios = document.querySelectorAll('audio');
+            allAudios.forEach(audio => {
+                if (!audio.paused) {
+                    audio.pause();
+                }
+                audio.currentTime = 0;
+                audio.src = '';
+            });
+            
+            // تنظيف MediaSession إذا كان موجوداً
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.setActionHandler('play', null);
+                navigator.mediaSession.setActionHandler('pause', null);
+                navigator.mediaSession.setActionHandler('stop', null);
+            }
+            
+        } catch (memoryCleanupError) {
+            console.log('Error in memory cleanup:', memoryCleanupError);
+        }
+        
+        console.log('✅ تم تنظيف جميع أنواع البث والذاكرة بنجاح');
+    }
+
     stopCurrentVideo() {
         const video = document.getElementById('videoPlayer');
         const source = document.getElementById('videoSource');
         
         try {
+            // تنظيف جميع أنواع البث أولاً
+            this.cleanupAllMedia();
+            
             // Pause and reset video
             if (video) {
                 video.pause();
@@ -1228,60 +1412,7 @@ class ArabicTVApp {
                 this.youtubePlayer = null;
             }
             
-            // Remove YouTube iframe if exists
-            const youtubeIframe = document.getElementById('youtubePlayer');
-            if (youtubeIframe) {
-                youtubeIframe.src = '';
-                youtubeIframe.remove();
-            }
-            
-            // Remove elahmad iframe if exists
-            const elahmadIframe = document.getElementById('elahmadPlayer');
-            if (elahmadIframe) {
-                // إيقاف iframe فوراً
-                elahmadIframe.src = '';
-                elahmadIframe.style.display = 'none';
-                
-                // محاولة إيقاف الصوت
-                try {
-                    if (elahmadIframe.contentWindow) {
-                        elahmadIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-                    }
-                } catch (e) {
-                    console.log('Cannot access iframe content');
-                }
-                
-                // إزالة iframe بعد تأخير قصير
-                setTimeout(() => {
-                    if (elahmadIframe && elahmadIframe.parentNode) {
-                        elahmadIframe.remove();
-                    }
-                }, 100);
-            }
-            
-            // Remove aflam iframe if exists
-            const aflamIframe = document.getElementById('aflamPlayer');
-            if (aflamIframe) {
-                // إيقاف iframe فوراً
-                aflamIframe.src = '';
-                aflamIframe.style.display = 'none';
-                
-                // محاولة إيقاف الصوت
-                try {
-                    if (aflamIframe.contentWindow) {
-                        aflamIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-                    }
-                } catch (e) {
-                    console.log('Cannot access aflam iframe content');
-                }
-                
-                // إزالة iframe بعد تأخير قصير
-                setTimeout(() => {
-                    if (aflamIframe && aflamIframe.parentNode) {
-                        aflamIframe.remove();
-                    }
-                }, 100);
-            }
+            // تنظيف جميع أنواع البث يتم الآن في دالة cleanupAllMedia()
             
             console.log('Current video stopped successfully');
         } catch (error) {
@@ -1307,6 +1438,9 @@ class ArabicTVApp {
 
             // Stop current video completely to prevent conflicts
             this.stopCurrentVideo();
+            
+            // تنظيف إضافي لضمان عدم استمرار البث السابق
+            this.cleanupAllMedia();
 
             // Show loading
             loading.style.display = 'flex';
@@ -2355,27 +2489,8 @@ class ArabicTVApp {
         // Reset video display
         video.style.display = 'block';
         
-        // Hide YouTube iframe if exists
-        if (iframe) {
-            iframe.style.display = 'none';
-            iframe.src = '';
-        }
-        
-        // Hide elahmad iframe if exists
-        const elahmadIframe = document.getElementById('elahmadPlayer');
-        if (elahmadIframe) {
-            elahmadIframe.style.display = 'none';
-            elahmadIframe.src = '';
-            
-            // محاولة إيقاف الصوت
-            try {
-                if (elahmadIframe.contentWindow) {
-                    elahmadIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-                }
-            } catch (e) {
-                console.log('Cannot access elahmad iframe content');
-            }
-        }
+        // تنظيف جميع أنواع البث باستخدام الدالة المساعدة
+        this.cleanupAllMedia();
         
         // Hide ad block notification
         const adBlockNotification = document.getElementById('adBlockNotification');
@@ -7323,6 +7438,15 @@ class ArabicTVApp {
                 console.log('Page hidden while in Picture-in-Picture mode');
             } else if (!document.hidden && this.isPictureInPicture) {
                 console.log('Page visible while in Picture-in-Picture mode');
+            }
+            
+            // إيقاف البث عند إخفاء الصفحة لتوفير البطارية والبيانات
+            if (document.hidden) {
+                console.log('🛑 إخفاء الصفحة - إيقاف البث مؤقتاً');
+                this.pauseCurrentVideo();
+            } else {
+                console.log('👁️ إظهار الصفحة - استئناف البث');
+                this.resumeCurrentVideo();
             }
         });
 
