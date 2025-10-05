@@ -1501,31 +1501,6 @@
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-05T04:45:45.383Z"
-    },
-    {
-      "id": 100,
-      "name": "Real Madrid",
-      "url": "https://rmtv.akamaized.net/hls/live/2043153/rmtv-es-web/master.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/sco/thumb/5/56/Real_Madrid_CF.svg/732px-Real_Madrid_CF.svg.png",
-      "category": "sports",
-      "country": "اسبانيا",
-      "type": "hls",
-      "status": "active",
-      "isLocal": false,
-      "lastModified": "2025-09-24T23:40:56.300Z",
-      "vpn": false
-    },
-    {
-      "id": 142,
-      "name": "TNA Wrestling",
-      "url": "https://epg.provider.plex.tv/library/parts/5e20b730f2f8d5003d739db7-606605549dbfca002d2ae873.m3u8?includeAllStreams=1&X-Plex-Product=Plex+Mediaverse&X-Plex-Token=xK7U9RfFyckTeqzcUZfQ",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/b/b0/Total_Nonstop_Action_Wrestling_logo_2024.png",
-      "category": "sports",
-      "country": "USA",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-10-04T04:49:03.975Z"
     }
   ],
   "favorites": [],
@@ -1597,6 +1572,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-05T05:17:25.781Z",
+  "lastModified": "2025-10-05T05:18:27.951Z",
   "version": "1.0"
 }
