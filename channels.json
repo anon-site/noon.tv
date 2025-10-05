@@ -1356,7 +1356,8 @@
       "country": "السعودية",
       "type": "aflam",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-05T04:21:23.436Z"
     },
     {
       "id": 156,
@@ -1367,7 +1368,8 @@
       "country": "السعودية",
       "type": "aflam",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-05T04:21:23.436Z"
     },
     {
       "id": 157,
@@ -1378,7 +1380,8 @@
       "country": "السعودية",
       "type": "aflam",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-05T04:21:23.436Z"
     },
     {
       "id": 158,
@@ -1389,7 +1392,8 @@
       "country": "السعودية",
       "type": "aflam",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-05T04:21:23.436Z"
     },
     {
       "id": 159,
@@ -1400,7 +1404,8 @@
       "country": "السعودية",
       "type": "aflam",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-05T04:21:23.436Z"
     },
     {
       "id": 160,
@@ -1410,6 +1415,63 @@
       "category": "sports",
       "country": "السعودية",
       "type": "aflam",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-05T04:21:23.436Z"
+    },
+    {
+      "id": 161,
+      "name": "المجد الوثائقية",
+      "url": "https://games1.elahmad.xyz/tv757_www.elahmad.com_almajd_documentary/index.m3u8?token=21f6331bd5e17864d7ed369be8529cff3bb2e3ee-1fa8ad52dc14639a5fd6495e39bcdae2-1759648525-1759637725",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/%D8%A7%D9%84%D9%85%D8%AC%D8%AF_%D8%A7%D9%84%D9%88%D8%AB%D8%A7%D8%A6%D9%82%D9%8A%D8%A9.png/1275px-%D8%A7%D9%84%D9%85%D8%AC%D8%AF_%D8%A7%D9%84%D9%88%D8%AB%D8%A7%D8%A6%D9%82%D9%8A%D8%A9.png",
+      "category": "documentary",
+      "country": "السعودية",
+      "type": "hls",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-05T04:21:23.436Z"
+    },
+    {
+      "id": 162,
+      "name": "المجد الحديث النبوي",
+      "url": "https://games1.elahmad.xyz/tv757_www.elahmad.com_almajd_hadeeth/index.m3u8?token=b55887d4c6707f6324533cd0e348f6fd03867e85-f407e9df3868fbcd32567f1cb5aace18-1759648651-1759637851",
+      "logo": "https://almajdtv.com/wp-content/uploads/2021/08/Hadeth_Cover.png",
+      "category": "religious",
+      "country": "السعودية",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 163,
+      "name": "المجد القرآن الكريم",
+      "url": "https://www.elahmad.com/tv/live/channel.php?id=almajd_quran",
+      "logo": "https://almajdtv.com/wp-content/uploads/2021/08/Quran_Cover.png",
+      "category": "religious",
+      "country": "السعودية",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 164,
+      "name": "ART Hekayat",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=hekayat",
+      "logo": "https://iili.io/KXxnapf.png",
+      "category": "entertainment",
+      "country": "السعودية",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 165,
+      "name": "ART Hekayat 2",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=hekayat_2",
+      "logo": "https://iili.io/KXxoIuj.png",
+      "category": "entertainment",
+      "country": "السعودية",
+      "type": "hls",
       "status": "active",
       "vpn": false
     }
@@ -1483,6 +1545,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-05T04:18:27.278Z",
+  "lastModified": "2025-10-05T04:32:48.438Z",
   "version": "1.0"
 }
