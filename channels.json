@@ -807,7 +807,7 @@
       "id": 88,
       "name": "سورية 2",
       "url": "https://live.kwikmotion.com/syriatv02live/syriatv02.smil/playlist.m3u8",
-      "logo": "https://www.althania.tv/images/logo.png",
+      "logo": "https://www.fadaatmedia.com/sites/default/files/2025-03/Logo%20syria%202%20Color.png",
       "category": "entertainment",
       "country": "سورية",
       "type": "hls",
@@ -1492,7 +1492,7 @@
       "id": 172,
       "name": "LBC TV",
       "url": "https://www.elahmad.com/tv/watchtv.php?id=lbc",
-      "logo": "https://static.wikia.nocookie.net/logopedia/images/9/9d/LBC_INTERNATIONAL.png/revision/latest?cb=20150915013834",
+      "logo": "https://iconape.com/wp-content/files/fs/284021/svg/284021.svg",
       "category": "entertainment",
       "country": "لبنان",
       "type": "hls",
@@ -1595,8 +1595,8 @@
     "showAutoNotifications": false,
     "backgroundAudio": true,
     "autoUpdateEnabled": false,
-    "hideElahmadControls": true,
-    "autoUpdateChannels": true
+    "autoUpdateChannels": true,
+    "hideElahmadControls": true
   },
   "categories": [
     {
@@ -1646,6 +1646,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-05T05:48:15.149Z",
+  "lastModified": "2025-10-05T15:34:45.231Z",
   "version": "1.0"
 }
