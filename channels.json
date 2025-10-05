@@ -1243,10 +1243,10 @@
       "id": 143,
       "name": "ART Cinema",
       "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=art_cinema",
-      "logo": "https://ewsat.com/img/ART_CINEMA.png",
+      "logo": "https://iili.io/KXoiDZB.png",
       "category": "movies",
       "country": "السعودية",
-      "type": "elahmad",
+      "type": "hls",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-04T04:50:35.132Z"
@@ -1255,7 +1255,7 @@
       "id": 144,
       "name": "ART Aflam 1",
       "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=art_aflam_1",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c9/ART_Aflam_1.png",
+      "logo": "https://iili.io/KXoipG1.png",
       "category": "movies",
       "country": "السعودية",
       "type": "hls",
@@ -1267,10 +1267,10 @@
       "id": 145,
       "name": "ART Aflam 2",
       "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=art_aflam_2",
-      "logo": "https://static.wikia.nocookie.net/logopedia/images/6/68/ART_MOVIES_2.png/revision/latest?cb=20150308150753",
+      "logo": "https://iili.io/KXoimCP.png",
       "category": "movies",
       "country": "السعودية",
-      "type": "elahmad",
+      "type": "hls",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-04T05:12:32.409Z"
@@ -1291,7 +1291,7 @@
       "id": 148,
       "name": "ماجد",
       "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=majid_tv",
-      "logo": "https://static.wikia.nocookie.net/logopedia/images/f/f7/Majid_2020.png/revision/latest?cb=20230724161933",
+      "logo": "https://iili.io/KXoiy6F.png",
       "category": "kids",
       "country": "السعودية",
       "type": "hls",
@@ -1315,10 +1315,10 @@
       "id": 152,
       "name": "Bein 1",
       "url": "https://direct.aflam4you.net/zremb472.php?vid=179&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
-      "logo": "https://bhzqcb.6670391863.store:8443/hls/cosjzd7el0.m3u8?s=MUqNT0kllPUWm-MhfZwkfw&e=1759578659",
+      "logo": "https://direct.aflam4you.net/zremb472.php?vid=179&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
       "category": "sports",
       "country": "السعودية",
-      "type": "aflam",
+      "type": "hls",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-04T05:53:52.119Z"
@@ -1330,7 +1330,7 @@
       "logo": "https://direct.aflam4you.net/zremb472.php?vid=2&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
       "category": "sports",
       "country": "السعودية",
-      "type": "aflam",
+      "type": "hls",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-04T06:14:18.221Z"
@@ -1342,10 +1342,76 @@
       "logo": "https://direct.aflam4you.net/zremb472.php?vid=1&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
       "category": "sports",
       "country": "السعودية",
-      "type": "aflam",
+      "type": "hls",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-04T06:24:45.593Z"
+    },
+    {
+      "id": 155,
+      "name": "Bein 4",
+      "url": "https://direct.aflam4you.net/zremb472.php?vid=3&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "logo": "https://direct.aflam4you.net/bein-sport-4-kooora-yalah-kora-funding-tv_3.html",
+      "category": "sports",
+      "country": "السعودية",
+      "type": "aflam",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 156,
+      "name": "Bein 5",
+      "url": "https://direct.aflam4you.net/zremb472.php?vid=73&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "logo": "https://direct.aflam4you.net/zremb472.php?vid=73&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "category": "sports",
+      "country": "السعودية",
+      "type": "aflam",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 157,
+      "name": "Bein 6",
+      "url": "https://direct.aflam4you.net/zremb472.php?vid=74&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "logo": "https://direct.aflam4you.net/zremb472.php?vid=74&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "category": "sports",
+      "country": "السعودية",
+      "type": "aflam",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 158,
+      "name": "Bein 7",
+      "url": "https://direct.aflam4you.net/zremb472.php?vid=75&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "logo": "https://direct.aflam4you.net/zremb472.php?vid=75&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "category": "sports",
+      "country": "السعودية",
+      "type": "aflam",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 159,
+      "name": "Bein 8",
+      "url": "https://direct.aflam4you.net/zremb472.php?vid=76&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "logo": "https://direct.aflam4you.net/zremb472.php?vid=76&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "category": "sports",
+      "country": "السعودية",
+      "type": "aflam",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 160,
+      "name": "Bein 9",
+      "url": "https://direct.aflam4you.net/zremb472.php?vid=69&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "logo": "https://direct.aflam4you.net/zremb472.php?vid=69&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "category": "sports",
+      "country": "السعودية",
+      "type": "aflam",
+      "status": "active",
+      "vpn": false
     }
   ],
   "favorites": [],
@@ -1366,8 +1432,8 @@
     "showAutoNotifications": false,
     "backgroundAudio": true,
     "autoUpdateEnabled": false,
-    "hideElahmadControls": true,
-    "autoUpdateChannels": true
+    "autoUpdateChannels": true,
+    "hideElahmadControls": true
   },
   "categories": [
     {
@@ -1417,6 +1483,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-04T06:32:19.265Z",
+  "lastModified": "2025-10-05T04:18:27.278Z",
   "version": "1.0"
 }
