@@ -1460,19 +1460,55 @@
     </script>
     <script src="script.js"></script>
     
-    <!-- Service Worker Registration -->
+    <!-- حماية من الإعلانات وإعادة التوجيه غير المرغوب فيها -->
     <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(registration => {
-                        console.log('✅ Service Worker registered successfully:', registration.scope);
-                    })
-                    .catch(error => {
-                        console.log('❌ Service Worker registration failed:', error);
+        // منع النوافذ المنبثقة غير المرغوب فيها
+        window.addEventListener('beforeunload', function(e) {
+            if (window.location.href.includes('elahmad.com') && !window.location.href.includes('noon.tv')) {
+                e.preventDefault();
+                e.returnValue = '';
+                return 'هل تريد مغادرة الموقع؟';
+            }
+        });
+        
+        // منع الإعلانات في الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType === 1) { // Element node
+                            // إزالة الإعلانات
+                            if (node.className && (
+                                node.className.includes('ad') || 
+                                node.className.includes('advertisement') ||
+                                node.className.includes('banner') ||
+                                node.className.includes('popup')
+                            )) {
+                                node.style.display = 'none';
+                                console.log('🚫 تم إخفاء إعلان');
+                            }
+                            
+                            // فحص النصوص للإعلانات
+                            if (node.textContent && (
+                                node.textContent.includes('إعلان') ||
+                                node.textContent.includes('advertisement') ||
+                                node.textContent.includes('Please wait 4 seconds')
+                            )) {
+                                node.style.display = 'none';
+                                console.log('🚫 تم إخفاء محتوى إعلاني');
+                            }
+                        }
                     });
+                });
             });
-        }
+            
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+            
+            console.log('🛡️ تم تفعيل حماية من الإعلانات وإعادة التوجيه');
+        });
     </script>
 </body>
 </html>

@@ -28848,3 +28848,25 @@ body[data-theme="light"] .more-menu-item:hover {
     margin-top: 0.5rem;
     display: block;
 }
+
+/* حماية من الإعلانات وإعادة التوجيه غير المرغوب فيها */
+.ad, .advertisement, .banner, .popup, 
+[class*="ad-"], [class*="advertisement"], [class*="banner"], [class*="popup"],
+[id*="ad-"], [id*="advertisement"], [id*="banner"], [id*="popup"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
+}
+
+/* حماية من النوافذ المنبثقة */
+.popup-overlay, .modal-overlay[style*="display: block"] {
+    display: none !important;
+}
+
+/* إخفاء المحتوى الإعلاني */
+*[style*="position: fixed"][style*="z-index: 9999"] {
+    display: none !important;
+}

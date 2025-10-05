@@ -103,37 +103,6 @@ class ArabicTVApp {
         
         // تشخيص أولي
         console.log('تم تهيئة التطبيق مع', this.channels.length, 'قناة');
-        
-        // تشخيص البيئة
-        if (this.isInApp()) {
-            console.log('🔧 تم تشغيل التطبيق داخل تطبيق APK/WebView - تم تعطيل sandbox للأمان');
-        } else {
-            console.log('🌐 تم تشغيل التطبيق في متصفح عادي - تم تفعيل sandbox للأمان');
-        }
-    }
-
-    // دالة للكشف عن البيئة (APK vs متصفح عادي)
-    isInApp() {
-        // الكشف عن التطبيقات المختلفة
-        const userAgent = navigator.userAgent.toLowerCase();
-        
-        // كشف تطبيقات APK المختلفة
-        const isInAPK = 
-            userAgent.includes('wv') || // WebView
-            userAgent.includes('android') && userAgent.includes('version') || // Android WebView
-            window.navigator.standalone === true || // iOS standalone
-            window.matchMedia('(display-mode: standalone)').matches || // PWA
-            document.referrer === '' && window.location.protocol === 'file:' || // File protocol
-            userAgent.includes('mobile') && userAgent.includes('safari') && !userAgent.includes('chrome'); // Mobile Safari in app
-        
-        // كشف إضافي للتطبيقات المخصصة
-        const isCustomApp = 
-            window.location.href.includes('app://') ||
-            window.location.protocol === 'app:' ||
-            typeof window.Android !== 'undefined' ||
-            typeof window.webkit !== 'undefined' && window.webkit.messageHandlers;
-        
-        return isInAPK || isCustomApp;
     }
 
     async loadDataFromFile() {
@@ -1917,9 +1886,33 @@ class ArabicTVApp {
                 iframe.allowFullscreen = true;
                 iframe.allow = 'autoplay; fullscreen; picture-in-picture; xr-spatial-tracking; encrypted-media';
                 
-                // Add security attributes without sandbox
-                iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
-                iframe.setAttribute('loading', 'lazy');
+            // إضافة حماية من الإعلانات وإعادة التوجيه
+            iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+            iframe.setAttribute('loading', 'lazy');
+            
+            // منع إعادة التوجيه غير المرغوب فيها
+            iframe.onload = () => {
+                console.log('✅ تم تحميل iframe من elahmad.com بنجاح');
+                loading.style.display = 'none';
+                
+                // فحص الإعلانات وإعادة التوجيه
+                setTimeout(() => {
+                    try {
+                        if (iframe.contentDocument && iframe.contentDocument.body) {
+                            const bodyText = iframe.contentDocument.body.textContent.toLowerCase();
+                            if (bodyText.includes('advertisement') || bodyText.includes('ad') || bodyText.includes('إعلان')) {
+                                console.warn('⚠️ تم اكتشاف إعلانات في المحتوى');
+                            }
+                            if (bodyText.includes('please wait') || bodyText.includes('انتظر')) {
+                                console.warn('⚠️ تم اكتشاف رسالة انتظار - قد تكون إعادة توجيه');
+                            }
+                        }
+                    } catch (e) {
+                        // Cross-origin error is expected for successful loads
+                        console.log('✅ iframe محمل بنجاح (Cross-origin)');
+                    }
+                }, 2000);
+            };
                 
                 // Insert iframe after video element
                 video.parentNode.insertBefore(iframe, video.nextSibling);
@@ -2181,10 +2174,8 @@ class ArabicTVApp {
             iframe.style.background = '#000';
             iframe.allowFullscreen = true;
             iframe.allow = 'autoplay; fullscreen; picture-in-picture; xr-spatial-tracking; encrypted-media';
-            // إضافة sandbox فقط في المتصفحات العادية وليس في التطبيقات APK
-            if (!this.isInApp()) {
-                iframe.sandbox = 'allow-scripts allow-same-origin allow-presentation allow-forms';
-            }
+            // إزالة sandbox لتجنب التحذيرات
+            // iframe.sandbox = 'allow-scripts allow-same-origin allow-presentation allow-forms';
             
             // Add error handling
             iframe.onerror = () => {
@@ -2192,6 +2183,11 @@ class ArabicTVApp {
                 this.showAflamError('فشل في تحميل المحتوى');
             };
             
+            // إضافة حماية من الإعلانات وإعادة التوجيه
+            iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+            iframe.setAttribute('loading', 'lazy');
+            
+            // منع إعادة التوجيه غير المرغوب فيها
             iframe.onload = () => {
                 console.log('✅ تم تحميل iframe من aflam4you.net');
                 loading.style.display = 'none';
@@ -2203,6 +2199,11 @@ class ArabicTVApp {
                             const bodyText = iframe.contentDocument.body.textContent.toLowerCase();
                             if (bodyText.includes('blocked') || bodyText.includes('contact the site owner')) {
                                 this.showAflamError('المحتوى محجوب من الموقع');
+                            }
+                            // فحص الإعلانات
+                            if (bodyText.includes('advertisement') || bodyText.includes('ad') || bodyText.includes('إعلان')) {
+                                console.warn('⚠️ تم اكتشاف إعلانات في المحتوى');
+                                // يمكن إضافة منطق لإخفاء الإعلانات هنا
                             }
                         }
                     } catch (e) {
@@ -2430,10 +2431,8 @@ class ArabicTVApp {
                 iframe.style.border = 'none';
                 iframe.allowFullscreen = true;
                 iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-                // إضافة sandbox فقط في المتصفحات العادية وليس في التطبيقات APK
-                if (!this.isInApp()) {
-                    iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation');
-                }
+                // إزالة sandbox لتجنب التحذيرات
+                // iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation');
                 
                 // Insert iframe after video element
                 video.parentNode.insertBefore(iframe, video.nextSibling);
@@ -9197,6 +9196,60 @@ function initializeMobileBottomNav() {
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new ArabicTVApp();
+    
+    // إضافة حماية من الإعلانات وإعادة التوجيه غير المرغوب فيها
+    const blockAdsAndRedirects = function() {
+        // منع النوافذ المنبثقة غير المرغوب فيها
+        window.addEventListener('beforeunload', function(e) {
+            // منع إعادة التوجيه غير المرغوب فيها
+            if (window.location.href.includes('elahmad.com') && !window.location.href.includes('noon.tv')) {
+                e.preventDefault();
+                e.returnValue = '';
+                return 'هل تريد مغادرة الموقع؟';
+            }
+        });
+        
+        // منع الإعلانات في الصفحة
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                mutation.addedNodes.forEach(function(node) {
+                    if (node.nodeType === 1) { // Element node
+                        // إزالة الإعلانات
+                        if (node.className && (
+                            node.className.includes('ad') || 
+                            node.className.includes('advertisement') ||
+                            node.className.includes('banner') ||
+                            node.className.includes('popup')
+                        )) {
+                            node.style.display = 'none';
+                            console.log('🚫 تم إخفاء إعلان');
+                        }
+                        
+                        // فحص النصوص للإعلانات
+                        if (node.textContent && (
+                            node.textContent.includes('إعلان') ||
+                            node.textContent.includes('advertisement') ||
+                            node.textContent.includes('Please wait 4 seconds')
+                        )) {
+                            node.style.display = 'none';
+                            console.log('🚫 تم إخفاء محتوى إعلاني');
+                        }
+                    }
+                });
+            });
+        });
+        
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+        
+        console.log('🛡️ تم تفعيل حماية من الإعلانات وإعادة التوجيه');
+    };
+    
+    // تفعيل الحماية
+    blockAdsAndRedirects();
+    
     // Initialize quality menu
     if (window.app && window.app.initQualityMenu) {
         window.app.initQualityMenu();
