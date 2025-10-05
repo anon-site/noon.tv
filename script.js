@@ -1446,7 +1446,6 @@ class ArabicTVApp {
             loading.style.display = 'flex';
             loading.innerHTML = `
                 <div class="spinner"></div>
-                <p>جارٍ تحميل البث...</p>
             `;
 
             // Check if it's a YouTube URL
@@ -1719,7 +1718,6 @@ class ArabicTVApp {
         } else {
             loading.innerHTML = `
                 <div class="spinner" style="border-top-color: #e94560;"></div>
-                <p style="color: #e94560;">خطأ في تحميل البث - جارٍ المحاولة مرة أخرى...</p>
             `;
             
             // Retry after 3 seconds only if not VPN required
@@ -1888,6 +1886,10 @@ class ArabicTVApp {
                 iframe.allowFullscreen = true;
                 iframe.allow = 'autoplay; fullscreen; picture-in-picture; xr-spatial-tracking; encrypted-media';
                 
+                // Add security attributes without sandbox
+                iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+                iframe.setAttribute('loading', 'lazy');
+                
                 // Insert iframe after video element
                 video.parentNode.insertBefore(iframe, video.nextSibling);
             }
@@ -1900,6 +1902,12 @@ class ArabicTVApp {
             
             // Show iframe
             iframe.style.display = 'block';
+            
+            // Add double-click fullscreen support for elahmad iframe
+            iframe.addEventListener('dblclick', () => {
+                console.log('🖱️ ضغط مزدوج على elahmad iframe - محاولة التكبير');
+                this.toggleFullscreen();
+            });
             
             console.log('✅ تم تحميل iframe من elahmad.com بنجاح');
             
@@ -2079,12 +2087,10 @@ class ArabicTVApp {
                 throw new Error('رابط aflam4you.net غير صحيح - تحقق من الرابط');
             }
 
-            // Show loading with extraction message
+            // Show loading
             loading.style.display = 'flex';
             loading.innerHTML = `
                 <div class="spinner"></div>
-                <p>جارٍ استخراج رابط البث المباشر...</p>
-                <small>من aflam4you.net</small>
             `;
 
             try {
@@ -2094,8 +2100,6 @@ class ArabicTVApp {
                 // Update loading message
                 loading.innerHTML = `
                     <div class="spinner"></div>
-                    <p>جارٍ تحميل البث المباشر...</p>
-                    <small>جودة عالية</small>
                 `;
 
                 // Load the direct stream using HLS
@@ -2135,8 +2139,6 @@ class ArabicTVApp {
             // Update loading message
             loading.innerHTML = `
                 <div class="spinner"></div>
-                <p>جارٍ تحميل المحتوى...</p>
-                <small>من aflam4you.net</small>
             `;
             
             // Create optimized iframe
@@ -2184,6 +2186,12 @@ class ArabicTVApp {
             
             // Show iframe
             iframe.style.display = 'block';
+            
+            // Add double-click fullscreen support for aflam iframe
+            iframe.addEventListener('dblclick', () => {
+                console.log('🖱️ ضغط مزدوج على aflam iframe - محاولة التكبير');
+                this.toggleFullscreen();
+            });
             
         } catch (error) {
             console.error('❌ خطأ في تحميل iframe من aflam4you.net:', error);
@@ -2269,6 +2277,12 @@ class ArabicTVApp {
             }
             
             console.log('✅ تم تحميل البث المباشر بنجاح:', streamUrl);
+            
+            // Add double-click fullscreen support for video element
+            video.addEventListener('dblclick', () => {
+                console.log('🖱️ ضغط مزدوج على الفيديو - محاولة التكبير');
+                this.toggleFullscreen();
+            });
             
         } catch (error) {
             console.error('❌ خطأ في تحميل البث المباشر:', error);
@@ -2397,6 +2411,12 @@ class ArabicTVApp {
             
             // Show iframe
             iframe.style.display = 'block';
+            
+            // Add double-click fullscreen support for YouTube iframe
+            iframe.addEventListener('dblclick', () => {
+                console.log('🖱️ ضغط مزدوج على YouTube iframe - محاولة التكبير');
+                this.toggleFullscreen();
+            });
             
             // Show ad block notification
             this.showAdBlockNotification();
@@ -2551,13 +2571,110 @@ class ArabicTVApp {
         }
     }
 
-    toggleFullscreen() {
+    getActivePlayer() {
         const video = document.getElementById('videoPlayer');
+        const youtubePlayer = document.getElementById('youtubePlayer');
+        const aflamPlayer = document.getElementById('aflamPlayer');
+        const elahmadPlayer = document.getElementById('elahmadPlayer');
         
-        if (!document.fullscreenElement) {
-            video.requestFullscreen().catch(console.error);
+        // Check video player (HLS streams)
+        if (video && video.style.display !== 'none' && video.src) {
+            return { player: video, type: 'video' };
+        }
+        
+        // Check YouTube player
+        if (youtubePlayer && youtubePlayer.style.display !== 'none' && youtubePlayer.src) {
+            return { player: youtubePlayer, type: 'youtube' };
+        }
+        
+        // Check Aflam player
+        if (aflamPlayer && aflamPlayer.style.display !== 'none' && aflamPlayer.src) {
+            return { player: aflamPlayer, type: 'aflam' };
+        }
+        
+        // Check Elahmad player
+        if (elahmadPlayer && elahmadPlayer.style.display !== 'none' && elahmadPlayer.src) {
+            return { player: elahmadPlayer, type: 'elahmad' };
+        }
+        
+        return null;
+    }
+
+    toggleFullscreen() {
+        const activePlayerInfo = this.getActivePlayer();
+        
+        if (!activePlayerInfo) {
+            console.warn('لا يوجد مشغل نشط للتكبير');
+            return;
+        }
+        
+        const activePlayer = activePlayerInfo.player;
+        const playerType = activePlayerInfo.type;
+        
+        // Check if already in fullscreen
+        const isFullscreen = document.fullscreenElement || 
+                           document.webkitFullscreenElement || 
+                           document.mozFullScreenElement || 
+                           document.msFullscreenElement;
+        
+        if (!isFullscreen) {
+            // Enter fullscreen
+            console.log(`🎬 محاولة الدخول إلى وضع التكبير مع مشغل ${playerType}`);
+            
+            // Special handling for elahmad iframe
+            if (playerType === 'elahmad') {
+                console.log('📺 معالجة خاصة لـ elahmad iframe');
+                // Ensure iframe has proper attributes for fullscreen
+                if (!activePlayer.allowFullscreen) {
+                    activePlayer.allowFullscreen = true;
+                }
+                if (!activePlayer.allow || !activePlayer.allow.includes('fullscreen')) {
+                    activePlayer.allow = 'autoplay; fullscreen; picture-in-picture; xr-spatial-tracking; encrypted-media';
+                }
+            }
+            
+            const requestFullscreen = activePlayer.requestFullscreen || 
+                                    activePlayer.webkitRequestFullscreen || 
+                                    activePlayer.mozRequestFullScreen || 
+                                    activePlayer.msRequestFullscreen;
+            
+            if (requestFullscreen) {
+                requestFullscreen.call(activePlayer).catch(error => {
+                    console.error('خطأ في دخول وضع التكبير:', error);
+                    // Fallback: try to fullscreen the video container
+                    const videoContainer = document.querySelector('.video-container');
+                    if (videoContainer) {
+                        console.log('🔄 محاولة التكبير باستخدام الحاوي كبديل');
+                        const containerRequestFullscreen = videoContainer.requestFullscreen || 
+                                                        videoContainer.webkitRequestFullscreen || 
+                                                        videoContainer.mozRequestFullScreen || 
+                                                        videoContainer.msRequestFullscreen;
+                        if (containerRequestFullscreen) {
+                            containerRequestFullscreen.call(videoContainer).catch(console.error);
+                        }
+                    }
+                });
         } else {
-            document.exitFullscreen().catch(console.error);
+                console.error('المتصفح لا يدعم وضع التكبير');
+                // Show user notification
+                if (this.notifyError) {
+                    this.notifyError('المتصفح لا يدعم وضع التكبير');
+                }
+            }
+        } else {
+            // Exit fullscreen
+            console.log('🚪 الخروج من وضع التكبير');
+            
+            const exitFullscreen = document.exitFullscreen || 
+                                 document.webkitExitFullscreen || 
+                                 document.mozCancelFullScreen || 
+                                 document.msExitFullscreen;
+            
+            if (exitFullscreen) {
+                exitFullscreen.call(document).catch(error => {
+                    console.error('خطأ في الخروج من وضع التكبير:', error);
+                });
+            }
         }
     }
 
@@ -8525,12 +8642,18 @@ function toggleWebsiteFullscreen() {
     }
 }
 
-// Listen for fullscreen change events
-document.addEventListener('fullscreenchange', function() {
+// Listen for fullscreen change events (cross-browser support)
+function handleFullscreenChange() {
     const desktopBtn = document.querySelector('.fullscreen-toggle-btn i');
     const mobileBtn = document.querySelector('.mobile-fullscreen-toggle-btn i');
     
-    if (document.fullscreenElement) {
+    // Check for fullscreen state across different browsers
+    const isFullscreen = document.fullscreenElement || 
+                       document.webkitFullscreenElement || 
+                       document.mozFullScreenElement || 
+                       document.msFullscreenElement;
+    
+    if (isFullscreen) {
         // Entered fullscreen
         if (desktopBtn) {
             desktopBtn.className = 'fas fa-compress';
@@ -8538,6 +8661,7 @@ document.addEventListener('fullscreenchange', function() {
         if (mobileBtn) {
             mobileBtn.className = 'fas fa-compress';
         }
+        console.log('✅ تم الدخول إلى وضع التكبير');
     } else {
         // Exited fullscreen
         if (desktopBtn) {
@@ -8546,8 +8670,15 @@ document.addEventListener('fullscreenchange', function() {
         if (mobileBtn) {
             mobileBtn.className = 'fas fa-expand';
         }
+        console.log('✅ تم الخروج من وضع التكبير');
     }
-});
+}
+
+// Add event listeners for all fullscreen change events
+document.addEventListener('fullscreenchange', handleFullscreenChange);
+document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+document.addEventListener('MSFullscreenChange', handleFullscreenChange);
 
 function saveGeneralSettings() {
     app.saveGeneralSettings();
