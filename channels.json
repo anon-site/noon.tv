@@ -65,7 +65,7 @@
     },
     {
       "id": 116,
-      "name": "روتانا كلاسيك",
+      "name": "Rotana Classic",
       "url": "https://uvotv-aniview.global.ssl.fastly.net/10010/dvr/hls/rotanazaman/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Rotana_Classic.png",
       "category": "movies",
@@ -77,7 +77,7 @@
     },
     {
       "id": 115,
-      "name": "روتانا افلام بلس",
+      "name": "+Rotana Aflam",
       "url": "https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/rotana-aflam-plus/master.m3u8",
       "logo": "https://play-lh.googleusercontent.com/ETz89iZ47jOI_T62QFEqKYP0fr6Y-NylpNTCAToveLB80F9DZ6KWzg4NgEss8qoIV_oF",
       "category": "movies",
@@ -1440,20 +1440,18 @@
       "country": "السعودية",
       "type": "hls",
       "status": "active",
-      "vpn": false,
-      "lastModified": "2025-10-05T04:45:45.383Z"
+      "vpn": false
     },
     {
       "id": 163,
       "name": "المجد القرآن الكريم",
-      "url": "https://www.elahmad.com/tv/live/channel.php?id=almajd_quran",
+      "url": "https://games1.elahmad.xyz/tv757_www.elahmad.com_almajd_quran/index.m3u8?token=88c9faea72189dc6b3eb4c35e3aae83c1da17c07-11545659b398bc420741629676202e94-1759650545-1759639745",
       "logo": "https://almajdtv.com/wp-content/uploads/2021/08/Quran_Cover.png",
       "category": "religious",
       "country": "السعودية",
-      "type": "elahmad",
+      "type": "hls",
       "status": "active",
-      "vpn": false,
-      "lastModified": "2025-10-05T04:45:45.383Z"
+      "vpn": false
     },
     {
       "id": 164,
@@ -1464,8 +1462,7 @@
       "country": "السعودية",
       "type": "hls",
       "status": "active",
-      "vpn": false,
-      "lastModified": "2025-10-05T04:45:45.383Z"
+      "vpn": false
     },
     {
       "id": 165,
@@ -1476,8 +1473,7 @@
       "country": "السعودية",
       "type": "hls",
       "status": "active",
-      "vpn": false,
-      "lastModified": "2025-10-05T04:45:45.383Z"
+      "vpn": false
     },
     {
       "id": 166,
@@ -1546,8 +1542,8 @@
     "showAutoNotifications": false,
     "backgroundAudio": true,
     "autoUpdateEnabled": false,
-    "autoUpdateChannels": true,
-    "hideElahmadControls": true
+    "hideElahmadControls": true,
+    "autoUpdateChannels": true
   },
   "categories": [
     {
@@ -1597,6 +1593,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-05T04:51:50.335Z",
+  "lastModified": "2025-10-05T04:54:52.505Z",
   "version": "1.0"
 }
