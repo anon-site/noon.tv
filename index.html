@@ -193,10 +193,6 @@
                     <span>الأدوات</span>
                 </div>
                 <div class="sidebar-actions">
-                    <button class="sidebar-action-btn" onclick="openIPTVChecker()">
-                        <i class="fas fa-search"></i>
-                        <span>فحص الروابط</span>
-                    </button>
                     <button class="sidebar-action-btn" onclick="openSettings()">
                         <i class="fas fa-cog"></i>
                         <span>الإعدادات</span>
@@ -1124,35 +1120,6 @@
                                     </div>
                                 </div>
                                 
-                                <div class="password-requirements">
-                                    <div class="requirements-header">
-                                        <i class="fas fa-info-circle"></i>
-                                        <h4>متطلبات كلمة المرور</h4>
-                                    </div>
-                                    <ul class="requirements-list">
-                                        <li class="requirement-item" id="req-length">
-                                            <i class="fas fa-circle requirement-icon"></i>
-                                            <span>8 أحرف على الأقل</span>
-                                        </li>
-                                        <li class="requirement-item" id="req-uppercase">
-                                            <i class="fas fa-circle requirement-icon"></i>
-                                            <span>حرف كبير واحد على الأقل</span>
-                                        </li>
-                                        <li class="requirement-item" id="req-lowercase">
-                                            <i class="fas fa-circle requirement-icon"></i>
-                                            <span>حرف صغير واحد على الأقل</span>
-                                        </li>
-                                        <li class="requirement-item" id="req-number">
-                                            <i class="fas fa-circle requirement-icon"></i>
-                                            <span>رقم واحد على الأقل</span>
-                                        </li>
-                                        <li class="requirement-item" id="req-special">
-                                            <i class="fas fa-circle requirement-icon"></i>
-                                            <span>رمز خاص واحد على الأقل</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                
                                 <div class="form-actions">
                                     <button type="submit" class="change-password-btn" id="changePasswordBtn">
                                         <i class="fas fa-shield-alt"></i>
@@ -1160,39 +1127,6 @@
                                     </button>
                                 </div>
                             </form>
-                        </div>
-                        
-                        <div class="security-section">
-                            <div class="security-header">
-                                <i class="fas fa-info-circle"></i>
-                                <h3>معلومات الأمان</h3>
-                            </div>
-                            
-                            <div class="security-info">
-                                <div class="info-item">
-                                    <i class="fas fa-shield-alt"></i>
-                                    <div class="info-content">
-                                        <h4>تشفير آمن</h4>
-                                        <p>كلمات المرور مشفرة باستخدام SHA-256 Hash</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="info-item">
-                                    <i class="fas fa-clock"></i>
-                                    <div class="info-content">
-                                        <h4>آخر تغيير</h4>
-                                        <p id="lastPasswordChange">لم يتم تغييرها من قبل</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="info-item">
-                                    <i class="fas fa-user-shield"></i>
-                                    <div class="info-content">
-                                        <h4>حالة الجلسة</h4>
-                                        <p id="sessionStatus">نشطة</p>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -1409,8 +1343,6 @@
             <div class="footer-bottom">
                 <div class="footer-legal">
                     <a href="#" class="legal-link">سياسة الخصوصية</a>
-                    <span class="separator">|</span>
-                    <a href="#" class="legal-link" onclick="openIPTVChecker()">فحص الروابط</a>
                     <span class="separator">|</span>
                     <a href="#" class="legal-link">اتصل بنا</a>
                 </div>
