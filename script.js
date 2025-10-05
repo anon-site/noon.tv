@@ -103,6 +103,37 @@ class ArabicTVApp {
         
         // تشخيص أولي
         console.log('تم تهيئة التطبيق مع', this.channels.length, 'قناة');
+        
+        // تشخيص البيئة
+        if (this.isInApp()) {
+            console.log('🔧 تم تشغيل التطبيق داخل تطبيق APK/WebView - تم تعطيل sandbox للأمان');
+        } else {
+            console.log('🌐 تم تشغيل التطبيق في متصفح عادي - تم تفعيل sandbox للأمان');
+        }
+    }
+
+    // دالة للكشف عن البيئة (APK vs متصفح عادي)
+    isInApp() {
+        // الكشف عن التطبيقات المختلفة
+        const userAgent = navigator.userAgent.toLowerCase();
+        
+        // كشف تطبيقات APK المختلفة
+        const isInAPK = 
+            userAgent.includes('wv') || // WebView
+            userAgent.includes('android') && userAgent.includes('version') || // Android WebView
+            window.navigator.standalone === true || // iOS standalone
+            window.matchMedia('(display-mode: standalone)').matches || // PWA
+            document.referrer === '' && window.location.protocol === 'file:' || // File protocol
+            userAgent.includes('mobile') && userAgent.includes('safari') && !userAgent.includes('chrome'); // Mobile Safari in app
+        
+        // كشف إضافي للتطبيقات المخصصة
+        const isCustomApp = 
+            window.location.href.includes('app://') ||
+            window.location.protocol === 'app:' ||
+            typeof window.Android !== 'undefined' ||
+            typeof window.webkit !== 'undefined' && window.webkit.messageHandlers;
+        
+        return isInAPK || isCustomApp;
     }
 
     async loadDataFromFile() {
@@ -2150,7 +2181,10 @@ class ArabicTVApp {
             iframe.style.background = '#000';
             iframe.allowFullscreen = true;
             iframe.allow = 'autoplay; fullscreen; picture-in-picture; xr-spatial-tracking; encrypted-media';
-            // Removed sandbox attribute to prevent mobile browser warnings
+            // إضافة sandbox فقط في المتصفحات العادية وليس في التطبيقات APK
+            if (!this.isInApp()) {
+                iframe.sandbox = 'allow-scripts allow-same-origin allow-presentation allow-forms';
+            }
             
             // Add error handling
             iframe.onerror = () => {
@@ -2396,7 +2430,10 @@ class ArabicTVApp {
                 iframe.style.border = 'none';
                 iframe.allowFullscreen = true;
                 iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-                // Removed sandbox attribute to prevent mobile browser warnings
+                // إضافة sandbox فقط في المتصفحات العادية وليس في التطبيقات APK
+                if (!this.isInApp()) {
+                    iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation');
+                }
                 
                 // Insert iframe after video element
                 video.parentNode.insertBefore(iframe, video.nextSibling);
