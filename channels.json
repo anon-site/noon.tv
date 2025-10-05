@@ -1395,42 +1395,6 @@
       "lastModified": "2025-10-05T04:21:23.436Z"
     },
     {
-      "id": 161,
-      "name": "المجد الوثائقية",
-      "url": "https://www.elahmad.com/tv/live/channel.php?id=almajd_documentary",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/%D8%A7%D9%84%D9%85%D8%AC%D8%AF_%D8%A7%D9%84%D9%88%D8%AB%D8%A7%D8%A6%D9%82%D9%8A%D8%A9.png/1275px-%D8%A7%D9%84%D9%85%D8%AC%D8%AF_%D8%A7%D9%84%D9%88%D8%AB%D8%A7%D8%A6%D9%82%D9%8A%D8%A9.png",
-      "category": "documentary",
-      "country": "السعودية",
-      "type": "elahmad",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-10-05T04:21:23.436Z"
-    },
-    {
-      "id": 162,
-      "name": "المجد الحديث النبوي",
-      "url": "https://games1.elahmad.xyz/tv757_www.elahmad.com_almajd_hadeeth/index.m3u8?token=b55887d4c6707f6324533cd0e348f6fd03867e85-f407e9df3868fbcd32567f1cb5aace18-1759648651-1759637851",
-      "logo": "https://almajdtv.com/wp-content/uploads/2021/08/Hadeth_Cover.png",
-      "category": "religious",
-      "country": "السعودية",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-10-05T05:06:57.568Z"
-    },
-    {
-      "id": 163,
-      "name": "المجد القرآن الكريم",
-      "url": "https://games1.elahmad.xyz/tv757_www.elahmad.com_almajd_quran/index.m3u8?token=88c9faea72189dc6b3eb4c35e3aae83c1da17c07-11545659b398bc420741629676202e94-1759650545-1759639745",
-      "logo": "https://almajdtv.com/wp-content/uploads/2021/08/Quran_Cover.png",
-      "category": "religious",
-      "country": "السعودية",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-10-05T05:06:57.568Z"
-    },
-    {
       "id": 164,
       "name": "ART Hekayat",
       "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=hekayat",
@@ -1456,12 +1420,12 @@
     },
     {
       "id": 166,
-      "name": "ج أطفال",
+      "name": "جيم",
       "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=jscc1",
-      "logo": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=jscc1",
+      "logo": "https://i.pinimg.com/originals/40/25/49/402549fdf074e456d5eeedc8b76d04b9.png",
       "category": "kids",
       "country": "السعودية",
-      "type": "elahmad",
+      "type": "hls",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-05T04:45:45.383Z"
@@ -1501,6 +1465,83 @@
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-05T04:45:45.383Z"
+    },
+    {
+      "id": 170,
+      "name": "MIX",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=mixbelaraby",
+      "logo": "https://media0084.elcinema.com/tvguide/1371_1.png",
+      "category": "entertainment",
+      "country": "السعودية",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 171,
+      "name": "LBC2",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=lb2",
+      "logo": "https://www.elahmad.com/tv/mobiletv/images/lb2.jpg?v=7",
+      "category": "entertainment",
+      "country": "لبنان",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 172,
+      "name": "LBC TV",
+      "url": "https://www.elahmad.com/tv/watchtv.php?id=lbc",
+      "logo": "https://static.wikia.nocookie.net/logopedia/images/9/9d/LBC_INTERNATIONAL.png/revision/latest?cb=20150915013834",
+      "category": "entertainment",
+      "country": "لبنان",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 173,
+      "name": "المنار",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=manartv2",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/8/81/New_Al-Manar_logo.PNG",
+      "category": "entertainment",
+      "country": "لبنان",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 174,
+      "name": "MTV",
+      "url": "https://www.elahmad.com/tv/watchtv.php?id=mtv_lebanon",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/2/21/Logo_MTV_%28Lebanon%29.png",
+      "category": "entertainment",
+      "country": "لبنان",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 175,
+      "name": "الاقصى",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=aqsatv1",
+      "logo": "https://www.elahmad.com/tv/mobiletv/images/aqsa_tv.jpg?v=7",
+      "category": "entertainment",
+      "country": "فلسطين",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 176,
+      "name": "النجاح",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=najah_tv",
+      "logo": "https://www.elahmad.com/tv/mobiletv/images/najah.jpg?v=7",
+      "category": "entertainment",
+      "country": "فلسطين",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false
     }
   ],
   "favorites": [],
@@ -1572,6 +1613,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-05T05:21:04.096Z",
+  "lastModified": "2025-10-05T05:40:31.149Z",
   "version": "1.0"
 }
