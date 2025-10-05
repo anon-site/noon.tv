@@ -126,11 +126,11 @@
     {
       "id": 113,
       "name": "MBC 4",
-      "url": "https://tgn.bozztv.com/eshgtv-trn09/ga-mchannel4/index.m3u8",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=mbc4_tv_1",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/MBC_4_Logo.svg/867px-MBC_4_Logo.svg.png",
       "category": "entertainment",
       "country": "السعودية",
-      "type": "hls",
+      "type": "elahmad",
       "status": "active",
       "lastModified": "2025-09-24T23:40:56.300Z",
       "vpn": false
@@ -198,12 +198,12 @@
     {
       "id": 135,
       "name": "MBC Action",
-      "url": "http://ypbmbfwd.mexamo.xyz:80/live/54RL5KJE/QVVXHK64/122037.m3u8",
+      "url": "https://direct.aflam4you.net/zremb472.php?vid=500&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/2/2f/MBC_Action_Logo.svg",
       "category": "entertainment",
       "country": "السعودية",
-      "type": "hls",
-      "status": "inactive",
+      "type": "aflam",
+      "status": "active",
       "vpn": false,
       "lastModified": "2025-10-02T02:21:40.501Z"
     },
@@ -843,19 +843,6 @@
       "vpn": false
     },
     {
-      "id": 100,
-      "name": "Real Madrid",
-      "url": "https://rmtv.akamaized.net/hls/live/2043153/rmtv-es-web/master.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/sco/thumb/5/56/Real_Madrid_CF.svg/732px-Real_Madrid_CF.svg.png",
-      "category": "sports",
-      "country": "اسبانيا",
-      "type": "hls",
-      "status": "active",
-      "isLocal": false,
-      "lastModified": "2025-09-24T23:40:56.300Z",
-      "vpn": false
-    },
-    {
       "id": 101,
       "name": "دبي زمان",
       "url": "https://dmiffthftl.cdn.mangomolo.com/dubaizaman/smil:dubaizaman.stream.smil/chunklist.m3u8",
@@ -866,7 +853,7 @@
       "status": "active",
       "isLocal": false,
       "lastModified": "2025-09-24T23:40:56.300Z",
-      "vpn": true
+      "vpn": false
     },
     {
       "id": 119,
@@ -1228,18 +1215,6 @@
       "lastModified": "2025-10-04T03:12:20.334Z"
     },
     {
-      "id": 142,
-      "name": "TNA Wrestling",
-      "url": "https://epg.provider.plex.tv/library/parts/5e20b730f2f8d5003d739db7-606605549dbfca002d2ae873.m3u8?includeAllStreams=1&X-Plex-Product=Plex+Mediaverse&X-Plex-Token=xK7U9RfFyckTeqzcUZfQ",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/b/b0/Total_Nonstop_Action_Wrestling_logo_2024.png",
-      "category": "sports",
-      "country": "USA",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-10-04T04:49:03.975Z"
-    },
-    {
       "id": 143,
       "name": "ART Cinema",
       "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=art_cinema",
@@ -1422,11 +1397,11 @@
     {
       "id": 161,
       "name": "المجد الوثائقية",
-      "url": "https://games1.elahmad.xyz/tv757_www.elahmad.com_almajd_documentary/index.m3u8?token=21f6331bd5e17864d7ed369be8529cff3bb2e3ee-1fa8ad52dc14639a5fd6495e39bcdae2-1759648525-1759637725",
+      "url": "https://www.elahmad.com/tv/live/channel.php?id=almajd_documentary",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/%D8%A7%D9%84%D9%85%D8%AC%D8%AF_%D8%A7%D9%84%D9%88%D8%AB%D8%A7%D8%A6%D9%82%D9%8A%D8%A9.png/1275px-%D8%A7%D9%84%D9%85%D8%AC%D8%AF_%D8%A7%D9%84%D9%88%D8%AB%D8%A7%D8%A6%D9%82%D9%8A%D8%A9.png",
       "category": "documentary",
       "country": "السعودية",
-      "type": "hls",
+      "type": "elahmad",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-05T04:21:23.436Z"
@@ -1440,7 +1415,8 @@
       "country": "السعودية",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-05T05:06:57.568Z"
     },
     {
       "id": 163,
@@ -1451,7 +1427,8 @@
       "country": "السعودية",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-05T05:06:57.568Z"
     },
     {
       "id": 164,
@@ -1462,7 +1439,8 @@
       "country": "السعودية",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-05T05:06:57.568Z"
     },
     {
       "id": 165,
@@ -1473,7 +1451,8 @@
       "country": "السعودية",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-05T05:06:57.568Z"
     },
     {
       "id": 166,
@@ -1522,6 +1501,31 @@
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-05T04:45:45.383Z"
+    },
+    {
+      "id": 100,
+      "name": "Real Madrid",
+      "url": "https://rmtv.akamaized.net/hls/live/2043153/rmtv-es-web/master.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/sco/thumb/5/56/Real_Madrid_CF.svg/732px-Real_Madrid_CF.svg.png",
+      "category": "sports",
+      "country": "اسبانيا",
+      "type": "hls",
+      "status": "active",
+      "isLocal": false,
+      "lastModified": "2025-09-24T23:40:56.300Z",
+      "vpn": false
+    },
+    {
+      "id": 142,
+      "name": "TNA Wrestling",
+      "url": "https://epg.provider.plex.tv/library/parts/5e20b730f2f8d5003d739db7-606605549dbfca002d2ae873.m3u8?includeAllStreams=1&X-Plex-Product=Plex+Mediaverse&X-Plex-Token=xK7U9RfFyckTeqzcUZfQ",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/b/b0/Total_Nonstop_Action_Wrestling_logo_2024.png",
+      "category": "sports",
+      "country": "USA",
+      "type": "hls",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-04T04:49:03.975Z"
     }
   ],
   "favorites": [],
@@ -1542,8 +1546,8 @@
     "showAutoNotifications": false,
     "backgroundAudio": true,
     "autoUpdateEnabled": false,
-    "hideElahmadControls": true,
-    "autoUpdateChannels": true
+    "autoUpdateChannels": true,
+    "hideElahmadControls": true
   },
   "categories": [
     {
@@ -1593,6 +1597,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-05T04:54:52.505Z",
+  "lastModified": "2025-10-05T05:14:04.163Z",
   "version": "1.0"
 }
