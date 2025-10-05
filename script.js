@@ -590,23 +590,34 @@ class ArabicTVApp {
     }
 
     bindAdminTabEvents() {
-        // إزالة الأحداث السابقة لتجنب التكرار
-        document.querySelectorAll('.admin-tab').forEach(tab => {
-            tab.replaceWith(tab.cloneNode(true));
-        });
+        // استخدام event delegation على مستوى admin-layout لضمان عمل الأحداث
+        const adminModal = document.getElementById('adminModal');
         
-        // ربط الأحداث الجديدة
-        const adminTabs = document.querySelectorAll('.admin-tab');
+        if (!adminModal) {
+            console.warn('⚠️ لم يتم العثور على adminModal');
+            return;
+        }
         
-        adminTabs.forEach(tab => {
-            tab.addEventListener('click', (e) => {
-                // التأكد من أننا نحصل على الزر وليس العنصر الداخلي
-                const button = e.target.closest('.admin-tab');
-                if (button && button.dataset.tab) {
-                    this.switchAdminTab(button.dataset.tab);
-                }
-            });
-        });
+        // إزالة أي مستمع سابق إذا وجد
+        if (this._adminTabClickHandler) {
+            adminModal.removeEventListener('click', this._adminTabClickHandler);
+        }
+        
+        // إنشاء مستمع جديد
+        this._adminTabClickHandler = (e) => {
+            const tab = e.target.closest('.admin-tab');
+            if (tab && tab.dataset.tab) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.switchAdminTab(tab.dataset.tab);
+                console.log(`✅ تم التبديل إلى تبويب: ${tab.dataset.tab}`);
+            }
+        };
+        
+        // إضافة المستمع الجديد
+        adminModal.addEventListener('click', this._adminTabClickHandler);
+        
+        console.log('✅ تم ربط أحداث التبويبات بنجاح');
     }
 
     bindStatusToggleEvents() {
@@ -3245,20 +3256,36 @@ class ArabicTVApp {
     }
 
     switchAdminTab(tab) {
+        console.log(`🔄 محاولة التبديل إلى تبويب: ${tab}`);
+        
         // Update active tab
-        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+        const allTabs = document.querySelectorAll('.admin-tab');
+        console.log(`📊 عدد التبويبات الموجودة: ${allTabs.length}`);
+        
+        allTabs.forEach(t => t.classList.remove('active'));
         const activeTab = document.querySelector(`[data-tab="${tab}"]`);
+        
         if (activeTab) {
             activeTab.classList.add('active');
+            console.log(`✅ تم تفعيل التبويب: ${tab}`);
+        } else {
+            console.warn(`⚠️ لم يتم العثور على التبويب: ${tab}`);
         }
 
         // Show tab content
-        document.querySelectorAll('.admin-tab-content').forEach(content => {
+        const allContents = document.querySelectorAll('.admin-tab-content');
+        console.log(`📊 عدد محتويات التبويبات: ${allContents.length}`);
+        
+        allContents.forEach(content => {
             content.classList.remove('active');
         });
+        
         const activeContent = document.getElementById(`${tab}Tab`);
         if (activeContent) {
             activeContent.classList.add('active');
+            console.log(`✅ تم إظهار محتوى التبويب: ${tab}Tab`);
+        } else {
+            console.warn(`⚠️ لم يتم العثور على محتوى التبويب: ${tab}Tab`);
         }
 
         // Load categories when switching to categories tab
