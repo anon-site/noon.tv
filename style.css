@@ -17234,6 +17234,54 @@ input:checked + .enhanced-slider:before {
 
 
 
+.settings-section-title i {
+
+    color: var(--primary-color);
+
+    font-size: 1rem;
+
+}
+
+
+
+.setting-label-group {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 0.25rem;
+
+    flex: 1;
+
+}
+
+
+
+.setting-label-group label {
+
+    font-weight: 600;
+
+    color: var(--text-primary);
+
+    font-size: 0.95rem;
+
+}
+
+
+
+.setting-label-group small {
+
+    color: var(--text-secondary);
+
+    font-size: 0.85rem;
+
+    line-height: 1.4;
+
+}
+
+
+
 .zoom-control {
 
     display: flex;
@@ -17418,11 +17466,73 @@ input:checked + .enhanced-slider:before {
 
     display: grid;
 
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 
-    gap: 1.5rem;
+    gap: 1rem;
 
-    margin-top: 1rem;
+    margin-top: 0;
+
+}
+
+
+
+.settings-action-btn {
+
+    padding: 1rem 1.5rem;
+
+    background: var(--card-bg);
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 12px;
+
+    color: var(--text-primary);
+
+    font-size: 0.95rem;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 0.75rem;
+
+    justify-content: center;
+
+}
+
+
+
+.settings-action-btn:hover {
+
+    background: var(--primary-color);
+
+    color: white;
+
+    border-color: var(--primary-color);
+
+}
+
+
+
+.settings-action-btn.delete-btn:hover {
+
+    background: #ef4444;
+
+    border-color: #ef4444;
+
+    color: white;
+
+}
+
+
+
+.settings-action-btn i {
+
+    font-size: 1.1rem;
 
 }
 
@@ -22945,6 +23055,32 @@ body[data-theme="light"] .enhanced-save-btn:hover {
         grid-template-columns: 1fr;
 
         gap: 1rem;
+
+    }
+
+    
+
+    .settings-action-btn {
+
+        padding: 0.875rem 1.25rem;
+
+        font-size: 0.9rem;
+
+    }
+
+    
+
+    .setting-label-group label {
+
+        font-size: 0.9rem;
+
+    }
+
+    
+
+    .setting-label-group small {
+
+        font-size: 0.8rem;
 
     }
 

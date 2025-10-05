@@ -520,38 +520,18 @@
                 </button>
             </div>
             <div class="settings-body">
-                <!-- Video & Audio Settings -->
+                <!-- المظهر العام -->
                 <div class="settings-section">
-                    <h4 class="settings-section-title">🎬 إعدادات الفيديو والصوت</h4>
+                    <h4 class="settings-section-title">
+                        <i class="fas fa-palette"></i>
+                        المظهر العام
+                    </h4>
                     
                     <div class="setting-item">
-                        <label for="autoQuality">جودة تلقائية حسب سرعة الإنترنت</label>
-                        <label class="switch">
-                            <input type="checkbox" id="autoQuality" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    
-                    <div class="setting-item">
-                        <label for="autoplay">تشغيل تلقائي</label>
-                        <label class="switch">
-                            <input type="checkbox" id="autoplay" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    
-                    <div class="setting-item">
-                        <label for="volume">مستوى الصوت</label>
-                        <input type="range" id="volume" min="0" max="100" value="100" class="volume-slider">
-                    </div>
-                </div>
-                
-                <!-- Theme & Appearance -->
-                <div class="settings-section">
-                    <h4 class="settings-section-title">🎨 المظهر والثيم</h4>
-                    
-                    <div class="setting-item">
-                        <label for="theme">نمط التطبيق</label>
+                        <div class="setting-label-group">
+                            <label for="theme">نمط التطبيق</label>
+                            <small>اختر بين الوضع الداكن أو الفاتح</small>
+                        </div>
                         <select id="theme" class="theme-select">
                             <option value="dark">داكن</option>
                             <option value="light">فاتح</option>
@@ -560,7 +540,10 @@
                     </div>
                     
                     <div class="setting-item">
-                        <label for="colorTheme">نظام الألوان</label>
+                        <div class="setting-label-group">
+                            <label for="colorTheme">نظام الألوان</label>
+                            <small>اختر لون النسق الرئيسي</small>
+                        </div>
                         <select id="colorTheme" class="color-theme-select">
                             <option value="default">الافتراضي</option>
                             <option value="blue">أزرق</option>
@@ -572,7 +555,30 @@
                     </div>
                     
                     <div class="setting-item">
-                        <label for="zoomLevel">حجم المحتوى</label>
+                        <div class="setting-label-group">
+                            <label for="borderRadius">شكل الحواف</label>
+                            <small>تحديد مستوى استدارة العناصر</small>
+                        </div>
+                        <select id="borderRadius" class="border-radius-select">
+                            <option value="minimal">مربع</option>
+                            <option value="normal">عادي</option>
+                            <option value="rounded" selected>مدور</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- التخصيص والعرض -->
+                <div class="settings-section">
+                    <h4 class="settings-section-title">
+                        <i class="fas fa-sliders-h"></i>
+                        التخصيص والعرض
+                    </h4>
+                    
+                    <div class="setting-item">
+                        <div class="setting-label-group">
+                            <label for="zoomLevel">حجم المحتوى</label>
+                            <small>تكبير أو تصغير عناصر الواجهة</small>
+                        </div>
                         <div class="zoom-control">
                             <input type="range" id="zoomLevel" min="75" max="150" value="100" step="5" class="zoom-slider">
                             <span id="zoomValue" class="zoom-value">100%</span>
@@ -580,7 +586,10 @@
                     </div>
                     
                     <div class="setting-item">
-                        <label for="fontSize">حجم النص</label>
+                        <div class="setting-label-group">
+                            <label for="fontSize">حجم النص</label>
+                            <small>اختر حجم الخط المناسب</small>
+                        </div>
                         <select id="fontSize" class="font-size-select">
                             <option value="small" selected>صغير</option>
                             <option value="medium">متوسط</option>
@@ -590,21 +599,10 @@
                     </div>
                     
                     <div class="setting-item">
-                        <label for="borderRadius">شكل الحواف</label>
-                        <select id="borderRadius" class="border-radius-select">
-                            <option value="minimal">مربع</option>
-                            <option value="normal">عادي</option>
-                            <option value="rounded" selected>مدور</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <!-- Layout & Display -->
-                <div class="settings-section">
-                    <h4 class="settings-section-title">📐 التخطيط والعرض</h4>
-                    
-                    <div class="setting-item">
-                        <label for="layoutMode">نمط العرض</label>
+                        <div class="setting-label-group">
+                            <label for="layoutMode">نمط العرض</label>
+                            <small>طريقة عرض القنوات</small>
+                        </div>
                         <select id="layoutMode" class="layout-mode-select">
                             <option value="grid">شبكة</option>
                             <option value="list">قائمة</option>
@@ -613,7 +611,10 @@
                     </div>
                     
                     <div class="setting-item">
-                        <label for="compactMode">الوضع المضغوط</label>
+                        <div class="setting-label-group">
+                            <label for="compactMode">الوضع المضغوط</label>
+                            <small>عرض المزيد من القنوات في الشاشة</small>
+                        </div>
                         <label class="switch">
                             <input type="checkbox" id="compactMode" checked>
                             <span class="slider"></span>
@@ -621,62 +622,102 @@
                     </div>
                     
                     <div class="setting-item">
-                        <label for="animationsEnabled">تفعيل الرسوم المتحركة</label>
-                        <label class="switch">
-                            <input type="checkbox" id="animationsEnabled">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    
-                    <div class="setting-item">
-                        <label for="highContrast">التباين العالي</label>
+                        <div class="setting-label-group">
+                            <label for="highContrast">التباين العالي</label>
+                            <small>تحسين الرؤية والوضوح</small>
+                        </div>
                         <label class="switch">
                             <input type="checkbox" id="highContrast">
                             <span class="slider"></span>
                         </label>
                     </div>
-                </div>
-                
-                <!-- System Settings -->
-                <div class="settings-section">
-                    <h4 class="settings-section-title">⚙️ إعدادات النظام</h4>
                     
                     <div class="setting-item">
-                        <label for="autoUpdateEnabled">التحديث التلقائي للقنوات</label>
+                        <div class="setting-label-group">
+                            <label for="animationsEnabled">الرسوم المتحركة</label>
+                            <small>تفعيل أو تعطيل التأثيرات الحركية</small>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="animationsEnabled">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- إعدادات الفيديو -->
+                <div class="settings-section">
+                    <h4 class="settings-section-title">
+                        <i class="fas fa-video"></i>
+                        إعدادات الفيديو
+                    </h4>
+                    
+                    <div class="setting-item">
+                        <div class="setting-label-group">
+                            <label for="autoQuality">جودة تلقائية</label>
+                            <small>ضبط الجودة حسب سرعة الإنترنت</small>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="autoQuality" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-label-group">
+                            <label for="autoplay">تشغيل تلقائي</label>
+                            <small>تشغيل الفيديو مباشرة عند الفتح</small>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="autoplay" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-label-group">
+                            <label for="volume">مستوى الصوت</label>
+                            <small>التحكم في مستوى الصوت الافتراضي</small>
+                        </div>
+                        <input type="range" id="volume" min="0" max="100" value="100" class="volume-slider">
+                    </div>
+                </div>
+                
+                <!-- الإعدادات العامة -->
+                <div class="settings-section">
+                    <h4 class="settings-section-title">
+                        <i class="fas fa-cog"></i>
+                        الإعدادات العامة
+                    </h4>
+                    
+                    <div class="setting-item">
+                        <div class="setting-label-group">
+                            <label for="autoUpdateEnabled">التحديث التلقائي</label>
+                            <small>تحديث قائمة القنوات تلقائياً عند فتح التطبيق</small>
+                        </div>
                         <label class="switch">
                             <input type="checkbox" id="autoUpdateEnabled" checked>
                             <span class="slider"></span>
                         </label>
-                        <small class="setting-description">تحديث القنوات تلقائياً عند فتح الموقع</small>
                     </div>
                 </div>
                 
-                <!-- Quick Actions -->
-                <div class="settings-actions">
+                <!-- الإجراءات السريعة -->
+                <div class="settings-section">
+                    <h4 class="settings-section-title">
+                        <i class="fas fa-tools"></i>
+                        الإجراءات السريعة
+                    </h4>
+                    
                     <div class="settings-actions-grid">
-                        <!-- إدارة التطبيق -->
-                        <div class="settings-button-group">
-                            <div class="settings-button-group-title">
-                                <i class="fas fa-cogs"></i>
-                                إدارة التطبيق
-                            </div>
-                            <button class="reset-settings-btn" onclick="app.resetCustomizations()">
-                                <i class="fas fa-undo"></i>
-                                إعادة تعيين التخصيصات
-                            </button>
-                        </div>
+                        <button class="settings-action-btn" onclick="app.resetCustomizations()">
+                            <i class="fas fa-undo"></i>
+                            <span>إعادة تعيين التخصيصات</span>
+                        </button>
                         
-                        <!-- إدارة البيانات -->
-                        <div class="settings-button-group">
-                            <div class="settings-button-group-title">
-                                <i class="fas fa-database"></i>
-                                إدارة البيانات
-                            </div>
-                            <button class="delete-cookies-btn" onclick="app.deleteAllCookies()">
-                                <i class="fas fa-trash-alt"></i>
-                                حذف الكوكيز
-                            </button>
-                        </div>
+                        <button class="settings-action-btn delete-btn" onclick="app.deleteAllCookies()">
+                            <i class="fas fa-trash-alt"></i>
+                            <span>حذف الكوكيز</span>
+                        </button>
                     </div>
                 </div>
             </div>
