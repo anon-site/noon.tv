@@ -2181,10 +2181,11 @@ class ArabicTVApp {
             iframe.style.background = '#000';
             iframe.allowFullscreen = true;
             iframe.allow = 'autoplay; fullscreen; picture-in-picture; xr-spatial-tracking; encrypted-media';
-            // إضافة sandbox فقط في المتصفحات العادية وليس في التطبيقات APK
-            if (!this.isInApp()) {
-                iframe.sandbox = 'allow-scripts allow-same-origin allow-presentation allow-forms';
-            }
+            // إزالة sandbox تماماً لحل مشكلة التطبيق APK
+            console.log('🔧 تم إنشاء iframe بدون sandbox لحل مشكلة APK');
+            // if (!this.isInApp()) {
+            //     iframe.sandbox = 'allow-scripts allow-same-origin allow-presentation allow-forms';
+            // }
             
             // Add error handling
             iframe.onerror = () => {
@@ -2430,10 +2431,11 @@ class ArabicTVApp {
                 iframe.style.border = 'none';
                 iframe.allowFullscreen = true;
                 iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-                // إضافة sandbox فقط في المتصفحات العادية وليس في التطبيقات APK
-                if (!this.isInApp()) {
-                    iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation');
-                }
+                // إزالة sandbox تماماً لحل مشكلة التطبيق APK
+                console.log('🔧 تم إنشاء YouTube iframe بدون sandbox لحل مشكلة APK');
+                // if (!this.isInApp()) {
+                //     iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation');
+                // }
                 
                 // Insert iframe after video element
                 video.parentNode.insertBefore(iframe, video.nextSibling);
