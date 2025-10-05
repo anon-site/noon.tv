@@ -118,11 +118,14 @@
         <div class="sidebar-content">
             <!-- TV Categories Section -->
             <div class="sidebar-section">
-                <div class="sidebar-section-title">
-                    <i class="fas fa-tv"></i>
-                    <span>تلفزيون</span>
-                </div>
-                <div class="sidebar-nav-tabs">
+                <button class="sidebar-section-title collapsible" onclick="toggleTVCategories()">
+                    <div class="section-title-content">
+                        <i class="fas fa-tv"></i>
+                        <span>تلفزيون</span>
+                    </div>
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </button>
+                <div class="sidebar-nav-tabs collapsible-content" id="tvCategoriesContent">
                     <button class="sidebar-nav-tab active" data-category="all">
                         <i class="fas fa-th-large"></i>
                         <span>جميع القنوات</span>
@@ -1403,6 +1406,31 @@
     <!-- HLS.js Library for video streaming -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
+        // Toggle TV Categories Dropdown
+        function toggleTVCategories() {
+            const titleBtn = document.querySelector('.sidebar-section-title.collapsible');
+            const content = document.getElementById('tvCategoriesContent');
+            const icon = titleBtn.querySelector('.toggle-icon');
+            
+            titleBtn.classList.toggle('active');
+            content.classList.toggle('active');
+            
+            if (content.classList.contains('active')) {
+                content.style.maxHeight = content.scrollHeight + 'px';
+            } else {
+                content.style.maxHeight = '0';
+            }
+        }
+        
+        // Initialize collapsed state on load
+        window.addEventListener('DOMContentLoaded', function() {
+            const content = document.getElementById('tvCategoriesContent');
+            // القسم يبدأ مغلقاً بشكل افتراضي
+            if (content) {
+                content.style.maxHeight = '0';
+            }
+        });
+        
         // Check if HLS.js loaded successfully
         window.addEventListener('load', function() {
             if (typeof Hls === 'undefined') {
