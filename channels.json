@@ -1542,6 +1542,39 @@
       "type": "elahmad",
       "status": "active",
       "vpn": false
+    },
+    {
+      "id": 177,
+      "name": "الانسان",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=alinsen",
+      "logo": "https://www.elahmad.com/tv/mobiletv/images/alinsen.jpg?v=7",
+      "category": "entertainment",
+      "country": "تونس",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 178,
+      "name": "تونيسنا",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=tunisna",
+      "logo": "https://www.elahmad.com/tv/mobiletv/images/tunisna.jpg?v=7",
+      "category": "entertainment",
+      "country": "تونس",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 179,
+      "name": "حنيبعل",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=hannibal",
+      "logo": "https://www.elahmad.com/tv/mobiletv/images/hannibal.jpg?v=7",
+      "category": "entertainment",
+      "country": "تونس",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false
     }
   ],
   "favorites": [],
@@ -1613,6 +1646,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-05T05:40:31.149Z",
+  "lastModified": "2025-10-05T05:48:15.149Z",
   "version": "1.0"
 }
