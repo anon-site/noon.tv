@@ -65,7 +65,7 @@
     },
     {
       "id": 116,
-      "name": "Rotana Classic",
+      "name": "روتانا كلاسيك",
       "url": "https://uvotv-aniview.global.ssl.fastly.net/10010/dvr/hls/rotanazaman/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Rotana_Classic.png",
       "category": "movies",
@@ -77,7 +77,7 @@
     },
     {
       "id": 115,
-      "name": "+Rotana Aflam",
+      "name": "روتانا افلام بلس",
       "url": "https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/rotana-aflam-plus/master.m3u8",
       "logo": "https://play-lh.googleusercontent.com/ETz89iZ47jOI_T62QFEqKYP0fr6Y-NylpNTCAToveLB80F9DZ6KWzg4NgEss8qoIV_oF",
       "category": "movies",
@@ -1474,6 +1474,50 @@
       "type": "hls",
       "status": "active",
       "vpn": false
+    },
+    {
+      "id": 166,
+      "name": "ج أطفال",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=jscc1",
+      "logo": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=jscc1",
+      "category": "kids",
+      "country": "السعودية",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 167,
+      "name": "روتانا سينيما",
+      "url": "https://uvotv-aniview.global.ssl.fastly.net/10010/dvr/hls/rotanacinemanhd/playlist-orig.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Rotana_Cinema_Egy.png/250px-Rotana_Cinema_Egy.png",
+      "category": "movies",
+      "country": "السعودية",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 168,
+      "name": "روتانا كوميدي",
+      "url": "https://uvotv-aniview.global.ssl.fastly.net/10010/dvr/hls/rotanacomedy/playlist-orig.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Rotana_Comedy.png/500px-Rotana_Comedy.png",
+      "category": "movies",
+      "country": "السعودية",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 169,
+      "name": "ابو ظبي",
+      "url": "https://www.elahmad.com/tv/live/channels.php?id=1075",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/d/d7/Abu_Dhabi_TV_logo_2023.png",
+      "category": "entertainment",
+      "country": "الامارات",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false
     }
   ],
   "favorites": [],
@@ -1545,6 +1589,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-05T04:32:48.438Z",
+  "lastModified": "2025-10-05T04:48:36.449Z",
   "version": "1.0"
 }
