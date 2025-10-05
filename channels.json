@@ -807,7 +807,7 @@
       "id": 88,
       "name": "سورية 2",
       "url": "https://live.kwikmotion.com/syriatv02live/syriatv02.smil/playlist.m3u8",
-      "logo": "https://www.fadaatmedia.com/sites/default/files/2025-03/Logo%20syria%202%20Color.png",
+      "logo": "https://www.althania.tv/images/logo.png",
       "category": "entertainment",
       "country": "سورية",
       "type": "hls",
@@ -1492,7 +1492,7 @@
       "id": 172,
       "name": "LBC TV",
       "url": "https://www.elahmad.com/tv/watchtv.php?id=lbc",
-      "logo": "https://iconape.com/wp-content/files/fs/284021/svg/284021.svg",
+      "logo": "https://static.wikia.nocookie.net/logopedia/images/9/9d/LBC_INTERNATIONAL.png/revision/latest?cb=20150915013834",
       "category": "entertainment",
       "country": "لبنان",
       "type": "hls",
@@ -1542,39 +1542,6 @@
       "type": "elahmad",
       "status": "active",
       "vpn": false
-    },
-    {
-      "id": 177,
-      "name": "الانسان",
-      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=alinsen",
-      "logo": "https://www.elahmad.com/tv/mobiletv/images/alinsen.jpg?v=7",
-      "category": "entertainment",
-      "country": "تونس",
-      "type": "elahmad",
-      "status": "active",
-      "vpn": false
-    },
-    {
-      "id": 178,
-      "name": "تونيسنا",
-      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=tunisna",
-      "logo": "https://www.elahmad.com/tv/mobiletv/images/tunisna.jpg?v=7",
-      "category": "entertainment",
-      "country": "تونس",
-      "type": "elahmad",
-      "status": "active",
-      "vpn": false
-    },
-    {
-      "id": 179,
-      "name": "حنيبعل",
-      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=hannibal",
-      "logo": "https://www.elahmad.com/tv/mobiletv/images/hannibal.jpg?v=7",
-      "category": "entertainment",
-      "country": "تونس",
-      "type": "elahmad",
-      "status": "active",
-      "vpn": false
     }
   ],
   "favorites": [],
@@ -1595,8 +1562,8 @@
     "showAutoNotifications": false,
     "backgroundAudio": true,
     "autoUpdateEnabled": false,
-    "autoUpdateChannels": true,
-    "hideElahmadControls": true
+    "hideElahmadControls": true,
+    "autoUpdateChannels": true
   },
   "categories": [
     {
@@ -1646,6 +1613,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-05T15:34:59.253Z",
+  "lastModified": "2025-10-05T05:40:31.149Z",
   "version": "1.0"
 }
