@@ -2150,7 +2150,7 @@ class ArabicTVApp {
             iframe.style.background = '#000';
             iframe.allowFullscreen = true;
             iframe.allow = 'autoplay; fullscreen; picture-in-picture; xr-spatial-tracking; encrypted-media';
-            iframe.sandbox = 'allow-scripts allow-same-origin allow-presentation allow-forms';
+            // Removed sandbox attribute to prevent mobile browser warnings
             
             // Add error handling
             iframe.onerror = () => {
@@ -2396,7 +2396,7 @@ class ArabicTVApp {
                 iframe.style.border = 'none';
                 iframe.allowFullscreen = true;
                 iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-                iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation');
+                // Removed sandbox attribute to prevent mobile browser warnings
                 
                 // Insert iframe after video element
                 video.parentNode.insertBefore(iframe, video.nextSibling);
