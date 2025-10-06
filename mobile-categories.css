@@ -1,0 +1,30 @@
+/* تحسينات إضافية لأزرار فئات القنوات في الشاشات الصغيرة */
+@media (max-width: 768px) {
+    .categories-dropdown .category-item {
+        padding: 6px 12px;
+        margin-bottom: 2px;
+        font-size: 0.85rem;
+        gap: 6px;
+    }
+    
+    .categories-dropdown .category-item i {
+        font-size: 0.9rem;
+        width: 16px;
+    }
+    
+    .categories-dropdown .category-item span {
+        font-size: 0.8rem;
+        line-height: 1.1;
+    }
+    
+    .categories-dropdown .category-count {
+        font-size: 0.7rem;
+        padding: 1px 4px;
+        min-width: 16px;
+    }
+    
+    .categories-dropdown .dropdown-content {
+        padding: 2px 4px;
+        max-height: 70vh;
+    }
+}

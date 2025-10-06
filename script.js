@@ -10,6 +10,71 @@ class ArabicTVApp {
         this.hls = null;
         this.isPictureInPicture = false;
         this.isLoggedIn = false;
+        
+        // Unified toggle function for all toggle operations
+        this.toggleElement = (elementId, options = {}) => {
+            const element = document.getElementById(elementId);
+            if (!element) return false;
+            
+            const {
+                toggleClass = 'active',
+                showClass = 'show',
+                hideClass = 'hide',
+                callback = null,
+                preventDefault = false
+            } = options;
+            
+            const isActive = element.classList.contains(toggleClass) || element.classList.contains(showClass);
+            
+            if (isActive) {
+                element.classList.remove(toggleClass, showClass);
+                element.classList.add(hideClass);
+                element.style.display = 'none';
+            } else {
+                element.classList.add(toggleClass, showClass);
+                element.classList.remove(hideClass);
+                element.style.display = 'block';
+            }
+            
+            if (callback && typeof callback === 'function') {
+                callback(isActive);
+            }
+            
+            return !isActive;
+        };
+        
+        // Unified display management functions
+        this.showElement = (elementId, displayType = 'block') => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.style.display = displayType;
+                element.classList.remove('hide');
+                element.classList.add('show', 'active');
+            }
+        };
+        
+        this.hideElement = (elementId) => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.style.display = 'none';
+                element.classList.remove('show', 'active');
+                element.classList.add('hide');
+            }
+        };
+        
+        this.toggleDisplay = (elementId, displayType = 'block') => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                const isHidden = element.style.display === 'none' || element.classList.contains('hide');
+                if (isHidden) {
+                    this.showElement(elementId, displayType);
+                } else {
+                    this.hideElement(elementId);
+                }
+                return !isHidden;
+            }
+            return false;
+        };
         // كلمة المرور مشفرة بـ SHA-256 Hash (أكثر أماناً)
         // قراءة كلمة المرور من localStorage أو استخدام الافتراضية
         this.adminPassword = localStorage.getItem('anon_tv_admin_password') || '3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657'; // كلمة مرور @admin123 مشفرة بـ SHA-256
@@ -1107,7 +1172,7 @@ class ArabicTVApp {
         if (channel.vpn === true) {
             vpnIndicator.style.display = 'flex';
         } else {
-            vpnIndicator.style.display = 'none';
+            this.hideElement('channelVpnIndicator');
         }
         
         // Channel logo overlay is now hidden
@@ -3772,7 +3837,7 @@ class ArabicTVApp {
         const url = document.getElementById('channelUrl').value.trim();
         const logo = document.getElementById('channelLogo').value.trim();
         const category = document.getElementById('channelCategory').value;
-        const country = document.getElementById('channelCountryInput').value.trim();
+        const country = document.getElementById('channelCountry').value.trim();
         
         // Auto-detect URL type
         let type = 'hls'; // default
@@ -3848,7 +3913,7 @@ class ArabicTVApp {
         document.getElementById('channelUrl').value = '';
         document.getElementById('channelLogo').value = '';
         document.getElementById('channelCategory').value = '';
-        document.getElementById('channelCountryInput').value = '';
+        document.getElementById('channelCountry').value = '';
         
         // Clear uploaded logo
         removeLogoPreview();
@@ -3922,7 +3987,7 @@ class ArabicTVApp {
             document.getElementById('channelUrl').value = channel.url;
             document.getElementById('channelLogo').value = channel.logo;
             document.getElementById('channelCategory').value = channel.category;
-            document.getElementById('channelCountryInput').value = channel.country;
+            document.getElementById('channelCountry').value = channel.country;
             document.getElementById('channelStatus').value = channel.status || 'active';
             
             // Change form title and button text
@@ -3985,7 +4050,7 @@ class ArabicTVApp {
         const url = document.getElementById('channelUrl').value.trim();
         const logo = document.getElementById('channelLogo').value.trim();
         const category = document.getElementById('channelCategory').value;
-        const country = document.getElementById('channelCountryInput').value.trim();
+        const country = document.getElementById('channelCountry').value.trim();
         
         // Auto-detect URL type
         let type = 'hls'; // default
@@ -7829,7 +7894,7 @@ class ArabicTVApp {
             document.getElementById('channelUrl').value = channel.url;
             document.getElementById('channelLogo').value = channel.logo;
             document.getElementById('channelCategory').value = channel.category;
-            document.getElementById('channelCountryInput').value = channel.country;
+            document.getElementById('channelCountry').value = channel.country;
             document.getElementById('channelStatus').value = channel.status || 'active';
             
             // Change form title and button text
@@ -8496,25 +8561,21 @@ function toggleChannelBar() {
     const channelsBtn = document.querySelector('.channels-btn');
     
     if (channelBar) {
-        if (channelBar.classList.contains('show')) {
+        const isActive = channelBar.classList.contains('show');
+        
+        if (isActive) {
             hideChannelBar();
-            // Update button state
-            if (channelsBtn) {
-                channelsBtn.classList.remove('active');
-            }
+            if (channelsBtn) channelsBtn.classList.remove('active');
         } else {
             showChannelBar();
-            // Update button state
-            if (channelsBtn) {
-                channelsBtn.classList.add('active');
-            }
+            if (channelsBtn) channelsBtn.classList.add('active');
         }
     }
 }
 
 function loadChannelBarContent() {
     const channelBarContent = document.getElementById('channelBarContent');
-    const channelBarCount = document.getElementById('channelBarCount');
+    const channelCount = document.getElementById('channelCount');
     if (!channelBarContent || !app.channels) return;
 
     // Clear existing content
@@ -8529,8 +8590,8 @@ function loadChannelBarContent() {
     }
 
     // Update channel count
-    if (channelBarCount) {
-        channelBarCount.textContent = channelsToShow.length;
+    if (channelCount) {
+        channelCount.textContent = channelsToShow.length;
     }
 
     // Show all channels (no limit for horizontal scroll)
@@ -8964,7 +9025,7 @@ function resetChannelForm() {
     document.getElementById('channelUrl').value = '';
     document.getElementById('channelLogo').value = '';
     document.getElementById('channelCategory').value = 'news';
-    document.getElementById('channelCountryInput').value = '';
+    document.getElementById('channelCountry').value = '';
     
     // مسح معاينة الشعار
     const logoPreview = document.getElementById('logoPreview');
@@ -10105,7 +10166,7 @@ function setupMediaSession() {
     navigator.mediaSession.metadata = new MediaMetadata({
         title: channel.name,
         artist: channel.country || 'قناة فضائية',
-        album: 'ANON TV',
+        album: 'NOON TV',
         artwork: channel.logo ? [
             { src: channel.logo, sizes: '96x96', type: 'image/png' },
             { src: channel.logo, sizes: '128x128', type: 'image/png' },

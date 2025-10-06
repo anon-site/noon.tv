@@ -23455,19 +23455,13 @@ body[data-theme="light"] .enhanced-save-btn:hover {
     
 
     .category-item {
-
-        padding: 0.75rem;
-
-        margin-bottom: 0.6rem;
-
-        border-radius: 8px;
-
-        flex-direction: column;
-
-        align-items: flex-start;
-
-        gap: 0.6rem;
-
+        padding: 6px 12px;
+        margin-bottom: 3px;
+        border-radius: 6px;
+        flex-direction: row;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.85rem;
     }
 
     
@@ -28205,65 +28199,57 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
 
 
 .categories-dropdown .dropdown-content {
-
-    max-height: 50vh;
-
+    max-height: 60vh;
     overflow-y: auto;
-
-    padding: 8px 0;
-
+    padding: 4px 8px;
     -webkit-tap-highlight-color: transparent;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
 
+.categories-dropdown .dropdown-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.categories-dropdown .dropdown-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.categories-dropdown .dropdown-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
 }
 
 
 
 .categories-dropdown .category-item {
-
     display: flex;
-
     align-items: center;
-
-    gap: 12px;
-
+    gap: 8px;
     width: 100%;
-
-    padding: 12px 20px;
-
+    padding: 8px 16px;
     background: none;
-
     border: none;
-
     color: var(--text-secondary);
-
     text-align: right;
-
-    transition: all 0.3s ease;
-
+    transition: all 0.2s ease;
     cursor: pointer;
-
+    border-radius: 6px;
+    margin-bottom: 2px;
     -webkit-tap-highlight-color: transparent;
-
     -webkit-touch-callout: none;
-
     -webkit-user-select: none;
-
     -moz-user-select: none;
-
     -ms-user-select: none;
-
     user-select: none;
-
 }
 
 
 
 .categories-dropdown .category-item:hover {
-
-    background: rgba(255, 255, 255, 0.1);
-
+    background: rgba(255, 255, 255, 0.08);
     color: var(--text-primary);
-
+    transform: translateX(-2px);
 }
 
 
@@ -28279,24 +28265,27 @@ body[data-theme="light"] .welcome-btn.secondary:hover {
 
 
 .categories-dropdown .category-item i {
-
-    font-size: 1.1rem;
-
-    width: 20px;
-
+    font-size: 1rem;
+    width: 18px;
     text-align: center;
-
+    opacity: 0.8;
 }
 
-
-
 .categories-dropdown .category-item span {
-
     flex: 1;
-
-    font-size: 0.95rem;
-
+    font-size: 0.9rem;
     font-weight: 500;
+    line-height: 1.2;
+}
+
+.categories-dropdown .category-count {
+    font-size: 0.8rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 20px;
+    text-align: center;
+    font-weight: 600;
 
 }
 
@@ -29659,563 +29648,3 @@ body[data-theme="light"] .more-menu-item:hover {
 
 
 
-
-
-
-
- 
- / *   E n h a n c e d   S e t t i n g s   D e s i g n   * / 
- . s e t t i n g s - s e c t i o n   { 
-         m a r g i n - b o t t o m :   2 r e m ; 
-         p a d d i n g :   1 . 5 r e m ; 
-         b a c k g r o u n d :   v a r ( - - c a r d - b a c k g r o u n d ) ; 
-         b o r d e r - r a d i u s :   1 2 p x ; 
-         b o r d e r :   1 p x   s o l i d   v a r ( - - b o r d e r - c o l o r ) ; 
-         b o x - s h a d o w :   0   2 p x   8 p x   r g b a ( 0 ,   0 ,   0 ,   0 . 1 ) ; 
- } 
- 
- . s e t t i n g s - s e c t i o n - t i t l e   { 
-         d i s p l a y :   f l e x ; 
-         a l i g n - i t e m s :   c e n t e r ; 
-         g a p :   0 . 7 5 r e m ; 
-         f o n t - s i z e :   1 . 1 r e m ; 
-         f o n t - w e i g h t :   6 0 0 ; 
-         c o l o r :   v a r ( - - t e x t - p r i m a r y ) ; 
-         m a r g i n - b o t t o m :   1 . 5 r e m ; 
-         p a d d i n g - b o t t o m :   0 . 7 5 r e m ; 
-         b o r d e r - b o t t o m :   2 p x   s o l i d   v a r ( - - h i g h l i g h t - c o l o r ) ; 
- } 
- 
- . s e t t i n g s - s e c t i o n - t i t l e   i   { 
-         c o l o r :   v a r ( - - h i g h l i g h t - c o l o r ) ; 
-         f o n t - s i z e :   1 . 2 r e m ; 
- } 
- 
- . s e t t i n g - l a b e l - g r o u p   { 
-         d i s p l a y :   f l e x ; 
-         f l e x - d i r e c t i o n :   c o l u m n ; 
-         g a p :   0 . 2 5 r e m ; 
-         f l e x :   1 ; 
- } 
- 
- . s e t t i n g - l a b e l - g r o u p   l a b e l   { 
-         f o n t - w e i g h t :   5 0 0 ; 
-         c o l o r :   v a r ( - - t e x t - p r i m a r y ) ; 
-         f o n t - s i z e :   0 . 9 5 r e m ; 
- } 
- 
- . s e t t i n g - d e s c r i p t i o n   { 
-         f o n t - s i z e :   0 . 8 r e m ; 
-         c o l o r :   v a r ( - - t e x t - s e c o n d a r y ) ; 
-         l i n e - h e i g h t :   1 . 4 ; 
- } 
- 
- . s e t t i n g - i t e m   { 
-         d i s p l a y :   f l e x ; 
-         j u s t i f y - c o n t e n t :   s p a c e - b e t w e e n ; 
-         a l i g n - i t e m s :   c e n t e r ; 
-         p a d d i n g :   1 r e m   0 ; 
-         b o r d e r - b o t t o m :   1 p x   s o l i d   v a r ( - - b o r d e r - c o l o r ) ; 
-         g a p :   1 r e m ; 
- } 
- 
- . s e t t i n g - i t e m : l a s t - c h i l d   { 
-         b o r d e r - b o t t o m :   n o n e ; 
- } 
- 
- . v o l u m e - c o n t r o l ,   . z o o m - c o n t r o l   { 
-         d i s p l a y :   f l e x ; 
-         a l i g n - i t e m s :   c e n t e r ; 
-         g a p :   0 . 7 5 r e m ; 
-         m i n - w i d t h :   1 2 0 p x ; 
- } 
- 
- . v o l u m e - v a l u e ,   . z o o m - v a l u e   { 
-         f o n t - s i z e :   0 . 8 5 r e m ; 
-         f o n t - w e i g h t :   5 0 0 ; 
-         c o l o r :   v a r ( - - t e x t - s e c o n d a r y ) ; 
-         m i n - w i d t h :   4 0 p x ; 
-         t e x t - a l i g n :   c e n t e r ; 
- } 
- 
- . v o l u m e - s l i d e r ,   . z o o m - s l i d e r   { 
-         f l e x :   1 ; 
-         h e i g h t :   6 p x ; 
-         b o r d e r - r a d i u s :   3 p x ; 
-         b a c k g r o u n d :   v a r ( - - b o r d e r - c o l o r ) ; 
-         o u t l i n e :   n o n e ; 
-         - w e b k i t - a p p e a r a n c e :   n o n e ; 
- } 
- 
- . v o l u m e - s l i d e r : : - w e b k i t - s l i d e r - t h u m b , 
- . z o o m - s l i d e r : : - w e b k i t - s l i d e r - t h u m b   { 
-         - w e b k i t - a p p e a r a n c e :   n o n e ; 
-         a p p e a r a n c e :   n o n e ; 
-         w i d t h :   1 8 p x ; 
-         h e i g h t :   1 8 p x ; 
-         b o r d e r - r a d i u s :   5 0 % ; 
-         b a c k g r o u n d :   v a r ( - - h i g h l i g h t - c o l o r ) ; 
-         c u r s o r :   p o i n t e r ; 
-         b o x - s h a d o w :   0   2 p x   4 p x   r g b a ( 0 ,   0 ,   0 ,   0 . 2 ) ; 
-         t r a n s i t i o n :   a l l   0 . 2 s   e a s e ; 
- } 
- 
- . v o l u m e - s l i d e r : : - w e b k i t - s l i d e r - t h u m b : h o v e r , 
- . z o o m - s l i d e r : : - w e b k i t - s l i d e r - t h u m b : h o v e r   { 
-         t r a n s f o r m :   s c a l e ( 1 . 1 ) ; 
-         b o x - s h a d o w :   0   4 p x   8 p x   r g b a ( 0 ,   0 ,   0 ,   0 . 3 ) ; 
- } 
- 
- . t h e m e - s e l e c t ,   . c o l o r - t h e m e - s e l e c t ,   . f o n t - s i z e - s e l e c t ,   
- . b o r d e r - r a d i u s - s e l e c t ,   . l a y o u t - m o d e - s e l e c t   { 
-         p a d d i n g :   0 . 5 r e m   0 . 7 5 r e m ; 
-         b o r d e r :   1 p x   s o l i d   v a r ( - - b o r d e r - c o l o r ) ; 
-         b o r d e r - r a d i u s :   8 p x ; 
-         b a c k g r o u n d :   v a r ( - - b a c k g r o u n d ) ; 
-         c o l o r :   v a r ( - - t e x t - p r i m a r y ) ; 
-         f o n t - s i z e :   0 . 9 r e m ; 
-         m i n - w i d t h :   1 2 0 p x ; 
-         c u r s o r :   p o i n t e r ; 
-         t r a n s i t i o n :   a l l   0 . 2 s   e a s e ; 
- } 
- 
- . t h e m e - s e l e c t : f o c u s ,   . c o l o r - t h e m e - s e l e c t : f o c u s ,   
- . f o n t - s i z e - s e l e c t : f o c u s ,   . b o r d e r - r a d i u s - s e l e c t : f o c u s , 
- . l a y o u t - m o d e - s e l e c t : f o c u s   { 
-         o u t l i n e :   n o n e ; 
-         b o r d e r - c o l o r :   v a r ( - - h i g h l i g h t - c o l o r ) ; 
-         b o x - s h a d o w :   0   0   0   2 p x   r g b a ( 2 5 5 ,   1 0 7 ,   1 0 7 ,   0 . 2 ) ; 
- } 
- 
- / *   E n h a n c e d   S w i t c h   D e s i g n   * / 
- . s w i t c h   { 
-         p o s i t i o n :   r e l a t i v e ; 
-         d i s p l a y :   i n l i n e - b l o c k ; 
-         w i d t h :   5 0 p x ; 
-         h e i g h t :   2 4 p x ; 
-         f l e x - s h r i n k :   0 ; 
- } 
- 
- . s w i t c h   i n p u t   { 
-         o p a c i t y :   0 ; 
-         w i d t h :   0 ; 
-         h e i g h t :   0 ; 
- } 
- 
- . s l i d e r   { 
-         p o s i t i o n :   a b s o l u t e ; 
-         c u r s o r :   p o i n t e r ; 
-         t o p :   0 ; 
-         l e f t :   0 ; 
-         r i g h t :   0 ; 
-         b o t t o m :   0 ; 
-         b a c k g r o u n d - c o l o r :   v a r ( - - b o r d e r - c o l o r ) ; 
-         t r a n s i t i o n :   0 . 3 s ; 
-         b o r d e r - r a d i u s :   2 4 p x ; 
- } 
- 
- . s l i d e r : b e f o r e   { 
-         p o s i t i o n :   a b s o l u t e ; 
-         c o n t e n t :   " ; 
-         h e i g h t :   1 8 p x ; 
-         w i d t h :   1 8 p x ; 
-         l e f t :   3 p x ; 
-         b o t t o m :   3 p x ; 
-         b a c k g r o u n d - c o l o r :   w h i t e ; 
-         t r a n s i t i o n :   0 . 3 s ; 
-         b o r d e r - r a d i u s :   5 0 % ; 
-         b o x - s h a d o w :   0   2 p x   4 p x   r g b a ( 0 ,   0 ,   0 ,   0 . 2 ) ; 
- } 
- 
- i n p u t : c h e c k e d   +   . s l i d e r   { 
-         b a c k g r o u n d - c o l o r :   v a r ( - - h i g h l i g h t - c o l o r ) ; 
- } 
- 
- i n p u t : c h e c k e d   +   . s l i d e r : b e f o r e   { 
-         t r a n s f o r m :   t r a n s l a t e X ( 2 6 p x ) ; 
- } 
- 
- . s l i d e r : h o v e r   { 
-         b o x - s h a d o w :   0   0   8 p x   r g b a ( 2 5 5 ,   1 0 7 ,   1 0 7 ,   0 . 3 ) ; 
- } 
- 
- / *   R e s p o n s i v e   D e s i g n   f o r   S e t t i n g s   * / 
- @ m e d i a   ( m a x - w i d t h :   7 6 8 p x )   { 
-         . s e t t i n g s - c o n t e n t   { 
-                 w i d t h :   9 5 v w ; 
-                 m a x - w i d t h :   6 0 0 p x ; 
-                 m a r g i n :   1 r e m ; 
-         } 
-         
-         . s e t t i n g s - s e c t i o n   { 
-                 p a d d i n g :   1 r e m ; 
-                 m a r g i n - b o t t o m :   1 . 5 r e m ; 
-         } 
-         
-         . s e t t i n g - i t e m   { 
-                 f l e x - d i r e c t i o n :   c o l u m n ; 
-                 a l i g n - i t e m s :   f l e x - s t a r t ; 
-                 g a p :   0 . 7 5 r e m ; 
-                 p a d d i n g :   1 . 2 5 r e m   0 ; 
-         } 
-         
-         . s e t t i n g - l a b e l - g r o u p   { 
-                 w i d t h :   1 0 0 % ; 
-         } 
-         
-         . v o l u m e - c o n t r o l ,   . z o o m - c o n t r o l   { 
-                 w i d t h :   1 0 0 % ; 
-                 j u s t i f y - c o n t e n t :   s p a c e - b e t w e e n ; 
-         } 
-         
-         . t h e m e - s e l e c t ,   . c o l o r - t h e m e - s e l e c t ,   . f o n t - s i z e - s e l e c t ,   
-         . b o r d e r - r a d i u s - s e l e c t ,   . l a y o u t - m o d e - s e l e c t   { 
-                 w i d t h :   1 0 0 % ; 
-                 m i n - w i d t h :   a u t o ; 
-         } 
-         
-         . s w i t c h   { 
-                 a l i g n - s e l f :   f l e x - e n d ; 
-         } 
- } 
- 
- / *   D a r k   T h e m e   A d j u s t m e n t s   * / 
- b o d y [ d a t a - t h e m e = 
- 
- d a r k ]   . s e t t i n g s - s e c t i o n   { 
-         b a c k g r o u n d :   r g b a ( 2 5 5 ,   2 5 5 ,   2 5 5 ,   0 . 0 5 ) ; 
-         b o r d e r - c o l o r :   r g b a ( 2 5 5 ,   2 5 5 ,   2 5 5 ,   0 . 1 ) ; 
- } 
- 
- b o d y [ d a t a - t h e m e = d a r k ]   . s e t t i n g - i t e m   { 
-         b o r d e r - b o t t o m - c o l o r :   r g b a ( 2 5 5 ,   2 5 5 ,   2 5 5 ,   0 . 1 ) ; 
- } 
- 
- / *   L i g h t   T h e m e   A d j u s t m e n t s   * / 
- b o d y [ d a t a - t h e m e = l i g h t ]   . s e t t i n g s - s e c t i o n   { 
-         b a c k g r o u n d :   # f f f f f f ; 
-         b o r d e r - c o l o r :   # e 2 e 8 f 0 ; 
-         b o x - s h a d o w :   0   2 p x   8 p x   r g b a ( 0 ,   0 ,   0 ,   0 . 0 5 ) ; 
- } 
- 
- b o d y [ d a t a - t h e m e = l i g h t ]   . s e t t i n g - i t e m   { 
-         b o r d e r - b o t t o m - c o l o r :   # f 1 f 5 f 9 ; 
- } 
- 
- b o d y [ d a t a - t h e m e = l i g h t ]   . s l i d e r   { 
-         b a c k g r o u n d - c o l o r :   # e 2 e 8 f 0 ; 
- } 
- 
- b o d y [ d a t a - t h e m e = l i g h t ]   . t h e m e - s e l e c t ,   
- b o d y [ d a t a - t h e m e = l i g h t ]   . c o l o r - t h e m e - s e l e c t ,   
- b o d y [ d a t a - t h e m e = l i g h t ]   . f o n t - s i z e - s e l e c t ,   
-
- 
- /* إخفاء أدوات مشغل Aflam4You TV */
-#aflam4youPlayer {
-    /* إخفاء شريط الأدوات في iframe Aflam4You */
-    pointer-events: auto;
-}
-
-/* إخفاء أدوات التحكم في iframe Aflam4You */
-#aflam4youPlayer iframe {
-    /* إخفاء شريط الأدوات */
-    border: none !important;
-}
-
-/* إخفاء أدوات التحكم في محتوى Aflam4You */
-#aflam4youPlayer * {
-    /* إخفاء جميع أدوات التحكم */
-    -webkit-appearance: none !important;
-    appearance: none !important;
-}
-
-/* إخفاء شريط الأدوات السفلي في Aflam4You */
-#aflam4youPlayer video::-webkit-media-controls-panel,
-#aflam4youPlayer video::-webkit-media-controls-play-button,
-#aflam4youPlayer video::-webkit-media-controls-volume-slider,
-#aflam4youPlayer video::-webkit-media-controls-mute-button,
-#aflam4youPlayer video::-webkit-media-controls-timeline,
-#aflam4youPlayer video::-webkit-media-controls-current-time-display,
-#aflam4youPlayer video::-webkit-media-controls-time-remaining-display,
-#aflam4youPlayer video::-webkit-media-controls-fullscreen-button {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-}
-
-/* إخفاء أدوات التحكم في جميع المتصفحات */
-#aflam4youPlayer video::-moz-media-controls,
-#aflam4youPlayer video::-moz-media-controls-panel,
-#aflam4youPlayer video::-moz-media-controls-play-button,
-#aflam4youPlayer video::-moz-media-controls-volume-slider,
-#aflam4youPlayer video::-moz-media-controls-mute-button,
-#aflam4youPlayer video::-moz-media-controls-timeline,
-#aflam4youPlayer video::-moz-media-controls-current-time-display,
-#aflam4youPlayer video::-moz-media-controls-time-remaining-display,
-#aflam4youPlayer video::-moz-media-controls-fullscreen-button {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-}
-
-/* إخفاء أدوات التحكم في Edge */
-#aflam4youPlayer video::-ms-media-controls,
-#aflam4youPlayer video::-ms-media-controls-panel,
-#aflam4youPlayer video::-ms-media-controls-play-button,
-#aflam4youPlayer video::-ms-media-controls-volume-slider,
-#aflam4youPlayer video::-ms-media-controls-mute-button,
-#aflam4youPlayer video::-ms-media-controls-timeline,
-#aflam4youPlayer video::-ms-media-controls-current-time-display,
-#aflam4youPlayer video::-ms-media-controls-time-remaining-display,
-#aflam4youPlayer video::-ms-media-controls-fullscreen-button {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-}
-
-/* إخفاء أدوات التحكم العامة */
-#aflam4youPlayer video[controls] {
-    /* إزالة خاصية controls من الفيديو */
-    -webkit-appearance: none !important;
-    appearance: none !important;
-}
-
-/* إخفاء أي عناصر تحكم أخرى */
-#aflam4youPlayer .controls,
-#aflam4youPlayer .player-controls,
-#aflam4youPlayer .video-controls,
-#aflam4youPlayer .media-controls,
-#aflam4youPlayer .play-controls,
-#aflam4youPlayer .volume-controls,
-#aflam4youPlayer .time-controls,
-#aflam4youPlayer .fullscreen-controls {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    height: 0 !important;
-    width: 0 !important;
-    overflow: hidden !important;
-}
-
-/* إخفاء شريط التقدم */
-#aflam4youPlayer .progress-bar,
-#aflam4youPlayer .seek-bar,
-#aflam4youPlayer .timeline,
-#aflam4youPlayer .scrubber {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-}
-
-/* إخفاء أزرار التشغيل والإيقاف */
-#aflam4youPlayer .play-button,
-#aflam4youPlayer .pause-button,
-#aflam4youPlayer .play-pause-button,
-#aflam4youPlayer .stop-button {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-}
-
-/* إخفاء أزرار الصوت */
-#aflam4youPlayer .volume-button,
-#aflam4youPlayer .mute-button,
-#aflam4youPlayer .volume-slider,
-#aflam4youPlayer .volume-control {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-}
-
-/* إخفاء أزرار الشاشة الكاملة */
-#aflam4youPlayer .fullscreen-button,
-#aflam4youPlayer .expand-button,
-#aflam4youPlayer .fullscreen-control {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-}
-
-/* إخفاء معلومات الوقت */
-#aflam4youPlayer .time-display,
-#aflam4youPlayer .current-time,
-#aflam4youPlayer .duration,
-#aflam4youPlayer .time-remaining {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-}
-
-/* إخفاء أي عناصر أخرى قد تظهر كأدوات تحكم */
-#aflam4youPlayer [class*="control"],
-#aflam4youPlayer [class*="button"],
-#aflam4youPlayer [class*="toolbar"],
-#aflam4youPlayer [class*="panel"],
-#aflam4youPlayer [id*="control"],
-#aflam4youPlayer [id*="button"],
-#aflam4youPlayer [id*="toolbar"],
-#aflam4youPlayer [id*="panel"] {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-}
-
-/* التأكد من إخفاء الأدوات في جميع الحالات */
-#aflam4youPlayer video {
-    /* إزالة جميع أدوات التحكم */
-    controls: none !important;
-    -webkit-controls: none !important;
-    -moz-controls: none !important;
-    -ms-controls: none !important;
-}
-
-/* إخفاء الأدوات عند التمرير */
-#aflam4youPlayer:hover video::-webkit-media-controls-panel,
-#aflam4youPlayer:hover video::-webkit-media-controls-play-button,
-#aflam4youPlayer:hover video::-webkit-media-controls-volume-slider,
-#aflam4youPlayer:hover video::-webkit-media-controls-mute-button,
-#aflam4youPlayer:hover video::-webkit-media-controls-timeline,
-#aflam4youPlayer:hover video::-webkit-media-controls-current-time-display,
-#aflam4youPlayer:hover video::-webkit-media-controls-time-remaining-display,
-#aflam4youPlayer:hover video::-webkit-media-controls-fullscreen-button {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-}
-
-/* إخفاء الأدوات عند التركيز */
-#aflam4youPlayer:focus video::-webkit-media-controls-panel,
-#aflam4youPlayer:focus video::-webkit-media-controls-play-button,
-#aflam4youPlayer:focus video::-webkit-media-controls-volume-slider,
-#aflam4youPlayer:focus video::-webkit-media-controls-mute-button,
-#aflam4youPlayer:focus video::-webkit-media-controls-timeline,
-#aflam4youPlayer:focus video::-webkit-media-controls-current-time-display,
-#aflam4youPlayer:focus video::-webkit-media-controls-time-remaining-display,
-#aflam4youPlayer:focus video::-webkit-media-controls-fullscreen-button {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-}
-
-/* إخفاء الأدوات عند النقر */
-#aflam4youPlayer:active video::-webkit-media-controls-panel,
-#aflam4youPlayer:active video::-webkit-media-controls-play-button,
-#aflam4youPlayer:active video::-webkit-media-controls-volume-slider,
-#aflam4youPlayer:active video::-webkit-media-controls-mute-button,
-#aflam4youPlayer:active video::-webkit-media-controls-timeline,
-#aflam4youPlayer:active video::-webkit-media-controls-current-time-display,
-#aflam4youPlayer:active video::-webkit-media-controls-time-remaining-display,
-#aflam4youPlayer:active video::-webkit-media-controls-fullscreen-button {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-}
-
-/* أنماط رسائل الخطأ لـ aflam4you.net */
-.error-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    opacity: 0.8;
-}
-
-.error-solutions {
-    margin-top: 1.5rem;
-    padding: 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.error-solutions p {
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: var(--text-primary);
-}
-
-.error-solutions ul {
-    list-style: none;
-    padding: 0;
-    margin: 0.5rem 0 1rem 0;
-}
-
-.error-solutions li {
-    padding: 0.25rem 0;
-    color: var(--text-secondary);
-    position: relative;
-    padding-right: 1.5rem;
-}
-
-.error-solutions li:before {
-    content: "•";
-    color: var(--highlight-color);
-    position: absolute;
-    right: 0;
-}
-
-.retry-btn, .open-external-btn {
-    background: var(--highlight-color);
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin: 0.5rem 0.5rem 0.5rem 0;
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.retry-btn:hover, .open-external-btn:hover {
-    background: #d63447;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(233, 69, 96, 0.3);
-}
-
-.open-external-btn {
-    background: var(--accent-color);
-}
-
-.open-external-btn:hover {
-    background: #0d2a4f;
-    box-shadow: 0 4px 12px rgba(15, 52, 96, 0.3);
-}
-
-/* تحسين رسائل الخطأ العامة */
-.video-loading .error-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    opacity: 0.7;
-}
-
-.video-loading small {
-    color: var(--text-secondary);
-    font-size: 0.85rem;
-    margin-top: 0.5rem;
-    display: block;
-}
-
-/* حماية من الإعلانات وإعادة التوجيه غير المرغوب فيها */
-.ad, .advertisement, .banner, .popup, 
-[class*="ad-"], [class*="advertisement"], [class*="banner"], [class*="popup"],
-[id*="ad-"], [id*="advertisement"], [id*="banner"], [id*="popup"] {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    height: 0 !important;
-    width: 0 !important;
-    overflow: hidden !important;
-}
-
-/* حماية من النوافذ المنبثقة */
-.popup-overlay, .modal-overlay[style*="display: block"] {
-    display: none !important;
-}
-
-/* إخفاء المحتوى الإعلاني */
-*[style*="position: fixed"][style*="z-index: 9999"] {
-    display: none !important;
-}
