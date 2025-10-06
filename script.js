@@ -1236,37 +1236,9 @@ class ArabicTVApp {
         // Show inactive channel message
         loading.style.display = 'flex';
         loading.innerHTML = `
-            <div class="error-icon" style="font-size: 3rem; color: #ff6b6b; margin-bottom: 1rem;">
-                <i class="fas fa-pause-circle"></i>
-            </div>
-            <p style="color: #ff6b6b; font-size: 1.1rem; margin-bottom: 1rem; text-align: center;">
-                القناة متوقفة من المصدر سيتم إصلاحها أو استبدال السيرفر قريباً
-            </p>
-            <div style="background: rgba(255, 107, 107, 0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0; border-right: 4px solid #ff6b6b;">
-                <p style="color: #666; font-size: 0.9rem; margin: 0;">
-                    <i class="fas fa-info-circle" style="margin-left: 0.5rem;"></i>
-                    هذه القناة غير متاحة حالياً من المصدر. يرجى المحاولة لاحقاً أو اختيار قناة أخرى
-                </p>
-            </div>
-            <div style="display: flex; gap: 10px; margin-top: 1rem; justify-content: center;">
-                <button onclick="app.retryVideo()" style="
-                    background: #28a745; 
-                    color: white; 
-                    border: none; 
-                    padding: 0.75rem 1.5rem; 
-                    border-radius: 6px; 
-                    cursor: pointer; 
-                    font-size: 0.9rem;
-                ">إعادة المحاولة</button>
-                <button onclick="closeModal()" style="
-                    background: #ff6b6b; 
-                    color: white; 
-                    border: none; 
-                    padding: 0.75rem 1.5rem; 
-                    border-radius: 6px; 
-                    cursor: pointer; 
-                    font-size: 0.9rem;
-                ">إغلاق</button>
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>القناة متوقفة مؤقتاً</p>
             </div>
         `;
         
@@ -1614,16 +1586,8 @@ class ArabicTVApp {
                 this.hls.on(Hls.Events.ERROR, (event, data) => {
                     console.error('HLS Error:', data);
                     
-                    // Show specific error messages
-                    if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
-                        this.showVideoError('خطأ في الشبكة - تحقق من اتصال الإنترنت');
-                    } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
-                        this.showVideoError('خطأ في تنسيق الفيديو - الرابط قد يكون غير صحيح');
-                    } else if (data.details === Hls.ErrorDetails.MANIFEST_LOAD_ERROR) {
-                        this.showVideoError('لا يمكن تحميل قائمة التشغيل - الرابط غير متاح');
-                    } else if (data.details === Hls.ErrorDetails.MANIFEST_LOAD_TIMEOUT) {
-                        this.showVideoError('انتهت مهلة تحميل قائمة التشغيل - الخادم بطيء');
-                    }
+                    // Show generic loading message instead of specific errors
+                    this.showVideoError('جارٍ تحميل البث...');
                     
                     if (data.fatal) {
                         this.handleVideoError();
@@ -1677,7 +1641,7 @@ class ArabicTVApp {
 
         } catch (error) {
             console.error('Error loading video:', error);
-            this.showVideoError(`خطأ في تحميل الفيديو: ${error.message}`);
+            this.showVideoError('جارٍ تحميل البث...');
             this.handleVideoError();
         }
     }
@@ -1695,43 +1659,17 @@ class ArabicTVApp {
         // Check if current channel requires VPN and show appropriate message
         if (this.currentChannel && this.currentChannel.vpn === true) {
             loading.innerHTML = `
-                <div class="error-icon" style="font-size: 3rem; color: #e94560; margin-bottom: 1rem;">
-                    <i class="fas fa-shield-alt"></i>
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>يتطلب VPN</p>
                 </div>
-                <p style="color: #e94560; font-size: 1.1rem; margin-bottom: 1rem; text-align: center;">
-                    يجب عليك تشغيل VPN لكي تعمل هذه القناة
-                </p>
-                <div style="background: rgba(233, 69, 96, 0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0; border-right: 4px solid #e94560;">
-                    <p style="color: #666; font-size: 0.9rem; margin: 0;">
-                        <i class="fas fa-info-circle" style="margin-left: 0.5rem;"></i>
-                        هذه القناة محجوبة في منطقتك الجغرافية وتتطلب استخدام VPN للوصول إليها
-                    </p>
-                </div>
-                <button onclick="app.retryVideo()" style="
-                    background: #e94560; 
-                    color: white; 
-                    border: none; 
-                    padding: 0.5rem 1rem; 
-                    border-radius: 5px; 
-                    cursor: pointer;
-                    font-size: 0.9rem;
-                ">إعادة المحاولة</button>
             `;
         } else {
             loading.innerHTML = `
-                <div class="error-icon" style="font-size: 3rem; color: #e94560; margin-bottom: 1rem;">
-                    <i class="fas fa-exclamation-triangle"></i>
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>جارٍ تحميل البث...</p>
                 </div>
-                <p style="color: #e94560; font-size: 1.1rem; margin-bottom: 1rem;">${message}</p>
-                <button onclick="app.retryVideo()" style="
-                    background: #e94560; 
-                    color: white; 
-                    border: none; 
-                    padding: 0.5rem 1rem; 
-                    border-radius: 5px; 
-                    cursor: pointer;
-                    font-size: 0.9rem;
-                ">إعادة المحاولة</button>
             `;
         }
     }
@@ -1782,7 +1720,7 @@ class ArabicTVApp {
             console.log('✅ تم تشغيل الفيديو يدوياً');
         }).catch(error => {
             console.error('❌ فشل التشغيل اليدوي:', error);
-            this.showVideoError('فشل في تشغيل الفيديو');
+            this.showVideoError('جارٍ تحميل البث...');
         });
     }
     
@@ -2010,37 +1948,9 @@ class ArabicTVApp {
         // Check if current channel is inactive
         if (this.currentChannel && this.currentChannel.status === 'inactive') {
             loading.innerHTML = `
-                <div class="error-icon" style="font-size: 3rem; color: #ff6b6b; margin-bottom: 1rem;">
-                    <i class="fas fa-pause-circle"></i>
-                </div>
-                <p style="color: #ff6b6b; font-size: 1.1rem; margin-bottom: 1rem; text-align: center;">
-                    القناة متوقفة من المصدر سيتم إصلاحها أو استبدال السيرفر قريباً
-                </p>
-                <div style="background: rgba(255, 107, 107, 0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0; border-right: 4px solid #ff6b6b;">
-                    <p style="color: #666; font-size: 0.9rem; margin: 0;">
-                        <i class="fas fa-info-circle" style="margin-left: 0.5rem;"></i>
-                        هذه القناة غير متاحة حالياً من المصدر. يرجى المحاولة لاحقاً أو اختيار قناة أخرى
-                    </p>
-                </div>
-                <div style="display: flex; gap: 10px; margin-top: 1rem; justify-content: center;">
-                    <button onclick="app.retryVideo()" style="
-                        background: #28a745; 
-                        color: white; 
-                        border: none; 
-                        padding: 0.75rem 1.5rem; 
-                        border-radius: 6px; 
-                        cursor: pointer; 
-                        font-size: 0.9rem;
-                    ">إعادة المحاولة</button>
-                    <button onclick="closeModal()" style="
-                        background: #ff6b6b; 
-                        color: white; 
-                        border: none; 
-                        padding: 0.75rem 1.5rem; 
-                        border-radius: 6px; 
-                        cursor: pointer; 
-                        font-size: 0.9rem;
-                    ">إغلاق</button>
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>القناة متوقفة مؤقتاً</p>
                 </div>
             `;
             
@@ -2055,28 +1965,10 @@ class ArabicTVApp {
         // Check if current channel requires VPN
         if (this.currentChannel && this.currentChannel.vpn === true) {
             loading.innerHTML = `
-                <div class="error-icon" style="font-size: 3rem; color: #e94560; margin-bottom: 1rem;">
-                    <i class="fas fa-shield-alt"></i>
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>يتطلب VPN</p>
                 </div>
-                <p style="color: #e94560; font-size: 1.1rem; margin-bottom: 1rem; text-align: center;">
-                    يجب عليك تشغيل VPN لكي تعمل هذه القناة
-                </p>
-                <div style="background: rgba(233, 69, 96, 0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0; border-right: 4px solid #e94560;">
-                    <p style="color: #666; font-size: 0.9rem; margin: 0;">
-                        <i class="fas fa-info-circle" style="margin-left: 0.5rem;"></i>
-                        هذه القناة محجوبة في منطقتك الجغرافية وتتطلب استخدام VPN للوصول إليها
-                    </p>
-                </div>
-                <button onclick="app.retryVideo()" style="
-                    background: #e94560; 
-                    color: white; 
-                    border: none; 
-                    padding: 0.75rem 1.5rem; 
-                    border-radius: 6px; 
-                    cursor: pointer; 
-                    font-size: 0.9rem;
-                    margin-top: 1rem;
-                ">إعادة المحاولة</button>
             `;
         } else {
             loading.innerHTML = `
@@ -2404,13 +2296,10 @@ class ArabicTVApp {
                     if (data.fatal) {
                         loading.style.display = 'flex';
                         loading.innerHTML = `
-                            <div class="error-icon">⚠️</div>
-                            <p>خطأ في تشغيل البث</p>
-                            <p class="error-details">خطأ فادح في تحميل البث - قد تحتاج VPN</p>
-                            <button class="retry-btn" onclick="app.loadVideoStream('${url}', 'shls')">
-                                <i class="fas fa-redo"></i>
-                                إعادة المحاولة
-                            </button>
+                            <div class="loading-spinner">
+                                <div class="spinner"></div>
+                                <p>جارٍ تحميل البث...</p>
+                            </div>
                         `;
                     }
                 });
@@ -2437,13 +2326,10 @@ class ArabicTVApp {
                 console.error('❌ خطأ في تشغيل الفيديو:', e);
                 loading.style.display = 'flex';
                 loading.innerHTML = `
-                    <div class="error-icon">⚠️</div>
-                    <p>خطأ في تشغيل البث</p>
-                    <p class="error-details">قد يكون الرابط غير متاح أو يحتاج VPN</p>
-                    <button class="retry-btn" onclick="app.loadVideoStream('${url}', 'shls')">
-                        <i class="fas fa-redo"></i>
-                        إعادة المحاولة
-                    </button>
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p>جارٍ تحميل البث...</p>
+                    </div>
                 `;
             });
             
@@ -2452,13 +2338,10 @@ class ArabicTVApp {
         } catch (error) {
             console.error('❌ خطأ في تحميل البث من shls-live-enc.edgenextcdn.net:', error);
             loading.innerHTML = `
-                <div class="error-icon">⚠️</div>
-                <p>خطأ في تحميل البث</p>
-                <p class="error-details">${error.message}</p>
-                <button class="retry-btn" onclick="app.loadVideoStream('${url}', 'shls')">
-                    <i class="fas fa-redo"></i>
-                    إعادة المحاولة
-                </button>
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>جارٍ تحميل البث...</p>
+                </div>
             `;
         }
     }
@@ -2562,9 +2445,10 @@ class ArabicTVApp {
         } catch (error) {
             console.error('❌ خطأ في تحميل iframe من elahmad.com:', error);
             loading.innerHTML = `
-                <div class="error-icon">⚠️</div>
-                <p>خطأ في تحميل المحتوى</p>
-                <small>${error.message}</small>
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>جارٍ تحميل المحتوى...</p>
+                </div>
             `;
             throw error;
         }
@@ -2994,7 +2878,7 @@ class ArabicTVApp {
                 this.hls.on(Hls.Events.ERROR, (event, data) => {
                     console.error('HLS Error:', data);
                     if (data.fatal) {
-                        this.showStreamError('خطأ في تحميل البث المباشر');
+                        this.showStreamError('جارٍ تحميل البث...');
                     }
                 });
 
@@ -3029,18 +2913,9 @@ class ArabicTVApp {
         const loading = document.getElementById('videoLoading');
         loading.style.display = 'flex';
         loading.innerHTML = `
-            <div class="error-icon">⚠️</div>
-            <p>خطأ في البث المباشر</p>
-            <small>${message}</small>
-            <div class="error-solutions">
-                <button class="retry-btn" onclick="app.retryAflamLoad()">
-                    <i class="fas fa-redo"></i>
-                    إعادة المحاولة
-                </button>
-                <button class="open-external-btn" onclick="app.openAflamExternal()">
-                    <i class="fas fa-external-link-alt"></i>
-                    فتح في نافذة جديدة
-                </button>
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>جارٍ تحميل البث...</p>
             </div>
         `;
     }
@@ -3160,7 +3035,7 @@ class ArabicTVApp {
             
         } catch (error) {
             console.error('Error loading YouTube video:', error);
-            this.showVideoError(`خطأ في تحميل فيديو اليوتيوب: ${error.message}`);
+            this.showVideoError('جارٍ تحميل البث...');
         }
     }
 
