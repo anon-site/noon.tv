@@ -1472,6 +1472,66 @@
             }
         });
         
+        // منع النوافذ المنبقة من Aflam4You ومواقع أخرى
+        window.addEventListener('beforeunload', function(e) {
+            if (window.location.href.includes('aflam4you.net') || 
+                window.location.href.includes('direct.aflam4you.net')) {
+                e.preventDefault();
+                e.returnValue = '';
+                return 'هل تريد مغادرة الموقع؟';
+            }
+        });
+        
+        // منع فتح النوافذ المنبقة
+        const originalOpen = window.open;
+        window.open = function(url, name, specs) {
+            // منع النوافذ المنبقة من مواقع الإعلانات
+            if (url && (
+                url.includes('aflam4you.net') ||
+                url.includes('advertisement') ||
+                url.includes('ads') ||
+                url.includes('popup') ||
+                url.includes('click here to unmute')
+            )) {
+                console.log('🚫 تم منع نافذة منبقة:', url);
+                return null;
+            }
+            return originalOpen.apply(this, arguments);
+        };
+        
+        // منع النوافذ المنبقة من iframe
+        document.addEventListener('DOMContentLoaded', function() {
+            // مراقبة iframe للكشف عن النوافذ المنبقة
+            const iframeObserver = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType === 1 && node.tagName === 'IFRAME') {
+                            // إضافة حماية إضافية للـ iframe
+                            node.addEventListener('load', function() {
+                                try {
+                                    // منع النوافذ المنبقة من داخل iframe
+                                    if (node.contentWindow) {
+                                        const originalIframeOpen = node.contentWindow.open;
+                                        node.contentWindow.open = function(url) {
+                                            console.log('🚫 تم منع نافذة منبقة من iframe:', url);
+                                            return null;
+                                        };
+                                    }
+                                } catch (e) {
+                                    // Cross-origin error متوقع
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+            
+            iframeObserver.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+        });
+        
         // منع الإعلانات في الصفحة
         document.addEventListener('DOMContentLoaded', function() {
             const observer = new MutationObserver(function(mutations) {
@@ -1483,20 +1543,37 @@
                                 node.className.includes('ad') || 
                                 node.className.includes('advertisement') ||
                                 node.className.includes('banner') ||
-                                node.className.includes('popup')
+                                node.className.includes('popup') ||
+                                node.className.includes('unmute') ||
+                                node.className.includes('click-here')
                             )) {
                                 node.style.display = 'none';
                                 console.log('🚫 تم إخفاء إعلان');
                             }
                             
-                            // فحص النصوص للإعلانات
+                            // فحص النصوص للإعلانات والنوافذ المنبقة
                             if (node.textContent && (
                                 node.textContent.includes('إعلان') ||
                                 node.textContent.includes('advertisement') ||
-                                node.textContent.includes('Please wait 4 seconds')
+                                node.textContent.includes('Please wait 4 seconds') ||
+                                node.textContent.includes('click here to unmute') ||
+                                node.textContent.includes('Click here to unmute') ||
+                                node.textContent.includes('CLICK HERE TO UNMUTE') ||
+                                node.textContent.includes('unmute') ||
+                                node.textContent.includes('Unmute')
                             )) {
                                 node.style.display = 'none';
-                                console.log('🚫 تم إخفاء محتوى إعلاني');
+                                console.log('🚫 تم إخفاء محتوى إعلاني أو نافذة منبقة');
+                            }
+                            
+                            // إزالة الروابط التي تحتوي على "unmute"
+                            if (node.tagName === 'A' && node.href && (
+                                node.href.includes('unmute') ||
+                                node.href.includes('advertisement') ||
+                                node.href.includes('popup')
+                            )) {
+                                node.style.display = 'none';
+                                console.log('🚫 تم إخفاء رابط إعلاني');
                             }
                         }
                     });
@@ -1508,7 +1585,7 @@
                 subtree: true
             });
             
-            console.log('🛡️ تم تفعيل حماية من الإعلانات وإعادة التوجيه');
+            console.log('🛡️ تم تفعيل حماية من الإعلانات والنوافذ المنبقة');
         });
     </script>
 </body>

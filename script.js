@@ -2008,6 +2008,23 @@ class ArabicTVApp {
             
             console.log('📄 تم تحميل المحتوى بنجاح، حجم:', htmlContent.length, 'حرف');
             
+            // إزالة الإعلانات والنوافذ المنبقة من المحتوى المحمل
+            htmlContent = htmlContent.replace(/<[^>]*class[^>]*ad[^>]*>.*?<\/[^>]*>/gi, '');
+            htmlContent = htmlContent.replace(/<[^>]*class[^>]*advertisement[^>]*>.*?<\/[^>]*>/gi, '');
+            htmlContent = htmlContent.replace(/<[^>]*class[^>]*popup[^>]*>.*?<\/[^>]*>/gi, '');
+            htmlContent = htmlContent.replace(/<[^>]*class[^>]*unmute[^>]*>.*?<\/[^>]*>/gi, '');
+            htmlContent = htmlContent.replace(/<a[^>]*href[^>]*unmute[^>]*>.*?<\/a>/gi, '');
+            htmlContent = htmlContent.replace(/<a[^>]*href[^>]*advertisement[^>]*>.*?<\/a>/gi, '');
+            htmlContent = htmlContent.replace(/<a[^>]*href[^>]*popup[^>]*>.*?<\/a>/gi, '');
+            
+            // إزالة النصوص التي تحتوي على unmute
+            htmlContent = htmlContent.replace(/click here to unmute/gi, '');
+            htmlContent = htmlContent.replace(/Click here to unmute/gi, '');
+            htmlContent = htmlContent.replace(/CLICK HERE TO UNMUTE/gi, '');
+            htmlContent = htmlContent.replace(/unmute/gi, '');
+            
+            console.log('🛡️ تم تنظيف المحتوى من الإعلانات والنوافذ المنبقة');
+            
             // Enhanced patterns for finding stream URLs
             const streamPatterns = [
                 // Pattern 1: Direct HLS URLs in quotes
@@ -2198,6 +2215,42 @@ class ArabicTVApp {
             iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
             iframe.setAttribute('loading', 'lazy');
             
+            // حماية إضافية من النوافذ المنبقة
+            iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation allow-forms allow-popups-to-escape-sandbox');
+            
+            // منع النوافذ المنبقة من iframe
+            iframe.addEventListener('load', function() {
+                try {
+                    // منع النوافذ المنبقة من داخل iframe
+                    if (iframe.contentWindow) {
+                        const originalIframeOpen = iframe.contentWindow.open;
+                        iframe.contentWindow.open = function(url) {
+                            console.log('🚫 تم منع نافذة منبقة من aflam4you iframe:', url);
+                            return null;
+                        };
+                        
+                        // منع النوافذ المنبقة عند النقر
+                        iframe.contentWindow.addEventListener('click', function(e) {
+                            if (e.target && (
+                                e.target.textContent && (
+                                    e.target.textContent.includes('unmute') ||
+                                    e.target.textContent.includes('click here') ||
+                                    e.target.textContent.includes('Click here')
+                                )
+                            )) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                console.log('🚫 تم منع النقر على رابط unmute');
+                                return false;
+                            }
+                        });
+                    }
+                } catch (e) {
+                    // Cross-origin error متوقع
+                    console.log('✅ حماية iframe مفعلة (Cross-origin)');
+                }
+            });
+            
             // منع إعادة التوجيه غير المرغوب فيها
             iframe.onload = () => {
                 console.log('✅ تم تحميل iframe من aflam4you.net');
@@ -2211,9 +2264,10 @@ class ArabicTVApp {
                             if (bodyText.includes('blocked') || bodyText.includes('contact the site owner')) {
                                 this.showAflamError('المحتوى محجوب من الموقع');
                             }
-                            // فحص الإعلانات
-                            if (bodyText.includes('advertisement') || bodyText.includes('ad') || bodyText.includes('إعلان')) {
-                                console.warn('⚠️ تم اكتشاف إعلانات في المحتوى');
+                            // فحص الإعلانات والنوافذ المنبقة
+                            if (bodyText.includes('advertisement') || bodyText.includes('ad') || bodyText.includes('إعلان') ||
+                                bodyText.includes('unmute') || bodyText.includes('click here to unmute')) {
+                                console.warn('⚠️ تم اكتشاف إعلانات أو نوافذ منبقة في المحتوى');
                                 // يمكن إضافة منطق لإخفاء الإعلانات هنا
                             }
                         }
