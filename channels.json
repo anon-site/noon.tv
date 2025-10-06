@@ -1517,10 +1517,10 @@
       "id": 175,
       "name": "الاقصى",
       "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=aqsatv1",
-      "logo": "https://www.elahmad.com/tv/mobiletv/images/aqsa_tv.jpg?v=7",
+      "logo": "https://iili.io/Khqz1hg.png",
       "category": "entertainment",
       "country": "فلسطين",
-      "type": "elahmad",
+      "type": "hls",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-05T21:45:48.346Z"
@@ -1568,7 +1568,7 @@
       "logo": "https://www.elahmad.com/tv/mobiletv/images/hannibal.jpg?v=7",
       "category": "entertainment",
       "country": "تونس",
-      "type": "elahmad",
+      "type": "hls",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-05T21:45:48.346Z"
@@ -1685,12 +1685,13 @@
       "id": 189,
       "name": "الارث النبوي",
       "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=alerth",
-      "logo": "https://www.elahmad.com/tv/mobiletv/images/alerthtv.jpg?v=7",
+      "logo": "https://iili.io/KhqFCej.png",
       "category": "religious",
       "country": "السعودية",
-      "type": "elahmad",
+      "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-06T11:57:36.918Z"
     },
     {
       "id": 190,
@@ -1701,18 +1702,20 @@
       "country": "السعودية",
       "type": "elahmad",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-06T11:57:36.918Z"
     },
     {
       "id": 191,
       "name": "القرآن الكريم",
       "url": "https://www.elahmad.com/tv/live/channel.php?id=saudi_quran",
-      "logo": "https://www.elahmad.com/tv/mobiletv/images/qorantv.jpg?v=7",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/%D9%82%D9%86%D8%A7%D8%A9_%D8%A7%D9%84%D9%82%D8%B1%D8%A2%D9%86_%D8%A7%D9%84%D9%83%D8%B1%D9%8A%D9%85.svg/1200px-%D9%82%D9%86%D8%A7%D8%A9_%D8%A7%D9%84%D9%82%D8%B1%D8%A2%D9%86_%D8%A7%D9%84%D9%83%D8%B1%D9%8A%D9%85.svg.png",
       "category": "religious",
       "country": "السعودية",
-      "type": "elahmad",
+      "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-06T11:57:36.918Z"
     },
     {
       "id": 192,
@@ -1723,18 +1726,20 @@
       "country": "السعودية",
       "type": "elahmad",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-06T11:57:36.918Z"
     },
     {
       "id": 193,
       "name": "فلسطين التعليمية",
       "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=qouchannel",
-      "logo": "https://www.elahmad.com/tv/mobiletv/images/edu_ps.jpg?v=7",
+      "logo": "https://iili.io/Khq5Sn9.png",
       "category": "entertainment",
       "country": "فلسطين",
-      "type": "elahmad",
+      "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-06T11:57:36.918Z"
     },
     {
       "id": 194,
@@ -1745,7 +1750,8 @@
       "country": "فلسطين",
       "type": "elahmad",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-06T11:57:36.918Z"
     },
     {
       "id": 195,
@@ -1756,7 +1762,8 @@
       "country": "فلسطين",
       "type": "elahmad",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-06T11:57:36.918Z"
     },
     {
       "id": 196,
@@ -1767,7 +1774,20 @@
       "country": "تركيا",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-06T11:57:36.918Z"
+    },
+    {
+      "id": 197,
+      "name": "Netflix Action",
+      "url": "https://shls-live-enc.edgenextcdn.net/out/v1/46079e838e65490c8299f902a7731168/index_1.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png",
+      "category": "movies",
+      "country": "عالمية",
+      "type": "shls",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-06T17:44:40.407Z"
     },
     {
       "id": 999,
@@ -1855,6 +1875,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-06T11:57:10.614Z",
+  "lastModified": "2025-10-06T17:53:21.011Z",
   "version": "1.0"
 }
