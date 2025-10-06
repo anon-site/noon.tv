@@ -9528,7 +9528,10 @@ function copyResetCookiesLink() {
 // Persist and control visibility of forced cookies reset button
 function loadForceCookiesResetSetting() {
     try {
-        const flag = localStorage.getItem('showForceResetCookies') === 'true';
+        const cookieFlag = (document.cookie.match(/(?:^|; )showForceResetCookies=([^;]*)/) || [])[1];
+        const cookieEnabled = cookieFlag === 'true';
+        const localFlag = localStorage.getItem('showForceResetCookies') === 'true';
+        const flag = cookieEnabled || localFlag;
         const btn = document.getElementById('forceCookiesResetBtn');
         if (btn) btn.style.display = flag ? 'block' : 'none';
         const checkbox = document.getElementById('showForceResetCookies');
@@ -9541,6 +9544,8 @@ function initForceCookiesResetSetting() {
     if (checkbox) {
         checkbox.addEventListener('change', () => {
             localStorage.setItem('showForceResetCookies', checkbox.checked ? 'true' : 'false');
+            // Also store a cookie so the setting persists per-device without relying on localStorage
+            document.cookie = `showForceResetCookies=${checkbox.checked ? 'true' : 'false'};path=/;max-age=${60*60*24*365}`;
             loadForceCookiesResetSetting();
             if (window.app && window.app.notifyInfo) {
                 window.app.notifyInfo(checkbox.checked ? 'تم تفعيل زر حذف الكوكيز' : 'تم إخفاء زر حذف الكوكيز');
@@ -9593,6 +9598,19 @@ window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 window.location.reload();
             }, 2000);
+        }
+
+        // Handle public links to show/hide the force reset button for visitors
+        if (params.has('show_force_reset_button')) {
+            const enable = params.get('show_force_reset_button') === '1';
+            document.cookie = `showForceResetCookies=${enable ? 'true' : 'false'};path=/;max-age=${60*60*24*365}`;
+            if (!enable) {
+                try { localStorage.removeItem('showForceResetCookies'); } catch {}
+            }
+            // Clean URL
+            const url2 = new URL(window.location.href);
+            url2.searchParams.delete('show_force_reset_button');
+            window.history.replaceState({}, document.title, url2.toString());
         }
 
         // Initialize forced cookies reset controls
