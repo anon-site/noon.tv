@@ -2235,6 +2235,65 @@ class ArabicTVApp {
 
             console.log('🔄 محاولة تحميل SHLS stream:', url);
 
+            // Check if we're on a server (not localhost)
+            const isServer = !window.location.hostname.includes('localhost') && 
+                           !window.location.hostname.includes('127.0.0.1') &&
+                           !window.location.hostname.includes('file://');
+
+            let streamUrl = url;
+            
+            if (isServer) {
+                console.log('🌐 تم الكشف عن السيرفر - استخدام الوكلاء...');
+                
+                // Try multiple CORS proxies for server environments
+                const proxies = [
+                    `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+                    `https://cors-anywhere.herokuapp.com/${url}`,
+                    `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+                    `https://thingproxy.freeboard.io/fetch/${url}`,
+                    `https://corsproxy.io/?${encodeURIComponent(url)}`
+                ];
+                
+                let proxySuccess = false;
+                
+                // Try each proxy until one works
+                for (const proxyUrl of proxies) {
+                    try {
+                        console.log('🔄 جاري المحاولة مع وكيل:', proxyUrl.split('?')[0]);
+                        const response = await fetch(proxyUrl, {
+                            method: 'GET',
+                            headers: {
+                                'Accept': 'application/vnd.apple.mpegurl, application/x-mpegurl, */*',
+                                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+                            }
+                        });
+                        
+                        if (!response.ok) {
+                            throw new Error(`HTTP ${response.status}`);
+                        }
+                        
+                        const data = await response.json();
+                        const content = data.contents || data;
+                        
+                        if (content && content.includes('#EXTM3U')) {
+                            console.log('✅ نجح التحميل مع وكيل:', proxyUrl.split('?')[0]);
+                            streamUrl = proxyUrl;
+                            proxySuccess = true;
+                            break;
+                        }
+                    } catch (error) {
+                        console.log('❌ فشل مع وكيل:', proxyUrl.split('?')[0], error.message);
+                        continue;
+                    }
+                }
+                
+                if (!proxySuccess) {
+                    console.log('⚠️ فشل جميع الوكلاء - محاولة الوصول المباشر...');
+                }
+            } else {
+                console.log('🏠 تم الكشف عن البيئة المحلية - استخدام الوصول المباشر...');
+            }
+
             // Hide loading and show video
             loading.style.display = 'none';
             video.style.display = 'block';
@@ -2252,11 +2311,17 @@ class ArabicTVApp {
                 this.hls = new Hls({
                     enableWorker: true,
                     lowLatencyMode: true,
-                    backBufferLength: 90
+                    backBufferLength: 90,
+                    // Add CORS configuration for server environments
+                    xhrSetup: function(xhr, url) {
+                        if (isServer) {
+                            xhr.withCredentials = false;
+                        }
+                    }
                 });
                 
                 // Load the source
-                this.hls.loadSource(url);
+                this.hls.loadSource(streamUrl);
                 this.hls.attachMedia(video);
                 
                 // Add HLS event listeners
@@ -2271,7 +2336,7 @@ class ArabicTVApp {
                         loading.innerHTML = `
                             <div class="error-icon">⚠️</div>
                             <p>خطأ في تشغيل البث</p>
-                            <p class="error-details">خطأ فادح في تحميل البث</p>
+                            <p class="error-details">خطأ فادح في تحميل البث - قد تحتاج VPN</p>
                             <button class="retry-btn" onclick="app.loadVideoStream('${url}', 'shls')">
                                 <i class="fas fa-redo"></i>
                                 إعادة المحاولة
@@ -2283,7 +2348,7 @@ class ArabicTVApp {
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 console.log('🔄 استخدام دعم المتصفح الأصلي لـ HLS...');
                 // Set video source directly - browsers can handle M3U8 streams natively
-                video.src = url;
+                video.src = streamUrl;
                 video.load();
             } else {
                 throw new Error('المتصفح لا يدعم تشغيل ملفات M3U8');
