@@ -1595,6 +1595,72 @@
       "type": "elahmad",
       "status": "active",
       "vpn": false
+    },
+    {
+      "id": 182,
+      "name": "بسمة",
+      "url": "https://www.elahmad.com/tv/live/channel.php?id=almajd_bassma",
+      "logo": "https://upload.wikimedia.org/wikipedia/ar/thumb/8/87/%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D8%A7%D8%A9_%D8%A8%D8%B3%D9%85%D8%A9_%D9%84%D9%84%D8%A3%D8%B7%D9%81%D8%A7%D9%84_2023.webp/1000px-%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D8%A7%D8%A9_%D8%A8%D8%B3%D9%85%D8%A9_%D9%84%D9%84%D8%A3%D8%B7%D9%81%D8%A7%D9%84_2023.webp.png",
+      "category": "entertainment",
+      "country": "عالمية",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 183,
+      "name": "TRT Cocuk",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=trt_cocuk",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/TRT_%C3%87ocuk_logo_%282021%29.svg/1024px-TRT_%C3%87ocuk_logo_%282021%29.svg.png",
+      "category": "kids",
+      "country": "تركيا",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 184,
+      "name": "نيل دراما",
+      "url": "https://www.elahmad.com/tv/arabic-tv-online.php?id=niledrama",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/e/ea/Nile_Drama.png",
+      "category": "entertainment",
+      "country": "مصر",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 185,
+      "name": "نيل سينما",
+      "url": "https://www.elahmad.com/tv/arabic-tv-online.php?id=nilecinema",
+      "logo": "https://static.wikia.nocookie.net/logopedia/images/5/51/NiIeCinema2012.png/revision/latest/scale-to-width-down/284?cb=20250403220742",
+      "category": "movies",
+      "country": "مصر",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 186,
+      "name": "ميسبيرو زمان",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=MasperoZaman",
+      "logo": "https://media0087.elcinema.com/tvguide/1336_1.png",
+      "category": "entertainment",
+      "country": "مصر",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 187,
+      "name": "سينما مصر",
+      "url": "https://www.elahmad.com/tv/arabic-tv-online.php?id=cima",
+      "logo": "https://cdn.freebiesupply.com/logos/large/2x/cinema-tv-logo-svg-vector.svg",
+      "category": "movies",
+      "country": "مصر",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false
     }
   ],
   "favorites": [],
@@ -1669,6 +1735,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-06T09:27:36.097Z",
+  "lastModified": "2025-10-06T09:38:58.784Z",
   "version": "1.0"
 }
