@@ -1594,7 +1594,8 @@
       "country": "العراق",
       "type": "elahmad",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-06T09:40:26.829Z"
     },
     {
       "id": 182,
@@ -1605,7 +1606,8 @@
       "country": "عالمية",
       "type": "elahmad",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-06T09:40:26.829Z"
     },
     {
       "id": 183,
@@ -1616,29 +1618,32 @@
       "country": "تركيا",
       "type": "elahmad",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-06T09:40:26.829Z"
     },
     {
       "id": 184,
       "name": "نيل دراما",
       "url": "https://www.elahmad.com/tv/arabic-tv-online.php?id=niledrama",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/e/ea/Nile_Drama.png",
+      "logo": "https://static.wikia.nocookie.net/logopedia/images/c/ca/NileDrama2008.png/revision/latest/scale-to-width-down/340?cb=20250403214151",
       "category": "entertainment",
       "country": "مصر",
-      "type": "elahmad",
+      "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-06T09:40:26.829Z"
     },
     {
       "id": 185,
       "name": "نيل سينما",
       "url": "https://www.elahmad.com/tv/arabic-tv-online.php?id=nilecinema",
-      "logo": "https://static.wikia.nocookie.net/logopedia/images/5/51/NiIeCinema2012.png/revision/latest/scale-to-width-down/284?cb=20250403220742",
+      "logo": "https://static.wikia.nocookie.net/logopedia/images/d/d8/NiIeCinema2008.png/revision/latest?cb=20250403220706",
       "category": "movies",
       "country": "مصر",
-      "type": "elahmad",
+      "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-06T09:40:26.829Z"
     },
     {
       "id": 186,
@@ -1649,7 +1654,8 @@
       "country": "مصر",
       "type": "elahmad",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-06T09:40:26.829Z"
     },
     {
       "id": 187,
@@ -1660,7 +1666,8 @@
       "country": "مصر",
       "type": "elahmad",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-06T09:40:26.829Z"
     }
   ],
   "favorites": [],
@@ -1735,6 +1742,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-06T09:38:58.784Z",
+  "lastModified": "2025-10-06T09:45:27.919Z",
   "version": "1.0"
 }
