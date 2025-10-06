@@ -194,11 +194,15 @@
             // Check if we're on a server (not localhost)
             const isServer = !window.location.hostname.includes('localhost') && 
                            !window.location.hostname.includes('127.0.0.1') &&
-                           !window.location.hostname.includes('file://');
+                           !window.location.hostname.includes('file://') &&
+                           !window.location.hostname.includes('github.io');
+
+            // Special handling for GitHub Pages
+            const isGitHubPages = window.location.hostname.includes('github.io');
             
             let streamUrl = testUrl;
             
-            if (isServer) {
+            if (isServer && !isGitHubPages) {
                 addResult('🌐 تم الكشف عن السيرفر - استخدام الوكلاء...', 'info');
                 
                 // Try multiple CORS proxies for server environments
@@ -245,6 +249,72 @@
                 
                 if (!proxySuccess) {
                     addResult('⚠️ فشل جميع الوكلاء - محاولة الوصول المباشر...', 'error');
+                }
+            } else if (isGitHubPages) {
+                addResult('🐙 تم الكشف عن GitHub Pages - استخدام طريقة خاصة...', 'info');
+                
+                // For GitHub Pages, try a different approach
+                try {
+                    addResult('🔄 محاولة الوصول المباشر على GitHub Pages...', 'info');
+                    const response = await fetch(testUrl, {
+                        method: 'GET',
+                        mode: 'cors',
+                        headers: {
+                            'Accept': 'application/vnd.apple.mpegurl, application/x-mpegurl, */*',
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const content = await response.text();
+                        if (content.includes('#EXTM3U')) {
+                            addResult('✅ نجح الوصول المباشر على GitHub Pages', 'success');
+                            streamUrl = testUrl;
+                        } else {
+                            throw new Error('المحتوى ليس ملف M3U8 صالح');
+                        }
+                    } else {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                } catch (error) {
+                    addResult(`❌ فشل الوصول المباشر على GitHub Pages: ${error.message}`, 'error');
+                    addResult('🔄 محاولة استخدام الوكلاء البديلة...', 'info');
+                    
+                    // Fallback to alternative proxies that work better with GitHub Pages
+                    const githubProxies = [
+                        `https://api.allorigins.win/get?url=${encodeURIComponent(testUrl)}`,
+                        `https://corsproxy.io/?${encodeURIComponent(testUrl)}`,
+                        `https://thingproxy.freeboard.io/fetch/${testUrl}`
+                    ];
+                    
+                    for (const proxyUrl of githubProxies) {
+                        try {
+                            addResult(`🔄 جاري المحاولة مع وكيل GitHub: ${proxyUrl.split('?')[0]}`, 'info');
+                            const response = await fetch(proxyUrl, {
+                                method: 'GET',
+                                headers: {
+                                    'Accept': 'application/vnd.apple.mpegurl, application/x-mpegurl, */*',
+                                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                                }
+                            });
+                            
+                            if (!response.ok) {
+                                throw new Error(`HTTP ${response.status}`);
+                            }
+                            
+                            const data = await response.json();
+                            const content = data.contents || data;
+                            
+                            if (content && content.includes('#EXTM3U')) {
+                                addResult(`✅ نجح التحميل مع وكيل GitHub: ${proxyUrl.split('?')[0]}`, 'success');
+                                streamUrl = proxyUrl;
+                                break;
+                            }
+                        } catch (error) {
+                            addResult(`❌ فشل مع وكيل GitHub: ${proxyUrl.split('?')[0]} - ${error.message}`, 'error');
+                            continue;
+                        }
+                    }
                 }
             } else {
                 addResult('🏠 تم الكشف عن البيئة المحلية - استخدام الوصول المباشر...', 'info');
@@ -322,10 +392,21 @@
             // Check if we're on a server
             const isServer = !window.location.hostname.includes('localhost') && 
                            !window.location.hostname.includes('127.0.0.1') &&
-                           !window.location.hostname.includes('file://');
+                           !window.location.hostname.includes('file://') &&
+                           !window.location.hostname.includes('github.io');
+            
+            // Special handling for GitHub Pages
+            const isGitHubPages = window.location.hostname.includes('github.io');
+            
+            let environment = '🏠 محلي';
+            if (isGitHubPages) {
+                environment = '🐙 GitHub Pages';
+            } else if (isServer) {
+                environment = '🌐 سيرفر';
+            }
             
             infoDiv.innerHTML = `
-                <p><strong>البيئة:</strong> ${isServer ? '🌐 سيرفر' : '🏠 محلي'}</p>
+                <p><strong>البيئة:</strong> ${environment}</p>
                 <p><strong>المتصفح:</strong> ${navigator.userAgent}</p>
                 <p><strong>دعم HLS الأصلي:</strong> ${video.canPlayType('application/vnd.apple.mpegurl') ? '✅ مدعوم' : '❌ غير مدعوم'}</p>
                 <p><strong>دعم HLS.js:</strong> ${typeof Hls !== 'undefined' && Hls.isSupported() ? '✅ مدعوم' : '❌ غير مدعوم'}</p>

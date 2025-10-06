@@ -2238,11 +2238,15 @@ class ArabicTVApp {
             // Check if we're on a server (not localhost)
             const isServer = !window.location.hostname.includes('localhost') && 
                            !window.location.hostname.includes('127.0.0.1') &&
-                           !window.location.hostname.includes('file://');
+                           !window.location.hostname.includes('file://') &&
+                           !window.location.hostname.includes('github.io');
 
+            // Special handling for GitHub Pages
+            const isGitHubPages = window.location.hostname.includes('github.io');
+            
             let streamUrl = url;
             
-            if (isServer) {
+            if (isServer && !isGitHubPages) {
                 console.log('🌐 تم الكشف عن السيرفر - استخدام الوكلاء...');
                 
                 // Try multiple CORS proxies for server environments
@@ -2289,6 +2293,72 @@ class ArabicTVApp {
                 
                 if (!proxySuccess) {
                     console.log('⚠️ فشل جميع الوكلاء - محاولة الوصول المباشر...');
+                }
+            } else if (isGitHubPages) {
+                console.log('🐙 تم الكشف عن GitHub Pages - استخدام طريقة خاصة...');
+                
+                // For GitHub Pages, try a different approach
+                try {
+                    // Try to fetch the M3U8 content directly and create a blob URL
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        mode: 'cors',
+                        headers: {
+                            'Accept': 'application/vnd.apple.mpegurl, application/x-mpegurl, */*',
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const content = await response.text();
+                        if (content.includes('#EXTM3U')) {
+                            console.log('✅ نجح الوصول المباشر على GitHub Pages');
+                            streamUrl = url;
+                        } else {
+                            throw new Error('المحتوى ليس ملف M3U8 صالح');
+                        }
+                    } else {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                } catch (error) {
+                    console.log('❌ فشل الوصول المباشر على GitHub Pages:', error.message);
+                    console.log('🔄 محاولة استخدام الوكلاء البديلة...');
+                    
+                    // Fallback to alternative proxies that work better with GitHub Pages
+                    const githubProxies = [
+                        `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+                        `https://corsproxy.io/?${encodeURIComponent(url)}`,
+                        `https://thingproxy.freeboard.io/fetch/${url}`
+                    ];
+                    
+                    for (const proxyUrl of githubProxies) {
+                        try {
+                            console.log('🔄 جاري المحاولة مع وكيل GitHub:', proxyUrl.split('?')[0]);
+                            const response = await fetch(proxyUrl, {
+                                method: 'GET',
+                                headers: {
+                                    'Accept': 'application/vnd.apple.mpegurl, application/x-mpegurl, */*',
+                                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                                }
+                            });
+                            
+                            if (!response.ok) {
+                                throw new Error(`HTTP ${response.status}`);
+                            }
+                            
+                            const data = await response.json();
+                            const content = data.contents || data;
+                            
+                            if (content && content.includes('#EXTM3U')) {
+                                console.log('✅ نجح التحميل مع وكيل GitHub:', proxyUrl.split('?')[0]);
+                                streamUrl = proxyUrl;
+                                break;
+                            }
+                        } catch (error) {
+                            console.log('❌ فشل مع وكيل GitHub:', proxyUrl.split('?')[0], error.message);
+                            continue;
+                        }
+                    }
                 }
             } else {
                 console.log('🏠 تم الكشف عن البيئة المحلية - استخدام الوصول المباشر...');
