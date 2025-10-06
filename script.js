@@ -30,7 +30,11 @@ class ArabicTVApp {
             borderRadius: 'rounded', // minimal, normal, rounded
             showAutoNotifications: false, // التحكم في الإشعارات التلقائية
             backgroundAudio: true, // تشغيل الصوت في الخلفية
-            autoUpdateEnabled: true // التحديث التلقائي للقنوات
+            autoUpdateEnabled: true, // التحديث التلقائي للقنوات
+            // إعدادات التشغيل التلقائي المحسن
+            forceAutoplay: true, // فرض التشغيل التلقائي حتى لو كان محظوراً
+            autoplayRetryAttempts: 3, // عدد محاولات إعادة التشغيل التلقائي
+            autoplayDelay: 1000 // تأخير قبل محاولة التشغيل التلقائي
         };
         this.filteredChannels = [...this.channels];
         this.currentCategory = 'all';
@@ -1516,8 +1520,10 @@ class ArabicTVApp {
 
                 this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
                     loading.style.display = 'none';
+                    
+                    // تشغيل تلقائي محسن
                     if (this.settings.autoplay) {
-                        video.play().catch(console.error);
+                        this.enhancedAutoplay(video);
                     }
                     
                     // Initialize quality display
@@ -1565,7 +1571,7 @@ class ArabicTVApp {
                 loading.style.display = 'none';
                 
                 if (this.settings.autoplay) {
-                    video.play().catch(console.error);
+                    this.enhancedAutoplay(video);
                 }
                 
                 // Update quality display for native HLS
@@ -1649,6 +1655,274 @@ class ArabicTVApp {
                     font-size: 0.9rem;
                 ">إعادة المحاولة</button>
             `;
+        }
+    }
+    
+    // Show manual play button when autoplay fails
+    showManualPlayButton() {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        loading.style.display = 'flex';
+        loading.innerHTML = `
+            <div class="manual-play-container" style="text-align: center; padding: 2rem;">
+                <div style="font-size: 4rem; color: #4CAF50; margin-bottom: 1rem;">
+                    <i class="fas fa-play-circle"></i>
+                </div>
+                <p style="color: #333; font-size: 1.2rem; margin-bottom: 1.5rem;">
+                    اضغط للتشغيل
+                </p>
+                <button onclick="app.manualPlay()" style="
+                    background: #4CAF50; 
+                    color: white; 
+                    border: none; 
+                    padding: 1rem 2rem; 
+                    border-radius: 8px; 
+                    cursor: pointer;
+                    font-size: 1.1rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    margin: 0 auto;
+                    transition: all 0.3s ease;
+                " onmouseover="this.style.background='#45a049'" onmouseout="this.style.background='#4CAF50'">
+                    <i class="fas fa-play"></i>
+                    تشغيل الآن
+                </button>
+            </div>
+        `;
+    }
+    
+    // Manual play function
+    manualPlay() {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        loading.style.display = 'none';
+        
+        video.play().then(() => {
+            console.log('✅ تم تشغيل الفيديو يدوياً');
+        }).catch(error => {
+            console.error('❌ فشل التشغيل اليدوي:', error);
+            this.showVideoError('فشل في تشغيل الفيديو');
+        });
+    }
+    
+    // Enhanced autoplay function with retry mechanism
+    async enhancedAutoplay(video, retryCount = 0) {
+        const maxRetries = this.settings.autoplayRetryAttempts || 3;
+        
+        try {
+            // إضافة muted للتأكد من التشغيل التلقائي
+            video.muted = true;
+            
+            // انتظار قصير قبل المحاولة
+            await new Promise(resolve => setTimeout(resolve, this.settings.autoplayDelay || 1000));
+            
+            await video.play();
+            console.log('✅ تم تشغيل الفيديو تلقائياً بنجاح');
+            
+            // إزالة muted بعد بدء التشغيل
+            setTimeout(() => {
+                if (video.muted) {
+                    video.muted = false;
+                    console.log('🔊 تم تفعيل الصوت');
+                }
+            }, 2000);
+            
+            return true;
+            
+        } catch (error) {
+            console.warn(`⚠️ فشل التشغيل التلقائي (محاولة ${retryCount + 1}/${maxRetries}):`, error.message);
+            
+            if (retryCount < maxRetries - 1) {
+                // إعادة المحاولة مع تأخير أطول
+                await new Promise(resolve => setTimeout(resolve, (retryCount + 1) * 1000));
+                return this.enhancedAutoplay(video, retryCount + 1);
+            } else {
+                // فشلت جميع المحاولات، إظهار زر التشغيل اليدوي
+                console.log('🔄 فشلت جميع محاولات التشغيل التلقائي، إظهار زر التشغيل اليدوي');
+                this.showManualPlayButton();
+                return false;
+            }
+        }
+    }
+    
+    // Attempt autoplay for Aflam4You iframe
+    attemptAflamAutoplay(iframe) {
+        try {
+            console.log('🎬 محاولة التشغيل التلقائي لـ Aflam4You...');
+            
+            // محاولة العثور على عنصر الفيديو داخل iframe
+            if (iframe.contentDocument) {
+                const videos = iframe.contentDocument.querySelectorAll('video');
+                if (videos.length > 0) {
+                    const video = videos[0];
+                    video.muted = true;
+                    video.play().then(() => {
+                        console.log('✅ تم تشغيل الفيديو تلقائياً في Aflam4You');
+                        // إزالة muted بعد بدء التشغيل
+                        setTimeout(() => {
+                            video.muted = false;
+                            console.log('🔊 تم تفعيل الصوت في Aflam4You');
+                        }, 2000);
+                    }).catch(error => {
+                        console.warn('⚠️ فشل التشغيل التلقائي في Aflam4You:', error.message);
+                        this.showAflamManualPlayButton(iframe);
+                    });
+                } else {
+                    // محاولة النقر على زر التشغيل إذا وُجد
+                    this.clickAflamPlayButton(iframe);
+                }
+            } else {
+                // Cross-origin - محاولة النقر على زر التشغيل
+                this.clickAflamPlayButton(iframe);
+            }
+        } catch (error) {
+            console.warn('⚠️ خطأ في محاولة التشغيل التلقائي لـ Aflam4You:', error.message);
+            this.showAflamManualPlayButton(iframe);
+        }
+    }
+    
+    // Click play button in Aflam4You iframe
+    clickAflamPlayButton(iframe) {
+        try {
+            console.log('🖱️ محاولة النقر على زر التشغيل في Aflam4You...');
+            
+            if (iframe.contentDocument) {
+                // البحث عن أزرار التشغيل المختلفة
+                const playButtons = [
+                    'button[class*="play"]',
+                    'button[class*="Play"]',
+                    '.play-button',
+                    '.PlayButton',
+                    'button[title*="play"]',
+                    'button[title*="Play"]',
+                    'button[aria-label*="play"]',
+                    'button[aria-label*="Play"]',
+                    '.video-play-button',
+                    '.player-play-button'
+                ];
+                
+                for (const selector of playButtons) {
+                    const button = iframe.contentDocument.querySelector(selector);
+                    if (button) {
+                        button.click();
+                        console.log('✅ تم النقر على زر التشغيل في Aflam4You');
+                        return;
+                    }
+                }
+                
+                // البحث عن عناصر الفيديو والنقر عليها
+                const videos = iframe.contentDocument.querySelectorAll('video');
+                videos.forEach(video => {
+                    video.click();
+                    console.log('✅ تم النقر على الفيديو في Aflam4You');
+                });
+            }
+        } catch (error) {
+            console.warn('⚠️ فشل النقر على زر التشغيل في Aflam4You:', error.message);
+        }
+    }
+    
+    // Hide ads and attempt autoplay in Aflam4You
+    hideAflamAdsAndAutoplay(iframe) {
+        try {
+            console.log('🚫 محاولة إخفاء الإعلانات والتشغيل التلقائي في Aflam4You...');
+            
+            if (iframe.contentDocument) {
+                // إخفاء الإعلانات
+                const adSelectors = [
+                    '[class*="ad"]',
+                    '[class*="advertisement"]',
+                    '[class*="popup"]',
+                    '[class*="unmute"]',
+                    '[id*="ad"]',
+                    '[id*="advertisement"]'
+                ];
+                
+                adSelectors.forEach(selector => {
+                    const elements = iframe.contentDocument.querySelectorAll(selector);
+                    elements.forEach(element => {
+                        element.style.display = 'none';
+                        console.log('🚫 تم إخفاء عنصر إعلاني في Aflam4You');
+                    });
+                });
+                
+                // إزالة النصوص الإعلانية
+                const textNodes = iframe.contentDocument.querySelectorAll('*');
+                textNodes.forEach(node => {
+                    if (node.textContent && (
+                        node.textContent.includes('unmute') ||
+                        node.textContent.includes('click here') ||
+                        node.textContent.includes('advertisement')
+                    )) {
+                        node.style.display = 'none';
+                    }
+                });
+                
+                // محاولة التشغيل التلقائي بعد إخفاء الإعلانات
+                setTimeout(() => {
+                    this.attemptAflamAutoplay(iframe);
+                }, 1000);
+            }
+        } catch (error) {
+            console.warn('⚠️ خطأ في إخفاء الإعلانات في Aflam4You:', error.message);
+        }
+    }
+    
+    // Show manual play button for Aflam4You
+    showAflamManualPlayButton(iframe) {
+        const loading = document.getElementById('videoLoading');
+        
+        loading.style.display = 'flex';
+        loading.innerHTML = `
+            <div class="aflam-manual-play-container" style="text-align: center; padding: 2rem;">
+                <div style="font-size: 4rem; color: #FF6B35; margin-bottom: 1rem;">
+                    <i class="fas fa-play-circle"></i>
+                </div>
+                <p style="color: #333; font-size: 1.2rem; margin-bottom: 1rem;">
+                    اضغط للتشغيل
+                </p>
+                <p style="color: #666; font-size: 0.9rem; margin-bottom: 1.5rem;">
+                    Aflam4You يتطلب تفاعل المستخدم للتشغيل
+                </p>
+                <button onclick="app.manualAflamPlay()" style="
+                    background: #FF6B35; 
+                    color: white; 
+                    border: none; 
+                    padding: 1rem 2rem; 
+                    border-radius: 8px; 
+                    cursor: pointer;
+                    font-size: 1.1rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    margin: 0 auto;
+                    transition: all 0.3s ease;
+                " onmouseover="this.style.background='#E55A2B'" onmouseout="this.style.background='#FF6B35'">
+                    <i class="fas fa-play"></i>
+                    تشغيل Aflam4You
+                </button>
+            </div>
+        `;
+    }
+    
+    // Manual play for Aflam4You
+    manualAflamPlay() {
+        const iframe = document.getElementById('aflamPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        if (iframe) {
+            loading.style.display = 'none';
+            
+            // محاولة النقر على زر التشغيل
+            this.clickAflamPlayButton(iframe);
+            
+            // محاولة التشغيل التلقائي بعد النقر
+            setTimeout(() => {
+                this.attemptAflamAutoplay(iframe);
+            }, 1000);
         }
     }
 
@@ -2215,8 +2489,8 @@ class ArabicTVApp {
             iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
             iframe.setAttribute('loading', 'lazy');
             
-            // حماية إضافية من النوافذ المنبقة
-            iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation allow-forms allow-popups-to-escape-sandbox');
+            // حماية إضافية من النوافذ المنبقة مع السماح بالتشغيل التلقائي
+            iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation allow-forms allow-popups-to-escape-sandbox allow-autoplay');
             
             // منع النوافذ المنبقة من iframe
             iframe.addEventListener('load', function() {
@@ -2251,10 +2525,15 @@ class ArabicTVApp {
                 }
             });
             
-            // منع إعادة التوجيه غير المرغوب فيها
+            // منع إعادة التوجيه غير المرغوب فيها مع التشغيل التلقائي
             iframe.onload = () => {
                 console.log('✅ تم تحميل iframe من aflam4you.net');
                 loading.style.display = 'none';
+                
+                // محاولة التشغيل التلقائي للفيديو داخل iframe
+                setTimeout(() => {
+                    this.attemptAflamAutoplay(iframe);
+                }, 2000);
                 
                 // Check for blocking after a delay
                 setTimeout(() => {
@@ -2268,12 +2547,15 @@ class ArabicTVApp {
                             if (bodyText.includes('advertisement') || bodyText.includes('ad') || bodyText.includes('إعلان') ||
                                 bodyText.includes('unmute') || bodyText.includes('click here to unmute')) {
                                 console.warn('⚠️ تم اكتشاف إعلانات أو نوافذ منبقة في المحتوى');
-                                // يمكن إضافة منطق لإخفاء الإعلانات هنا
+                                // محاولة إخفاء الإعلانات والتشغيل التلقائي
+                                this.hideAflamAdsAndAutoplay(iframe);
                             }
                         }
                     } catch (e) {
                         // Cross-origin error is expected for successful loads
                         console.log('✅ iframe محمل بنجاح (Cross-origin)');
+                        // محاولة التشغيل التلقائي حتى مع Cross-origin
+                        this.attemptAflamAutoplay(iframe);
                     }
                 }, 3000);
             };
@@ -2281,8 +2563,12 @@ class ArabicTVApp {
             // Insert iframe after video element
             video.parentNode.insertBefore(iframe, video.nextSibling);
             
-            // Set iframe source
-            iframe.src = url;
+            // Set iframe source with autoplay parameters
+            let aflamUrl = url;
+            if (!aflamUrl.includes('autoplay')) {
+                aflamUrl += (aflamUrl.includes('?') ? '&' : '?') + 'autoplay=1&muted=1';
+            }
+            iframe.src = aflamUrl;
             
             // Show iframe
             iframe.style.display = 'block';
@@ -2291,6 +2577,14 @@ class ArabicTVApp {
             iframe.addEventListener('dblclick', () => {
                 console.log('🖱️ ضغط مزدوج على aflam iframe - محاولة التكبير');
                 this.toggleFullscreen();
+            });
+            
+            // محاولة إضافية للتشغيل التلقائي بعد تحميل iframe
+            iframe.addEventListener('load', () => {
+                setTimeout(() => {
+                    console.log('🔄 محاولة إضافية للتشغيل التلقائي في Aflam4You...');
+                    this.attemptAflamAutoplay(iframe);
+                }, 5000);
             });
             
         } catch (error) {
@@ -2370,7 +2664,7 @@ class ArabicTVApp {
                 video.src = streamUrl;
                 loading.style.display = 'none';
                 if (this.settings.autoplay) {
-                    video.play().catch(console.error);
+                    this.enhancedAutoplay(video);
                 }
             } else {
                 throw new Error('المتصفح لا يدعم تشغيل البث المباشر');
@@ -2537,6 +2831,16 @@ class ArabicTVApp {
         
         // Add ad blocking parameters
         embedUrl += '&adblock=1&no_ads=1&adblocker=1';
+        
+        // إضافة معاملات للتشغيل التلقائي المحسن
+        embedUrl += '&mute=1&start=0&loop=0&playlist=' + videoId;
+        
+        // إضافة معاملات الجودة
+        if (quality !== 'auto') {
+            embedUrl += `&vq=${quality}`;
+        }
+        
+        console.log('🔗 رابط YouTube المحسن:', embedUrl);
         
         // Add quality parameters based on selection
         switch (quality) {
