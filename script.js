@@ -3837,7 +3837,7 @@ class ArabicTVApp {
         const url = document.getElementById('channelUrl').value.trim();
         const logo = document.getElementById('channelLogo').value.trim();
         const category = document.getElementById('channelCategory').value;
-        const country = document.getElementById('channelCountry').value.trim();
+        const country = document.getElementById('channelCountryInput').value.trim();
         
         // Auto-detect URL type
         let type = 'hls'; // default
@@ -3913,7 +3913,7 @@ class ArabicTVApp {
         document.getElementById('channelUrl').value = '';
         document.getElementById('channelLogo').value = '';
         document.getElementById('channelCategory').value = '';
-        document.getElementById('channelCountry').value = '';
+        document.getElementById('channelCountryInput').value = '';
         
         // Clear uploaded logo
         removeLogoPreview();
@@ -3987,7 +3987,7 @@ class ArabicTVApp {
             document.getElementById('channelUrl').value = channel.url;
             document.getElementById('channelLogo').value = channel.logo;
             document.getElementById('channelCategory').value = channel.category;
-            document.getElementById('channelCountry').value = channel.country;
+            document.getElementById('channelCountryInput').value = channel.country;
             document.getElementById('channelStatus').value = channel.status || 'active';
             
             // Change form title and button text
@@ -4050,7 +4050,7 @@ class ArabicTVApp {
         const url = document.getElementById('channelUrl').value.trim();
         const logo = document.getElementById('channelLogo').value.trim();
         const category = document.getElementById('channelCategory').value;
-        const country = document.getElementById('channelCountry').value.trim();
+        const country = document.getElementById('channelCountryInput').value.trim();
         
         // Auto-detect URL type
         let type = 'hls'; // default
@@ -7894,7 +7894,7 @@ class ArabicTVApp {
             document.getElementById('channelUrl').value = channel.url;
             document.getElementById('channelLogo').value = channel.logo;
             document.getElementById('channelCategory').value = channel.category;
-            document.getElementById('channelCountry').value = channel.country;
+            document.getElementById('channelCountryInput').value = channel.country;
             document.getElementById('channelStatus').value = channel.status || 'active';
             
             // Change form title and button text
@@ -9025,7 +9025,7 @@ function resetChannelForm() {
     document.getElementById('channelUrl').value = '';
     document.getElementById('channelLogo').value = '';
     document.getElementById('channelCategory').value = 'news';
-    document.getElementById('channelCountry').value = '';
+    document.getElementById('channelCountryInput').value = '';
     
     // مسح معاينة الشعار
     const logoPreview = document.getElementById('logoPreview');
