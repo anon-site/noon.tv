@@ -1670,18 +1670,6 @@
       "lastModified": "2025-10-06T09:40:26.829Z"
     },
     {
-      "id": 188,
-      "name": "Canal D",
-      "url": "https://www.elahmad.com/tv/live/channels.php?id=1116",
-      "logo": "https://iconape.com/wp-content/png_logo_vector/kanal-d-logo.png",
-      "category": "entertainment",
-      "country": "تركيا",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-10-06T09:55:05.517Z"
-    },
-    {
       "id": 189,
       "name": "الارث النبوي",
       "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=alerth",
@@ -1737,18 +1725,6 @@
       "category": "entertainment",
       "country": "فلسطين",
       "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-10-06T11:57:36.918Z"
-    },
-    {
-      "id": 194,
-      "name": "مكان",
-      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=makan",
-      "logo": "https://www.elahmad.com/tv/mobiletv/images/makantv.jpg?v=7",
-      "category": "entertainment",
-      "country": "فلسطين",
-      "type": "elahmad",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-06T11:57:36.918Z"
@@ -1862,6 +1838,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-06T18:33:02.336Z",
+  "lastModified": "2025-10-06T19:14:07.620Z",
   "version": "1.0"
 }
