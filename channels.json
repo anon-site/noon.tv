@@ -1713,6 +1713,61 @@
       "type": "elahmad",
       "status": "active",
       "vpn": false
+    },
+    {
+      "id": 192,
+      "name": "الثقافية",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=saudi_thaqafiya",
+      "logo": "https://www.elahmad.com/tv/mobiletv/images/al_thaqafeya.jpg?v=7",
+      "category": "entertainment",
+      "country": "السعودية",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 193,
+      "name": "فلسطين التعليمية",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=qouchannel",
+      "logo": "https://www.elahmad.com/tv/mobiletv/images/edu_ps.jpg?v=7",
+      "category": "entertainment",
+      "country": "فلسطين",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 194,
+      "name": "مكان",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=makan",
+      "logo": "https://www.elahmad.com/tv/mobiletv/images/makantv.jpg?v=7",
+      "category": "entertainment",
+      "country": "فلسطين",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 195,
+      "name": "معا",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=maannews1",
+      "logo": "https://www.elahmad.com/tv/mobiletv/images/maannews.jpg?v=7",
+      "category": "entertainment",
+      "country": "فلسطين",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 196,
+      "name": "قنوات تركيا",
+      "url": "https://www.elahmad.com/tv/kanal-turk.php",
+      "logo": "https://www.elahmad.com/tv/mobiletv/images/turkey_tv_live.jpg?v=7",
+      "category": "entertainment",
+      "country": "تركيا",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
     }
   ],
   "favorites": [],
@@ -1787,6 +1842,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-06T10:02:44.905Z",
+  "lastModified": "2025-10-06T10:12:02.566Z",
   "version": "1.0"
 }
