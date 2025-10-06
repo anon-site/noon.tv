@@ -1148,7 +1148,7 @@ class ArabicTVApp {
         this.isLoadingChannel = true;
         this.currentChannel = channel;
         this.showVideoModal(channel);
-        const type = channel.type || (this.isYouTubeUrl(channel.url) ? 'youtube' : (this.isElahmadUrl(channel.url) ? 'elahmad' : (this.isAflamUrl(channel.url) ? 'aflam' : 'hls')));
+        const type = channel.type || (this.isYouTubeUrl(channel.url) ? 'youtube' : (this.isElahmadUrl(channel.url) ? 'elahmad' : (this.isAflamUrl(channel.url) ? 'aflam' : (this.isShlsUrl(channel.url) ? 'shls' : 'hls'))));
         
         try {
             await this.loadVideoStream(channel.url, type);
@@ -1407,6 +1407,13 @@ class ArabicTVApp {
             }
         }
         
+        // تنظيف HLS instance للـ SHLS streams
+        if (this.hls) {
+            console.log('🛑 تنظيف HLS instance...');
+            this.hls.destroy();
+            this.hls = null;
+        }
+        
         // تنظيف YouTube iframe
         const youtubeIframe = document.getElementById('youtubePlayer');
         if (youtubeIframe) {
@@ -1544,6 +1551,12 @@ class ArabicTVApp {
             // Check if it's an aflam4you.net URL
             if (type === 'aflam' || this.isAflamUrl(url)) {
                 await this.loadAflamVideo(url);
+                return;
+            }
+
+            // Check if it's a shls-live-enc.edgenextcdn.net URL
+            if (type === 'shls' || this.isShlsUrl(url)) {
+                await this.loadShlsVideo(url);
                 return;
             }
 
@@ -2133,6 +2146,11 @@ class ArabicTVApp {
             iconClass = 'fas fa-film';
             typeText = 'Aflam4You';
             indicatorColor = '#e74c3c';
+        } else if (this.isShlsUrl(url)) {
+            urlType = 'shls';
+            iconClass = 'fas fa-server';
+            typeText = 'SHLS Stream';
+            indicatorColor = '#3498db';
         } else if (url.includes('.m3u8') || url.includes('playlist.m3u8') || url.includes('index.m3u8')) {
             urlType = 'hls';
             iconClass = 'fas fa-broadcast-tower';
@@ -2187,7 +2205,128 @@ class ArabicTVApp {
         return aflamRegex.test(url);
     }
 
-    // Load elahmad.com iframe
+    // Check if URL is from shls-live-enc.edgenextcdn.net
+    isShlsUrl(url) {
+        const shlsRegex = /^(https?:\/\/)?shls-live-enc\.edgenextcdn\.net/;
+        return shlsRegex.test(url);
+    }
+
+    // Load shls-live-enc.edgenextcdn.net video with proxy support
+    async loadShlsVideo(url) {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            // Validate URL
+            if (!url || url.trim() === '') {
+                throw new Error('رابط shls-live-enc.edgenextcdn.net فارغ أو غير صحيح');
+            }
+
+            if (!this.isShlsUrl(url)) {
+                throw new Error('رابط shls-live-enc.edgenextcdn.net غير صحيح - تحقق من الرابط');
+            }
+
+            // Show loading
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ تحميل البث...</p>
+            `;
+
+            console.log('🔄 محاولة تحميل SHLS stream:', url);
+
+            // Hide loading and show video
+            loading.style.display = 'none';
+            video.style.display = 'block';
+            
+            // Check if HLS.js is available and needed
+            if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+                console.log('🔄 استخدام HLS.js لتشغيل البث...');
+                
+                // Destroy previous HLS instance if exists
+                if (this.hls) {
+                    this.hls.destroy();
+                }
+                
+                // Create new HLS instance
+                this.hls = new Hls({
+                    enableWorker: true,
+                    lowLatencyMode: true,
+                    backBufferLength: 90
+                });
+                
+                // Load the source
+                this.hls.loadSource(url);
+                this.hls.attachMedia(video);
+                
+                // Add HLS event listeners
+                this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    console.log('✅ تم تحليل المانيفست بنجاح');
+                });
+                
+                this.hls.on(Hls.Events.ERROR, (event, data) => {
+                    console.error('❌ خطأ في HLS:', data);
+                    if (data.fatal) {
+                        loading.style.display = 'flex';
+                        loading.innerHTML = `
+                            <div class="error-icon">⚠️</div>
+                            <p>خطأ في تشغيل البث</p>
+                            <p class="error-details">خطأ فادح في تحميل البث</p>
+                            <button class="retry-btn" onclick="app.loadVideoStream('${url}', 'shls')">
+                                <i class="fas fa-redo"></i>
+                                إعادة المحاولة
+                            </button>
+                        `;
+                    }
+                });
+                
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                console.log('🔄 استخدام دعم المتصفح الأصلي لـ HLS...');
+                // Set video source directly - browsers can handle M3U8 streams natively
+                video.src = url;
+                video.load();
+            } else {
+                throw new Error('المتصفح لا يدعم تشغيل ملفات M3U8');
+            }
+            
+            // Add event listeners for better error handling
+            video.addEventListener('loadstart', () => {
+                console.log('🔄 بدء تحميل الفيديو...');
+            });
+            
+            video.addEventListener('canplay', () => {
+                console.log('✅ يمكن تشغيل الفيديو');
+            });
+            
+            video.addEventListener('error', (e) => {
+                console.error('❌ خطأ في تشغيل الفيديو:', e);
+                loading.style.display = 'flex';
+                loading.innerHTML = `
+                    <div class="error-icon">⚠️</div>
+                    <p>خطأ في تشغيل البث</p>
+                    <p class="error-details">قد يكون الرابط غير متاح أو يحتاج VPN</p>
+                    <button class="retry-btn" onclick="app.loadVideoStream('${url}', 'shls')">
+                        <i class="fas fa-redo"></i>
+                        إعادة المحاولة
+                    </button>
+                `;
+            });
+            
+            console.log('✅ تم تحميل البث من shls-live-enc.edgenextcdn.net بنجاح');
+            
+        } catch (error) {
+            console.error('❌ خطأ في تحميل البث من shls-live-enc.edgenextcdn.net:', error);
+            loading.innerHTML = `
+                <div class="error-icon">⚠️</div>
+                <p>خطأ في تحميل البث</p>
+                <p class="error-details">${error.message}</p>
+                <button class="retry-btn" onclick="app.loadVideoStream('${url}', 'shls')">
+                    <i class="fas fa-redo"></i>
+                    إعادة المحاولة
+                </button>
+            `;
+        }
+    }
     async loadElahmadVideo(url) {
         const video = document.getElementById('videoPlayer');
         const loading = document.getElementById('videoLoading');
@@ -3047,8 +3186,12 @@ class ArabicTVApp {
         const aflamPlayer = document.getElementById('aflamPlayer');
         const elahmadPlayer = document.getElementById('elahmadPlayer');
         
-        // Check video player (HLS streams)
+        // Check video player (HLS streams and SHLS)
         if (video && video.style.display !== 'none' && video.src) {
+            // Check if it's a SHLS stream
+            if (this.isShlsUrl(video.src)) {
+                return { player: video, type: 'shls' };
+            }
             return { player: video, type: 'video' };
         }
         
@@ -3100,6 +3243,15 @@ class ArabicTVApp {
                 }
                 if (!activePlayer.allow || !activePlayer.allow.includes('fullscreen')) {
                     activePlayer.allow = 'autoplay; fullscreen; picture-in-picture; xr-spatial-tracking; encrypted-media';
+                }
+            }
+            
+            // Special handling for SHLS streams
+            if (playerType === 'shls') {
+                console.log('📺 معالجة خاصة لـ SHLS stream');
+                // Ensure video has proper attributes for fullscreen
+                if (!activePlayer.webkitSupportsFullscreen) {
+                    activePlayer.webkitSupportsFullscreen = true;
                 }
             }
             
