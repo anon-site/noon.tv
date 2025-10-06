@@ -1784,23 +1784,10 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png",
       "category": "movies",
       "country": "عالمية",
-      "type": "shls",
+      "type": "hls",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-06T17:44:40.407Z"
-    },
-    {
-      "id": 999,
-      "name": "قناة تجريبية SHLS",
-      "url": "https://shls-live-enc.edgenextcdn.net/out/v1/46079e838e65490c8299f902a7731168/index_1.m3u8",
-      "logo": "https://via.placeholder.com/150x150/3498db/ffffff?text=SHLS",
-      "category": "entertainment",
-      "country": "تجريبي",
-      "type": "shls",
-      "status": "active",
-      "isLocal": false,
-      "lastModified": "2025-01-06T12:00:00.000Z",
-      "vpn": false
     }
   ],
   "favorites": [],
@@ -1875,6 +1862,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-06T17:53:21.011Z",
+  "lastModified": "2025-10-06T18:33:02.336Z",
   "version": "1.0"
 }
