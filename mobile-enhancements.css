@@ -26,6 +26,8 @@
         width: 94%;
         bottom: 70px;
         max-height: 70vh;
+        border-radius: 20px 20px 0 0;
+        box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.18), 0 9px 28px rgba(0, 0, 0, 0.28);
     }
     
     .categories-dropdown .category-item {
@@ -89,6 +91,8 @@
     .categories-dropdown {
         width: 87%;
         bottom: 80px;
+        border-radius: 22px 22px 0 0;
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.2), 0 10px 30px rgba(0, 0, 0, 0.3);
     }
     
     .categories-dropdown .category-item {
@@ -142,6 +146,8 @@
     .categories-dropdown {
         bottom: 60px;
         max-height: 85vh;
+        border-radius: 16px 16px 0 0;
+        box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.15), 0 6px 20px rgba(0, 0, 0, 0.25);
     }
     
     .categories-dropdown .category-item {

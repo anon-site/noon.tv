@@ -6886,6 +6886,9 @@ class ArabicTVApp {
     }
 
     toggleFavorites() {
+        // Close all mobile menus first
+        closeAllMobileMenus();
+        
         // Toggle favorites filter
         this.toggleFavoritesFilter();
     }
@@ -8475,6 +8478,9 @@ class ArabicTVApp {
 
     // Show all channels and scroll to top
     showAllChannels() {
+        // Close all mobile menus first
+        closeAllMobileMenus();
+        
         // Filter to show all channels
         this.filterChannels('all');
         
@@ -9353,7 +9359,7 @@ function selectCategory(category) {
         updateBottomNavActiveState('home');
         
         // Close dropdown
-        closeCategoriesDropdown();
+        closeAllMobileMenus();
     }
 }
 
@@ -9425,6 +9431,183 @@ function closeMoreMenu() {
     
     menu.classList.remove('active');
     overlay.classList.remove('active');
+}
+
+// Share site (mobile first) with Web Share API and clipboard fallback
+function shareSite() {
+    try {
+        const shareData = {
+            title: document.title || 'NOON TV',
+            text: 'شاهد القنوات العربية المباشرة على NOON TV',
+            url: window.location.href
+        };
+
+        if (navigator.share) {
+            navigator.share(shareData).catch(() => {
+                // If user cancels share, silently ignore
+            }).finally(() => {
+                closeMoreMenu();
+            });
+            return;
+        }
+
+        // Fallback: copy URL to clipboard
+        const urlToCopy = shareData.url;
+        const copyToClipboard = async () => {
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    await navigator.clipboard.writeText(urlToCopy);
+                } else {
+                    const tempInput = document.createElement('input');
+                    tempInput.value = urlToCopy;
+                    document.body.appendChild(tempInput);
+                    tempInput.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(tempInput);
+                }
+                if (window.app && window.app.notifySuccess) {
+                    window.app.notifySuccess('تم نسخ رابط الموقع إلى الحافظة');
+                }
+            } catch (err) {
+                if (window.app && window.app.notifyError) {
+                    window.app.notifyError('تعذر مشاركة الرابط. يرجى النسخ يدويًا');
+                }
+            } finally {
+                closeMoreMenu();
+            }
+        };
+
+        copyToClipboard();
+    } catch (e) {
+        // As a last resort just close menu
+        closeMoreMenu();
+    }
+}
+
+// Open Telegram link from More menu
+function openTelegram() {
+    try {
+        // Link to NOON TV official Telegram channel
+        const telegramUrl = 'https://t.me/noon_tv2';
+        window.open(telegramUrl, '_blank', 'noopener,noreferrer');
+    } finally {
+        closeMoreMenu();
+    }
+}
+
+// Copy a special link to enforce cookies reset for visitors
+function copyResetCookiesLink() {
+    try {
+        const url = new URL(window.location.href);
+        url.searchParams.set('reset_cookies', '1');
+        const link = url.toString();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(link).then(() => {
+                if (window.app && window.app.notifySuccess) {
+                    window.app.notifySuccess('تم نسخ رابط فرض حذف الكوكيز');
+                }
+            });
+        } else {
+            const temp = document.createElement('input');
+            temp.value = link;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            if (window.app && window.app.notifySuccess) {
+                window.app.notifySuccess('تم نسخ رابط فرض حذف الكوكيز');
+            }
+        }
+    } catch (e) {
+        if (window.app && window.app.notifyError) {
+            window.app.notifyError('تعذر إنشاء الرابط');
+        }
+    }
+}
+
+// Persist and control visibility of forced cookies reset button
+function loadForceCookiesResetSetting() {
+    try {
+        const flag = localStorage.getItem('showForceResetCookies') === 'true';
+        const btn = document.getElementById('forceCookiesResetBtn');
+        if (btn) btn.style.display = flag ? 'block' : 'none';
+        const checkbox = document.getElementById('showForceResetCookies');
+        if (checkbox) checkbox.checked = flag;
+    } catch {}
+}
+
+function initForceCookiesResetSetting() {
+    const checkbox = document.getElementById('showForceResetCookies');
+    if (checkbox) {
+        checkbox.addEventListener('change', () => {
+            localStorage.setItem('showForceResetCookies', checkbox.checked ? 'true' : 'false');
+            loadForceCookiesResetSetting();
+            if (window.app && window.app.notifyInfo) {
+                window.app.notifyInfo(checkbox.checked ? 'تم تفعيل زر حذف الكوكيز' : 'تم إخفاء زر حذف الكوكيز');
+            }
+        });
+    }
+}
+
+// Button action: triggers same behavior as reset_cookies=1
+function triggerForcedCookiesReset() {
+    try {
+        // Use the same logic as URL param to clear data then reload
+        document.cookie.split(';').forEach(cookie => {
+            const eqPos = cookie.indexOf('=');
+            const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
+            document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;`;
+        });
+        try { localStorage.clear(); } catch {}
+        try { sessionStorage.clear(); } catch {}
+        if (window.app && window.app.notifySuccess) {
+            window.app.notifySuccess('تم حذف الكوكيز والبيانات المخزنة للجهاز');
+        }
+        setTimeout(() => window.location.reload(), 1500);
+    } catch {}
+}
+
+// On load: if reset_cookies param present, clear cookies/storage and notify
+window.addEventListener('DOMContentLoaded', () => {
+    try {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('reset_cookies') === '1') {
+            // Clear cookies
+            document.cookie.split(';').forEach(cookie => {
+                const eqPos = cookie.indexOf('=');
+                const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
+                document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;`;
+            });
+            // Clear local/session storage
+            try { localStorage.clear(); } catch {}
+            try { sessionStorage.clear(); } catch {}
+            if (window.app && window.app.notifySuccess) {
+                window.app.notifySuccess('تم حذف الكوكيز والبيانات المخزنة للجهاز');
+            }
+            // Remove the parameter from URL without reload
+            const url = new URL(window.location.href);
+            url.searchParams.delete('reset_cookies');
+            window.history.replaceState({}, document.title, url.toString());
+            
+            // إعادة تحميل الصفحة تلقائياً بعد ثانيتين
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+        }
+
+        // Initialize forced cookies reset controls
+        loadForceCookiesResetSetting();
+        initForceCookiesResetSetting();
+    } catch (e) {
+        // ignore
+    }
+});
+
+// دالة لإغلاق جميع القوائم المفتوحة في الشريط السفلي
+function closeAllMobileMenus() {
+    closeCategoriesDropdown();
+    closeSearchPopup();
+    closeMoreMenu();
 }
 
 // Bottom Navigation Functions
@@ -9562,9 +9745,7 @@ function setupMobileOverlay() {
     const overlay = document.getElementById('mobileOverlay');
     if (overlay) {
         overlay.addEventListener('click', () => {
-            closeCategoriesDropdown();
-            closeSearchPopup();
-            closeMoreMenu();
+            closeAllMobileMenus();
         });
     }
 }

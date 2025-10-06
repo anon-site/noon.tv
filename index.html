@@ -209,6 +209,10 @@
                         <i class="fas fa-sync-alt"></i>
                         <span>تحديث القنوات</span>
                     </button>
+                    <button class="sidebar-action-btn" onclick="openTelegram()">
+                        <i class="fab fa-telegram-plane"></i>
+                        <span>Telegram</span>
+                    </button>
                 </div>
             </div>
             
@@ -329,6 +333,10 @@
                 <i class="fas fa-sync-alt"></i>
                 <span>تحديث</span>
             </button>
+            <button class="more-menu-item" onclick="shareSite();">
+                <i class="fas fa-share-alt"></i>
+                <span>مشاركة</span>
+            </button>
             <button class="more-menu-item" onclick="openSettings(); closeMoreMenu();">
                 <i class="fas fa-cog"></i>
                 <span>الإعدادات</span>
@@ -336,6 +344,10 @@
             <button class="more-menu-item" onclick="openAdminPanel(); closeMoreMenu();">
                 <i class="fas fa-user-shield"></i>
                 <span>التحكم</span>
+            </button>
+            <button class="more-menu-item" onclick="openTelegram();">
+                <i class="fab fa-telegram-plane"></i>
+                <span>Telegram</span>
             </button>
         </div>
     </div>
@@ -1173,6 +1185,35 @@
                                 </div>
                             </form>
                         </div>
+        
+        <!-- Enforce Cookies Reset Section -->
+        <div class="security-section">
+            <div class="security-header">
+                <div class="security-icon-wrapper">
+                    <i class="fas fa-cookie-bite"></i>
+                </div>
+                <div class="security-title-group">
+                    <h3>فرض حذف الكوكيز</h3>
+                    <p>انسخ رابطاً خاصاً يجبر الزائر على حذف الكوكيز عند فتحه</p>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="change-password-btn" onclick="copyResetCookiesLink()">
+                    <i class="fas fa-link"></i>
+                    <span>نسخ رابط فرض حذف الكوكيز</span>
+                </button>
+            </div>
+            <div class="enhanced-setting-item" style="margin-top: 1rem;">
+                <div class="setting-label-group">
+                    <label for="showForceResetCookies">إظهار زر حذف الكوكيز (إجباري)</label>
+                    <small>عند التفعيل، يظهر زر بارز للزوار لتنفيذ حذف الكوكيز بسرعة</small>
+                </div>
+                <label class="enhanced-switch">
+                    <input type="checkbox" id="showForceResetCookies">
+                    <span class="enhanced-slider"></span>
+                </label>
+            </div>
+        </div>
                     </div>
                 </div>
                 </div>
@@ -1379,6 +1420,11 @@
 
     <!-- Notifications Container -->
     <div class="notifications-container" id="notificationsContainer"></div>
+
+    <!-- Forced Cookies Reset Button (Optional, shown when enabled in admin) -->
+    <button id="forceCookiesResetBtn" class="scroll-to-top-btn" style="display:none;left: 16px; right: auto;" onclick="triggerForcedCookiesReset()" title="حذف الكوكيز والبيانات">
+        <i class="fas fa-cookie-bite"></i>
+    </button>
 
     <!-- Scroll to Top Button -->
     <button class="scroll-to-top-btn" id="scrollToTopBtn" onclick="scrollToTop()" title="الصعود إلى الأعلى">
