@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.youtube.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; media-src 'self' https: blob:; connect-src 'self' https: wss: https://api.allorigins.win https://cors-anywhere.herokuapp.com https://api.codetabs.com; frame-src 'self' https://www.youtube.com https://youtube.com https://www.elahmad.com https://direct.aflam4you.net; child-src 'self' https://www.youtube.com https://youtube.com https://www.elahmad.com https://direct.aflam4you.net; object-src 'none'; base-uri 'self'; form-action 'self';">
     
-    <meta name="description" content="منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات">
+    <meta name="description" content="منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات - يدعم جميع أنواع البث">
     
     <!-- Open Graph Meta Tags -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="NOON TV - القنوات الفضائية العربية">
-    <meta property="og:description" content="منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات">
+    <meta property="og:description" content="منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات - يدعم جميع أنواع البث">
     <meta property="og:image" content="favicon.svg">
     <meta property="og:url" content="/TV-AR/">
     <meta property="og:site_name" content="NOON TV">
@@ -19,7 +19,7 @@
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="NOON TV - القنوات الفضائية العربية">
-    <meta name="twitter:description" content="منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات">
+    <meta name="twitter:description" content="منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات - يدعم جميع أنواع البث">
     <meta name="twitter:image" content="favicon.svg">
     
     <title>NOON TV - القنوات الفضائية العربية</title>
@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="mobile-categories.css">
     <link rel="stylesheet" href="mobile-enhancements.css">
+    <link rel="stylesheet" href="no-channels.css">
 </head>
 <body>
     <!-- Header -->
@@ -893,8 +894,8 @@
                             <div class="form-column">
                                 <div class="form-group">
                                     <label for="channelUrl" id="urlLabel">رابط البث</label>
-                                    <input type="url" id="channelUrl" required placeholder="أدخل رابط البث (HLS، يوتيوب، أو SHLS)" oninput="detectUrlType()">
-                                    <small id="urlHelp" class="form-help" style="color: #666; font-size: 0.85rem; margin-top: 0.25rem; display: block;">أدخل رابط البث المباشر، رابط يوتيوب، أو رابط SHLS</small>
+                                    <input type="url" id="channelUrl" required placeholder="أدخل رابط البث (HLS، MP4، WebM، RTMP، RTSP، DASH، يوتيوب، أو SHLS)" oninput="detectUrlType()">
+                                    <small id="urlHelp" class="form-help" style="color: #666; font-size: 0.85rem; margin-top: 0.25rem; display: block;">يدعم جميع أنواع البث: HLS، MP4، WebM، FLV، RTMP، RTSP، DASH، WebRTC، يوتيوب، و SHLS</small>
                                     <div id="urlTypeIndicator" style="margin-top: 0.5rem; padding: 0.5rem; border-radius: 4px; display: none;">
                                         <i id="urlTypeIcon" class="fas fa-info-circle"></i>
                                         <span id="urlTypeText">نوع الرابط: </span>
@@ -1274,7 +1275,7 @@
                     <i class="fas fa-satellite-dish"></i>
                 </div>
                 <h2>مرحباً بك في NOON TV!</h2>
-                <p>منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات مع مزامنة سحابية متطورة</p>
+                <p>منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات مع مزامنة سحابية متطورة - يدعم جميع أنواع البث</p>
             </div>
             
             <div class="welcome-body">
@@ -1285,6 +1286,16 @@
                     <div class="step-content">
                         <h4>تحديث القنوات التلقائي</h4>
                         <p>يتم فحص التحديثات تلقائياً عند تحميل التطبيق. يمكنك تحديث القنوات يدوياً من خلال زر "تحديث القنوات" في القائمة الجانبية أو من قائمة "المزيد" في الهاتف</p>
+                    </div>
+                </div>
+                
+                <div class="welcome-step">
+                    <div class="step-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <div class="step-content">
+                        <h4>دعم جميع أنواع البث</h4>
+                        <p>يدعم المشغل جميع أنواع البث المباشر: HLS، MP4، WebM، FLV، RTMP، RTSP، DASH، WebRTC، يوتيوب، و SHLS مع كشف تلقائي لنوع الرابط</p>
                     </div>
                 </div>
                 
@@ -1359,7 +1370,7 @@
                         <h3>NOON TV</h3>
                     </div>
                     <p class="footer-description">
-                        منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات
+                        منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات - يدعم جميع أنواع البث
                     </p>
                     <div class="footer-copyright">
                         <p>&copy; 2025 NOON TV. جميع الحقوق محفوظة.</p>

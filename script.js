@@ -131,12 +131,12 @@ class ArabicTVApp {
         this.init();
     }
 
-    init() {
+    async init() {
         this.testLocalStorage(); // Test if localStorage is working
         this.loadRemoteStorageSettings(); // Load remote storage configuration
         this.loadCategories(); // Load categories first
         this.loadChannelsFromStorage(); // Load saved channels first (priority)
-        this.loadDataFromFile(); // Load data from channels.json as fallback
+        await this.loadDataFromFile(); // Load data from channels.json as fallback
         this.loadFavorites(); // Load saved favorites
         this.filteredChannels = [...this.channels]; // Ensure filtered channels match loaded channels
         this.loadSettings();
@@ -188,11 +188,23 @@ class ArabicTVApp {
             }
             const data = await response.json();
             
-            // لا نحمل القنوات من JSON file - نبدأ بقائمة فارغة
-            console.log('تم تخطي تحميل القنوات من channels.json - سيتم البدء بقائمة فارغة');
+            // Load channels from JSON file if no channels in localStorage
+            if (data.channels && Array.isArray(data.channels) && data.channels.length > 0) {
+                this.channels = data.channels.map(channel => ({
+                    ...channel,
+                    lastModified: channel.lastModified || new Date().toISOString()
+                }));
+                console.log('تم تحميل القنوات من channels.json:', this.channels.length, 'قناة');
+            } else {
+                console.log('لا توجد قنوات في channels.json، سيتم البدء بقائمة فارغة');
+                this.channels = [];
+            }
             
-            // لا نحمل الفئات من JSON file - يجب أن تأتي من localStorage
-            console.log('تم تخطي تحميل الفئات من channels.json - سيتم تحميلها من localStorage');
+            // Load categories from JSON file
+            if (data.categories && Array.isArray(data.categories)) {
+                this.categories = data.categories;
+                console.log('تم تحميل الفئات من channels.json:', this.categories.length, 'فئة');
+            }
             
             // Load settings from JSON file
             if (data.settings && typeof data.settings === 'object') {
@@ -206,9 +218,18 @@ class ArabicTVApp {
                 console.log('تم تحميل المفضلة من channels.json:', this.favorites.size, 'قناة');
             }
             
+            // Update filtered channels
+            this.filteredChannels = [...this.channels];
+            
+            // Update sidebar counts
+            this.updateSidebarCounts();
+            
         } catch (error) {
             console.error('خطأ في تحميل البيانات من channels.json:', error);
             console.log('سيتم استخدام البيانات الافتراضية');
+            this.channels = [];
+            this.filteredChannels = [];
+            this.updateSidebarCounts();
         }
     }
 
@@ -941,6 +962,23 @@ class ArabicTVApp {
         
         grid.innerHTML = '';
         console.log('عرض القنوات:', this.filteredChannels.length, 'قناة');
+        
+        // إضافة رسالة تشخيصية إذا لم توجد قنوات
+        if (!this.filteredChannels || this.filteredChannels.length === 0) {
+            console.log('لا توجد قنوات للعرض - القنوات المحملة:', this.channels.length);
+            grid.innerHTML = `
+                <div class="no-channels-message">
+                    <i class="fas fa-tv"></i>
+                    <h3>لا توجد قنوات متاحة</h3>
+                    <p>اضغط على زر "تحديث القنوات" لتحميل القنوات من الخادم</p>
+                    <button class="update-channels-btn" onclick="updateChannels()">
+                        <i class="fas fa-sync-alt"></i>
+                        تحديث القنوات
+                    </button>
+                </div>
+            `;
+            return;
+        }
 
         this.filteredChannels.forEach(channel => {
             const channelCard = this.createChannelCard(channel);
@@ -1148,10 +1186,13 @@ class ArabicTVApp {
         this.isLoadingChannel = true;
         this.currentChannel = channel;
         this.showVideoModal(channel);
-        const type = channel.type || (this.isYouTubeUrl(channel.url) ? 'youtube' : (this.isElahmadUrl(channel.url) ? 'elahmad' : (this.isAflamUrl(channel.url) ? 'aflam' : (this.isShlsUrl(channel.url) ? 'shls' : 'hls'))));
+        
+        // Auto-detect stream type using the new detection system
+        const streamType = this.detectStreamType(channel.url);
+        console.log('🔍 نوع البث المكتشف:', streamType, 'للقناة:', channel.name);
         
         try {
-            await this.loadVideoStream(channel.url, type);
+            await this.loadVideoStream(channel.url, streamType);
         } finally {
             this.isLoadingChannel = false;
         }
@@ -1507,29 +1548,68 @@ class ArabicTVApp {
                 <div class="spinner"></div>
             `;
 
-            // Check if it's a YouTube URL
-            if (type === 'youtube' || this.isYouTubeUrl(url)) {
-                const currentQuality = this.getCurrentQuality();
-                await this.loadYouTubeVideo(url, currentQuality);
-                return;
+            // Auto-detect stream type if not provided
+            if (type === 'hls' || type === 'auto') {
+                type = this.detectStreamType(url);
+                console.log('🔍 تم كشف نوع البث:', type);
             }
 
-            // Check if it's an elahmad.com URL
-            if (type === 'elahmad' || this.isElahmadUrl(url)) {
-                await this.loadElahmadVideo(url);
-                return;
-            }
+            // Route to appropriate loader based on detected type
+            switch (type) {
+                case 'youtube':
+                    const currentQuality = this.getCurrentQuality();
+                    await this.loadYouTubeVideo(url, currentQuality);
+                    return;
 
-            // Check if it's an aflam4you.net URL
-            if (type === 'aflam' || this.isAflamUrl(url)) {
-                await this.loadAflamVideo(url);
-                return;
-            }
+                case 'elahmad':
+                    await this.loadElahmadVideo(url);
+                    return;
 
-            // Check if it's a shls-live-enc.edgenextcdn.net URL
-            if (type === 'shls' || this.isShlsUrl(url)) {
-                await this.loadShlsVideo(url);
-                return;
+                case 'aflam':
+                    await this.loadAflamVideo(url);
+                    return;
+
+                case 'shls':
+                    await this.loadShlsVideo(url);
+                    return;
+
+                case 'mp4':
+                    await this.loadMp4Video(url);
+                    return;
+
+                case 'webm':
+                    await this.loadWebMVideo(url);
+                    return;
+
+                case 'flv':
+                    await this.loadFlvVideo(url);
+                    return;
+
+                case 'rtmp':
+                    await this.loadRtmpVideo(url);
+                    return;
+
+                case 'rtsp':
+                    await this.loadRtspVideo(url);
+                    return;
+
+                case 'dash':
+                    await this.loadDashVideo(url);
+                    return;
+
+                case 'webrtc':
+                    await this.loadWebRtcVideo(url);
+                    return;
+
+                case 'direct':
+                    // Try to load as direct video
+                    await this.loadDirectVideo(url);
+                    return;
+
+                case 'hls':
+                default:
+                    // Continue with HLS processing below
+                    break;
             }
 
             // HLS streaming
@@ -2005,6 +2085,12 @@ class ArabicTVApp {
 
     // Detect URL type automatically
     detectUrlType() {
+        // Use the new detection system
+        this.detectUrlTypeNew();
+    }
+
+    // Updated detectUrlType method using new detection system
+    detectUrlTypeNew() {
         const channelUrl = document.getElementById('channelUrl');
         const urlTypeIndicator = document.getElementById('urlTypeIndicator');
         const urlTypeIcon = document.getElementById('urlTypeIcon');
@@ -2017,59 +2103,44 @@ class ArabicTVApp {
             return;
         }
         
-        // Detect URL type
-        let urlType = 'unknown';
+        // Use the new detection system
+        const detectedType = this.detectStreamType(url);
+        const typeDisplayName = this.getStreamTypeDisplayName(detectedType);
+        
+        // Set appropriate icon and color based on type
         let iconClass = 'fas fa-question-circle';
-        let typeText = 'غير معروف';
         let indicatorColor = '#666';
         
-        if (this.isYouTubeUrl(url)) {
-            urlType = 'youtube';
-            iconClass = 'fab fa-youtube';
-            typeText = 'يوتيوب';
-            indicatorColor = '#ff0000';
-        } else if (this.isElahmadUrl(url)) {
-            urlType = 'elahmad';
-            iconClass = 'fas fa-tv';
-            typeText = 'ElAhmad TV';
-            indicatorColor = '#8e44ad';
-        } else if (this.isAflamUrl(url)) {
-            urlType = 'aflam';
-            iconClass = 'fas fa-film';
-            typeText = 'Aflam4You';
-            indicatorColor = '#e74c3c';
-        } else if (this.isShlsUrl(url)) {
-            urlType = 'shls';
-            iconClass = 'fas fa-server';
-            typeText = 'SHLS Stream';
-            indicatorColor = '#3498db';
-        } else if (url.includes('.m3u8') || url.includes('playlist.m3u8') || url.includes('index.m3u8')) {
-            urlType = 'hls';
-            iconClass = 'fas fa-broadcast-tower';
-            typeText = 'HLS (مباشر)';
-            indicatorColor = '#00a8ff';
-        } else if (url.includes('.mp4') || url.includes('.webm') || url.includes('.avi')) {
-            urlType = 'video';
-            iconClass = 'fas fa-video';
-            typeText = 'فيديو مباشر';
-            indicatorColor = '#00d2d3';
-        } else if (url.includes('rtmp://') || url.includes('rtsp://')) {
-            urlType = 'stream';
-            iconClass = 'fas fa-satellite-dish';
-            typeText = 'بث مباشر';
-            indicatorColor = '#ff9ff3';
-        }
+        const typeConfig = {
+            'youtube': { icon: 'fab fa-youtube', color: '#ff0000' },
+            'hls': { icon: 'fas fa-broadcast-tower', color: '#00a8ff' },
+            'mp4': { icon: 'fas fa-video', color: '#00d2d3' },
+            'webm': { icon: 'fas fa-video', color: '#00d2d3' },
+            'flv': { icon: 'fas fa-video', color: '#00d2d3' },
+            'rtmp': { icon: 'fas fa-satellite-dish', color: '#f39c12' },
+            'rtsp': { icon: 'fas fa-satellite-dish', color: '#f39c12' },
+            'dash': { icon: 'fas fa-stream', color: '#9b59b6' },
+            'webrtc': { icon: 'fas fa-network-wired', color: '#2ecc71' },
+            'direct': { icon: 'fas fa-file-video', color: '#00d2d3' },
+            'elahmad': { icon: 'fas fa-tv', color: '#8e44ad' },
+            'aflam': { icon: 'fas fa-film', color: '#e74c3c' },
+            'shls': { icon: 'fas fa-server', color: '#3498db' },
+            'unknown': { icon: 'fas fa-question-circle', color: '#666' }
+        };
         
-        // Update indicator
-        urlTypeIcon.className = iconClass;
-        urlTypeValue.textContent = typeText;
+        const config = typeConfig[detectedType] || typeConfig['unknown'];
+        iconClass = config.icon;
+        indicatorColor = config.color;
+        
+        // Show indicator
         urlTypeIndicator.style.display = 'block';
+        urlTypeIcon.className = iconClass;
+        urlTypeValue.textContent = typeDisplayName;
         urlTypeIndicator.style.backgroundColor = indicatorColor + '20';
-        urlTypeIndicator.style.border = '1px solid ' + indicatorColor;
-        urlTypeIndicator.style.color = indicatorColor;
+        urlTypeIndicator.style.borderColor = indicatorColor;
         
         // Store detected type for form submission
-        this.detectedUrlType = urlType;
+        this.detectedUrlType = detectedType;
     }
 
     // Check if URL is a YouTube URL
@@ -2101,6 +2172,132 @@ class ArabicTVApp {
     isShlsUrl(url) {
         const shlsRegex = /^(https?:\/\/)?shls-live-enc\.edgenextcdn\.net/;
         return shlsRegex.test(url);
+    }
+
+    // === دوال كشف أنواع الصيغ والروابط الجديدة ===
+    
+    // Check if URL is MP4 video
+    isMp4Url(url) {
+        const mp4Regex = /\.mp4(\?|$|#)/i;
+        return mp4Regex.test(url);
+    }
+
+    // Check if URL is WebM video
+    isWebMUrl(url) {
+        const webmRegex = /\.webm(\?|$|#)/i;
+        return webmRegex.test(url);
+    }
+
+    // Check if URL is FLV video
+    isFlvUrl(url) {
+        const flvRegex = /\.flv(\?|$|#)/i;
+        return flvRegex.test(url);
+    }
+
+    // Check if URL is RTMP stream
+    isRtmpUrl(url) {
+        const rtmpRegex = /^rtmp:\/\//i;
+        return rtmpRegex.test(url);
+    }
+
+    // Check if URL is RTSP stream
+    isRtspUrl(url) {
+        const rtspRegex = /^rtsp:\/\//i;
+        return rtspRegex.test(url);
+    }
+
+    // Check if URL is DASH stream
+    isDashUrl(url) {
+        const dashRegex = /\.mpd(\?|$|#)/i;
+        return dashRegex.test(url);
+    }
+
+    // Check if URL is WebRTC stream
+    isWebRtcUrl(url) {
+        const webrtcRegex = /^(https?:\/\/)?.*webrtc/i;
+        return webrtcRegex.test(url);
+    }
+
+    // Check if URL is M3U8 playlist
+    isM3u8Url(url) {
+        const m3u8Regex = /\.m3u8(\?|$|#)/i;
+        return m3u8Regex.test(url);
+    }
+
+    // Check if URL is direct video file
+    isDirectVideoUrl(url) {
+        const videoExtensions = /\.(mp4|webm|ogg|avi|mov|wmv|flv|mkv|3gp|m4v)(\?|$|#)/i;
+        return videoExtensions.test(url);
+    }
+
+    // Check if URL is streaming protocol
+    isStreamingUrl(url) {
+        const streamingRegex = /^(rtmp|rtsp|webrtc):\/\//i;
+        return streamingRegex.test(url);
+    }
+
+    // Universal URL type detection
+    detectStreamType(url) {
+        if (!url) return 'unknown';
+        
+        // YouTube
+        if (this.isYouTubeUrl(url)) return 'youtube';
+        
+        // ElAhmad
+        if (this.isElahmadUrl(url)) return 'elahmad';
+        
+        // Aflam4You
+        if (this.isAflamUrl(url)) return 'aflam';
+        
+        // SHLS
+        if (this.isShlsUrl(url)) return 'shls';
+        
+        // RTMP
+        if (this.isRtmpUrl(url)) return 'rtmp';
+        
+        // RTSP
+        if (this.isRtspUrl(url)) return 'rtsp';
+        
+        // DASH
+        if (this.isDashUrl(url)) return 'dash';
+        
+        // WebRTC
+        if (this.isWebRtcUrl(url)) return 'webrtc';
+        
+        // M3U8 (HLS)
+        if (this.isM3u8Url(url)) return 'hls';
+        
+        // Direct video files
+        if (this.isMp4Url(url)) return 'mp4';
+        if (this.isWebMUrl(url)) return 'webm';
+        if (this.isFlvUrl(url)) return 'flv';
+        
+        // Generic direct video
+        if (this.isDirectVideoUrl(url)) return 'direct';
+        
+        // Default to HLS for unknown streaming URLs
+        return 'hls';
+    }
+
+    // Get stream type display name
+    getStreamTypeDisplayName(type) {
+        const typeNames = {
+            'youtube': 'يوتيوب',
+            'elahmad': 'ElAhmad TV',
+            'aflam': 'Aflam4You',
+            'shls': 'SHLS Stream',
+            'hls': 'HLS (مباشر)',
+            'mp4': 'MP4 فيديو',
+            'webm': 'WebM فيديو',
+            'flv': 'FLV فيديو',
+            'rtmp': 'RTMP بث',
+            'rtsp': 'RTSP بث',
+            'dash': 'DASH بث',
+            'webrtc': 'WebRTC بث',
+            'direct': 'فيديو مباشر',
+            'unknown': 'غير معروف'
+        };
+        return typeNames[type] || 'غير معروف';
     }
 
     // Load shls-live-enc.edgenextcdn.net video with proxy support
@@ -2343,6 +2540,373 @@ class ArabicTVApp {
                     <p>جارٍ تحميل البث...</p>
                 </div>
             `;
+        }
+    }
+
+    // === دوال تحميل الصيغ الجديدة ===
+    
+    // Load MP4 video
+    async loadMp4Video(url) {
+        const video = document.getElementById('videoPlayer');
+        const source = document.getElementById('videoSource');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            console.log('🔄 تحميل MP4 فيديو:', url);
+            
+            // Show loading
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ تحميل MP4...</p>
+            `;
+
+            // Set video source
+            source.src = url;
+            source.type = 'video/mp4';
+            video.load();
+
+            // Wait for video to be ready
+            await new Promise((resolve, reject) => {
+                const timeout = setTimeout(() => {
+                    reject(new Error('انتهت مهلة تحميل MP4'));
+                }, 30000);
+
+                video.addEventListener('loadedmetadata', () => {
+                    clearTimeout(timeout);
+                    loading.style.display = 'none';
+                    
+                    if (this.settings.autoplay) {
+                        this.enhancedAutoplay(video);
+                    }
+                    
+                    this.updateQualityDisplayForDirectVideo('MP4');
+                    setupMediaSession();
+                    resolve();
+                }, { once: true });
+
+                video.addEventListener('error', (e) => {
+                    clearTimeout(timeout);
+                    reject(new Error('خطأ في تحميل MP4: ' + e.message));
+                }, { once: true });
+            });
+
+        } catch (error) {
+            console.error('خطأ في تحميل MP4:', error);
+            this.showVideoError('خطأ في تحميل MP4');
+            this.handleVideoError();
+        }
+    }
+
+    // Load WebM video
+    async loadWebMVideo(url) {
+        const video = document.getElementById('videoPlayer');
+        const source = document.getElementById('videoSource');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            console.log('🔄 تحميل WebM فيديو:', url);
+            
+            // Show loading
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ تحميل WebM...</p>
+            `;
+
+            // Set video source
+            source.src = url;
+            source.type = 'video/webm';
+            video.load();
+
+            // Wait for video to be ready
+            await new Promise((resolve, reject) => {
+                const timeout = setTimeout(() => {
+                    reject(new Error('انتهت مهلة تحميل WebM'));
+                }, 30000);
+
+                video.addEventListener('loadedmetadata', () => {
+                    clearTimeout(timeout);
+                    loading.style.display = 'none';
+                    
+                    if (this.settings.autoplay) {
+                        this.enhancedAutoplay(video);
+                    }
+                    
+                    this.updateQualityDisplayForDirectVideo('WebM');
+                    setupMediaSession();
+                    resolve();
+                }, { once: true });
+
+                video.addEventListener('error', (e) => {
+                    clearTimeout(timeout);
+                    reject(new Error('خطأ في تحميل WebM: ' + e.message));
+                }, { once: true });
+            });
+
+        } catch (error) {
+            console.error('خطأ في تحميل WebM:', error);
+            this.showVideoError('خطأ في تحميل WebM');
+            this.handleVideoError();
+        }
+    }
+
+    // Load FLV video (requires conversion or special handling)
+    async loadFlvVideo(url) {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            console.log('🔄 تحميل FLV فيديو:', url);
+            
+            // Show loading
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ تحميل FLV...</p>
+            `;
+
+            // FLV is not natively supported by HTML5 video
+            // We'll try to load it as a generic video and let the browser handle it
+            // or show a message that FLV requires conversion
+            
+            const source = document.getElementById('videoSource');
+            source.src = url;
+            source.type = 'video/x-flv';
+            video.load();
+
+            // Wait for video to be ready
+            await new Promise((resolve, reject) => {
+                const timeout = setTimeout(() => {
+                    reject(new Error('FLV غير مدعوم بشكل مباشر - يرجى تحويله إلى MP4'));
+                }, 10000);
+
+                video.addEventListener('loadedmetadata', () => {
+                    clearTimeout(timeout);
+                    loading.style.display = 'none';
+                    
+                    if (this.settings.autoplay) {
+                        this.enhancedAutoplay(video);
+                    }
+                    
+                    this.updateQualityDisplayForDirectVideo('FLV');
+                    setupMediaSession();
+                    resolve();
+                }, { once: true });
+
+                video.addEventListener('error', (e) => {
+                    clearTimeout(timeout);
+                    reject(new Error('FLV غير مدعوم - يرجى تحويله إلى MP4 أو WebM'));
+                }, { once: true });
+            });
+
+        } catch (error) {
+            console.error('خطأ في تحميل FLV:', error);
+            this.showVideoError('FLV غير مدعوم - يرجى تحويله إلى MP4');
+            this.handleVideoError();
+        }
+    }
+
+    // Load RTMP stream (requires special handling)
+    async loadRtmpVideo(url) {
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            console.log('🔄 تحميل RTMP stream:', url);
+            
+            // Show loading
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ تحميل RTMP...</p>
+            `;
+
+            // RTMP is not directly supported by HTML5 video
+            // We need to use a WebRTC gateway or convert to HLS
+            throw new Error('RTMP يتطلب خادم وسيط أو تحويل إلى HLS');
+
+        } catch (error) {
+            console.error('خطأ في تحميل RTMP:', error);
+            this.showVideoError('RTMP غير مدعوم مباشرة - يرجى تحويله إلى HLS');
+            this.handleVideoError();
+        }
+    }
+
+    // Load RTSP stream (requires special handling)
+    async loadRtspVideo(url) {
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            console.log('🔄 تحميل RTSP stream:', url);
+            
+            // Show loading
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ تحميل RTSP...</p>
+            `;
+
+            // RTSP is not directly supported by HTML5 video
+            // We need to use a WebRTC gateway or convert to HLS
+            throw new Error('RTSP يتطلب خادم وسيط أو تحويل إلى HLS');
+
+        } catch (error) {
+            console.error('خطأ في تحميل RTSP:', error);
+            this.showVideoError('RTSP غير مدعوم مباشرة - يرجى تحويله إلى HLS');
+            this.handleVideoError();
+        }
+    }
+
+    // Load DASH stream
+    async loadDashVideo(url) {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            console.log('🔄 تحميل DASH stream:', url);
+            
+            // Show loading
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ تحميل DASH...</p>
+            `;
+
+            // Check if browser supports DASH natively
+            if (video.canPlayType('application/dash+xml')) {
+                const source = document.getElementById('videoSource');
+                source.src = url;
+                source.type = 'application/dash+xml';
+                video.load();
+
+                await new Promise((resolve, reject) => {
+                    const timeout = setTimeout(() => {
+                        reject(new Error('انتهت مهلة تحميل DASH'));
+                    }, 30000);
+
+                    video.addEventListener('loadedmetadata', () => {
+                        clearTimeout(timeout);
+                        loading.style.display = 'none';
+                        
+                        if (this.settings.autoplay) {
+                            this.enhancedAutoplay(video);
+                        }
+                        
+                        this.updateQualityDisplayForDirectVideo('DASH');
+                        setupMediaSession();
+                        resolve();
+                    }, { once: true });
+
+                    video.addEventListener('error', (e) => {
+                        clearTimeout(timeout);
+                        reject(new Error('خطأ في تحميل DASH: ' + e.message));
+                    }, { once: true });
+                });
+            } else {
+                throw new Error('DASH غير مدعوم في هذا المتصفح');
+            }
+
+        } catch (error) {
+            console.error('خطأ في تحميل DASH:', error);
+            this.showVideoError('DASH غير مدعوم في هذا المتصفح');
+            this.handleVideoError();
+        }
+    }
+
+    // Load WebRTC stream
+    async loadWebRtcVideo(url) {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            console.log('🔄 تحميل WebRTC stream:', url);
+            
+            // Show loading
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ تحميل WebRTC...</p>
+            `;
+
+            // WebRTC requires special handling with RTCPeerConnection
+            // This is a simplified implementation
+            throw new Error('WebRTC يتطلب تطبيق خاص');
+
+        } catch (error) {
+            console.error('خطأ في تحميل WebRTC:', error);
+            this.showVideoError('WebRTC يتطلب تطبيق خاص');
+            this.handleVideoError();
+        }
+    }
+
+    // Update quality display for direct video formats
+    updateQualityDisplayForDirectVideo(format) {
+        const qualityDisplay = document.getElementById('currentQualityText');
+        if (qualityDisplay) {
+            qualityDisplay.textContent = `${format} - مباشر`;
+        }
+    }
+
+    // Load direct video (generic fallback)
+    async loadDirectVideo(url) {
+        const video = document.getElementById('videoPlayer');
+        const source = document.getElementById('videoSource');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            console.log('🔄 تحميل فيديو مباشر:', url);
+            
+            // Show loading
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ تحميل الفيديو...</p>
+            `;
+
+            // Try to detect MIME type from URL
+            let mimeType = 'video/mp4'; // default
+            if (this.isWebMUrl(url)) {
+                mimeType = 'video/webm';
+            } else if (this.isMp4Url(url)) {
+                mimeType = 'video/mp4';
+            } else if (this.isFlvUrl(url)) {
+                mimeType = 'video/x-flv';
+            }
+
+            // Set video source
+            source.src = url;
+            source.type = mimeType;
+            video.load();
+
+            // Wait for video to be ready
+            await new Promise((resolve, reject) => {
+                const timeout = setTimeout(() => {
+                    reject(new Error('انتهت مهلة تحميل الفيديو'));
+                }, 30000);
+
+                video.addEventListener('loadedmetadata', () => {
+                    clearTimeout(timeout);
+                    loading.style.display = 'none';
+                    
+                    if (this.settings.autoplay) {
+                        this.enhancedAutoplay(video);
+                    }
+                    
+                    this.updateQualityDisplayForDirectVideo('مباشر');
+                    setupMediaSession();
+                    resolve();
+                }, { once: true });
+
+                video.addEventListener('error', (e) => {
+                    clearTimeout(timeout);
+                    reject(new Error('خطأ في تحميل الفيديو: ' + e.message));
+                }, { once: true });
+            });
+
+        } catch (error) {
+            console.error('خطأ في تحميل الفيديو المباشر:', error);
+            this.showVideoError('خطأ في تحميل الفيديو');
+            this.handleVideoError();
         }
     }
     async loadElahmadVideo(url) {
@@ -4372,6 +4936,8 @@ class ArabicTVApp {
                         lastModified: channel.lastModified || new Date().toISOString()
                     }));
                     console.log('تم تحميل القنوات المحفوظة:', this.channels.length, 'قناة');
+                    // تحديث filteredChannels
+                    this.filteredChannels = [...this.channels];
                     // تحديث عداد القنوات
                     this.updateSidebarCounts();
                     return;
@@ -4381,6 +4947,7 @@ class ArabicTVApp {
             // إذا لم توجد قنوات محفوظة، ابدأ بقائمة فارغة
             console.log('لا توجد قنوات محفوظة، سيتم البدء بقائمة فارغة');
             this.channels = [];
+            this.filteredChannels = [];
             // تحديث عداد القنوات
             this.updateSidebarCounts();
         
@@ -4388,6 +4955,7 @@ class ArabicTVApp {
             console.error('خطأ في تحميل القنوات المحفوظة:', error);
             console.log('سيتم البدء بقائمة فارغة');
             this.channels = [];
+            this.filteredChannels = [];
             // تحديث عداد القنوات
             this.updateSidebarCounts();
         }
@@ -7160,9 +7728,9 @@ class ArabicTVApp {
 
     hideLoading() {
         const loading = document.getElementById('loading');
-        setTimeout(() => {
+        if (loading) {
             loading.style.display = 'none';
-        }, 1000);
+        }
     }
 
     // Connection quality detection
