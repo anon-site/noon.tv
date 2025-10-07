@@ -511,24 +511,17 @@
                                 <!-- Channels will be loaded here -->
                             </div>
                         </div>
-                        <div class="channel-bar-scroll-indicators">
-                            <div class="scroll-indicator left" id="scrollLeftIndicator">
-                                <i class="fas fa-chevron-left"></i>
-                            </div>
-                            <div class="scroll-indicator right" id="scrollRightIndicator">
-                                <i class="fas fa-chevron-right"></i>
-                            </div>
-                        </div>
+                        
                     </div>
                     <div class="channel-bar-controls">
-                        <button class="channel-bar-btn" onclick="previousChannel()" title="القناة السابقة">
+                        <button class="channel-bar-btn" onclick="scrollChannelBarRight()" title="تمرير يمين">
                             <i class="fas fa-chevron-right"></i>
-                        </button>
-                        <button class="channel-bar-btn" onclick="nextChannel()" title="القناة التالية">
-                            <i class="fas fa-chevron-left"></i>
                         </button>
                         <button class="channel-bar-btn" onclick="scrollToCurrentChannel()" title="الانتقال للقناة الحالية">
                             <i class="fas fa-bullseye"></i>
+                        </button>
+                        <button class="channel-bar-btn" onclick="scrollChannelBarLeft()" title="تمرير يسار">
+                            <i class="fas fa-chevron-left"></i>
                         </button>
                     </div>
                 </div>

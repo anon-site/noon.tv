@@ -9917,6 +9917,20 @@ function scrollToCurrentChannel() {
     }
 }
 
+function scrollChannelBarLeft() {
+    const scrollContainer = document.getElementById('channelBarScroll');
+    if (!scrollContainer) return;
+    const step = Math.max(200, Math.floor(scrollContainer.clientWidth * 0.6));
+    scrollContainer.scrollBy({ left: -step, behavior: 'smooth' });
+}
+
+function scrollChannelBarRight() {
+    const scrollContainer = document.getElementById('channelBarScroll');
+    if (!scrollContainer) return;
+    const step = Math.max(200, Math.floor(scrollContainer.clientWidth * 0.6));
+    scrollContainer.scrollBy({ left: step, behavior: 'smooth' });
+}
+
 // Mouse wheel horizontal scroll
 function setupChannelBarWheelScroll() {
     const scrollContainer = document.getElementById('channelBarScroll');
