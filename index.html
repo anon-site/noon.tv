@@ -448,7 +448,7 @@
                 </div>
             </div>
             <div class="video-container">
-                <video id="videoPlayer" controls autoplay muted playsinline>
+                <video id="videoPlayer" controls autoplay playsinline>
                     <source id="videoSource" src="" type="application/x-mpegURL">
                     متصفحك لا يدعم تشغيل الفيديو
                 </video>
@@ -476,6 +476,16 @@
                 <div class="live-indicator">
                     <span class="live-dot"></span>
                     مباشر
+                </div>
+                
+                <!-- Player Channel Navigation Buttons -->
+                <div class="player-channel-nav">
+                    <button class="player-nav-btn prev" onclick="previousChannel()" title="القناة السابقة" aria-label="القناة السابقة">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <button class="player-nav-btn next" onclick="nextChannel()" title="القناة التالية" aria-label="القناة التالية">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
                 </div>
                 
                 <!-- Ad Block Notification -->

@@ -1809,8 +1809,8 @@ class ArabicTVApp {
         const maxRetries = this.settings.autoplayRetryAttempts || 3;
         
         try {
-            // إضافة muted للتأكد من التشغيل التلقائي
-            video.muted = true;
+            // محاولة التشغيل مباشرة بدون كتم الصوت
+            video.muted = false;
             
             // انتظار قصير قبل المحاولة
             await new Promise(resolve => setTimeout(resolve, this.settings.autoplayDelay || 1000));
@@ -1818,13 +1818,12 @@ class ArabicTVApp {
             await video.play();
             console.log('✅ تم تشغيل الفيديو تلقائياً بنجاح');
             
-            // إزالة muted بعد بدء التشغيل
+            // تأكيد بقاء الصوت مفعل
             setTimeout(() => {
                 if (video.muted) {
                     video.muted = false;
-                    console.log('🔊 تم تفعيل الصوت');
                 }
-            }, 2000);
+            }, 300);
             
             return true;
             
@@ -1854,14 +1853,13 @@ class ArabicTVApp {
                 const videos = iframe.contentDocument.querySelectorAll('video');
                 if (videos.length > 0) {
                     const video = videos[0];
-                    video.muted = true;
+                    video.muted = false;
                     video.play().then(() => {
                         console.log('✅ تم تشغيل الفيديو تلقائياً في Aflam4You');
-                        // إزالة muted بعد بدء التشغيل
+                        // تأكيد بقاء الصوت مفعل
                         setTimeout(() => {
                             video.muted = false;
-                            console.log('🔊 تم تفعيل الصوت في Aflam4You');
-                        }, 2000);
+                        }, 300);
                     }).catch(error => {
                         console.warn('⚠️ فشل التشغيل التلقائي في Aflam4You:', error.message);
                         this.showAflamManualPlayButton(iframe);
@@ -3564,7 +3562,7 @@ class ArabicTVApp {
             // Set iframe source with autoplay parameters
             let aflamUrl = url;
             if (!aflamUrl.includes('autoplay')) {
-                aflamUrl += (aflamUrl.includes('?') ? '&' : '?') + 'autoplay=1&muted=1';
+                aflamUrl += (aflamUrl.includes('?') ? '&' : '?') + 'autoplay=1&muted=0';
             }
             iframe.src = aflamUrl;
             
