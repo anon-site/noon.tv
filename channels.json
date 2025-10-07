@@ -1755,15 +1755,27 @@
     },
     {
       "id": 197,
-      "name": "Netflix Action",
+      "name": "Fox Movies Action",
       "url": "https://shls-live-enc.edgenextcdn.net/out/v1/46079e838e65490c8299f902a7731168/index_1.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Fox_Action_Movies_2022.svg/2560px-Fox_Action_Movies_2022.svg.png",
       "category": "movies",
       "country": "عالمية",
       "type": "hls",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-06T17:44:40.407Z"
+    },
+    {
+      "id": 198,
+      "name": "Movies Thrille",
+      "url": "https://shls-live-enc.edgenextcdn.net/out/v1/f6d718e841f8442f8374de47f18c93a7/index_1.m3u8",
+      "logo": "https://images.squarespace-cdn.com/content/v1/63dda050707d230d4aa878ee/55328e00-b65a-43ab-b4c2-5eee65ac0221/ThrillerTV-logo-red-1920x640.png",
+      "category": "movies",
+      "country": "عالمية",
+      "type": "hls",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-07T00:14:48.108Z"
     }
   ],
   "favorites": [],
@@ -1838,6 +1850,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-06T19:14:07.620Z",
+  "lastModified": "2025-10-07T02:00:53.960Z",
   "version": "1.0"
 }
