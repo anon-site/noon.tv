@@ -9520,7 +9520,7 @@ function toggleChannelBar() {
 
 function loadChannelBarContent() {
     const channelBarContent = document.getElementById('channelBarContent');
-    const channelCount = document.getElementById('channelCount');
+    const channelCount = document.getElementById('channelBarCount');
     if (!channelBarContent || !app.channels) return;
 
     // Clear existing content
