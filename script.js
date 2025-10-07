@@ -2333,9 +2333,15 @@ class ArabicTVApp {
             // Special handling for GitHub Pages
             const isGitHubPages = window.location.hostname.includes('github.io');
             
+            // Use enhanced GitHub Pages function if on GitHub Pages
+            if (isGitHubPages) {
+                console.log('🌐 تم الكشف عن GitHub Pages - استخدام الدالة المحسنة...');
+                return await this.loadShlsVideoForGitHub(url);
+            }
+            
             let streamUrl = url;
             
-            if (isServer && !isGitHubPages) {
+            if (isServer) {
                 console.log('🌐 تم الكشف عن السيرفر - استخدام الوكلاء...');
                 
                 // Try multiple CORS proxies for server environments
@@ -2540,6 +2546,211 @@ class ArabicTVApp {
                     <p>جارٍ تحميل البث...</p>
                 </div>
             `;
+        }
+    }
+
+    // Enhanced GitHub Pages support for SHLS streams
+    async loadShlsVideoForGitHub(url) {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            console.log('🔄 تحميل SHLS stream محسن لـ GitHub Pages:', url);
+            
+            // Show loading with specific message for GitHub Pages
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ تحميل البث (GitHub Pages)...</p>
+            `;
+
+            // Enhanced proxy list specifically for GitHub Pages
+            const githubProxies = [
+                `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+                `https://corsproxy.io/?${encodeURIComponent(url)}`,
+                `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+                `https://thingproxy.freeboard.io/fetch/${url}`,
+                `https://cors-anywhere.herokuapp.com/${url}`,
+                `https://proxy.cors.sh/${url}`,
+                `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
+            ];
+            
+            let streamUrl = url;
+            let proxySuccess = false;
+            
+            // Try each proxy with enhanced error handling
+            for (const proxyUrl of githubProxies) {
+                try {
+                    console.log('🔄 جاري المحاولة مع وكيل GitHub:', proxyUrl.split('?')[0]);
+                    
+                    const response = await fetch(proxyUrl, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/vnd.apple.mpegurl, application/x-mpegurl, */*',
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                            'Referer': window.location.origin,
+                            'Origin': window.location.origin
+                        },
+                        mode: 'cors',
+                        credentials: 'omit'
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                    
+                    // Handle different proxy response formats
+                    let content;
+                    if (proxyUrl.includes('allorigins.win')) {
+                        const data = await response.json();
+                        content = data.contents || data;
+                    } else {
+                        content = await response.text();
+                    }
+                    
+                    if (content && content.includes('#EXTM3U')) {
+                        console.log('✅ نجح التحميل مع وكيل GitHub:', proxyUrl.split('?')[0]);
+                        streamUrl = proxyUrl;
+                        proxySuccess = true;
+                        break;
+                    }
+                } catch (error) {
+                    console.log('❌ فشل مع وكيل GitHub:', proxyUrl.split('?')[0], error.message);
+                    continue;
+                }
+            }
+            
+            if (!proxySuccess) {
+                throw new Error('فشل في الوصول للبث عبر جميع الوكلاء المتاحة على GitHub Pages');
+            }
+
+            // Hide loading and show video
+            loading.style.display = 'none';
+            video.style.display = 'block';
+            
+            // Enhanced HLS configuration for GitHub Pages
+            if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+                console.log('🔄 استخدام HLS.js محسن لـ GitHub Pages...');
+                
+                // Destroy previous HLS instance if exists
+                if (this.hls) {
+                    this.hls.destroy();
+                }
+                
+                // Create new HLS instance with GitHub Pages optimizations
+                this.hls = new Hls({
+                    enableWorker: true,
+                    lowLatencyMode: false, // Disable for better compatibility
+                    backBufferLength: 30,
+                    maxBufferLength: 60,
+                    maxMaxBufferLength: 300,
+                    maxBufferSize: 30 * 1000 * 1000,
+                    maxBufferHole: 0.5,
+                    highBufferWatchdogPeriod: 2,
+                    nudgeOffset: 0.1,
+                    nudgeMaxRetry: 3,
+                    maxFragLookUpTolerance: 0.20,
+                    liveSyncDurationCount: 3,
+                    liveMaxLatencyDurationCount: Infinity,
+                    liveDurationInfinity: true,
+                    enableSoftwareAES: true,
+                    manifestLoadingTimeOut: 20000, // Increased timeout for GitHub Pages
+                    manifestLoadingMaxRetry: 5,   // More retries for GitHub Pages
+                    manifestLoadingRetryDelay: 3000,
+                    fragLoadingTimeOut: 45000,    // Increased timeout
+                    fragLoadingMaxRetry: 8,
+                    fragLoadingRetryDelay: 3000,
+                    startFragPrefetch: false, // Disable for GitHub Pages
+                    // Enhanced headers for GitHub Pages
+                    xhrSetup: function(xhr, url) {
+                        xhr.setRequestHeader('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
+                        xhr.setRequestHeader('Referer', window.location.origin);
+                        xhr.setRequestHeader('Accept', 'application/vnd.apple.mpegurl, application/x-mpegurl, */*');
+                        xhr.setRequestHeader('Origin', window.location.origin);
+                    }
+                });
+
+                this.hls.loadSource(streamUrl);
+                this.hls.attachMedia(video);
+
+                this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    console.log('✅ تم تحميل البث بنجاح على GitHub Pages');
+                    
+                    if (this.settings.autoplay) {
+                        this.enhancedAutoplay(video);
+                    }
+                    
+                    this.updateQualityDisplayFromHLS();
+                    setupMediaSession();
+                });
+
+                this.hls.on(Hls.Events.ERROR, (event, data) => {
+                    console.error('❌ خطأ في تشغيل البث على GitHub Pages:', data);
+                    
+                    if (data.fatal) {
+                        switch (data.type) {
+                            case Hls.ErrorTypes.NETWORK_ERROR:
+                                console.log('🔄 محاولة إعادة التحميل بعد خطأ الشبكة...');
+                                setTimeout(() => {
+                                    this.hls.startLoad();
+                                }, 2000);
+                                break;
+                            case Hls.ErrorTypes.MEDIA_ERROR:
+                                console.log('🔄 محاولة إعادة التحميل بعد خطأ الوسائط...');
+                                setTimeout(() => {
+                                    this.hls.recoverMediaError();
+                                }, 2000);
+                                break;
+                            default:
+                                console.log('❌ خطأ غير قابل للإصلاح');
+                                this.showVideoError('خطأ في تشغيل البث على GitHub Pages - جرب استخدام VPN أو تحديث الصفحة');
+                                break;
+                        }
+                    }
+                });
+
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // Native HLS support (Safari) - not recommended for GitHub Pages
+                console.log('🔄 استخدام دعم HLS الأصلي للمتصفح...');
+                const source = document.getElementById('videoSource');
+                source.src = streamUrl;
+                video.load();
+                
+                if (this.settings.autoplay) {
+                    this.enhancedAutoplay(video);
+                }
+                
+                this.updateQualityDisplayFromNativeHLS();
+                setupMediaSession();
+            } else {
+                throw new Error('المتصفح لا يدعم تشغيل البث المباشر');
+            }
+            
+            // Enhanced error handling for video element
+            video.addEventListener('error', (e) => {
+                console.error('❌ خطأ في تشغيل الفيديو على GitHub Pages:', e);
+                loading.style.display = 'flex';
+                loading.innerHTML = `
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p>جارٍ تحميل البث...</p>
+                    </div>
+                `;
+            });
+            
+            console.log('✅ تم تحميل البث من shls-live-enc.edgenextcdn.net بنجاح على GitHub Pages');
+            
+        } catch (error) {
+            console.error('❌ خطأ في تحميل البث على GitHub Pages:', error);
+            loading.innerHTML = `
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>مشكلة في الوصول للبث على GitHub Pages</p>
+                </div>
+            `;
+            
+            // Show specific error message for GitHub Pages
+            this.showVideoError('مشكلة في الوصول للبث على GitHub Pages - جرب استخدام VPN أو تحديث الصفحة');
         }
     }
 
