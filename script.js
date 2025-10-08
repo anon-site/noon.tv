@@ -7816,9 +7816,6 @@ class ArabicTVApp {
     }
 
     toggleFavorites() {
-        // Close all mobile menus first
-        closeAllMobileMenus();
-        
         // Toggle favorites filter
         this.toggleFavoritesFilter();
     }
@@ -9408,9 +9405,6 @@ class ArabicTVApp {
 
     // Show all channels and scroll to top
     showAllChannels() {
-        // Close all mobile menus first
-        closeAllMobileMenus();
-        
         // Filter to show all channels
         this.filterChannels('all');
         
@@ -10305,7 +10299,7 @@ function selectCategory(category) {
         updateBottomNavActiveState('home');
         
         // Close dropdown
-        closeAllMobileMenus();
+        closeCategoriesDropdown();
     }
 }
 
@@ -10356,6 +10350,7 @@ function closeSearchPopup() {
 
 // More Menu Functions - Removed duplicate function
 
+<<<<<<< HEAD
 // Share site (mobile first) with Web Share API and clipboard fallback
 function shareSite() {
     try {
@@ -10537,6 +10532,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // دالة لإغلاق جميع القوائم المفتوحة في الشريط السفلي - Removed duplicate
 
+=======
+>>>>>>> parent of e325da2 (123)
 // Bottom Navigation Functions
 function updateBottomNavActiveState(activeAction) {
     document.querySelectorAll('.bottom-nav-btn').forEach(btn => {
@@ -10675,7 +10672,9 @@ function setupMobileOverlay() {
     const overlay = document.getElementById('mobileOverlay');
     if (overlay) {
         overlay.addEventListener('click', () => {
-            closeAllMobileMenus();
+            closeCategoriesDropdown();
+            closeSearchPopup();
+            closeMoreMenu();
         });
     }
 }
