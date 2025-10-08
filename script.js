@@ -10,6 +10,71 @@ class ArabicTVApp {
         this.hls = null;
         this.isPictureInPicture = false;
         this.isLoggedIn = false;
+        
+        // Unified toggle function for all toggle operations
+        this.toggleElement = (elementId, options = {}) => {
+            const element = document.getElementById(elementId);
+            if (!element) return false;
+            
+            const {
+                toggleClass = 'active',
+                showClass = 'show',
+                hideClass = 'hide',
+                callback = null,
+                preventDefault = false
+            } = options;
+            
+            const isActive = element.classList.contains(toggleClass) || element.classList.contains(showClass);
+            
+            if (isActive) {
+                element.classList.remove(toggleClass, showClass);
+                element.classList.add(hideClass);
+                element.style.display = 'none';
+            } else {
+                element.classList.add(toggleClass, showClass);
+                element.classList.remove(hideClass);
+                element.style.display = 'block';
+            }
+            
+            if (callback && typeof callback === 'function') {
+                callback(isActive);
+            }
+            
+            return !isActive;
+        };
+        
+        // Unified display management functions
+        this.showElement = (elementId, displayType = 'block') => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.style.display = displayType;
+                element.classList.remove('hide');
+                element.classList.add('show', 'active');
+            }
+        };
+        
+        this.hideElement = (elementId) => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.style.display = 'none';
+                element.classList.remove('show', 'active');
+                element.classList.add('hide');
+            }
+        };
+        
+        this.toggleDisplay = (elementId, displayType = 'block') => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                const isHidden = element.style.display === 'none' || element.classList.contains('hide');
+                if (isHidden) {
+                    this.showElement(elementId, displayType);
+                } else {
+                    this.hideElement(elementId);
+                }
+                return !isHidden;
+            }
+            return false;
+        };
         // كلمة المرور مشفرة بـ SHA-256 Hash (أكثر أماناً)
         // قراءة كلمة المرور من localStorage أو استخدام الافتراضية
         this.adminPassword = localStorage.getItem('anon_tv_admin_password') || '3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657'; // كلمة مرور @admin123 مشفرة بـ SHA-256
@@ -1148,7 +1213,7 @@ class ArabicTVApp {
         if (channel.vpn === true) {
             vpnIndicator.style.display = 'flex';
         } else {
-            vpnIndicator.style.display = 'none';
+            this.hideElement('channelVpnIndicator');
         }
         
         // Channel logo overlay is now hidden
@@ -7751,6 +7816,9 @@ class ArabicTVApp {
     }
 
     toggleFavorites() {
+        // Close all mobile menus first
+        closeAllMobileMenus();
+        
         // Toggle favorites filter
         this.toggleFavoritesFilter();
     }
@@ -9340,6 +9408,9 @@ class ArabicTVApp {
 
     // Show all channels and scroll to top
     showAllChannels() {
+        // Close all mobile menus first
+        closeAllMobileMenus();
+        
         // Filter to show all channels
         this.filterChannels('all');
         
@@ -9370,7 +9441,6 @@ class ArabicTVApp {
 // Global functions for inline event handlers
 function openSettings() {
     app.openSettings();
-    closeMoreMenu();
 }
 
 function closeSettings() {
@@ -9379,7 +9449,6 @@ function closeSettings() {
 
 function openAdminPanel() {
     app.openAdminPanel();
-    closeMoreMenu();
 }
 
 function closeAdminPanel() {
@@ -9428,29 +9497,21 @@ function toggleChannelBar() {
     const channelsBtn = document.querySelector('.channels-btn');
     
     if (channelBar) {
-        if (channelBar.classList.contains('show')) {
+        const isActive = channelBar.classList.contains('show');
+        
+        if (isActive) {
             hideChannelBar();
-            // Update button state
-            if (channelsBtn) {
-                channelsBtn.classList.remove('active');
-            }
+            if (channelsBtn) channelsBtn.classList.remove('active');
         } else {
             showChannelBar();
-            // Update button state
-            if (channelsBtn) {
-                channelsBtn.classList.add('active');
-            }
+            if (channelsBtn) channelsBtn.classList.add('active');
         }
     }
 }
 
 function loadChannelBarContent() {
     const channelBarContent = document.getElementById('channelBarContent');
-<<<<<<< HEAD
     const channelCount = document.getElementById('channelBarCount');
-=======
-    const channelBarCount = document.getElementById('channelBarCount');
->>>>>>> parent of c5747b0 (121)
     if (!channelBarContent || !app.channels) return;
 
     // Clear existing content
@@ -9465,8 +9526,8 @@ function loadChannelBarContent() {
     }
 
     // Update channel count
-    if (channelBarCount) {
-        channelBarCount.textContent = channelsToShow.length;
+    if (channelCount) {
+        channelCount.textContent = channelsToShow.length;
     }
 
     // Show all channels (no limit for horizontal scroll)
@@ -10224,8 +10285,8 @@ function closeCategoriesDropdown() {
     const dropdown = document.getElementById('categoriesDropdown');
     const overlay = document.getElementById('mobileOverlay');
     
-    if (dropdown) dropdown.classList.remove('show');
-    if (overlay) overlay.classList.remove('active');
+    dropdown.classList.remove('active');
+    overlay.classList.remove('active');
 }
 
 function selectCategory(category) {
@@ -10242,7 +10303,7 @@ function selectCategory(category) {
         updateBottomNavActiveState('home');
         
         // Close dropdown
-        closeCategoriesDropdown();
+        closeAllMobileMenus();
     }
 }
 
@@ -10275,8 +10336,8 @@ function closeSearchPopup() {
     const popup = document.getElementById('searchPopup');
     const overlay = document.getElementById('mobileOverlay');
     
-    if (popup) popup.classList.remove('show');
-    if (overlay) overlay.classList.remove('active');
+    popup.classList.remove('active');
+    overlay.classList.remove('active');
     
     // Clear search results
     const searchResults = document.getElementById('searchResults');
@@ -10291,9 +10352,31 @@ function closeSearchPopup() {
     }
 }
 
-// More Menu Functions - Removed duplicate function
+// More Menu Functions
+function toggleMoreMenu() {
+    const menu = document.getElementById('moreMenu');
+    const overlay = document.getElementById('mobileOverlay');
+    
+    if (menu.classList.contains('active')) {
+        closeMoreMenu();
+    } else {
+        // Close other dropdowns first
+        closeCategoriesDropdown();
+        closeSearchPopup();
+        
+        menu.classList.add('active');
+        overlay.classList.add('active');
+    }
+}
 
-<<<<<<< HEAD
+function closeMoreMenu() {
+    const menu = document.getElementById('moreMenu');
+    const overlay = document.getElementById('mobileOverlay');
+    
+    menu.classList.remove('active');
+    overlay.classList.remove('active');
+}
+
 // Share site (mobile first) with Web Share API and clipboard fallback
 function shareSite() {
     try {
@@ -10345,7 +10428,16 @@ function shareSite() {
     }
 }
 
-// Open Telegram link from More menu - Removed duplicate function
+// Open Telegram link from More menu
+function openTelegram() {
+    try {
+        // Link to NOON TV official Telegram channel
+        const telegramUrl = 'https://t.me/noon_tv2';
+        window.open(telegramUrl, '_blank', 'noopener,noreferrer');
+    } finally {
+        closeMoreMenu();
+    }
+}
 
 // Copy a special link to enforce cookies reset for visitors
 function copyResetCookiesLink() {
@@ -10377,53 +10469,6 @@ function copyResetCookiesLink() {
     }
 }
 
-// Persist and control visibility of forced cookies reset button
-function loadForceCookiesResetSetting() {
-    try {
-        const cookieFlag = (document.cookie.match(/(?:^|; )showForceResetCookies=([^;]*)/) || [])[1];
-        const cookieEnabled = cookieFlag === 'true';
-        const localFlag = localStorage.getItem('showForceResetCookies') === 'true';
-        const flag = cookieEnabled || localFlag;
-        const btn = document.getElementById('forceCookiesResetBtn');
-        if (btn) btn.style.display = flag ? 'block' : 'none';
-        const checkbox = document.getElementById('showForceResetCookies');
-        if (checkbox) checkbox.checked = flag;
-    } catch {}
-}
-
-function initForceCookiesResetSetting() {
-    const checkbox = document.getElementById('showForceResetCookies');
-    if (checkbox) {
-        checkbox.addEventListener('change', () => {
-            localStorage.setItem('showForceResetCookies', checkbox.checked ? 'true' : 'false');
-            // Also store a cookie so the setting persists per-device without relying on localStorage
-            document.cookie = `showForceResetCookies=${checkbox.checked ? 'true' : 'false'};path=/;max-age=${60*60*24*365}`;
-            loadForceCookiesResetSetting();
-            if (window.app && window.app.notifyInfo) {
-                window.app.notifyInfo(checkbox.checked ? 'تم تفعيل زر حذف الكوكيز' : 'تم إخفاء زر حذف الكوكيز');
-            }
-        });
-    }
-}
-
-// Button action: triggers same behavior as reset_cookies=1
-function triggerForcedCookiesReset() {
-    try {
-        // Use the same logic as URL param to clear data then reload
-        document.cookie.split(';').forEach(cookie => {
-            const eqPos = cookie.indexOf('=');
-            const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
-            document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;`;
-        });
-        try { localStorage.clear(); } catch {}
-        try { sessionStorage.clear(); } catch {}
-        if (window.app && window.app.notifySuccess) {
-            window.app.notifySuccess('تم حذف الكوكيز والبيانات المخزنة للجهاز');
-        }
-        setTimeout(() => window.location.reload(), 1500);
-    } catch {}
-}
-
 // On load: if reset_cookies param present, clear cookies/storage and notify
 window.addEventListener('DOMContentLoaded', () => {
     try {
@@ -10451,32 +10496,18 @@ window.addEventListener('DOMContentLoaded', () => {
                 window.location.reload();
             }, 2000);
         }
-
-        // Handle public links to show/hide the force reset button for visitors
-        if (params.has('show_force_reset_button')) {
-            const enable = params.get('show_force_reset_button') === '1';
-            document.cookie = `showForceResetCookies=${enable ? 'true' : 'false'};path=/;max-age=${60*60*24*365}`;
-            if (!enable) {
-                try { localStorage.removeItem('showForceResetCookies'); } catch {}
-            }
-            // Clean URL
-            const url2 = new URL(window.location.href);
-            url2.searchParams.delete('show_force_reset_button');
-            window.history.replaceState({}, document.title, url2.toString());
-        }
-
-        // Initialize forced cookies reset controls
-        loadForceCookiesResetSetting();
-        initForceCookiesResetSetting();
     } catch (e) {
         // ignore
     }
 });
 
-// دالة لإغلاق جميع القوائم المفتوحة في الشريط السفلي - Removed duplicate
+// دالة لإغلاق جميع القوائم المفتوحة في الشريط السفلي
+function closeAllMobileMenus() {
+    closeCategoriesDropdown();
+    closeSearchPopup();
+    closeMoreMenu();
+}
 
-=======
->>>>>>> parent of e325da2 (123)
 // Bottom Navigation Functions
 function updateBottomNavActiveState(activeAction) {
     document.querySelectorAll('.bottom-nav-btn').forEach(btn => {
@@ -10514,7 +10545,7 @@ function updateMobileFavoritesBadge() {
 
 // Search functionality for mobile
 function setupMobileSearch() {
-    const searchInput = document.getElementById('mobileSearchInput');
+    const searchInput = document.getElementById('searchPopupInput');
     if (!searchInput) return;
     
     let searchTimeout;
@@ -10524,15 +10555,12 @@ function setupMobileSearch() {
         const query = e.target.value.trim();
         
         if (query.length < 2) {
-            const resultsContainer = document.getElementById('mobileSearchResults');
-            if (resultsContainer) {
-                resultsContainer.innerHTML = '';
-            }
+            document.getElementById('searchResults').innerHTML = '';
             return;
         }
         
         searchTimeout = setTimeout(() => {
-            performMobileSearch();
+            performMobileSearch(query);
         }, 300);
     });
     
@@ -10541,7 +10569,7 @@ function setupMobileSearch() {
             e.preventDefault();
             const query = e.target.value.trim();
             if (query.length >= 2) {
-                performMobileSearch();
+                performMobileSearch(query);
             }
         }
     });
@@ -10615,9 +10643,7 @@ function setupMobileOverlay() {
     const overlay = document.getElementById('mobileOverlay');
     if (overlay) {
         overlay.addEventListener('click', () => {
-            closeCategoriesDropdown();
-            closeSearchPopup();
-            closeMoreMenu();
+            closeAllMobileMenus();
         });
     }
 }
@@ -10773,245 +10799,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize mobile bottom navigation
     initializeMobileBottomNav();
 });
-
-// Mobile Bottom Navigation Functions
-function toggleCategoriesMenu() {
-    const dropdown = document.getElementById('categoriesDropdown');
-    const overlay = document.getElementById('mobileOverlay');
-    
-    if (dropdown.classList.contains('show')) {
-        closeCategoriesMenu();
-    } else {
-        closeAllMobileMenus();
-        dropdown.classList.add('show');
-        overlay.classList.add('active');
-        updateBottomNavActiveState('categories');
-    }
-}
-
-function closeCategoriesMenu() {
-    const dropdown = document.getElementById('categoriesDropdown');
-    const overlay = document.getElementById('mobileOverlay');
-    
-    dropdown.classList.remove('show');
-    overlay.classList.remove('active');
-}
-
-function selectCategory(category) {
-    if (window.app) {
-        window.app.currentCategory = category;
-        window.app.filterChannels(category);
-    }
-    
-    // Update active category
-    document.querySelectorAll('.category-item').forEach(item => {
-        item.classList.remove('active');
-    });
-    document.querySelector(`[data-category="${category}"]`).classList.add('active');
-    
-    // Update bottom nav active state
-    updateBottomNavActiveState('home');
-    
-    // Close dropdown
-    closeCategoriesMenu();
-}
-
-function toggleMobileSearch() {
-    const popup = document.getElementById('searchPopup');
-    const overlay = document.getElementById('mobileOverlay');
-    
-    if (popup.classList.contains('show')) {
-        closeMobileSearch();
-    } else {
-        closeAllMobileMenus();
-        popup.classList.add('show');
-        overlay.classList.add('active');
-        updateBottomNavActiveState('search');
-        
-        // Focus on search input
-        setTimeout(() => {
-            const searchInput = document.getElementById('mobileSearchInput');
-            if (searchInput) {
-                searchInput.focus();
-            }
-        }, 100);
-    }
-}
-
-function closeMobileSearch() {
-    const popup = document.getElementById('searchPopup');
-    const overlay = document.getElementById('mobileOverlay');
-    
-    popup.classList.remove('show');
-    overlay.classList.remove('active');
-    
-    // Clear search results
-    const results = document.getElementById('mobileSearchResults');
-    if (results) {
-        results.innerHTML = '';
-    }
-}
-
-function performMobileSearch() {
-    const searchInput = document.getElementById('mobileSearchInput');
-    const query = searchInput.value.trim();
-    
-    if (query.length < 2) {
-        // Clear results if query is too short
-        const resultsContainer = document.getElementById('mobileSearchResults');
-        if (resultsContainer) {
-            resultsContainer.innerHTML = '';
-        }
-        return;
-    }
-    
-    if (window.app) {
-        // Search channels
-        const results = window.app.channels.filter(channel => {
-            return channel.name.toLowerCase().includes(query.toLowerCase()) ||
-                   channel.country.toLowerCase().includes(query.toLowerCase()) ||
-                   channel.category.toLowerCase().includes(query.toLowerCase());
-        });
-        
-        displayMobileSearchResults(results);
-    }
-}
-
-function displayMobileSearchResults(results) {
-    const resultsContainer = document.getElementById('mobileSearchResults');
-    
-    if (!results || results.length === 0) {
-        resultsContainer.innerHTML = `
-            <div class="no-results">
-                <i class="fas fa-search"></i>
-                <p>لم يتم العثور على نتائج</p>
-            </div>
-        `;
-        return;
-    }
-    
-    resultsContainer.innerHTML = results.map(channel => `
-        <div class="search-result-item" onclick="selectChannelFromSearch('${channel.name}')">
-            <div class="channel-info">
-                <h4>${channel.name}</h4>
-                <p>${channel.country || 'غير محدد'}</p>
-            </div>
-            <div class="channel-category">
-                <span class="category-badge">${getCategoryName(channel.category)}</span>
-            </div>
-        </div>
-    `).join('');
-}
-
-function selectChannelFromSearch(channelName) {
-    if (window.app) {
-        const channel = window.app.channels.find(c => c.name === channelName);
-        if (channel) {
-            window.app.showVideoModal(channel);
-            closeMobileSearch();
-        }
-    }
-}
-
-function getCategoryName(category) {
-    const categoryNames = {
-        'news': 'الأخبار',
-        'entertainment': 'المنوعة',
-        'sports': 'الرياضة',
-        'religious': 'الدينية',
-        'music': 'الموسيقى',
-        'movies': 'الأفلام',
-        'documentary': 'الوثائقية',
-        'kids': 'الأطفال'
-    };
-    return categoryNames[category] || 'غير محدد';
-}
-
-function toggleMoreMenu() {
-    const menu = document.getElementById('moreMenu');
-    const overlay = document.getElementById('mobileOverlay');
-    
-    if (menu.classList.contains('show')) {
-        closeMoreMenu();
-    } else {
-        closeAllMobileMenus();
-        menu.classList.add('show');
-        if (overlay) overlay.classList.add('active');
-        updateBottomNavActiveState('more');
-    }
-}
-
-function closeMoreMenu() {
-    const menu = document.getElementById('moreMenu');
-    const overlay = document.getElementById('mobileOverlay');
-    
-    menu.classList.remove('show');
-    if (overlay) overlay.classList.remove('active');
-}
-
-function shareApp() {
-    if (navigator.share) {
-        navigator.share({
-            title: 'NOON TV - القنوات الفضائية العربية',
-            text: 'منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة',
-            url: window.location.href
-        });
-    } else {
-        // Fallback for browsers that don't support Web Share API
-        const url = window.location.href;
-        navigator.clipboard.writeText(url).then(() => {
-            if (window.app) {
-                window.app.notifySuccess('تم نسخ الرابط إلى الحافظة');
-            }
-        });
-    }
-    closeMoreMenu();
-}
-
-function openTelegram() {
-    window.open('https://t.me/noon_tv_channel', '_blank');
-    closeMoreMenu();
-}
-
-function closeAllMobileMenus() {
-    closeCategoriesMenu();
-    closeMobileSearch();
-    closeMoreMenu();
-}
-
-function updateMobileFavoritesBadge() {
-    const badge = document.getElementById('mobileFavoritesBadge');
-    if (badge && window.app) {
-        const favorites = window.app.getFavorites();
-        const count = favorites.length;
-        
-        if (count > 0) {
-            badge.textContent = count;
-            badge.style.display = 'flex';
-        } else {
-            badge.style.display = 'none';
-        }
-    }
-}
-
-function updateMobileCategoryCounts() {
-    if (!window.app) return;
-    
-    const categories = ['all', 'news', 'entertainment', 'sports', 'religious', 'music', 'movies', 'documentary', 'kids'];
-    
-    categories.forEach(category => {
-        const countElement = document.getElementById(`mobile${category.charAt(0).toUpperCase() + category.slice(1)}Count`);
-        if (countElement) {
-            let count = 0;
-            if (category === 'all') {
-                count = window.app.channels.length;
-            } else {
-                count = window.app.channels.filter(channel => channel.category === category).length;
-            }
-            countElement.textContent = count;
-        }
-    });
-}
 
 // Helper function to validate JSON and provide detailed error information
 function validateJSON(jsonString, context = '') {
@@ -11291,9 +11078,6 @@ async function updateChannels() {
             );
         }, 2000);
     }
-    
-    // إغلاق قائمة المزيد تلقائياً
-    closeMoreMenu();
 }
 
 // Logo Upload Functions
@@ -11461,7 +11245,7 @@ function setupMediaSession() {
     navigator.mediaSession.metadata = new MediaMetadata({
         title: channel.name,
         artist: channel.country || 'قناة فضائية',
-        album: 'ANON TV',
+        album: 'NOON TV',
         artwork: channel.logo ? [
             { src: channel.logo, sizes: '96x96', type: 'image/png' },
             { src: channel.logo, sizes: '128x128', type: 'image/png' },
@@ -11536,33 +11320,6 @@ if ('serviceWorker' in navigator) {
             case 'pause':
                 video.pause();
                 break;
-        }
-    });
-}
-
-// ===== Mobile Bottom Navigation Functions =====
-
-// Toggle favorites for mobile bottom nav
-function toggleFavorites() {
-    if (window.app) {
-        window.app.toggleFavorites();
-    }
-}
-
-// Show all channels for mobile bottom nav
-function showAllChannels() {
-    if (window.app) {
-        window.app.showAllChannels();
-    }
-}
-
-// Update bottom navigation active state
-function updateBottomNavActiveState(activeAction) {
-    const bottomNavBtns = document.querySelectorAll('.bottom-nav-btn');
-    bottomNavBtns.forEach(btn => {
-        btn.classList.remove('active');
-        if (btn.getAttribute('data-action') === activeAction) {
-            btn.classList.add('active');
         }
     });
 }

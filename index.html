@@ -29,13 +29,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-<<<<<<< HEAD
     <link rel="stylesheet" href="mobile-categories.css">
     <link rel="stylesheet" href="mobile-enhancements.css">
     <link rel="stylesheet" href="no-channels.css">
-=======
-    <link rel="stylesheet" href="simplified-effects.css">
->>>>>>> parent of c5747b0 (121)
 </head>
 <body>
     <!-- Header -->
@@ -211,158 +207,17 @@
                         <i class="fas fa-sync-alt"></i>
                         <span>تحديث القنوات</span>
                     </button>
+                    <button class="sidebar-action-btn" onclick="openTelegram()">
+                        <i class="fab fa-telegram-plane"></i>
+                        <span>Telegram</span>
+                    </button>
                 </div>
             </div>
             
         </div>
     </div>
 
-    <!-- Mobile Bottom Navigation -->
-    <div class="mobile-bottom-nav" id="mobileBottomNav">
-        <!-- Categories Button -->
-        <button class="bottom-nav-btn" data-action="categories" onclick="toggleCategoriesMenu()">
-            <i class="fas fa-th-large"></i>
-            <span>الفئات</span>
-        </button>
-        
-        <!-- Favorites Button -->
-        <button class="bottom-nav-btn" data-action="favorites" onclick="toggleFavorites()">
-            <i class="fas fa-heart"></i>
-            <span>المفضلة</span>
-            <div class="favorites-badge" id="mobileFavoritesBadge" style="display: none;">0</div>
-        </button>
-        
-        <!-- Home Button -->
-        <button class="bottom-nav-btn active" data-action="home" onclick="showAllChannels()">
-            <i class="fas fa-home"></i>
-            <span>الرئيسية</span>
-        </button>
-        
-        <!-- Search Button -->
-        <button class="bottom-nav-btn" data-action="search" onclick="toggleMobileSearch()">
-            <i class="fas fa-search"></i>
-            <span>البحث</span>
-        </button>
-        
-        <!-- More Button -->
-        <button class="bottom-nav-btn" data-action="more" onclick="toggleMoreMenu()">
-            <i class="fas fa-ellipsis-h"></i>
-            <span>المزيد</span>
-        </button>
-    </div>
-    
-    <!-- Categories Dropdown Menu -->
-    <div class="categories-dropdown" id="categoriesDropdown">
-        <div class="categories-header">
-            <h3>الفئات</h3>
-            <button class="close-categories-btn" onclick="closeCategoriesMenu()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="categories-list">
-            <button class="category-item active" data-category="all" onclick="selectCategory('all')">
-                <i class="fas fa-th-large"></i>
-                <span>جميع القنوات</span>
-                <span class="category-count" id="mobileAllCount">0</span>
-            </button>
-            <button class="category-item" data-category="news" onclick="selectCategory('news')">
-                <i class="fas fa-newspaper"></i>
-                <span>الأخبار</span>
-                <span class="category-count" id="mobileNewsCount">0</span>
-            </button>
-            <button class="category-item" data-category="entertainment" onclick="selectCategory('entertainment')">
-                <i class="fas fa-film"></i>
-                <span>المنوعة</span>
-                <span class="category-count" id="mobileEntertainmentCount">0</span>
-            </button>
-            <button class="category-item" data-category="sports" onclick="selectCategory('sports')">
-                <i class="fas fa-futbol"></i>
-                <span>الرياضة</span>
-                <span class="category-count" id="mobileSportsCount">0</span>
-            </button>
-            <button class="category-item" data-category="religious" onclick="selectCategory('religious')">
-                <i class="fas fa-mosque"></i>
-                <span>الدينية</span>
-                <span class="category-count" id="mobileReligiousCount">0</span>
-            </button>
-            <button class="category-item" data-category="music" onclick="selectCategory('music')">
-                <i class="fas fa-music"></i>
-                <span>الموسيقى</span>
-                <span class="category-count" id="mobileMusicCount">0</span>
-            </button>
-            <button class="category-item" data-category="movies" onclick="selectCategory('movies')">
-                <i class="fas fa-film"></i>
-                <span>الأفلام</span>
-                <span class="category-count" id="mobileMoviesCount">0</span>
-            </button>
-            <button class="category-item" data-category="documentary" onclick="selectCategory('documentary')">
-                <i class="fas fa-book-open"></i>
-                <span>الوثائقية</span>
-                <span class="category-count" id="mobileDocumentaryCount">0</span>
-            </button>
-            <button class="category-item" data-category="kids" onclick="selectCategory('kids')">
-                <i class="fas fa-child"></i>
-                <span>الأطفال</span>
-                <span class="category-count" id="mobileKidsCount">0</span>
-            </button>
-        </div>
-    </div>
-    
-    <!-- Mobile Search Popup -->
-    <div class="search-popup" id="searchPopup">
-        <div class="search-popup-header">
-            <div class="search-input-container">
-                <input type="text" class="search-popup-input" placeholder="البحث عن قناة..." id="mobileSearchInput">
-                <button class="search-popup-btn" onclick="performMobileSearch()">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
-            <button class="close-search-btn" onclick="closeMobileSearch()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="search-results" id="mobileSearchResults">
-            <!-- Search results will be displayed here -->
-        </div>
-    </div>
-    
-    <!-- More Menu -->
-    <div class="more-menu" id="moreMenu">
-        <div class="more-menu-header">
-            <h3>المزيد</h3>
-            <button class="close-more-btn" onclick="closeMoreMenu()">
-                <i class="fas fa-times"></i>
-            </button>
-<<<<<<< HEAD
-        </div>
-        <div class="more-menu-items">
-            <button class="more-menu-item" onclick="updateChannels()">
-                <i class="fas fa-sync-alt"></i>
-                <span>تحديث القنوات</span>
-            </button>
-            <button class="more-menu-item" onclick="shareApp()">
-                <i class="fas fa-share-alt"></i>
-                <span>مشاركة</span>
-            </button>
-            <button class="more-menu-item" onclick="openSettings()">
-=======
-            <button class="more-menu-item" onclick="openSettings(); closeMoreMenu();">
->>>>>>> parent of e325da2 (123)
-                <i class="fas fa-cog"></i>
-                <span>الإعدادات</span>
-            </button>
-            <button class="more-menu-item" onclick="openAdminPanel()">
-                <i class="fas fa-user-shield"></i>
-                <span>لوحة التحكم</span>
-            </button>
-<<<<<<< HEAD
-            <button class="more-menu-item" onclick="openTelegram()">
-                <i class="fab fa-telegram-plane"></i>
-                <span>Telegram</span>
-            </button>
-=======
->>>>>>> parent of e325da2 (123)
-        </div>
+    <!-- Mobile Bottom Navigation Removed -->
     </div>
 
     <!-- Mobile Overlay -->
@@ -1202,6 +1057,25 @@
                                 </div>
                             </form>
                         </div>
+        
+        <!-- Enforce Cookies Reset Section -->
+        <div class="security-section">
+            <div class="security-header">
+                <div class="security-icon-wrapper">
+                    <i class="fas fa-cookie-bite"></i>
+                </div>
+                <div class="security-title-group">
+                    <h3>فرض حذف الكوكيز</h3>
+                    <p>انسخ رابطاً خاصاً يجبر الزائر على حذف الكوكيز عند فتحه</p>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="change-password-btn" onclick="copyResetCookiesLink()">
+                    <i class="fas fa-link"></i>
+                    <span>نسخ رابط فرض حذف الكوكيز</span>
+                </button>
+            </div>
+        </div>
                     </div>
                 </div>
                 </div>

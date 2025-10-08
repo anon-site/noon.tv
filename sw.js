@@ -57,7 +57,7 @@ self.addEventListener('sync', event => {
 // Push notifications for audio control
 self.addEventListener('push', event => {
     const options = {
-        body: event.data ? event.data.text() : 'ANON TV - تشغيل الصوت في الخلفية',
+        body: event.data ? event.data.text() : 'NOON TV - تشغيل الصوت في الخلفية',
         icon: '/favicon.svg',
         badge: '/favicon.svg',
         vibrate: [100, 50, 100],
@@ -80,7 +80,7 @@ self.addEventListener('push', event => {
     };
 
     event.waitUntil(
-        self.registration.showNotification('ANON TV', options)
+        self.registration.showNotification('NOON TV', options)
     );
 });
 
