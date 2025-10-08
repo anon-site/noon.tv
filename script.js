@@ -10,71 +10,6 @@ class ArabicTVApp {
         this.hls = null;
         this.isPictureInPicture = false;
         this.isLoggedIn = false;
-        
-        // Unified toggle function for all toggle operations
-        this.toggleElement = (elementId, options = {}) => {
-            const element = document.getElementById(elementId);
-            if (!element) return false;
-            
-            const {
-                toggleClass = 'active',
-                showClass = 'show',
-                hideClass = 'hide',
-                callback = null,
-                preventDefault = false
-            } = options;
-            
-            const isActive = element.classList.contains(toggleClass) || element.classList.contains(showClass);
-            
-            if (isActive) {
-                element.classList.remove(toggleClass, showClass);
-                element.classList.add(hideClass);
-                element.style.display = 'none';
-            } else {
-                element.classList.add(toggleClass, showClass);
-                element.classList.remove(hideClass);
-                element.style.display = 'block';
-            }
-            
-            if (callback && typeof callback === 'function') {
-                callback(isActive);
-            }
-            
-            return !isActive;
-        };
-        
-        // Unified display management functions
-        this.showElement = (elementId, displayType = 'block') => {
-            const element = document.getElementById(elementId);
-            if (element) {
-                element.style.display = displayType;
-                element.classList.remove('hide');
-                element.classList.add('show', 'active');
-            }
-        };
-        
-        this.hideElement = (elementId) => {
-            const element = document.getElementById(elementId);
-            if (element) {
-                element.style.display = 'none';
-                element.classList.remove('show', 'active');
-                element.classList.add('hide');
-            }
-        };
-        
-        this.toggleDisplay = (elementId, displayType = 'block') => {
-            const element = document.getElementById(elementId);
-            if (element) {
-                const isHidden = element.style.display === 'none' || element.classList.contains('hide');
-                if (isHidden) {
-                    this.showElement(elementId, displayType);
-                } else {
-                    this.hideElement(elementId);
-                }
-                return !isHidden;
-            }
-            return false;
-        };
         // كلمة المرور مشفرة بـ SHA-256 Hash (أكثر أماناً)
         // قراءة كلمة المرور من localStorage أو استخدام الافتراضية
         this.adminPassword = localStorage.getItem('anon_tv_admin_password') || '3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657'; // كلمة مرور @admin123 مشفرة بـ SHA-256
@@ -1213,7 +1148,7 @@ class ArabicTVApp {
         if (channel.vpn === true) {
             vpnIndicator.style.display = 'flex';
         } else {
-            this.hideElement('channelVpnIndicator');
+            vpnIndicator.style.display = 'none';
         }
         
         // Channel logo overlay is now hidden
@@ -9493,21 +9428,29 @@ function toggleChannelBar() {
     const channelsBtn = document.querySelector('.channels-btn');
     
     if (channelBar) {
-        const isActive = channelBar.classList.contains('show');
-        
-        if (isActive) {
+        if (channelBar.classList.contains('show')) {
             hideChannelBar();
-            if (channelsBtn) channelsBtn.classList.remove('active');
+            // Update button state
+            if (channelsBtn) {
+                channelsBtn.classList.remove('active');
+            }
         } else {
             showChannelBar();
-            if (channelsBtn) channelsBtn.classList.add('active');
+            // Update button state
+            if (channelsBtn) {
+                channelsBtn.classList.add('active');
+            }
         }
     }
 }
 
 function loadChannelBarContent() {
     const channelBarContent = document.getElementById('channelBarContent');
+<<<<<<< HEAD
     const channelCount = document.getElementById('channelBarCount');
+=======
+    const channelBarCount = document.getElementById('channelBarCount');
+>>>>>>> parent of c5747b0 (121)
     if (!channelBarContent || !app.channels) return;
 
     // Clear existing content
@@ -9522,8 +9465,8 @@ function loadChannelBarContent() {
     }
 
     // Update channel count
-    if (channelCount) {
-        channelCount.textContent = channelsToShow.length;
+    if (channelBarCount) {
+        channelBarCount.textContent = channelsToShow.length;
     }
 
     // Show all channels (no limit for horizontal scroll)
@@ -11518,7 +11461,7 @@ function setupMediaSession() {
     navigator.mediaSession.metadata = new MediaMetadata({
         title: channel.name,
         artist: channel.country || 'قناة فضائية',
-        album: 'NOON TV',
+        album: 'ANON TV',
         artwork: channel.logo ? [
             { src: channel.logo, sizes: '96x96', type: 'image/png' },
             { src: channel.logo, sizes: '128x128', type: 'image/png' },
