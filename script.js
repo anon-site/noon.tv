@@ -7789,27 +7789,18 @@ class ArabicTVApp {
         requestAnimationFrame(() => {
             const sidebar = document.getElementById('desktopSidebar');
             const mainContent = document.querySelector('.main-content');
-            const header = document.querySelector('.header');
-            const breadcrumbs = document.querySelector('.breadcrumbs-container');
-            const footer = document.querySelector('.footer');
             const overlay = document.querySelector('.sidebar-overlay') || this.createSidebarOverlay();
             
-            console.log('عناصر DOM:', { sidebar, mainContent, header, breadcrumbs, footer, overlay });
+            console.log('عناصر DOM:', { sidebar, mainContent, overlay });
             
             if (this.isDesktopSidebarOpen) {
                 sidebar.classList.add('active');
                 mainContent.classList.add('sidebar-open');
-                if (header) header.classList.add('sidebar-open');
-                if (breadcrumbs) breadcrumbs.classList.add('sidebar-open');
-                if (footer) footer.classList.add('sidebar-open');
                 overlay.classList.add('active');
                 console.log('تم فتح القائمة الجانبية');
             } else {
                 sidebar.classList.remove('active');
                 mainContent.classList.remove('sidebar-open');
-                if (header) header.classList.remove('sidebar-open');
-                if (breadcrumbs) breadcrumbs.classList.remove('sidebar-open');
-                if (footer) footer.classList.remove('sidebar-open');
                 overlay.classList.remove('active');
                 console.log('تم إغلاق القائمة الجانبية');
             }
