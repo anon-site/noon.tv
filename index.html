@@ -219,42 +219,47 @@
 
     <!-- Mobile Bottom Navigation -->
     <div class="mobile-bottom-nav" id="mobileBottomNav">
-        <button class="bottom-nav-btn" data-action="categories" onclick="toggleCategoriesDropdown()">
+        <!-- Categories Button -->
+        <button class="bottom-nav-btn" data-action="categories" onclick="toggleCategoriesMenu()">
             <i class="fas fa-th-large"></i>
-            <span>القائمة</span>
+            <span>الفئات</span>
         </button>
         
-        <button class="bottom-nav-btn" data-action="favorites" onclick="app.toggleFavorites()">
+        <!-- Favorites Button -->
+        <button class="bottom-nav-btn" data-action="favorites" onclick="toggleFavorites()">
             <i class="fas fa-heart"></i>
             <span>المفضلة</span>
-            <span class="favorites-badge" id="mobileFavoritesBadge">0</span>
+            <div class="favorites-badge" id="mobileFavoritesBadge" style="display: none;">0</div>
         </button>
         
-        <button class="bottom-nav-btn active" data-action="home" onclick="app.showAllChannels()">
+        <!-- Home Button -->
+        <button class="bottom-nav-btn active" data-action="home" onclick="showAllChannels()">
             <i class="fas fa-home"></i>
             <span>الرئيسية</span>
         </button>
         
-        <button class="bottom-nav-btn" data-action="search" onclick="toggleSearchPopup()">
+        <!-- Search Button -->
+        <button class="bottom-nav-btn" data-action="search" onclick="toggleMobileSearch()">
             <i class="fas fa-search"></i>
             <span>البحث</span>
         </button>
         
+        <!-- More Button -->
         <button class="bottom-nav-btn" data-action="more" onclick="toggleMoreMenu()">
             <i class="fas fa-ellipsis-h"></i>
             <span>المزيد</span>
         </button>
     </div>
-
-    <!-- Categories Dropdown -->
+    
+    <!-- Categories Dropdown Menu -->
     <div class="categories-dropdown" id="categoriesDropdown">
-        <div class="dropdown-header">
-            <h3>فئات القنوات</h3>
-            <button class="close-dropdown" onclick="closeCategoriesDropdown()">
+        <div class="categories-header">
+            <h3>الفئات</h3>
+            <button class="close-categories-btn" onclick="closeCategoriesMenu()">
                 <i class="fas fa-times"></i>
             </button>
         </div>
-        <div class="dropdown-content">
+        <div class="categories-list">
             <button class="category-item active" data-category="all" onclick="selectCategory('all')">
                 <i class="fas fa-th-large"></i>
                 <span>جميع القنوات</span>
@@ -302,48 +307,51 @@
             </button>
         </div>
     </div>
-
-    <!-- Search Popup -->
+    
+    <!-- Mobile Search Popup -->
     <div class="search-popup" id="searchPopup">
-        <div class="search-popup-content">
-            <div class="search-popup-header">
-                <h3>البحث عن قناة</h3>
-                <button class="close-search" onclick="closeSearchPopup()">
-                    <i class="fas fa-times"></i>
+        <div class="search-popup-header">
+            <div class="search-input-container">
+                <input type="text" class="search-popup-input" placeholder="البحث عن قناة..." id="mobileSearchInput">
+                <button class="search-popup-btn" onclick="performMobileSearch()">
+                    <i class="fas fa-search"></i>
                 </button>
             </div>
-            <div class="search-popup-body">
-                <div class="search-input-container">
-                    <input type="text" class="search-popup-input" placeholder="اكتب اسم القناة..." id="searchPopupInput">
-                    <i class="fas fa-search search-icon"></i>
-                </div>
-                <div class="search-results" id="searchResults">
-                    <!-- Search results will appear here -->
-                </div>
-            </div>
+            <button class="close-search-btn" onclick="closeMobileSearch()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="search-results" id="mobileSearchResults">
+            <!-- Search results will be displayed here -->
         </div>
     </div>
-
+    
     <!-- More Menu -->
     <div class="more-menu" id="moreMenu">
-        <div class="more-menu-content">
-            <button class="more-menu-item" onclick="updateChannels(); closeMoreMenu();">
-                <i class="fas fa-sync-alt"></i>
-                <span>تحديث</span>
+        <div class="more-menu-header">
+            <h3>المزيد</h3>
+            <button class="close-more-btn" onclick="closeMoreMenu()">
+                <i class="fas fa-times"></i>
             </button>
-            <button class="more-menu-item" onclick="shareSite();">
+        </div>
+        <div class="more-menu-items">
+            <button class="more-menu-item" onclick="updateChannels()">
+                <i class="fas fa-sync-alt"></i>
+                <span>تحديث القنوات</span>
+            </button>
+            <button class="more-menu-item" onclick="shareApp()">
                 <i class="fas fa-share-alt"></i>
                 <span>مشاركة</span>
             </button>
-            <button class="more-menu-item" onclick="openSettings(); closeMoreMenu();">
+            <button class="more-menu-item" onclick="openSettings()">
                 <i class="fas fa-cog"></i>
                 <span>الإعدادات</span>
             </button>
-            <button class="more-menu-item" onclick="openAdminPanel(); closeMoreMenu();">
+            <button class="more-menu-item" onclick="openAdminPanel()">
                 <i class="fas fa-user-shield"></i>
-                <span>التحكم</span>
+                <span>لوحة التحكم</span>
             </button>
-            <button class="more-menu-item" onclick="openTelegram();">
+            <button class="more-menu-item" onclick="openTelegram()">
                 <i class="fab fa-telegram-plane"></i>
                 <span>Telegram</span>
             </button>

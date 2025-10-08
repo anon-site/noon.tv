@@ -10800,6 +10800,234 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeMobileBottomNav();
 });
 
+// Mobile Bottom Navigation Functions
+function toggleCategoriesMenu() {
+    const dropdown = document.getElementById('categoriesDropdown');
+    const overlay = document.getElementById('mobileOverlay');
+    
+    if (dropdown.classList.contains('show')) {
+        closeCategoriesMenu();
+    } else {
+        closeAllMobileMenus();
+        dropdown.classList.add('show');
+        overlay.classList.add('active');
+        updateBottomNavActiveState('categories');
+    }
+}
+
+function closeCategoriesMenu() {
+    const dropdown = document.getElementById('categoriesDropdown');
+    const overlay = document.getElementById('mobileOverlay');
+    
+    dropdown.classList.remove('show');
+    overlay.classList.remove('active');
+}
+
+function selectCategory(category) {
+    if (window.app) {
+        window.app.currentCategory = category;
+        window.app.filterChannels(category);
+    }
+    
+    // Update active category
+    document.querySelectorAll('.category-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    document.querySelector(`[data-category="${category}"]`).classList.add('active');
+    
+    // Update bottom nav active state
+    updateBottomNavActiveState('home');
+    
+    // Close dropdown
+    closeCategoriesMenu();
+}
+
+function toggleMobileSearch() {
+    const popup = document.getElementById('searchPopup');
+    const overlay = document.getElementById('mobileOverlay');
+    
+    if (popup.classList.contains('show')) {
+        closeMobileSearch();
+    } else {
+        closeAllMobileMenus();
+        popup.classList.add('show');
+        overlay.classList.add('active');
+        updateBottomNavActiveState('search');
+        
+        // Focus on search input
+        setTimeout(() => {
+            const searchInput = document.getElementById('mobileSearchInput');
+            if (searchInput) {
+                searchInput.focus();
+            }
+        }, 100);
+    }
+}
+
+function closeMobileSearch() {
+    const popup = document.getElementById('searchPopup');
+    const overlay = document.getElementById('mobileOverlay');
+    
+    popup.classList.remove('show');
+    overlay.classList.remove('active');
+    
+    // Clear search results
+    const results = document.getElementById('mobileSearchResults');
+    if (results) {
+        results.innerHTML = '';
+    }
+}
+
+function performMobileSearch() {
+    const searchInput = document.getElementById('mobileSearchInput');
+    const query = searchInput.value.trim();
+    
+    if (query.length < 2) {
+        return;
+    }
+    
+    if (window.app) {
+        window.app.searchChannels(query);
+        displayMobileSearchResults(window.app.searchResults);
+    }
+}
+
+function displayMobileSearchResults(results) {
+    const resultsContainer = document.getElementById('mobileSearchResults');
+    
+    if (!results || results.length === 0) {
+        resultsContainer.innerHTML = `
+            <div class="no-results">
+                <i class="fas fa-search"></i>
+                <p>لم يتم العثور على نتائج</p>
+            </div>
+        `;
+        return;
+    }
+    
+    resultsContainer.innerHTML = results.map(channel => `
+        <div class="search-result-item" onclick="selectChannelFromSearch('${channel.name}')">
+            <div class="channel-info">
+                <h4>${channel.name}</h4>
+                <p>${channel.country || 'غير محدد'}</p>
+            </div>
+            <div class="channel-category">
+                <span class="category-badge">${getCategoryName(channel.category)}</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+function selectChannelFromSearch(channelName) {
+    if (window.app) {
+        const channel = window.app.channels.find(c => c.name === channelName);
+        if (channel) {
+            window.app.showVideoModal(channel);
+            closeMobileSearch();
+        }
+    }
+}
+
+function getCategoryName(category) {
+    const categoryNames = {
+        'news': 'الأخبار',
+        'entertainment': 'المنوعة',
+        'sports': 'الرياضة',
+        'religious': 'الدينية',
+        'music': 'الموسيقى',
+        'movies': 'الأفلام',
+        'documentary': 'الوثائقية',
+        'kids': 'الأطفال'
+    };
+    return categoryNames[category] || 'غير محدد';
+}
+
+function toggleMoreMenu() {
+    const menu = document.getElementById('moreMenu');
+    const overlay = document.getElementById('mobileOverlay');
+    
+    if (menu.classList.contains('show')) {
+        closeMoreMenu();
+    } else {
+        closeAllMobileMenus();
+        menu.classList.add('show');
+        overlay.classList.add('active');
+        updateBottomNavActiveState('more');
+    }
+}
+
+function closeMoreMenu() {
+    const menu = document.getElementById('moreMenu');
+    const overlay = document.getElementById('mobileOverlay');
+    
+    menu.classList.remove('show');
+    overlay.classList.remove('active');
+}
+
+function shareApp() {
+    if (navigator.share) {
+        navigator.share({
+            title: 'NOON TV - القنوات الفضائية العربية',
+            text: 'منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة',
+            url: window.location.href
+        });
+    } else {
+        // Fallback for browsers that don't support Web Share API
+        const url = window.location.href;
+        navigator.clipboard.writeText(url).then(() => {
+            if (window.app) {
+                window.app.notifySuccess('تم نسخ الرابط إلى الحافظة');
+            }
+        });
+    }
+    closeMoreMenu();
+}
+
+function openTelegram() {
+    window.open('https://t.me/noon_tv_channel', '_blank');
+    closeMoreMenu();
+}
+
+function closeAllMobileMenus() {
+    closeCategoriesMenu();
+    closeMobileSearch();
+    closeMoreMenu();
+}
+
+function updateMobileFavoritesBadge() {
+    const badge = document.getElementById('mobileFavoritesBadge');
+    if (badge && window.app) {
+        const favorites = window.app.getFavorites();
+        const count = favorites.length;
+        
+        if (count > 0) {
+            badge.textContent = count;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+}
+
+function updateMobileCategoryCounts() {
+    if (!window.app) return;
+    
+    const categories = ['all', 'news', 'entertainment', 'sports', 'religious', 'music', 'movies', 'documentary', 'kids'];
+    
+    categories.forEach(category => {
+        const countElement = document.getElementById(`mobile${category.charAt(0).toUpperCase() + category.slice(1)}Count`);
+        if (countElement) {
+            let count = 0;
+            if (category === 'all') {
+                count = window.app.channels.length;
+            } else {
+                count = window.app.channels.filter(channel => channel.category === category).length;
+            }
+            countElement.textContent = count;
+        }
+    });
+}
+
 // Helper function to validate JSON and provide detailed error information
 function validateJSON(jsonString, context = '') {
     try {
