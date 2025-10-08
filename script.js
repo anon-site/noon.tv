@@ -9441,6 +9441,7 @@ class ArabicTVApp {
 // Global functions for inline event handlers
 function openSettings() {
     app.openSettings();
+    closeMoreMenu();
 }
 
 function closeSettings() {
@@ -9449,6 +9450,7 @@ function closeSettings() {
 
 function openAdminPanel() {
     app.openAdminPanel();
+    closeMoreMenu();
 }
 
 function closeAdminPanel() {
@@ -10285,8 +10287,8 @@ function closeCategoriesDropdown() {
     const dropdown = document.getElementById('categoriesDropdown');
     const overlay = document.getElementById('mobileOverlay');
     
-    dropdown.classList.remove('active');
-    overlay.classList.remove('active');
+    if (dropdown) dropdown.classList.remove('show');
+    if (overlay) overlay.classList.remove('active');
 }
 
 function selectCategory(category) {
@@ -10336,8 +10338,8 @@ function closeSearchPopup() {
     const popup = document.getElementById('searchPopup');
     const overlay = document.getElementById('mobileOverlay');
     
-    popup.classList.remove('active');
-    overlay.classList.remove('active');
+    if (popup) popup.classList.remove('show');
+    if (overlay) overlay.classList.remove('active');
     
     // Clear search results
     const searchResults = document.getElementById('searchResults');
@@ -10352,30 +10354,7 @@ function closeSearchPopup() {
     }
 }
 
-// More Menu Functions
-function toggleMoreMenu() {
-    const menu = document.getElementById('moreMenu');
-    const overlay = document.getElementById('mobileOverlay');
-    
-    if (menu.classList.contains('active')) {
-        closeMoreMenu();
-    } else {
-        // Close other dropdowns first
-        closeCategoriesDropdown();
-        closeSearchPopup();
-        
-        menu.classList.add('active');
-        overlay.classList.add('active');
-    }
-}
-
-function closeMoreMenu() {
-    const menu = document.getElementById('moreMenu');
-    const overlay = document.getElementById('mobileOverlay');
-    
-    menu.classList.remove('active');
-    overlay.classList.remove('active');
-}
+// More Menu Functions - Removed duplicate function
 
 // Share site (mobile first) with Web Share API and clipboard fallback
 function shareSite() {
@@ -10428,16 +10407,7 @@ function shareSite() {
     }
 }
 
-// Open Telegram link from More menu
-function openTelegram() {
-    try {
-        // Link to NOON TV official Telegram channel
-        const telegramUrl = 'https://t.me/noon_tv2';
-        window.open(telegramUrl, '_blank', 'noopener,noreferrer');
-    } finally {
-        closeMoreMenu();
-    }
-}
+// Open Telegram link from More menu - Removed duplicate function
 
 // Copy a special link to enforce cookies reset for visitors
 function copyResetCookiesLink() {
@@ -10501,12 +10471,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// دالة لإغلاق جميع القوائم المفتوحة في الشريط السفلي
-function closeAllMobileMenus() {
-    closeCategoriesDropdown();
-    closeSearchPopup();
-    closeMoreMenu();
-}
+// دالة لإغلاق جميع القوائم المفتوحة في الشريط السفلي - Removed duplicate
 
 // Bottom Navigation Functions
 function updateBottomNavActiveState(activeAction) {
@@ -10545,7 +10510,7 @@ function updateMobileFavoritesBadge() {
 
 // Search functionality for mobile
 function setupMobileSearch() {
-    const searchInput = document.getElementById('searchPopupInput');
+    const searchInput = document.getElementById('mobileSearchInput');
     if (!searchInput) return;
     
     let searchTimeout;
@@ -10555,12 +10520,15 @@ function setupMobileSearch() {
         const query = e.target.value.trim();
         
         if (query.length < 2) {
-            document.getElementById('searchResults').innerHTML = '';
+            const resultsContainer = document.getElementById('mobileSearchResults');
+            if (resultsContainer) {
+                resultsContainer.innerHTML = '';
+            }
             return;
         }
         
         searchTimeout = setTimeout(() => {
-            performMobileSearch(query);
+            performMobileSearch();
         }, 300);
     });
     
@@ -10569,7 +10537,7 @@ function setupMobileSearch() {
             e.preventDefault();
             const query = e.target.value.trim();
             if (query.length >= 2) {
-                performMobileSearch(query);
+                performMobileSearch();
             }
         }
     });
@@ -10883,12 +10851,23 @@ function performMobileSearch() {
     const query = searchInput.value.trim();
     
     if (query.length < 2) {
+        // Clear results if query is too short
+        const resultsContainer = document.getElementById('mobileSearchResults');
+        if (resultsContainer) {
+            resultsContainer.innerHTML = '';
+        }
         return;
     }
     
     if (window.app) {
-        window.app.searchChannels(query);
-        displayMobileSearchResults(window.app.searchResults);
+        // Search channels
+        const results = window.app.channels.filter(channel => {
+            return channel.name.toLowerCase().includes(query.toLowerCase()) ||
+                   channel.country.toLowerCase().includes(query.toLowerCase()) ||
+                   channel.category.toLowerCase().includes(query.toLowerCase());
+        });
+        
+        displayMobileSearchResults(results);
     }
 }
 
@@ -10951,7 +10930,7 @@ function toggleMoreMenu() {
     } else {
         closeAllMobileMenus();
         menu.classList.add('show');
-        overlay.classList.add('active');
+        if (overlay) overlay.classList.add('active');
         updateBottomNavActiveState('more');
     }
 }
@@ -10961,7 +10940,7 @@ function closeMoreMenu() {
     const overlay = document.getElementById('mobileOverlay');
     
     menu.classList.remove('show');
-    overlay.classList.remove('active');
+    if (overlay) overlay.classList.remove('active');
 }
 
 function shareApp() {
@@ -11306,6 +11285,9 @@ async function updateChannels() {
             );
         }, 2000);
     }
+    
+    // إغلاق قائمة المزيد تلقائياً
+    closeMoreMenu();
 }
 
 // Logo Upload Functions
@@ -11548,6 +11530,33 @@ if ('serviceWorker' in navigator) {
             case 'pause':
                 video.pause();
                 break;
+        }
+    });
+}
+
+// ===== Mobile Bottom Navigation Functions =====
+
+// Toggle favorites for mobile bottom nav
+function toggleFavorites() {
+    if (window.app) {
+        window.app.toggleFavorites();
+    }
+}
+
+// Show all channels for mobile bottom nav
+function showAllChannels() {
+    if (window.app) {
+        window.app.showAllChannels();
+    }
+}
+
+// Update bottom navigation active state
+function updateBottomNavActiveState(activeAction) {
+    const bottomNavBtns = document.querySelectorAll('.bottom-nav-btn');
+    bottomNavBtns.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('data-action') === activeAction) {
+            btn.classList.add('active');
         }
     });
 }
