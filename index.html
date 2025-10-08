@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="mobile-categories.css">
     <link rel="stylesheet" href="mobile-enhancements.css">
+    <link rel="stylesheet" href="mobile-nav.css">
     <link rel="stylesheet" href="no-channels.css">
 </head>
 <body>
@@ -1298,6 +1299,52 @@
         <i class="fas fa-chevron-up"></i>
     </button>
 
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-bottom-nav">
+        <div class="mobile-nav-menu">
+            <a href="#" class="mobile-nav-item" onclick="app.toggleSidebar()">
+                <i class="fas fa-bars"></i>
+                <span>القائمة</span>
+            </a>
+            <a href="#" class="mobile-nav-item" onclick="app.toggleFavorites()">
+                <i class="fas fa-heart"></i>
+                <span>المفضلة</span>
+            </a>
+            <a href="#" class="mobile-nav-item active">
+                <i class="fas fa-home"></i>
+                <span>الرئيسية</span>
+            </a>
+            <a href="#" class="mobile-nav-item" onclick="focusSearch()">
+                <i class="fas fa-search"></i>
+                <span>بحث</span>
+            </a>
+            <a href="#" class="mobile-nav-item" onclick="toggleMoreMenu()">
+                <i class="fas fa-ellipsis-h"></i>
+                <span>المزيد</span>
+            </a>
+        </div>
+
+        <!-- More Menu Dropdown -->
+        <div class="mobile-more-menu" id="mobileMoreMenu">
+            <a href="#" class="more-menu-item" onclick="updateChannels()">
+                <i class="fas fa-sync-alt"></i>
+                <span>تحديث</span>
+            </a>
+            <a href="#" class="more-menu-item" onclick="openSettings()">
+                <i class="fas fa-cog"></i>
+                <span>الإعدادات</span>
+            </a>
+            <a href="#" class="more-menu-item" onclick="openAdminPanel()">
+                <i class="fas fa-user-shield"></i>
+                <span>التحكم</span>
+            </a>
+            <a href="#" class="more-menu-item" onclick="openTelegram()">
+                <i class="fab fa-telegram-plane"></i>
+                <span>Telegram</span>
+            </a>
+        </div>
+    </nav>
+
 
     <!-- HLS.js Library for video streaming -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
@@ -1331,6 +1378,7 @@
         });
     </script>
     <script src="script.js"></script>
+    <script src="mobile-nav.js"></script>
     
     <!-- حماية من الإعلانات وإعادة التوجيه غير المرغوب فيها -->
     <script>
