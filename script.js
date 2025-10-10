@@ -10,6 +10,71 @@ class ArabicTVApp {
         this.hls = null;
         this.isPictureInPicture = false;
         this.isLoggedIn = false;
+        
+        // Unified toggle function for all toggle operations
+        this.toggleElement = (elementId, options = {}) => {
+            const element = document.getElementById(elementId);
+            if (!element) return false;
+            
+            const {
+                toggleClass = 'active',
+                showClass = 'show',
+                hideClass = 'hide',
+                callback = null,
+                preventDefault = false
+            } = options;
+            
+            const isActive = element.classList.contains(toggleClass) || element.classList.contains(showClass);
+            
+            if (isActive) {
+                element.classList.remove(toggleClass, showClass);
+                element.classList.add(hideClass);
+                element.style.display = 'none';
+            } else {
+                element.classList.add(toggleClass, showClass);
+                element.classList.remove(hideClass);
+                element.style.display = 'block';
+            }
+            
+            if (callback && typeof callback === 'function') {
+                callback(isActive);
+            }
+            
+            return !isActive;
+        };
+        
+        // Unified display management functions
+        this.showElement = (elementId, displayType = 'block') => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.style.display = displayType;
+                element.classList.remove('hide');
+                element.classList.add('show', 'active');
+            }
+        };
+        
+        this.hideElement = (elementId) => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.style.display = 'none';
+                element.classList.remove('show', 'active');
+                element.classList.add('hide');
+            }
+        };
+        
+        this.toggleDisplay = (elementId, displayType = 'block') => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                const isHidden = element.style.display === 'none' || element.classList.contains('hide');
+                if (isHidden) {
+                    this.showElement(elementId, displayType);
+                } else {
+                    this.hideElement(elementId);
+                }
+                return !isHidden;
+            }
+            return false;
+        };
         // كلمة المرور مشفرة بـ SHA-256 Hash (أكثر أماناً)
         // قراءة كلمة المرور من localStorage أو استخدام الافتراضية
         this.adminPassword = localStorage.getItem('anon_tv_admin_password') || '3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657'; // كلمة مرور @admin123 مشفرة بـ SHA-256
@@ -27,13 +92,21 @@ class ArabicTVApp {
             animationsEnabled: false,
             compactMode: true,
             highContrast: false,
-            borderRadius: 'rounded' // minimal, normal, rounded
+            borderRadius: 'rounded', // minimal, normal, rounded
+            showAutoNotifications: false, // التحكم في الإشعارات التلقائية
+            backgroundAudio: true, // تشغيل الصوت في الخلفية
+            autoUpdateEnabled: true, // التحديث التلقائي للقنوات
+            // إعدادات التشغيل التلقائي المحسن
+            forceAutoplay: true, // فرض التشغيل التلقائي حتى لو كان محظوراً
+            autoplayRetryAttempts: 3, // عدد محاولات إعادة التشغيل التلقائي
+            autoplayDelay: 1000 // تأخير قبل محاولة التشغيل التلقائي
         };
         this.filteredChannels = [...this.channels];
         this.currentCategory = 'all';
         this.editingChannelId = null; // Track which channel is being edited
         this.notificationQueue = []; // Queue for notifications
         this.activeNotifications = new Set(); // Track active notifications
+        this.isAutomaticUpdate = false; // Track if update is automatic
         this.originalOrder = [...this.channels]; // Track original order for comparison
         this.hasOrderChanged = false; // Track if order has been modified
         this.isMobileSidebarOpen = false; // Track mobile sidebar state
@@ -58,16 +131,17 @@ class ArabicTVApp {
         this.init();
     }
 
-    init() {
+    async init() {
         this.testLocalStorage(); // Test if localStorage is working
         this.loadRemoteStorageSettings(); // Load remote storage configuration
         this.loadCategories(); // Load categories first
         this.loadChannelsFromStorage(); // Load saved channels first (priority)
-        this.loadDataFromFile(); // Load data from channels.json as fallback
+        await this.loadDataFromFile(); // Load data from channels.json as fallback
         this.loadFavorites(); // Load saved favorites
         this.filteredChannels = [...this.channels]; // Ensure filtered channels match loaded channels
         this.loadSettings();
         this.loadAdminPassword(); // تحميل كلمة المرور المحفوظة
+        this.loadLastUpdateTime(); // تحميل آخر تحديث محفوظ
         this.loadLoginState(); // تحميل حالة تسجيل الدخول بعد تحميل البيانات
         this.renderChannels(); // عرض القنوات بعد تحميل حالة تسجيل الدخول
         // إعادة عرض القنوات مرة أخرى لضمان ظهور الأيقونات بشكل صحيح
@@ -77,24 +151,8 @@ class ArabicTVApp {
         this.bindEvents();
         this.bindRemoteStorageEvents();
         
-        // Check for updates after a short delay
-        setTimeout(() => {
-            this.checkForUpdates();
-        }, 2000);
-        this.setupMobileSearch();
-        this.setupPictureInPictureEvents();
-        this.checkAndSetupPictureInPicture();
-        
-        // Attempt auto-sync if enabled
-        if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
-            // First check for updates from GitHub, then sync from remote storage
-            this.checkForUpdates().then(hasUpdates => {
-                if (!hasUpdates) {
-                    // Only sync from remote if no GitHub updates available
-                    this.syncFromRemote();
-                }
-            });
-        }
+        // Simple auto-update on page load
+        this.setupAutoUpdate();
         this.syncMobileNavTabs();
         this.initializeNewFeatures(); // Initialize new navigation features (includes loadCategories)
         this.initializeFooter(); // Initialize footer functionality
@@ -130,11 +188,23 @@ class ArabicTVApp {
             }
             const data = await response.json();
             
-            // لا نحمل القنوات من JSON file - نبدأ بقائمة فارغة
-            console.log('تم تخطي تحميل القنوات من channels.json - سيتم البدء بقائمة فارغة');
+            // Load channels from JSON file if no channels in localStorage
+            if (data.channels && Array.isArray(data.channels) && data.channels.length > 0) {
+                this.channels = data.channels.map(channel => ({
+                    ...channel,
+                    lastModified: channel.lastModified || new Date().toISOString()
+                }));
+                console.log('تم تحميل القنوات من channels.json:', this.channels.length, 'قناة');
+            } else {
+                console.log('لا توجد قنوات في channels.json، سيتم البدء بقائمة فارغة');
+                this.channels = [];
+            }
             
-            // لا نحمل الفئات من JSON file - يجب أن تأتي من localStorage
-            console.log('تم تخطي تحميل الفئات من channels.json - سيتم تحميلها من localStorage');
+            // Load categories from JSON file
+            if (data.categories && Array.isArray(data.categories)) {
+                this.categories = data.categories;
+                console.log('تم تحميل الفئات من channels.json:', this.categories.length, 'فئة');
+            }
             
             // Load settings from JSON file
             if (data.settings && typeof data.settings === 'object') {
@@ -148,9 +218,18 @@ class ArabicTVApp {
                 console.log('تم تحميل المفضلة من channels.json:', this.favorites.size, 'قناة');
             }
             
+            // Update filtered channels
+            this.filteredChannels = [...this.channels];
+            
+            // Update sidebar counts
+            this.updateSidebarCounts();
+            
         } catch (error) {
             console.error('خطأ في تحميل البيانات من channels.json:', error);
             console.log('سيتم استخدام البيانات الافتراضية');
+            this.channels = [];
+            this.filteredChannels = [];
+            this.updateSidebarCounts();
         }
     }
 
@@ -202,10 +281,11 @@ class ArabicTVApp {
                 this.adminPassword = savedPassword;
                 console.log('تم تحميل كلمة المرور المحفوظة');
                 
-                // تحذير المستخدم إذا لم تكن المزامنة السحابية مفعلة
-                if (!this.remoteStorage.enabled) {
+                // تحذير المستخدم إذا لم تكن المزامنة السحابية مفعلة (فقط عند عدم إظهار الإشعار من قبل)
+                if (!this.remoteStorage.enabled && !localStorage.getItem('passwordWarningShown')) {
                     setTimeout(() => {
                         this.notifyWarning('كلمة المرور محفوظة محلياً فقط. فعّل المزامنة السحابية لاستخدامها على جميع الأجهزة');
+                        localStorage.setItem('passwordWarningShown', 'true');
                     }, 3000);
                 }
             } else {
@@ -274,6 +354,12 @@ class ArabicTVApp {
                 console.log('أزرار التحكم المخصصة:', this.settings.showCustomControls);
             }
 
+            const autoUpdateEnabledEl = document.getElementById('autoUpdateEnabled');
+            if (autoUpdateEnabledEl) {
+                autoUpdateEnabledEl.checked = this.settings.autoUpdateEnabled;
+                console.log('التحديث التلقائي:', this.settings.autoUpdateEnabled);
+            }
+
             // Apply new customization settings
             this.applyZoomLevel();
             this.applyColorTheme();
@@ -283,6 +369,9 @@ class ArabicTVApp {
             this.applyCompactMode();
             this.applyHighContrast();
             this.applyBorderRadius();
+            this.applyAutoNotifications();
+            this.applyBackgroundAudio();
+            this.updateAutoUpdateButton();
             
             console.log('✅ تم تطبيق جميع الإعدادات بنجاح');
             
@@ -396,6 +485,37 @@ class ArabicTVApp {
         if (document.getElementById('borderRadius')) {
             document.getElementById('borderRadius').value = borderRadius;
         }
+    }
+
+    applyAutoNotifications() {
+        const showAutoNotifications = this.settings.showAutoNotifications;
+        
+        if (document.getElementById('showAutoNotifications')) {
+            document.getElementById('showAutoNotifications').checked = showAutoNotifications;
+        }
+    }
+
+    applyBackgroundAudio() {
+        const backgroundAudio = this.settings.backgroundAudio;
+        
+        if (document.getElementById('backgroundAudio')) {
+            document.getElementById('backgroundAudio').checked = backgroundAudio;
+        }
+    }
+
+    resetNotifications() {
+        // إعادة تعيين الإشعارات المحفوظة
+        localStorage.removeItem('passwordWarningShown');
+        localStorage.removeItem('welcomeShown');
+        localStorage.removeItem('hasVisitedBefore');
+        localStorage.removeItem('lastUpdateCheck');
+        
+        // إعادة تعيين إعداد الإشعارات التلقائية
+        this.settings.showAutoNotifications = false;
+        this.saveSettings();
+        this.applyAutoNotifications();
+        
+        this.notifySuccess('تم إعادة تعيين جميع الإشعارات! ستظهر الإشعارات مرة أخرى عند الحاجة.');
     }
 
     bindEvents() {
@@ -520,6 +640,34 @@ class ArabicTVApp {
             });
         }
 
+        const showAutoNotificationsCheckbox = document.getElementById('showAutoNotifications');
+        if (showAutoNotificationsCheckbox) {
+            showAutoNotificationsCheckbox.addEventListener('change', (e) => {
+                this.settings.showAutoNotifications = e.target.checked;
+                this.saveSettings();
+                this.applyAutoNotifications();
+            });
+        }
+
+        const backgroundAudioCheckbox = document.getElementById('backgroundAudio');
+        if (backgroundAudioCheckbox) {
+            backgroundAudioCheckbox.addEventListener('change', (e) => {
+                this.settings.backgroundAudio = e.target.checked;
+                this.saveSettings();
+                this.applyBackgroundAudio();
+            });
+        }
+
+        const autoUpdateEnabledCheckbox = document.getElementById('autoUpdateEnabled');
+        if (autoUpdateEnabledCheckbox) {
+            autoUpdateEnabledCheckbox.addEventListener('change', (e) => {
+                this.settings.autoUpdateEnabled = e.target.checked;
+                this.saveSettings();
+                this.updateAutoUpdateButton();
+                console.log('تم تغيير التحديث التلقائي إلى:', e.target.checked);
+            });
+        }
+
         // Admin panel events
         this.bindAdminEvents();
         
@@ -529,57 +677,37 @@ class ArabicTVApp {
         // Sidebar events
         this.bindSidebarEvents();
 
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            // منع الاختصارات عند الكتابة في حقول الإدخال
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.contentEditable === 'true') {
-                return;
-            }
-            
-            switch(e.key.toLowerCase()) {
-                case 'escape':
-                    this.closeModal();
-                    this.closeSettings();
-                    this.closeAdminPanel();
-                    // إغلاق القوائم المحمولة
-                    if (this.isMobileSidebarOpen) {
-                        this.closeMobileMenu();
-                    }
-                    if (this.isDesktopSidebarOpen) {
-                        this.toggleSidebar();
-                    }
-                    break;
-                case 'c':
-                    this.openAdminPanel();
-                    break;
-                case 's':
-                    this.openSettings();
-                    break;
-                case 'm':
-                    this.toggleSidebar();
-                    break;
-            }
-        });
     }
 
     bindAdminTabEvents() {
-        // إزالة الأحداث السابقة لتجنب التكرار
-        document.querySelectorAll('.admin-tab').forEach(tab => {
-            tab.replaceWith(tab.cloneNode(true));
-        });
+        // استخدام event delegation على مستوى admin-layout لضمان عمل الأحداث
+        const adminModal = document.getElementById('adminModal');
         
-        // ربط الأحداث الجديدة
-        const adminTabs = document.querySelectorAll('.admin-tab');
+        if (!adminModal) {
+            console.warn('⚠️ لم يتم العثور على adminModal');
+            return;
+        }
         
-        adminTabs.forEach(tab => {
-            tab.addEventListener('click', (e) => {
-                // التأكد من أننا نحصل على الزر وليس العنصر الداخلي
-                const button = e.target.closest('.admin-tab');
-                if (button && button.dataset.tab) {
-                    this.switchAdminTab(button.dataset.tab);
-                }
-            });
-        });
+        // إزالة أي مستمع سابق إذا وجد
+        if (this._adminTabClickHandler) {
+            adminModal.removeEventListener('click', this._adminTabClickHandler);
+        }
+        
+        // إنشاء مستمع جديد
+        this._adminTabClickHandler = (e) => {
+            const tab = e.target.closest('.admin-tab');
+            if (tab && tab.dataset.tab) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.switchAdminTab(tab.dataset.tab);
+                console.log(`✅ تم التبديل إلى تبويب: ${tab.dataset.tab}`);
+            }
+        };
+        
+        // إضافة المستمع الجديد
+        adminModal.addEventListener('click', this._adminTabClickHandler);
+        
+        console.log('✅ تم ربط أحداث التبويبات بنجاح');
     }
 
     bindStatusToggleEvents() {
@@ -600,6 +728,24 @@ class ArabicTVApp {
         });
     }
 
+    bindVpnToggleEvents() {
+        // إزالة الأحداث السابقة لتجنب التكرار
+        document.querySelectorAll('.vpn-toggle').forEach(toggle => {
+            const newToggle = toggle.cloneNode(true);
+            toggle.parentNode.replaceChild(newToggle, toggle);
+        });
+        
+        // ربط الأحداث الجديدة
+        document.querySelectorAll('.vpn-toggle').forEach(toggle => {
+            toggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const vpn = toggle.dataset.vpn === 'true';
+                this.setChannelVpn(vpn);
+            });
+        });
+    }
+
     setChannelStatus(status) {
         // تحديث القيمة المخفية
         const statusInput = document.getElementById('channelStatus');
@@ -609,6 +755,17 @@ class ArabicTVApp {
         
         // تحديث واجهة المستخدم
         this.updateStatusToggleUI(status);
+    }
+
+    setChannelVpn(vpn) {
+        // تحديث القيمة المخفية
+        const vpnInput = document.getElementById('channelVpn');
+        if (vpnInput) {
+            vpnInput.value = vpn.toString();
+        }
+        
+        // تحديث واجهة المستخدم
+        this.updateVpnToggleUI(vpn);
     }
 
     updateStatusToggleUI(status) {
@@ -639,6 +796,44 @@ class ArabicTVApp {
                     icon.classList.add('active');
                 } else {
                     icon.classList.add('inactive');
+                }
+            }
+        });
+    }
+
+    updateVpnToggleUI(vpn) {
+        // تحديث القيمة المخفية أولاً
+        const vpnInput = document.getElementById('channelVpn');
+        if (vpnInput) {
+            vpnInput.value = vpn.toString();
+        }
+        
+        // التأكد من وجود العناصر
+        const toggles = document.querySelectorAll('.vpn-toggle');
+        if (toggles.length === 0) {
+            return;
+        }
+        
+        // إزالة الكلاس النشط من جميع التبديلات
+        toggles.forEach(toggle => {
+            toggle.classList.remove('active');
+        });
+        
+        // إضافة الكلاس النشط للتبديل المحدد
+        const activeToggle = document.querySelector(`[data-vpn="${vpn}"]`);
+        if (activeToggle) {
+            activeToggle.classList.add('active');
+        }
+        
+        // تحديث الأيقونات
+        document.querySelectorAll('.vpn-icon').forEach(icon => {
+            const toggle = icon.closest('.vpn-toggle');
+            if (toggle) {
+                const toggleVpn = toggle.dataset.vpn === 'true';
+                if (toggleVpn === vpn) {
+                    icon.style.color = '';
+                } else {
+                    icon.style.color = 'var(--text-muted)';
                 }
             }
         });
@@ -767,6 +962,23 @@ class ArabicTVApp {
         
         grid.innerHTML = '';
         console.log('عرض القنوات:', this.filteredChannels.length, 'قناة');
+        
+        // إضافة رسالة تشخيصية إذا لم توجد قنوات
+        if (!this.filteredChannels || this.filteredChannels.length === 0) {
+            console.log('لا توجد قنوات للعرض - القنوات المحملة:', this.channels.length);
+            grid.innerHTML = `
+                <div class="no-channels-message">
+                    <i class="fas fa-tv"></i>
+                    <h3>لا توجد قنوات متاحة</h3>
+                    <p>اضغط على زر "تحديث القنوات" لتحميل القنوات من الخادم</p>
+                    <button class="update-channels-btn" onclick="updateChannels()">
+                        <i class="fas fa-sync-alt"></i>
+                        تحديث القنوات
+                    </button>
+                </div>
+            `;
+            return;
+        }
 
         this.filteredChannels.forEach(channel => {
             const channelCard = this.createChannelCard(channel);
@@ -788,7 +1000,12 @@ class ArabicTVApp {
         // إنشاء placeholder محسن للشعار
         const logoPlaceholder = this.createLogoPlaceholder(channel);
         
+        // العثور على رقم القناة (الفهرس + 1)
+        const channelIndex = this.channels.findIndex(ch => ch.id === channel.id);
+        const channelNumber = channelIndex + 1;
+        
         card.innerHTML = `
+            <div class="channel-number">${channelNumber}</div>
             <img src="${channel.logo}" alt="${channel.name}" class="channel-logo" 
                  onerror="this.src='${logoPlaceholder}'; this.classList.add('placeholder-logo');">
             <div class="channel-info">
@@ -796,6 +1013,7 @@ class ArabicTVApp {
                 <div class="channel-meta">
                     <span class="channel-country">${channel.country}</span>
                     <span class="channel-category">${this.getCategoryName(channel.category)}</span>
+                    ${channel.vpn === true ? '<span class="channel-vpn-badge"><i class="fas fa-shield-alt"></i> VPN</span>' : ''}
                 </div>
             </div>
             <div class="play-overlay">
@@ -947,25 +1165,77 @@ class ArabicTVApp {
     }
 
     async playChannel(channel) {
+        // Prevent multiple simultaneous channel loads
+        if (this.isLoadingChannel) {
+            console.log('Channel loading in progress, skipping...');
+            return;
+        }
+        
+        // If same channel is already playing, don't reload
+        if (this.currentChannel && this.currentChannel.id === channel.id) {
+            console.log('Same channel already playing, skipping...');
+            return;
+        }
+        
+        // Check if channel is inactive
+        if (channel.status === 'inactive') {
+            this.showInactiveChannelMessage(channel);
+            return;
+        }
+        
+        this.isLoadingChannel = true;
         this.currentChannel = channel;
         this.showVideoModal(channel);
-        const type = channel.type || (this.isYouTubeUrl(channel.url) ? 'youtube' : 'hls');
-        await this.loadVideoStream(channel.url, type);
+        
+        // Auto-detect stream type using the new detection system
+        const streamType = this.detectStreamType(channel.url);
+        console.log('🔍 نوع البث المكتشف:', streamType, 'للقناة:', channel.name);
+        
+        try {
+            await this.loadVideoStream(channel.url, streamType);
+        } finally {
+            this.isLoadingChannel = false;
+        }
+        
+        // Channel bar remains visible when playing a channel for better navigation
     }
 
     showVideoModal(channel) {
         const modal = document.getElementById('videoModal');
         const title = document.getElementById('channelTitle');
         const countryText = document.querySelector('.country-text');
+        const vpnIndicator = document.getElementById('channelVpnIndicator');
         
         title.textContent = channel.name;
         countryText.textContent = channel.country || '-';
+        
+        // Show/hide VPN indicator
+        if (channel.vpn === true) {
+            vpnIndicator.style.display = 'flex';
+        } else {
+            this.hideElement('channelVpnIndicator');
+        }
+        
         // Channel logo overlay is now hidden
         
         modal.classList.add('active');
         
         // Show video loading
         document.getElementById('videoLoading').style.display = 'flex';
+        
+        // Auto-show channel bar on mobile
+        if (window.innerWidth <= 768) {
+            setTimeout(() => {
+                const channelBar = document.getElementById('channelBar');
+                const channelsBtn = document.querySelector('.channels-btn');
+                if (channelBar && !channelBar.classList.contains('show')) {
+                    showChannelBar();
+                    if (channelsBtn) {
+                        channelsBtn.classList.add('active');
+                    }
+                }
+            }, 100);
+        }
         
         // News ticker is now disabled by default
         // if (this.settings.showNewsTicker) {
@@ -979,6 +1249,275 @@ class ArabicTVApp {
         
         // Use default video controls
         document.getElementById('videoPlayer').controls = true;
+        
+        // Setup channel bar event listeners
+        this.setupChannelBarEvents();
+        
+        // Update active channel in channel bar if it's visible
+        this.updateActiveChannelInBar(channel);
+    }
+
+    showInactiveChannelMessage(channel) {
+        const modal = document.getElementById('videoModal');
+        const title = document.getElementById('channelTitle');
+        const countryText = document.querySelector('.country-text');
+        const vpnIndicator = document.getElementById('channelVpnIndicator');
+        const loading = document.getElementById('videoLoading');
+        
+        // Set channel info
+        title.textContent = channel.name;
+        countryText.textContent = channel.country || '-';
+        
+        // Hide VPN indicator for inactive channels
+        vpnIndicator.style.display = 'none';
+        
+        // Show modal
+        modal.classList.add('active');
+        
+        // Show inactive channel message
+        loading.style.display = 'flex';
+        loading.innerHTML = `
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>القناة متوقفة مؤقتاً</p>
+            </div>
+        `;
+        
+        // Show video player for retry functionality
+        const video = document.getElementById('videoPlayer');
+        if (video) {
+            video.style.display = 'block';
+        }
+    }
+
+    // دالة لإيقاف البث مؤقتاً عند إخفاء الصفحة
+    pauseCurrentVideo() {
+        try {
+            const video = document.getElementById('videoPlayer');
+            if (video && !video.paused) {
+                video.pause();
+                console.log('⏸️ تم إيقاف الفيديو مؤقتاً');
+            }
+            
+            // إيقاف aflam iframe مؤقتاً
+            const aflamIframe = document.getElementById('aflamPlayer');
+            if (aflamIframe) {
+                try {
+                    if (aflamIframe.contentWindow) {
+                        aflamIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                    }
+                } catch (e) {
+                    console.log('Cannot pause aflam iframe');
+                }
+            }
+            
+            // إيقاف elahmad iframe مؤقتاً
+            const elahmadIframe = document.getElementById('elahmadPlayer');
+            if (elahmadIframe) {
+                try {
+                    if (elahmadIframe.contentWindow) {
+                        elahmadIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                    }
+                } catch (e) {
+                    console.log('Cannot pause elahmad iframe');
+                }
+            }
+            
+        } catch (error) {
+            console.log('Error pausing current video:', error);
+        }
+    }
+    
+    // دالة لاستئناف البث عند إظهار الصفحة
+    resumeCurrentVideo() {
+        try {
+            const video = document.getElementById('videoPlayer');
+            if (video && video.paused && this.currentChannel) {
+                video.play().catch(console.error);
+                console.log('▶️ تم استئناف الفيديو');
+            }
+            
+            // استئناف aflam iframe
+            const aflamIframe = document.getElementById('aflamPlayer');
+            if (aflamIframe) {
+                try {
+                    if (aflamIframe.contentWindow) {
+                        aflamIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                    }
+                } catch (e) {
+                    console.log('Cannot resume aflam iframe');
+                }
+            }
+            
+            // استئناف elahmad iframe
+            const elahmadIframe = document.getElementById('elahmadPlayer');
+            if (elahmadIframe) {
+                try {
+                    if (elahmadIframe.contentWindow) {
+                        elahmadIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                    }
+                } catch (e) {
+                    console.log('Cannot resume elahmad iframe');
+                }
+            }
+            
+        } catch (error) {
+            console.log('Error resuming current video:', error);
+        }
+    }
+
+    // دالة مساعدة لتنظيف جميع أنواع البث
+    cleanupAllMedia() {
+        console.log('🧹 تنظيف جميع أنواع البث...');
+        
+        // تنظيف aflam iframe
+        const aflamIframe = document.getElementById('aflamPlayer');
+        if (aflamIframe) {
+            console.log('🛑 تنظيف aflam iframe...');
+            aflamIframe.src = '';
+            aflamIframe.style.display = 'none';
+            
+            try {
+                if (aflamIframe.contentWindow) {
+                    aflamIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                    aflamIframe.contentWindow.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
+                    aflamIframe.contentWindow.postMessage('{"event":"command","func":"pause","args":""}', '*');
+                }
+            } catch (e) {
+                console.log('Cannot access aflam iframe content');
+            }
+            
+            try {
+                if (aflamIframe.parentNode) {
+                    aflamIframe.remove();
+                }
+            } catch (removeError) {
+                console.log('Error removing aflam iframe:', removeError);
+            }
+        }
+        
+        // تنظيف elahmad iframe
+        const elahmadIframe = document.getElementById('elahmadPlayer');
+        if (elahmadIframe) {
+            console.log('🛑 تنظيف elahmad iframe...');
+            elahmadIframe.src = '';
+            elahmadIframe.style.display = 'none';
+            
+            try {
+                if (elahmadIframe.contentWindow) {
+                    elahmadIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                }
+            } catch (e) {
+                console.log('Cannot access elahmad iframe content');
+            }
+            
+            try {
+                if (elahmadIframe.parentNode) {
+                    elahmadIframe.remove();
+                }
+            } catch (removeError) {
+                console.log('Error removing elahmad iframe:', removeError);
+            }
+        }
+        
+        // تنظيف HLS instance للـ SHLS streams
+        if (this.hls) {
+            console.log('🛑 تنظيف HLS instance...');
+            this.hls.destroy();
+            this.hls = null;
+        }
+        
+        // تنظيف YouTube iframe
+        const youtubeIframe = document.getElementById('youtubePlayer');
+        if (youtubeIframe) {
+            console.log('🛑 تنظيف YouTube iframe...');
+            youtubeIframe.src = '';
+            youtubeIframe.style.display = 'none';
+            
+            try {
+                if (youtubeIframe.parentNode) {
+                    youtubeIframe.remove();
+                }
+            } catch (removeError) {
+                console.log('Error removing YouTube iframe:', removeError);
+            }
+        }
+        
+        // تنظيف إضافي للذاكرة
+        try {
+            // إيقاف جميع العناصر الصوتية والفيديو في الصفحة
+            const allVideos = document.querySelectorAll('video');
+            allVideos.forEach(video => {
+                if (!video.paused) {
+                    video.pause();
+                }
+                video.currentTime = 0;
+                video.src = '';
+            });
+            
+            const allAudios = document.querySelectorAll('audio');
+            allAudios.forEach(audio => {
+                if (!audio.paused) {
+                    audio.pause();
+                }
+                audio.currentTime = 0;
+                audio.src = '';
+            });
+            
+            // تنظيف MediaSession إذا كان موجوداً
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.setActionHandler('play', null);
+                navigator.mediaSession.setActionHandler('pause', null);
+                navigator.mediaSession.setActionHandler('stop', null);
+            }
+            
+        } catch (memoryCleanupError) {
+            console.log('Error in memory cleanup:', memoryCleanupError);
+        }
+        
+        console.log('✅ تم تنظيف جميع أنواع البث والذاكرة بنجاح');
+    }
+
+    stopCurrentVideo() {
+        const video = document.getElementById('videoPlayer');
+        const source = document.getElementById('videoSource');
+        
+        try {
+            // تنظيف جميع أنواع البث أولاً
+            this.cleanupAllMedia();
+            
+            // Pause and reset video
+            if (video) {
+                video.pause();
+                video.currentTime = 0;
+                video.src = '';
+                video.load();
+                video.style.display = 'block'; // Show video element
+            }
+            
+            // Clear source
+            if (source) {
+                source.src = '';
+            }
+            
+            // Destroy HLS instance if exists
+            if (this.hls) {
+                this.hls.destroy();
+                this.hls = null;
+            }
+            
+            // Clear YouTube player if exists
+            if (this.youtubePlayer) {
+                this.youtubePlayer.destroy();
+                this.youtubePlayer = null;
+            }
+            
+            // تنظيف جميع أنواع البث يتم الآن في دالة cleanupAllMedia()
+            
+            console.log('Current video stopped successfully');
+        } catch (error) {
+            console.error('Error stopping current video:', error);
+        }
     }
 
     async loadVideoStream(url, type = 'hls') {
@@ -987,29 +1526,98 @@ class ArabicTVApp {
         const loading = document.getElementById('videoLoading');
 
         try {
+            // Ensure video player is visible
+            if (video) {
+                video.style.display = 'block';
+            }
+            
             // Validate URL
             if (!url || url.trim() === '') {
                 throw new Error('رابط الفيديو فارغ أو غير صحيح');
             }
 
+            // Stop current video completely to prevent conflicts
+            this.stopCurrentVideo();
+            
+            // تنظيف إضافي لضمان عدم استمرار البث السابق
+            this.cleanupAllMedia();
+
             // Show loading
             loading.style.display = 'flex';
             loading.innerHTML = `
                 <div class="spinner"></div>
-                <p>جارٍ تحميل البث...</p>
             `;
 
-            // Check if it's a YouTube URL
-            if (type === 'youtube' || this.isYouTubeUrl(url)) {
-                const currentQuality = this.getCurrentQuality();
-                await this.loadYouTubeVideo(url, currentQuality);
-                return;
+            // Auto-detect stream type if not provided
+            if (type === 'hls' || type === 'auto') {
+                type = this.detectStreamType(url);
+                console.log('🔍 تم كشف نوع البث:', type);
+            }
+
+            // Route to appropriate loader based on detected type
+            switch (type) {
+                case 'youtube':
+                    const currentQuality = this.getCurrentQuality();
+                    await this.loadYouTubeVideo(url, currentQuality);
+                    return;
+
+                case 'elahmad':
+                    await this.loadElahmadVideo(url);
+                    return;
+
+                case 'aflam':
+                    await this.loadAflamVideo(url);
+                    return;
+
+                case 'shls':
+                    await this.loadShlsVideo(url);
+                    return;
+
+                case 'mp4':
+                    await this.loadMp4Video(url);
+                    return;
+
+                case 'webm':
+                    await this.loadWebMVideo(url);
+                    return;
+
+                case 'flv':
+                    await this.loadFlvVideo(url);
+                    return;
+
+                case 'rtmp':
+                    await this.loadRtmpVideo(url);
+                    return;
+
+                case 'rtsp':
+                    await this.loadRtspVideo(url);
+                    return;
+
+                case 'dash':
+                    await this.loadDashVideo(url);
+                    return;
+
+                case 'webrtc':
+                    await this.loadWebRtcVideo(url);
+                    return;
+
+                case 'direct':
+                    // Try to load as direct video
+                    await this.loadDirectVideo(url);
+                    return;
+
+                case 'hls':
+                default:
+                    // Continue with HLS processing below
+                    break;
             }
 
             // HLS streaming
             if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+                // Ensure previous HLS instance is destroyed
                 if (this.hls) {
                     this.hls.destroy();
+                    this.hls = null;
                 }
 
                 this.hls = new Hls({
@@ -1042,27 +1650,24 @@ class ArabicTVApp {
 
                 this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
                     loading.style.display = 'none';
+                    
+                    // تشغيل تلقائي محسن
                     if (this.settings.autoplay) {
-                        video.play().catch(console.error);
+                        this.enhancedAutoplay(video);
                     }
                     
                     // Initialize quality display
                     this.updateQualityDisplayFromHLS();
+                    
+                    // Setup Media Session for background audio
+                    setupMediaSession();
                 });
 
                 this.hls.on(Hls.Events.ERROR, (event, data) => {
                     console.error('HLS Error:', data);
                     
-                    // Show specific error messages
-                    if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
-                        this.showVideoError('خطأ في الشبكة - تحقق من اتصال الإنترنت');
-                    } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
-                        this.showVideoError('خطأ في تنسيق الفيديو - الرابط قد يكون غير صحيح');
-                    } else if (data.details === Hls.ErrorDetails.MANIFEST_LOAD_ERROR) {
-                        this.showVideoError('لا يمكن تحميل قائمة التشغيل - الرابط غير متاح');
-                    } else if (data.details === Hls.ErrorDetails.MANIFEST_LOAD_TIMEOUT) {
-                        this.showVideoError('انتهت مهلة تحميل قائمة التشغيل - الخادم بطيء');
-                    }
+                    // Show generic loading message instead of specific errors
+                    this.showVideoError('جارٍ تحميل البث...');
                     
                     if (data.fatal) {
                         this.handleVideoError();
@@ -1088,8 +1693,14 @@ class ArabicTVApp {
                 loading.style.display = 'none';
                 
                 if (this.settings.autoplay) {
-                    video.play().catch(console.error);
+                    this.enhancedAutoplay(video);
                 }
+                
+                // Update quality display for native HLS
+                this.updateQualityDisplayFromNativeHLS();
+                
+                // Setup Media Session for background audio
+                setupMediaSession();
             } else if (typeof Hls === 'undefined') {
                 throw new Error('مكتبة HLS.js غير محملة - تحقق من اتصال الإنترنت');
             } else {
@@ -1098,50 +1709,373 @@ class ArabicTVApp {
 
             // Set volume
             video.volume = this.settings.volume / 100;
+            
+            // Enable background audio if setting is enabled
+            if (this.settings.backgroundAudio) {
+                video.setAttribute('playsinline', 'true');
+                video.setAttribute('webkit-playsinline', 'true');
+                video.setAttribute('x5-playsinline', 'true');
+                video.setAttribute('x5-video-player-type', 'h5');
+                video.setAttribute('x5-video-player-fullscreen', 'false');
+            }
 
         } catch (error) {
             console.error('Error loading video:', error);
-            this.showVideoError(`خطأ في تحميل الفيديو: ${error.message}`);
+            this.showVideoError('جارٍ تحميل البث...');
             this.handleVideoError();
+        }
+    }
+
+    updateQualityDisplayFromNativeHLS() {
+        const qualityDisplay = document.getElementById('currentQualityText');
+        if (qualityDisplay) {
+            qualityDisplay.textContent = 'تلقائي (Safari)';
         }
     }
 
     showVideoError(message) {
         const loading = document.getElementById('videoLoading');
+        
+        // Check if current channel requires VPN and show appropriate message
+        if (this.currentChannel && this.currentChannel.vpn === true) {
+            loading.innerHTML = `
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>يتطلب VPN</p>
+                </div>
+            `;
+        } else {
+            loading.innerHTML = `
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>جارٍ تحميل البث...</p>
+                </div>
+            `;
+        }
+    }
+    
+    // Show manual play button when autoplay fails
+    showManualPlayButton() {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        loading.style.display = 'flex';
         loading.innerHTML = `
-            <div class="error-icon" style="font-size: 3rem; color: #e94560; margin-bottom: 1rem;">
-                <i class="fas fa-exclamation-triangle"></i>
+            <div class="manual-play-container" style="text-align: center; padding: 2rem;">
+                <div style="font-size: 4rem; color: #4CAF50; margin-bottom: 1rem;">
+                    <i class="fas fa-play-circle"></i>
+                </div>
+                <p style="color: #333; font-size: 1.2rem; margin-bottom: 1.5rem;">
+                    اضغط للتشغيل
+                </p>
+                <button onclick="app.manualPlay()" style="
+                    background: #4CAF50; 
+                    color: white; 
+                    border: none; 
+                    padding: 1rem 2rem; 
+                    border-radius: 8px; 
+                    cursor: pointer;
+                    font-size: 1.1rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    margin: 0 auto;
+                    transition: all 0.3s ease;
+                " onmouseover="this.style.background='#45a049'" onmouseout="this.style.background='#4CAF50'">
+                    <i class="fas fa-play"></i>
+                    تشغيل الآن
+                </button>
             </div>
-            <p style="color: #e94560; font-size: 1.1rem; margin-bottom: 1rem;">${message}</p>
-            <button onclick="app.retryVideo()" style="
-                background: #e94560; 
-                color: white; 
-                border: none; 
-                padding: 0.5rem 1rem; 
-                border-radius: 5px; 
-                cursor: pointer;
-                font-size: 0.9rem;
-            ">إعادة المحاولة</button>
         `;
+    }
+    
+    // Manual play function
+    manualPlay() {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        loading.style.display = 'none';
+        
+        video.play().then(() => {
+            console.log('✅ تم تشغيل الفيديو يدوياً');
+        }).catch(error => {
+            console.error('❌ فشل التشغيل اليدوي:', error);
+            this.showVideoError('جارٍ تحميل البث...');
+        });
+    }
+    
+    // Enhanced autoplay function with retry mechanism
+    async enhancedAutoplay(video, retryCount = 0) {
+        const maxRetries = this.settings.autoplayRetryAttempts || 3;
+        
+        try {
+            // محاولة التشغيل مباشرة بدون كتم الصوت
+            video.muted = false;
+            
+            // انتظار قصير قبل المحاولة
+            await new Promise(resolve => setTimeout(resolve, this.settings.autoplayDelay || 1000));
+            
+            await video.play();
+            console.log('✅ تم تشغيل الفيديو تلقائياً بنجاح');
+            
+            // تأكيد بقاء الصوت مفعل
+            setTimeout(() => {
+                if (video.muted) {
+                    video.muted = false;
+                }
+            }, 300);
+            
+            return true;
+            
+        } catch (error) {
+            console.warn(`⚠️ فشل التشغيل التلقائي (محاولة ${retryCount + 1}/${maxRetries}):`, error.message);
+            
+            if (retryCount < maxRetries - 1) {
+                // إعادة المحاولة مع تأخير أطول
+                await new Promise(resolve => setTimeout(resolve, (retryCount + 1) * 1000));
+                return this.enhancedAutoplay(video, retryCount + 1);
+            } else {
+                // فشلت جميع المحاولات، إظهار زر التشغيل اليدوي
+                console.log('🔄 فشلت جميع محاولات التشغيل التلقائي، إظهار زر التشغيل اليدوي');
+                this.showManualPlayButton();
+                return false;
+            }
+        }
+    }
+    
+    // Attempt autoplay for Aflam4You iframe
+    attemptAflamAutoplay(iframe) {
+        try {
+            console.log('🎬 محاولة التشغيل التلقائي لـ Aflam4You...');
+            
+            // محاولة العثور على عنصر الفيديو داخل iframe
+            if (iframe.contentDocument) {
+                const videos = iframe.contentDocument.querySelectorAll('video');
+                if (videos.length > 0) {
+                    const video = videos[0];
+                    video.muted = false;
+                    video.play().then(() => {
+                        console.log('✅ تم تشغيل الفيديو تلقائياً في Aflam4You');
+                        // تأكيد بقاء الصوت مفعل
+                        setTimeout(() => {
+                            video.muted = false;
+                        }, 300);
+                    }).catch(error => {
+                        console.warn('⚠️ فشل التشغيل التلقائي في Aflam4You:', error.message);
+                        this.showAflamManualPlayButton(iframe);
+                    });
+                } else {
+                    // محاولة النقر على زر التشغيل إذا وُجد
+                    this.clickAflamPlayButton(iframe);
+                }
+            } else {
+                // Cross-origin - محاولة النقر على زر التشغيل
+                this.clickAflamPlayButton(iframe);
+            }
+        } catch (error) {
+            console.warn('⚠️ خطأ في محاولة التشغيل التلقائي لـ Aflam4You:', error.message);
+            this.showAflamManualPlayButton(iframe);
+        }
+    }
+    
+    // Click play button in Aflam4You iframe
+    clickAflamPlayButton(iframe) {
+        try {
+            console.log('🖱️ محاولة النقر على زر التشغيل في Aflam4You...');
+            
+            if (iframe.contentDocument) {
+                // البحث عن أزرار التشغيل المختلفة
+                const playButtons = [
+                    'button[class*="play"]',
+                    'button[class*="Play"]',
+                    '.play-button',
+                    '.PlayButton',
+                    'button[title*="play"]',
+                    'button[title*="Play"]',
+                    'button[aria-label*="play"]',
+                    'button[aria-label*="Play"]',
+                    '.video-play-button',
+                    '.player-play-button'
+                ];
+                
+                for (const selector of playButtons) {
+                    const button = iframe.contentDocument.querySelector(selector);
+                    if (button) {
+                        button.click();
+                        console.log('✅ تم النقر على زر التشغيل في Aflam4You');
+                        return;
+                    }
+                }
+                
+                // البحث عن عناصر الفيديو والنقر عليها
+                const videos = iframe.contentDocument.querySelectorAll('video');
+                videos.forEach(video => {
+                    video.click();
+                    console.log('✅ تم النقر على الفيديو في Aflam4You');
+                });
+            }
+        } catch (error) {
+            console.warn('⚠️ فشل النقر على زر التشغيل في Aflam4You:', error.message);
+        }
+    }
+    
+    // Hide ads and attempt autoplay in Aflam4You
+    hideAflamAdsAndAutoplay(iframe) {
+        try {
+            console.log('🚫 محاولة إخفاء الإعلانات والتشغيل التلقائي في Aflam4You...');
+            
+            if (iframe.contentDocument) {
+                // إخفاء الإعلانات
+                const adSelectors = [
+                    '[class*="ad"]',
+                    '[class*="advertisement"]',
+                    '[class*="popup"]',
+                    '[class*="unmute"]',
+                    '[id*="ad"]',
+                    '[id*="advertisement"]'
+                ];
+                
+                adSelectors.forEach(selector => {
+                    const elements = iframe.contentDocument.querySelectorAll(selector);
+                    elements.forEach(element => {
+                        element.style.display = 'none';
+                        console.log('🚫 تم إخفاء عنصر إعلاني في Aflam4You');
+                    });
+                });
+                
+                // إزالة النصوص الإعلانية
+                const textNodes = iframe.contentDocument.querySelectorAll('*');
+                textNodes.forEach(node => {
+                    if (node.textContent && (
+                        node.textContent.includes('unmute') ||
+                        node.textContent.includes('click here') ||
+                        node.textContent.includes('advertisement')
+                    )) {
+                        node.style.display = 'none';
+                    }
+                });
+                
+                // محاولة التشغيل التلقائي بعد إخفاء الإعلانات
+                setTimeout(() => {
+                    this.attemptAflamAutoplay(iframe);
+                }, 1000);
+            }
+        } catch (error) {
+            console.warn('⚠️ خطأ في إخفاء الإعلانات في Aflam4You:', error.message);
+        }
+    }
+    
+    // Show manual play button for Aflam4You
+    showAflamManualPlayButton(iframe) {
+        const loading = document.getElementById('videoLoading');
+        
+        loading.style.display = 'flex';
+        loading.innerHTML = `
+            <div class="aflam-manual-play-container" style="text-align: center; padding: 2rem;">
+                <div style="font-size: 4rem; color: #FF6B35; margin-bottom: 1rem;">
+                    <i class="fas fa-play-circle"></i>
+                </div>
+                <p style="color: #333; font-size: 1.2rem; margin-bottom: 1rem;">
+                    اضغط للتشغيل
+                </p>
+                <p style="color: #666; font-size: 0.9rem; margin-bottom: 1.5rem;">
+                    Aflam4You يتطلب تفاعل المستخدم للتشغيل
+                </p>
+                <button onclick="app.manualAflamPlay()" style="
+                    background: #FF6B35; 
+                    color: white; 
+                    border: none; 
+                    padding: 1rem 2rem; 
+                    border-radius: 8px; 
+                    cursor: pointer;
+                    font-size: 1.1rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    margin: 0 auto;
+                    transition: all 0.3s ease;
+                " onmouseover="this.style.background='#E55A2B'" onmouseout="this.style.background='#FF6B35'">
+                    <i class="fas fa-play"></i>
+                    تشغيل Aflam4You
+                </button>
+            </div>
+        `;
+    }
+    
+    // Manual play for Aflam4You
+    manualAflamPlay() {
+        const iframe = document.getElementById('aflamPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        if (iframe) {
+            loading.style.display = 'none';
+            
+            // محاولة النقر على زر التشغيل
+            this.clickAflamPlayButton(iframe);
+            
+            // محاولة التشغيل التلقائي بعد النقر
+            setTimeout(() => {
+                this.attemptAflamAutoplay(iframe);
+            }, 1000);
+        }
     }
 
     handleVideoError() {
         const loading = document.getElementById('videoLoading');
-        loading.innerHTML = `
-            <div class="spinner" style="border-top-color: #e94560;"></div>
-            <p style="color: #e94560;">خطأ في تحميل البث - جارٍ المحاولة مرة أخرى...</p>
-        `;
         
-        // Retry after 3 seconds
-        setTimeout(() => {
-            if (this.currentChannel) {
-                this.loadVideoStream(this.currentChannel.url);
+        // Check if current channel is inactive
+        if (this.currentChannel && this.currentChannel.status === 'inactive') {
+            loading.innerHTML = `
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>القناة متوقفة مؤقتاً</p>
+                </div>
+            `;
+            
+            // Show video player for retry functionality
+            const video = document.getElementById('videoPlayer');
+            if (video) {
+                video.style.display = 'block';
             }
-        }, 3000);
+            return;
+        }
+        
+        // Check if current channel requires VPN
+        if (this.currentChannel && this.currentChannel.vpn === true) {
+            loading.innerHTML = `
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>يتطلب VPN</p>
+                </div>
+            `;
+        } else {
+            loading.innerHTML = `
+                <div class="spinner" style="border-top-color: #e94560;"></div>
+            `;
+            
+            // Retry after 3 seconds only if not VPN required
+            setTimeout(() => {
+                if (this.currentChannel) {
+                    this.loadVideoStream(this.currentChannel.url);
+                }
+            }, 3000);
+        }
     }
 
     retryVideo() {
         if (this.currentChannel) {
+            // Show video player again
+            const video = document.getElementById('videoPlayer');
+            if (video) {
+                video.style.display = 'block';
+            }
+            
+            // Hide loading error message
+            const loading = document.getElementById('videoLoading');
+            if (loading) {
+                loading.style.display = 'none';
+            }
+            
             const type = this.currentChannel.type || 'hls';
             this.loadVideoStream(this.currentChannel.url, type);
         }
@@ -1149,6 +2083,12 @@ class ArabicTVApp {
 
     // Detect URL type automatically
     detectUrlType() {
+        // Use the new detection system
+        this.detectUrlTypeNew();
+    }
+
+    // Updated detectUrlType method using new detection system
+    detectUrlTypeNew() {
         const channelUrl = document.getElementById('channelUrl');
         const urlTypeIndicator = document.getElementById('urlTypeIndicator');
         const urlTypeIcon = document.getElementById('urlTypeIcon');
@@ -1161,44 +2101,44 @@ class ArabicTVApp {
             return;
         }
         
-        // Detect URL type
-        let urlType = 'unknown';
+        // Use the new detection system
+        const detectedType = this.detectStreamType(url);
+        const typeDisplayName = this.getStreamTypeDisplayName(detectedType);
+        
+        // Set appropriate icon and color based on type
         let iconClass = 'fas fa-question-circle';
-        let typeText = 'غير معروف';
         let indicatorColor = '#666';
         
-        if (this.isYouTubeUrl(url)) {
-            urlType = 'youtube';
-            iconClass = 'fab fa-youtube';
-            typeText = 'يوتيوب';
-            indicatorColor = '#ff0000';
-        } else if (url.includes('.m3u8') || url.includes('playlist.m3u8') || url.includes('index.m3u8')) {
-            urlType = 'hls';
-            iconClass = 'fas fa-broadcast-tower';
-            typeText = 'HLS (مباشر)';
-            indicatorColor = '#00a8ff';
-        } else if (url.includes('.mp4') || url.includes('.webm') || url.includes('.avi')) {
-            urlType = 'video';
-            iconClass = 'fas fa-video';
-            typeText = 'فيديو مباشر';
-            indicatorColor = '#00d2d3';
-        } else if (url.includes('rtmp://') || url.includes('rtsp://')) {
-            urlType = 'stream';
-            iconClass = 'fas fa-satellite-dish';
-            typeText = 'بث مباشر';
-            indicatorColor = '#ff9ff3';
-        }
+        const typeConfig = {
+            'youtube': { icon: 'fab fa-youtube', color: '#ff0000' },
+            'hls': { icon: 'fas fa-broadcast-tower', color: '#00a8ff' },
+            'mp4': { icon: 'fas fa-video', color: '#00d2d3' },
+            'webm': { icon: 'fas fa-video', color: '#00d2d3' },
+            'flv': { icon: 'fas fa-video', color: '#00d2d3' },
+            'rtmp': { icon: 'fas fa-satellite-dish', color: '#f39c12' },
+            'rtsp': { icon: 'fas fa-satellite-dish', color: '#f39c12' },
+            'dash': { icon: 'fas fa-stream', color: '#9b59b6' },
+            'webrtc': { icon: 'fas fa-network-wired', color: '#2ecc71' },
+            'direct': { icon: 'fas fa-file-video', color: '#00d2d3' },
+            'elahmad': { icon: 'fas fa-tv', color: '#8e44ad' },
+            'aflam': { icon: 'fas fa-film', color: '#e74c3c' },
+            'shls': { icon: 'fas fa-server', color: '#3498db' },
+            'unknown': { icon: 'fas fa-question-circle', color: '#666' }
+        };
         
-        // Update indicator
-        urlTypeIcon.className = iconClass;
-        urlTypeValue.textContent = typeText;
+        const config = typeConfig[detectedType] || typeConfig['unknown'];
+        iconClass = config.icon;
+        indicatorColor = config.color;
+        
+        // Show indicator
         urlTypeIndicator.style.display = 'block';
+        urlTypeIcon.className = iconClass;
+        urlTypeValue.textContent = typeDisplayName;
         urlTypeIndicator.style.backgroundColor = indicatorColor + '20';
-        urlTypeIndicator.style.border = '1px solid ' + indicatorColor;
-        urlTypeIndicator.style.color = indicatorColor;
+        urlTypeIndicator.style.borderColor = indicatorColor;
         
         // Store detected type for form submission
-        this.detectedUrlType = urlType;
+        this.detectedUrlType = detectedType;
     }
 
     // Check if URL is a YouTube URL
@@ -1212,6 +2152,1593 @@ class ArabicTVApp {
         const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
         const match = url.match(regExp);
         return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    // Check if URL is from elahmad.com
+    isElahmadUrl(url) {
+        const elahmadRegex = /^(https?:\/\/)?(www\.)?elahmad\.com/;
+        return elahmadRegex.test(url);
+    }
+
+    // Check if URL is from aflam4you.net
+    isAflamUrl(url) {
+        const aflamRegex = /^(https?:\/\/)?(www\.)?direct\.aflam4you\.net/;
+        return aflamRegex.test(url);
+    }
+
+    // Check if URL is from shls-live-enc.edgenextcdn.net
+    isShlsUrl(url) {
+        const shlsRegex = /^(https?:\/\/)?shls-live-enc\.edgenextcdn\.net/;
+        return shlsRegex.test(url);
+    }
+
+    // === دوال كشف أنواع الصيغ والروابط الجديدة ===
+    
+    // Check if URL is MP4 video
+    isMp4Url(url) {
+        const mp4Regex = /\.mp4(\?|$|#)/i;
+        return mp4Regex.test(url);
+    }
+
+    // Check if URL is WebM video
+    isWebMUrl(url) {
+        const webmRegex = /\.webm(\?|$|#)/i;
+        return webmRegex.test(url);
+    }
+
+    // Check if URL is FLV video
+    isFlvUrl(url) {
+        const flvRegex = /\.flv(\?|$|#)/i;
+        return flvRegex.test(url);
+    }
+
+    // Check if URL is RTMP stream
+    isRtmpUrl(url) {
+        const rtmpRegex = /^rtmp:\/\//i;
+        return rtmpRegex.test(url);
+    }
+
+    // Check if URL is RTSP stream
+    isRtspUrl(url) {
+        const rtspRegex = /^rtsp:\/\//i;
+        return rtspRegex.test(url);
+    }
+
+    // Check if URL is DASH stream
+    isDashUrl(url) {
+        const dashRegex = /\.mpd(\?|$|#)/i;
+        return dashRegex.test(url);
+    }
+
+    // Check if URL is WebRTC stream
+    isWebRtcUrl(url) {
+        const webrtcRegex = /^(https?:\/\/)?.*webrtc/i;
+        return webrtcRegex.test(url);
+    }
+
+    // Check if URL is M3U8 playlist
+    isM3u8Url(url) {
+        const m3u8Regex = /\.m3u8(\?|$|#)/i;
+        return m3u8Regex.test(url);
+    }
+
+    // Check if URL is direct video file
+    isDirectVideoUrl(url) {
+        const videoExtensions = /\.(mp4|webm|ogg|avi|mov|wmv|flv|mkv|3gp|m4v)(\?|$|#)/i;
+        return videoExtensions.test(url);
+    }
+
+    // Check if URL is streaming protocol
+    isStreamingUrl(url) {
+        const streamingRegex = /^(rtmp|rtsp|webrtc):\/\//i;
+        return streamingRegex.test(url);
+    }
+
+    // Universal URL type detection
+    detectStreamType(url) {
+        if (!url) return 'unknown';
+        
+        // YouTube
+        if (this.isYouTubeUrl(url)) return 'youtube';
+        
+        // ElAhmad
+        if (this.isElahmadUrl(url)) return 'elahmad';
+        
+        // Aflam4You
+        if (this.isAflamUrl(url)) return 'aflam';
+        
+        // SHLS
+        if (this.isShlsUrl(url)) return 'shls';
+        
+        // RTMP
+        if (this.isRtmpUrl(url)) return 'rtmp';
+        
+        // RTSP
+        if (this.isRtspUrl(url)) return 'rtsp';
+        
+        // DASH
+        if (this.isDashUrl(url)) return 'dash';
+        
+        // WebRTC
+        if (this.isWebRtcUrl(url)) return 'webrtc';
+        
+        // M3U8 (HLS)
+        if (this.isM3u8Url(url)) return 'hls';
+        
+        // Direct video files
+        if (this.isMp4Url(url)) return 'mp4';
+        if (this.isWebMUrl(url)) return 'webm';
+        if (this.isFlvUrl(url)) return 'flv';
+        
+        // Generic direct video
+        if (this.isDirectVideoUrl(url)) return 'direct';
+        
+        // Default to HLS for unknown streaming URLs
+        return 'hls';
+    }
+
+    // Get stream type display name
+    getStreamTypeDisplayName(type) {
+        const typeNames = {
+            'youtube': 'يوتيوب',
+            'elahmad': 'ElAhmad TV',
+            'aflam': 'Aflam4You',
+            'shls': 'SHLS Stream',
+            'hls': 'HLS (مباشر)',
+            'mp4': 'MP4 فيديو',
+            'webm': 'WebM فيديو',
+            'flv': 'FLV فيديو',
+            'rtmp': 'RTMP بث',
+            'rtsp': 'RTSP بث',
+            'dash': 'DASH بث',
+            'webrtc': 'WebRTC بث',
+            'direct': 'فيديو مباشر',
+            'unknown': 'غير معروف'
+        };
+        return typeNames[type] || 'غير معروف';
+    }
+
+    // Load shls-live-enc.edgenextcdn.net video with proxy support
+    async loadShlsVideo(url) {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            // Validate URL
+            if (!url || url.trim() === '') {
+                throw new Error('رابط shls-live-enc.edgenextcdn.net فارغ أو غير صحيح');
+            }
+
+            if (!this.isShlsUrl(url)) {
+                throw new Error('رابط shls-live-enc.edgenextcdn.net غير صحيح - تحقق من الرابط');
+            }
+
+            // Show loading
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ تحميل البث...</p>
+            `;
+
+            console.log('🔄 محاولة تحميل SHLS stream:', url);
+
+            // Check if we're on a server (not localhost)
+            const isServer = !window.location.hostname.includes('localhost') && 
+                           !window.location.hostname.includes('127.0.0.1') &&
+                           !window.location.hostname.includes('file://') &&
+                           !window.location.hostname.includes('github.io');
+
+            // Special handling for GitHub Pages
+            const isGitHubPages = window.location.hostname.includes('github.io');
+            
+            // Use enhanced GitHub Pages function if on GitHub Pages
+            if (isGitHubPages) {
+                console.log('🌐 تم الكشف عن GitHub Pages - استخدام الدالة المحسنة...');
+                return await this.loadShlsVideoForGitHub(url);
+            }
+            
+            let streamUrl = url;
+            
+            if (isServer) {
+                console.log('🌐 تم الكشف عن السيرفر - استخدام الوكلاء...');
+                
+                // Try multiple CORS proxies for server environments
+                const proxies = [
+                    `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+                    `https://cors-anywhere.herokuapp.com/${url}`,
+                    `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+                    `https://thingproxy.freeboard.io/fetch/${url}`,
+                    `https://corsproxy.io/?${encodeURIComponent(url)}`
+                ];
+                
+                let proxySuccess = false;
+                
+                // Try each proxy until one works
+                for (const proxyUrl of proxies) {
+                    try {
+                        console.log('🔄 جاري المحاولة مع وكيل:', proxyUrl.split('?')[0]);
+                        const response = await fetch(proxyUrl, {
+                            method: 'GET',
+                            headers: {
+                                'Accept': 'application/vnd.apple.mpegurl, application/x-mpegurl, */*',
+                                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+                            }
+                        });
+                        
+                        if (!response.ok) {
+                            throw new Error(`HTTP ${response.status}`);
+                        }
+                        
+                        const data = await response.json();
+                        const content = data.contents || data;
+                        
+                        if (content && content.includes('#EXTM3U')) {
+                            console.log('✅ نجح التحميل مع وكيل:', proxyUrl.split('?')[0]);
+                            streamUrl = proxyUrl;
+                            proxySuccess = true;
+                            break;
+                        }
+                    } catch (error) {
+                        console.log('❌ فشل مع وكيل:', proxyUrl.split('?')[0], error.message);
+                        continue;
+                    }
+                }
+                
+                if (!proxySuccess) {
+                    console.log('⚠️ فشل جميع الوكلاء - محاولة الوصول المباشر...');
+                }
+            } else if (isGitHubPages) {
+                console.log('🐙 تم الكشف عن GitHub Pages - استخدام طريقة خاصة...');
+                
+                // For GitHub Pages, try a different approach
+                try {
+                    // Try to fetch the M3U8 content directly and create a blob URL
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        mode: 'cors',
+                        headers: {
+                            'Accept': 'application/vnd.apple.mpegurl, application/x-mpegurl, */*',
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const content = await response.text();
+                        if (content.includes('#EXTM3U')) {
+                            console.log('✅ نجح الوصول المباشر على GitHub Pages');
+                            streamUrl = url;
+                        } else {
+                            throw new Error('المحتوى ليس ملف M3U8 صالح');
+                        }
+                    } else {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                } catch (error) {
+                    console.log('❌ فشل الوصول المباشر على GitHub Pages:', error.message);
+                    console.log('🔄 محاولة استخدام الوكلاء البديلة...');
+                    
+                    // Fallback to alternative proxies that work better with GitHub Pages
+                    const githubProxies = [
+                        `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+                        `https://corsproxy.io/?${encodeURIComponent(url)}`,
+                        `https://thingproxy.freeboard.io/fetch/${url}`
+                    ];
+                    
+                    for (const proxyUrl of githubProxies) {
+                        try {
+                            console.log('🔄 جاري المحاولة مع وكيل GitHub:', proxyUrl.split('?')[0]);
+                            const response = await fetch(proxyUrl, {
+                                method: 'GET',
+                                headers: {
+                                    'Accept': 'application/vnd.apple.mpegurl, application/x-mpegurl, */*',
+                                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                                }
+                            });
+                            
+                            if (!response.ok) {
+                                throw new Error(`HTTP ${response.status}`);
+                            }
+                            
+                            const data = await response.json();
+                            const content = data.contents || data;
+                            
+                            if (content && content.includes('#EXTM3U')) {
+                                console.log('✅ نجح التحميل مع وكيل GitHub:', proxyUrl.split('?')[0]);
+                                streamUrl = proxyUrl;
+                                break;
+                            }
+                        } catch (error) {
+                            console.log('❌ فشل مع وكيل GitHub:', proxyUrl.split('?')[0], error.message);
+                            continue;
+                        }
+                    }
+                }
+            } else {
+                console.log('🏠 تم الكشف عن البيئة المحلية - استخدام الوصول المباشر...');
+            }
+
+            // Hide loading and show video
+            loading.style.display = 'none';
+            video.style.display = 'block';
+            
+            // Check if HLS.js is available and needed
+            if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+                console.log('🔄 استخدام HLS.js لتشغيل البث...');
+                
+                // Destroy previous HLS instance if exists
+                if (this.hls) {
+                    this.hls.destroy();
+                }
+                
+                // Create new HLS instance
+                this.hls = new Hls({
+                    enableWorker: true,
+                    lowLatencyMode: true,
+                    backBufferLength: 90,
+                    // Add CORS configuration for server environments
+                    xhrSetup: function(xhr, url) {
+                        if (isServer) {
+                            xhr.withCredentials = false;
+                        }
+                    }
+                });
+                
+                // Load the source
+                this.hls.loadSource(streamUrl);
+                this.hls.attachMedia(video);
+                
+                // Add HLS event listeners
+                this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    console.log('✅ تم تحليل المانيفست بنجاح');
+                });
+                
+                this.hls.on(Hls.Events.ERROR, (event, data) => {
+                    console.error('❌ خطأ في HLS:', data);
+                    if (data.fatal) {
+                        loading.style.display = 'flex';
+                        loading.innerHTML = `
+                            <div class="loading-spinner">
+                                <div class="spinner"></div>
+                                <p>جارٍ تحميل البث...</p>
+                            </div>
+                        `;
+                    }
+                });
+                
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                console.log('🔄 استخدام دعم المتصفح الأصلي لـ HLS...');
+                // Set video source directly - browsers can handle M3U8 streams natively
+                video.src = streamUrl;
+                video.load();
+            } else {
+                throw new Error('المتصفح لا يدعم تشغيل ملفات M3U8');
+            }
+            
+            // Add event listeners for better error handling
+            video.addEventListener('loadstart', () => {
+                console.log('🔄 بدء تحميل الفيديو...');
+            });
+            
+            video.addEventListener('canplay', () => {
+                console.log('✅ يمكن تشغيل الفيديو');
+            });
+            
+            video.addEventListener('error', (e) => {
+                console.error('❌ خطأ في تشغيل الفيديو:', e);
+                loading.style.display = 'flex';
+                loading.innerHTML = `
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p>جارٍ تحميل البث...</p>
+                    </div>
+                `;
+            });
+            
+            console.log('✅ تم تحميل البث من shls-live-enc.edgenextcdn.net بنجاح');
+            
+        } catch (error) {
+            console.error('❌ خطأ في تحميل البث من shls-live-enc.edgenextcdn.net:', error);
+            loading.innerHTML = `
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>جارٍ تحميل البث...</p>
+                </div>
+            `;
+        }
+    }
+
+    // Enhanced GitHub Pages support for SHLS streams
+    async loadShlsVideoForGitHub(url) {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            console.log('🔄 تحميل SHLS stream محسن لـ GitHub Pages:', url);
+            
+            // Show loading with specific message for GitHub Pages
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ تحميل البث (GitHub Pages)...</p>
+            `;
+
+            // Enhanced proxy list specifically for GitHub Pages
+            const githubProxies = [
+                `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+                `https://corsproxy.io/?${encodeURIComponent(url)}`,
+                `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+                `https://thingproxy.freeboard.io/fetch/${url}`,
+                `https://cors-anywhere.herokuapp.com/${url}`,
+                `https://proxy.cors.sh/${url}`,
+                `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
+            ];
+            
+            let streamUrl = url;
+            let proxySuccess = false;
+            
+            // Try each proxy with enhanced error handling
+            for (const proxyUrl of githubProxies) {
+                try {
+                    console.log('🔄 جاري المحاولة مع وكيل GitHub:', proxyUrl.split('?')[0]);
+                    
+                    const response = await fetch(proxyUrl, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/vnd.apple.mpegurl, application/x-mpegurl, */*',
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                            'Referer': window.location.origin,
+                            'Origin': window.location.origin
+                        },
+                        mode: 'cors',
+                        credentials: 'omit'
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                    
+                    // Handle different proxy response formats
+                    let content;
+                    if (proxyUrl.includes('allorigins.win')) {
+                        const data = await response.json();
+                        content = data.contents || data;
+                    } else {
+                        content = await response.text();
+                    }
+                    
+                    if (content && content.includes('#EXTM3U')) {
+                        console.log('✅ نجح التحميل مع وكيل GitHub:', proxyUrl.split('?')[0]);
+                        streamUrl = proxyUrl;
+                        proxySuccess = true;
+                        break;
+                    }
+                } catch (error) {
+                    console.log('❌ فشل مع وكيل GitHub:', proxyUrl.split('?')[0], error.message);
+                    continue;
+                }
+            }
+            
+            if (!proxySuccess) {
+                throw new Error('فشل في الوصول للبث عبر جميع الوكلاء المتاحة على GitHub Pages');
+            }
+
+            // Hide loading and show video
+            loading.style.display = 'none';
+            video.style.display = 'block';
+            
+            // Enhanced HLS configuration for GitHub Pages
+            if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+                console.log('🔄 استخدام HLS.js محسن لـ GitHub Pages...');
+                
+                // Destroy previous HLS instance if exists
+                if (this.hls) {
+                    this.hls.destroy();
+                }
+                
+                // Create new HLS instance with GitHub Pages optimizations
+                this.hls = new Hls({
+                    enableWorker: true,
+                    lowLatencyMode: false, // Disable for better compatibility
+                    backBufferLength: 30,
+                    maxBufferLength: 60,
+                    maxMaxBufferLength: 300,
+                    maxBufferSize: 30 * 1000 * 1000,
+                    maxBufferHole: 0.5,
+                    highBufferWatchdogPeriod: 2,
+                    nudgeOffset: 0.1,
+                    nudgeMaxRetry: 3,
+                    maxFragLookUpTolerance: 0.20,
+                    liveSyncDurationCount: 3,
+                    liveMaxLatencyDurationCount: Infinity,
+                    liveDurationInfinity: true,
+                    enableSoftwareAES: true,
+                    manifestLoadingTimeOut: 20000, // Increased timeout for GitHub Pages
+                    manifestLoadingMaxRetry: 5,   // More retries for GitHub Pages
+                    manifestLoadingRetryDelay: 3000,
+                    fragLoadingTimeOut: 45000,    // Increased timeout
+                    fragLoadingMaxRetry: 8,
+                    fragLoadingRetryDelay: 3000,
+                    startFragPrefetch: false, // Disable for GitHub Pages
+                    // Enhanced headers for GitHub Pages
+                    xhrSetup: function(xhr, url) {
+                        xhr.setRequestHeader('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
+                        xhr.setRequestHeader('Referer', window.location.origin);
+                        xhr.setRequestHeader('Accept', 'application/vnd.apple.mpegurl, application/x-mpegurl, */*');
+                        xhr.setRequestHeader('Origin', window.location.origin);
+                    }
+                });
+
+                this.hls.loadSource(streamUrl);
+                this.hls.attachMedia(video);
+
+                this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    console.log('✅ تم تحميل البث بنجاح على GitHub Pages');
+                    
+                    if (this.settings.autoplay) {
+                        this.enhancedAutoplay(video);
+                    }
+                    
+                    this.updateQualityDisplayFromHLS();
+                    setupMediaSession();
+                });
+
+                this.hls.on(Hls.Events.ERROR, (event, data) => {
+                    console.error('❌ خطأ في تشغيل البث على GitHub Pages:', data);
+                    
+                    if (data.fatal) {
+                        switch (data.type) {
+                            case Hls.ErrorTypes.NETWORK_ERROR:
+                                console.log('🔄 محاولة إعادة التحميل بعد خطأ الشبكة...');
+                                setTimeout(() => {
+                                    this.hls.startLoad();
+                                }, 2000);
+                                break;
+                            case Hls.ErrorTypes.MEDIA_ERROR:
+                                console.log('🔄 محاولة إعادة التحميل بعد خطأ الوسائط...');
+                                setTimeout(() => {
+                                    this.hls.recoverMediaError();
+                                }, 2000);
+                                break;
+                            default:
+                                console.log('❌ خطأ غير قابل للإصلاح');
+                                this.showVideoError('خطأ في تشغيل البث على GitHub Pages - جرب استخدام VPN أو تحديث الصفحة');
+                                break;
+                        }
+                    }
+                });
+
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // Native HLS support (Safari) - not recommended for GitHub Pages
+                console.log('🔄 استخدام دعم HLS الأصلي للمتصفح...');
+                const source = document.getElementById('videoSource');
+                source.src = streamUrl;
+                video.load();
+                
+                if (this.settings.autoplay) {
+                    this.enhancedAutoplay(video);
+                }
+                
+                this.updateQualityDisplayFromNativeHLS();
+                setupMediaSession();
+            } else {
+                throw new Error('المتصفح لا يدعم تشغيل البث المباشر');
+            }
+            
+            // Enhanced error handling for video element
+            video.addEventListener('error', (e) => {
+                console.error('❌ خطأ في تشغيل الفيديو على GitHub Pages:', e);
+                loading.style.display = 'flex';
+                loading.innerHTML = `
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p>جارٍ تحميل البث...</p>
+                    </div>
+                `;
+            });
+            
+            console.log('✅ تم تحميل البث من shls-live-enc.edgenextcdn.net بنجاح على GitHub Pages');
+            
+        } catch (error) {
+            console.error('❌ خطأ في تحميل البث على GitHub Pages:', error);
+            loading.innerHTML = `
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>مشكلة في الوصول للبث على GitHub Pages</p>
+                </div>
+            `;
+            
+            // Show specific error message for GitHub Pages
+            this.showVideoError('مشكلة في الوصول للبث على GitHub Pages - جرب استخدام VPN أو تحديث الصفحة');
+        }
+    }
+
+    // === دوال تحميل الصيغ الجديدة ===
+    
+    // Load MP4 video
+    async loadMp4Video(url) {
+        const video = document.getElementById('videoPlayer');
+        const source = document.getElementById('videoSource');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            console.log('🔄 تحميل MP4 فيديو:', url);
+            
+            // Show loading
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ تحميل MP4...</p>
+            `;
+
+            // Set video source
+            source.src = url;
+            source.type = 'video/mp4';
+            video.load();
+
+            // Wait for video to be ready
+            await new Promise((resolve, reject) => {
+                const timeout = setTimeout(() => {
+                    reject(new Error('انتهت مهلة تحميل MP4'));
+                }, 30000);
+
+                video.addEventListener('loadedmetadata', () => {
+                    clearTimeout(timeout);
+                    loading.style.display = 'none';
+                    
+                    if (this.settings.autoplay) {
+                        this.enhancedAutoplay(video);
+                    }
+                    
+                    this.updateQualityDisplayForDirectVideo('MP4');
+                    setupMediaSession();
+                    resolve();
+                }, { once: true });
+
+                video.addEventListener('error', (e) => {
+                    clearTimeout(timeout);
+                    reject(new Error('خطأ في تحميل MP4: ' + e.message));
+                }, { once: true });
+            });
+
+        } catch (error) {
+            console.error('خطأ في تحميل MP4:', error);
+            this.showVideoError('خطأ في تحميل MP4');
+            this.handleVideoError();
+        }
+    }
+
+    // Load WebM video
+    async loadWebMVideo(url) {
+        const video = document.getElementById('videoPlayer');
+        const source = document.getElementById('videoSource');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            console.log('🔄 تحميل WebM فيديو:', url);
+            
+            // Show loading
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ تحميل WebM...</p>
+            `;
+
+            // Set video source
+            source.src = url;
+            source.type = 'video/webm';
+            video.load();
+
+            // Wait for video to be ready
+            await new Promise((resolve, reject) => {
+                const timeout = setTimeout(() => {
+                    reject(new Error('انتهت مهلة تحميل WebM'));
+                }, 30000);
+
+                video.addEventListener('loadedmetadata', () => {
+                    clearTimeout(timeout);
+                    loading.style.display = 'none';
+                    
+                    if (this.settings.autoplay) {
+                        this.enhancedAutoplay(video);
+                    }
+                    
+                    this.updateQualityDisplayForDirectVideo('WebM');
+                    setupMediaSession();
+                    resolve();
+                }, { once: true });
+
+                video.addEventListener('error', (e) => {
+                    clearTimeout(timeout);
+                    reject(new Error('خطأ في تحميل WebM: ' + e.message));
+                }, { once: true });
+            });
+
+        } catch (error) {
+            console.error('خطأ في تحميل WebM:', error);
+            this.showVideoError('خطأ في تحميل WebM');
+            this.handleVideoError();
+        }
+    }
+
+    // Load FLV video (requires conversion or special handling)
+    async loadFlvVideo(url) {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            console.log('🔄 تحميل FLV فيديو:', url);
+            
+            // Show loading
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ تحميل FLV...</p>
+            `;
+
+            // FLV is not natively supported by HTML5 video
+            // We'll try to load it as a generic video and let the browser handle it
+            // or show a message that FLV requires conversion
+            
+            const source = document.getElementById('videoSource');
+            source.src = url;
+            source.type = 'video/x-flv';
+            video.load();
+
+            // Wait for video to be ready
+            await new Promise((resolve, reject) => {
+                const timeout = setTimeout(() => {
+                    reject(new Error('FLV غير مدعوم بشكل مباشر - يرجى تحويله إلى MP4'));
+                }, 10000);
+
+                video.addEventListener('loadedmetadata', () => {
+                    clearTimeout(timeout);
+                    loading.style.display = 'none';
+                    
+                    if (this.settings.autoplay) {
+                        this.enhancedAutoplay(video);
+                    }
+                    
+                    this.updateQualityDisplayForDirectVideo('FLV');
+                    setupMediaSession();
+                    resolve();
+                }, { once: true });
+
+                video.addEventListener('error', (e) => {
+                    clearTimeout(timeout);
+                    reject(new Error('FLV غير مدعوم - يرجى تحويله إلى MP4 أو WebM'));
+                }, { once: true });
+            });
+
+        } catch (error) {
+            console.error('خطأ في تحميل FLV:', error);
+            this.showVideoError('FLV غير مدعوم - يرجى تحويله إلى MP4');
+            this.handleVideoError();
+        }
+    }
+
+    // Load RTMP stream (requires special handling)
+    async loadRtmpVideo(url) {
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            console.log('🔄 تحميل RTMP stream:', url);
+            
+            // Show loading
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ تحميل RTMP...</p>
+            `;
+
+            // RTMP is not directly supported by HTML5 video
+            // We need to use a WebRTC gateway or convert to HLS
+            throw new Error('RTMP يتطلب خادم وسيط أو تحويل إلى HLS');
+
+        } catch (error) {
+            console.error('خطأ في تحميل RTMP:', error);
+            this.showVideoError('RTMP غير مدعوم مباشرة - يرجى تحويله إلى HLS');
+            this.handleVideoError();
+        }
+    }
+
+    // Load RTSP stream (requires special handling)
+    async loadRtspVideo(url) {
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            console.log('🔄 تحميل RTSP stream:', url);
+            
+            // Show loading
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ تحميل RTSP...</p>
+            `;
+
+            // RTSP is not directly supported by HTML5 video
+            // We need to use a WebRTC gateway or convert to HLS
+            throw new Error('RTSP يتطلب خادم وسيط أو تحويل إلى HLS');
+
+        } catch (error) {
+            console.error('خطأ في تحميل RTSP:', error);
+            this.showVideoError('RTSP غير مدعوم مباشرة - يرجى تحويله إلى HLS');
+            this.handleVideoError();
+        }
+    }
+
+    // Load DASH stream
+    async loadDashVideo(url) {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            console.log('🔄 تحميل DASH stream:', url);
+            
+            // Show loading
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ تحميل DASH...</p>
+            `;
+
+            // Check if browser supports DASH natively
+            if (video.canPlayType('application/dash+xml')) {
+                const source = document.getElementById('videoSource');
+                source.src = url;
+                source.type = 'application/dash+xml';
+                video.load();
+
+                await new Promise((resolve, reject) => {
+                    const timeout = setTimeout(() => {
+                        reject(new Error('انتهت مهلة تحميل DASH'));
+                    }, 30000);
+
+                    video.addEventListener('loadedmetadata', () => {
+                        clearTimeout(timeout);
+                        loading.style.display = 'none';
+                        
+                        if (this.settings.autoplay) {
+                            this.enhancedAutoplay(video);
+                        }
+                        
+                        this.updateQualityDisplayForDirectVideo('DASH');
+                        setupMediaSession();
+                        resolve();
+                    }, { once: true });
+
+                    video.addEventListener('error', (e) => {
+                        clearTimeout(timeout);
+                        reject(new Error('خطأ في تحميل DASH: ' + e.message));
+                    }, { once: true });
+                });
+            } else {
+                throw new Error('DASH غير مدعوم في هذا المتصفح');
+            }
+
+        } catch (error) {
+            console.error('خطأ في تحميل DASH:', error);
+            this.showVideoError('DASH غير مدعوم في هذا المتصفح');
+            this.handleVideoError();
+        }
+    }
+
+    // Load WebRTC stream
+    async loadWebRtcVideo(url) {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            console.log('🔄 تحميل WebRTC stream:', url);
+            
+            // Show loading
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ تحميل WebRTC...</p>
+            `;
+
+            // WebRTC requires special handling with RTCPeerConnection
+            // This is a simplified implementation
+            throw new Error('WebRTC يتطلب تطبيق خاص');
+
+        } catch (error) {
+            console.error('خطأ في تحميل WebRTC:', error);
+            this.showVideoError('WebRTC يتطلب تطبيق خاص');
+            this.handleVideoError();
+        }
+    }
+
+    // Update quality display for direct video formats
+    updateQualityDisplayForDirectVideo(format) {
+        const qualityDisplay = document.getElementById('currentQualityText');
+        if (qualityDisplay) {
+            qualityDisplay.textContent = `${format} - مباشر`;
+        }
+    }
+
+    // Load direct video (generic fallback)
+    async loadDirectVideo(url) {
+        const video = document.getElementById('videoPlayer');
+        const source = document.getElementById('videoSource');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            console.log('🔄 تحميل فيديو مباشر:', url);
+            
+            // Show loading
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+                <p>جارٍ تحميل الفيديو...</p>
+            `;
+
+            // Try to detect MIME type from URL
+            let mimeType = 'video/mp4'; // default
+            if (this.isWebMUrl(url)) {
+                mimeType = 'video/webm';
+            } else if (this.isMp4Url(url)) {
+                mimeType = 'video/mp4';
+            } else if (this.isFlvUrl(url)) {
+                mimeType = 'video/x-flv';
+            }
+
+            // Set video source
+            source.src = url;
+            source.type = mimeType;
+            video.load();
+
+            // Wait for video to be ready
+            await new Promise((resolve, reject) => {
+                const timeout = setTimeout(() => {
+                    reject(new Error('انتهت مهلة تحميل الفيديو'));
+                }, 30000);
+
+                video.addEventListener('loadedmetadata', () => {
+                    clearTimeout(timeout);
+                    loading.style.display = 'none';
+                    
+                    if (this.settings.autoplay) {
+                        this.enhancedAutoplay(video);
+                    }
+                    
+                    this.updateQualityDisplayForDirectVideo('مباشر');
+                    setupMediaSession();
+                    resolve();
+                }, { once: true });
+
+                video.addEventListener('error', (e) => {
+                    clearTimeout(timeout);
+                    reject(new Error('خطأ في تحميل الفيديو: ' + e.message));
+                }, { once: true });
+            });
+
+        } catch (error) {
+            console.error('خطأ في تحميل الفيديو المباشر:', error);
+            this.showVideoError('خطأ في تحميل الفيديو');
+            this.handleVideoError();
+        }
+    }
+    async loadElahmadVideo(url) {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            // Validate URL
+            if (!url || url.trim() === '') {
+                throw new Error('رابط elahmad.com فارغ أو غير صحيح');
+            }
+
+            if (!this.isElahmadUrl(url)) {
+                throw new Error('رابط elahmad.com غير صحيح - تحقق من الرابط');
+            }
+
+            // Stop any existing iframe
+            const existingIframe = document.getElementById('elahmadPlayer');
+            if (existingIframe) {
+                // إيقاف iframe السابق فوراً
+                existingIframe.src = '';
+                existingIframe.style.display = 'none';
+                
+                // محاولة إيقاف الصوت
+                try {
+                    if (existingIframe.contentWindow) {
+                        existingIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                    }
+                } catch (e) {
+                    console.log('Cannot access existing iframe content');
+                }
+                
+                // إزالة iframe السابق
+                existingIframe.remove();
+            }
+
+            // Hide the video element and show iframe
+            video.style.display = 'none';
+            
+            // Create or update elahmad iframe
+            let iframe = document.getElementById('elahmadPlayer');
+            if (!iframe) {
+                iframe = document.createElement('iframe');
+                iframe.id = 'elahmadPlayer';
+                iframe.style.width = '100%';
+                iframe.style.height = '100%';
+                iframe.style.border = 'none';
+                iframe.allowFullscreen = true;
+                iframe.allow = 'autoplay; fullscreen; picture-in-picture; xr-spatial-tracking; encrypted-media';
+                
+            // إضافة حماية من الإعلانات وإعادة التوجيه
+            iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+            iframe.setAttribute('loading', 'lazy');
+            
+            // منع إعادة التوجيه غير المرغوب فيها
+            iframe.onload = () => {
+                console.log('✅ تم تحميل iframe من elahmad.com بنجاح');
+                loading.style.display = 'none';
+                
+                // فحص الإعلانات وإعادة التوجيه
+                setTimeout(() => {
+                    try {
+                        if (iframe.contentDocument && iframe.contentDocument.body) {
+                            const bodyText = iframe.contentDocument.body.textContent.toLowerCase();
+                            if (bodyText.includes('advertisement') || bodyText.includes('ad') || bodyText.includes('إعلان')) {
+                                console.warn('⚠️ تم اكتشاف إعلانات في المحتوى');
+                            }
+                            if (bodyText.includes('please wait') || bodyText.includes('انتظر')) {
+                                console.warn('⚠️ تم اكتشاف رسالة انتظار - قد تكون إعادة توجيه');
+                            }
+                        }
+                    } catch (e) {
+                        // Cross-origin error is expected for successful loads
+                        console.log('✅ iframe محمل بنجاح (Cross-origin)');
+                    }
+                }, 2000);
+            };
+                
+                // Insert iframe after video element
+                video.parentNode.insertBefore(iframe, video.nextSibling);
+            }
+
+            // Set iframe source
+            iframe.src = url;
+            
+            // Hide loading
+            loading.style.display = 'none';
+            
+            // Show iframe
+            iframe.style.display = 'block';
+            
+            // Add double-click fullscreen support for elahmad iframe
+            iframe.addEventListener('dblclick', () => {
+                console.log('🖱️ ضغط مزدوج على elahmad iframe - محاولة التكبير');
+                this.toggleFullscreen();
+            });
+            
+            console.log('✅ تم تحميل iframe من elahmad.com بنجاح');
+            
+        } catch (error) {
+            console.error('❌ خطأ في تحميل iframe من elahmad.com:', error);
+            loading.innerHTML = `
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>جارٍ تحميل المحتوى...</p>
+                </div>
+            `;
+            throw error;
+        }
+    }
+
+    // Extract direct stream URL from aflam4you.net page (Enhanced)
+    async extractAflamStreamUrl(pageUrl) {
+        try {
+            console.log('🔍 جاري استخراج رابط البث المباشر من:', pageUrl);
+            
+            // Try multiple CORS proxies
+            const proxies = [
+                `https://api.allorigins.win/get?url=${encodeURIComponent(pageUrl)}`,
+                `https://cors-anywhere.herokuapp.com/${pageUrl}`,
+                `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(pageUrl)}`
+            ];
+            
+            let htmlContent = '';
+            let lastError = null;
+            
+            // Try each proxy until one works
+            for (const proxyUrl of proxies) {
+                try {
+                    console.log('🔄 جاري المحاولة مع:', proxyUrl.split('?')[0]);
+                    const response = await fetch(proxyUrl, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    htmlContent = data.contents || data;
+                    
+                    if (htmlContent && htmlContent.length > 100) {
+                        console.log('✅ نجح التحميل مع:', proxyUrl.split('?')[0]);
+                        break;
+                    }
+                } catch (error) {
+                    console.log('❌ فشل مع:', proxyUrl.split('?')[0], error.message);
+                    lastError = error;
+                    continue;
+                }
+            }
+            
+            if (!htmlContent || htmlContent.length < 100) {
+                throw new Error('لا يمكن الوصول لمحتوى الصفحة من أي خادم وكيل');
+            }
+            
+            console.log('📄 تم تحميل المحتوى بنجاح، حجم:', htmlContent.length, 'حرف');
+            
+            // إزالة الإعلانات والنوافذ المنبقة من المحتوى المحمل
+            htmlContent = htmlContent.replace(/<[^>]*class[^>]*ad[^>]*>.*?<\/[^>]*>/gi, '');
+            htmlContent = htmlContent.replace(/<[^>]*class[^>]*advertisement[^>]*>.*?<\/[^>]*>/gi, '');
+            htmlContent = htmlContent.replace(/<[^>]*class[^>]*popup[^>]*>.*?<\/[^>]*>/gi, '');
+            htmlContent = htmlContent.replace(/<[^>]*class[^>]*unmute[^>]*>.*?<\/[^>]*>/gi, '');
+            htmlContent = htmlContent.replace(/<a[^>]*href[^>]*unmute[^>]*>.*?<\/a>/gi, '');
+            htmlContent = htmlContent.replace(/<a[^>]*href[^>]*advertisement[^>]*>.*?<\/a>/gi, '');
+            htmlContent = htmlContent.replace(/<a[^>]*href[^>]*popup[^>]*>.*?<\/a>/gi, '');
+            
+            // إزالة النصوص التي تحتوي على unmute
+            htmlContent = htmlContent.replace(/click here to unmute/gi, '');
+            htmlContent = htmlContent.replace(/Click here to unmute/gi, '');
+            htmlContent = htmlContent.replace(/CLICK HERE TO UNMUTE/gi, '');
+            htmlContent = htmlContent.replace(/unmute/gi, '');
+            
+            console.log('🛡️ تم تنظيف المحتوى من الإعلانات والنوافذ المنبقة');
+            
+            // Enhanced patterns for finding stream URLs
+            const streamPatterns = [
+                // Pattern 1: Direct HLS URLs in quotes
+                /["'](https?:\/\/[^"'\s]+\.m3u8[^"'\s]*)["']/gi,
+                // Pattern 2: HLS URLs in video sources
+                /<source[^>]*src=["']([^"']*\.m3u8[^"']*)["'][^>]*>/gi,
+                // Pattern 3: HLS URLs in JavaScript variables
+                /(?:src|url|stream|hls|source)["\s]*[:=]["\s]*["']([^"']*\.m3u8[^"']*)["']/gi,
+                // Pattern 4: HLS URLs in data attributes
+                /data-[^=]*=["']([^"']*\.m3u8[^"']*)["']/gi,
+                // Pattern 5: HLS URLs in object/embed tags
+                /<(?:object|embed)[^>]*src=["']([^"']*\.m3u8[^"']*)["'][^>]*>/gi,
+                // Pattern 6: HLS URLs in iframe src
+                /<iframe[^>]*src=["']([^"']*\.m3u8[^"']*)["'][^>]*>/gi,
+                // Pattern 7: HLS URLs in player configurations
+                /(?:player|video|stream)["\s]*[:=]["\s]*["']([^"']*\.m3u8[^"']*)["']/gi,
+                // Pattern 8: HLS URLs in JSON-like structures
+                /"url"["\s]*:["\s]*["']([^"']*\.m3u8[^"']*)["']/gi,
+                // Pattern 9: HLS URLs in base64 encoded data
+                /data:application\/json;base64,[A-Za-z0-9+/=]+/gi
+            ];
+            
+            const foundStreams = new Set();
+            
+            // Extract streams using all patterns
+            streamPatterns.forEach((pattern, index) => {
+                let match;
+                while ((match = pattern.exec(htmlContent)) !== null) {
+                    const streamUrl = match[1] || match[0];
+                    if (streamUrl && streamUrl.includes('.m3u8')) {
+                        foundStreams.add(streamUrl);
+                        console.log(`🎯 تم العثور على رابط في النمط ${index + 1}:`, streamUrl);
+                    }
+                }
+            });
+            
+            // Also try to find URLs in script tags
+            const scriptMatches = htmlContent.match(/<script[^>]*>[\s\S]*?<\/script>/gi);
+            if (scriptMatches) {
+                scriptMatches.forEach(script => {
+                    const scriptStreams = script.match(/(https?:\/\/[^"'\s]+\.m3u8[^"'\s]*)/gi);
+                    if (scriptStreams) {
+                        scriptStreams.forEach(stream => foundStreams.add(stream));
+                    }
+                });
+            }
+            
+            // Convert Set to Array and filter valid URLs
+            const validStreams = Array.from(foundStreams).filter(url => {
+                try {
+                    const urlObj = new URL(url);
+                    return url.includes('.m3u8') && 
+                           !url.includes('placeholder') && 
+                           !url.includes('example') &&
+                           !url.includes('test') &&
+                           (urlObj.protocol === 'http:' || urlObj.protocol === 'https:');
+                } catch {
+                    return false;
+                }
+            });
+            
+            console.log('📊 إجمالي الروابط الموجودة:', foundStreams.size);
+            console.log('✅ الروابط الصحيحة:', validStreams.length);
+            
+            if (validStreams.length === 0) {
+                // Try to find any video-related URLs as fallback
+                const videoPatterns = [
+                    /(https?:\/\/[^"'\s]+\.(?:mp4|webm|avi|mov)[^"'\s]*)/gi,
+                    /(https?:\/\/[^"'\s]+\.(?:ts|m4s)[^"'\s]*)/gi
+                ];
+                
+                const videoUrls = new Set();
+                videoPatterns.forEach(pattern => {
+                    let match;
+                    while ((match = pattern.exec(htmlContent)) !== null) {
+                        videoUrls.add(match[1]);
+                    }
+                });
+                
+                if (videoUrls.size > 0) {
+                    console.log('🎥 تم العثور على روابط فيديو بديلة:', Array.from(videoUrls));
+                    return Array.from(videoUrls)[0];
+                }
+                
+                throw new Error('لم يتم العثور على رابط بث مباشر في الصفحة');
+            }
+            
+            // Return the first valid stream URL
+            const streamUrl = validStreams[0];
+            console.log('✅ تم العثور على رابط البث المباشر:', streamUrl);
+            
+            return streamUrl;
+            
+        } catch (error) {
+            console.error('❌ خطأ في استخراج رابط البث المباشر:', error);
+            throw new Error(`فشل في استخراج رابط البث المباشر: ${error.message}`);
+        }
+    }
+
+    // Load aflam4you.net video
+    async loadAflamVideo(url) {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            // Validate URL
+            if (!url || url.trim() === '') {
+                throw new Error('رابط aflam4you.net فارغ أو غير صحيح');
+            }
+
+            if (!this.isAflamUrl(url)) {
+                throw new Error('رابط aflam4you.net غير صحيح - تحقق من الرابط');
+            }
+
+            // Show loading
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="spinner"></div>
+            `;
+
+            try {
+                // Try to extract direct stream URL first
+                const streamUrl = await this.extractAflamStreamUrl(url);
+                
+                // Update loading message
+                loading.innerHTML = `
+                    <div class="spinner"></div>
+                `;
+
+                // Load the direct stream using HLS
+                await this.loadDirectStream(streamUrl);
+                
+            } catch (extractError) {
+                console.log('⚠️ فشل استخراج البث المباشر، جاري المحاولة مع iframe:', extractError.message);
+                
+                // Fallback to iframe method with improvements
+                await this.loadAflamIframe(url);
+            }
+            
+        } catch (error) {
+            console.error('❌ خطأ في تحميل aflam4you.net:', error);
+            this.showAflamError(error.message);
+            throw error;
+        }
+    }
+
+    // Load aflam4you.net using iframe (Fallback method)
+    async loadAflamIframe(url) {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            // Stop any existing iframe
+            const existingIframe = document.getElementById('aflamPlayer');
+            if (existingIframe) {
+                existingIframe.src = '';
+                existingIframe.style.display = 'none';
+                existingIframe.remove();
+            }
+
+            // Hide the video element and show iframe
+            video.style.display = 'none';
+            
+            // Update loading message
+            loading.innerHTML = `
+                <div class="spinner"></div>
+            `;
+            
+            // Create optimized iframe
+            const iframe = document.createElement('iframe');
+            iframe.id = 'aflamPlayer';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.border = 'none';
+            iframe.style.background = '#000';
+            iframe.allowFullscreen = true;
+            iframe.allow = 'autoplay; fullscreen; picture-in-picture; xr-spatial-tracking; encrypted-media';
+            // إزالة sandbox لتجنب التحذيرات
+            // iframe.sandbox = 'allow-scripts allow-same-origin allow-presentation allow-forms';
+            
+            // Add error handling
+            iframe.onerror = () => {
+                console.error('❌ خطأ في تحميل iframe من aflam4you.net');
+                this.showAflamError('فشل في تحميل المحتوى');
+            };
+            
+            // إضافة حماية من الإعلانات وإعادة التوجيه
+            iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+            iframe.setAttribute('loading', 'lazy');
+            
+            // حماية إضافية من النوافذ المنبقة مع السماح بالتشغيل التلقائي
+            iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation allow-forms allow-popups-to-escape-sandbox allow-autoplay');
+            
+            // منع النوافذ المنبقة من iframe
+            iframe.addEventListener('load', function() {
+                try {
+                    // منع النوافذ المنبقة من داخل iframe
+                    if (iframe.contentWindow) {
+                        const originalIframeOpen = iframe.contentWindow.open;
+                        iframe.contentWindow.open = function(url) {
+                            console.log('🚫 تم منع نافذة منبقة من aflam4you iframe:', url);
+                            return null;
+                        };
+                        
+                        // منع النوافذ المنبقة عند النقر
+                        iframe.contentWindow.addEventListener('click', function(e) {
+                            if (e.target && (
+                                e.target.textContent && (
+                                    e.target.textContent.includes('unmute') ||
+                                    e.target.textContent.includes('click here') ||
+                                    e.target.textContent.includes('Click here')
+                                )
+                            )) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                console.log('🚫 تم منع النقر على رابط unmute');
+                                return false;
+                            }
+                        });
+                    }
+                } catch (e) {
+                    // Cross-origin error متوقع
+                    console.log('✅ حماية iframe مفعلة (Cross-origin)');
+                }
+            });
+            
+            // منع إعادة التوجيه غير المرغوب فيها مع التشغيل التلقائي
+            iframe.onload = () => {
+                console.log('✅ تم تحميل iframe من aflam4you.net');
+                loading.style.display = 'none';
+                
+                // محاولة التشغيل التلقائي للفيديو داخل iframe
+                setTimeout(() => {
+                    this.attemptAflamAutoplay(iframe);
+                }, 2000);
+                
+                // Check for blocking after a delay
+                setTimeout(() => {
+                    try {
+                        if (iframe.contentDocument && iframe.contentDocument.body) {
+                            const bodyText = iframe.contentDocument.body.textContent.toLowerCase();
+                            if (bodyText.includes('blocked') || bodyText.includes('contact the site owner')) {
+                                this.showAflamError('المحتوى محجوب من الموقع');
+                            }
+                            // فحص الإعلانات والنوافذ المنبقة
+                            if (bodyText.includes('advertisement') || bodyText.includes('ad') || bodyText.includes('إعلان') ||
+                                bodyText.includes('unmute') || bodyText.includes('click here to unmute')) {
+                                console.warn('⚠️ تم اكتشاف إعلانات أو نوافذ منبقة في المحتوى');
+                                // محاولة إخفاء الإعلانات والتشغيل التلقائي
+                                this.hideAflamAdsAndAutoplay(iframe);
+                            }
+                        }
+                    } catch (e) {
+                        // Cross-origin error is expected for successful loads
+                        console.log('✅ iframe محمل بنجاح (Cross-origin)');
+                        // محاولة التشغيل التلقائي حتى مع Cross-origin
+                        this.attemptAflamAutoplay(iframe);
+                    }
+                }, 3000);
+            };
+            
+            // Insert iframe after video element
+            video.parentNode.insertBefore(iframe, video.nextSibling);
+            
+            // Set iframe source with autoplay parameters
+            let aflamUrl = url;
+            if (!aflamUrl.includes('autoplay')) {
+                aflamUrl += (aflamUrl.includes('?') ? '&' : '?') + 'autoplay=1&muted=0';
+            }
+            iframe.src = aflamUrl;
+            
+            // Show iframe
+            iframe.style.display = 'block';
+            
+            // Add double-click fullscreen support for aflam iframe
+            iframe.addEventListener('dblclick', () => {
+                console.log('🖱️ ضغط مزدوج على aflam iframe - محاولة التكبير');
+                this.toggleFullscreen();
+            });
+            
+            // محاولة إضافية للتشغيل التلقائي بعد تحميل iframe
+            iframe.addEventListener('load', () => {
+                setTimeout(() => {
+                    console.log('🔄 محاولة إضافية للتشغيل التلقائي في Aflam4You...');
+                    this.attemptAflamAutoplay(iframe);
+                }, 5000);
+            });
+            
+        } catch (error) {
+            console.error('❌ خطأ في تحميل iframe من aflam4you.net:', error);
+            this.showAflamError(error.message);
+            throw error;
+        }
+    }
+
+    // Load direct HLS stream
+    async loadDirectStream(streamUrl) {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            // Show video element
+            video.style.display = 'block';
+            
+            // Hide any existing iframes
+            const aflamIframe = document.getElementById('aflamPlayer');
+            if (aflamIframe) {
+                aflamIframe.style.display = 'none';
+            }
+            
+            // Load HLS stream
+            if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+                // Destroy existing HLS instance
+                if (this.hls) {
+                    this.hls.destroy();
+                    this.hls = null;
+                }
+
+                this.hls = new Hls({
+                    enableWorker: true,
+                    lowLatencyMode: true,
+                    backBufferLength: 90,
+                    maxBufferLength: 0,
+                    maxMaxBufferLength: 600,
+                    maxBufferSize: 60 * 1000 * 1000,
+                    maxBufferHole: 0.5,
+                    highBufferWatchdogPeriod: 2,
+                    nudgeOffset: 0.1,
+                    nudgeMaxRetry: 3,
+                    maxFragLookUpTolerance: 0.20,
+                    liveSyncDurationCount: 3,
+                    liveMaxLatencyDurationCount: Infinity,
+                    liveDurationInfinity: true,
+                    enableSoftwareAES: true,
+                    manifestLoadingTimeOut: 10000,
+                    manifestLoadingMaxRetry: 1,
+                    manifestLoadingRetryDelay: 1000,
+                    fragLoadingTimeOut: 20000,
+                    fragLoadingMaxRetry: 6,
+                    fragLoadingRetryDelay: 1000,
+                    startFragPrefetch: true
+                });
+
+                this.hls.loadSource(streamUrl);
+                this.hls.attachMedia(video);
+
+                this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    loading.style.display = 'none';
+                    if (this.settings.autoplay) {
+                        video.play().catch(console.error);
+                    }
+                });
+
+                this.hls.on(Hls.Events.ERROR, (event, data) => {
+                    console.error('HLS Error:', data);
+                    if (data.fatal) {
+                        this.showStreamError('جارٍ تحميل البث...');
+                    }
+                });
+
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // Native HLS support (Safari)
+                video.src = streamUrl;
+                loading.style.display = 'none';
+                if (this.settings.autoplay) {
+                    this.enhancedAutoplay(video);
+                }
+            } else {
+                throw new Error('المتصفح لا يدعم تشغيل البث المباشر');
+            }
+            
+            console.log('✅ تم تحميل البث المباشر بنجاح:', streamUrl);
+            
+            // Add double-click fullscreen support for video element
+            video.addEventListener('dblclick', () => {
+                console.log('🖱️ ضغط مزدوج على الفيديو - محاولة التكبير');
+                this.toggleFullscreen();
+            });
+            
+        } catch (error) {
+            console.error('❌ خطأ في تحميل البث المباشر:', error);
+            this.showStreamError(error.message);
+            throw error;
+        }
+    }
+
+    // Show stream error message
+    showStreamError(message) {
+        const loading = document.getElementById('videoLoading');
+        loading.style.display = 'flex';
+        loading.innerHTML = `
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>جارٍ تحميل البث...</p>
+            </div>
+        `;
+    }
+
+    // Show aflam error message
+    showAflamError(errorMessage = '') {
+        const loading = document.getElementById('videoLoading');
+        const iframe = document.getElementById('aflamPlayer');
+        
+        if (iframe) {
+            iframe.style.display = 'none';
+        }
+        
+        loading.style.display = 'flex';
+        loading.innerHTML = `
+            <div class="error-icon">🚫</div>
+            <p>المحتوى محجوب</p>
+            <small>${errorMessage || 'لا يمكن تحميل المحتوى من aflam4you.net'}</small>
+            <div class="error-solutions">
+                <p><strong>الحلول المقترحة:</strong></p>
+                <ul>
+                    <li>تأكد من أن الموقع غير محجوب في منطقتك</li>
+                    <li>جرب استخدام VPN</li>
+                    <li>تحقق من الرابط في المتصفح مباشرة</li>
+                    <li>اتصل بمالك الموقع لحل المشكلة</li>
+                </ul>
+                <button class="retry-btn" onclick="app.retryAflamLoad()">
+                    <i class="fas fa-redo"></i>
+                    إعادة المحاولة
+                </button>
+                <button class="open-external-btn" onclick="app.openAflamExternal()">
+                    <i class="fas fa-external-link-alt"></i>
+                    فتح في نافذة جديدة
+                </button>
+            </div>
+        `;
+    }
+
+    // Retry aflam load
+    retryAflamLoad() {
+        if (this.currentChannel && this.currentChannel.url) {
+            this.loadAflamVideo(this.currentChannel.url);
+        }
+    }
+
+    // Open aflam in external window
+    openAflamExternal() {
+        if (this.currentChannel && this.currentChannel.url) {
+            window.open(this.currentChannel.url, '_blank', 'noopener,noreferrer');
+        }
     }
 
     // Load YouTube video using iframe
@@ -1230,6 +3757,13 @@ class ArabicTVApp {
                 throw new Error('رابط اليوتيوب غير صحيح - تحقق من الرابط');
             }
 
+            // Stop any existing YouTube player
+            const existingIframe = document.getElementById('youtubePlayer');
+            if (existingIframe) {
+                existingIframe.src = '';
+                existingIframe.remove();
+            }
+
             // Hide the video element and show iframe
             video.style.display = 'none';
             
@@ -1243,7 +3777,8 @@ class ArabicTVApp {
                 iframe.style.border = 'none';
                 iframe.allowFullscreen = true;
                 iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-                iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation');
+                // إزالة sandbox لتجنب التحذيرات
+                // iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation');
                 
                 // Insert iframe after video element
                 video.parentNode.insertBefore(iframe, video.nextSibling);
@@ -1259,6 +3794,12 @@ class ArabicTVApp {
             // Show iframe
             iframe.style.display = 'block';
             
+            // Add double-click fullscreen support for YouTube iframe
+            iframe.addEventListener('dblclick', () => {
+                console.log('🖱️ ضغط مزدوج على YouTube iframe - محاولة التكبير');
+                this.toggleFullscreen();
+            });
+            
             // Show ad block notification
             this.showAdBlockNotification();
             
@@ -1267,7 +3808,7 @@ class ArabicTVApp {
             
         } catch (error) {
             console.error('Error loading YouTube video:', error);
-            this.showVideoError(`خطأ في تحميل فيديو اليوتيوب: ${error.message}`);
+            this.showVideoError('جارٍ تحميل البث...');
         }
     }
 
@@ -1277,6 +3818,16 @@ class ArabicTVApp {
         
         // Add ad blocking parameters
         embedUrl += '&adblock=1&no_ads=1&adblocker=1';
+        
+        // إضافة معاملات للتشغيل التلقائي المحسن
+        embedUrl += '&mute=1&start=0&loop=0&playlist=' + videoId;
+        
+        // إضافة معاملات الجودة
+        if (quality !== 'auto') {
+            embedUrl += `&vq=${quality}`;
+        }
+        
+        console.log('🔗 رابط YouTube المحسن:', embedUrl);
         
         // Add quality parameters based on selection
         switch (quality) {
@@ -1350,11 +3901,8 @@ class ArabicTVApp {
         // Reset video display
         video.style.display = 'block';
         
-        // Hide YouTube iframe if exists
-        if (iframe) {
-            iframe.style.display = 'none';
-            iframe.src = '';
-        }
+        // تنظيف جميع أنواع البث باستخدام الدالة المساعدة
+        this.cleanupAllMedia();
         
         // Hide ad block notification
         const adBlockNotification = document.getElementById('adBlockNotification');
@@ -1415,13 +3963,123 @@ class ArabicTVApp {
         }
     }
 
-    toggleFullscreen() {
+    getActivePlayer() {
         const video = document.getElementById('videoPlayer');
+        const youtubePlayer = document.getElementById('youtubePlayer');
+        const aflamPlayer = document.getElementById('aflamPlayer');
+        const elahmadPlayer = document.getElementById('elahmadPlayer');
         
-        if (!document.fullscreenElement) {
-            video.requestFullscreen().catch(console.error);
+        // Check video player (HLS streams and SHLS)
+        if (video && video.style.display !== 'none' && video.src) {
+            // Check if it's a SHLS stream
+            if (this.isShlsUrl(video.src)) {
+                return { player: video, type: 'shls' };
+            }
+            return { player: video, type: 'video' };
+        }
+        
+        // Check YouTube player
+        if (youtubePlayer && youtubePlayer.style.display !== 'none' && youtubePlayer.src) {
+            return { player: youtubePlayer, type: 'youtube' };
+        }
+        
+        // Check Aflam player
+        if (aflamPlayer && aflamPlayer.style.display !== 'none' && aflamPlayer.src) {
+            return { player: aflamPlayer, type: 'aflam' };
+        }
+        
+        // Check Elahmad player
+        if (elahmadPlayer && elahmadPlayer.style.display !== 'none' && elahmadPlayer.src) {
+            return { player: elahmadPlayer, type: 'elahmad' };
+        }
+        
+        return null;
+    }
+
+    toggleFullscreen() {
+        const activePlayerInfo = this.getActivePlayer();
+        
+        if (!activePlayerInfo) {
+            console.warn('لا يوجد مشغل نشط للتكبير');
+            return;
+        }
+        
+        const activePlayer = activePlayerInfo.player;
+        const playerType = activePlayerInfo.type;
+        
+        // Check if already in fullscreen
+        const isFullscreen = document.fullscreenElement || 
+                           document.webkitFullscreenElement || 
+                           document.mozFullScreenElement || 
+                           document.msFullscreenElement;
+        
+        if (!isFullscreen) {
+            // Enter fullscreen
+            console.log(`🎬 محاولة الدخول إلى وضع التكبير مع مشغل ${playerType}`);
+            
+            // Special handling for elahmad iframe
+            if (playerType === 'elahmad') {
+                console.log('📺 معالجة خاصة لـ elahmad iframe');
+                // Ensure iframe has proper attributes for fullscreen
+                if (!activePlayer.allowFullscreen) {
+                    activePlayer.allowFullscreen = true;
+                }
+                if (!activePlayer.allow || !activePlayer.allow.includes('fullscreen')) {
+                    activePlayer.allow = 'autoplay; fullscreen; picture-in-picture; xr-spatial-tracking; encrypted-media';
+                }
+            }
+            
+            // Special handling for SHLS streams
+            if (playerType === 'shls') {
+                console.log('📺 معالجة خاصة لـ SHLS stream');
+                // Ensure video has proper attributes for fullscreen
+                if (!activePlayer.webkitSupportsFullscreen) {
+                    activePlayer.webkitSupportsFullscreen = true;
+                }
+            }
+            
+            const requestFullscreen = activePlayer.requestFullscreen || 
+                                    activePlayer.webkitRequestFullscreen || 
+                                    activePlayer.mozRequestFullScreen || 
+                                    activePlayer.msRequestFullscreen;
+            
+            if (requestFullscreen) {
+                requestFullscreen.call(activePlayer).catch(error => {
+                    console.error('خطأ في دخول وضع التكبير:', error);
+                    // Fallback: try to fullscreen the video container
+                    const videoContainer = document.querySelector('.video-container');
+                    if (videoContainer) {
+                        console.log('🔄 محاولة التكبير باستخدام الحاوي كبديل');
+                        const containerRequestFullscreen = videoContainer.requestFullscreen || 
+                                                        videoContainer.webkitRequestFullscreen || 
+                                                        videoContainer.mozRequestFullScreen || 
+                                                        videoContainer.msRequestFullscreen;
+                        if (containerRequestFullscreen) {
+                            containerRequestFullscreen.call(videoContainer).catch(console.error);
+                        }
+                    }
+                });
         } else {
-            document.exitFullscreen().catch(console.error);
+                console.error('المتصفح لا يدعم وضع التكبير');
+                // Show user notification
+                if (this.notifyError) {
+                    this.notifyError('المتصفح لا يدعم وضع التكبير');
+                }
+            }
+        } else {
+            // Exit fullscreen
+            console.log('🚪 الخروج من وضع التكبير');
+            
+            const exitFullscreen = document.exitFullscreen || 
+                                 document.webkitExitFullscreen || 
+                                 document.mozCancelFullScreen || 
+                                 document.msExitFullscreen;
+            
+            if (exitFullscreen) {
+                exitFullscreen.call(document).catch(error => {
+                    console.error('خطأ في الخروج من وضع التكبير:', error);
+                });
+            }
         }
     }
 
@@ -1452,6 +4110,7 @@ class ArabicTVApp {
         setTimeout(() => {
             this.bindAdminTabEvents();
             this.bindStatusToggleEvents();
+            this.bindVpnToggleEvents();
         }, 50);
     }
 
@@ -1955,20 +4614,36 @@ class ArabicTVApp {
     }
 
     switchAdminTab(tab) {
+        console.log(`🔄 محاولة التبديل إلى تبويب: ${tab}`);
+        
         // Update active tab
-        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+        const allTabs = document.querySelectorAll('.admin-tab');
+        console.log(`📊 عدد التبويبات الموجودة: ${allTabs.length}`);
+        
+        allTabs.forEach(t => t.classList.remove('active'));
         const activeTab = document.querySelector(`[data-tab="${tab}"]`);
+        
         if (activeTab) {
             activeTab.classList.add('active');
+            console.log(`✅ تم تفعيل التبويب: ${tab}`);
+        } else {
+            console.warn(`⚠️ لم يتم العثور على التبويب: ${tab}`);
         }
 
         // Show tab content
-        document.querySelectorAll('.admin-tab-content').forEach(content => {
+        const allContents = document.querySelectorAll('.admin-tab-content');
+        console.log(`📊 عدد محتويات التبويبات: ${allContents.length}`);
+        
+        allContents.forEach(content => {
             content.classList.remove('active');
         });
+        
         const activeContent = document.getElementById(`${tab}Tab`);
         if (activeContent) {
             activeContent.classList.add('active');
+            console.log(`✅ تم إظهار محتوى التبويب: ${tab}Tab`);
+        } else {
+            console.warn(`⚠️ لم يتم العثور على محتوى التبويب: ${tab}Tab`);
         }
 
         // Load categories when switching to categories tab
@@ -2079,7 +4754,14 @@ class ArabicTVApp {
 
         items.forEach(item => {
             const name = item.querySelector('h4').textContent.toLowerCase();
-            const shouldShow = name.includes(searchTerm);
+            const channelId = parseInt(item.dataset.channelId);
+            
+            // العثور على رقم القناة
+            const channelIndex = this.channels.findIndex(ch => ch.id === channelId);
+            const channelNumber = channelIndex + 1;
+            
+            const shouldShow = name.includes(searchTerm) || 
+                              channelNumber.toString().includes(searchTerm);
             item.style.display = shouldShow ? 'flex' : 'none';
         });
     }
@@ -2119,6 +4801,9 @@ class ArabicTVApp {
         // Get status from form
         const status = document.getElementById('channelStatus').value || 'active';
         
+        // Get VPN requirement from form
+        const vpn = document.getElementById('channelVpn').value === 'true';
+        
         // Add new channel
         const newChannel = {
             id: Math.max(...this.channels.map(c => c.id), 0) + 1, // Generate proper unique ID
@@ -2128,7 +4813,8 @@ class ArabicTVApp {
             category: category,
             country: country,
             type: type,
-            status: status
+            status: status,
+            vpn: vpn
         };
 
         this.channels.push(newChannel);
@@ -2136,12 +4822,11 @@ class ArabicTVApp {
         this.filteredChannels = [...this.channels]; // Update filtered channels too
         this.renderChannels();
         this.renderAdminChannels();
+        this.updateChannelStats(); // تحديث عدد القنوات في الشريط العلوي
         
         this.resetAddChannelForm();
         this.showNotification('success', 'تم إضافة القناة', 'تم إضافة القناة بنجاح وحفظها!');
         
-        // تحديث وقت التحديث عند إضافة قناة من لوحة التحكم
-        this.updateLastUpdateTime();
         
         // المزامنة التلقائية مع السحابة
         if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
@@ -2179,6 +4864,9 @@ class ArabicTVApp {
         
         // Reset status toggle
         this.updateStatusToggleUI('active');
+        
+        // Reset VPN toggle to default value (true)
+        this.updateVpnToggleUI(true);
         
         // Reset button text and class
         const submitBtn = document.querySelector('#addChannelForm button[type="submit"]');
@@ -2251,10 +4939,12 @@ class ArabicTVApp {
             
             // Re-bind status toggle events for the new form
             this.bindStatusToggleEvents();
+            this.bindVpnToggleEvents();
             
             // Update status toggle UI after binding events
             setTimeout(() => {
                 this.updateStatusToggleUI(channel.status || 'active');
+                this.updateVpnToggleUI(channel.vpn || false);
             }, 100);
         }, 300);
         
@@ -2316,6 +5006,9 @@ class ArabicTVApp {
         // Get status from form
         const status = document.getElementById('channelStatus').value || 'active';
         
+        // Get VPN requirement from form
+        const vpn = document.getElementById('channelVpn').value === 'true';
+        
         // Update the channel
         this.channels[channelIndex] = {
             ...this.channels[channelIndex],
@@ -2325,7 +5018,8 @@ class ArabicTVApp {
             category: category,
             country: country,
             type: type,
-            status: status
+            status: status,
+            vpn: vpn
         };
 
         // Save and refresh
@@ -2339,8 +5033,6 @@ class ArabicTVApp {
         
         this.showNotification('success', 'تم تحديث القناة', 'تم تحديث القناة وحفظ التغييرات بنجاح!');
         
-        // تحديث وقت التحديث عند تعديل قناة من لوحة التحكم
-        this.updateLastUpdateTime();
         
         // المزامنة التلقائية مع السحابة
         if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
@@ -2382,12 +5074,11 @@ class ArabicTVApp {
             // Re-render channels
             this.renderChannels();
             this.renderAdminChannels();
+            this.updateChannelStats(); // تحديث عدد القنوات في الشريط العلوي
             
             // Show success notification
             this.showNotification('success', 'تم حذف القناة', `تم حذف قناة "${channel.name}" بنجاح`);
             
-            // تحديث وقت التحديث عند حذف قناة من لوحة التحكم
-            this.updateLastUpdateTime();
             
             // المزامنة التلقائية مع السحابة
             if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
@@ -2403,10 +5094,16 @@ class ArabicTVApp {
 
     saveChannelsToStorage() {
         try {
-            const channelsData = JSON.stringify(this.channels);
+            // إضافة وقت آخر تعديل لكل قناة قبل الحفظ
+            const channelsWithTimestamp = this.channels.map(channel => ({
+                ...channel,
+                lastModified: channel.lastModified || new Date().toISOString()
+            }));
+            
+            const channelsData = JSON.stringify(channelsWithTimestamp);
             localStorage.setItem('arabicTVChannels', channelsData);
             console.log('تم حفظ القنوات بنجاح:', this.channels.length, 'قناة');
-            console.log('بيانات القنوات المحفوظة:', this.channels);
+            console.log('بيانات القنوات المحفوظة:', channelsWithTimestamp);
             
             // تحقق من نجاح الحفظ
             const verifyChannels = localStorage.getItem('arabicTVChannels');
@@ -2442,8 +5139,14 @@ class ArabicTVApp {
             if (savedChannels) {
                 const parsedChannels = JSON.parse(savedChannels);
                 if (parsedChannels && parsedChannels.length > 0) {
-                    this.channels = parsedChannels;
+                    // ضمان وجود الطوابع الزمنية للقنوات القديمة
+                    this.channels = parsedChannels.map(channel => ({
+                        ...channel,
+                        lastModified: channel.lastModified || new Date().toISOString()
+                    }));
                     console.log('تم تحميل القنوات المحفوظة:', this.channels.length, 'قناة');
+                    // تحديث filteredChannels
+                    this.filteredChannels = [...this.channels];
                     // تحديث عداد القنوات
                     this.updateSidebarCounts();
                     return;
@@ -2453,6 +5156,7 @@ class ArabicTVApp {
             // إذا لم توجد قنوات محفوظة، ابدأ بقائمة فارغة
             console.log('لا توجد قنوات محفوظة، سيتم البدء بقائمة فارغة');
             this.channels = [];
+            this.filteredChannels = [];
             // تحديث عداد القنوات
             this.updateSidebarCounts();
         
@@ -2460,6 +5164,7 @@ class ArabicTVApp {
             console.error('خطأ في تحميل القنوات المحفوظة:', error);
             console.log('سيتم البدء بقائمة فارغة');
             this.channels = [];
+            this.filteredChannels = [];
             // تحديث عداد القنوات
             this.updateSidebarCounts();
         }
@@ -2537,6 +5242,8 @@ class ArabicTVApp {
             if (success) {
                 this.remoteStorage.lastSync = new Date().toISOString();
                 this.saveRemoteStorageSettings();
+                // تحديث آخر تحديث عند نجاح المزامنة
+                this.updateLastUpdateTime();
                 this.notifySuccess('تم رفع البيانات إلى المستودع بنجاح!');
                 return true;
             } else {
@@ -2848,6 +5555,39 @@ class ArabicTVApp {
         return remoteTime > localTime;
     }
 
+    // دمج القنوات بذكاء لحماية التغييرات المحلية
+    mergeChannels(localChannels, remoteChannels) {
+        const mergedChannels = [...localChannels];
+        const localChannelIds = new Set(localChannels.map(ch => ch.id));
+        
+        // إضافة القنوات الجديدة من السحابة التي لا توجد محلياً
+        remoteChannels.forEach(remoteChannel => {
+            if (!localChannelIds.has(remoteChannel.id)) {
+                mergedChannels.push(remoteChannel);
+                console.log('تم إضافة قناة جديدة من السحابة:', remoteChannel.name);
+            } else {
+                // تحديث القنوات الموجودة إذا كانت السحابة أحدث
+                const localChannel = localChannels.find(ch => ch.id === remoteChannel.id);
+                if (localChannel && remoteChannel.lastModified && localChannel.lastModified) {
+                    const remoteTime = new Date(remoteChannel.lastModified);
+                    const localTime = new Date(localChannel.lastModified);
+                    
+                    if (remoteTime > localTime) {
+                        // استبدال القناة المحلية بالسحابية إذا كانت أحدث
+                        const index = mergedChannels.findIndex(ch => ch.id === remoteChannel.id);
+                        mergedChannels[index] = remoteChannel;
+                        console.log('تم تحديث قناة من السحابة:', remoteChannel.name);
+                    } else {
+                        console.log('القناة المحلية أحدث، تم الاحتفاظ بها:', localChannel.name);
+                    }
+                }
+            }
+        });
+        
+        console.log(`تم دمج القنوات: ${localChannels.length} محلية + ${remoteChannels.length} سحابية = ${mergedChannels.length} إجمالي`);
+        return mergedChannels;
+    }
+
     async mergeRemoteData(remoteData) {
         // Check for conflicts
         const hasConflicts = await this.detectConflicts(remoteData);
@@ -2864,9 +5604,9 @@ class ArabicTVApp {
         };
 
         try {
-            // Update channels
+            // Merge channels instead of replacing them completely
             if (remoteData.channels && Array.isArray(remoteData.channels)) {
-                this.channels = remoteData.channels;
+                this.channels = this.mergeChannels(this.channels, remoteData.channels);
                 this.filteredChannels = [...this.channels];
                 this.saveChannelsToStorage();
             }
@@ -2917,22 +5657,61 @@ class ArabicTVApp {
     }
 
     async detectConflicts(remoteData) {
-        // Check if there are significant differences
+        // تحسين آلية كشف التعارضات لحماية التغييرات المحلية
         const localChannelsCount = this.channels.length;
         const remoteChannelsCount = remoteData.channels ? remoteData.channels.length : 0;
         
-        // Consider it a conflict if:
-        // 1. Channel counts differ significantly (more than 10% difference)
-        // 2. Both local and remote have been modified recently
+        // إذا كانت القنوات المحلية أكثر من السحابية، فهذا يعني إضافة قنوات محلياً
+        if (localChannelsCount > remoteChannelsCount) {
+            const localChannelIds = new Set(this.channels.map(ch => ch.id));
+            const remoteChannelIds = new Set(remoteData.channels ? remoteData.channels.map(ch => ch.id) : []);
+            
+            // حساب عدد القنوات الجديدة المحلية
+            const newLocalChannels = localChannelsCount - remoteChannelIds.size;
+            
+            // إذا كان هناك قنوات جديدة محلية، اعتبر هذا تعارضاً لحمايتها
+            if (newLocalChannels > 0) {
+                console.log(`تم اكتشاف ${newLocalChannels} قناة جديدة محلية - سيتم حمايتها من الاستبدال`);
+                return true;
+            }
+        }
+        
+        // فحص التعديلات على القنوات الموجودة
+        if (remoteData.channels && this.channels.length > 0) {
+            const localChannelIds = new Set(this.channels.map(ch => ch.id));
+            const remoteChannelIds = new Set(remoteData.channels.map(ch => ch.id));
+            
+            // فحص القنوات المشتركة للتعديلات المتضاربة
+            for (const localChannel of this.channels) {
+                if (remoteChannelIds.has(localChannel.id)) {
+                    const remoteChannel = remoteData.channels.find(ch => ch.id === localChannel.id);
+                    
+                    // إذا كان هناك تعديلات محلية حديثة على قناة موجودة في السحابة
+                    if (localChannel.lastModified && remoteChannel.lastModified) {
+                        const localTime = new Date(localChannel.lastModified);
+                        const remoteTime = new Date(remoteChannel.lastModified);
+                        const timeDiff = Math.abs(localTime - remoteTime);
+                        
+                        // إذا كان التعديل المحلي أحدث من السحابي بساعة أو أقل، اعتبر هذا تعارضاً
+                        if (localTime > remoteTime && timeDiff < 3600000) {
+                            console.log(`تعارض في القناة ${localChannel.name}: التعديل المحلي أحدث من السحابي`);
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        
+        // فحص الاختلافات الكبيرة في العدد (أكثر من 20% بدلاً من 10%)
         const countDifference = Math.abs(localChannelsCount - remoteChannelsCount);
-        const significantDifference = countDifference > Math.max(localChannelsCount, remoteChannelsCount) * 0.1;
+        const significantDifference = countDifference > Math.max(localChannelsCount, remoteChannelsCount) * 0.2;
         
         const localLastModified = this.getLocalLastModified();
         const remoteLastModified = new Date(remoteData.lastModified || 0);
         const timeDifference = Math.abs(localLastModified - remoteLastModified);
         
-        // Consider conflict if both were modified within the last hour and have significant differences
-        return significantDifference && timeDifference < 3600000; // 1 hour in milliseconds
+        // اعتبار التعارض فقط إذا كان هناك اختلاف كبير وكلاهما تم تعديله مؤخراً
+        return significantDifference && timeDifference < 1800000; // 30 دقيقة بدلاً من ساعة
     }
 
     getLocalLastModified() {
@@ -3162,10 +5941,18 @@ class ArabicTVApp {
         this.settings.compactMode = true;
         this.settings.highContrast = false;
         this.settings.borderRadius = 'rounded';
+        this.settings.showAutoNotifications = false;
+        this.settings.autoUpdateEnabled = true; // تفعيل التحديث التلقائي للقنوات
+        
+        // إعادة تعيين الإشعارات المحفوظة
+        localStorage.removeItem('passwordWarningShown');
         
         // Save and apply
         this.saveSettings();
         this.applySettings();
+        
+        // تحديث زر التحديث التلقائي في الواجهة
+        this.updateAutoUpdateButton();
         
         this.notifySuccess('تم إعادة تعيين جميع التخصيصات!');
         
@@ -3200,6 +5987,57 @@ class ArabicTVApp {
                 this.notifyWarning('فشل في تحديث البيانات، يمكنك المحاولة يدوياً من زر "تحديث القنوات"');
             }
         }, 1000);
+    }
+
+    // Toggle Auto Update Functionality
+    toggleAutoUpdate() {
+        const autoUpdateEnabled = document.getElementById('autoUpdateEnabled');
+        const toggleBtn = document.getElementById('toggleAutoUpdateBtn');
+        const btnText = document.getElementById('autoUpdateBtnText');
+        
+        if (autoUpdateEnabled && toggleBtn && btnText) {
+            // Toggle the setting
+            autoUpdateEnabled.checked = !autoUpdateEnabled.checked;
+            
+            // Update button appearance and text
+            if (autoUpdateEnabled.checked) {
+                toggleBtn.classList.remove('disabled');
+                btnText.textContent = 'إلغاء التحديث التلقائي';
+                this.notifySuccess('تم تفعيل التحديث التلقائي للقنوات');
+            } else {
+                toggleBtn.classList.add('disabled');
+                btnText.textContent = 'تفعيل التحديث التلقائي';
+                this.notifyWarning('تم إلغاء التحديث التلقائي للقنوات');
+            }
+            
+            // Save the setting
+            this.settings.autoUpdateEnabled = autoUpdateEnabled.checked;
+            this.saveSettings();
+            
+            console.log('التحديث التلقائي:', autoUpdateEnabled.checked ? 'مفعل' : 'معطل');
+        }
+    }
+
+    // Check if auto update is enabled
+    isAutoUpdateEnabled() {
+        return this.settings.autoUpdateEnabled !== false; // Default to true
+    }
+
+    // Update auto update button appearance
+    updateAutoUpdateButton() {
+        const toggleBtn = document.getElementById('toggleAutoUpdateBtn');
+        const btnText = document.getElementById('autoUpdateBtnText');
+        const autoUpdateEnabled = document.getElementById('autoUpdateEnabled');
+        
+        if (toggleBtn && btnText && autoUpdateEnabled) {
+            if (this.settings.autoUpdateEnabled) {
+                toggleBtn.classList.remove('disabled');
+                btnText.textContent = 'إلغاء التحديث التلقائي';
+            } else {
+                toggleBtn.classList.add('disabled');
+                btnText.textContent = 'تفعيل التحديث التلقائي';
+            }
+        }
     }
 
     // Remote Storage UI Management
@@ -3516,6 +6354,9 @@ class ArabicTVApp {
             
             // Then sync to remote
             await this.syncToRemote();
+            
+            // تحديث آخر تحديث عند نجاح المزامنة اليدوية
+            this.updateLastUpdateTime();
             
             this.notifySuccess('تمت المزامنة بنجاح!');
             this.updateSyncStatus();
@@ -4626,6 +7467,7 @@ class ArabicTVApp {
 
     // نظام الإشعارات الجميل
     showNotification(title, message, type = 'info', duration = 4000) {
+        console.log('🔔 إظهار إشعار:', { title, message, type, duration });
         const container = document.getElementById('notificationsContainer');
         if (!container) return;
 
@@ -4678,6 +7520,31 @@ class ArabicTVApp {
         this.limitNotifications();
 
         return notificationId;
+    }
+
+    // دالة اختبار الإشعارات
+    testNotifications() {
+        console.log('🧪 اختبار الإشعارات...');
+        
+        // اختبار إشعار نجاح
+        setTimeout(() => {
+            this.showNotification('نجح الاختبار!', 'الإشعارات تعمل بشكل صحيح', 'success', 3000);
+        }, 500);
+        
+        // اختبار إشعار تحذير
+        setTimeout(() => {
+            this.showNotification('تحذير', 'هذا إشعار تحذير للاختبار', 'warning', 3000);
+        }, 1500);
+        
+        // اختبار إشعار خطأ
+        setTimeout(() => {
+            this.showNotification('خطأ', 'هذا إشعار خطأ للاختبار', 'error', 3000);
+        }, 2500);
+        
+        // اختبار إشعار معلومات
+        setTimeout(() => {
+            this.showNotification('معلومات', 'هذا إشعار معلومات للاختبار', 'info', 3000);
+        }, 3500);
     }
 
     closeNotification(notificationId) {
@@ -4867,8 +7734,6 @@ class ArabicTVApp {
             
             this.notifySuccess('تم حفظ الترتيب الجديد للقنوات بنجاح!');
             
-            // تحديث وقت التحديث عند حفظ ترتيب القنوات من لوحة التحكم
-            this.updateLastUpdateTime();
             
             // المزامنة التلقائية مع السحابة
             if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
@@ -4951,6 +7816,9 @@ class ArabicTVApp {
     }
 
     toggleFavorites() {
+        // Close all mobile menus first
+        closeAllMobileMenus();
+        
         // Toggle favorites filter
         this.toggleFavoritesFilter();
     }
@@ -5060,9 +7928,9 @@ class ArabicTVApp {
 
     hideLoading() {
         const loading = document.getElementById('loading');
-        setTimeout(() => {
+        if (loading) {
             loading.style.display = 'none';
-        }, 1000);
+        }
     }
 
     // Connection quality detection
@@ -5612,8 +8480,13 @@ class ArabicTVApp {
         if (searchInput && searchInput.value.trim()) {
             const searchTerm = searchInput.value.toLowerCase().trim();
             filtered = filtered.filter(channel => {
+                // العثور على رقم القناة
+                const channelIndex = this.channels.findIndex(ch => ch.id === channel.id);
+                const channelNumber = channelIndex + 1;
+                
                 return channel.name.toLowerCase().includes(searchTerm) ||
-                       channel.country.toLowerCase().includes(searchTerm);
+                       channel.country.toLowerCase().includes(searchTerm) ||
+                       channelNumber.toString().includes(searchTerm);
             });
             console.log('بعد تصفية البحث:', filtered.length);
         }
@@ -5696,10 +8569,54 @@ class ArabicTVApp {
             channelCountElement.textContent = this.filteredChannels.length;
         }
         
-        // تحديث الوقت المعروض من البيانات المحفوظة (بدون تحديث الوقت الحالي)
-        this.displayLastUpdateTime();
-        
         this.updateBreadcrumbs();
+    }
+    
+    // تحديث وقت آخر تحديث
+    updateLastUpdateTime() {
+        const lastUpdateElement = document.getElementById('lastUpdate');
+        if (lastUpdateElement) {
+            const now = new Date();
+            
+            // التاريخ الميلادي بتنسيق dd/mm/yyyy
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            // عرض التاريخ بتنسيق dd/mm/yyyy    hh:mm:ss مع ألوان مختلفة
+            lastUpdateElement.innerHTML = `${day}/${month}/${year}    <span class="time-part">${hours}:${minutes}:${seconds}</span>`;
+            
+            // حفظ آخر تحديث في التخزين المحلي
+            localStorage.setItem('lastUpdateTime', now.toISOString());
+        }
+    }
+    
+    // تحميل آخر تحديث محفوظ
+    loadLastUpdateTime() {
+        const lastUpdateElement = document.getElementById('lastUpdate');
+        if (lastUpdateElement) {
+            const savedTime = localStorage.getItem('lastUpdateTime');
+            if (savedTime) {
+                const savedDate = new Date(savedTime);
+                
+                // التاريخ الميلادي بتنسيق dd/mm/yyyy
+                const day = String(savedDate.getDate()).padStart(2, '0');
+                const month = String(savedDate.getMonth() + 1).padStart(2, '0');
+                const year = savedDate.getFullYear();
+                const hours = String(savedDate.getHours()).padStart(2, '0');
+                const minutes = String(savedDate.getMinutes()).padStart(2, '0');
+                const seconds = String(savedDate.getSeconds()).padStart(2, '0');
+                
+                // عرض التاريخ المحفوظ بتنسيق dd/mm/yyyy    hh:mm:ss مع ألوان مختلفة
+                lastUpdateElement.innerHTML = `${day}/${month}/${year}    <span class="time-part">${hours}:${minutes}:${seconds}</span>`;
+            } else {
+                // إذا لم يكن هناك تاريخ محفوظ، استخدم التاريخ الحالي
+                this.updateLastUpdateTime();
+            }
+        }
     }
     
     // Initialize footer functionality
@@ -5736,133 +8653,97 @@ class ArabicTVApp {
         });
     }
     
-    updateLastUpdateTime() {
-        const lastUpdateTimeElement = document.getElementById('lastUpdateTime');
-        if (lastUpdateTimeElement) {
-            const now = new Date();
-            const timeString = now.toLocaleString('en-US', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false
-            });
-            lastUpdateTimeElement.textContent = timeString;
-            
-            // حفظ الوقت في localStorage
-            localStorage.setItem('lastUpdateTime', now.toISOString());
-        }
-    }
     
-    displayLastUpdateTime() {
-        const lastUpdateTimeElement = document.getElementById('lastUpdateTime');
-        if (lastUpdateTimeElement) {
-            const savedTime = localStorage.getItem('lastUpdateTime');
-            if (savedTime) {
-                const updateDate = new Date(savedTime);
-                const timeString = updateDate.toLocaleString('en-US', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: false
-                });
-                lastUpdateTimeElement.textContent = timeString;
-            } else {
-                lastUpdateTimeElement.textContent = '-';
-            }
+
+    // Simple auto-update on page load
+    setupAutoUpdate() {
+        // Check if auto update is enabled before proceeding
+        if (!this.isAutoUpdateEnabled()) {
+            console.log('🚫 التحديث التلقائي معطل من قبل المستخدم');
+            return;
         }
+        
+        // Always update channels when page loads
+        console.log('🔄 تحديث القنوات تلقائياً عند فتح الموقع...');
+        
+        setTimeout(() => {
+            this.isAutomaticUpdate = true; // Mark as automatic update
+            updateChannels();
+            this.isAutomaticUpdate = false; // Reset flag
+            
+            // Simple notification for automatic update will be shown by updateChannels function
+        }, 2000);
     }
 
-    // Check for updates
-    async checkForUpdates() {
+    // Simple check for updates - check if auto update is enabled first
+    async checkForUpdates(isAutomaticCheck = false) {
         try {
             console.log('🔍 فحص التحديثات...');
             
-            // Get local data info
-            const localData = localStorage.getItem('tvChannels');
-            const localUpdateTime = localStorage.getItem('lastUpdateTime');
+            // Check if auto update is enabled for automatic checks
+            if (isAutomaticCheck && !this.isAutoUpdateEnabled()) {
+                console.log('🚫 التحديث التلقائي معطل من قبل المستخدم');
+                return false;
+            }
             
-            if (!localData || !localUpdateTime) {
-                console.log('📥 لا توجد بيانات محلية، سيتم تحميل البيانات لأول مرة');
-                return false;
-            }
-
-            // Fetch remote data info
-            const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json', {
-                method: 'HEAD'
-            });
-            
-            if (!response.ok) {
-                console.log('❌ فشل في فحص التحديثات');
-                return false;
-            }
-
-            const remoteLastModified = response.headers.get('last-modified');
-            const localDate = new Date(localUpdateTime);
-            const remoteDate = new Date(remoteLastModified);
-
-            console.log('📅 آخر تحديث محلي:', localDate.toLocaleString('ar'));
-            console.log('📅 آخر تحديث سحابي:', remoteDate.toLocaleString('ar'));
-
-            if (remoteDate > localDate) {
-                console.log('🆕 يوجد تحديث جديد متاح!');
-                this.showUpdateAvailableNotification(remoteDate);
-                
-                // إذا كانت المزامنة السحابية مفعلة، قم بإشعار المستخدم بإمكانية المزامنة التلقائية
-                if (this.remoteStorage.enabled && this.remoteStorage.autoSync) {
-                    console.log('💡 يمكن تحديث القنوات ومزامنتها تلقائياً مع السحابة');
-                }
-                
-                return true;
-            } else {
-                console.log('✅ البيانات محدثة');
-                return false;
-            }
+            // Always update channels
+            console.log('🔄 تحديث القنوات تلقائياً...');
+            await updateChannels();
+            return true;
 
         } catch (error) {
-            console.error('خطأ في فحص التحديثات:', error);
+            console.error('خطأ في تحديث القنوات:', error);
             return false;
         }
     }
 
     // Show update available notification
     showUpdateAvailableNotification(remoteDate) {
-        const updateTimeText = document.getElementById('updateTimeText');
-        if (updateTimeText) {
-            // Add update indicator
-            updateTimeText.innerHTML = `
-                <div class="update-indicator">
-                    <i class="fas fa-sync-alt"></i>
-                    <span>تحديث جديد متاح!</span>
-                    <button onclick="updateChannels()">تحديث الآن</button>
+        const notification = document.createElement('div');
+        notification.className = 'notification update-available';
+        notification.innerHTML = `
+            <div class="notification-content">
+                <div class="notification-icon">
+                    <i class="fas fa-download"></i>
                 </div>
-            `;
-        }
-
-        // Add pulse effect to update button
+                <div class="notification-text">
+                    <h4>تحديث جديد متاح!</h4>
+                    <p>تم العثور على تحديث جديد للقنوات. اضغط هنا لتحديث البيانات.</p>
+                    <small>آخر تحديث: ${new Date(remoteDate).toLocaleString('ar-SA')}</small>
+                </div>
+                <div class="notification-actions">
+                    <button class="btn-primary" onclick="updateChannels(); app.closeNotification(this)">
+                        <i class="fas fa-sync-alt"></i>
+                        تحديث الآن
+                    </button>
+                    <button class="btn-secondary" onclick="app.closeNotification(this)">
+                        <i class="fas fa-times"></i>
+                        لاحقاً
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('notificationsContainer').appendChild(notification);
+        
+        // إظهار الإشعار مع تأثير
         setTimeout(() => {
-            this.highlightUpdateButton();
-        }, 1000);
+            notification.classList.add('show');
+        }, 100);
+        
+        // إخفاء الإشعار تلقائياً بعد 15 ثانية
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }
+        }, 15000);
     }
 
-    // Reset update indicator
-    resetUpdateIndicator() {
-        const updateTimeText = document.getElementById('updateTimeText');
-        if (updateTimeText) {
-            // Reset to normal display
-            updateTimeText.innerHTML = `
-                <i class="fas fa-clock"></i>
-                تحديث: <span id="lastUpdateTime">-</span>
-            `;
-            // عرض الوقت المحفوظ فقط
-            this.displayLastUpdateTime();
-        }
-    }
 
     // Enhanced Channel Card Creation (Override existing method)
     createChannelCard(channel) {
@@ -5882,7 +8763,12 @@ class ArabicTVApp {
         const statusClass = isActive ? 'active' : 'inactive';
         const statusIcon = isActive ? 'fas fa-circle' : 'fas fa-circle';
         
+        // العثور على رقم القناة (الفهرس + 1)
+        const channelIndex = this.channels.findIndex(ch => ch.id === channel.id);
+        const channelNumber = channelIndex + 1;
+        
         card.innerHTML = `
+            <div class="channel-number">${channelNumber}</div>
             <img src="${channel.logo}" alt="${channel.name}" class="channel-logo" 
                  onerror="this.src='${logoPlaceholder}'; this.classList.add('placeholder-logo');">
             <div class="channel-info">
@@ -5962,7 +8848,9 @@ class ArabicTVApp {
             // Update status toggle UI
             setTimeout(() => {
                 this.bindStatusToggleEvents();
+                this.bindVpnToggleEvents();
                 this.updateStatusToggleUI(channel.status || 'active');
+                this.updateVpnToggleUI(channel.vpn || false);
             }, 100);
         }, 100);
     }
@@ -5997,6 +8885,7 @@ class ArabicTVApp {
             // Re-render channels
             this.renderChannels();
             this.renderAdminChannels();
+            this.updateChannelStats(); // تحديث عدد القنوات في الشريط العلوي
             
             // Show success notification
             this.showNotification('success', 'تم حذف القناة', `تم حذف قناة "${channel.name}" بنجاح`);
@@ -6095,6 +8984,15 @@ class ArabicTVApp {
             } else if (!document.hidden && this.isPictureInPicture) {
                 console.log('Page visible while in Picture-in-Picture mode');
             }
+            
+            // إيقاف البث عند إخفاء الصفحة لتوفير البطارية والبيانات
+            if (document.hidden) {
+                console.log('🛑 إخفاء الصفحة - إيقاف البث مؤقتاً');
+                this.pauseCurrentVideo();
+            } else {
+                console.log('👁️ إظهار الصفحة - استئناف البث');
+                this.resumeCurrentVideo();
+            }
         });
 
         // Listen for beforeunload event to handle cleanup
@@ -6141,6 +9039,61 @@ class ArabicTVApp {
             'requestPictureInPicture' in video ||
             (document.pictureInPictureElement !== undefined)
         );
+    }
+
+    // Setup Channel Bar Events
+    setupChannelBarEvents() {
+        const videoContainer = document.querySelector('.video-container');
+        const channelBar = document.getElementById('channelBar');
+        const modal = document.getElementById('videoModal');
+        
+        if (!videoContainer || !channelBar || !modal) return;
+
+        let isChannelBarVisible = false;
+
+        // Hide channel bar when clicking outside of it (only on desktop)
+        modal.addEventListener('click', (e) => {
+            // Check if click is outside the channel bar and not on the toggle button
+            if (isChannelBarVisible && !channelBar.contains(e.target) && !videoContainer.contains(e.target) && !e.target.closest('.channels-btn')) {
+                // Only hide on desktop, keep visible on mobile
+                if (window.innerWidth > 768) {
+                    hideChannelBar();
+                    isChannelBarVisible = false;
+                }
+            }
+        });
+
+        // Auto-show channel bar on mobile when modal opens
+        if (window.innerWidth <= 768) {
+            setTimeout(() => {
+            if (!isChannelBarVisible) {
+                showChannelBar();
+                isChannelBarVisible = true;
+            }
+            }, 500);
+        }
+
+        // Setup wheel scroll for channel bar
+        setupChannelBarWheelScroll();
+
+    }
+
+    // Update active channel in channel bar
+    updateActiveChannelInBar(channel) {
+        const channelBarContent = document.getElementById('channelBarContent');
+        if (!channelBarContent) return;
+
+        // Remove active class from all items
+        const allItems = channelBarContent.querySelectorAll('.channel-bar-item');
+        allItems.forEach(item => {
+            item.classList.remove('active');
+        });
+
+        // Add active class to current channel
+        const currentItem = channelBarContent.querySelector(`[data-channel-id="${channel.id}"]`);
+        if (currentItem) {
+            currentItem.classList.add('active');
+        }
     }
 
     // Check and setup Picture-in-Picture support
@@ -6455,6 +9408,9 @@ class ArabicTVApp {
 
     // Show all channels and scroll to top
     showAllChannels() {
+        // Close all mobile menus first
+        closeAllMobileMenus();
+        
         // Filter to show all channels
         this.filterChannels('all');
         
@@ -6505,6 +9461,512 @@ function openIPTVChecker() {
 
 function closeModal() {
     app.closeModal();
+}
+
+// Channel Bar Functions
+function showChannelBar() {
+    const channelBar = document.getElementById('channelBar');
+    const channelsBtn = document.querySelector('.channels-btn');
+    
+    if (channelBar) {
+        channelBar.classList.add('show');
+        loadChannelBarContent();
+        // Update button state
+        if (channelsBtn) {
+            channelsBtn.classList.add('active');
+        }
+        // No auto-hide - will hide only when mouse leaves
+    }
+}
+
+function hideChannelBar() {
+    const channelBar = document.getElementById('channelBar');
+    const channelsBtn = document.querySelector('.channels-btn');
+    
+    if (channelBar) {
+        channelBar.classList.remove('show');
+        // Update button state
+        if (channelsBtn) {
+            channelsBtn.classList.remove('active');
+        }
+    }
+}
+
+function toggleChannelBar() {
+    const channelBar = document.getElementById('channelBar');
+    const channelsBtn = document.querySelector('.channels-btn');
+    
+    if (channelBar) {
+        const isActive = channelBar.classList.contains('show');
+        
+        if (isActive) {
+            hideChannelBar();
+            if (channelsBtn) channelsBtn.classList.remove('active');
+        } else {
+            showChannelBar();
+            if (channelsBtn) channelsBtn.classList.add('active');
+        }
+    }
+}
+
+function loadChannelBarContent() {
+    const channelBarContent = document.getElementById('channelBarContent');
+    const channelCount = document.getElementById('channelBarCount');
+    if (!channelBarContent || !app.channels) return;
+
+    // Clear existing content
+    channelBarContent.innerHTML = '';
+
+    // Get current category or all channels
+    const currentCategory = app.currentCategory || 'all';
+    let channelsToShow = app.channels;
+
+    if (currentCategory !== 'all') {
+        channelsToShow = app.channels.filter(channel => channel.category === currentCategory);
+    }
+
+    // Update channel count
+    if (channelCount) {
+        channelCount.textContent = channelsToShow.length;
+    }
+
+    // Show all channels (no limit for horizontal scroll)
+    channelsToShow.forEach((channel, index) => {
+        const channelItem = document.createElement('div');
+        channelItem.className = 'channel-bar-item';
+        channelItem.dataset.channelId = channel.id;
+        
+        if (app.currentChannel && channel.id === app.currentChannel.id) {
+            channelItem.classList.add('active');
+        }
+
+        channelItem.innerHTML = `
+            <img src="${channel.logo || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjMzMzIi8+CjxwYXRoIGQ9Ik0yMCAxMEMyNi42MjcgMTAgMzIgMTUuMzczIDMyIDIyQzMyIDI4LjYyNyAyNi42MjcgMzQgMjAgMzRDMTMuMzczIDM0IDggMjguNjI3IDggMjJDMCAxNS4zNzMgMTMuMzczIDEwIDIwIDEwWiIgZmlsbD0iI2ZmZiIvPgo8L3N2Zz4K'}" 
+                 alt="${channel.name}" 
+                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjMzMzIi8+CjxwYXRoIGQ9Ik0yMCAxMEMyNi42MjcgMTAgMzIgMTUuMzczIDMyIDIyQzMyIDI4LjYyNyAyNi42MjcgMzQgMjAgMzRDMTMuMzczIDM0IDggMjguNjI3IDggMjJDMCAxNS4zNzMgMTMuMzczIDEwIDIwIDEwWiIgZmlsbD0iI2ZmZiIvPgo8L3N2Zz4K'">
+            <p class="channel-name">${channel.name}</p>
+            <p class="channel-category">${getCategoryName(channel.category)}</p>
+            ${channel.vpn === true ? '<span class="channel-bar-vpn-badge"><i class="fas fa-shield-alt"></i></span>' : ''}
+        `;
+
+        channelItem.addEventListener('click', () => {
+            app.playChannel(channel);
+            // Don't hide channel bar for better navigation on all devices
+            // hideChannelBar();
+        });
+
+        channelBarContent.appendChild(channelItem);
+    });
+
+    // Setup scroll functionality
+    setupChannelBarScroll();
+}
+
+function getCategoryName(category) {
+    const categoryNames = {
+        'news': 'أخبار',
+        'entertainment': 'منوعة',
+        'sports': 'رياضة',
+        'religious': 'دينية',
+        'music': 'موسيقى',
+        'movies': 'أفلام',
+        'documentary': 'وثائقية'
+    };
+    return categoryNames[category] || category;
+}
+
+function previousChannel() {
+    if (!app.channels || !app.currentChannel) return;
+
+    const currentIndex = app.channels.findIndex(channel => channel.id === app.currentChannel.id);
+    if (currentIndex > 0) {
+        const previousChannel = app.channels[currentIndex - 1];
+        app.playChannel(previousChannel);
+        // Don't hide channel bar for faster navigation
+        // hideChannelBar();
+    }
+}
+
+function nextChannel() {
+    if (!app.channels || !app.currentChannel) return;
+
+    const currentIndex = app.channels.findIndex(channel => channel.id === app.currentChannel.id);
+    if (currentIndex < app.channels.length - 1) {
+        const nextChannel = app.channels[currentIndex + 1];
+        app.playChannel(nextChannel);
+        // Don't hide channel bar for faster navigation
+        // hideChannelBar();
+    }
+}
+
+function jumpChannels(steps) {
+    if (!app.channels || !app.currentChannel) return;
+
+    const currentIndex = app.channels.findIndex(channel => channel.id === app.currentChannel.id);
+    const newIndex = currentIndex + steps;
+    
+    if (newIndex >= 0 && newIndex < app.channels.length) {
+        const targetChannel = app.channels[newIndex];
+        app.playChannel(targetChannel);
+    }
+}
+
+// Channel Bar Scroll Functions
+function setupChannelBarScroll() {
+    const scrollContainer = document.getElementById('channelBarScroll');
+    const leftIndicator = document.getElementById('scrollLeftIndicator');
+    const rightIndicator = document.getElementById('scrollRightIndicator');
+    
+    if (!scrollContainer) return;
+
+    // Scroll indicators click events
+    if (leftIndicator) {
+        leftIndicator.addEventListener('click', () => {
+            // Optimized scroll amount for smoother desktop experience
+            const scrollAmount = window.innerWidth <= 768 ? 120 : 200;
+            scrollContainer.scrollBy({
+                left: -scrollAmount,
+                behavior: 'smooth'
+            });
+        });
+    }
+
+    if (rightIndicator) {
+        rightIndicator.addEventListener('click', () => {
+            // Optimized scroll amount for smoother desktop experience
+            const scrollAmount = window.innerWidth <= 768 ? 120 : 200;
+            scrollContainer.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth'
+            });
+        });
+    }
+
+    // Update scroll indicators visibility
+    function updateScrollIndicators() {
+        const scrollLeft = scrollContainer.scrollLeft;
+        const maxScrollLeft = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+
+        if (leftIndicator) {
+            leftIndicator.style.opacity = scrollLeft > 0 ? '1' : '0';
+        }
+        if (rightIndicator) {
+            rightIndicator.style.opacity = scrollLeft < maxScrollLeft ? '1' : '0';
+        }
+    }
+
+    // Listen for scroll events - optimized with throttling
+    let scrollTimeout;
+    scrollContainer.addEventListener('scroll', () => {
+        if (scrollTimeout) {
+            clearTimeout(scrollTimeout);
+        }
+        scrollTimeout = setTimeout(updateScrollIndicators, 16); // ~60fps
+    });
+    
+    // Initial check
+    updateScrollIndicators();
+
+    // Setup touch/swipe support
+    setupChannelBarTouchSupport(scrollContainer);
+    
+    // Setup mouse drag support
+    setupChannelBarMouseDrag(scrollContainer);
+}
+
+function setupChannelBarTouchSupport(scrollContainer) {
+    let startX = 0;
+    let startY = 0;
+    let isScrolling = false;
+    let isDragging = false;
+    let lastScrollLeft = 0;
+    let velocity = 0;
+    let lastTime = 0;
+    let animationId = 0;
+    let touchStartTime = 0;
+    let isDesktopTouch = false;
+
+    // Detect if this is a desktop touch device (laptop with touchscreen)
+    const isDesktop = window.innerWidth > 768;
+    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    isDesktopTouch = isDesktop && hasTouch;
+
+    scrollContainer.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        isScrolling = false;
+        isDragging = false;
+        lastScrollLeft = scrollContainer.scrollLeft;
+        velocity = 0;
+        lastTime = Date.now();
+        touchStartTime = Date.now();
+        
+        // Add visual feedback for desktop touch
+        if (isDesktopTouch) {
+            scrollContainer.style.cursor = 'grabbing';
+            scrollContainer.classList.add('touch-active');
+        }
+        
+        // Cancel any ongoing animation
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = 0;
+        }
+    }, { passive: true });
+
+    scrollContainer.addEventListener('touchmove', (e) => {
+        if (!startX || !startY) return;
+
+        const currentX = e.touches[0].clientX;
+        const currentY = e.touches[0].clientY;
+        const diffX = Math.abs(currentX - startX);
+        const diffY = Math.abs(currentY - startY);
+
+        // More sensitive horizontal scroll detection for desktop touch
+        const threshold = isDesktopTouch ? 15 : 20;
+        if (diffX > diffY && diffX > threshold) {
+            isScrolling = true;
+            isDragging = true;
+            e.preventDefault();
+            
+            // Calculate velocity for smooth momentum
+            const currentTime = Date.now();
+            const timeDiff = currentTime - lastTime;
+            if (timeDiff > 0) {
+                const scrollDiff = scrollContainer.scrollLeft - lastScrollLeft;
+                velocity = scrollDiff / timeDiff;
+                lastScrollLeft = scrollContainer.scrollLeft;
+                lastTime = currentTime;
+            }
+        }
+    }, { passive: false });
+
+    scrollContainer.addEventListener('touchend', (e) => {
+        if (!isScrolling || !startX) return;
+
+        const endX = e.changedTouches[0].clientX;
+        const diffX = startX - endX;
+        const currentTime = Date.now();
+        const timeDiff = currentTime - lastTime;
+        const totalTouchTime = currentTime - touchStartTime;
+
+        // Calculate final velocity
+        if (timeDiff > 0) {
+            const scrollDiff = scrollContainer.scrollLeft - lastScrollLeft;
+            velocity = scrollDiff / timeDiff;
+        }
+
+        // Enhanced momentum for desktop touch devices
+        const isQuickSwipe = totalTouchTime < (isDesktopTouch ? 400 : 300) && Math.abs(diffX) > (isDesktopTouch ? 20 : 30);
+        
+        if (isQuickSwipe && isDragging && Math.abs(velocity) > 0.1) {
+            // Apply enhanced momentum for desktop touch
+            const momentumMultiplier = isDesktopTouch ? 0.4 : 0.2;
+            applyMomentumScroll(scrollContainer, velocity * momentumMultiplier);
+        } else if (Math.abs(diffX) > (isDesktopTouch ? 20 : 30)) {
+            // For slow drags, use enhanced scroll amounts for desktop touch
+            const scrollAmount = isDesktopTouch ? 200 : (window.innerWidth <= 768 ? 80 : 150);
+            if (diffX > 0) {
+                scrollContainer.scrollBy({
+                    left: scrollAmount,
+                    behavior: 'smooth'
+                });
+            } else {
+                scrollContainer.scrollBy({
+                    left: -scrollAmount,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // Reset state and visual feedback
+        startX = 0;
+        startY = 0;
+        isScrolling = false;
+        isDragging = false;
+        velocity = 0;
+        
+        if (isDesktopTouch) {
+            scrollContainer.style.cursor = 'grab';
+            scrollContainer.classList.remove('touch-active');
+        }
+    }, { passive: true });
+
+    // Enhanced momentum scrolling function for desktop touch
+    function applyMomentumScroll(container, initialVelocity) {
+        // Enhanced momentum for desktop touch devices
+        const velocityMultiplier = isDesktopTouch ? 0.3 : (window.innerWidth <= 768 ? 0.1 : 0.2);
+        let currentVelocity = initialVelocity * velocityMultiplier;
+        // Adjusted friction for desktop touch
+        const friction = isDesktopTouch ? 0.92 : (window.innerWidth <= 768 ? 0.8 : 0.85);
+        const minVelocity = isDesktopTouch ? 0.05 : 0.02; // Adjusted threshold for desktop touch
+
+        function animate() {
+            if (Math.abs(currentVelocity) < minVelocity) {
+                return; // Stop animation
+            }
+
+            container.scrollLeft -= currentVelocity;
+            currentVelocity *= friction;
+            
+            animationId = requestAnimationFrame(animate);
+        }
+
+        animationId = requestAnimationFrame(animate);
+    }
+}
+
+function setupChannelBarMouseDrag(scrollContainer) {
+    let isDragging = false;
+    let startX = 0;
+    let scrollLeft = 0;
+    let isDesktopTouch = false;
+
+    // Detect if this is a desktop touch device
+    const isDesktop = window.innerWidth > 768;
+    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    isDesktopTouch = isDesktop && hasTouch;
+
+    scrollContainer.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.pageX - scrollContainer.offsetLeft;
+        scrollLeft = scrollContainer.scrollLeft;
+        scrollContainer.style.cursor = 'grabbing';
+        
+        // Add visual feedback for desktop touch
+        if (isDesktopTouch) {
+            scrollContainer.classList.add('mouse-drag-active');
+        }
+        
+        e.preventDefault();
+    });
+
+    scrollContainer.addEventListener('mouseleave', () => {
+        isDragging = false;
+        scrollContainer.style.cursor = 'grab';
+        
+        if (isDesktopTouch) {
+            scrollContainer.classList.remove('mouse-drag-active');
+        }
+    });
+
+    scrollContainer.addEventListener('mouseup', () => {
+        isDragging = false;
+        scrollContainer.style.cursor = 'grab';
+        
+        if (isDesktopTouch) {
+            scrollContainer.classList.remove('mouse-drag-active');
+        }
+    });
+
+    scrollContainer.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const x = e.pageX - scrollContainer.offsetLeft;
+        // Enhanced speed for desktop touch devices
+        const multiplier = isDesktopTouch ? 4 : (window.innerWidth <= 768 ? 1.5 : 3);
+        const walk = (x - startX) * multiplier;
+        scrollContainer.scrollLeft = scrollLeft - walk;
+    });
+
+    // Enhanced hover effects for desktop touch
+    if (isDesktopTouch) {
+        scrollContainer.addEventListener('mouseenter', () => {
+            scrollContainer.style.cursor = 'grab';
+        });
+        
+        scrollContainer.addEventListener('mouseleave', () => {
+            if (!isDragging) {
+                scrollContainer.style.cursor = 'grab';
+            }
+        });
+    }
+}
+
+function scrollToCurrentChannel() {
+    const channelBarContent = document.getElementById('channelBarContent');
+    const scrollContainer = document.getElementById('channelBarScroll');
+    
+    if (!channelBarContent || !scrollContainer || !app.currentChannel) return;
+
+    const currentChannelItem = channelBarContent.querySelector(`[data-channel-id="${app.currentChannel.id}"]`);
+    if (currentChannelItem) {
+        const itemRect = currentChannelItem.getBoundingClientRect();
+        const containerRect = scrollContainer.getBoundingClientRect();
+        const scrollLeft = scrollContainer.scrollLeft;
+        
+        // Calculate position to center the current channel - optimized
+        const targetScrollLeft = scrollLeft + (itemRect.left - containerRect.left) - (containerRect.width / 2) + (itemRect.width / 2);
+        
+        // Use requestAnimationFrame for smoother animation
+        requestAnimationFrame(() => {
+        scrollContainer.scrollTo({
+            left: targetScrollLeft,
+            behavior: 'smooth'
+            });
+        });
+    }
+}
+
+function scrollChannelBarLeft() {
+    const scrollContainer = document.getElementById('channelBarScroll');
+    if (!scrollContainer) return;
+    const step = Math.max(200, Math.floor(scrollContainer.clientWidth * 0.6));
+    scrollContainer.scrollBy({ left: -step, behavior: 'smooth' });
+}
+
+function scrollChannelBarRight() {
+    const scrollContainer = document.getElementById('channelBarScroll');
+    if (!scrollContainer) return;
+    const step = Math.max(200, Math.floor(scrollContainer.clientWidth * 0.6));
+    scrollContainer.scrollBy({ left: step, behavior: 'smooth' });
+}
+
+// Mouse wheel horizontal scroll
+function setupChannelBarWheelScroll() {
+    const scrollContainer = document.getElementById('channelBarScroll');
+    if (!scrollContainer) return;
+
+    // Detect if this is a desktop touch device
+    const isDesktop = window.innerWidth > 768;
+    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const isDesktopTouch = isDesktop && hasTouch;
+
+    scrollContainer.addEventListener('wheel', (e) => {
+        // Always allow horizontal scroll when hovering over the channel bar
+        e.preventDefault();
+        // Optimized speed for smoother desktop experience
+        const multiplier = isDesktopTouch ? 2 : (window.innerWidth <= 768 ? 1 : 1.5);
+        scrollContainer.scrollBy({
+            left: e.deltaY * multiplier,
+            behavior: 'smooth'
+        });
+    }, { passive: false });
+
+    // Also support shift + wheel for even faster control
+    scrollContainer.addEventListener('wheel', (e) => {
+        if (e.shiftKey) {
+            e.preventDefault();
+            // Optimized speed for smoother desktop experience
+            const multiplier = isDesktopTouch ? 3 : (window.innerWidth <= 768 ? 2 : 2.5);
+            scrollContainer.scrollBy({
+                left: e.deltaY * multiplier,
+                behavior: 'smooth'
+            });
+        }
+    }, { passive: false });
+
+    // Add visual feedback for wheel scrolling on desktop touch
+    if (isDesktopTouch) {
+        let wheelTimeout;
+        scrollContainer.addEventListener('wheel', () => {
+            scrollContainer.classList.add('wheel-scrolling');
+            clearTimeout(wheelTimeout);
+            wheelTimeout = setTimeout(() => {
+                scrollContainer.classList.remove('wheel-scrolling');
+            }, 150);
+        });
+    }
 }
 
 function resetChannelForm() {
@@ -6581,6 +10043,83 @@ function toggleFullscreen() {
 function togglePictureInPicture() {
     app.togglePictureInPicture();
 }
+
+// Website Fullscreen Toggle Function
+function toggleWebsiteFullscreen() {
+    if (!document.fullscreenElement) {
+        // Enter fullscreen
+        document.documentElement.requestFullscreen().then(() => {
+            console.log('تم تفعيل وضع الشاشة الكاملة');
+            // Change icon to compress for both desktop and mobile buttons
+            const desktopBtn = document.querySelector('.fullscreen-toggle-btn i');
+            const mobileBtn = document.querySelector('.mobile-fullscreen-toggle-btn i');
+            if (desktopBtn) {
+                desktopBtn.className = 'fas fa-compress';
+            }
+            if (mobileBtn) {
+                mobileBtn.className = 'fas fa-compress';
+            }
+        }).catch(err => {
+            console.error('خطأ في تفعيل وضع الشاشة الكاملة:', err);
+            app.notifyError('فشل في تفعيل وضع الشاشة الكاملة');
+        });
+    } else {
+        // Exit fullscreen
+        document.exitFullscreen().then(() => {
+            console.log('تم إلغاء وضع الشاشة الكاملة');
+            // Change icon back to expand for both desktop and mobile buttons
+            const desktopBtn = document.querySelector('.fullscreen-toggle-btn i');
+            const mobileBtn = document.querySelector('.mobile-fullscreen-toggle-btn i');
+            if (desktopBtn) {
+                desktopBtn.className = 'fas fa-expand';
+            }
+            if (mobileBtn) {
+                mobileBtn.className = 'fas fa-expand';
+            }
+        }).catch(err => {
+            console.error('خطأ في إلغاء وضع الشاشة الكاملة:', err);
+            app.notifyError('فشل في إلغاء وضع الشاشة الكاملة');
+        });
+    }
+}
+
+// Listen for fullscreen change events (cross-browser support)
+function handleFullscreenChange() {
+    const desktopBtn = document.querySelector('.fullscreen-toggle-btn i');
+    const mobileBtn = document.querySelector('.mobile-fullscreen-toggle-btn i');
+    
+    // Check for fullscreen state across different browsers
+    const isFullscreen = document.fullscreenElement || 
+                       document.webkitFullscreenElement || 
+                       document.mozFullScreenElement || 
+                       document.msFullscreenElement;
+    
+    if (isFullscreen) {
+        // Entered fullscreen
+        if (desktopBtn) {
+            desktopBtn.className = 'fas fa-compress';
+        }
+        if (mobileBtn) {
+            mobileBtn.className = 'fas fa-compress';
+        }
+        console.log('✅ تم الدخول إلى وضع التكبير');
+    } else {
+        // Exited fullscreen
+        if (desktopBtn) {
+            desktopBtn.className = 'fas fa-expand';
+        }
+        if (mobileBtn) {
+            mobileBtn.className = 'fas fa-expand';
+        }
+        console.log('✅ تم الخروج من وضع التكبير');
+    }
+}
+
+// Add event listeners for all fullscreen change events
+document.addEventListener('fullscreenchange', handleFullscreenChange);
+document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+document.addEventListener('MSFullscreenChange', handleFullscreenChange);
 
 function saveGeneralSettings() {
     app.saveGeneralSettings();
@@ -6764,7 +10303,7 @@ function selectCategory(category) {
         updateBottomNavActiveState('home');
         
         // Close dropdown
-        closeCategoriesDropdown();
+        closeAllMobileMenus();
     }
 }
 
@@ -6838,6 +10377,137 @@ function closeMoreMenu() {
     overlay.classList.remove('active');
 }
 
+// Share site (mobile first) with Web Share API and clipboard fallback
+function shareSite() {
+    try {
+        const shareData = {
+            title: document.title || 'NOON TV',
+            text: 'شاهد القنوات العربية المباشرة على NOON TV',
+            url: window.location.href
+        };
+
+        if (navigator.share) {
+            navigator.share(shareData).catch(() => {
+                // If user cancels share, silently ignore
+            }).finally(() => {
+                closeMoreMenu();
+            });
+            return;
+        }
+
+        // Fallback: copy URL to clipboard
+        const urlToCopy = shareData.url;
+        const copyToClipboard = async () => {
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    await navigator.clipboard.writeText(urlToCopy);
+                } else {
+                    const tempInput = document.createElement('input');
+                    tempInput.value = urlToCopy;
+                    document.body.appendChild(tempInput);
+                    tempInput.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(tempInput);
+                }
+                if (window.app && window.app.notifySuccess) {
+                    window.app.notifySuccess('تم نسخ رابط الموقع إلى الحافظة');
+                }
+            } catch (err) {
+                if (window.app && window.app.notifyError) {
+                    window.app.notifyError('تعذر مشاركة الرابط. يرجى النسخ يدويًا');
+                }
+            } finally {
+                closeMoreMenu();
+            }
+        };
+
+        copyToClipboard();
+    } catch (e) {
+        // As a last resort just close menu
+        closeMoreMenu();
+    }
+}
+
+// Open Telegram link from More menu
+function openTelegram() {
+    try {
+        // Link to NOON TV official Telegram channel
+        const telegramUrl = 'https://t.me/noon_tv2';
+        window.open(telegramUrl, '_blank', 'noopener,noreferrer');
+    } finally {
+        closeMoreMenu();
+    }
+}
+
+// Copy a special link to enforce cookies reset for visitors
+function copyResetCookiesLink() {
+    try {
+        const url = new URL(window.location.href);
+        url.searchParams.set('reset_cookies', '1');
+        const link = url.toString();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(link).then(() => {
+                if (window.app && window.app.notifySuccess) {
+                    window.app.notifySuccess('تم نسخ رابط فرض حذف الكوكيز');
+                }
+            });
+        } else {
+            const temp = document.createElement('input');
+            temp.value = link;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            if (window.app && window.app.notifySuccess) {
+                window.app.notifySuccess('تم نسخ رابط فرض حذف الكوكيز');
+            }
+        }
+    } catch (e) {
+        if (window.app && window.app.notifyError) {
+            window.app.notifyError('تعذر إنشاء الرابط');
+        }
+    }
+}
+
+// On load: if reset_cookies param present, clear cookies/storage and notify
+window.addEventListener('DOMContentLoaded', () => {
+    try {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('reset_cookies') === '1') {
+            // Clear cookies
+            document.cookie.split(';').forEach(cookie => {
+                const eqPos = cookie.indexOf('=');
+                const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
+                document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;`;
+            });
+            // Clear local/session storage
+            try { localStorage.clear(); } catch {}
+            try { sessionStorage.clear(); } catch {}
+            if (window.app && window.app.notifySuccess) {
+                window.app.notifySuccess('تم حذف الكوكيز والبيانات المخزنة للجهاز');
+            }
+            // Remove the parameter from URL without reload
+            const url = new URL(window.location.href);
+            url.searchParams.delete('reset_cookies');
+            window.history.replaceState({}, document.title, url.toString());
+            
+            // إعادة تحميل الصفحة تلقائياً بعد ثانيتين
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+        }
+    } catch (e) {
+        // ignore
+    }
+});
+
+// دالة لإغلاق جميع القوائم المفتوحة في الشريط السفلي
+function closeAllMobileMenus() {
+    closeCategoriesDropdown();
+    closeSearchPopup();
+    closeMoreMenu();
+}
+
 // Bottom Navigation Functions
 function updateBottomNavActiveState(activeAction) {
     document.querySelectorAll('.bottom-nav-btn').forEach(btn => {
@@ -6908,10 +10578,15 @@ function setupMobileSearch() {
 function performMobileSearch(query) {
     if (!window.app) return;
     
-    const results = window.app.channels.filter(channel => 
-        channel.name.toLowerCase().includes(query.toLowerCase()) ||
-        channel.country.toLowerCase().includes(query.toLowerCase())
-    );
+    const results = window.app.channels.filter(channel => {
+        // العثور على رقم القناة
+        const channelIndex = window.app.channels.findIndex(ch => ch.id === channel.id);
+        const channelNumber = channelIndex + 1;
+        
+        return channel.name.toLowerCase().includes(query.toLowerCase()) ||
+               channel.country.toLowerCase().includes(query.toLowerCase()) ||
+               channelNumber.toString().includes(query);
+    });
     
     const searchResults = document.getElementById('searchResults');
     if (!searchResults) return;
@@ -6927,6 +10602,10 @@ function performMobileSearch(query) {
         </div>
         ${results.map(channel => {
             console.log('إنشاء عنصر بحث للقناة:', channel.name, 'مع ID:', channel.id);
+            // العثور على رقم القناة
+            const channelIndex = window.app.channels.findIndex(ch => ch.id === channel.id);
+            const channelNumber = channelIndex + 1;
+            
             return `
             <div class="search-result-item" onclick="selectChannelFromSearch(${channel.id})">
                 <div class="search-result-logo">
@@ -6935,7 +10614,7 @@ function performMobileSearch(query) {
                 </div>
                 <div class="search-result-info">
                     <h4>${channel.name}</h4>
-                    <p>${channel.country}</p>
+                    <p>${channel.country} • رقم ${channelNumber}</p>
                 </div>
             </div>
         `;
@@ -6964,9 +10643,7 @@ function setupMobileOverlay() {
     const overlay = document.getElementById('mobileOverlay');
     if (overlay) {
         overlay.addEventListener('click', () => {
-            closeCategoriesDropdown();
-            closeSearchPopup();
-            closeMoreMenu();
+            closeAllMobileMenus();
         });
     }
 }
@@ -7053,6 +10730,659 @@ function initializeMobileBottomNav() {
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new ArabicTVApp();
+
+    // ===== NEW MOBILE BOTTOM NAVIGATION FUNCTIONS =====
+
+    // Show home page
+    window.showHomePage = function() {
+        // Remove active class from all nav items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        // Add active class to home button
+        document.querySelector('[data-page="home"]').classList.add('active');
+        
+        // Show all channels
+        if (window.app && window.app.filterChannels) {
+            window.app.filterChannels('all');
+        }
+        
+        // Close any open menus
+        closeAllMenus();
+    };
+
+    // Toggle categories dropdown
+    window.toggleCategories = function() {
+        const dropdown = document.getElementById('categoriesDropdown');
+        const moreMenu = document.getElementById('moreMenu');
+        
+        // Close more menu if open
+        moreMenu.classList.remove('active');
+        
+        // Toggle categories dropdown
+        dropdown.classList.toggle('active');
+        
+        // Update nav item active state
+        updateNavActiveState('categories');
+    };
+
+    // Close categories dropdown
+    window.closeCategories = function() {
+        const dropdown = document.getElementById('categoriesDropdown');
+        dropdown.classList.remove('active');
+    };
+
+    // Open mobile search
+    window.openMobileSearch = function() {
+        const searchModal = document.getElementById('searchModal');
+        const mobileSearchInput = document.getElementById('mobileSearchInput');
+        
+        // Show search modal
+        searchModal.classList.add('active');
+        
+        // Focus on search input after animation
+        setTimeout(() => {
+            if (mobileSearchInput) {
+                mobileSearchInput.focus();
+            }
+        }, 300);
+        
+        // Update nav item active state
+        updateNavActiveState('search');
+        
+        // Close any open menus
+        closeAllMenus();
+        
+        // Load recent searches
+        loadRecentSearches();
+    };
+
+    // Close search modal
+    window.closeSearchModal = function() {
+        const searchModal = document.getElementById('searchModal');
+        searchModal.classList.remove('active');
+        
+        // Clear search input
+        const mobileSearchInput = document.getElementById('mobileSearchInput');
+        if (mobileSearchInput) {
+            mobileSearchInput.value = '';
+        }
+        
+        // Clear results
+        clearSearchResults();
+    };
+
+    // Clear search
+    window.clearSearch = function() {
+        const mobileSearchInput = document.getElementById('mobileSearchInput');
+        const clearBtn = document.getElementById('clearSearchBtn');
+        
+        if (mobileSearchInput) {
+            mobileSearchInput.value = '';
+            mobileSearchInput.focus();
+        }
+        
+        if (clearBtn) {
+            clearBtn.classList.remove('visible');
+        }
+        
+        clearSearchResults();
+        hideSuggestions();
+    };
+
+    // Clear recent searches
+    window.clearRecentSearches = function() {
+        localStorage.removeItem('recentSearches');
+        loadRecentSearches();
+    };
+
+    // Toggle favorites
+    window.toggleFavorites = function() {
+        if (window.app && window.app.toggleFavorites) {
+            window.app.toggleFavorites();
+        }
+        
+        // Update nav item active state
+        updateNavActiveState('favorites');
+        
+        // Close any open menus
+        closeAllMenus();
+    };
+
+    // Toggle more menu
+    window.toggleMoreMenu = function() {
+        const moreMenu = document.getElementById('moreMenu');
+        const categoriesDropdown = document.getElementById('categoriesDropdown');
+        
+        // Close categories dropdown if open
+        categoriesDropdown.classList.remove('active');
+        
+        // Toggle more menu
+        moreMenu.classList.toggle('active');
+        
+        // Update nav item active state
+        updateNavActiveState('more');
+    };
+
+    // Update nav item active state
+    function updateNavActiveState(activePage) {
+        // Remove active class from all nav items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        // Add active class to current page
+        const activeItem = document.querySelector(`[data-page="${activePage}"]`);
+        if (activeItem) {
+            activeItem.classList.add('active');
+        }
+    }
+
+    // Close all menus
+    function closeAllMenus() {
+        const moreMenu = document.getElementById('moreMenu');
+        const categoriesDropdown = document.getElementById('categoriesDropdown');
+        
+        moreMenu.classList.remove('active');
+        categoriesDropdown.classList.remove('active');
+    }
+
+    // Handle category selection
+    function selectCategory(category) {
+        if (window.app && window.app.filterChannels) {
+            window.app.filterChannels(category);
+        }
+        
+        // Update category items active state
+        document.querySelectorAll('.category-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        const activeItem = document.querySelector(`[data-category="${category}"]`);
+        if (activeItem) {
+            activeItem.classList.add('active');
+        }
+        
+        // Close categories dropdown
+        closeCategories();
+        
+        // Update nav item active state
+        updateNavActiveState('categories');
+    }
+
+    // Update favorites badge
+    function updateFavoritesBadge() {
+        const badge = document.getElementById('favoritesBadge');
+        if (badge && window.app && window.app.favorites) {
+            const favoritesCount = window.app.favorites.length;
+            if (favoritesCount > 0) {
+                badge.textContent = favoritesCount;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+    }
+
+    // Close menus when clicking outside
+    document.addEventListener('click', function(event) {
+        const bottomNav = document.getElementById('bottomNav');
+        const moreMenu = document.getElementById('moreMenu');
+        const categoriesDropdown = document.getElementById('categoriesDropdown');
+        
+        if (!bottomNav.contains(event.target)) {
+            closeAllMenus();
+        }
+    });
+
+    // Handle category item clicks
+    document.addEventListener('click', function(event) {
+        if (event.target.closest('.category-item')) {
+            const category = event.target.closest('.category-item').dataset.category;
+            if (category) {
+                selectCategory(category);
+            }
+        }
+    });
+
+    // Update favorites badge periodically
+    setInterval(updateFavoritesBadge, 1000);
+
+    // ===== PROFESSIONAL SEARCH FUNCTIONALITY =====
+
+    // Search functionality variables
+    let searchTimeout;
+    let currentSearchResults = [];
+    let currentFilter = 'all';
+    let currentSort = 'name';
+
+    // Initialize search functionality
+    function initializeSearch() {
+        const mobileSearchInput = document.getElementById('mobileSearchInput');
+        const clearBtn = document.getElementById('clearSearchBtn');
+        const sortSelect = document.getElementById('sortSelect');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        // Search input events
+        if (mobileSearchInput) {
+            mobileSearchInput.addEventListener('input', handleSearchInput);
+            mobileSearchInput.addEventListener('keydown', handleSearchKeydown);
+        }
+
+        // Clear button events
+        if (clearBtn) {
+            clearBtn.addEventListener('click', clearSearch);
+        }
+
+        // Sort select events
+        if (sortSelect) {
+            sortSelect.addEventListener('change', handleSortChange);
+        }
+
+        // Filter button events
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', handleFilterChange);
+        });
+
+        // Close modal when clicking outside
+        const searchModal = document.getElementById('searchModal');
+        if (searchModal) {
+            searchModal.addEventListener('click', function(e) {
+                if (e.target === searchModal) {
+                    closeSearchModal();
+                }
+            });
+        }
+    }
+
+    // Handle search input
+    function handleSearchInput(e) {
+        const query = e.target.value.trim();
+        const clearBtn = document.getElementById('clearSearchBtn');
+
+        // Show/hide clear button
+        if (clearBtn) {
+            if (query.length > 0) {
+                clearBtn.classList.add('visible');
+            } else {
+                clearBtn.classList.remove('visible');
+            }
+        }
+
+        // Clear previous timeout
+        if (searchTimeout) {
+            clearTimeout(searchTimeout);
+        }
+
+        // Show suggestions if query is short
+        if (query.length > 0 && query.length < 3) {
+            showSuggestions(query);
+        } else {
+            hideSuggestions();
+        }
+
+        // Search with delay
+        if (query.length >= 2) {
+            searchTimeout = setTimeout(() => {
+                performSearch(query);
+            }, 300);
+        } else {
+            clearSearchResults();
+            showRecentSearches();
+        }
+    }
+
+    // Handle search keydown
+    function handleSearchKeydown(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const query = e.target.value.trim();
+            if (query.length > 0) {
+                performSearch(query);
+                addToRecentSearches(query);
+            }
+        } else if (e.key === 'Escape') {
+            closeSearchModal();
+        }
+    }
+
+    // Perform search
+    function performSearch(query) {
+        if (!window.app || !window.app.channels) {
+            return;
+        }
+
+        const channels = window.app.channels;
+        const results = channels.filter(channel => {
+            const name = channel.name.toLowerCase();
+            const category = channel.category.toLowerCase();
+            const country = channel.country.toLowerCase();
+            const searchQuery = query.toLowerCase();
+
+            // Apply filter
+            if (currentFilter !== 'all' && category !== currentFilter) {
+                return false;
+            }
+
+            // Search in name, category, and country
+            return name.includes(searchQuery) || 
+                   category.includes(searchQuery) || 
+                   country.includes(searchQuery);
+        });
+
+        // Sort results
+        results.sort((a, b) => {
+            switch (currentSort) {
+                case 'name':
+                    return a.name.localeCompare(b.name);
+                case 'category':
+                    return a.category.localeCompare(b.category);
+                case 'country':
+                    return a.country.localeCompare(b.country);
+                default:
+                    return 0;
+            }
+        });
+
+        currentSearchResults = results;
+        displaySearchResults(results);
+        updateResultsCount(results.length);
+    }
+
+    // Display search results
+    function displaySearchResults(results) {
+        const resultsContainer = document.getElementById('mobileSearchResults');
+        const noResults = document.getElementById('mobileNoResults');
+        const recentSearches = document.getElementById('recentSearches');
+
+        if (!resultsContainer) return;
+
+        // Hide recent searches
+        if (recentSearches) {
+            recentSearches.style.display = 'none';
+        }
+
+        if (results.length === 0) {
+            resultsContainer.innerHTML = '';
+            if (noResults) {
+                noResults.style.display = 'block';
+            }
+            return;
+        }
+
+        // Hide no results
+        if (noResults) {
+            noResults.style.display = 'none';
+        }
+
+        // Generate results HTML
+        const resultsHTML = results.map(channel => `
+            <div class="search-result-item" onclick="selectSearchResult('${channel.id}')">
+                <img src="${channel.logo || 'favicon.svg'}" 
+                     alt="${channel.name}" 
+                     class="search-result-logo"
+                     onerror="this.src='favicon.svg'">
+                <div class="search-result-info">
+                    <h4>${channel.name}</h4>
+                    <p>${channel.country} • ${getCategoryName(channel.category)}</p>
+                </div>
+                <span class="search-result-category">${getCategoryName(channel.category)}</span>
+            </div>
+        `).join('');
+
+        resultsContainer.innerHTML = resultsHTML;
+    }
+
+    // Select search result
+    function selectSearchResult(channelId) {
+        if (window.app && window.app.channels) {
+            const channel = window.app.channels.find(c => c.id === channelId);
+            if (channel) {
+                // Play the channel
+                if (window.app.playChannel) {
+                    window.app.playChannel(channel);
+                }
+                // Close search modal
+                closeSearchModal();
+            }
+        }
+    }
+
+    // Update results count
+    function updateResultsCount(count) {
+        const resultsCount = document.getElementById('mobileResultsCount');
+        if (resultsCount) {
+            resultsCount.textContent = count;
+        }
+    }
+
+    // Clear search results
+    function clearSearchResults() {
+        const resultsContainer = document.getElementById('mobileSearchResults');
+        const noResults = document.getElementById('mobileNoResults');
+        const recentSearches = document.getElementById('recentSearches');
+
+        if (resultsContainer) {
+            resultsContainer.innerHTML = '';
+        }
+
+        if (noResults) {
+            noResults.style.display = 'none';
+        }
+
+        if (recentSearches) {
+            recentSearches.style.display = 'block';
+        }
+
+        updateResultsCount(0);
+    }
+
+    // Show suggestions
+    function showSuggestions(query) {
+        const suggestionsContainer = document.getElementById('searchSuggestions');
+        if (!suggestionsContainer) return;
+
+        // Get recent searches that match
+        const recentSearches = getRecentSearches();
+        const matchingSearches = recentSearches.filter(search => 
+            search.toLowerCase().includes(query.toLowerCase())
+        );
+
+        if (matchingSearches.length === 0) {
+            hideSuggestions();
+            return;
+        }
+
+        const suggestionsHTML = matchingSearches.map(search => `
+            <div class="suggestion-item" onclick="selectSuggestion('${search}')">
+                <i class="fas fa-history"></i>
+                <span class="suggestion-text">${search}</span>
+            </div>
+        `).join('');
+
+        suggestionsContainer.innerHTML = suggestionsHTML;
+        suggestionsContainer.classList.add('active');
+    }
+
+    // Hide suggestions
+    function hideSuggestions() {
+        const suggestionsContainer = document.getElementById('searchSuggestions');
+        if (suggestionsContainer) {
+            suggestionsContainer.classList.remove('active');
+        }
+    }
+
+    // Select suggestion
+    function selectSuggestion(suggestion) {
+        const mobileSearchInput = document.getElementById('mobileSearchInput');
+        if (mobileSearchInput) {
+            mobileSearchInput.value = suggestion;
+            performSearch(suggestion);
+            addToRecentSearches(suggestion);
+        }
+        hideSuggestions();
+    }
+
+    // Handle filter change
+    function handleFilterChange(e) {
+        const filter = e.target.dataset.filter;
+        
+        // Update active filter button
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        e.target.classList.add('active');
+        
+        currentFilter = filter;
+        
+        // Re-search with new filter
+        const mobileSearchInput = document.getElementById('mobileSearchInput');
+        if (mobileSearchInput && mobileSearchInput.value.trim()) {
+            performSearch(mobileSearchInput.value.trim());
+        }
+    }
+
+    // Handle sort change
+    function handleSortChange(e) {
+        currentSort = e.target.value;
+        
+        // Re-sort current results
+        if (currentSearchResults.length > 0) {
+            displaySearchResults(currentSearchResults);
+        }
+    }
+
+    // Get category name in Arabic
+    function getCategoryName(category) {
+        const categoryNames = {
+            'news': 'أخبار',
+            'entertainment': 'منوعة',
+            'sports': 'رياضة',
+            'religious': 'دينية',
+            'music': 'موسيقى',
+            'movies': 'أفلام',
+            'documentary': 'وثائقية',
+            'kids': 'أطفال'
+        };
+        return categoryNames[category] || category;
+    }
+
+    // Recent searches functionality
+    function getRecentSearches() {
+        try {
+            const recent = localStorage.getItem('recentSearches');
+            return recent ? JSON.parse(recent) : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function addToRecentSearches(search) {
+        try {
+            let recent = getRecentSearches();
+            recent = recent.filter(s => s !== search);
+            recent.unshift(search);
+            recent = recent.slice(0, 10); // Keep only 10 recent searches
+            localStorage.setItem('recentSearches', JSON.stringify(recent));
+        } catch (e) {
+            console.error('Error saving recent searches:', e);
+        }
+    }
+
+    function loadRecentSearches() {
+        const recentSearches = document.getElementById('recentSearches');
+        const recentList = document.getElementById('recentList');
+        
+        if (!recentSearches || !recentList) return;
+
+        const recent = getRecentSearches();
+        
+        if (recent.length === 0) {
+            recentSearches.style.display = 'none';
+            return;
+        }
+
+        recentSearches.style.display = 'block';
+        
+        const recentHTML = recent.map(search => `
+            <div class="recent-item" onclick="selectRecentSearch('${search}')">${search}</div>
+        `).join('');
+
+        recentList.innerHTML = recentHTML;
+    }
+
+    function selectRecentSearch(search) {
+        const mobileSearchInput = document.getElementById('mobileSearchInput');
+        if (mobileSearchInput) {
+            mobileSearchInput.value = search;
+            performSearch(search);
+        }
+    }
+
+    function showRecentSearches() {
+        const recentSearches = document.getElementById('recentSearches');
+        if (recentSearches) {
+            recentSearches.style.display = 'block';
+        }
+    }
+
+    // Initialize search when DOM is loaded
+    initializeSearch();
+    
+    // إضافة حماية من الإعلانات وإعادة التوجيه غير المرغوب فيها
+    const blockAdsAndRedirects = function() {
+        // منع النوافذ المنبثقة غير المرغوب فيها
+        window.addEventListener('beforeunload', function(e) {
+            // منع إعادة التوجيه غير المرغوب فيها
+            if (window.location.href.includes('elahmad.com') && !window.location.href.includes('noon.tv')) {
+                e.preventDefault();
+                e.returnValue = '';
+                return 'هل تريد مغادرة الموقع؟';
+            }
+        });
+        
+        // منع الإعلانات في الصفحة
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                mutation.addedNodes.forEach(function(node) {
+                    if (node.nodeType === 1) { // Element node
+                        // إزالة الإعلانات
+                        if (node.className && (
+                            node.className.includes('ad') || 
+                            node.className.includes('advertisement') ||
+                            node.className.includes('banner') ||
+                            node.className.includes('popup')
+                        )) {
+                            node.style.display = 'none';
+                            console.log('🚫 تم إخفاء إعلان');
+                        }
+                        
+                        // فحص النصوص للإعلانات
+                        if (node.textContent && (
+                            node.textContent.includes('إعلان') ||
+                            node.textContent.includes('advertisement') ||
+                            node.textContent.includes('Please wait 4 seconds')
+                        )) {
+                            node.style.display = 'none';
+                            console.log('🚫 تم إخفاء محتوى إعلاني');
+                        }
+                    }
+                });
+            });
+        });
+        
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+        
+        console.log('🛡️ تم تفعيل حماية من الإعلانات وإعادة التوجيه');
+    };
+    
+    // تفعيل الحماية
+    blockAdsAndRedirects();
+    
     // Initialize quality menu
     if (window.app && window.app.initQualityMenu) {
         window.app.initQualityMenu();
@@ -7072,7 +11402,16 @@ document.addEventListener('DOMContentLoaded', () => {
 // Helper function to validate JSON and provide detailed error information
 function validateJSON(jsonString, context = '') {
     try {
-        const parsed = JSON.parse(jsonString);
+        // First, try to clean up common JSON issues
+        let cleanedJson = jsonString.trim();
+        
+        // Remove any BOM characters
+        cleanedJson = cleanedJson.replace(/^\uFEFF/, '');
+        
+        // Try to fix common comma issues
+        cleanedJson = cleanedJson.replace(/,(\s*[}\]])/g, '$1');
+        
+        const parsed = JSON.parse(cleanedJson);
         return { valid: true, data: parsed, error: null };
     } catch (error) {
         let detailedError = {
@@ -7102,6 +11441,10 @@ function validateJSON(jsonString, context = '') {
                 detailedError.suggestion = 'يبدو أن هناك مشكلة في الأقواس المتعرجة';
             } else if (charAtError === '[' || charAtError === ']') {
                 detailedError.suggestion = 'يبدو أن هناك مشكلة في الأقواس المربعة';
+            } else if (charAtError === ':') {
+                detailedError.suggestion = 'يبدو أن هناك مشكلة في النقطتين';
+            } else {
+                detailedError.suggestion = 'تحقق من التنسيق حول هذا الموضع';
             }
         }
         
@@ -7119,6 +11462,11 @@ async function updateChannels() {
     try {
         console.log('🔄 بدء تحديث القنوات...');
         
+        // Show loading notification for users (only if not automatic)
+        if (!window.app.isAutomaticUpdate) {
+            window.app.notifyInfo('جارٍ تحديث القنوات من الخادم...', 'تحديث القنوات', 3000);
+        }
+        
         // Fetch channels from GitHub
         const response = await fetch('https://raw.githubusercontent.com/anon-site/TV-AR/main/channels.json');
         
@@ -7130,8 +11478,11 @@ async function updateChannels() {
         const responseText = await response.text();
         console.log('📥 تم جلب البيانات من GitHub، حجم البيانات:', responseText.length, 'حرف');
         
+        // Clean up the response text to handle potential formatting issues
+        const cleanedResponseText = responseText.trim();
+        
         // Validate JSON before parsing
-        const validation = validateJSON(responseText, 'GitHub channels data');
+        const validation = validateJSON(cleanedResponseText, 'GitHub channels data');
         
         if (!validation.valid) {
             console.error('❌ خطأ في تحليل JSON:');
@@ -7173,7 +11524,7 @@ async function updateChannels() {
             console.log('💾 تم إنشاء نسخة احتياطية من القنوات الحالية:', currentChannels.length, 'قناة');
         }
         
-        // Validate each channel has required fields
+        // Validate each channel has required fields and ensure VPN property exists
         const invalidChannels = data.channels.filter(channel => 
             !channel.name || !channel.url || !channel.category
         );
@@ -7182,6 +11533,12 @@ async function updateChannels() {
             console.warn('⚠️ تم العثور على قنوات غير صحيحة:', invalidChannels.length);
             console.warn('القنوات غير الصحيحة:', invalidChannels);
         }
+        
+        // Ensure all channels have VPN property set correctly
+        data.channels = data.channels.map(channel => ({
+            ...channel,
+            vpn: channel.vpn === true || channel.vpn === 'true' || false
+        }));
         
         // Update channels in the app
         window.app.channels = data.channels;
@@ -7198,15 +11555,13 @@ async function updateChannels() {
         // Update channel statistics
         window.app.updateChannelStats();
         
+        // تحديث آخر تحديث سيتم في دالة المزامنة السحابية
+        
         // Reload the channels display
         window.app.renderChannels();
         window.app.updateSidebarCounts();
         
-        // تحديث الوقت عند التحديث من لوحة التحكم فقط
-        window.app.updateLastUpdateTime();
         
-        // Reset update indicator
-        window.app.resetUpdateIndicator();
         
         // المزامنة التلقائية مع السحابة بعد التحديث من GitHub
         if (window.app.remoteStorage.enabled && window.app.remoteStorage.autoSync) {
@@ -7214,26 +11569,46 @@ async function updateChannels() {
             window.app.syncToRemote().then(syncSuccess => {
                 if (syncSuccess) {
                     console.log('✅ تمت المزامنة السحابية بنجاح');
-                    setTimeout(() => {
-                        window.app.notifySuccess('تم تحديث القنوات ومزامنتها مع جميع الأجهزة المتصلة!');
-                    }, 1000);
+                    // تحديث آخر تحديث عند نجاح المزامنة السحابية
+                    window.app.updateLastUpdateTime();
+                    if (!window.app.isAutomaticUpdate) {
+                        setTimeout(() => {
+                            window.app.notifySuccess('تم تحديث القنوات ومزامنتها مع جميع الأجهزة المتصلة!');
+                        }, 1000);
+                    } else {
+                        // For automatic updates, show only the simple notification
+                        setTimeout(() => {
+                            window.app.notifyInfo('تم تحديث القنوات تلقائياً', 'تحديث تلقائي', 2000);
+                        }, 1000);
+                    }
                 } else {
                     console.log('⚠️ فشلت المزامنة السحابية');
+                    if (!window.app.isAutomaticUpdate) {
+                        setTimeout(() => {
+                            window.app.notifyWarning('تم تحديث القنوات محلياً، لكن فشلت المزامنة مع السحابة. يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.');
+                        }, 1000);
+                    }
+                }
+            }).catch(syncError => {
+                console.error('❌ خطأ في المزامنة السحابية:', syncError);
+                if (!window.app.isAutomaticUpdate) {
                     setTimeout(() => {
                         window.app.notifyWarning('تم تحديث القنوات محلياً، لكن فشلت المزامنة مع السحابة. يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.');
                     }, 1000);
                 }
-            }).catch(syncError => {
-                console.error('❌ خطأ في المزامنة السحابية:', syncError);
-                setTimeout(() => {
-                    window.app.notifyWarning('تم تحديث القنوات محلياً، لكن فشلت المزامنة مع السحابة. يمكنك المحاولة يدوياً من إعدادات المزامنة السحابية.');
-                }, 1000);
             });
         } else {
-            // Show success notification
-            setTimeout(() => {
-                window.app.notifySuccess(`تم تحديث القنوات بنجاح! تم تحميل ${data.channels.length} قناة جديدة.`);
-            }, 500);
+            // Show success notification (only if not automatic)
+            if (!window.app.isAutomaticUpdate) {
+                setTimeout(() => {
+                    window.app.notifySuccess(`تم تحديث القنوات بنجاح! تم تحميل ${data.channels.length} قناة جديدة.`, 'تحديث مكتمل', 5000);
+                }, 500);
+            } else {
+                // For automatic updates, show only the simple notification
+                setTimeout(() => {
+                    window.app.notifyInfo('تم تحديث القنوات تلقائياً', 'تحديث تلقائي', 2000);
+                }, 500);
+            }
         }
         
         // Log confirmation that data was saved
@@ -7243,17 +11618,28 @@ async function updateChannels() {
     } catch (error) {
         console.error('❌ خطأ في تحديث القنوات:', error);
         
-        // Show detailed error notification
+        // Show user-friendly error notification
         let errorMessage = 'فشل في تحديث القنوات';
+        let errorTitle = 'خطأ في التحديث';
+        
         if (error.message.includes('JSON')) {
-            errorMessage += ': خطأ في تنسيق البيانات';
-        } else if (error.message.includes('fetch')) {
-            errorMessage += ': مشكلة في الاتصال بالإنترنت';
+            errorMessage = 'خطأ في تنسيق البيانات المستلمة من الخادم';
+            errorTitle = 'خطأ في البيانات';
+        } else if (error.message.includes('fetch') || error.message.includes('network')) {
+            errorMessage = 'مشكلة في الاتصال بالإنترنت. يرجى التحقق من اتصالك والمحاولة مرة أخرى';
+            errorTitle = 'مشكلة في الاتصال';
+        } else if (error.message.includes('404')) {
+            errorMessage = 'لم يتم العثور على ملف القنوات على الخادم';
+            errorTitle = 'ملف غير موجود';
+        } else if (error.message.includes('403') || error.message.includes('401')) {
+            errorMessage = 'لا يمكن الوصول إلى ملف القنوات. قد يكون هناك مشكلة في الصلاحيات';
+            errorTitle = 'مشكلة في الصلاحيات';
         } else {
-            errorMessage += `: ${error.message}`;
+            errorMessage = 'حدث خطأ غير متوقع أثناء تحديث القنوات';
+            errorTitle = 'خطأ غير متوقع';
         }
         
-        window.app.notifyError(errorMessage, 8000);
+        window.app.notifyError(errorMessage, errorTitle, 6000);
         
         // Try to restore backup if available
         const backupData = localStorage.getItem('channels_backup');
@@ -7285,7 +11671,7 @@ async function updateChannels() {
         // Show additional help
         setTimeout(() => {
             window.app.notifyInfo(
-                'يمكنك المحاولة مرة أخرى أو التحقق من اتصال الإنترنت',
+                'يمكنك المحاولة مرة أخرى أو التحقق من اتصال الإنترنت. إذا استمرت المشكلة، يرجى المحاولة لاحقاً.',
                 'مساعدة',
                 5000
             );
@@ -7413,6 +11799,128 @@ function setupScrollToTopButton() {
 // Initialize scroll to top button when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     setupScrollToTopButton();
+    
+    // Setup background audio setting handler
+    const backgroundAudioToggle = document.getElementById('backgroundAudio');
+    if (backgroundAudioToggle && window.app) {
+        backgroundAudioToggle.addEventListener('change', function(e) {
+            window.app.settings.backgroundAudio = e.target.checked;
+            window.app.saveSettings();
+            
+            // Apply changes to current video if playing
+            const video = document.getElementById('videoPlayer');
+            if (video && window.app.currentChannel) {
+                if (e.target.checked) {
+                    video.setAttribute('playsinline', 'true');
+                    video.setAttribute('webkit-playsinline', 'true');
+                    video.setAttribute('x5-playsinline', 'true');
+                    video.setAttribute('x5-video-player-type', 'h5');
+                    video.setAttribute('x5-video-player-fullscreen', 'false');
+                    setupMediaSession();
+                    console.log('تم تفعيل تشغيل الصوت في الخلفية');
+                } else {
+                    console.log('تم إلغاء تفعيل تشغيل الصوت في الخلفية');
+                }
+            }
+        });
+    }
 });
+
+// Media Session API for background audio support
+function setupMediaSession() {
+    if (!('mediaSession' in navigator)) {
+        console.log('Media Session API غير مدعوم في هذا المتصفح');
+        return;
+    }
+
+    const video = document.getElementById('videoPlayer');
+    if (!video || !app.currentChannel) {
+        return;
+    }
+
+    const channel = app.currentChannel;
+    
+    // Set media metadata
+    navigator.mediaSession.metadata = new MediaMetadata({
+        title: channel.name,
+        artist: channel.country || 'قناة فضائية',
+        album: 'NOON TV',
+        artwork: channel.logo ? [
+            { src: channel.logo, sizes: '96x96', type: 'image/png' },
+            { src: channel.logo, sizes: '128x128', type: 'image/png' },
+            { src: channel.logo, sizes: '192x192', type: 'image/png' },
+            { src: channel.logo, sizes: '256x256', type: 'image/png' },
+            { src: channel.logo, sizes: '384x384', type: 'image/png' },
+            { src: channel.logo, sizes: '512x512', type: 'image/png' }
+        ] : [
+            { src: 'favicon.svg', sizes: '96x96', type: 'image/svg+xml' }
+        ]
+    });
+
+    // Set action handlers
+    navigator.mediaSession.setActionHandler('play', () => {
+        video.play();
+    });
+
+    navigator.mediaSession.setActionHandler('pause', () => {
+        video.pause();
+    });
+
+    navigator.mediaSession.setActionHandler('stop', () => {
+        video.pause();
+        video.currentTime = 0;
+    });
+
+    navigator.mediaSession.setActionHandler('seekbackward', (details) => {
+        const skipTime = details.seekOffset || 10;
+        video.currentTime = Math.max(video.currentTime - skipTime, 0);
+    });
+
+    navigator.mediaSession.setActionHandler('seekforward', (details) => {
+        const skipTime = details.seekOffset || 10;
+        video.currentTime = Math.min(video.currentTime + skipTime, video.duration || 0);
+    });
+
+    navigator.mediaSession.setActionHandler('seekto', (details) => {
+        if (details.seekTime !== undefined) {
+            video.currentTime = details.seekTime;
+        }
+    });
+
+    // Update playback state
+    navigator.mediaSession.playbackState = video.paused ? 'paused' : 'playing';
+
+    // Listen for video events to update media session
+    video.addEventListener('play', () => {
+        navigator.mediaSession.playbackState = 'playing';
+    });
+
+    video.addEventListener('pause', () => {
+        navigator.mediaSession.playbackState = 'paused';
+    });
+
+    video.addEventListener('ended', () => {
+        navigator.mediaSession.playbackState = 'none';
+    });
+
+    console.log('تم إعداد Media Session API لتشغيل الصوت في الخلفية');
+}
+
+// Service Worker message handling
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('message', event => {
+        const video = document.getElementById('videoPlayer');
+        if (!video) return;
+
+        switch (event.data.action) {
+            case 'play':
+                video.play();
+                break;
+            case 'pause':
+                video.pause();
+                break;
+        }
+    });
+}
 
 

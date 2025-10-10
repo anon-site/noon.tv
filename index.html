@@ -3,32 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.youtube.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; media-src 'self' https: blob:; connect-src 'self' https: wss:; frame-src 'self' https://www.youtube.com https://youtube.com; child-src 'self' https://www.youtube.com https://youtube.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.youtube.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; media-src 'self' https: blob:; connect-src 'self' https: wss: https://api.allorigins.win https://cors-anywhere.herokuapp.com https://api.codetabs.com; frame-src 'self' https://www.youtube.com https://youtube.com https://www.elahmad.com https://direct.aflam4you.net; child-src 'self' https://www.youtube.com https://youtube.com https://www.elahmad.com https://direct.aflam4you.net; object-src 'none'; base-uri 'self'; form-action 'self';">
     
-    <meta name="description" content="منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات">
+    <meta name="description" content="منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات - يدعم جميع أنواع البث">
     
     <!-- Open Graph Meta Tags -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="ANON TV - القنوات الفضائية العربية">
-    <meta property="og:description" content="منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات">
+    <meta property="og:title" content="NOON TV - القنوات الفضائية العربية">
+    <meta property="og:description" content="منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات - يدعم جميع أنواع البث">
     <meta property="og:image" content="favicon.svg">
     <meta property="og:url" content="/TV-AR/">
-    <meta property="og:site_name" content="ANON TV">
+    <meta property="og:site_name" content="NOON TV">
     <meta property="og:locale" content="ar_SA">
     
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="ANON TV - القنوات الفضائية العربية">
-    <meta name="twitter:description" content="منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات">
+    <meta name="twitter:title" content="NOON TV - القنوات الفضائية العربية">
+    <meta name="twitter:description" content="منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات - يدعم جميع أنواع البث">
     <meta name="twitter:image" content="favicon.svg">
     
-    <title>ANON TV - القنوات الفضائية العربية</title>
+    <title>NOON TV - القنوات الفضائية العربية</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mobile-categories.css">
+    <link rel="stylesheet" href="mobile-enhancements.css">
+    <link rel="stylesheet" href="mobile-nav.css">
+    <link rel="stylesheet" href="no-channels.css">
 </head>
 <body>
     <!-- Header -->
@@ -37,7 +41,7 @@
             <div class="header-content">
                 <div class="logo">
                     <i class="fas fa-satellite-dish"></i>
-                    <h1>ANON TV</h1>
+                    <h1>NOON TV</h1>
                     <div class="admin-badge" id="adminBadge" style="display: none;">
                         <i class="fas fa-crown"></i>
                         <span>Admin</span>
@@ -60,6 +64,16 @@
                         <input type="checkbox" class="theme-input" id="themeToggle">
                         <span class="theme-slider"></span>
                     </label>
+                    
+                    <!-- Mobile Fullscreen Toggle Button -->
+                    <button class="mobile-fullscreen-toggle-btn mobile-only" onclick="toggleWebsiteFullscreen()" title="تكبير الشاشة">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                    
+                    <!-- Fullscreen Toggle Button -->
+                    <button class="fullscreen-toggle-btn desktop-only" onclick="toggleWebsiteFullscreen()" title="تكبير الشاشة">
+                        <i class="fas fa-expand"></i>
+                    </button>
                     
                     <button class="sidebar-toggle-btn desktop-only" onclick="app.toggleSidebar()">
                         <i class="fas fa-bars"></i>
@@ -85,10 +99,7 @@
                 <span class="breadcrumb-current" id="currentBreadcrumb">جميع القنوات</span>
                 <div class="channel-stats" id="channelStats">
                     <span class="stats-text">عدد القنوات: <strong id="channelCount">0</strong></span>
-                    <span class="update-time-text" id="updateTimeText">
-                        <i class="fas fa-clock"></i>
-                        تحديث: <span id="lastUpdateTime">-</span>
-                    </span>
+                    <span class="last-update-text">آخر تحديث: <span class="update-date" id="lastUpdate">-</span></span>
                 </div>
             </nav>
         </div>
@@ -100,7 +111,7 @@
         <div class="sidebar-header">
             <div class="sidebar-logo">
                 <i class="fas fa-satellite-dish"></i>
-                <span class="sidebar-title">ANON TV</span>
+                <span class="sidebar-title">NOON TV</span>
             </div>
             <button class="sidebar-toggle-btn" onclick="app.toggleSidebar()">
                 <i class="fas fa-chevron-right"></i>
@@ -155,6 +166,11 @@
                         <span>الوثائقية</span>
                         <span class="tab-count" id="documentaryCount">0</span>
                     </button>
+                    <button class="sidebar-nav-tab" data-category="kids">
+                        <i class="fas fa-child"></i>
+                        <span>الأطفال</span>
+                        <span class="tab-count" id="kidsCount">0</span>
+                    </button>
                 </div>
             </div>
             
@@ -180,10 +196,6 @@
                     <span>الأدوات</span>
                 </div>
                 <div class="sidebar-actions">
-                    <button class="sidebar-action-btn" onclick="openIPTVChecker()">
-                        <i class="fas fa-search"></i>
-                        <span>فحص الروابط</span>
-                    </button>
                     <button class="sidebar-action-btn" onclick="openSettings()">
                         <i class="fas fa-cog"></i>
                         <span>الإعدادات</span>
@@ -196,130 +208,17 @@
                         <i class="fas fa-sync-alt"></i>
                         <span>تحديث القنوات</span>
                     </button>
+                    <button class="sidebar-action-btn" onclick="openTelegram()">
+                        <i class="fab fa-telegram-plane"></i>
+                        <span>Telegram</span>
+                    </button>
                 </div>
             </div>
             
         </div>
     </div>
 
-    <!-- Mobile Bottom Navigation -->
-    <div class="mobile-bottom-nav" id="mobileBottomNav">
-        <button class="bottom-nav-btn" data-action="categories" onclick="toggleCategoriesDropdown()">
-            <i class="fas fa-th-large"></i>
-            <span>القائمة</span>
-        </button>
-        
-        <button class="bottom-nav-btn" data-action="favorites" onclick="app.toggleFavorites()">
-            <i class="fas fa-heart"></i>
-            <span>المفضلة</span>
-            <span class="favorites-badge" id="mobileFavoritesBadge">0</span>
-        </button>
-        
-        <button class="bottom-nav-btn active" data-action="home" onclick="app.showAllChannels()">
-            <i class="fas fa-home"></i>
-            <span>الرئيسية</span>
-        </button>
-        
-        <button class="bottom-nav-btn" data-action="search" onclick="toggleSearchPopup()">
-            <i class="fas fa-search"></i>
-            <span>البحث</span>
-        </button>
-        
-        <button class="bottom-nav-btn" data-action="more" onclick="toggleMoreMenu()">
-            <i class="fas fa-ellipsis-h"></i>
-            <span>المزيد</span>
-        </button>
-    </div>
-
-    <!-- Categories Dropdown -->
-    <div class="categories-dropdown" id="categoriesDropdown">
-        <div class="dropdown-header">
-            <h3>فئات القنوات</h3>
-            <button class="close-dropdown" onclick="closeCategoriesDropdown()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="dropdown-content">
-            <button class="category-item active" data-category="all" onclick="selectCategory('all')">
-                <i class="fas fa-th-large"></i>
-                <span>جميع القنوات</span>
-                <span class="category-count" id="mobileAllCount">0</span>
-            </button>
-            <button class="category-item" data-category="news" onclick="selectCategory('news')">
-                <i class="fas fa-newspaper"></i>
-                <span>الأخبار</span>
-                <span class="category-count" id="mobileNewsCount">0</span>
-            </button>
-            <button class="category-item" data-category="entertainment" onclick="selectCategory('entertainment')">
-                <i class="fas fa-film"></i>
-                <span>المنوعة</span>
-                <span class="category-count" id="mobileEntertainmentCount">0</span>
-            </button>
-            <button class="category-item" data-category="sports" onclick="selectCategory('sports')">
-                <i class="fas fa-futbol"></i>
-                <span>الرياضة</span>
-                <span class="category-count" id="mobileSportsCount">0</span>
-            </button>
-            <button class="category-item" data-category="religious" onclick="selectCategory('religious')">
-                <i class="fas fa-mosque"></i>
-                <span>الدينية</span>
-                <span class="category-count" id="mobileReligiousCount">0</span>
-            </button>
-            <button class="category-item" data-category="music" onclick="selectCategory('music')">
-                <i class="fas fa-music"></i>
-                <span>الموسيقى</span>
-                <span class="category-count" id="mobileMusicCount">0</span>
-            </button>
-            <button class="category-item" data-category="movies" onclick="selectCategory('movies')">
-                <i class="fas fa-film"></i>
-                <span>الأفلام</span>
-                <span class="category-count" id="mobileMoviesCount">0</span>
-            </button>
-            <button class="category-item" data-category="documentary" onclick="selectCategory('documentary')">
-                <i class="fas fa-book-open"></i>
-                <span>الوثائقية</span>
-                <span class="category-count" id="mobileDocumentaryCount">0</span>
-            </button>
-        </div>
-    </div>
-
-    <!-- Search Popup -->
-    <div class="search-popup" id="searchPopup">
-        <div class="search-popup-content">
-            <div class="search-popup-header">
-                <h3>البحث عن قناة</h3>
-                <button class="close-search" onclick="closeSearchPopup()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="search-popup-body">
-                <div class="search-input-container">
-                    <input type="text" class="search-popup-input" placeholder="اكتب اسم القناة..." id="searchPopupInput">
-                    <i class="fas fa-search search-icon"></i>
-                </div>
-                <div class="search-results" id="searchResults">
-                    <!-- Search results will appear here -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- More Menu -->
-    <div class="more-menu" id="moreMenu">
-        <div class="more-menu-content">
-            <button class="more-menu-item" onclick="updateChannels(); closeMoreMenu();">
-                <i class="fas fa-sync-alt"></i>
-                <span>تحديث</span>
-            </button>
-            <button class="more-menu-item" onclick="openSettings(); closeMoreMenu();">
-                <i class="fas fa-cog"></i>
-                <span>الإعدادات</span>
-            </button>
-            <button class="more-menu-item" onclick="openAdminPanel(); closeMoreMenu();">
-                <i class="fas fa-user-shield"></i>
-                <span>التحكم</span>
-            </button>
-        </div>
+    <!-- Mobile Bottom Navigation Removed -->
     </div>
 
     <!-- Mobile Overlay -->
@@ -346,10 +245,16 @@
             <div class="modal-header">
                 <div class="channel-title-container">
                     <h3 id="channelTitle">قناة</h3>
-                    <span class="channel-country" id="channelCountry">
-                        <i class="fas fa-flag"></i>
-                        <span class="country-text">-</span>
-                    </span>
+                    <div class="channel-info-row">
+                        <span class="channel-country" id="channelCountry">
+                            <i class="fas fa-flag"></i>
+                            <span class="country-text">-</span>
+                        </span>
+                        <span class="channel-vpn-indicator" id="channelVpnIndicator" style="display: none;">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>يتطلب VPN</span>
+                        </span>
+                    </div>
                 </div>
                 <div class="modal-controls">
                     <!-- Quality Display -->
@@ -396,6 +301,9 @@
                             </div>
                         </div>
                     </div>
+                    <button class="channels-btn" onclick="toggleChannelBar()" title="عرض/إخفاء القنوات">
+                        <i class="fas fa-tv"></i>
+                    </button>
                     <button class="pip-btn" onclick="togglePictureInPicture()" title="إخراج الشاشة خارج المتصفح">
                         <i class="fas fa-external-link-alt"></i>
                     </button>
@@ -408,7 +316,7 @@
                 </div>
             </div>
             <div class="video-container">
-                <video id="videoPlayer" controls autoplay>
+                <video id="videoPlayer" controls autoplay playsinline>
                     <source id="videoSource" src="" type="application/x-mpegURL">
                     متصفحك لا يدعم تشغيل الفيديو
                 </video>
@@ -438,10 +346,52 @@
                     مباشر
                 </div>
                 
+                <!-- Player Channel Navigation Buttons -->
+                <div class="player-channel-nav">
+                    <button class="player-nav-btn prev" onclick="previousChannel()" title="القناة السابقة" aria-label="القناة السابقة">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <button class="player-nav-btn next" onclick="nextChannel()" title="القناة التالية" aria-label="القناة التالية">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                </div>
+                
                 <!-- Ad Block Notification -->
                 <div class="ad-block-notification" id="adBlockNotification">
                     <i class="fas fa-shield-alt"></i>
                     تم تفعيل منع الإعلانات
+                </div>
+                
+                <!-- Channel Bar -->
+                <div class="channel-bar" id="channelBar">
+                    <div class="channel-bar-header">
+                        <h4>القنوات المتاحة</h4>
+                        <div class="channel-bar-info">
+                            <span id="channelBarCount">0</span> قناة
+                        </div>
+                        <button class="channel-bar-close" onclick="hideChannelBar()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="channel-bar-container">
+                        <div class="channel-bar-scroll" id="channelBarScroll">
+                            <div class="channel-bar-content" id="channelBarContent">
+                                <!-- Channels will be loaded here -->
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="channel-bar-controls">
+                        <button class="channel-bar-btn" onclick="scrollChannelBarRight()" title="تمرير يمين">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <button class="channel-bar-btn" onclick="scrollToCurrentChannel()" title="الانتقال للقناة الحالية">
+                            <i class="fas fa-bullseye"></i>
+                        </button>
+                        <button class="channel-bar-btn" onclick="scrollChannelBarLeft()" title="تمرير يسار">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -458,48 +408,30 @@
                 </button>
             </div>
             <div class="settings-body">
-                <div class="setting-item">
-                    <label for="autoQuality">جودة تلقائية حسب سرعة الإنترنت</label>
-                    <label class="switch">
-                        <input type="checkbox" id="autoQuality" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="setting-item">
-                    <label for="autoplay">تشغيل تلقائي</label>
-                    <label class="switch">
-                        <input type="checkbox" id="autoplay" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-
-                <div class="setting-item">
-                    <label for="volume">مستوى الصوت</label>
-                    <input type="range" id="volume" min="0" max="100" value="100" class="volume-slider">
-                </div>
-                <div class="setting-item">
-                    <label for="theme">نمط التطبيق</label>
-                    <select id="theme" class="theme-select">
-                        <option value="dark">داكن</option>
-                        <option value="light">فاتح</option>
-                        <option value="auto">تلقائي</option>
-                    </select>
-                </div>
-                
-                <!-- Appearance Customization Section -->
+                <!-- المظهر العام -->
                 <div class="settings-section">
-                    <h4 class="settings-section-title">🎨 تخصيص المظهر</h4>
+                    <h4 class="settings-section-title">
+                        <i class="fas fa-palette"></i>
+                        المظهر العام
+                    </h4>
                     
                     <div class="setting-item">
-                        <label for="zoomLevel">حجم المحتوى</label>
-                        <div class="zoom-control">
-                            <input type="range" id="zoomLevel" min="75" max="150" value="100" step="5" class="zoom-slider">
-                            <span id="zoomValue" class="zoom-value">100%</span>
+                        <div class="setting-label-group">
+                            <label for="theme">نمط التطبيق</label>
+                            <small>اختر بين الوضع الداكن أو الفاتح</small>
                         </div>
+                        <select id="theme" class="theme-select">
+                            <option value="dark">داكن</option>
+                            <option value="light">فاتح</option>
+                            <option value="auto">تلقائي</option>
+                        </select>
                     </div>
                     
                     <div class="setting-item">
-                        <label for="colorTheme">نظام الألوان</label>
+                        <div class="setting-label-group">
+                            <label for="colorTheme">نظام الألوان</label>
+                            <small>اختر لون النسق الرئيسي</small>
+                        </div>
                         <select id="colorTheme" class="color-theme-select">
                             <option value="default">الافتراضي</option>
                             <option value="blue">أزرق</option>
@@ -511,7 +443,41 @@
                     </div>
                     
                     <div class="setting-item">
-                        <label for="fontSize">حجم النص</label>
+                        <div class="setting-label-group">
+                            <label for="borderRadius">شكل الحواف</label>
+                            <small>تحديد مستوى استدارة العناصر</small>
+                        </div>
+                        <select id="borderRadius" class="border-radius-select">
+                            <option value="minimal">مربع</option>
+                            <option value="normal">عادي</option>
+                            <option value="rounded" selected>مدور</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- التخصيص والعرض -->
+                <div class="settings-section">
+                    <h4 class="settings-section-title">
+                        <i class="fas fa-sliders-h"></i>
+                        التخصيص والعرض
+                    </h4>
+                    
+                    <div class="setting-item">
+                        <div class="setting-label-group">
+                            <label for="zoomLevel">حجم المحتوى</label>
+                            <small>تكبير أو تصغير عناصر الواجهة</small>
+                        </div>
+                        <div class="zoom-control">
+                            <input type="range" id="zoomLevel" min="75" max="150" value="100" step="5" class="zoom-slider">
+                            <span id="zoomValue" class="zoom-value">100%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-label-group">
+                            <label for="fontSize">حجم النص</label>
+                            <small>اختر حجم الخط المناسب</small>
+                        </div>
                         <select id="fontSize" class="font-size-select">
                             <option value="small" selected>صغير</option>
                             <option value="medium">متوسط</option>
@@ -521,21 +487,10 @@
                     </div>
                     
                     <div class="setting-item">
-                        <label for="borderRadius">شكل الحواف</label>
-                        <select id="borderRadius" class="border-radius-select">
-                            <option value="minimal">مربع</option>
-                            <option value="normal">عادي</option>
-                            <option value="rounded" selected>مدور</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <!-- Layout and Behavior Section -->
-                <div class="settings-section">
-                    <h4 class="settings-section-title">📐 التخطيط والسلوك</h4>
-                    
-                    <div class="setting-item">
-                        <label for="layoutMode">نمط العرض</label>
+                        <div class="setting-label-group">
+                            <label for="layoutMode">نمط العرض</label>
+                            <small>طريقة عرض القنوات</small>
+                        </div>
                         <select id="layoutMode" class="layout-mode-select">
                             <option value="grid">شبكة</option>
                             <option value="list">قائمة</option>
@@ -544,7 +499,10 @@
                     </div>
                     
                     <div class="setting-item">
-                        <label for="compactMode">الوضع المضغوط</label>
+                        <div class="setting-label-group">
+                            <label for="compactMode">الوضع المضغوط</label>
+                            <small>عرض المزيد من القنوات في الشاشة</small>
+                        </div>
                         <label class="switch">
                             <input type="checkbox" id="compactMode" checked>
                             <span class="slider"></span>
@@ -552,36 +510,103 @@
                     </div>
                     
                     <div class="setting-item">
-                        <label for="animationsEnabled">تفعيل الرسوم المتحركة</label>
-                        <label class="switch">
-                            <input type="checkbox" id="animationsEnabled">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    
-                    <div class="setting-item">
-                        <label for="highContrast">التباين العالي</label>
+                        <div class="setting-label-group">
+                            <label for="highContrast">التباين العالي</label>
+                            <small>تحسين الرؤية والوضوح</small>
+                        </div>
                         <label class="switch">
                             <input type="checkbox" id="highContrast">
                             <span class="slider"></span>
                         </label>
                     </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-label-group">
+                            <label for="animationsEnabled">الرسوم المتحركة</label>
+                            <small>تفعيل أو تعطيل التأثيرات الحركية</small>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="animationsEnabled">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
                 </div>
                 
-                <!-- Quick Actions -->
-                <div class="settings-actions">
-                    <button class="reset-settings-btn" onclick="app.resetCustomizations()">
-                        <i class="fas fa-undo"></i>
-                        إعادة تعيين التخصيصات
-                    </button>
-                    <button class="show-welcome-btn" onclick="app.showWelcomeModal()">
-                        <i class="fas fa-info-circle"></i>
-                        عرض رسالة الترحيب
-                    </button>
-                    <button class="delete-cookies-btn" onclick="app.deleteAllCookies()">
-                        <i class="fas fa-trash-alt"></i>
-                        حذف الكوكيز
-                    </button>
+                <!-- إعدادات الفيديو -->
+                <div class="settings-section">
+                    <h4 class="settings-section-title">
+                        <i class="fas fa-video"></i>
+                        إعدادات الفيديو
+                    </h4>
+                    
+                    <div class="setting-item">
+                        <div class="setting-label-group">
+                            <label for="autoQuality">جودة تلقائية</label>
+                            <small>ضبط الجودة حسب سرعة الإنترنت</small>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="autoQuality" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-label-group">
+                            <label for="autoplay">تشغيل تلقائي</label>
+                            <small>تشغيل الفيديو مباشرة عند الفتح</small>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="autoplay" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-label-group">
+                            <label for="volume">مستوى الصوت</label>
+                            <small>التحكم في مستوى الصوت الافتراضي</small>
+                        </div>
+                        <input type="range" id="volume" min="0" max="100" value="100" class="volume-slider">
+                    </div>
+                </div>
+                
+                <!-- الإعدادات العامة -->
+                <div class="settings-section">
+                    <h4 class="settings-section-title">
+                        <i class="fas fa-cog"></i>
+                        الإعدادات العامة
+                    </h4>
+                    
+                    <div class="setting-item">
+                        <div class="setting-label-group">
+                            <label for="autoUpdateEnabled">التحديث التلقائي</label>
+                            <small>تحديث قائمة القنوات تلقائياً عند فتح التطبيق</small>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="autoUpdateEnabled" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- الإجراءات السريعة -->
+                <div class="settings-section">
+                    <h4 class="settings-section-title">
+                        <i class="fas fa-tools"></i>
+                        الإجراءات السريعة
+                    </h4>
+                    
+                    <div class="settings-actions-grid">
+                        <button class="settings-action-btn" onclick="app.resetCustomizations()">
+                            <i class="fas fa-undo"></i>
+                            <span>إعادة تعيين التخصيصات</span>
+                        </button>
+                        
+                        <button class="settings-action-btn delete-btn" onclick="app.deleteAllCookies()">
+                            <i class="fas fa-trash-alt"></i>
+                            <span>حذف الكوكيز</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -641,23 +666,23 @@
             <div class="admin-layout">
                 <div class="admin-sidebar">
                     <div class="admin-tabs">
-                        <button class="admin-tab active" data-tab="channels" onclick="app.switchAdminTab('channels')">
+                        <button class="admin-tab active" data-tab="channels">
                             <i class="fas fa-tv"></i>
                             <span>إدارة القنوات</span>
                         </button>
-                        <button class="admin-tab" data-tab="add" onclick="app.switchAdminTab('add')">
+                        <button class="admin-tab" data-tab="add">
                             <i class="fas fa-plus"></i>
                             <span>إضافة قناة</span>
                         </button>
-                        <button class="admin-tab" data-tab="categories" onclick="app.switchAdminTab('categories')">
+                        <button class="admin-tab" data-tab="categories">
                             <i class="fas fa-tags"></i>
                             <span>إدارة الفئات</span>
                         </button>
-                        <button class="admin-tab" data-tab="settings" onclick="app.switchAdminTab('settings')">
+                        <button class="admin-tab" data-tab="settings">
                             <i class="fas fa-cog"></i>
                             <span>إعدادات عامة</span>
                         </button>
-                        <button class="admin-tab" data-tab="security" onclick="app.switchAdminTab('security')">
+                        <button class="admin-tab" data-tab="security">
                             <i class="fas fa-shield-alt"></i>
                             <span>الأمان</span>
                         </button>
@@ -700,6 +725,7 @@
                                         <option value="music">الموسيقى</option>
                                         <option value="movies">الأفلام</option>
                                         <option value="documentary">الوثائقية</option>
+                                        <option value="kids">الأطفال</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -720,13 +746,28 @@
                                     </div>
                                     <input type="hidden" id="channelStatus" value="active">
                                 </div>
+                                <div class="form-group">
+                                    <label for="channelVpn">يتطلب VPN</label>
+                                    <div class="vpn-toggle-container">
+                                        <label class="vpn-toggle" data-vpn="false">
+                                            <i class="fas fa-globe vpn-icon"></i>
+                                            <span>لا يتطلب</span>
+                                        </label>
+                                        <label class="vpn-toggle active" data-vpn="true">
+                                            <i class="fas fa-shield-alt vpn-icon"></i>
+                                            <span>يتطلب VPN</span>
+                                        </label>
+                                    </div>
+                                    <input type="hidden" id="channelVpn" value="true">
+                                </div>
                             </div>
                             
                             <div class="form-column">
                                 <div class="form-group">
                                     <label for="channelUrl" id="urlLabel">رابط البث</label>
-                                    <input type="url" id="channelUrl" required placeholder="أدخل رابط البث (HLS أو يوتيوب)" oninput="detectUrlType()">
-                                    <small id="urlHelp" class="form-help" style="color: #666; font-size: 0.85rem; margin-top: 0.25rem; display: block;">أدخل رابط البث المباشر أو رابط يوتيوب</small>
+                                    <input type="url" id="channelUrl" required placeholder="أدخل رابط البث (HLS، MP4، WebM، RTMP، RTSP، DASH، يوتيوب، أو SHLS)" oninput="detectUrlType()">
+                                    <small id="urlHelp" class="form-help" style="color: #666; font-size: 0.85rem; margin-top: 0.25rem; display: block;">يدعم جميع أنواع البث: HLS، MP4، WebM، FLV، RTMP، RTSP، DASH، WebRTC، يوتيوب، و SHLS</small>
+                                    <small id="githubPagesHelp" class="form-help" style="color: #e74c3c; font-size: 0.8rem; margin-top: 0.25rem; display: block; font-weight: 500;">⚠️ ملاحظة: بعض روابط البث قد لا تعمل على GitHub Pages بسبب قيود CORS - جرب استخدام VPN أو استضافة الموقع على سيرفر آخر</small>
                                     <div id="urlTypeIndicator" style="margin-top: 0.5rem; padding: 0.5rem; border-radius: 4px; display: none;">
                                         <i id="urlTypeIcon" class="fas fa-info-circle"></i>
                                         <span id="urlTypeText">نوع الرابط: </span>
@@ -1009,35 +1050,6 @@
                                     </div>
                                 </div>
                                 
-                                <div class="password-requirements">
-                                    <div class="requirements-header">
-                                        <i class="fas fa-info-circle"></i>
-                                        <h4>متطلبات كلمة المرور</h4>
-                                    </div>
-                                    <ul class="requirements-list">
-                                        <li class="requirement-item" id="req-length">
-                                            <i class="fas fa-circle requirement-icon"></i>
-                                            <span>8 أحرف على الأقل</span>
-                                        </li>
-                                        <li class="requirement-item" id="req-uppercase">
-                                            <i class="fas fa-circle requirement-icon"></i>
-                                            <span>حرف كبير واحد على الأقل</span>
-                                        </li>
-                                        <li class="requirement-item" id="req-lowercase">
-                                            <i class="fas fa-circle requirement-icon"></i>
-                                            <span>حرف صغير واحد على الأقل</span>
-                                        </li>
-                                        <li class="requirement-item" id="req-number">
-                                            <i class="fas fa-circle requirement-icon"></i>
-                                            <span>رقم واحد على الأقل</span>
-                                        </li>
-                                        <li class="requirement-item" id="req-special">
-                                            <i class="fas fa-circle requirement-icon"></i>
-                                            <span>رمز خاص واحد على الأقل</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                
                                 <div class="form-actions">
                                     <button type="submit" class="change-password-btn" id="changePasswordBtn">
                                         <i class="fas fa-shield-alt"></i>
@@ -1046,39 +1058,25 @@
                                 </div>
                             </form>
                         </div>
-                        
-                        <div class="security-section">
-                            <div class="security-header">
-                                <i class="fas fa-info-circle"></i>
-                                <h3>معلومات الأمان</h3>
-                            </div>
-                            
-                            <div class="security-info">
-                                <div class="info-item">
-                                    <i class="fas fa-shield-alt"></i>
-                                    <div class="info-content">
-                                        <h4>تشفير آمن</h4>
-                                        <p>كلمات المرور مشفرة باستخدام SHA-256 Hash</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="info-item">
-                                    <i class="fas fa-clock"></i>
-                                    <div class="info-content">
-                                        <h4>آخر تغيير</h4>
-                                        <p id="lastPasswordChange">لم يتم تغييرها من قبل</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="info-item">
-                                    <i class="fas fa-user-shield"></i>
-                                    <div class="info-content">
-                                        <h4>حالة الجلسة</h4>
-                                        <p id="sessionStatus">نشطة</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+        
+        <!-- Enforce Cookies Reset Section -->
+        <div class="security-section">
+            <div class="security-header">
+                <div class="security-icon-wrapper">
+                    <i class="fas fa-cookie-bite"></i>
+                </div>
+                <div class="security-title-group">
+                    <h3>فرض حذف الكوكيز</h3>
+                    <p>انسخ رابطاً خاصاً يجبر الزائر على حذف الكوكيز عند فتحه</p>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="change-password-btn" onclick="copyResetCookiesLink()">
+                    <i class="fas fa-link"></i>
+                    <span>نسخ رابط فرض حذف الكوكيز</span>
+                </button>
+            </div>
+        </div>
                     </div>
                 </div>
                 </div>
@@ -1148,8 +1146,8 @@
                 <div class="welcome-icon">
                     <i class="fas fa-satellite-dish"></i>
                 </div>
-                <h2>مرحباً بك في ANON TV!</h2>
-                <p>منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات مع مزامنة سحابية متطورة</p>
+                <h2>مرحباً بك في NOON TV!</h2>
+                <p>منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات مع مزامنة سحابية متطورة - يدعم جميع أنواع البث</p>
             </div>
             
             <div class="welcome-body">
@@ -1160,6 +1158,16 @@
                     <div class="step-content">
                         <h4>تحديث القنوات التلقائي</h4>
                         <p>يتم فحص التحديثات تلقائياً عند تحميل التطبيق. يمكنك تحديث القنوات يدوياً من خلال زر "تحديث القنوات" في القائمة الجانبية أو من قائمة "المزيد" في الهاتف</p>
+                    </div>
+                </div>
+                
+                <div class="welcome-step">
+                    <div class="step-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <div class="step-content">
+                        <h4>دعم جميع أنواع البث</h4>
+                        <p>يدعم المشغل جميع أنواع البث المباشر: HLS، MP4، WebM، FLV، RTMP، RTSP، DASH، WebRTC، يوتيوب، و SHLS مع كشف تلقائي لنوع الرابط</p>
                     </div>
                 </div>
                 
@@ -1231,38 +1239,51 @@
                 <div class="footer-section">
                     <div class="footer-logo">
                         <i class="fas fa-satellite-dish"></i>
-                        <h3>ANON TV</h3>
+                        <h3>NOON TV</h3>
                     </div>
                     <p class="footer-description">
-                        منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات
+                        منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات - يدعم جميع أنواع البث
                     </p>
-                    <div class="footer-social">
-                        <a href="#" class="social-link" title="GitHub">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <a href="#" class="social-link" title="Twitter">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="social-link" title="Telegram">
-                            <i class="fab fa-telegram"></i>
-                        </a>
-                        <a href="#" class="social-link" title="Discord">
-                            <i class="fab fa-discord"></i>
-                        </a>
+                    <div class="footer-copyright">
+                        <p>&copy; 2025 NOON TV. جميع الحقوق محفوظة.</p>
+                        <p class="footer-design">تصميم وتطوير <a href="https://anon-site.github.io/" target="_blank" rel="noopener noreferrer">Anon Design</a></p>
+                        <p class="footer-version">الإصدار  : 2.0.1<span id="appVersion"></span></p>
+                        
+                        
+
+                        <!-- Urban VPN Download Section -->
+                        <div class="vpn-download-inline">
+                            <div class="vpn-download-content">
+                                <div class="vpn-download-info">
+                                    <div class="vpn-download-text">
+                                        <i class="fas fa-shield-alt"></i>
+                                        <span>تحميل Urban VPN</span>
+                                    </div>
+                                    <div class="vpn-download-features">
+                                        <span class="vpn-feature-badge">مجاني</span>
+                                        <span class="vpn-feature-badge">سريع</span>
+                                    </div>
+                                </div>
+                                <div class="vpn-download-buttons">
+                                    <a href="https://chromewebstore.google.com/detail/urban-vpn-proxy/eppiocemhmnlbhjplcgkofciiegomcon" target="_blank" rel="noopener noreferrer" class="vpn-download-btn chrome-btn">
+                                        <i class="fab fa-chrome"></i>
+                                        <span>كروم</span>
+                                    </a>
+                                    <a href="https://play.google.com/store/apps/details?id=com.urbanvpn.android" target="_blank" rel="noopener noreferrer" class="vpn-download-btn android-btn">
+                                        <i class="fab fa-android"></i>
+                                        <span>أندرويد</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
             </div>
             
             <div class="footer-bottom">
-                <div class="footer-copyright">
-                    <p>&copy; 2025 ANON TV. جميع الحقوق محفوظة.</p>
-                    <p class="footer-version">الإصدار  : 2.0.1<span id="appVersion"></span></p>
-                </div>
                 <div class="footer-legal">
                     <a href="#" class="legal-link">سياسة الخصوصية</a>
-                    <span class="separator">|</span>
-                    <a href="#" class="legal-link" onclick="openIPTVChecker()">فحص الروابط</a>
                     <span class="separator">|</span>
                     <a href="#" class="legal-link">اتصل بنا</a>
                 </div>
@@ -1277,6 +1298,247 @@
     <button class="scroll-to-top-btn" id="scrollToTopBtn" onclick="scrollToTop()" title="الصعود إلى الأعلى">
         <i class="fas fa-chevron-up"></i>
     </button>
+
+    <!-- New Mobile Bottom Navigation -->
+    <nav class="bottom-nav" id="bottomNav">
+        <div class="bottom-nav-container">
+            <!-- Home Button -->
+            <button class="nav-item active" data-page="home" onclick="showHomePage()">
+                <div class="nav-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <span class="nav-label">الرئيسية</span>
+            </button>
+
+            <!-- Categories Button -->
+            <button class="nav-item" data-page="categories" onclick="toggleCategories()">
+                <div class="nav-icon">
+                    <i class="fas fa-th-large"></i>
+                </div>
+                <span class="nav-label">الفئات</span>
+            </button>
+
+            <!-- Search Button -->
+            <button class="nav-item" data-page="search" onclick="openMobileSearch()">
+                <div class="nav-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <span class="nav-label">البحث</span>
+            </button>
+
+            <!-- Favorites Button -->
+            <button class="nav-item" data-page="favorites" onclick="toggleFavorites()">
+                <div class="nav-icon">
+                    <i class="fas fa-heart"></i>
+                    <span class="nav-badge" id="favoritesBadge" style="display: none;">0</span>
+                </div>
+                <span class="nav-label">المفضلة</span>
+            </button>
+
+            <!-- More Button -->
+            <button class="nav-item" data-page="more" onclick="toggleMoreMenu()">
+                <div class="nav-icon">
+                    <i class="fas fa-ellipsis-h"></i>
+                </div>
+                <span class="nav-label">المزيد</span>
+            </button>
+        </div>
+
+        <!-- More Menu Dropdown -->
+        <div class="more-menu" id="moreMenu">
+            <div class="more-menu-content">
+                <button class="more-item" onclick="updateChannels()">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>تحديث القنوات</span>
+                </button>
+                <button class="more-item" onclick="openSettings()">
+                    <i class="fas fa-cog"></i>
+                    <span>الإعدادات</span>
+                </button>
+                <button class="more-item" onclick="openAdminPanel()">
+                    <i class="fas fa-user-shield"></i>
+                    <span>لوحة التحكم</span>
+                </button>
+                <button class="more-item" onclick="openTelegram()">
+                    <i class="fab fa-telegram-plane"></i>
+                    <span>Telegram</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Categories Dropdown -->
+        <div class="categories-dropdown" id="categoriesDropdown">
+            <div class="dropdown-header">
+                <h3>فئات القنوات</h3>
+                <button class="close-dropdown" onclick="closeCategories()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="categories-list">
+                <button class="category-item active" data-category="all">
+                    <i class="fas fa-th-large"></i>
+                    <span>جميع القنوات</span>
+                    <span class="category-count" id="allCount">0</span>
+                </button>
+                <button class="category-item" data-category="news">
+                    <i class="fas fa-newspaper"></i>
+                    <span>الأخبار</span>
+                    <span class="category-count" id="newsCount">0</span>
+                </button>
+                <button class="category-item" data-category="entertainment">
+                    <i class="fas fa-film"></i>
+                    <span>المنوعة</span>
+                    <span class="category-count" id="entertainmentCount">0</span>
+                </button>
+                <button class="category-item" data-category="sports">
+                    <i class="fas fa-futbol"></i>
+                    <span>الرياضة</span>
+                    <span class="category-count" id="sportsCount">0</span>
+                </button>
+                <button class="category-item" data-category="religious">
+                    <i class="fas fa-mosque"></i>
+                    <span>الدينية</span>
+                    <span class="category-count" id="religiousCount">0</span>
+                </button>
+                <button class="category-item" data-category="music">
+                    <i class="fas fa-music"></i>
+                    <span>الموسيقى</span>
+                    <span class="category-count" id="musicCount">0</span>
+                </button>
+                <button class="category-item" data-category="movies">
+                    <i class="fas fa-film"></i>
+                    <span>الأفلام</span>
+                    <span class="category-count" id="moviesCount">0</span>
+                </button>
+                <button class="category-item" data-category="documentary">
+                    <i class="fas fa-book-open"></i>
+                    <span>الوثائقية</span>
+                    <span class="category-count" id="documentaryCount">0</span>
+                </button>
+                <button class="category-item" data-category="kids">
+                    <i class="fas fa-child"></i>
+                    <span>الأطفال</span>
+                    <span class="category-count" id="kidsCount">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Professional Search Modal -->
+        <div class="search-modal" id="searchModal">
+            <div class="search-modal-content">
+                <!-- Search Header -->
+                <div class="search-header">
+                    <div class="search-title">
+                        <i class="fas fa-search"></i>
+                        <h3>البحث المتقدم</h3>
+                    </div>
+                    <button class="close-search" onclick="closeSearchModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- Search Input Section -->
+                <div class="search-input-section">
+                    <div class="search-input-container">
+                        <div class="search-input-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" 
+                                   class="search-input" 
+                                   id="mobileSearchInput" 
+                                   placeholder="ابحث عن قناة، فئة، أو كلمة مفتاحية..."
+                                   autocomplete="off">
+                            <button class="clear-search" id="clearSearchBtn" onclick="clearSearch()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="search-suggestions" id="searchSuggestions">
+                            <!-- Suggestions will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search Filters -->
+                <div class="search-filters">
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i class="fas fa-filter"></i>
+                            فلاتر البحث
+                        </label>
+                        <div class="filter-options">
+                            <button class="filter-btn active" data-filter="all">
+                                <i class="fas fa-th-large"></i>
+                                <span>الكل</span>
+                            </button>
+                            <button class="filter-btn" data-filter="news">
+                                <i class="fas fa-newspaper"></i>
+                                <span>أخبار</span>
+                            </button>
+                            <button class="filter-btn" data-filter="sports">
+                                <i class="fas fa-futbol"></i>
+                                <span>رياضة</span>
+                            </button>
+                            <button class="filter-btn" data-filter="entertainment">
+                                <i class="fas fa-film"></i>
+                                <span>منوعة</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search Results -->
+                <div class="search-results-section">
+                    <div class="search-results-header">
+                        <div class="results-info">
+                            <span class="results-count" id="mobileResultsCount">0</span>
+                            <span>نتيجة</span>
+                        </div>
+                        <div class="sort-options">
+                            <select class="sort-select" id="sortSelect">
+                                <option value="name">الاسم</option>
+                                <option value="category">الفئة</option>
+                                <option value="country">البلد</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="search-results" id="mobileSearchResults">
+                        <!-- Search results will be populated here -->
+                    </div>
+                    
+                    <div class="no-results" id="mobileNoResults" style="display: none;">
+                        <div class="no-results-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h4>لم يتم العثور على نتائج</h4>
+                        <p>جرب كلمات مفتاحية مختلفة أو تحقق من الإملاء</p>
+                        <div class="search-tips">
+                            <h5>نصائح للبحث:</h5>
+                            <ul>
+                                <li>استخدم كلمات مفتاحية قصيرة</li>
+                                <li>جرب البحث باللغة العربية أو الإنجليزية</li>
+                                <li>استخدم فلاتر البحث للعثور على فئات محددة</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Searches -->
+                <div class="recent-searches" id="recentSearches" style="display: none;">
+                    <div class="recent-header">
+                        <i class="fas fa-history"></i>
+                        <span>البحث الأخير</span>
+                        <button class="clear-recent" onclick="clearRecentSearches()">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="recent-list" id="recentList">
+                        <!-- Recent searches will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
 
 
     <!-- HLS.js Library for video streaming -->
@@ -1311,6 +1573,135 @@
         });
     </script>
     <script src="script.js"></script>
+    <script src="mobile-nav.js"></script>
+    
+    <!-- حماية من الإعلانات وإعادة التوجيه غير المرغوب فيها -->
+    <script>
+        // منع النوافذ المنبثقة غير المرغوب فيها
+        window.addEventListener('beforeunload', function(e) {
+            if (window.location.href.includes('elahmad.com') && !window.location.href.includes('noon.tv')) {
+                e.preventDefault();
+                e.returnValue = '';
+                return 'هل تريد مغادرة الموقع؟';
+            }
+        });
+        
+        // منع النوافذ المنبقة من Aflam4You ومواقع أخرى
+        window.addEventListener('beforeunload', function(e) {
+            if (window.location.href.includes('aflam4you.net') || 
+                window.location.href.includes('direct.aflam4you.net')) {
+                e.preventDefault();
+                e.returnValue = '';
+                return 'هل تريد مغادرة الموقع؟';
+            }
+        });
+        
+        // منع فتح النوافذ المنبقة
+        const originalOpen = window.open;
+        window.open = function(url, name, specs) {
+            // منع النوافذ المنبقة من مواقع الإعلانات
+            if (url && (
+                url.includes('aflam4you.net') ||
+                url.includes('advertisement') ||
+                url.includes('ads') ||
+                url.includes('popup') ||
+                url.includes('click here to unmute')
+            )) {
+                console.log('🚫 تم منع نافذة منبقة:', url);
+                return null;
+            }
+            return originalOpen.apply(this, arguments);
+        };
+        
+        // منع النوافذ المنبقة من iframe
+        document.addEventListener('DOMContentLoaded', function() {
+            // مراقبة iframe للكشف عن النوافذ المنبقة
+            const iframeObserver = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType === 1 && node.tagName === 'IFRAME') {
+                            // إضافة حماية إضافية للـ iframe
+                            node.addEventListener('load', function() {
+                                try {
+                                    // منع النوافذ المنبقة من داخل iframe
+                                    if (node.contentWindow) {
+                                        const originalIframeOpen = node.contentWindow.open;
+                                        node.contentWindow.open = function(url) {
+                                            console.log('🚫 تم منع نافذة منبقة من iframe:', url);
+                                            return null;
+                                        };
+                                    }
+                                } catch (e) {
+                                    // Cross-origin error متوقع
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+            
+            iframeObserver.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+        });
+        
+        // منع الإعلانات في الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType === 1) { // Element node
+                            // إزالة الإعلانات
+                            if (node.className && (
+                                node.className.includes('ad') || 
+                                node.className.includes('advertisement') ||
+                                node.className.includes('banner') ||
+                                node.className.includes('popup') ||
+                                node.className.includes('unmute') ||
+                                node.className.includes('click-here')
+                            )) {
+                                node.style.display = 'none';
+                                console.log('🚫 تم إخفاء إعلان');
+                            }
+                            
+                            // فحص النصوص للإعلانات والنوافذ المنبقة
+                            if (node.textContent && (
+                                node.textContent.includes('إعلان') ||
+                                node.textContent.includes('advertisement') ||
+                                node.textContent.includes('Please wait 4 seconds') ||
+                                node.textContent.includes('click here to unmute') ||
+                                node.textContent.includes('Click here to unmute') ||
+                                node.textContent.includes('CLICK HERE TO UNMUTE') ||
+                                node.textContent.includes('unmute') ||
+                                node.textContent.includes('Unmute')
+                            )) {
+                                node.style.display = 'none';
+                                console.log('🚫 تم إخفاء محتوى إعلاني أو نافذة منبقة');
+                            }
+                            
+                            // إزالة الروابط التي تحتوي على "unmute"
+                            if (node.tagName === 'A' && node.href && (
+                                node.href.includes('unmute') ||
+                                node.href.includes('advertisement') ||
+                                node.href.includes('popup')
+                            )) {
+                                node.style.display = 'none';
+                                console.log('🚫 تم إخفاء رابط إعلاني');
+                            }
+                        }
+                    });
+                });
+            });
+            
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+            
+            console.log('🛡️ تم تفعيل حماية من الإعلانات والنوافذ المنبقة');
+        });
+    </script>
 </body>
 </html>
 
