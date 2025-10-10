@@ -208,17 +208,139 @@
                         <i class="fas fa-sync-alt"></i>
                         <span>تحديث القنوات</span>
                     </button>
-                    <button class="sidebar-action-btn" onclick="openTelegram()">
-                        <i class="fab fa-telegram-plane"></i>
-                        <span>Telegram</span>
-                    </button>
                 </div>
             </div>
             
         </div>
     </div>
 
+<<<<<<< HEAD
     <!-- Mobile Bottom Navigation Removed -->
+=======
+    <!-- Mobile Bottom Navigation -->
+    <div class="mobile-bottom-nav" id="mobileBottomNav">
+        <button class="bottom-nav-btn" data-action="categories" onclick="toggleCategoriesDropdown()">
+            <i class="fas fa-th-large"></i>
+            <span>القائمة</span>
+        </button>
+        
+        <button class="bottom-nav-btn" data-action="favorites" onclick="app.toggleFavorites()">
+            <i class="fas fa-heart"></i>
+            <span>المفضلة</span>
+            <span class="favorites-badge" id="mobileFavoritesBadge">0</span>
+        </button>
+        
+        <button class="bottom-nav-btn active" data-action="home" onclick="app.showAllChannels()">
+            <i class="fas fa-home"></i>
+            <span>الرئيسية</span>
+        </button>
+        
+        <button class="bottom-nav-btn" data-action="search" onclick="toggleSearchPopup()">
+            <i class="fas fa-search"></i>
+            <span>البحث</span>
+        </button>
+        
+        <button class="bottom-nav-btn" data-action="more" onclick="toggleMoreMenu()">
+            <i class="fas fa-ellipsis-h"></i>
+            <span>المزيد</span>
+        </button>
+    </div>
+
+    <!-- Categories Dropdown -->
+    <div class="categories-dropdown" id="categoriesDropdown">
+        <div class="dropdown-header">
+            <h3>فئات القنوات</h3>
+            <button class="close-dropdown" onclick="closeCategoriesDropdown()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="dropdown-content">
+            <button class="category-item active" data-category="all" onclick="selectCategory('all')">
+                <i class="fas fa-th-large"></i>
+                <span>جميع القنوات</span>
+                <span class="category-count" id="mobileAllCount">0</span>
+            </button>
+            <button class="category-item" data-category="news" onclick="selectCategory('news')">
+                <i class="fas fa-newspaper"></i>
+                <span>الأخبار</span>
+                <span class="category-count" id="mobileNewsCount">0</span>
+            </button>
+            <button class="category-item" data-category="entertainment" onclick="selectCategory('entertainment')">
+                <i class="fas fa-film"></i>
+                <span>المنوعة</span>
+                <span class="category-count" id="mobileEntertainmentCount">0</span>
+            </button>
+            <button class="category-item" data-category="sports" onclick="selectCategory('sports')">
+                <i class="fas fa-futbol"></i>
+                <span>الرياضة</span>
+                <span class="category-count" id="mobileSportsCount">0</span>
+            </button>
+            <button class="category-item" data-category="religious" onclick="selectCategory('religious')">
+                <i class="fas fa-mosque"></i>
+                <span>الدينية</span>
+                <span class="category-count" id="mobileReligiousCount">0</span>
+            </button>
+            <button class="category-item" data-category="music" onclick="selectCategory('music')">
+                <i class="fas fa-music"></i>
+                <span>الموسيقى</span>
+                <span class="category-count" id="mobileMusicCount">0</span>
+            </button>
+            <button class="category-item" data-category="movies" onclick="selectCategory('movies')">
+                <i class="fas fa-film"></i>
+                <span>الأفلام</span>
+                <span class="category-count" id="mobileMoviesCount">0</span>
+            </button>
+            <button class="category-item" data-category="documentary" onclick="selectCategory('documentary')">
+                <i class="fas fa-book-open"></i>
+                <span>الوثائقية</span>
+                <span class="category-count" id="mobileDocumentaryCount">0</span>
+            </button>
+            <button class="category-item" data-category="kids" onclick="selectCategory('kids')">
+                <i class="fas fa-child"></i>
+                <span>الأطفال</span>
+                <span class="category-count" id="mobileKidsCount">0</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Search Popup -->
+    <div class="search-popup" id="searchPopup">
+        <div class="search-popup-content">
+            <div class="search-popup-header">
+                <h3>البحث عن قناة</h3>
+                <button class="close-search" onclick="closeSearchPopup()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="search-popup-body">
+                <div class="search-input-container">
+                    <input type="text" class="search-popup-input" placeholder="اكتب اسم القناة..." id="searchPopupInput">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                <div class="search-results" id="searchResults">
+                    <!-- Search results will appear here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- More Menu -->
+    <div class="more-menu" id="moreMenu">
+        <div class="more-menu-content">
+            <button class="more-menu-item" onclick="updateChannels(); closeMoreMenu();">
+                <i class="fas fa-sync-alt"></i>
+                <span>تحديث</span>
+            </button>
+            <button class="more-menu-item" onclick="openSettings(); closeMoreMenu();">
+                <i class="fas fa-cog"></i>
+                <span>الإعدادات</span>
+            </button>
+            <button class="more-menu-item" onclick="openAdminPanel(); closeMoreMenu();">
+                <i class="fas fa-user-shield"></i>
+                <span>التحكم</span>
+            </button>
+        </div>
+>>>>>>> parent of e325da2 (123)
     </div>
 
     <!-- Mobile Overlay -->
@@ -1058,6 +1180,7 @@
                                 </div>
                             </form>
                         </div>
+<<<<<<< HEAD
         
         <!-- Enforce Cookies Reset Section -->
         <div class="security-section">
@@ -1077,6 +1200,8 @@
                 </button>
             </div>
         </div>
+=======
+>>>>>>> parent of e325da2 (123)
                     </div>
                 </div>
                 </div>
