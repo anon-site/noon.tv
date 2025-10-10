@@ -33,8 +33,50 @@ self.addEventListener('activate', event => {
     );
 });
 
-// Fetch event
+// Fetch event with CORS proxy support
 self.addEventListener('fetch', event => {
+    const url = new URL(event.request.url);
+    
+    // Check if this is a SHLS stream request
+    if (url.hostname.includes('shls-live-enc.edgenextcdn.net') || 
+        url.hostname.includes('edgenextcdn.net')) {
+        
+        event.respondWith(
+            fetch(event.request.url, {
+                method: event.request.method,
+                headers: {
+                    'Accept': 'application/vnd.apple.mpegurl, application/x-mpegurl, */*',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                    'Referer': 'https://www.google.com/',
+                    'Origin': 'https://www.google.com'
+                },
+                mode: 'cors',
+                credentials: 'omit',
+                redirect: 'follow'
+            })
+            .then(response => {
+                // Clone the response and add CORS headers
+                const newHeaders = new Headers(response.headers);
+                newHeaders.set('Access-Control-Allow-Origin', '*');
+                newHeaders.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
+                newHeaders.set('Access-Control-Allow-Headers', '*');
+                
+                return new Response(response.body, {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: newHeaders
+                });
+            })
+            .catch(error => {
+                console.error('Service Worker fetch error for SHLS:', error);
+                // Return a minimal error response
+                return new Response('', { status: 500 });
+            })
+        );
+        return;
+    }
+    
+    // Default caching strategy for other requests
     event.respondWith(
         caches.match(event.request)
             .then(response => {
