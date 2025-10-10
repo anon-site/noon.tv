@@ -2645,34 +2645,10 @@ body[data-theme="light"] .channel-number {
     font-size: 0.5rem;
 }
 .play-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: var(--transition);
-}
-.channel-card:hover .play-overlay {
-    opacity: 1;
+    display: none !important;
 }
 .play-btn {
-    width: 60px;
-    height: 60px;
-    background: var(--highlight-color);
-    border: none;
-    border-radius: 50%;
-    color: white;
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: var(--transition);
-}
-.play-btn:hover {
-    transform: scale(1.1);
+    display: none !important;
 }
 /* Loading Spinner */
 .loading {
@@ -5742,33 +5718,35 @@ body[data-theme="light"] .pip-btn.pip-active {
 @media (max-width: 768px) {
     .modal-controls {
         display: flex;
-        gap: 8px;
-        justify-content: space-between;
-        padding: 0.75rem;
-        background: rgba(0, 0, 0, 0.1);
-        border-radius: 12px;
-        margin-top: 0.5rem;
+        flex-direction: row;
+        gap: 6px;
+        padding: 0.5rem;
+        background: transparent;
+        border-radius: 0;
+        margin-top: 0;
+        justify-content: center;
     }
     .quality-btn, .pip-btn, .fullscreen-btn, .close-btn {
-        padding: 10px 12px;
-        font-size: 0.85rem;
-        min-width: 48px;
-        min-height: 48px;
-        border-radius: 12px;
+        padding: 8px 10px;
+        font-size: 0.75rem;
+        min-width: 42px;
+        min-height: 40px;
+        border-radius: 8px;
         flex: 1;
-        max-width: 90px;
+        max-width: 70px;
         justify-content: center;
-        background: var(--background-dark);
+        background: var(--secondary-color);
         border: 2px solid var(--border-color);
         color: var(--text-primary);
         transition: all 0.3s ease;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        display: flex;
+        align-items: center;
     }
-    .quality-btn:hover, .pip-btn:hover, .fullscreen-btn:hover, .close-btn:hover {
+    .quality-btn:active, .pip-btn:active, .fullscreen-btn:active, .close-btn:active {
         background: var(--highlight-color);
         border-color: var(--highlight-color);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        transform: scale(0.95);
     }
     .quality-btn span, .pip-btn span, .fullscreen-btn span {
         display: none;
@@ -5844,20 +5822,19 @@ body[data-theme="light"] .pip-btn.pip-active {
 }
 @media (max-width: 480px) {
     .modal-controls {
-        gap: 6px;
-        padding: 0.5rem;
-        margin-top: 0.25rem;
+        gap: 5px;
+        padding: 0.4rem;
     }
     .quality-btn, .pip-btn, .fullscreen-btn, .close-btn {
-        padding: 8px 10px;
-        font-size: 0.8rem;
-        min-width: 44px;
-        min-height: 44px;
-        border-radius: 10px;
-        max-width: 80px;
+        padding: 7px 8px;
+        font-size: 0.7rem;
+        min-width: 38px;
+        min-height: 38px;
+        max-width: 65px;
+        border-radius: 8px;
     }
     .quality-btn i, .pip-btn i, .fullscreen-btn i, .close-btn i {
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
     .modal-header h3 {
         font-size: 1.1rem;
@@ -5911,16 +5888,15 @@ body[data-theme="light"] .pip-btn.pip-active {
 @media (max-width: 375px) {
     .modal-controls {
         gap: 4px;
-        padding: 0.4rem;
-        margin-top: 0.25rem;
+        padding: 0.35rem;
     }
     .quality-btn, .pip-btn, .fullscreen-btn, .close-btn {
-        padding: 6px 8px;
-        font-size: 0.75rem;
-        min-width: 40px;
-        min-height: 40px;
-        border-radius: 8px;
-        max-width: 70px;
+        padding: 6px 6px;
+        font-size: 0.65rem;
+        min-width: 35px;
+        min-height: 36px;
+        max-width: 60px;
+        border-radius: 6px;
     }
     .quality-btn i, .pip-btn i, .fullscreen-btn i, .close-btn i {
         font-size: 0.9rem;

@@ -1016,11 +1016,6 @@ class ArabicTVApp {
                     ${channel.vpn === true ? '<span class="channel-vpn-badge"><i class="fas fa-shield-alt"></i> VPN</span>' : ''}
                 </div>
             </div>
-            <div class="play-overlay">
-                <button class="play-btn">
-                    <i class="fas fa-play"></i>
-                </button>
-            </div>
         `;
 
         card.addEventListener('click', () => this.playChannel(channel));
