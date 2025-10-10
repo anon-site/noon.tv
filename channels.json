@@ -1837,6 +1837,50 @@
       "type": "hls",
       "status": "active",
       "vpn": false
+    },
+    {
+      "id": 209,
+      "name": "Hallmark Mysteries East",
+      "url": "https://fl7.moveonjoy.com/HALLMARK_MOVIES_MYSTERIES/index.m3u8",
+      "logo": "",
+      "category": "movies",
+      "country": "USA",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 210,
+      "name": "FX Movie",
+      "url": "https://fl7.moveonjoy.com/FX_MOVIE/index.m3u8",
+      "logo": "",
+      "category": "movies",
+      "country": "USA",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 211,
+      "name": "MovieSmart Turk",
+      "url": "https://iptv-org.github.io/iptv/categories/movies.m3u",
+      "logo": "",
+      "category": "movies",
+      "country": "عالمية",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 212,
+      "name": "Newflix",
+      "url": "https://newfhls.wns.live/hls/stream.m3u8",
+      "logo": "",
+      "category": "movies",
+      "country": "عالمية",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
     }
   ],
   "favorites": [],
@@ -1909,6 +1953,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-10T19:05:15.282Z",
+  "lastModified": "2025-10-10T19:15:12.283Z",
   "version": "1.0"
 }
