@@ -12723,7 +12723,11 @@ body[data-theme="light"] .filter-btn.active {
     border-color: #3b82f6;
 
 }
-/* Player channel navigation (Prev/Next) */
+/* =================================
+   Player Channel Navigation Buttons
+   أزرار التنقل بين القنوات (السابقة/التالية)
+   تظهر على الكومبيوتر فقط
+   ================================= */
 .player-channel-nav {
     position: absolute;
     inset: 0;
@@ -12762,10 +12766,13 @@ body[data-theme="light"] .filter-btn.active {
     left: 12px; /* RTL: next on the left */
 }
 
+/* =================================
+   Mobile: Hide Channel Nav Buttons
+   إخفاء أزرار التنقل على الهاتف
+   ================================= */
 @media (max-width: 768px) {
-    .player-channel-nav .player-nav-btn {
-        width: 40px;
-        height: 40px;
+    .player-channel-nav {
+        display: none !important;
     }
 }
 body[data-theme="light"] .favorite-btn {
