@@ -1423,14 +1423,14 @@
             </div>
         </div>
 
-        <!-- Professional Search Modal -->
+        <!-- Simple Search Modal -->
         <div class="search-modal" id="searchModal">
             <div class="search-modal-content">
                 <!-- Search Header -->
                 <div class="search-header">
                     <div class="search-title">
                         <i class="fas fa-search"></i>
-                        <h3>البحث المتقدم</h3>
+                        <h3>البحث</h3>
                     </div>
                     <button class="close-search" onclick="closeSearchModal()">
                         <i class="fas fa-times"></i>
@@ -1445,41 +1445,10 @@
                             <input type="text" 
                                    class="search-input" 
                                    id="mobileSearchInput" 
-                                   placeholder="ابحث عن قناة، فئة، أو كلمة مفتاحية..."
+                                   placeholder="ابحث عن قناة..."
                                    autocomplete="off">
                             <button class="clear-search" id="clearSearchBtn" onclick="clearSearch()">
                                 <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                        <div class="search-suggestions" id="searchSuggestions">
-                            <!-- Suggestions will be populated here -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Search Filters -->
-                <div class="search-filters">
-                    <div class="filter-group">
-                        <label class="filter-label">
-                            <i class="fas fa-filter"></i>
-                            فلاتر البحث
-                        </label>
-                        <div class="filter-options">
-                            <button class="filter-btn active" data-filter="all">
-                                <i class="fas fa-th-large"></i>
-                                <span>الكل</span>
-                            </button>
-                            <button class="filter-btn" data-filter="news">
-                                <i class="fas fa-newspaper"></i>
-                                <span>أخبار</span>
-                            </button>
-                            <button class="filter-btn" data-filter="sports">
-                                <i class="fas fa-futbol"></i>
-                                <span>رياضة</span>
-                            </button>
-                            <button class="filter-btn" data-filter="entertainment">
-                                <i class="fas fa-film"></i>
-                                <span>منوعة</span>
                             </button>
                         </div>
                     </div>
@@ -1490,14 +1459,7 @@
                     <div class="search-results-header">
                         <div class="results-info">
                             <span class="results-count" id="mobileResultsCount">0</span>
-                            <span>نتيجة</span>
-                        </div>
-                        <div class="sort-options">
-                            <select class="sort-select" id="sortSelect">
-                                <option value="name">الاسم</option>
-                                <option value="category">الفئة</option>
-                                <option value="country">البلد</option>
-                            </select>
+                            <span>قناة</span>
                         </div>
                     </div>
                     
@@ -1510,29 +1472,7 @@
                             <i class="fas fa-search"></i>
                         </div>
                         <h4>لم يتم العثور على نتائج</h4>
-                        <p>جرب كلمات مفتاحية مختلفة أو تحقق من الإملاء</p>
-                        <div class="search-tips">
-                            <h5>نصائح للبحث:</h5>
-                            <ul>
-                                <li>استخدم كلمات مفتاحية قصيرة</li>
-                                <li>جرب البحث باللغة العربية أو الإنجليزية</li>
-                                <li>استخدم فلاتر البحث للعثور على فئات محددة</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent Searches -->
-                <div class="recent-searches" id="recentSearches" style="display: none;">
-                    <div class="recent-header">
-                        <i class="fas fa-history"></i>
-                        <span>البحث الأخير</span>
-                        <button class="clear-recent" onclick="clearRecentSearches()">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                    <div class="recent-list" id="recentList">
-                        <!-- Recent searches will be populated here -->
+                        <p>جرب كلمات مفتاحية مختلفة</p>
                     </div>
                 </div>
             </div>

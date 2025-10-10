@@ -7832,34 +7832,24 @@ class ArabicTVApp {
         const categories = this.categories.map(cat => cat.key);
         
         categories.forEach(category => {
-            // Update desktop sidebar counts
-            const countElement = document.getElementById(`${category}Count`);
-            if (countElement) {
-                let count = 0;
-                if (category === 'all') {
-                    count = this.channels.length;
-                } else {
-                    count = this.channels.filter(channel => channel.category === category).length;
-                }
-                countElement.textContent = count;
-                console.log(`عداد ${category}:`, count);
+            let count = 0;
+            if (category === 'all') {
+                count = this.channels.length;
             } else {
-                console.warn(`لم يتم العثور على عنصر ${category}Count`);
+                count = this.channels.filter(channel => channel.category === category).length;
             }
             
-            // Update mobile sidebar counts
-            const mobileCountElement = document.getElementById(`mobile${category.charAt(0).toUpperCase() + category.slice(1)}Count`);
-            if (mobileCountElement) {
-                let count = 0;
-                if (category === 'all') {
-                    count = this.channels.length;
-                } else {
-                    count = this.channels.filter(channel => channel.category === category).length;
-                }
-                mobileCountElement.textContent = count;
-                console.log(`عداد الموبايل ${category}:`, count);
+            // Update all count elements with this category (desktop sidebar, mobile categories, etc.)
+            // This will update both desktop and mobile since they share the same IDs
+            const countElements = document.querySelectorAll(`#${category}Count`);
+            countElements.forEach(element => {
+                element.textContent = count;
+            });
+            
+            if (countElements.length > 0) {
+                console.log(`تحديث عداد ${category}:`, count, '- عدد العناصر:', countElements.length);
             } else {
-                console.warn(`لم يتم العثور على عنصر mobile${category.charAt(0).toUpperCase() + category.slice(1)}Count`);
+                console.warn(`لم يتم العثور على عناصر ${category}Count`);
             }
         });
 
@@ -10793,9 +10783,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Close any open menus
         closeAllMenus();
-        
-        // Load recent searches
-        loadRecentSearches();
     };
 
     // Close search modal
@@ -10949,20 +10936,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update favorites badge periodically
     setInterval(updateFavoritesBadge, 1000);
 
-    // ===== PROFESSIONAL SEARCH FUNCTIONALITY =====
+    // ===== SIMPLE SEARCH FUNCTIONALITY =====
 
     // Search functionality variables
     let searchTimeout;
     let currentSearchResults = [];
-    let currentFilter = 'all';
-    let currentSort = 'name';
 
-    // Initialize search functionality
+    // Initialize search functionality (simplified)
     function initializeSearch() {
         const mobileSearchInput = document.getElementById('mobileSearchInput');
         const clearBtn = document.getElementById('clearSearchBtn');
-        const sortSelect = document.getElementById('sortSelect');
-        const filterBtns = document.querySelectorAll('.filter-btn');
 
         // Search input events
         if (mobileSearchInput) {
@@ -10975,16 +10958,6 @@ document.addEventListener('DOMContentLoaded', () => {
             clearBtn.addEventListener('click', clearSearch);
         }
 
-        // Sort select events
-        if (sortSelect) {
-            sortSelect.addEventListener('change', handleSortChange);
-        }
-
-        // Filter button events
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', handleFilterChange);
-        });
-
         // Close modal when clicking outside
         const searchModal = document.getElementById('searchModal');
         if (searchModal) {
@@ -10996,7 +10969,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Handle search input
+    // Handle search input (simplified)
     function handleSearchInput(e) {
         const query = e.target.value.trim();
         const clearBtn = document.getElementById('clearSearchBtn');
@@ -11015,21 +10988,13 @@ document.addEventListener('DOMContentLoaded', () => {
             clearTimeout(searchTimeout);
         }
 
-        // Show suggestions if query is short
-        if (query.length > 0 && query.length < 3) {
-            showSuggestions(query);
-        } else {
-            hideSuggestions();
-        }
-
         // Search with delay
-        if (query.length >= 2) {
+        if (query.length >= 1) {
             searchTimeout = setTimeout(() => {
                 performSearch(query);
             }, 300);
         } else {
             clearSearchResults();
-            showRecentSearches();
         }
     }
 
@@ -11040,30 +11005,25 @@ document.addEventListener('DOMContentLoaded', () => {
             const query = e.target.value.trim();
             if (query.length > 0) {
                 performSearch(query);
-                addToRecentSearches(query);
             }
         } else if (e.key === 'Escape') {
             closeSearchModal();
         }
     }
 
-    // Perform search
+    // Perform search (simplified)
     function performSearch(query) {
         if (!window.app || !window.app.channels) {
             return;
         }
 
         const channels = window.app.channels;
+        const searchQuery = query.toLowerCase();
+        
         const results = channels.filter(channel => {
             const name = channel.name.toLowerCase();
             const category = channel.category.toLowerCase();
             const country = channel.country.toLowerCase();
-            const searchQuery = query.toLowerCase();
-
-            // Apply filter
-            if (currentFilter !== 'all' && category !== currentFilter) {
-                return false;
-            }
 
             // Search in name, category, and country
             return name.includes(searchQuery) || 
@@ -11071,37 +11031,20 @@ document.addEventListener('DOMContentLoaded', () => {
                    country.includes(searchQuery);
         });
 
-        // Sort results
-        results.sort((a, b) => {
-            switch (currentSort) {
-                case 'name':
-                    return a.name.localeCompare(b.name);
-                case 'category':
-                    return a.category.localeCompare(b.category);
-                case 'country':
-                    return a.country.localeCompare(b.country);
-                default:
-                    return 0;
-            }
-        });
+        // Sort by name
+        results.sort((a, b) => a.name.localeCompare(b.name));
 
         currentSearchResults = results;
         displaySearchResults(results);
         updateResultsCount(results.length);
     }
 
-    // Display search results
+    // Display search results (simplified)
     function displaySearchResults(results) {
         const resultsContainer = document.getElementById('mobileSearchResults');
         const noResults = document.getElementById('mobileNoResults');
-        const recentSearches = document.getElementById('recentSearches');
 
         if (!resultsContainer) return;
-
-        // Hide recent searches
-        if (recentSearches) {
-            recentSearches.style.display = 'none';
-        }
 
         if (results.length === 0) {
             resultsContainer.innerHTML = '';
@@ -11118,35 +11061,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Generate results HTML
         const resultsHTML = results.map(channel => `
-            <div class="search-result-item" onclick="selectSearchResult('${channel.id}')">
+            <div class="search-result-item" onclick="selectSearchResult(${channel.id})">
                 <img src="${channel.logo || 'favicon.svg'}" 
                      alt="${channel.name}" 
                      class="search-result-logo"
                      onerror="this.src='favicon.svg'">
                 <div class="search-result-info">
                     <h4>${channel.name}</h4>
-                    <p>${channel.country} • ${getCategoryName(channel.category)}</p>
+                    <p>${channel.country}</p>
                 </div>
-                <span class="search-result-category">${getCategoryName(channel.category)}</span>
+                <i class="fas fa-play-circle search-result-play"></i>
             </div>
         `).join('');
 
         resultsContainer.innerHTML = resultsHTML;
     }
 
-    // Select search result
-    function selectSearchResult(channelId) {
-        if (window.app && window.app.channels) {
-            const channel = window.app.channels.find(c => c.id === channelId);
-            if (channel) {
-                // Play the channel
-                if (window.app.playChannel) {
-                    window.app.playChannel(channel);
-                }
-                // Close search modal
-                closeSearchModal();
-            }
+    // Select search result and play channel
+    window.selectSearchResult = function(channelId) {
+        console.log('تم الضغط على قناة بـ ID:', channelId);
+        
+        if (!window.app || !window.app.channels) {
+            console.error('التطبيق أو القنوات غير متاحة');
+            return;
         }
+        
+        // Find channel by ID (convert to number if needed)
+        const channel = window.app.channels.find(c => c.id == channelId);
+        
+        if (!channel) {
+            console.error('لم يتم العثور على القناة بـ ID:', channelId);
+            return;
+        }
+        
+        console.log('تم العثور على القناة:', channel.name);
+        
+        // Close search modal first
+        closeSearchModal();
+        
+        // Play the channel using the app's playChannel method
+        setTimeout(() => {
+            if (window.app && window.app.playChannel) {
+                console.log('تشغيل القناة:', channel.name);
+                window.app.playChannel(channel);
+            } else {
+                console.error('دالة playChannel غير متاحة');
+            }
+        }, 300);
     }
 
     // Update results count
@@ -11161,7 +11122,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function clearSearchResults() {
         const resultsContainer = document.getElementById('mobileSearchResults');
         const noResults = document.getElementById('mobileNoResults');
-        const recentSearches = document.getElementById('recentSearches');
 
         if (resultsContainer) {
             resultsContainer.innerHTML = '';
@@ -11171,161 +11131,9 @@ document.addEventListener('DOMContentLoaded', () => {
             noResults.style.display = 'none';
         }
 
-        if (recentSearches) {
-            recentSearches.style.display = 'block';
-        }
-
         updateResultsCount(0);
     }
 
-    // Show suggestions
-    function showSuggestions(query) {
-        const suggestionsContainer = document.getElementById('searchSuggestions');
-        if (!suggestionsContainer) return;
-
-        // Get recent searches that match
-        const recentSearches = getRecentSearches();
-        const matchingSearches = recentSearches.filter(search => 
-            search.toLowerCase().includes(query.toLowerCase())
-        );
-
-        if (matchingSearches.length === 0) {
-            hideSuggestions();
-            return;
-        }
-
-        const suggestionsHTML = matchingSearches.map(search => `
-            <div class="suggestion-item" onclick="selectSuggestion('${search}')">
-                <i class="fas fa-history"></i>
-                <span class="suggestion-text">${search}</span>
-            </div>
-        `).join('');
-
-        suggestionsContainer.innerHTML = suggestionsHTML;
-        suggestionsContainer.classList.add('active');
-    }
-
-    // Hide suggestions
-    function hideSuggestions() {
-        const suggestionsContainer = document.getElementById('searchSuggestions');
-        if (suggestionsContainer) {
-            suggestionsContainer.classList.remove('active');
-        }
-    }
-
-    // Select suggestion
-    function selectSuggestion(suggestion) {
-        const mobileSearchInput = document.getElementById('mobileSearchInput');
-        if (mobileSearchInput) {
-            mobileSearchInput.value = suggestion;
-            performSearch(suggestion);
-            addToRecentSearches(suggestion);
-        }
-        hideSuggestions();
-    }
-
-    // Handle filter change
-    function handleFilterChange(e) {
-        const filter = e.target.dataset.filter;
-        
-        // Update active filter button
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        e.target.classList.add('active');
-        
-        currentFilter = filter;
-        
-        // Re-search with new filter
-        const mobileSearchInput = document.getElementById('mobileSearchInput');
-        if (mobileSearchInput && mobileSearchInput.value.trim()) {
-            performSearch(mobileSearchInput.value.trim());
-        }
-    }
-
-    // Handle sort change
-    function handleSortChange(e) {
-        currentSort = e.target.value;
-        
-        // Re-sort current results
-        if (currentSearchResults.length > 0) {
-            displaySearchResults(currentSearchResults);
-        }
-    }
-
-    // Get category name in Arabic
-    function getCategoryName(category) {
-        const categoryNames = {
-            'news': 'أخبار',
-            'entertainment': 'منوعة',
-            'sports': 'رياضة',
-            'religious': 'دينية',
-            'music': 'موسيقى',
-            'movies': 'أفلام',
-            'documentary': 'وثائقية',
-            'kids': 'أطفال'
-        };
-        return categoryNames[category] || category;
-    }
-
-    // Recent searches functionality
-    function getRecentSearches() {
-        try {
-            const recent = localStorage.getItem('recentSearches');
-            return recent ? JSON.parse(recent) : [];
-        } catch (e) {
-            return [];
-        }
-    }
-
-    function addToRecentSearches(search) {
-        try {
-            let recent = getRecentSearches();
-            recent = recent.filter(s => s !== search);
-            recent.unshift(search);
-            recent = recent.slice(0, 10); // Keep only 10 recent searches
-            localStorage.setItem('recentSearches', JSON.stringify(recent));
-        } catch (e) {
-            console.error('Error saving recent searches:', e);
-        }
-    }
-
-    function loadRecentSearches() {
-        const recentSearches = document.getElementById('recentSearches');
-        const recentList = document.getElementById('recentList');
-        
-        if (!recentSearches || !recentList) return;
-
-        const recent = getRecentSearches();
-        
-        if (recent.length === 0) {
-            recentSearches.style.display = 'none';
-            return;
-        }
-
-        recentSearches.style.display = 'block';
-        
-        const recentHTML = recent.map(search => `
-            <div class="recent-item" onclick="selectRecentSearch('${search}')">${search}</div>
-        `).join('');
-
-        recentList.innerHTML = recentHTML;
-    }
-
-    function selectRecentSearch(search) {
-        const mobileSearchInput = document.getElementById('mobileSearchInput');
-        if (mobileSearchInput) {
-            mobileSearchInput.value = search;
-            performSearch(search);
-        }
-    }
-
-    function showRecentSearches() {
-        const recentSearches = document.getElementById('recentSearches');
-        if (recentSearches) {
-            recentSearches.style.display = 'block';
-        }
-    }
 
     // Initialize search when DOM is loaded
     initializeSearch();
