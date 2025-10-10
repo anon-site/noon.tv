@@ -1759,7 +1759,8 @@
       "country": "سورية",
       "type": "elahmad",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-10T19:32:08.992Z"
     },
     {
       "id": 202,
@@ -1770,7 +1771,8 @@
       "country": "USA",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-10T19:32:08.992Z"
     },
     {
       "id": 203,
@@ -1781,7 +1783,8 @@
       "country": "عالمية",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-10T19:32:08.992Z"
     },
     {
       "id": 204,
@@ -1792,7 +1795,8 @@
       "country": "USA",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-10T19:32:08.992Z"
     },
     {
       "id": 205,
@@ -1803,7 +1807,8 @@
       "country": "India",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-10T19:32:08.992Z"
     },
     {
       "id": 206,
@@ -1814,7 +1819,8 @@
       "country": "USA",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-10T19:32:08.992Z"
     },
     {
       "id": 207,
@@ -1824,8 +1830,9 @@
       "category": "movies",
       "country": "عالمية",
       "type": "hls",
-      "status": "active",
-      "vpn": false
+      "status": "inactive",
+      "vpn": false,
+      "lastModified": "2025-10-10T19:32:08.992Z"
     },
     {
       "id": 208,
@@ -1835,8 +1842,9 @@
       "category": "entertainment",
       "country": "السعودية",
       "type": "hls",
-      "status": "active",
-      "vpn": false
+      "status": "inactive",
+      "vpn": false,
+      "lastModified": "2025-10-10T19:32:08.992Z"
     },
     {
       "id": 209,
@@ -1847,18 +1855,20 @@
       "country": "USA",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-10T19:32:08.992Z"
     },
     {
       "id": 210,
       "name": "FX Movie",
       "url": "https://fl7.moveonjoy.com/FX_MOVIE/index.m3u8",
-      "logo": "",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/4/4d/FX_International_logo.svg",
       "category": "movies",
       "country": "USA",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-10T19:32:08.992Z"
     },
     {
       "id": 211,
@@ -1868,8 +1878,9 @@
       "category": "movies",
       "country": "عالمية",
       "type": "hls",
-      "status": "active",
-      "vpn": false
+      "status": "inactive",
+      "vpn": false,
+      "lastModified": "2025-10-10T19:32:08.992Z"
     },
     {
       "id": 212,
@@ -1879,8 +1890,9 @@
       "category": "movies",
       "country": "عالمية",
       "type": "hls",
-      "status": "active",
-      "vpn": false
+      "status": "inactive",
+      "vpn": false,
+      "lastModified": "2025-10-10T19:32:08.992Z"
     }
   ],
   "favorites": [],
@@ -1953,6 +1965,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-10T19:32:52.710Z",
+  "lastModified": "2025-10-10T20:02:33.106Z",
   "version": "1.0"
 }
