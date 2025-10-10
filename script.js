@@ -1370,12 +1370,10 @@ class ArabicTVApp {
     cleanupAllMedia() {
         console.log('🧹 تنظيف جميع أنواع البث...');
         
-        // تنظيف aflam iframe
+        // تنظيف aflam iframe - بدون حذف العنصر، فقط إيقاف وإخفاء
         const aflamIframe = document.getElementById('aflamPlayer');
         if (aflamIframe) {
             console.log('🛑 تنظيف aflam iframe...');
-            aflamIframe.src = '';
-            aflamIframe.style.display = 'none';
             
             try {
                 if (aflamIframe.contentWindow) {
@@ -1387,21 +1385,16 @@ class ArabicTVApp {
                 console.log('Cannot access aflam iframe content');
             }
             
-            try {
-                if (aflamIframe.parentNode) {
-                    aflamIframe.remove();
-                }
-            } catch (removeError) {
-                console.log('Error removing aflam iframe:', removeError);
-            }
+            // إفراغ المصدر وإخفاء iframe بدلاً من حذفه
+            aflamIframe.src = 'about:blank';
+            aflamIframe.style.display = 'none';
+            console.log('✅ تم إيقاف وإخفاء aflam iframe');
         }
         
-        // تنظيف elahmad iframe
+        // تنظيف elahmad iframe - بدون حذف العنصر، فقط إيقاف وإخفاء
         const elahmadIframe = document.getElementById('elahmadPlayer');
         if (elahmadIframe) {
             console.log('🛑 تنظيف elahmad iframe...');
-            elahmadIframe.src = '';
-            elahmadIframe.style.display = 'none';
             
             try {
                 if (elahmadIframe.contentWindow) {
@@ -1411,13 +1404,10 @@ class ArabicTVApp {
                 console.log('Cannot access elahmad iframe content');
             }
             
-            try {
-                if (elahmadIframe.parentNode) {
-                    elahmadIframe.remove();
-                }
-            } catch (removeError) {
-                console.log('Error removing elahmad iframe:', removeError);
-            }
+            // إفراغ المصدر وإخفاء iframe بدلاً من حذفه
+            elahmadIframe.src = 'about:blank';
+            elahmadIframe.style.display = 'none';
+            console.log('✅ تم إيقاف وإخفاء elahmad iframe');
         }
         
         // تنظيف HLS instance للـ SHLS streams
@@ -1427,20 +1417,15 @@ class ArabicTVApp {
             this.hls = null;
         }
         
-        // تنظيف YouTube iframe
+        // تنظيف YouTube iframe - بدون حذف العنصر، فقط إيقاف وإخفاء
         const youtubeIframe = document.getElementById('youtubePlayer');
         if (youtubeIframe) {
             console.log('🛑 تنظيف YouTube iframe...');
-            youtubeIframe.src = '';
-            youtubeIframe.style.display = 'none';
             
-            try {
-                if (youtubeIframe.parentNode) {
-                    youtubeIframe.remove();
-                }
-            } catch (removeError) {
-                console.log('Error removing YouTube iframe:', removeError);
-            }
+            // إفراغ المصدر وإخفاء iframe بدلاً من حذفه
+            youtubeIframe.src = 'about:blank';
+            youtubeIframe.style.display = 'none';
+            console.log('✅ تم إيقاف وإخفاء YouTube iframe');
         }
         
         // تنظيف إضافي للذاكرة
@@ -1754,56 +1739,6 @@ class ArabicTVApp {
         }
     }
     
-    // Show manual play button when autoplay fails
-    showManualPlayButton() {
-        const video = document.getElementById('videoPlayer');
-        const loading = document.getElementById('videoLoading');
-        
-        loading.style.display = 'flex';
-        loading.innerHTML = `
-            <div class="manual-play-container" style="text-align: center; padding: 2rem;">
-                <div style="font-size: 4rem; color: #4CAF50; margin-bottom: 1rem;">
-                    <i class="fas fa-play-circle"></i>
-                </div>
-                <p style="color: #333; font-size: 1.2rem; margin-bottom: 1.5rem;">
-                    اضغط للتشغيل
-                </p>
-                <button onclick="app.manualPlay()" style="
-                    background: #4CAF50; 
-                    color: white; 
-                    border: none; 
-                    padding: 1rem 2rem; 
-                    border-radius: 8px; 
-                    cursor: pointer;
-                    font-size: 1.1rem;
-                    display: flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                    margin: 0 auto;
-                    transition: all 0.3s ease;
-                " onmouseover="this.style.background='#45a049'" onmouseout="this.style.background='#4CAF50'">
-                    <i class="fas fa-play"></i>
-                    تشغيل الآن
-                </button>
-            </div>
-        `;
-    }
-    
-    // Manual play function
-    manualPlay() {
-        const video = document.getElementById('videoPlayer');
-        const loading = document.getElementById('videoLoading');
-        
-        loading.style.display = 'none';
-        
-        video.play().then(() => {
-            console.log('✅ تم تشغيل الفيديو يدوياً');
-        }).catch(error => {
-            console.error('❌ فشل التشغيل اليدوي:', error);
-            this.showVideoError('جارٍ تحميل البث...');
-        });
-    }
-    
     // Enhanced autoplay function with retry mechanism
     async enhancedAutoplay(video, retryCount = 0) {
         const maxRetries = this.settings.autoplayRetryAttempts || 3;
@@ -1835,10 +1770,26 @@ class ArabicTVApp {
                 await new Promise(resolve => setTimeout(resolve, (retryCount + 1) * 1000));
                 return this.enhancedAutoplay(video, retryCount + 1);
             } else {
-                // فشلت جميع المحاولات، إظهار زر التشغيل اليدوي
-                console.log('🔄 فشلت جميع محاولات التشغيل التلقائي، إظهار زر التشغيل اليدوي');
-                this.showManualPlayButton();
-                return false;
+                // فشلت جميع المحاولات - محاولة أخيرة مع كتم الصوت
+                console.log('🔄 محاولة أخيرة مع كتم الصوت...');
+                try {
+                    video.muted = true;
+                    await video.play();
+                    // إلغاء كتم الصوت بعد التشغيل
+                    setTimeout(() => {
+                        video.muted = false;
+                        console.log('🔊 تم إلغاء كتم الصوت بعد التشغيل');
+                    }, 500);
+                    return true;
+                } catch (finalError) {
+                    console.error('❌ فشلت جميع المحاولات:', finalError);
+                    // إخفاء شاشة التحميل فقط
+                    const loading = document.getElementById('videoLoading');
+                    if (loading) {
+                        loading.style.display = 'none';
+                    }
+                    return false;
+                }
             }
         }
     }
@@ -1853,16 +1804,46 @@ class ArabicTVApp {
                 const videos = iframe.contentDocument.querySelectorAll('video');
                 if (videos.length > 0) {
                     const video = videos[0];
+                    // إلغاء كتم الصوت بشكل فوري
                     video.muted = false;
+                    video.volume = 1.0; // تعيين مستوى الصوت إلى الأقصى
+                    
                     video.play().then(() => {
                         console.log('✅ تم تشغيل الفيديو تلقائياً في Aflam4You');
-                        // تأكيد بقاء الصوت مفعل
+                        // تأكيد بقاء الصوت مفعل بشكل متكرر
+                        const unmuteInterval = setInterval(() => {
+                            if (video.muted) {
+                                video.muted = false;
+                                video.volume = 1.0;
+                                console.log('🔊 إعادة تفعيل الصوت في Aflam4You');
+                            }
+                        }, 100);
+                        
+                        // إيقاف المراقبة بعد 5 ثوان
                         setTimeout(() => {
-                            video.muted = false;
-                        }, 300);
+                            clearInterval(unmuteInterval);
+                            console.log('✅ تم إيقاف مراقبة الصوت في Aflam4You');
+                        }, 5000);
                     }).catch(error => {
                         console.warn('⚠️ فشل التشغيل التلقائي في Aflam4You:', error.message);
-                        this.showAflamManualPlayButton(iframe);
+                        // محاولة التشغيل مع كتم الصوت ثم إلغاء الكتم
+                        video.muted = true;
+                        video.play().then(() => {
+                            console.log('✅ تم تشغيل الفيديو مع كتم الصوت في Aflam4You');
+                            // إلغاء كتم الصوت بعد التشغيل
+                            setTimeout(() => {
+                                video.muted = false;
+                                video.volume = 1.0;
+                                console.log('🔊 تم إلغاء كتم الصوت في Aflam4You');
+                            }, 500);
+                        }).catch(err => {
+                            console.error('❌ فشل التشغيل حتى مع كتم الصوت:', err);
+                            // إخفاء شاشة التحميل فقط بدون إظهار زر
+                            const loading = document.getElementById('videoLoading');
+                            if (loading) {
+                                loading.style.display = 'none';
+                            }
+                        });
                     });
                 } else {
                     // محاولة النقر على زر التشغيل إذا وُجد
@@ -1874,7 +1855,11 @@ class ArabicTVApp {
             }
         } catch (error) {
             console.warn('⚠️ خطأ في محاولة التشغيل التلقائي لـ Aflam4You:', error.message);
-            this.showAflamManualPlayButton(iframe);
+            // إخفاء شاشة التحميل فقط
+            const loading = document.getElementById('videoLoading');
+            if (loading) {
+                loading.style.display = 'none';
+            }
         }
     }
     
@@ -1965,58 +1950,20 @@ class ArabicTVApp {
         }
     }
     
-    // Show manual play button for Aflam4You
-    showAflamManualPlayButton(iframe) {
-        const loading = document.getElementById('videoLoading');
-        
-        loading.style.display = 'flex';
-        loading.innerHTML = `
-            <div class="aflam-manual-play-container" style="text-align: center; padding: 2rem;">
-                <div style="font-size: 4rem; color: #FF6B35; margin-bottom: 1rem;">
-                    <i class="fas fa-play-circle"></i>
-                </div>
-                <p style="color: #333; font-size: 1.2rem; margin-bottom: 1rem;">
-                    اضغط للتشغيل
-                </p>
-                <p style="color: #666; font-size: 0.9rem; margin-bottom: 1.5rem;">
-                    Aflam4You يتطلب تفاعل المستخدم للتشغيل
-                </p>
-                <button onclick="app.manualAflamPlay()" style="
-                    background: #FF6B35; 
-                    color: white; 
-                    border: none; 
-                    padding: 1rem 2rem; 
-                    border-radius: 8px; 
-                    cursor: pointer;
-                    font-size: 1.1rem;
-                    display: flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                    margin: 0 auto;
-                    transition: all 0.3s ease;
-                " onmouseover="this.style.background='#E55A2B'" onmouseout="this.style.background='#FF6B35'">
-                    <i class="fas fa-play"></i>
-                    تشغيل Aflam4You
-                </button>
-            </div>
-        `;
-    }
-    
-    // Manual play for Aflam4You
-    manualAflamPlay() {
-        const iframe = document.getElementById('aflamPlayer');
-        const loading = document.getElementById('videoLoading');
-        
-        if (iframe) {
-            loading.style.display = 'none';
-            
-            // محاولة النقر على زر التشغيل
-            this.clickAflamPlayButton(iframe);
-            
-            // محاولة التشغيل التلقائي بعد النقر
-            setTimeout(() => {
-                this.attemptAflamAutoplay(iframe);
-            }, 1000);
+    // Force unmute for Aflam4You iframe
+    forceUnmuteAflam(iframe) {
+        try {
+            if (iframe.contentDocument) {
+                const videos = iframe.contentDocument.querySelectorAll('video');
+                videos.forEach(video => {
+                    video.muted = false;
+                    video.volume = 1.0;
+                    console.log('🔊 تم فرض إلغاء كتم الصوت في Aflam4You');
+                });
+            }
+        } catch (error) {
+            // Cross-origin error متوقع
+            console.log('⚠️ لا يمكن الوصول لـ iframe content (Cross-origin)');
         }
     }
 
@@ -3135,11 +3082,7 @@ class ArabicTVApp {
             // Stop any existing iframe
             const existingIframe = document.getElementById('elahmadPlayer');
             if (existingIframe) {
-                // إيقاف iframe السابق فوراً
-                existingIframe.src = '';
-                existingIframe.style.display = 'none';
-                
-                // محاولة إيقاف الصوت
+                // إيقاف البث السابق فقط بدون حذف العنصر
                 try {
                     if (existingIframe.contentWindow) {
                         existingIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
@@ -3147,17 +3090,18 @@ class ArabicTVApp {
                 } catch (e) {
                     console.log('Cannot access existing iframe content');
                 }
-                
-                // إزالة iframe السابق
-                existingIframe.remove();
+                existingIframe.src = 'about:blank';
+                existingIframe.style.display = 'none';
+                console.log('✅ تم إيقاف elahmad iframe السابق');
             }
 
             // Hide the video element and show iframe
             video.style.display = 'none';
             
-            // Create or update elahmad iframe
+            // إعادة استخدام iframe الموجود أو إنشاء واحد جديد
             let iframe = document.getElementById('elahmadPlayer');
             if (!iframe) {
+                console.log('🆕 إنشاء iframe جديد لـ elahmad.com');
                 iframe = document.createElement('iframe');
                 iframe.id = 'elahmadPlayer';
                 iframe.style.width = '100%';
@@ -3166,36 +3110,40 @@ class ArabicTVApp {
                 iframe.allowFullscreen = true;
                 iframe.allow = 'autoplay; fullscreen; picture-in-picture; xr-spatial-tracking; encrypted-media';
                 
-            // إضافة حماية من الإعلانات وإعادة التوجيه
-            iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
-            iframe.setAttribute('loading', 'lazy');
-            
-            // منع إعادة التوجيه غير المرغوب فيها
-            iframe.onload = () => {
-                console.log('✅ تم تحميل iframe من elahmad.com بنجاح');
-                loading.style.display = 'none';
+                // إضافة حماية من الإعلانات وإعادة التوجيه
+                iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+                iframe.setAttribute('loading', 'lazy');
                 
-                // فحص الإعلانات وإعادة التوجيه
-                setTimeout(() => {
-                    try {
-                        if (iframe.contentDocument && iframe.contentDocument.body) {
-                            const bodyText = iframe.contentDocument.body.textContent.toLowerCase();
-                            if (bodyText.includes('advertisement') || bodyText.includes('ad') || bodyText.includes('إعلان')) {
-                                console.warn('⚠️ تم اكتشاف إعلانات في المحتوى');
+                // منع إعادة التوجيه غير المرغوب فيها
+                iframe.onload = () => {
+                    console.log('✅ تم تحميل iframe من elahmad.com بنجاح');
+                    loading.style.display = 'none';
+                    
+                    // فحص الإعلانات وإعادة التوجيه
+                    setTimeout(() => {
+                        try {
+                            if (iframe.contentDocument && iframe.contentDocument.body) {
+                                const bodyText = iframe.contentDocument.body.textContent.toLowerCase();
+                                if (bodyText.includes('advertisement') || bodyText.includes('ad') || bodyText.includes('إعلان')) {
+                                    console.warn('⚠️ تم اكتشاف إعلانات في المحتوى');
+                                }
+                                if (bodyText.includes('please wait') || bodyText.includes('انتظر')) {
+                                    console.warn('⚠️ تم اكتشاف رسالة انتظار - قد تكون إعادة توجيه');
+                                }
                             }
-                            if (bodyText.includes('please wait') || bodyText.includes('انتظر')) {
-                                console.warn('⚠️ تم اكتشاف رسالة انتظار - قد تكون إعادة توجيه');
-                            }
+                        } catch (e) {
+                            // Cross-origin error is expected for successful loads
+                            console.log('✅ iframe محمل بنجاح (Cross-origin)');
                         }
-                    } catch (e) {
-                        // Cross-origin error is expected for successful loads
-                        console.log('✅ iframe محمل بنجاح (Cross-origin)');
-                    }
-                }, 2000);
-            };
+                    }, 2000);
+                };
                 
-                // Insert iframe after video element
+                // Insert iframe after video element only if newly created
                 video.parentNode.insertBefore(iframe, video.nextSibling);
+            } else {
+                console.log('♻️ إعادة استخدام iframe موجود لـ elahmad.com');
+                // إعادة تعيين خصائص iframe الموجود
+                iframe.style.display = 'block';
             }
 
             // Set iframe source
@@ -3450,9 +3398,18 @@ class ArabicTVApp {
             // Stop any existing iframe
             const existingIframe = document.getElementById('aflamPlayer');
             if (existingIframe) {
-                existingIframe.src = '';
+                // إيقاف البث السابق فقط بدون حذف العنصر
+                try {
+                    if (existingIframe.contentWindow) {
+                        existingIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                        existingIframe.contentWindow.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
+                    }
+                } catch (e) {
+                    console.log('Cannot access existing iframe content');
+                }
+                existingIframe.src = 'about:blank';
                 existingIframe.style.display = 'none';
-                existingIframe.remove();
+                console.log('✅ تم إيقاف iframe السابق');
             }
 
             // Hide the video element and show iframe
@@ -3463,33 +3420,36 @@ class ArabicTVApp {
                 <div class="spinner"></div>
             `;
             
-            // Create optimized iframe
-            const iframe = document.createElement('iframe');
+            // إعادة استخدام iframe الموجود أو إنشاء واحد جديد
+            let iframe = document.getElementById('aflamPlayer');
+            if (!iframe) {
+                console.log('🆕 إنشاء iframe جديد لـ Aflam4You');
+                iframe = document.createElement('iframe');
             iframe.id = 'aflamPlayer';
             iframe.style.width = '100%';
             iframe.style.height = '100%';
             iframe.style.border = 'none';
             iframe.style.background = '#000';
-            iframe.allowFullscreen = true;
-            iframe.allow = 'autoplay; fullscreen; picture-in-picture; xr-spatial-tracking; encrypted-media';
-            // إزالة sandbox لتجنب التحذيرات
-            // iframe.sandbox = 'allow-scripts allow-same-origin allow-presentation allow-forms';
+                iframe.allowFullscreen = true;
+                iframe.allow = 'autoplay; fullscreen; picture-in-picture; xr-spatial-tracking; encrypted-media';
+                // إزالة sandbox لتجنب التحذيرات
+                // iframe.sandbox = 'allow-scripts allow-same-origin allow-presentation allow-forms';
             
-            // Add error handling
-            iframe.onerror = () => {
-                console.error('❌ خطأ في تحميل iframe من aflam4you.net');
-                this.showAflamError('فشل في تحميل المحتوى');
-            };
+                // Add error handling
+                iframe.onerror = () => {
+                    console.error('❌ خطأ في تحميل iframe من aflam4you.net');
+                    this.showAflamError('فشل في تحميل المحتوى');
+                };
             
-            // إضافة حماية من الإعلانات وإعادة التوجيه
-            iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
-            iframe.setAttribute('loading', 'lazy');
+                // إضافة حماية من الإعلانات وإعادة التوجيه
+                iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+                iframe.setAttribute('loading', 'lazy');
+                
+                // حماية إضافية من النوافذ المنبقة مع السماح بالتشغيل التلقائي
+                iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation allow-forms allow-popups-to-escape-sandbox allow-autoplay');
             
-            // حماية إضافية من النوافذ المنبقة مع السماح بالتشغيل التلقائي
-            iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation allow-forms allow-popups-to-escape-sandbox allow-autoplay');
-            
-            // منع النوافذ المنبقة من iframe
-            iframe.addEventListener('load', function() {
+                // منع النوافذ المنبقة من iframe
+                iframe.addEventListener('load', function() {
                 try {
                     // منع النوافذ المنبقة من داخل iframe
                     if (iframe.contentWindow) {
@@ -3515,21 +3475,21 @@ class ArabicTVApp {
                             }
                         });
                     }
-                } catch (e) {
-                    // Cross-origin error متوقع
-                    console.log('✅ حماية iframe مفعلة (Cross-origin)');
-                }
-            });
+                    } catch (e) {
+                        // Cross-origin error متوقع
+                        console.log('✅ حماية iframe مفعلة (Cross-origin)');
+                    }
+                });
             
-            // منع إعادة التوجيه غير المرغوب فيها مع التشغيل التلقائي
-            iframe.onload = () => {
+                // منع إعادة التوجيه غير المرغوب فيها مع التشغيل التلقائي
+                iframe.onload = () => {
                 console.log('✅ تم تحميل iframe من aflam4you.net');
                 loading.style.display = 'none';
                 
-                // محاولة التشغيل التلقائي للفيديو داخل iframe
+            // محاولة التشغيل التلقائي للفيديو داخل iframe بشكل فوري
                 setTimeout(() => {
                     this.attemptAflamAutoplay(iframe);
-                }, 2000);
+                }, 500);
                 
                 // Check for blocking after a delay
                 setTimeout(() => {
@@ -3552,17 +3512,23 @@ class ArabicTVApp {
                         console.log('✅ iframe محمل بنجاح (Cross-origin)');
                         // محاولة التشغيل التلقائي حتى مع Cross-origin
                         this.attemptAflamAutoplay(iframe);
-                    }
-                }, 3000);
-            };
+                        }
+                    }, 1000);
+                };
             
-            // Insert iframe after video element
-            video.parentNode.insertBefore(iframe, video.nextSibling);
+                // Insert iframe after video element only if newly created
+                video.parentNode.insertBefore(iframe, video.nextSibling);
+            } else {
+                console.log('♻️ إعادة استخدام iframe موجود لـ Aflam4You');
+                // إعادة تعيين خصائص iframe الموجود
+                iframe.style.display = 'block';
+            }
             
-            // Set iframe source with autoplay parameters
+            // Set iframe source with autoplay parameters and unmuted audio
             let aflamUrl = url;
             if (!aflamUrl.includes('autoplay')) {
-                aflamUrl += (aflamUrl.includes('?') ? '&' : '?') + 'autoplay=1&muted=0';
+                // إضافة معاملات التشغيل التلقائي بدون كتم الصوت
+                aflamUrl += (aflamUrl.includes('?') ? '&' : '?') + 'autoplay=1&muted=0&mute=0&volume=100';
             }
             iframe.src = aflamUrl;
             
@@ -3577,10 +3543,20 @@ class ArabicTVApp {
             
             // محاولة إضافية للتشغيل التلقائي بعد تحميل iframe
             iframe.addEventListener('load', () => {
+                // محاولة فورية للتشغيل التلقائي
                 setTimeout(() => {
                     console.log('🔄 محاولة إضافية للتشغيل التلقائي في Aflam4You...');
                     this.attemptAflamAutoplay(iframe);
-                }, 5000);
+                    // محاولة إلغاء كتم الصوت بشكل متكرر
+                    this.forceUnmuteAflam(iframe);
+                }, 1000);
+                
+                // محاولة ثانية بعد ثانيتين
+                setTimeout(() => {
+                    console.log('🔄 محاولة ثانية للتشغيل التلقائي في Aflam4You...');
+                    this.attemptAflamAutoplay(iframe);
+                    this.forceUnmuteAflam(iframe);
+                }, 2000);
             });
             
         } catch (error) {
