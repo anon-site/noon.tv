@@ -767,7 +767,6 @@
                                     <label for="channelUrl" id="urlLabel">رابط البث</label>
                                     <input type="url" id="channelUrl" required placeholder="أدخل رابط البث (HLS، MP4، WebM، RTMP، RTSP، DASH، يوتيوب، أو SHLS)" oninput="detectUrlType()">
                                     <small id="urlHelp" class="form-help" style="color: #666; font-size: 0.85rem; margin-top: 0.25rem; display: block;">يدعم جميع أنواع البث: HLS، MP4، WebM، FLV، RTMP، RTSP، DASH، WebRTC، يوتيوب، و SHLS</small>
-                                    <small id="githubPagesHelp" class="form-help" style="color: #e74c3c; font-size: 0.8rem; margin-top: 0.25rem; display: block; font-weight: 500;">⚠️ ملاحظة: بعض روابط البث قد لا تعمل على GitHub Pages بسبب قيود CORS - جرب استخدام VPN أو استضافة الموقع على سيرفر آخر</small>
                                     <div id="urlTypeIndicator" style="margin-top: 0.5rem; padding: 0.5rem; border-radius: 4px; display: none;">
                                         <i id="urlTypeIcon" class="fas fa-info-circle"></i>
                                         <span id="urlTypeText">نوع الرابط: </span>
@@ -1347,19 +1346,19 @@
         <!-- More Menu Dropdown -->
         <div class="more-menu" id="moreMenu">
             <div class="more-menu-content">
-                <button class="more-item" onclick="updateChannels()">
+                <button class="more-item" onclick="updateChannels(); closeMoreMenu();">
                     <i class="fas fa-sync-alt"></i>
                     <span>تحديث القنوات</span>
                 </button>
-                <button class="more-item" onclick="openSettings()">
+                <button class="more-item" onclick="openSettings(); closeMoreMenu();">
                     <i class="fas fa-cog"></i>
                     <span>الإعدادات</span>
                 </button>
-                <button class="more-item" onclick="openAdminPanel()">
+                <button class="more-item" onclick="openAdminPanel(); closeMoreMenu();">
                     <i class="fas fa-user-shield"></i>
                     <span>لوحة التحكم</span>
                 </button>
-                <button class="more-item" onclick="openTelegram()">
+                <button class="more-item" onclick="openTelegram(); closeMoreMenu();">
                     <i class="fab fa-telegram-plane"></i>
                     <span>Telegram</span>
                 </button>

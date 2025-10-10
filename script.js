@@ -10813,19 +10813,36 @@ document.addEventListener('DOMContentLoaded', () => {
         closeAllMenus();
     };
 
-    // Toggle more menu
+    // Toggle more menu (enhanced with overlay)
     window.toggleMoreMenu = function() {
         const moreMenu = document.getElementById('moreMenu');
         const categoriesDropdown = document.getElementById('categoriesDropdown');
+        const body = document.body;
         
         // Close categories dropdown if open
         categoriesDropdown.classList.remove('active');
         
         // Toggle more menu
-        moreMenu.classList.toggle('active');
+        const isActive = moreMenu.classList.toggle('active');
+        
+        // Toggle body overflow to prevent scrolling when menu is open
+        if (isActive) {
+            body.style.overflow = 'hidden';
+        } else {
+            body.style.overflow = '';
+        }
         
         // Update nav item active state
         updateNavActiveState('more');
+    };
+    
+    // Close more menu specifically
+    window.closeMoreMenu = function() {
+        const moreMenu = document.getElementById('moreMenu');
+        const body = document.body;
+        
+        moreMenu.classList.remove('active');
+        body.style.overflow = '';
     };
 
     // Update nav item active state
@@ -10846,9 +10863,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function closeAllMenus() {
         const moreMenu = document.getElementById('moreMenu');
         const categoriesDropdown = document.getElementById('categoriesDropdown');
+        const body = document.body;
         
         moreMenu.classList.remove('active');
         categoriesDropdown.classList.remove('active');
+        body.style.overflow = '';
     }
 
     // Handle category selection
@@ -10888,15 +10907,56 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Close menus when clicking outside
+    // Close menus when clicking outside or on overlay
     document.addEventListener('click', function(event) {
         const bottomNav = document.getElementById('bottomNav');
         const moreMenu = document.getElementById('moreMenu');
+        const moreMenuContent = moreMenu.querySelector('.more-menu-content');
         const categoriesDropdown = document.getElementById('categoriesDropdown');
         
+        // Close if clicked outside bottom nav
         if (!bottomNav.contains(event.target)) {
-            closeAllMenus();
+            // Check if clicked on more menu overlay (not content)
+            if (moreMenu.classList.contains('active') && 
+                event.target === moreMenu || 
+                (!moreMenuContent.contains(event.target) && moreMenu.contains(event.target))) {
+                closeMoreMenu();
+            } else {
+                closeAllMenus();
+            }
         }
+    });
+    
+    // Close more menu when clicking on overlay
+    document.getElementById('moreMenu').addEventListener('click', function(event) {
+        const moreMenuContent = this.querySelector('.more-menu-content');
+        
+        // If clicked outside the content (on overlay)
+        if (!moreMenuContent.contains(event.target)) {
+            closeMoreMenu();
+        }
+    });
+    
+    // Auto-close more menu when any item is clicked (with visual feedback)
+    document.querySelectorAll('.more-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            // Add visual feedback
+            this.classList.add('clicked');
+            
+            // Vibrate on mobile (if supported)
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+            
+            // Close menu after animation
+            setTimeout(() => {
+                closeMoreMenu();
+                // Remove clicked class after closing
+                setTimeout(() => {
+                    this.classList.remove('clicked');
+                }, 300);
+            }, 200);
+        });
     });
 
     // Handle category item clicks
