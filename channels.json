@@ -336,19 +336,6 @@
       "vpn": false
     },
     {
-      "id": 82,
-      "name": "Ch4Teen",
-      "url": "https://ch14.tv/live/ch4teenclip/playlist.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/d/d5/%D9%82%D9%86%D8%A7%D8%A9_%D9%81%D9%88%D8%B1%D8%AA%D9%8A%D9%86.png",
-      "category": "religious",
-      "country": "الكويت",
-      "type": "hls",
-      "status": "active",
-      "isLocal": false,
-      "lastModified": "2025-09-24T23:40:56.300Z",
-      "vpn": false
-    },
-    {
       "id": 9,
       "name": "الشرقية",
       "url": "https://5d94523502c2d.streamlock.net/home/mystream/playlist.m3u8",
@@ -988,32 +975,6 @@
       "category": "kids",
       "country": "لبنان",
       "type": "hls",
-      "status": "active",
-      "isLocal": false,
-      "lastModified": "2025-09-24T23:40:56.300Z",
-      "vpn": false
-    },
-    {
-      "id": 95,
-      "name": "Spanish Guitar",
-      "url": "https://www.youtube.com/watch?v=BPcUxivZHuU",
-      "logo": "https://iili.io/K7EBEHg.png",
-      "category": "music",
-      "country": "Spain",
-      "type": "youtube",
-      "status": "active",
-      "isLocal": false,
-      "lastModified": "2025-09-24T23:40:56.300Z",
-      "vpn": false
-    },
-    {
-      "id": 98,
-      "name": "Classical Guitar",
-      "url": "https://www.youtube.com/watch?v=mLVBNUG5gP4",
-      "logo": "https://cdn1.iconfinder.com/data/icons/games-and-fun-1/100/games_and_fun_guitar-4-512.png",
-      "category": "music",
-      "country": "Spain",
-      "type": "youtube",
       "status": "active",
       "isLocal": false,
       "lastModified": "2025-09-24T23:40:56.300Z",
@@ -1694,18 +1655,6 @@
       "lastModified": "2025-10-06T11:57:36.918Z"
     },
     {
-      "id": 191,
-      "name": "القرآن الكريم",
-      "url": "https://www.elahmad.com/tv/live/channel.php?id=saudi_quran",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/%D9%82%D9%86%D8%A7%D8%A9_%D8%A7%D9%84%D9%82%D8%B1%D8%A2%D9%86_%D8%A7%D9%84%D9%83%D8%B1%D9%8A%D9%85.svg/1200px-%D9%82%D9%86%D8%A7%D8%A9_%D8%A7%D9%84%D9%82%D8%B1%D8%A2%D9%86_%D8%A7%D9%84%D9%83%D8%B1%D9%8A%D9%85.svg.png",
-      "category": "religious",
-      "country": "السعودية",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-10-06T11:57:36.918Z"
-    },
-    {
       "id": 192,
       "name": "الثقافية",
       "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=saudi_thaqafiya",
@@ -1848,6 +1797,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-10T02:36:38.170Z",
+  "lastModified": "2025-10-10T04:16:58.538Z",
   "version": "1.0"
 }
