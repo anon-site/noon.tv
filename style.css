@@ -28140,7 +28140,7 @@ body[data-theme="light"] .more-menu-item:hover {
     position: fixed;
     bottom: 70px;
     left: 20px;
-    right: 265px;
+    right: 180px;
     background: var(--primary-color);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
