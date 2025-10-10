@@ -933,7 +933,7 @@
     {
       "id": 108,
       "name": "Disney Junior East",
-      "url": "https://fl25.moveonjoy.com/DISNEY_JR/index.m3u8",
+      "url": "http://116.90.120.149:8000/play/a0b3/index.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/2024_Disney_Jr._Logo.svg/1280px-2024_Disney_Jr._Logo.svg.png",
       "category": "kids",
       "country": "USA",
@@ -1044,7 +1044,7 @@
     },
     {
       "id": 122,
-      "name": "Rakuten TV",
+      "name": "Rakuten Top Movies",
       "url": "https://0145451975a64b35866170fd2e8fa486.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5987/master.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Rakuten_TV_logo.svg/2560px-Rakuten_TV_logo.svg.png",
       "category": "movies",
@@ -1056,7 +1056,7 @@
     },
     {
       "id": 125,
-      "name": "Rakuten TV UK2",
+      "name": "Rakuten TV Actio",
       "url": "https://54045f0c40fd442c8b06df076aaf1e85.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6065/master.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Rakuten_TV_logo.svg/2560px-Rakuten_TV_logo.svg.png",
       "category": "movies",
@@ -1068,7 +1068,7 @@
     },
     {
       "id": 126,
-      "name": "Rakuten TV UK3",
+      "name": "Rakuten TV Comedy",
       "url": "https://9be783d652cd4b099cf63e1dc134c4a3.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6181/master.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Rakuten_TV_logo.svg/2560px-Rakuten_TV_logo.svg.png",
       "category": "movies",
@@ -1080,7 +1080,7 @@
     },
     {
       "id": 127,
-      "name": "Rakuten TV UK4",
+      "name": "Rakuten TV Drama",
       "url": "https://fee09fd665814f51b939b6d106cf5f66.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6093/master.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Rakuten_TV_logo.svg/2560px-Rakuten_TV_logo.svg.png",
       "category": "movies",
@@ -1092,11 +1092,11 @@
     },
     {
       "id": 130,
-      "name": "One TV",
-      "url": "https://hms.pfs.gdn/v1/broadcast/one/playlist.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/0/0c/TV_One_US_2012.png",
+      "name": "Rakuten TV Family",
+      "url": "https://e3207568b726401995c25670faaf32e4.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6203/master.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Rakuten_TV_logo.svg/2560px-Rakuten_TV_logo.svg.png",
       "category": "entertainment",
-      "country": "لبنان",
+      "country": "UK",
       "type": "hls",
       "status": "active",
       "lastModified": "2025-10-02T00:50:06.463Z",
@@ -1760,6 +1760,127 @@
       "type": "elahmad",
       "status": "active",
       "vpn": false
+    },
+    {
+      "id": 202,
+      "name": "Hallmark Movie",
+      "url": "https://d3is52sgpnlx4c.cloudfront.net/10901/88885520/hls/master.m3u8?withResolution=true&ads.xumo_channelId=88885520&ads.csid=viziowatchfree_us_crownmediahallmarkmoviesnew_ssai&ads.caid=CrownMediaHallmarkMoviesNew&ads.lat=&ads.lon=&ads.os=&ads.osv=&ads.xumo_platform=viziowatchfree&ads._fw_player_width=%7bWIDTH%7d&ads._fw_player_height=%7bHEIGHT%7d&ads._fw_is_lat=%7bLMT%7d&ads._fw_us_privacy=%7bUSPRIVACY%7d&ads._fw_coppa=0&ads._fw_app_bundle=%7bAPP_BUNDLE%7d&ads._fw_content_category=IAB1-5&ads._fw_content_genre=movies&ads._fw_content_language=en&ads._fw_content_rating=tv-14&ads._fw_deviceMake=%7bDEVICE_MAKE%7d&ads._fw_device_model=%7bDEVICE_MODEL%7d&ads._fw_devicetype=%7bDEVICE_TYPE%7d&ads.domain=%7bDOMAIN%7d&ads.gpp=%7bGPP%7d&ads.gpp_sid=%7bGPP_SID%7d&ads._fw_h_x_country=US&ads.appName=%7bAPP_NAME%7d&ads.xumo_contentId=2777&ads.xumo_contentName=CrownMediaHallmarkMoviesNew&ads.xumo_providerId=2777&ads.xumo_providerName=CrownMediaHallmarkMoviesNew&ads.channelId=88885520&ads.xumo_channelName=HallmarkMovies&ads.xumo_imdb_genre=Action&ads._fw_content_programmer_brand=CrownMediaHallmarkMoviesNew&ads.xumo_adsystem=mediatailor&ads.tpcl=MIDROLL&ads.xumo_ifa=%7bADID%7d&ads.xumo_ifaType=%7bIFATYPE%7d&ads._fw_app_store_url=%7bAPP_STORE_URL%7d&ads.appVersion=%7bAPP_VERSION%7d&ads.amznappId=14911df5fe9f4df5a4ebfa1eb51d83eb&ads.amznslotId=b187c68c-9a6f-4d25-9a9c-b95b42d440af&ads.vizdartoken=eyJhdWQiOiI5NiIsIndmcGNpZCI6MzIwNTQ0NDcxNn0",
+      "logo": "https://cdn.freebiesupply.com/logos/large/2x/hallmark-channel-logo-svg-vector.svg",
+      "category": "movies",
+      "country": "USA",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 203,
+      "name": "Kung Fu Movies",
+      "url": "https://s2host3.localnow.api.cms.amdvids.com/v1/master/c189661feba961c19bc5fb60b57879ee9b84548a/config2/d/XUU229YVT9R4U3TK0SQC/hls3/now_-1m_15s/m.m3u8?ads.rating=TV14&ads.vast_id=SGL104&ads.channel_name=Kung%20Fu%20Movies&ads.content_genre=Action%2CClassic%2CMovies&ads.content_series=invincible%20obsessed%20fighter.1982.exported&ads.ic=IAB1-5&ads.provider=Global%20Media&page_url=https%25253A%25252F%25252Flocalnow.com%25252Fchannels%25252Fcbs-news-chicago-hyperlocal&ua=Mozilla%2F5.0%20%28Windows%20NT%2010.0%3B%20Win64%3B%20x64%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F122.0.0.0%20Safari%2F537.36&width=1920&app_version=0.0.0&ccpa_us_privacy=1YNY&device_devicetype=desktop_web&height=1080&ip_addr=193.228.206.147&ads.cdnhost=s2host3.localnow.api.cms.amdvids.com&ads.playbackid=7DB404D9-5CF0-414C-9A60-A05839756563&ads.n1=rule_id&ads.v1=E7BB7BA1-D932-4E65-BD9F-93731E6E87C5-1744054592&ads.n3=qp_content_id&ads.v3=7DB404D9-5CF0-414C-9A60-A05839756563&ads.n4=content_name&ads.v4=EPG%20%7C%20Kung%20Fu%20Movies&ads.n21=channel_name&ads.v21=EPG%20%20Kung%20Fu%20Movies&ads.n22=url&ads.v22=https%25253A%25252F%25252Flocalnow.com%25252Fchannels%25252Fcbs-news-chicago-hyperlocal&ads.n23=content_type&ads.v23=channel&ads.n24=channel_brand_id&ads.v24=AMDB012682&ads.n25=us_privacy&ads.v25=1YNY&ads.n26=content_custom_1_param&ads.v26=7DB404D9-5CF0-414C-9A60-A05839756563&ads.n27=channel_genre&ads.v27=Action%2FAdventure&ads.n28=content_livestream&ads.v28=1&ads.n29=channel_ext_id&ads.v29=61f9beda75ae24607c1e2885&ads.n30=network_name&ads.v30=kung-fu-movies&ads.n31=channel_corp&ads.v31=SotalCloud%20INC&ads.n32=content_custom_2_param&ads.v32=AMDB012682&ads.n33=ua&ads.v33=Mozilla%2F5.0%20%28Windows%20NT%2010.0%3B%20Win64%3B%20x64%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F122.0.0.0%20Safari%2F537.36&ads.n34=content_custom_3_param&ads.v34=channel&ads.n35=content_producer_name&ads.v35=SotalCloud%20INC&ads.n36=gpp&ads.v36=&ads.n37=dnt&ads.v37=&ads.n38=channel_id&ads.v38=7DB404D9-5CF0-414C-9A60-A05839756563&ads.n39=did&ads.v39=&ads.n40=device_make&ads.v40=&ads.n41=channel_rating&ads.v41=TV-PG&ads.n42=channel_title&ads.v42=EPG%20%20Kung%20Fu%20Movies&ads.n43=app_store_url&ads.v43=&ads.n44=content_provider&ads.v44=kung-fu-movies&ads.n45=w&ads.v45=1920&ads.n46=device_type&ads.v46=&ads.n47=gpp_sid&ads.v47=&ads.n48=app_name&ads.v48=&ads.n49=pos&ads.v49=midroll&ads.n50=h&ads.v50=1080&ads.n51=device_model&ads.v51=&ads.n52=app_bundle&ads.v52=&ads.n53=channel_company_id&ads.v53=AMDP500264&ads.n54=channel_language&ads.v54=en&ads.n55=ifa_type&ads.v55=&ads.n56=cust_devicename&ads.v56=desktop_web&ads.n57=ip&ads.v57=193.228.206.147&ads.n58=app_version&ads.v58=0.0.0",
+      "logo": "https://iili.io/KNnJUva.png",
+      "category": "movies",
+      "country": "عالمية",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 204,
+      "name": "Action Hollywood",
+      "url": "https://s8host2.localnow.api.cms.amdvids.com/v1/master/c189661feba961c19bc5fb60b57879ee9b84548a/config10/playlist.m3u8?ads.cdnhost=s8host2.localnow.api.cms.amdvids.com&ads.playbackid=9DA67180-77F0-4AAA-A1C4-148BEBA5BD25&ads.n1=rule_id&ads.v1=E7BB7BA1-D932-4E65-BD9F-93731E6E87C5-1744054592&ads.n3=qp_content_id&ads.v3=9DA67180-77F0-4AAA-A1C4-148BEBA5BD25&ads.n4=content_name&ads.v4=EPG%20%7C%20%20Action%20Hollywood%20Movies&ads.n21=did&ads.v21=&ads.n22=w&ads.v22=1920&ads.n23=content_producer_name&ads.v23=Lightning%20International%20Limited&ads.n24=channel_genre&ads.v24=Action%2FAdventure&ads.n25=content_custom_3_param&ads.v25=channel&ads.n26=channel_language&ads.v26=en&ads.n27=content_type&ads.v27=channel&ads.n28=channel_id&ads.v28=9DA67180-77F0-4AAA-A1C4-148BEBA5BD25&ads.n29=content_provider&ads.v29=action-hollywood-movies&ads.n30=device_type&ads.v30=&ads.n31=h&ads.v31=1080&ads.n32=dnt&ads.v32=&ads.n33=channel_rating&ads.v33=TV-PG&ads.n34=cust_devicename&ads.v34=desktop_web&ads.n35=channel_name&ads.v35=EPG%20%20%20Action%20Hollywood%20Movies&ads.n36=channel_ext_id&ads.v36=&ads.n37=app_version&ads.v37=0.0.0&ads.n38=ifa_type&ads.v38=&ads.n39=device_make&ads.v39=&ads.n40=us_privacy&ads.v40=1YNY&ads.n41=pos&ads.v41=midroll&ads.n42=channel_title&ads.v42=EPG%20%20%20Action%20Hollywood%20Movies&ads.n43=ua&ads.v43=Mozilla%2F5.0%20%28Windows%20NT%2010.0%3B%20Win64%3B%20x64%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F122.0.0.0%20Safari%2F537.36&ads.n44=content_livestream&ads.v44=1&ads.n45=gpp_sid&ads.v45=&ads.n46=device_model&ads.v46=&ads.n47=content_custom_1_param&ads.v47=9DA67180-77F0-4AAA-A1C4-148BEBA5BD25&ads.n48=app_store_url&ads.v48=&ads.n49=content_custom_2_param&ads.v49=AMDB013350&ads.n50=ip&ads.v50=193.228.206.147&ads.n51=channel_corp&ads.v51=Lightning%20International%20Limited&ads.n52=channel_brand_id&ads.v52=AMDB013350&ads.n53=channel_company_id&ads.v53=AMDP500507&ads.n54=gpp&ads.v54=&ads.n55=url&ads.v55=https%25253A%25252F%25252Flocalnow.com%25252Fchannels%25252Fcbs-news-chicago-hyperlocal&ads.n56=app_name&ads.v56=&ads.n57=network_name&ads.v57=action-hollywood-movies&ads.n58=app_bundle&ads.v58=",
+      "logo": "https://image-resizer-cloud-cdn.api.cms.amdvids.com/image/9DA67180-77F0-4AAA-A1C4-148BEBA5BD25/3-1x1.png/900",
+      "category": "movies",
+      "country": "USA",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 205,
+      "name": "B4U Movies",
+      "url": "https://amg00877-b4unew-amg00877c2-xiaomi-in-5489.playouts.now.amagi.tv/playlist.m3u8",
+      "logo": "https://iili.io/KNBIvdQ.png",
+      "category": "movies",
+      "country": "India",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 206,
+      "name": "Wedo Movies",
+      "url": "https://cdn-ue1-prod.tsv2.amagi.tv/linear/amg00735-videosolutionsa-movies4free-xiaomi/playlist.m3u8",
+      "logo": "https://www.freeview.co.uk/sites/default/files/styles/255_wide/public/2024-10/wedo-movies.png?itok=-aPrJWjk",
+      "category": "movies",
+      "country": "USA",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 207,
+      "name": "Aurora Media Films",
+      "url": "https://cdn.streamhispanatv.net:3417/live/auroramflive.m3u8",
+      "logo": "",
+      "category": "movies",
+      "country": "عالمية",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 208,
+      "name": "روتانا خليج",
+      "url": "https://rotana.hibridcdn.net/rotananet/khaleejiya_net-7Y83PP5adWixDF93/playlist.m3u8",
+      "logo": "",
+      "category": "entertainment",
+      "country": "السعودية",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 209,
+      "name": "Hallmark Mysteries East",
+      "url": "https://fl7.moveonjoy.com/HALLMARK_MOVIES_MYSTERIES/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/4/43/Hallmark_movies_mysteries.png",
+      "category": "movies",
+      "country": "USA",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 210,
+      "name": "FX Movie",
+      "url": "https://fl7.moveonjoy.com/FX_MOVIE/index.m3u8",
+      "logo": "",
+      "category": "movies",
+      "country": "USA",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 211,
+      "name": "MovieSmart Turk",
+      "url": "https://iptv-org.github.io/iptv/categories/movies.m3u",
+      "logo": "",
+      "category": "movies",
+      "country": "عالمية",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 212,
+      "name": "Newflix",
+      "url": "https://newfhls.wns.live/hls/stream.m3u8",
+      "logo": "",
+      "category": "movies",
+      "country": "عالمية",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
     }
   ],
   "favorites": [],
@@ -1832,6 +1953,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-10T06:02:43.063Z",
+  "lastModified": "2025-10-10T19:32:52.710Z",
   "version": "1.0"
 }
