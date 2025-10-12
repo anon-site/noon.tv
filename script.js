@@ -9391,9 +9391,17 @@ function getCategoryName(category) {
 function previousChannel() {
     if (!app.channels || !app.currentChannel) return;
 
-    const currentIndex = app.channels.findIndex(channel => channel.id === app.currentChannel.id);
+    // Get filtered channels based on current category filter
+    const currentCategory = window.currentPlayerCategoryFilter || 'all';
+    let channelsToNavigate = app.channels;
+    
+    if (currentCategory !== 'all') {
+        channelsToNavigate = app.channels.filter(channel => channel.category === currentCategory);
+    }
+    
+    const currentIndex = channelsToNavigate.findIndex(channel => channel.id === app.currentChannel.id);
     if (currentIndex > 0) {
-        const previousChannel = app.channels[currentIndex - 1];
+        const previousChannel = channelsToNavigate[currentIndex - 1];
         app.playChannel(previousChannel);
         // Don't hide channel bar for faster navigation
         // hideChannelBar();
@@ -9403,9 +9411,17 @@ function previousChannel() {
 function nextChannel() {
     if (!app.channels || !app.currentChannel) return;
 
-    const currentIndex = app.channels.findIndex(channel => channel.id === app.currentChannel.id);
-    if (currentIndex < app.channels.length - 1) {
-        const nextChannel = app.channels[currentIndex + 1];
+    // Get filtered channels based on current category filter
+    const currentCategory = window.currentPlayerCategoryFilter || 'all';
+    let channelsToNavigate = app.channels;
+    
+    if (currentCategory !== 'all') {
+        channelsToNavigate = app.channels.filter(channel => channel.category === currentCategory);
+    }
+    
+    const currentIndex = channelsToNavigate.findIndex(channel => channel.id === app.currentChannel.id);
+    if (currentIndex < channelsToNavigate.length - 1) {
+        const nextChannel = channelsToNavigate[currentIndex + 1];
         app.playChannel(nextChannel);
         // Don't hide channel bar for faster navigation
         // hideChannelBar();
@@ -9415,11 +9431,19 @@ function nextChannel() {
 function jumpChannels(steps) {
     if (!app.channels || !app.currentChannel) return;
 
-    const currentIndex = app.channels.findIndex(channel => channel.id === app.currentChannel.id);
+    // Get filtered channels based on current category filter
+    const currentCategory = window.currentPlayerCategoryFilter || 'all';
+    let channelsToNavigate = app.channels;
+    
+    if (currentCategory !== 'all') {
+        channelsToNavigate = app.channels.filter(channel => channel.category === currentCategory);
+    }
+
+    const currentIndex = channelsToNavigate.findIndex(channel => channel.id === app.currentChannel.id);
     const newIndex = currentIndex + steps;
     
-    if (newIndex >= 0 && newIndex < app.channels.length) {
-        const targetChannel = app.channels[newIndex];
+    if (newIndex >= 0 && newIndex < channelsToNavigate.length) {
+        const targetChannel = channelsToNavigate[newIndex];
         app.playChannel(targetChannel);
     }
 }
