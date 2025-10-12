@@ -1138,6 +1138,22 @@ class ArabicTVApp {
 
         // Use the new unified filter system
         this.applyAllFilters();
+        
+        // Sync with player category filter
+        if (typeof window.currentPlayerCategoryFilter !== 'undefined' && window.currentPlayerCategoryFilter !== category) {
+            window.currentPlayerCategoryFilter = category;
+            if (typeof updatePlayerCategoryDropdown === 'function') {
+                updatePlayerCategoryDropdown();
+            }
+            
+            // Update channel bar if it's open
+            const channelBar = document.getElementById('channelBar');
+            if (channelBar && channelBar.classList.contains('show')) {
+                if (typeof loadChannelBarContentWithFilter === 'function') {
+                    loadChannelBarContentWithFilter(category);
+                }
+            }
+        }
     }
 
     searchChannels(query) {
@@ -10344,6 +10360,14 @@ function filterChannelBar(category) {
         }
     }
     
+    // Sync with main page category filter
+    if (window.app && typeof window.app.filterChannels === 'function') {
+        // Only sync if different from current category
+        if (window.app.currentCategory !== category) {
+            window.app.filterChannels(category);
+        }
+    }
+    
     // Reload channel bar content with filter
     loadChannelBarContentWithFilter(category);
     
@@ -11717,6 +11741,16 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    
+    // Sync player category filter with main category on page load
+    setTimeout(() => {
+        if (window.app && window.app.currentCategory) {
+            window.currentPlayerCategoryFilter = window.app.currentCategory;
+            if (typeof updatePlayerCategoryDropdown === 'function') {
+                updatePlayerCategoryDropdown();
+            }
+        }
+    }, 500);
 });
 
 // Media Session API for background audio support
