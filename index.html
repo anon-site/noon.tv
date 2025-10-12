@@ -241,6 +241,61 @@
                         </span>
                     </div>
                 </div>
+                <!-- Categories Filter Dropdown -->
+                <div class="player-categories-filter">
+                    <button class="player-categories-btn" id="playerCategoriesBtn" onclick="togglePlayerCategories()">
+                        <i class="fas fa-filter"></i>
+                        <span class="player-category-text" id="playerCategoryText">جميع القنوات</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="player-categories-menu" id="playerCategoriesMenu">
+                        <div class="player-category-option active" data-category="all" onclick="filterChannelBar('all')">
+                            <i class="fas fa-th-large"></i>
+                            <span>جميع القنوات</span>
+                            <span class="player-category-count" id="playerAllCount">0</span>
+                        </div>
+                        <div class="player-category-option" data-category="news" onclick="filterChannelBar('news')">
+                            <i class="fas fa-newspaper"></i>
+                            <span>الأخبار</span>
+                            <span class="player-category-count" id="playerNewsCount">0</span>
+                        </div>
+                        <div class="player-category-option" data-category="entertainment" onclick="filterChannelBar('entertainment')">
+                            <i class="fas fa-film"></i>
+                            <span>المنوعة</span>
+                            <span class="player-category-count" id="playerEntertainmentCount">0</span>
+                        </div>
+                        <div class="player-category-option" data-category="sports" onclick="filterChannelBar('sports')">
+                            <i class="fas fa-futbol"></i>
+                            <span>الرياضة</span>
+                            <span class="player-category-count" id="playerSportsCount">0</span>
+                        </div>
+                        <div class="player-category-option" data-category="religious" onclick="filterChannelBar('religious')">
+                            <i class="fas fa-mosque"></i>
+                            <span>الدينية</span>
+                            <span class="player-category-count" id="playerReligiousCount">0</span>
+                        </div>
+                        <div class="player-category-option" data-category="music" onclick="filterChannelBar('music')">
+                            <i class="fas fa-music"></i>
+                            <span>الموسيقى</span>
+                            <span class="player-category-count" id="playerMusicCount">0</span>
+                        </div>
+                        <div class="player-category-option" data-category="movies" onclick="filterChannelBar('movies')">
+                            <i class="fas fa-film"></i>
+                            <span>الأفلام</span>
+                            <span class="player-category-count" id="playerMoviesCount">0</span>
+                        </div>
+                        <div class="player-category-option" data-category="documentary" onclick="filterChannelBar('documentary')">
+                            <i class="fas fa-book-open"></i>
+                            <span>الوثائقية</span>
+                            <span class="player-category-count" id="playerDocumentaryCount">0</span>
+                        </div>
+                        <div class="player-category-option" data-category="kids" onclick="filterChannelBar('kids')">
+                            <i class="fas fa-child"></i>
+                            <span>الأطفال</span>
+                            <span class="player-category-count" id="playerKidsCount">0</span>
+                        </div>
+                    </div>
+                </div>
                 <div class="modal-controls">
                     <!-- Quality Display -->
                     <div class="quality-display" id="qualityDisplay">

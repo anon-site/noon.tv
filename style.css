@@ -6844,11 +6844,15 @@ body[data-theme="light"] .logout-btn:hover {
 
     display: flex;
 
-    align-items: center;
+    flex-direction: column;
 
-    gap: 0.75rem;
+    align-items: flex-start;
+
+    gap: 0.35rem;
 
     flex: 1;
+
+    min-width: 0; /* Allow text truncation */
 
 }
 
@@ -7518,6 +7522,328 @@ body[data-theme="light"] .logout-btn:hover {
 
     text-align: center;
 
+}
+
+
+/* Player Categories Filter Dropdown */
+.player-categories-filter {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 0 8px;
+}
+
+.player-categories-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.player-categories-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--highlight-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.2);
+}
+
+.player-categories-btn i:first-child {
+    font-size: 0.9rem;
+}
+
+.player-categories-btn i:last-child {
+    font-size: 0.75rem;
+    transition: transform 0.3s ease;
+}
+
+.player-categories-btn.open i:last-child {
+    transform: rotate(180deg);
+}
+
+.player-category-text {
+    font-size: 0.875rem;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.player-categories-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    background: linear-gradient(135deg, var(--background-dark), var(--secondary-color));
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    min-width: 220px;
+    max-height: 350px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(20px);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.player-categories-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.player-category-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 16px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    border-radius: 8px;
+    margin: 2px 8px;
+}
+
+.player-category-option:last-child {
+    border-bottom: none;
+}
+
+.player-category-option:hover {
+    background: var(--highlight-color);
+    color: white;
+    transform: translateX(2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.player-category-option.active {
+    background: linear-gradient(45deg, var(--highlight-color), #ff6b6b);
+    color: white;
+    transform: translateX(2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.player-category-option i {
+    width: 20px;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.player-category-option span:not(.player-category-count) {
+    flex: 1;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.player-category-count {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--text-primary);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    min-width: 30px;
+    text-align: center;
+}
+
+.player-category-option.active .player-category-count,
+.player-category-option:hover .player-category-count {
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    .player-categories-filter {
+        margin: 0 4px;
+    }
+    
+    .player-categories-btn {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+    
+    .player-category-text {
+        font-size: 0.8rem;
+        max-width: 90px;
+    }
+    
+    .player-categories-btn i:first-child {
+        font-size: 0.8rem;
+    }
+    
+    .player-categories-menu {
+        min-width: 180px;
+        max-height: 280px;
+    }
+    
+    .player-category-option {
+        padding: 10px 12px;
+    }
+    
+    .player-category-option span:not(.player-category-count) {
+        font-size: 0.85rem;
+    }
+    
+    .player-category-count {
+        font-size: 0.7rem;
+        padding: 2px 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .player-categories-btn {
+        padding: 4px 6px;
+        font-size: 0.7rem;
+    }
+    
+    .player-categories-btn i:first-child {
+        font-size: 0.7rem;
+    }
+    
+    .player-categories-btn i:last-child {
+        font-size: 0.65rem;
+    }
+    
+    .player-category-text {
+        font-size: 0.7rem;
+        max-width: 60px;
+    }
+    
+    .player-categories-menu {
+        min-width: 160px;
+        left: auto;
+        right: 0;
+    }
+
+    .player-category-option span:not(.player-category-count) {
+        font-size: 0.8rem;
+    }
+    
+    /* Compact modal-header for very small screens */
+    .modal-header {
+        padding: 0.5rem 0.4rem !important;
+        gap: 4px !important;
+        position: relative !important;
+    }
+    
+    .channel-title-container {
+        flex: 1 1 100% !important;
+    }
+    
+    .channel-title-container h3 {
+        font-size: 0.9rem !important;
+    }
+    
+    .channel-country, .channel-vpn-indicator {
+        font-size: 0.7rem !important;
+    }
+    
+    .modal-controls {
+        gap: 4px !important;
+    }
+    
+    .player-categories-filter {
+        top: 0.5rem !important;
+        left: 0.3rem !important;
+    }
+    
+    .channel-title-container h3 {
+        margin-left: 110px !important;
+    }
+    
+    .quality-btn, .pip-btn, .fullscreen-btn, .close-btn, .channels-btn {
+        padding: 5px 8px;
+        font-size: 0.8rem;
+    }
+}
+
+/* Desktop layout for channel-title-container */
+@media (min-width: 769px) {
+    .channel-title-container {
+        flex-direction: row;
+        align-items: center;
+        gap: 0.75rem;
+    }
+}
+
+/* Additional responsive improvements for modal-header */
+@media (max-width: 768px) {
+    .modal-header {
+        flex-wrap: wrap !important;
+        padding: 0.5rem 0.4rem !important;
+        gap: 4px !important;
+        display: flex !important;
+        align-items: center !important;
+        position: relative !important;
+    }
+    
+    /* First row: Title + Categories button in same line */
+    .channel-title-container {
+        flex: 1 1 100% !important;
+        margin-bottom: 0 !important;
+        order: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        min-width: 0 !important;
+    }
+    
+    .channel-title-container h3 {
+        font-size: 0.95rem !important;
+        margin: 0 !important;
+        margin-left: 120px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        line-height: 1.2 !important;
+        display: block !important;
+    }
+    
+    .channel-info-row {
+        margin-top: 1px !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 0.3rem !important;
+    }
+    
+    .player-categories-filter {
+        order: 2 !important;
+        margin: 0 !important;
+        flex: 0 0 auto !important;
+        position: absolute !important;
+        top: 0.5rem !important;
+        left: 0.4rem !important;
+        z-index: 10 !important;
+    }
+    
+    /* Second row: Controls */
+    .modal-controls {
+        order: 3 !important;
+        flex: 1 1 100% !important;
+        justify-content: flex-end !important;
+        margin-top: 3px !important;
+        display: flex !important;
+        gap: 5px !important;
+    }
+    
+    /* Adjust button sizes for mobile */
+    .quality-btn, .pip-btn, .fullscreen-btn, .close-btn, .channels-btn {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+    }
+}
     font-size: 1rem;
 
 }

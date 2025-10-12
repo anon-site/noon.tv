@@ -1242,6 +1242,9 @@ class ArabicTVApp {
         
         // Update active channel in channel bar if it's visible
         this.updateActiveChannelInBar(channel);
+        
+        // Update player category dropdown to maintain filter state
+        updatePlayerCategoryDropdown();
     }
 
     showInactiveChannelMessage(channel) {
@@ -9327,8 +9330,8 @@ function loadChannelBarContent() {
     // Clear existing content
     channelBarContent.innerHTML = '';
 
-    // Get current category or all channels
-    const currentCategory = app.currentCategory || 'all';
+    // Use the active player category filter if available, otherwise use default
+    const currentCategory = window.currentPlayerCategoryFilter || app.currentCategory || 'all';
     let channelsToShow = app.channels;
 
     if (currentCategory !== 'all') {
@@ -10246,6 +10249,216 @@ function openTelegram() {
         window.open(telegramUrl, '_blank', 'noopener,noreferrer');
     } finally {
         closeMoreMenu();
+    }
+}
+
+// Player Categories Filter Functions
+let currentPlayerCategoryFilter = localStorage.getItem('playerCategoryFilter') || 'all';
+window.currentPlayerCategoryFilter = currentPlayerCategoryFilter;
+
+function togglePlayerCategories() {
+    const menu = document.getElementById('playerCategoriesMenu');
+    const btn = document.getElementById('playerCategoriesBtn');
+    
+    if (!menu || !btn) return;
+    
+    const isOpen = menu.classList.contains('show');
+    
+    if (isOpen) {
+        menu.classList.remove('show');
+        btn.classList.remove('open');
+    } else {
+        menu.classList.add('show');
+        btn.classList.add('open');
+        updatePlayerCategoryCounts();
+    }
+}
+
+function filterChannelBar(category) {
+    // Save the filter globally and in localStorage
+    currentPlayerCategoryFilter = category;
+    window.currentPlayerCategoryFilter = category;
+    localStorage.setItem('playerCategoryFilter', category);
+    
+    // Update button text
+    const categoryText = document.getElementById('playerCategoryText');
+    const categoryNames = {
+        'all': 'جميع القنوات',
+        'news': 'الأخبار',
+        'entertainment': 'المنوعة',
+        'sports': 'الرياضة',
+        'religious': 'الدينية',
+        'music': 'الموسيقى',
+        'movies': 'الأفلام',
+        'documentary': 'الوثائقية',
+        'kids': 'الأطفال'
+    };
+    
+    if (categoryText) {
+        categoryText.textContent = categoryNames[category] || 'جميع القنوات';
+    }
+    
+    // Update active state in menu
+    const menu = document.getElementById('playerCategoriesMenu');
+    if (menu) {
+        menu.querySelectorAll('.player-category-option').forEach(option => {
+            option.classList.remove('active');
+        });
+        
+        const activeOption = menu.querySelector(`[data-category="${category}"]`);
+        if (activeOption) {
+            activeOption.classList.add('active');
+        }
+    }
+    
+    // Reload channel bar content with filter
+    loadChannelBarContentWithFilter(category);
+    
+    // Close menu
+    togglePlayerCategories();
+    
+    // Show channel bar if hidden
+    const channelBar = document.getElementById('channelBar');
+    if (channelBar && !channelBar.classList.contains('show')) {
+        showChannelBar();
+    }
+}
+
+function loadChannelBarContentWithFilter(category) {
+    const channelBarContent = document.getElementById('channelBarContent');
+    const channelCount = document.getElementById('channelBarCount');
+    if (!channelBarContent || !app.channels) return;
+    
+    // Clear existing content
+    channelBarContent.innerHTML = '';
+    
+    // Filter channels by category
+    let channelsToShow = app.channels;
+    if (category !== 'all') {
+        channelsToShow = app.channels.filter(channel => channel.category === category);
+    }
+    
+    // Update channel count
+    if (channelCount) {
+        channelCount.textContent = channelsToShow.length;
+    }
+    
+    // Render filtered channels
+    channelsToShow.forEach((channel) => {
+        const channelItem = document.createElement('div');
+        channelItem.className = 'channel-bar-item';
+        channelItem.dataset.channelId = channel.id;
+        
+        if (app.currentChannel && channel.id === app.currentChannel.id) {
+            channelItem.classList.add('active');
+        }
+        
+        channelItem.innerHTML = `
+            <img src="${channel.logo || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjMzMzIi8+CjxwYXRoIGQ9Ik0yMCAxMEMyNi42MjcgMTAgMzIgMTUuMzczIDMyIDIyQzMyIDI4LjYyNyAyNi42MjcgMzQgMjAgMzRDMTMuMzczIDM0IDggMjguNjI3IDggMjJDMCAxNS4zNzMgMTMuMzczIDEwIDIwIDEwWiIgZmlsbD0iI2ZmZiIvPgo8L3N2Zz4K'}" 
+                 alt="${channel.name}" 
+                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjMzMzIi8+CjxwYXRoIGQ9Ik0yMCAxMEMyNi42MjcgMTAgMzIgMTUuMzczIDMyIDIyQzMyIDI4LjYyNyAyNi42MjcgMzQgMjAgMzRDMTMuMzczIDM0IDggMjguNjI3IDggMjJDMCAxNS4zNzMgMTMuMzczIDEwIDIwIDEwWiIgZmlsbD0iI2ZmZiIvPgo8L3N2Zz4K'">
+            <p class="channel-name">${channel.name}</p>
+            <p class="channel-category">${getCategoryName(channel.category)}</p>
+            ${channel.vpn === true ? '<span class="channel-bar-vpn-badge"><i class="fas fa-shield-alt"></i></span>' : ''}
+        `;
+        
+        channelItem.addEventListener('click', () => {
+            app.playChannel(channel);
+        });
+        
+        channelBarContent.appendChild(channelItem);
+    });
+    
+    // Setup scroll functionality
+    setupChannelBarScroll();
+}
+
+function updatePlayerCategoryCounts() {
+    if (!app || !app.channels) return;
+    
+    const categories = {
+        'all': app.channels.length,
+        'news': app.channels.filter(ch => ch.category === 'news').length,
+        'entertainment': app.channels.filter(ch => ch.category === 'entertainment').length,
+        'sports': app.channels.filter(ch => ch.category === 'sports').length,
+        'religious': app.channels.filter(ch => ch.category === 'religious').length,
+        'music': app.channels.filter(ch => ch.category === 'music').length,
+        'movies': app.channels.filter(ch => ch.category === 'movies').length,
+        'documentary': app.channels.filter(ch => ch.category === 'documentary').length,
+        'kids': app.channels.filter(ch => ch.category === 'kids').length
+    };
+    
+    // Update counts in player menu
+    Object.keys(categories).forEach(category => {
+        const countId = `player${category.charAt(0).toUpperCase() + category.slice(1)}Count`;
+        const countElement = document.getElementById(countId);
+        if (countElement) {
+            countElement.textContent = categories[category];
+        }
+    });
+}
+
+// Close player categories menu when clicking outside
+document.addEventListener('click', (e) => {
+    const menu = document.getElementById('playerCategoriesMenu');
+    const btn = document.getElementById('playerCategoriesBtn');
+    
+    if (!menu || !btn) return;
+    
+    if (!btn.contains(e.target) && !menu.contains(e.target)) {
+        menu.classList.remove('show');
+        btn.classList.remove('open');
+    }
+});
+
+// Update player category dropdown UI based on current filter
+function updatePlayerCategoryDropdown() {
+    const currentFilter = window.currentPlayerCategoryFilter || 'all';
+    
+    // Update button text
+    const categoryText = document.getElementById('playerCategoryText');
+    const categoryNames = {
+        'all': 'جميع القنوات',
+        'news': 'الأخبار',
+        'entertainment': 'المنوعة',
+        'sports': 'الرياضة',
+        'religious': 'الدينية',
+        'music': 'الموسيقى',
+        'movies': 'الأفلام',
+        'documentary': 'الوثائقية',
+        'kids': 'الأطفال'
+    };
+    
+    if (categoryText) {
+        categoryText.textContent = categoryNames[currentFilter] || 'جميع القنوات';
+    }
+    
+    // Update active state in menu
+    const menu = document.getElementById('playerCategoriesMenu');
+    if (menu) {
+        menu.querySelectorAll('.player-category-option').forEach(option => {
+            option.classList.remove('active');
+        });
+        
+        const activeOption = menu.querySelector(`[data-category="${currentFilter}"]`);
+        if (activeOption) {
+            activeOption.classList.add('active');
+        }
+    }
+    
+    // Update counts
+    updatePlayerCategoryCounts();
+}
+
+// Update player category counts when channels change
+if (window.app) {
+    const originalRenderChannels = window.app.renderChannels;
+    if (originalRenderChannels) {
+        window.app.renderChannels = function(...args) {
+            const result = originalRenderChannels.apply(this, args);
+            updatePlayerCategoryCounts();
+            return result;
+        };
     }
 }
 
