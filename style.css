@@ -7687,6 +7687,7 @@ body[data-theme="light"] .logout-btn:hover {
     .player-categories-menu {
         min-width: 180px;
         max-height: 280px;
+        z-index: 10001;
     }
     
     .player-category-option {
@@ -7724,8 +7725,11 @@ body[data-theme="light"] .logout-btn:hover {
     
     .player-categories-menu {
         min-width: 160px;
-        left: auto;
-        right: 0;
+        max-width: calc(100vw - 20px) !important;
+        z-index: 10001 !important;
+        position: fixed !important;
+        left: 10px !important;
+        right: 10px !important;
     }
 
     .player-category-option span:not(.player-category-count) {

@@ -10293,6 +10293,15 @@ function togglePlayerCategories() {
         menu.classList.remove('show');
         btn.classList.remove('open');
     } else {
+        // Position the menu correctly on mobile
+        if (window.innerWidth <= 768) {
+            const btnRect = btn.getBoundingClientRect();
+            menu.style.position = 'fixed';
+            menu.style.top = (btnRect.bottom + 5) + 'px';
+            menu.style.left = btnRect.left + 'px';
+            menu.style.right = 'auto';
+        }
+        
         menu.classList.add('show');
         btn.classList.add('open');
         updatePlayerCategoryCounts();
