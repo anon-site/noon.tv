@@ -2919,65 +2919,16 @@ body[data-theme="light"] .sidebar-nav-tab.active .tab-count {
 
 
 
-/* Favorites button in sidebar */
-
-.favorites-sidebar-btn {
-
-    background: linear-gradient(45deg, #ff6b6b, #ee5a52) !important;
-
-    border-color: #ff6b6b !important;
-
-    color: white !important;
-
-    position: relative;
-
-}
 
 
 
-.favorites-sidebar-btn:hover {
-
-    background: linear-gradient(45deg, #ff5252, #e53935) !important;
-
-    border-color: #ff5252 !important;
-
-    transform: translateX(-3px) scale(1.02);
-
-    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4) !important;
-
-}
 
 
 
-.favorites-sidebar-btn .favorites-count {
-
-    background: rgba(255, 255, 255, 0.2);
-
-    color: white;
-
-    padding: 2px 8px;
-
-    border-radius: 12px;
-
-    font-size: 0.8rem;
-
-    font-weight: 600;
-
-    min-width: 20px;
-
-    text-align: center;
-
-    margin-left: auto;
-
-}
 
 
 
-.favorites-sidebar-btn:hover .favorites-count {
 
-    background: rgba(255, 255, 255, 0.3);
-
-}
 
 
 
@@ -4267,13 +4218,7 @@ body[data-theme="light"] .sidebar-action-btn:hover {
 
 
 
-/* Light theme for favorites button in sidebar */
 
-body[data-theme="light"] .favorites-sidebar-btn {
-
-    background: linear-gradient(45deg, #ff6b6b, #ee5a52) !important;
-
-    border-color: #ff6b6b !important;
 
     color: white !important;
 
@@ -4281,13 +4226,6 @@ body[data-theme="light"] .favorites-sidebar-btn {
 
 
 
-body[data-theme="light"] .favorites-sidebar-btn:hover {
-
-    background: linear-gradient(45deg, #ff5252, #e53935) !important;
-
-    border-color: #ff5252 !important;
-
-}
 
 
 
@@ -4321,9 +4259,6 @@ body[data-theme="light"] .favorites-sidebar-btn:hover {
 
     
 
-    .header-actions .favorites-btn {
-
-        display: none;
 
     }
 
@@ -12224,17 +12159,12 @@ body[data-theme="light"] .notification-close:hover {
 
 
 
-/* Favorite Button on Channel Cards */
-
 .channel-card {
-
     position: relative;
-
 }
 
 
 
-.favorite-btn {
 
     position: absolute;
 

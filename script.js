@@ -111,9 +111,7 @@ class ArabicTVApp {
         this.hasOrderChanged = false; // Track if order has been modified
         this.isMobileSidebarOpen = false; // Track mobile sidebar state
         this.isDesktopSidebarOpen = false; // Track desktop sidebar state
-        this.favorites = new Set(); // Track favorite channels
         this.currentCountryFilter = 'all'; // Track country filter
-        this.showFavoritesOnly = false; // Track favorites filter
         this.categories = this.getDefaultCategories(); // Track categories
         
         // Remote Storage Configuration
@@ -137,7 +135,6 @@ class ArabicTVApp {
         this.loadCategories(); // Load categories first
         this.loadChannelsFromStorage(); // Load saved channels first (priority)
         await this.loadDataFromFile(); // Load data from channels.json as fallback
-        this.loadFavorites(); // Load saved favorites
         this.filteredChannels = [...this.channels]; // Ensure filtered channels match loaded channels
         this.loadSettings();
         this.loadAdminPassword(); // تحميل كلمة المرور المحفوظة
@@ -212,11 +209,6 @@ class ArabicTVApp {
                 console.log('تم تحميل الإعدادات من channels.json');
             }
             
-            // Load favorites from JSON file
-            if (data.favorites && Array.isArray(data.favorites)) {
-                this.favorites = new Set(data.favorites);
-                console.log('تم تحميل المفضلة من channels.json:', this.favorites.size, 'قناة');
-            }
             
             // Update filtered channels
             this.filteredChannels = [...this.channels];
@@ -5029,11 +5021,6 @@ class ArabicTVApp {
         if (!channel) return;
         
         if (confirm(`هل أنت متأكد من حذف قناة "${channel.name}"؟\n\nهذا الإجراء لا يمكن التراجع عنه.`)) {
-            // Remove from favorites if favorited
-            if (this.favorites.has(id)) {
-                this.favorites.delete(id);
-                this.saveFavorites();
-            }
             
             // Remove from channels array
             this.channels = this.channels.filter(c => c.id !== id);
@@ -5200,7 +5187,6 @@ class ArabicTVApp {
             
             const data = {
                 channels: this.channels,
-                favorites: Array.from(this.favorites),
                 settings: this.settings,
                 categories: this.categories,
                 adminPassword: this.adminPassword, // إضافة كلمة المرور للمزامنة السحابية
@@ -5570,7 +5556,6 @@ class ArabicTVApp {
         // Backup current data
         const backup = {
             channels: [...this.channels],
-            favorites: new Set(this.favorites),
             settings: { ...this.settings }
         };
 
@@ -5582,11 +5567,6 @@ class ArabicTVApp {
                 this.saveChannelsToStorage();
             }
 
-            // Update favorites
-            if (remoteData.favorites && Array.isArray(remoteData.favorites)) {
-                this.favorites = new Set(remoteData.favorites);
-                this.saveFavorites();
-            }
 
             // Update settings
             if (remoteData.settings && typeof remoteData.settings === 'object') {
@@ -5613,14 +5593,12 @@ class ArabicTVApp {
             // Re-render everything
             this.renderChannels();
             this.renderAdminChannels();
-            this.updateFavoritesCount();
             
         } catch (error) {
             console.error('خطأ في دمج البيانات، استعادة النسخة الاحتياطية:', error);
             
             // Restore backup
             this.channels = backup.channels;
-            this.favorites = backup.favorites;
             this.settings = backup.settings;
             
             throw error;
@@ -5744,14 +5722,12 @@ class ArabicTVApp {
                         <div class="local-data">
                             <h4>البيانات المحلية</h4>
                             <p>عدد القنوات: <strong>${this.channels.length}</strong></p>
-                            <p>عدد المفضلة: <strong>${this.favorites.size}</strong></p>
                             <p>آخر تعديل: <strong>${this.getLocalLastModified().toLocaleString('ar')}</strong></p>
                         </div>
                         
                         <div class="remote-data">
                             <h4>البيانات السحابية</h4>
                             <p>عدد القنوات: <strong>${remoteData.channels ? remoteData.channels.length : 0}</strong></p>
-                            <p>عدد المفضلة: <strong>${remoteData.favorites ? remoteData.favorites.length : 0}</strong></p>
                             <p>آخر تعديل: <strong>${new Date(remoteData.lastModified || 0).toLocaleString('ar')}</strong></p>
                         </div>
                     </div>
@@ -5785,10 +5761,6 @@ class ArabicTVApp {
             this.saveChannelsToStorage();
         }
 
-        if (remoteData.favorites && Array.isArray(remoteData.favorites)) {
-            this.favorites = new Set(remoteData.favorites);
-            this.saveFavorites();
-        }
 
         if (remoteData.settings && typeof remoteData.settings === 'object') {
             this.settings = { ...this.settings, ...remoteData.settings };
@@ -5802,18 +5774,15 @@ class ArabicTVApp {
 
         this.renderChannels();
         this.renderAdminChannels();
-        this.updateFavoritesCount();
     }
 
     async smartMerge(remoteData) {
         // Smart merge logic
         const mergedChannels = this.mergeChannels(this.channels, remoteData.channels || []);
-        const mergedFavorites = this.mergeFavorites(this.favorites, new Set(remoteData.favorites || []));
         const mergedSettings = { ...this.settings, ...remoteData.settings };
 
         this.channels = mergedChannels;
         this.filteredChannels = [...this.channels];
-        this.favorites = mergedFavorites;
         this.settings = mergedSettings;
 
         if (remoteData.categories && Array.isArray(remoteData.categories)) {
@@ -5821,12 +5790,10 @@ class ArabicTVApp {
         }
 
         this.saveChannelsToStorage();
-        this.saveFavorites();
         this.saveSettings();
         this.applySettings();
         this.renderChannels();
         this.renderAdminChannels();
-        this.updateFavoritesCount();
     }
 
     mergeChannels(localChannels, remoteChannels) {
@@ -5843,10 +5810,6 @@ class ArabicTVApp {
         return merged;
     }
 
-    mergeFavorites(localFavorites, remoteFavorites) {
-        // Combine all favorites
-        return new Set([...localFavorites, ...remoteFavorites]);
-    }
 
     mergeCategories(localCategories, remoteCategories) {
         const merged = [...localCategories];
@@ -6751,7 +6714,6 @@ class ArabicTVApp {
                 version: '1.0',
                 timestamp: new Date().toISOString(),
                 channels: this.channels,
-                favorites: Array.from(this.favorites),
                 settings: this.settings,
                 categories: this.categories,
                 remoteStorage: this.remoteStorage,
@@ -6819,10 +6781,6 @@ class ArabicTVApp {
                 this.saveChannelsToStorage();
             }
             
-            // Restore favorites
-            if (backupData.favorites && Array.isArray(backupData.favorites)) {
-                this.favorites = new Set(backupData.favorites);
-            }
             
             // Restore settings
             if (backupData.settings && typeof backupData.settings === 'object') {
@@ -6877,7 +6835,6 @@ class ArabicTVApp {
                 version: '1.0',
                 timestamp: new Date().toISOString(),
                 channels: this.channels,
-                favorites: Array.from(this.favorites),
                 settings: this.settings,
                 categories: this.categories,
                 // Exclude sensitive remote storage data
@@ -7786,13 +7743,6 @@ class ArabicTVApp {
         return overlay;
     }
 
-    toggleFavorites() {
-        // Close all mobile menus first
-        closeAllMobileMenus();
-        
-        // Toggle favorites filter
-        this.toggleFavoritesFilter();
-    }
 
 
     // Update sidebar counts
@@ -7824,11 +7774,6 @@ class ArabicTVApp {
             }
         });
 
-        // Update favorites count
-        const favoritesCountElements = document.querySelectorAll('.favorites-count, #headerFavoritesCount');
-        favoritesCountElements.forEach(element => {
-            element.textContent = this.favorites.size;
-        });
         
         // Debug log
         console.log('تم تحديث عداد القنوات:', {
@@ -8220,7 +8165,6 @@ class ArabicTVApp {
     
     initializeNewFeatures() {
         this.bindNewNavigationEvents();
-        this.updateFavoritesCount();
         this.setupFilterDropdowns();
         this.loadCategories();
     }
@@ -8272,81 +8216,8 @@ class ArabicTVApp {
     }
 
 
-    // Favorites Management
-    loadFavorites() {
-        try {
-            const savedFavorites = localStorage.getItem('arabicTVFavorites');
-            if (savedFavorites) {
-                this.favorites = new Set(JSON.parse(savedFavorites));
-                console.log('تم تحميل المفضلة:', this.favorites.size, 'قناة');
-            }
-        } catch (error) {
-            console.error('خطأ في تحميل المفضلة:', error);
-            this.favorites = new Set();
-        }
-    }
 
-    saveFavorites() {
-        try {
-            const favoritesArray = Array.from(this.favorites);
-            localStorage.setItem('arabicTVFavorites', JSON.stringify(favoritesArray));
-            console.log('تم حفظ المفضلة:', favoritesArray.length, 'قناة');
-        } catch (error) {
-            console.error('خطأ في حفظ المفضلة:', error);
-        }
-    }
 
-    toggleFavorite(channelId, event) {
-        if (event) {
-            event.stopPropagation();
-        }
-
-        if (this.favorites.has(channelId)) {
-            this.favorites.delete(channelId);
-            this.notifyInfo('تم إزالة القناة من المفضلة');
-        } else {
-            this.favorites.add(channelId);
-            this.notifySuccess('تم إضافة القناة للمفضلة');
-        }
-
-        this.saveFavorites();
-        this.updateFavoritesCount();
-        this.renderChannels(); // Re-render to update favorite buttons
-        
-        // Update filters if showing favorites only
-        if (this.showFavoritesOnly) {
-            this.applyAllFilters();
-        }
-    }
-
-    updateFavoritesCount() {
-        const count = this.favorites.size;
-        
-        // Update all favorites count elements
-        const favoritesCountElements = document.querySelectorAll('.favorites-count, #headerFavoritesCount, #sidebarFavoritesCount, #mobileFavoritesCount');
-        favoritesCountElements.forEach(element => {
-            element.textContent = count;
-        });
-    }
-
-    toggleFavoritesFilter() {
-        this.showFavoritesOnly = !this.showFavoritesOnly;
-        
-        const favoritesFilterBtn = document.getElementById('favoritesFilterBtn');
-        
-        if (favoritesFilterBtn) {
-            if (this.showFavoritesOnly) {
-                favoritesFilterBtn.classList.add('active');
-                this.notifyInfo('عرض المفضلة فقط');
-            } else {
-                favoritesFilterBtn.classList.remove('active');
-                this.notifyInfo('عرض جميع القنوات');
-            }
-        }
-
-        this.applyAllFilters();
-        this.updateBreadcrumbs();
-    }
 
     // Filter Management
     toggleFilterDropdown(filterType) {
@@ -8430,11 +8301,6 @@ class ArabicTVApp {
             console.log('بعد تصفية البلد:', filtered.length);
         }
 
-        // Apply favorites filter
-        if (this.showFavoritesOnly) {
-            filtered = filtered.filter(channel => this.favorites.has(channel.id));
-            console.log('بعد تصفية المفضلة:', filtered.length);
-        }
 
         // Apply search filter
         const searchInput = document.getElementById('searchInput');
@@ -8461,7 +8327,6 @@ class ArabicTVApp {
     resetAllFilters() {
         this.currentCategory = 'all';
         this.currentCountryFilter = 'all';
-        this.showFavoritesOnly = false;
 
         // Reset UI elements
 
@@ -8511,10 +8376,6 @@ class ArabicTVApp {
         
         if (this.currentQualityFilter !== 'all') {
             activeFilters.push(this.currentQualityFilter);
-        }
-        
-        if (this.showFavoritesOnly) {
-            activeFilters.push('المفضلة');
         }
 
         if (activeFilters.length > 0) {
@@ -8714,10 +8575,6 @@ class ArabicTVApp {
         // إنشاء placeholder محسن للشعار
         const logoPlaceholder = this.createLogoPlaceholder(channel);
         
-        // Check if channel is favorited
-        const isFavorited = this.favorites.has(channel.id);
-        const heartClass = isFavorited ? 'fas fa-heart' : 'far fa-heart';
-        const favoritedClass = isFavorited ? 'favorited' : '';
         
         // تحديد حالة القناة
         const isActive = channel.status === 'active';
@@ -8749,9 +8606,6 @@ class ArabicTVApp {
                     <i class="fas fa-play"></i>
                 </button>
             </div>
-            <button class="favorite-btn ${favoritedClass}" onclick="app.toggleFavorite(${channel.id}, event)">
-                <i class="${heartClass}"></i>
-            </button>
             <div class="channel-actions" ${!this.isLoggedIn ? 'style="display: none;"' : ''}>
                 <button class="channel-edit-btn" onclick="app.editChannelFromCard(${channel.id}, event)" title="تعديل القناة">
                     <i class="fas fa-edit"></i>
@@ -8825,11 +8679,6 @@ class ArabicTVApp {
         
         // Show confirmation dialog
         if (confirm(`هل أنت متأكد من حذف قناة "${channel.name}"؟\n\nهذا الإجراء لا يمكن التراجع عنه.`)) {
-            // Remove from favorites if favorited
-            if (this.favorites.has(channelId)) {
-                this.favorites.delete(channelId);
-                this.saveFavorites();
-            }
             
             // Remove from channels array
             const channelIndex = this.channels.findIndex(c => c.id === channelId);
@@ -10495,14 +10344,6 @@ function updateMobileCategoryCounts() {
     });
 }
 
-function updateMobileFavoritesBadge() {
-    if (!window.app) return;
-    
-    const badge = document.getElementById('mobileFavoritesBadge');
-    if (badge) {
-        badge.textContent = window.app.favorites.size;
-    }
-}
 
 // Search functionality for mobile
 function setupMobileSearch() {
@@ -10676,15 +10517,9 @@ function initializeMobileBottomNav() {
     setupMobileOverlay();
     addMobileSearchStyles();
     
-    // Update favorites badge periodically
-    setInterval(() => {
-        updateMobileFavoritesBadge();
-    }, 1000);
-    
     // Update category counts when channels are loaded
     if (window.app) {
         updateMobileCategoryCounts();
-        updateMobileFavoritesBadge();
     }
 }
 
@@ -10795,18 +10630,6 @@ document.addEventListener('DOMContentLoaded', () => {
         loadRecentSearches();
     };
 
-    // Toggle favorites
-    window.toggleFavorites = function() {
-        if (window.app && window.app.toggleFavorites) {
-            window.app.toggleFavorites();
-        }
-        
-        // Update nav item active state
-        updateNavActiveState('favorites');
-        
-        // Close any open menus
-        closeAllMenus();
-    };
 
     // Toggle more menu (enhanced with overlay)
     window.toggleMoreMenu = function() {
@@ -10888,20 +10711,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateNavActiveState('categories');
     }
 
-    // Update favorites badge
-    function updateFavoritesBadge() {
-        const badge = document.getElementById('favoritesBadge');
-        if (badge && window.app && window.app.favorites) {
-            const favoritesCount = window.app.favorites.length;
-            if (favoritesCount > 0) {
-                badge.textContent = favoritesCount;
-                badge.style.display = 'flex';
-            } else {
-                badge.style.display = 'none';
-            }
-        }
-    }
-
     // Close menus when clicking outside or on overlay
     document.addEventListener('click', function(event) {
         const bottomNav = document.getElementById('bottomNav');
@@ -10964,8 +10773,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Update favorites badge periodically
-    setInterval(updateFavoritesBadge, 1000);
 
     // ===== SIMPLE SEARCH FUNCTIONALITY =====
 
