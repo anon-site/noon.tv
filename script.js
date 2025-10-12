@@ -10277,8 +10277,9 @@ function openTelegram() {
 }
 
 // Player Categories Filter Functions
-let currentPlayerCategoryFilter = localStorage.getItem('playerCategoryFilter') || 'all';
-window.currentPlayerCategoryFilter = currentPlayerCategoryFilter;
+// Reset to 'all' on page load (no localStorage persistence)
+let currentPlayerCategoryFilter = 'all';
+window.currentPlayerCategoryFilter = 'all';
 
 function togglePlayerCategories() {
     const menu = document.getElementById('playerCategoriesMenu');
@@ -10299,10 +10300,9 @@ function togglePlayerCategories() {
 }
 
 function filterChannelBar(category) {
-    // Save the filter globally and in localStorage
+    // Save the filter globally (only for current session)
     currentPlayerCategoryFilter = category;
     window.currentPlayerCategoryFilter = category;
-    localStorage.setItem('playerCategoryFilter', category);
     
     // Update button text
     const categoryText = document.getElementById('playerCategoryText');
@@ -10437,6 +10437,7 @@ document.addEventListener('click', (e) => {
 
 // Update player category dropdown UI based on current filter
 function updatePlayerCategoryDropdown() {
+    // Always show 'all' on page load
     const currentFilter = window.currentPlayerCategoryFilter || 'all';
     
     // Update button text
