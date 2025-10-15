@@ -4085,6 +4085,14 @@ class ArabicTVApp {
         document.getElementById('adminModal').classList.add('active');
         this.renderAdminChannels();
         this.updateSaveOrderButton();
+        
+        // Reset admin search to remove any previous filtering and show all items
+        const adminSearch = document.getElementById('adminSearchInput');
+        if (adminSearch) {
+            adminSearch.value = '';
+            setTimeout(() => this.filterAdminChannels(''), 0);
+        }
+
         // Update category options to ensure latest categories are available
         this.updateChannelCategoryOptions();
         
@@ -4643,6 +4651,15 @@ class ArabicTVApp {
             this.updateChannelCategoryOptions();
         }
 
+        // Ensure all channels are visible when switching to channels tab
+        if (tab === 'channels') {
+            const adminSearch = document.getElementById('adminSearchInput');
+            if (adminSearch) {
+                adminSearch.value = '';
+            }
+            setTimeout(() => this.filterAdminChannels(''), 0);
+        }
+
         // Reset form when switching to add tab (unless we're editing)
         // This should be after updateChannelCategoryOptions to ensure categories are loaded
         if (tab === 'add' && !this.editingChannelId) {
@@ -4657,7 +4674,8 @@ class ArabicTVApp {
         this.channels.forEach((channel, index) => {
             const item = document.createElement('div');
             item.className = 'admin-channel-item';
-            item.draggable = true;
+            // Drag & drop disabled
+            item.draggable = false;
             item.dataset.channelId = channel.id;
             item.dataset.index = index;
             
@@ -4671,7 +4689,6 @@ class ArabicTVApp {
             
             item.innerHTML = `
                 <div class="admin-channel-info">
-                    <i class="fas fa-grip-vertical drag-handle"></i>
                     <img src="${channel.logo}" alt="${channel.name}" class="admin-channel-logo"
                          onerror="this.src='${adminPlaceholder}'; this.classList.add('admin-placeholder-logo');">
                     <div>
@@ -4693,6 +4710,10 @@ class ArabicTVApp {
                                    value="${index + 1}" 
                                    min="1" 
                                    max="${this.channels.length}"
+                                   step="1"
+                                   inputmode="numeric"
+                                   pattern="[0-9]*"
+                                   onfocus="this.select()"
                                    onchange="app.moveChannelToPosition(${index}, this.value)"
                                    title="أدخل رقم الموقع الجديد">
                         </div>
@@ -4720,9 +4741,7 @@ class ArabicTVApp {
                 </div>
             `;
             
-            // إضافة event listeners للسحب والإفلات
-            this.addDragListeners(item);
-            
+            // السحب والإفلات معطل
             list.appendChild(item);
         });
         
