@@ -3452,6 +3452,7 @@ class ArabicTVApp {
             
             // إعادة استخدام iframe الموجود أو إنشاء واحد جديد
             let iframe = document.getElementById('aflamPlayer');
+            const isNewIframe = !iframe;
             if (!iframe) {
                 console.log('🆕 إنشاء iframe جديد لـ Aflam4You');
                 iframe = document.createElement('iframe');
@@ -3478,73 +3479,77 @@ class ArabicTVApp {
                 // حماية إضافية من النوافذ المنبقة مع السماح بالتشغيل التلقائي
                 iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation allow-forms allow-popups-to-escape-sandbox allow-autoplay');
             
-                // منع النوافذ المنبقة من iframe
-                iframe.addEventListener('load', function() {
-                try {
-                    // منع النوافذ المنبقة من داخل iframe
-                    if (iframe.contentWindow) {
-                        const originalIframeOpen = iframe.contentWindow.open;
-                        iframe.contentWindow.open = function(url) {
-                            console.log('🚫 تم منع نافذة منبقة من aflam4you iframe:', url);
-                            return null;
-                        };
-                        
-                        // منع النوافذ المنبقة عند النقر
-                        iframe.contentWindow.addEventListener('click', function(e) {
-                            if (e.target && (
-                                e.target.textContent && (
-                                    e.target.textContent.includes('unmute') ||
-                                    e.target.textContent.includes('click here') ||
-                                    e.target.textContent.includes('Click here')
-                                )
-                            )) {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                console.log('🚫 تم منع النقر على رابط unmute');
-                                return false;
+                // منع النوافذ المنبقة من iframe - فقط للإطارات الجديدة
+                if (isNewIframe) {
+                    iframe.addEventListener('load', function() {
+                        try {
+                            // منع النوافذ المنبقة من داخل iframe
+                            if (iframe.contentWindow) {
+                                const originalIframeOpen = iframe.contentWindow.open;
+                                iframe.contentWindow.open = function(url) {
+                                    console.log('🚫 تم منع نافذة منبقة من aflam4you iframe:', url);
+                                    return null;
+                                };
+                                
+                                // منع النوافذ المنبقة عند النقر
+                                iframe.contentWindow.addEventListener('click', function(e) {
+                                    if (e.target && (
+                                        e.target.textContent && (
+                                            e.target.textContent.includes('unmute') ||
+                                            e.target.textContent.includes('click here') ||
+                                            e.target.textContent.includes('Click here')
+                                        )
+                                    )) {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        console.log('🚫 تم منع النقر على رابط unmute');
+                                        return false;
+                                    }
+                                });
                             }
-                        });
-                    }
-                    } catch (e) {
-                        // Cross-origin error متوقع
-                        console.log('✅ حماية iframe مفعلة (Cross-origin)');
-                    }
-                });
+                        } catch (e) {
+                            // Cross-origin error متوقع
+                            console.log('✅ حماية iframe مفعلة (Cross-origin)');
+                        }
+                    });
+                }
             
-                // منع إعادة التوجيه غير المرغوب فيها مع التشغيل التلقائي
-                iframe.onload = () => {
-                console.log('✅ تم تحميل iframe من aflam4you.net');
-                loading.style.display = 'none';
-                
-            // محاولة التشغيل التلقائي للفيديو داخل iframe بشكل فوري
-                setTimeout(() => {
-                    this.attemptAflamAutoplay(iframe);
-                }, 500);
-                
-                // Check for blocking after a delay
-                setTimeout(() => {
-                    try {
-                        if (iframe.contentDocument && iframe.contentDocument.body) {
-                            const bodyText = iframe.contentDocument.body.textContent.toLowerCase();
-                            if (bodyText.includes('blocked') || bodyText.includes('contact the site owner')) {
-                                this.showAflamError('المحتوى محجوب من الموقع');
+                // منع إعادة التوجيه غير المرغوب فيها مع التشغيل التلقائي - فقط للإطارات الجديدة
+                if (isNewIframe) {
+                    iframe.onload = () => {
+                        console.log('✅ تم تحميل iframe من aflam4you.net');
+                        loading.style.display = 'none';
+                        
+                        // محاولة التشغيل التلقائي للفيديو داخل iframe بشكل فوري
+                        setTimeout(() => {
+                            this.attemptAflamAutoplay(iframe);
+                        }, 500);
+                        
+                        // Check for blocking after a delay
+                        setTimeout(() => {
+                            try {
+                                if (iframe.contentDocument && iframe.contentDocument.body) {
+                                    const bodyText = iframe.contentDocument.body.textContent.toLowerCase();
+                                    if (bodyText.includes('blocked') || bodyText.includes('contact the site owner')) {
+                                        this.showAflamError('المحتوى محجوب من الموقع');
+                                    }
+                                    // فحص الإعلانات والنوافذ المنبقة
+                                    if (bodyText.includes('advertisement') || bodyText.includes('ad') || bodyText.includes('إعلان') ||
+                                        bodyText.includes('unmute') || bodyText.includes('click here to unmute')) {
+                                        console.warn('⚠️ تم اكتشاف إعلانات أو نوافذ منبقة في المحتوى');
+                                        // محاولة إخفاء الإعلانات والتشغيل التلقائي
+                                        this.hideAflamAdsAndAutoplay(iframe);
+                                    }
+                                }
+                            } catch (e) {
+                                // Cross-origin error is expected for successful loads
+                                console.log('✅ iframe محمل بنجاح (Cross-origin)');
+                                // محاولة التشغيل التلقائي حتى مع Cross-origin
+                                this.attemptAflamAutoplay(iframe);
                             }
-                            // فحص الإعلانات والنوافذ المنبقة
-                            if (bodyText.includes('advertisement') || bodyText.includes('ad') || bodyText.includes('إعلان') ||
-                                bodyText.includes('unmute') || bodyText.includes('click here to unmute')) {
-                                console.warn('⚠️ تم اكتشاف إعلانات أو نوافذ منبقة في المحتوى');
-                                // محاولة إخفاء الإعلانات والتشغيل التلقائي
-                                this.hideAflamAdsAndAutoplay(iframe);
-                            }
-                        }
-                    } catch (e) {
-                        // Cross-origin error is expected for successful loads
-                        console.log('✅ iframe محمل بنجاح (Cross-origin)');
-                        // محاولة التشغيل التلقائي حتى مع Cross-origin
-                        this.attemptAflamAutoplay(iframe);
-                        }
-                    }, 1000);
-                };
+                        }, 1000);
+                    };
+                }
             
                 // Insert iframe after video element only if newly created
                 video.parentNode.insertBefore(iframe, video.nextSibling);
@@ -3552,6 +3557,8 @@ class ArabicTVApp {
                 console.log('♻️ إعادة استخدام iframe موجود لـ Aflam4You');
                 // إعادة تعيين خصائص iframe الموجود
                 iframe.style.display = 'block';
+                // تأكد من إخفاء شاشة التحميل عند استخدام iframe موجود
+                loading.style.display = 'none';
             }
             
             // Set iframe source with autoplay parameters and unmuted audio
@@ -3560,34 +3567,70 @@ class ArabicTVApp {
                 // إضافة معاملات التشغيل التلقائي بدون كتم الصوت
                 aflamUrl += (aflamUrl.includes('?') ? '&' : '?') + 'autoplay=1&muted=0&mute=0&volume=100';
             }
+            
+            // إعادة تعيين المصدر دائماً لتحميل القناة الجديدة
             iframe.src = aflamUrl;
+            console.log('🔄 تم تعيين مصدر جديد لـ iframe:', aflamUrl);
             
             // Show iframe
             iframe.style.display = 'block';
             
-            // Add double-click fullscreen support for aflam iframe
-            iframe.addEventListener('dblclick', () => {
-                console.log('🖱️ ضغط مزدوج على aflam iframe - محاولة التكبير');
-                this.toggleFullscreen();
-            });
+            // Add double-click fullscreen support for aflam iframe - فقط للإطارات الجديدة
+            if (isNewIframe) {
+                iframe.addEventListener('dblclick', () => {
+                    console.log('🖱️ ضغط مزدوج على aflam iframe - محاولة التكبير');
+                    this.toggleFullscreen();
+                });
+            }
             
-            // محاولة إضافية للتشغيل التلقائي بعد تحميل iframe
-            iframe.addEventListener('load', () => {
-                // محاولة فورية للتشغيل التلقائي
-                setTimeout(() => {
-                    console.log('🔄 محاولة إضافية للتشغيل التلقائي في Aflam4You...');
-                    this.attemptAflamAutoplay(iframe);
-                    // محاولة إلغاء كتم الصوت بشكل متكرر
-                    this.forceUnmuteAflam(iframe);
-                }, 1000);
+            // إزالة جميع مستمعي الأحداث القدامى وإضافة جديدة
+            const newIframe = iframe.cloneNode(false);
+            if (iframe.parentNode) {
+                iframe.parentNode.replaceChild(newIframe, iframe);
+                iframe = newIframe;
+                // تحديث الخصائص بعد الاستنساخ
+                iframe.id = 'aflamPlayer';
+                iframe.src = aflamUrl;
+                iframe.style.width = '100%';
+                iframe.style.height = '100%';
+                iframe.style.border = 'none';
+                iframe.style.background = '#000';
+                iframe.style.display = 'block';
+                iframe.allowFullscreen = true;
+                iframe.allow = 'autoplay; fullscreen; picture-in-picture; xr-spatial-tracking; encrypted-media';
+                iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+                iframe.setAttribute('loading', 'lazy');
+                iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation allow-forms allow-popups-to-escape-sandbox allow-autoplay');
                 
-                // محاولة ثانية بعد ثانيتين
-                setTimeout(() => {
-                    console.log('🔄 محاولة ثانية للتشغيل التلقائي في Aflam4You...');
-                    this.attemptAflamAutoplay(iframe);
-                    this.forceUnmuteAflam(iframe);
-                }, 2000);
-            });
+                // إضافة مستمع حدث التحميل الجديد
+                iframe.addEventListener('load', () => {
+                    console.log('✅ تم تحميل القناة الجديدة في Aflam4You');
+                    loading.style.display = 'none';
+                    
+                    // محاولة فورية للتشغيل التلقائي
+                    setTimeout(() => {
+                        console.log('🔄 محاولة إضافية للتشغيل التلقائي في Aflam4You...');
+                        this.attemptAflamAutoplay(iframe);
+                        // محاولة إلغاء كتم الصوت بشكل متكرر
+                        this.forceUnmuteAflam(iframe);
+                    }, 1000);
+                    
+                    // محاولة ثانية بعد ثانيتين
+                    setTimeout(() => {
+                        console.log('🔄 محاولة ثانية للتشغيل التلقائي في Aflam4You...');
+                        this.attemptAflamAutoplay(iframe);
+                        this.forceUnmuteAflam(iframe);
+                    }, 2000);
+                });
+                
+                // إضافة مستمع حدث الضغط المزدوج
+                iframe.addEventListener('dblclick', () => {
+                    console.log('🖱️ ضغط مزدوج على aflam iframe - محاولة التكبير');
+                    this.toggleFullscreen();
+                });
+                
+                console.log('✅ تم تحديث iframe مع مستمعي أحداث جديدة');
+            }
             
         } catch (error) {
             console.error('❌ خطأ في تحميل iframe من aflam4you.net:', error);
