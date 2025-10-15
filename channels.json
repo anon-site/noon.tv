@@ -1823,26 +1823,14 @@
       "lastModified": "2025-10-10T19:32:08.992Z"
     },
     {
-      "id": 207,
-      "name": "Aurora Media Films",
-      "url": "https://cdn.streamhispanatv.net:3417/live/auroramflive.m3u8",
-      "logo": "",
-      "category": "movies",
-      "country": "عالمية",
-      "type": "hls",
-      "status": "inactive",
-      "vpn": false,
-      "lastModified": "2025-10-10T19:32:08.992Z"
-    },
-    {
       "id": 208,
       "name": "روتانا خليج",
-      "url": "https://rotana.hibridcdn.net/rotananet/khaleejiya_net-7Y83PP5adWixDF93/playlist.m3u8",
-      "logo": "",
+      "url": "https://www.elahmad.com/tv/live/channels.php?id=1092",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Rotana_Khalejia.png/250px-Rotana_Khalejia.png",
       "category": "entertainment",
       "country": "السعودية",
-      "type": "hls",
-      "status": "inactive",
+      "type": "elahmad",
+      "status": "active",
       "vpn": false,
       "lastModified": "2025-10-10T19:32:08.992Z"
     },
@@ -1871,6 +1859,18 @@
       "lastModified": "2025-10-10T19:32:08.992Z"
     },
     {
+      "id": 207,
+      "name": "Aurora Media Films",
+      "url": "https://cdn.streamhispanatv.net:3417/live/auroramflive.m3u8",
+      "logo": "",
+      "category": "movies",
+      "country": "عالمية",
+      "type": "hls",
+      "status": "inactive",
+      "vpn": false,
+      "lastModified": "2025-10-10T19:32:08.992Z"
+    },
+    {
       "id": 211,
       "name": "MovieSmart Turk",
       "url": "https://iptv-org.github.io/iptv/categories/movies.m3u",
@@ -1895,7 +1895,6 @@
       "lastModified": "2025-10-10T19:32:08.992Z"
     }
   ],
-  "favorites": [],
   "settings": {
     "autoQuality": true,
     "autoplay": true,
@@ -1965,6 +1964,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-10T20:02:33.106Z",
+  "lastModified": "2025-10-15T02:36:32.858Z",
   "version": "1.0"
 }
