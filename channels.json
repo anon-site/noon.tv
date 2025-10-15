@@ -65,7 +65,7 @@
     },
     {
       "id": 116,
-      "name": "Rotana Classic",
+      "name": "روتانا كلاسيك",
       "url": "https://uvotv-aniview.global.ssl.fastly.net/10010/dvr/hls/rotanazaman/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Rotana_Classic.png",
       "category": "movies",
@@ -1381,11 +1381,11 @@
     {
       "id": 167,
       "name": "روتانا سينيما",
-      "url": "https://uvotv-aniview.global.ssl.fastly.net/10010/dvr/hls/rotanacinemanhd/playlist-orig.m3u8",
+      "url": "https://www.elahmad.com/tv/live/channels.php?id=954",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Rotana_Cinema_Egy.png/250px-Rotana_Cinema_Egy.png",
       "category": "movies",
       "country": "السعودية",
-      "type": "hls",
+      "type": "elahmad",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-05T04:45:45.383Z"
@@ -1393,11 +1393,11 @@
     {
       "id": 168,
       "name": "روتانا كوميدي",
-      "url": "https://uvotv-aniview.global.ssl.fastly.net/10010/dvr/hls/rotanacomedy/playlist-orig.m3u8",
+      "url": "https://www.elahmad.com/tv/live/channels.php?id=1035",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Rotana_Comedy.png/500px-Rotana_Comedy.png",
       "category": "movies",
       "country": "السعودية",
-      "type": "hls",
+      "type": "elahmad",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-05T04:45:45.383Z"
@@ -1537,11 +1537,11 @@
     {
       "id": 180,
       "name": "روتانا دراما",
-      "url": "https://uvotv-aniview.global.ssl.fastly.net/10010/dvr/hls/rotanadrama/playlist.m3u8",
+      "url": "https://www.elahmad.com/tv/live/channels.php?id=1051",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/4/4f/Rotana_Drama.png",
       "category": "entertainment",
       "country": "السعودية",
-      "type": "hls",
+      "type": "elahmad",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-06T08:35:42.747Z"
@@ -1857,6 +1857,17 @@
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-10T19:32:08.992Z"
+    },
+    {
+      "id": 211,
+      "name": "روتانا مصر",
+      "url": "https://www.elahmad.com/tv/live/channels.php?id=1108",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Rotana_Cinema_Egy.png/250px-Rotana_Cinema_Egy.png",
+      "category": "movies",
+      "country": "مصر",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
     }
   ],
   "settings": {
@@ -1928,6 +1939,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-15T02:36:57.055Z",
+  "lastModified": "2025-10-15T02:50:22.545Z",
   "version": "1.0"
 }
