@@ -1857,42 +1857,6 @@
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-10T19:32:08.992Z"
-    },
-    {
-      "id": 207,
-      "name": "Aurora Media Films",
-      "url": "https://cdn.streamhispanatv.net:3417/live/auroramflive.m3u8",
-      "logo": "",
-      "category": "movies",
-      "country": "عالمية",
-      "type": "hls",
-      "status": "inactive",
-      "vpn": false,
-      "lastModified": "2025-10-10T19:32:08.992Z"
-    },
-    {
-      "id": 211,
-      "name": "MovieSmart Turk",
-      "url": "https://iptv-org.github.io/iptv/categories/movies.m3u",
-      "logo": "",
-      "category": "movies",
-      "country": "عالمية",
-      "type": "hls",
-      "status": "inactive",
-      "vpn": false,
-      "lastModified": "2025-10-10T19:32:08.992Z"
-    },
-    {
-      "id": 212,
-      "name": "Newflix",
-      "url": "https://newfhls.wns.live/hls/stream.m3u8",
-      "logo": "",
-      "category": "movies",
-      "country": "عالمية",
-      "type": "hls",
-      "status": "inactive",
-      "vpn": false,
-      "lastModified": "2025-10-10T19:32:08.992Z"
     }
   ],
   "settings": {
@@ -1964,6 +1928,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-15T02:36:32.858Z",
+  "lastModified": "2025-10-15T02:36:57.055Z",
   "version": "1.0"
 }
