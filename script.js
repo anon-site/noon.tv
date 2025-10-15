@@ -7653,8 +7653,17 @@ class ArabicTVApp {
         // تسجيل أن الترتيب تغير
         this.hasOrderChanged = true;
 
+        // مسح حقل البحث لإظهار جميع القنوات
+        const adminSearch = document.getElementById('adminSearchInput');
+        if (adminSearch) {
+            adminSearch.value = '';
+        }
+
         // إعادة رسم القائمة
         this.renderAdminChannels();
+        
+        // تطبيق الفلتر بعد التأكد من إضافة العناصر إلى DOM
+        setTimeout(() => this.filterAdminChannels(''), 10);
     }
 
     moveChannelToPosition(fromIndex, newPosition) {
