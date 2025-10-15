@@ -1115,6 +1115,11 @@ class ArabicTVApp {
         console.log('تصفية القنوات حسب الفئة:', category);
         this.currentCategory = category;
         
+        // عند تغيير الفئة، أزل قائمة البحث المخصصة من شريط القنوات
+        if (window.channelBarCustomList) {
+            window.channelBarCustomList = null;
+        }
+        
         // Update active tab
         const allTabs = document.querySelectorAll('.sidebar-nav-tab, .mobile-sidebar-nav-tab');
         console.log('عدد التبويبات الموجودة:', allTabs.length);
@@ -1159,6 +1164,14 @@ class ArabicTVApp {
     searchChannels(query) {
         // Use the new unified filter system
         this.applyAllFilters();
+        
+        // عند البحث، اربط نتيجة التصفية الحالية بالقائمة المخصصة لشريط القنوات
+        const q = (query || '').trim();
+        if (q.length > 0) {
+            window.channelBarCustomList = [...this.filteredChannels];
+        } else {
+            window.channelBarCustomList = null;
+        }
         
         // Scroll to top when searching on desktop
         window.scrollTo({
@@ -1238,6 +1251,17 @@ class ArabicTVApp {
                     }
                 }
             }, 100);
+        } else {
+            // على الكمبيوتر: إذا كان هناك قائمة بحث مخصصة فعِّل الشريط تلقائياً
+            if (window.channelBarCustomList && window.channelBarCustomList.length > 0) {
+                const channelBar = document.getElementById('channelBar');
+                if (channelBar && !channelBar.classList.contains('show')) {
+                    showChannelBar();
+                } else {
+                    // تأكد من تحميل القائمة الحالية
+                    loadChannelBarContent();
+                }
+            }
         }
         
         // News ticker is now disabled by default
@@ -9365,11 +9389,13 @@ function loadChannelBarContent() {
     // Clear existing content
     channelBarContent.innerHTML = '';
 
-    // Use the active player category filter if available, otherwise use default
+    // إذا كانت هناك قائمة مخصصة من البحث استخدمها، وإلا استخدم الفئة الحالية
     const currentCategory = window.currentPlayerCategoryFilter || app.currentCategory || 'all';
-    let channelsToShow = app.channels;
+    let channelsToShow = (window.channelBarCustomList && window.channelBarCustomList.length > 0)
+        ? window.channelBarCustomList
+        : app.channels;
 
-    if (currentCategory !== 'all') {
+    if (!window.channelBarCustomList && currentCategory !== 'all') {
         channelsToShow = app.channels.filter(channel => channel.category === currentCategory);
     }
 
@@ -9426,11 +9452,13 @@ function getCategoryName(category) {
 function previousChannel() {
     if (!app.channels || !app.currentChannel) return;
 
-    // Get filtered channels based on current category filter
+    // استخدم قائمة البحث المخصصة إن وجدت وإلا اعتمد على الفئة
     const currentCategory = window.currentPlayerCategoryFilter || 'all';
-    let channelsToNavigate = app.channels;
+    let channelsToNavigate = (window.channelBarCustomList && window.channelBarCustomList.length > 0)
+        ? window.channelBarCustomList
+        : app.channels;
     
-    if (currentCategory !== 'all') {
+    if (!window.channelBarCustomList && currentCategory !== 'all') {
         channelsToNavigate = app.channels.filter(channel => channel.category === currentCategory);
     }
     
@@ -9446,11 +9474,13 @@ function previousChannel() {
 function nextChannel() {
     if (!app.channels || !app.currentChannel) return;
 
-    // Get filtered channels based on current category filter
+    // استخدم قائمة البحث المخصصة إن وجدت وإلا اعتمد على الفئة
     const currentCategory = window.currentPlayerCategoryFilter || 'all';
-    let channelsToNavigate = app.channels;
+    let channelsToNavigate = (window.channelBarCustomList && window.channelBarCustomList.length > 0)
+        ? window.channelBarCustomList
+        : app.channels;
     
-    if (currentCategory !== 'all') {
+    if (!window.channelBarCustomList && currentCategory !== 'all') {
         channelsToNavigate = app.channels.filter(channel => channel.category === currentCategory);
     }
     
@@ -9466,11 +9496,13 @@ function nextChannel() {
 function jumpChannels(steps) {
     if (!app.channels || !app.currentChannel) return;
 
-    // Get filtered channels based on current category filter
+    // استخدم قائمة البحث المخصصة إن وجدت وإلا اعتمد على الفئة
     const currentCategory = window.currentPlayerCategoryFilter || 'all';
-    let channelsToNavigate = app.channels;
+    let channelsToNavigate = (window.channelBarCustomList && window.channelBarCustomList.length > 0)
+        ? window.channelBarCustomList
+        : app.channels;
     
-    if (currentCategory !== 'all') {
+    if (!window.channelBarCustomList && currentCategory !== 'all') {
         channelsToNavigate = app.channels.filter(channel => channel.category === currentCategory);
     }
 
@@ -10344,6 +10376,9 @@ function togglePlayerCategories() {
 }
 
 function filterChannelBar(category) {
+    // عند اختيار فئة يدوياً، أزل قائمة البحث المخصصة
+    window.channelBarCustomList = null;
+
     // Save the filter globally (only for current session)
     currentPlayerCategoryFilter = category;
     window.currentPlayerCategoryFilter = category;
@@ -10894,6 +10929,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Clear results
         clearSearchResults();
+        
+        // ملاحظة: لا نقوم بإزالة قائمة البحث المخصصة هنا حتى تبقى الباقة ظاهرة بعد تشغيل القناة على الهاتف
     };
 
     // Clear search
@@ -10912,6 +10949,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         clearSearchResults();
         hideSuggestions();
+        
+        // إزالة قائمة البحث المخصصة عند مسح البحث
+        window.channelBarCustomList = null;
     };
 
     // Clear recent searches
@@ -11163,6 +11203,10 @@ document.addEventListener('DOMContentLoaded', () => {
         results.sort((a, b) => a.name.localeCompare(b.name));
 
         currentSearchResults = results;
+        
+        // اربط نتائج البحث الحالية بشريط القنوات ليتم عرضها عند تشغيل أي قناة
+        window.channelBarCustomList = [...results];
+        
         displaySearchResults(results);
         updateResultsCount(results.length);
     }
