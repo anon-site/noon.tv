@@ -120,7 +120,8 @@
       "country": "مصر",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-23T14:36:24.077Z"
     },
     {
       "id": 208,
@@ -1296,11 +1297,11 @@
     {
       "id": 152,
       "name": "Bein 1",
-      "url": "https://direct.aflam4you.net/playeraf.php?vid=179&aflam_s=1&aflam_k=1156hh8811111111&autoplay=1",
+      "url": "https://direct.aflam4you.net/playeraf.php?vid=68&aflam_s=1&aflam_k=3443234455",
       "logo": "https://iili.io/Kjx5qn1.png",
       "category": "sports",
       "country": "السعودية",
-      "type": "hls",
+      "type": "aflam",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-04T05:53:52.119Z"
@@ -1308,11 +1309,11 @@
     {
       "id": 153,
       "name": "Bein 2",
-      "url": "https://direct.aflam4you.net/playeraf.php?vid=2&aflam_s=1&aflam_k=1156hh8811111111&autoplay=1",
+      "url": "https://direct.aflam4you.net/playeraf.php?vid=2&aflam_s=1&aflam_k=3443234455",
       "logo": "https://iili.io/Kjx5KZP.png",
       "category": "sports",
       "country": "السعودية",
-      "type": "hls",
+      "type": "aflam",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-04T06:14:18.221Z"
@@ -1320,11 +1321,11 @@
     {
       "id": 154,
       "name": "Bein 3",
-      "url": "https://direct.aflam4you.net/zremb472.php?vid=1&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "url": "https://direct.aflam4you.net/playeraf.php?vid=1&aflam_s=1&aflam_k=3443234455",
       "logo": "https://iili.io/Kjx5FwB.png",
       "category": "sports",
       "country": "السعودية",
-      "type": "hls",
+      "type": "aflam",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-04T06:24:45.593Z"
@@ -1332,11 +1333,11 @@
     {
       "id": 155,
       "name": "Bein 4",
-      "url": "https://direct.aflam4you.net/zremb472.php?vid=3&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "url": "https://direct.aflam4you.net/playeraf.php?vid=3&aflam_s=1&aflam_k=3443234455",
       "logo": "https://iili.io/Kjx53uV.png",
       "category": "sports",
       "country": "السعودية",
-      "type": "hls",
+      "type": "aflam",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-05T04:21:23.436Z"
@@ -1344,11 +1345,11 @@
     {
       "id": 156,
       "name": "Bein 5",
-      "url": "https://direct.aflam4you.net/zremb472.php?vid=73&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "url": "https://direct.aflam4you.net/playeraf.php?vid=73&aflam_s=1&aflam_k=3443234455",
       "logo": "https://iili.io/Kjx5xcJ.png",
       "category": "sports",
       "country": "السعودية",
-      "type": "hls",
+      "type": "aflam",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-05T04:21:23.436Z"
@@ -1356,11 +1357,11 @@
     {
       "id": 157,
       "name": "Bein 6",
-      "url": "https://direct.aflam4you.net/zremb472.php?vid=74&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "url": "https://direct.aflam4you.net/playeraf.php?vid=74&aflam_s=1&aflam_k=3443234455",
       "logo": "https://iili.io/Kjx5z8v.png",
       "category": "sports",
       "country": "السعودية",
-      "type": "hls",
+      "type": "aflam",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-05T04:21:23.436Z"
@@ -1368,11 +1369,11 @@
     {
       "id": 158,
       "name": "Bein 7",
-      "url": "https://direct.aflam4you.net/zremb472.php?vid=75&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "url": "https://direct.aflam4you.net/playeraf.php?vid=75&aflam_s=1&aflam_k=3443234455",
       "logo": "https://iili.io/Kjx5T9R.png",
       "category": "sports",
       "country": "السعودية",
-      "type": "hls",
+      "type": "aflam",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-05T04:21:23.436Z"
@@ -1380,11 +1381,11 @@
     {
       "id": 159,
       "name": "Bein 8",
-      "url": "https://direct.aflam4you.net/zremb472.php?vid=76&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "url": "https://direct.aflam4you.net/playeraf.php?vid=76&aflam_s=1&aflam_k=3443234455",
       "logo": "https://iili.io/Kjx5uup.png",
       "category": "sports",
       "country": "السعودية",
-      "type": "hls",
+      "type": "aflam",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-05T04:21:23.436Z"
@@ -1392,11 +1393,11 @@
     {
       "id": 160,
       "name": "Bein 9",
-      "url": "https://direct.aflam4you.net/zremb472.php?vid=69&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
+      "url": "https://direct.aflam4you.net/playeraf.php?vid=69&aflam_s=1&aflam_k=3443234455",
       "logo": "https://iili.io/Kjx5RtI.png",
       "category": "sports",
       "country": "السعودية",
-      "type": "hls",
+      "type": "aflam",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-05T04:21:23.436Z"
@@ -1847,9 +1848,9 @@
     },
     {
       "id": 209,
-      "name": "Hallmark Mysteries East",
-      "url": "https://fl7.moveonjoy.com/HALLMARK_MOVIES_MYSTERIES/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/4/43/Hallmark_movies_mysteries.png",
+      "name": "Movie Hub",
+      "url": "https://aka-live491.delivery.roku.com/4eddfb64-e03e-4a12-b889-53eed835572e/t2-origin/out/v1/live.m3u8",
+      "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeE0Gpd8B668UI5EOS85BfMlAoWWG4YzyOrA&s",
       "category": "movies",
       "country": "USA",
       "type": "hls",
@@ -1860,7 +1861,7 @@
     {
       "id": 210,
       "name": "FX Movie",
-      "url": "https://fl7.moveonjoy.com/FX_MOVIE/index.m3u8",
+      "url": "https://fl3.moveonjoy.com/FX_MOVIE/index.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/4/4d/FX_International_logo.svg",
       "category": "movies",
       "country": "USA",
@@ -1868,6 +1869,28 @@
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-10T19:32:08.992Z"
+    },
+    {
+      "id": 212,
+      "name": "Movie Hub Action",
+      "url": "https://aka-live491.delivery.roku.com/be8e0aad-9c0d-4b4d-ac10-d0c72bb6c7f3/t2-origin/out/v1/live.m3u8",
+      "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeE0Gpd8B668UI5EOS85BfMlAoWWG4YzyOrA&s",
+      "category": "movies",
+      "country": "USA",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 213,
+      "name": "Xumo Family Movies",
+      "url": "https://d3is52sgpnlx4c.cloudfront.net/10901/88885569/hls/master.m3u8?withResolution=true&ads.xumo_channelId=88885569&ads.csid=viziowatchfree_us_xumofreefamilymovies_ssai&ads.caid=XumoFreeFamilyMovies&ads.lat=&ads.lon=&ads.os=&ads.osv=&ads.xumo_platform=viziowatchfree&ads._fw_player_width=%7bWIDTH%7d&ads._fw_player_height=%7bHEIGHT%7d&ads._fw_is_lat=%7bLMT%7d&ads._fw_us_privacy=%7bUSPRIVACY%7d&ads._fw_coppa=0&ads._fw_app_bundle=%7bAPP_BUNDLE%7d&ads._fw_content_category=IAB1-7&ads._fw_content_genre=television&ads._fw_content_language=en&ads._fw_content_rating=tv-g&ads._fw_deviceMake=%7bDEVICE_MAKE%7d&ads._fw_device_model=%7bDEVICE_MODEL%7d&ads._fw_devicetype=%7bDEVICE_TYPE%7d&ads.domain=%7bDOMAIN%7d&ads.gpp=%7bGPP%7d&ads.gpp_sid=%7bGPP_SID%7d&ads._fw_h_x_country=US&ads.appName=%7bAPP_NAME%7d&ads.xumo_contentId=149&ads.xumo_contentName=XumoFreeFamilyMovies&ads.xumo_providerId=149&ads.xumo_providerName=XumoFreeFamilyMovies&ads.channelId=88885569&ads.xumo_channelName=XumoFreeFamilyMovies&ads._fw_content_programmer_brand=XumoFreeFamilyMovies&ads.xumo_adsystem=mediatailor&ads.tpcl=MIDROLL&ads.xumo_ifa=%7bADID%7d&ads.xumo_ifaType=%7bIFATYPE%7d&ads._fw_app_store_url=%7bAPP_STORE_URL%7d&ads.appVersion=%7bAPP_VERSION%7d&ads.vizdartoken=eyJhdWQiOiI5NiIsIndmcGNpZCI6NDE4MjU1NDgzOH0",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/XUMO-logo-2022.svg/512px-XUMO-logo-2022.svg.png",
+      "category": "movies",
+      "country": "USA",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
     }
   ],
   "settings": {
@@ -1939,6 +1962,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-15T05:06:04.344Z",
+  "lastModified": "2025-10-23T15:08:43.062Z",
   "version": "1.0"
 }
