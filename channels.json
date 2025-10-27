@@ -930,7 +930,7 @@
     {
       "id": 103,
       "name": "سبيستون",
-      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=spacetoon_live",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=spacetoon",
       "logo": "https://upload.wikimedia.org/wikipedia/en/2/2b/Spacetoon_logo.png",
       "category": "kids",
       "country": "عالمية",
@@ -1297,7 +1297,7 @@
     {
       "id": 152,
       "name": "Bein 1",
-      "url": "https://direct.aflam4you.net/playeraf.php?vid=68&aflam_s=1&aflam_k=3456665543234455",
+      "url": "https://direct.aflam4you.net/zremb472.php?vid=68&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
       "logo": "https://iili.io/Kjx5qn1.png",
       "category": "sports",
       "country": "السعودية",
@@ -1583,18 +1583,6 @@
       "lastModified": "2025-10-06T09:40:26.829Z"
     },
     {
-      "id": 182,
-      "name": "بسمة",
-      "url": "https://www.elahmad.com/tv/live/channel.php?id=almajd_bassma",
-      "logo": "https://upload.wikimedia.org/wikipedia/ar/thumb/8/87/%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D8%A7%D8%A9_%D8%A8%D8%B3%D9%85%D8%A9_%D9%84%D9%84%D8%A3%D8%B7%D9%81%D8%A7%D9%84_2023.webp/1000px-%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D8%A7%D8%A9_%D8%A8%D8%B3%D9%85%D8%A9_%D9%84%D9%84%D8%A3%D8%B7%D9%81%D8%A7%D9%84_2023.webp.png",
-      "category": "entertainment",
-      "country": "عالمية",
-      "type": "elahmad",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-10-06T09:40:26.829Z"
-    },
-    {
       "id": 183,
       "name": "TRT Cocuk",
       "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=trt_cocuk",
@@ -1653,30 +1641,6 @@
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-06T09:40:26.829Z"
-    },
-    {
-      "id": 189,
-      "name": "الارث النبوي",
-      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=alerth",
-      "logo": "https://iili.io/KhqFCej.png",
-      "category": "religious",
-      "country": "السعودية",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-10-06T11:57:36.918Z"
-    },
-    {
-      "id": 190,
-      "name": "السنة النبوية",
-      "url": "https://www.elahmad.com/tv/live/channel.php?id=saudi_suna",
-      "logo": "https://upload.wikimedia.org/wikipedia/ar/e/e9/%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D8%A7%D8%A9_%D8%A7%D9%84%D8%B3%D9%86%D8%A9_%D8%A7%D9%84%D9%86%D8%A8%D9%88%D9%8A%D8%A9.png",
-      "category": "religious",
-      "country": "السعودية",
-      "type": "elahmad",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-10-06T11:57:36.918Z"
     },
     {
       "id": 192,
@@ -1879,7 +1843,8 @@
       "country": "USA",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-27T21:44:41.053Z"
     },
     {
       "id": 213,
@@ -1890,7 +1855,8 @@
       "country": "USA",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-10-27T21:44:41.053Z"
     }
   ],
   "settings": {
@@ -1962,6 +1928,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-27T21:43:47.671Z",
+  "lastModified": "2025-10-27T22:25:42.093Z",
   "version": "1.0"
 }
