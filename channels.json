@@ -1297,7 +1297,7 @@
     {
       "id": 152,
       "name": "Bein 1",
-      "url": "https://direct.aflam4you.net/playeraf.php?vid=68&aflam_s=1&aflam_k=3443234455",
+      "url": "https://direct.aflam4you.net/playeraf.php?vid=68&aflam_s=1&aflam_k=3456665543234455",
       "logo": "https://iili.io/Kjx5qn1.png",
       "category": "sports",
       "country": "السعودية",
@@ -1309,7 +1309,7 @@
     {
       "id": 153,
       "name": "Bein 2",
-      "url": "https://direct.aflam4you.net/playeraf.php?vid=2&aflam_s=1&aflam_k=3443234455",
+      "url": "https://direct.aflam4you.net/playeraf.php?vid=2&aflam_s=1&aflam_k=3456665543234455",
       "logo": "https://iili.io/Kjx5KZP.png",
       "category": "sports",
       "country": "السعودية",
@@ -1321,7 +1321,7 @@
     {
       "id": 154,
       "name": "Bein 3",
-      "url": "https://direct.aflam4you.net/playeraf.php?vid=1&aflam_s=1&aflam_k=3443234455",
+      "url": "https://direct.aflam4you.net/playeraf.php?vid=1&aflam_s=1&aflam_k=3456665543234455",
       "logo": "https://iili.io/Kjx5FwB.png",
       "category": "sports",
       "country": "السعودية",
@@ -1333,7 +1333,7 @@
     {
       "id": 155,
       "name": "Bein 4",
-      "url": "https://direct.aflam4you.net/playeraf.php?vid=3&aflam_s=1&aflam_k=3443234455",
+      "url": "https://direct.aflam4you.net/playeraf.php?vid=3&aflam_s=1&aflam_k=3456665543234455",
       "logo": "https://iili.io/Kjx53uV.png",
       "category": "sports",
       "country": "السعودية",
@@ -1962,6 +1962,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-23T15:08:43.062Z",
+  "lastModified": "2025-10-27T21:43:47.671Z",
   "version": "1.0"
 }
