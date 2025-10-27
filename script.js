@@ -3476,8 +3476,8 @@ class ArabicTVApp {
                 iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
                 iframe.setAttribute('loading', 'lazy');
                 
-                // حماية إضافية من النوافذ المنبقة مع السماح بالتشغيل التلقائي
-                iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation allow-forms allow-popups-to-escape-sandbox allow-autoplay');
+                // إزالة sandbox للسماح بالتشغيل الكامل بدون قيود
+                // iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation allow-forms allow-popups-to-escape-sandbox allow-autoplay');
             
                 // منع النوافذ المنبقة من iframe - فقط للإطارات الجديدة
                 if (isNewIframe) {
@@ -3600,7 +3600,8 @@ class ArabicTVApp {
                 iframe.allow = 'autoplay; fullscreen; picture-in-picture; xr-spatial-tracking; encrypted-media';
                 iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
                 iframe.setAttribute('loading', 'lazy');
-                iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation allow-forms allow-popups-to-escape-sandbox allow-autoplay');
+                // إزالة sandbox للسماح بالتشغيل الكامل بدون قيود
+                // iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation allow-forms allow-popups-to-escape-sandbox allow-autoplay');
                 
                 // إضافة مستمع حدث التحميل الجديد
                 iframe.addEventListener('load', () => {
