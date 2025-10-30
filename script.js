@@ -113,6 +113,7 @@ class ArabicTVApp {
         this.isDesktopSidebarOpen = false; // Track desktop sidebar state
         this.currentCountryFilter = 'all'; // Track country filter
         this.categories = this.getDefaultCategories(); // Track categories
+        this.favorites = []; // Track favorite channels
         
         // Remote Storage Configuration
         this.remoteStorage = {
@@ -139,6 +140,7 @@ class ArabicTVApp {
         this.loadSettings();
         this.loadAdminPassword(); // تحميل كلمة المرور المحفوظة
         this.loadLastUpdateTime(); // تحميل آخر تحديث محفوظ
+        this.loadFavorites(); // تحميل القنوات المفضلة
         this.loadLoginState(); // تحميل حالة تسجيل الدخول بعد تحميل البيانات
         this.renderChannels(); // عرض القنوات بعد تحميل حالة تسجيل الدخول
         // إعادة عرض القنوات مرة أخرى لضمان ظهور الأيقونات بشكل صحيح
@@ -1114,6 +1116,31 @@ class ArabicTVApp {
     filterChannels(category) {
         console.log('تصفية القنوات حسب الفئة:', category);
         this.currentCategory = category;
+        
+        // Handle favorites category
+        if (category === 'favorites') {
+            this.filteredChannels = this.channels.filter(ch => this.isFavorite(ch.id));
+            this.renderChannels();
+            this.updateChannelStats();
+            this.updateBreadcrumbs();
+            
+            // Update active tab
+            const allTabs = document.querySelectorAll('.sidebar-nav-tab, .mobile-sidebar-nav-tab');
+            allTabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            const activeTabs = document.querySelectorAll(`[data-category="${category}"]`);
+            activeTabs.forEach(tab => {
+                tab.classList.add('active');
+            });
+            
+            // Scroll to top
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            return;
+        }
         
         // عند تغيير الفئة، أزل قائمة البحث المخصصة من شريط القنوات
         if (window.channelBarCustomList) {
@@ -6063,6 +6090,77 @@ class ArabicTVApp {
         return this.settings.autoUpdateEnabled !== false; // Default to true
     }
 
+    // Favorites Management
+    loadFavorites() {
+        try {
+            const savedFavorites = localStorage.getItem('arabicTVFavorites');
+            if (savedFavorites) {
+                this.favorites = JSON.parse(savedFavorites);
+                console.log('تم تحميل المفضلة:', this.favorites.length, 'قناة');
+            } else {
+                this.favorites = [];
+                console.log('لا توجد قنوات مفضلة محفوظة');
+            }
+        } catch (error) {
+            console.error('خطأ في تحميل المفضلة:', error);
+            this.favorites = [];
+        }
+    }
+
+    saveFavorites() {
+        try {
+            localStorage.setItem('arabicTVFavorites', JSON.stringify(this.favorites));
+            console.log('تم حفظ المفضلة:', this.favorites.length, 'قناة');
+        } catch (error) {
+            console.error('خطأ في حفظ المفضلة:', error);
+            this.notifyError('خطأ في حفظ المفضلة');
+        }
+    }
+
+    toggleFavorite(channelId, event) {
+        if (event) {
+            event.stopPropagation();
+        }
+
+        const channel = this.channels.find(c => c.id === channelId);
+        if (!channel) return;
+
+        const index = this.favorites.indexOf(channelId);
+        if (index > -1) {
+            // Remove from favorites
+            this.favorites.splice(index, 1);
+            this.notifyInfo(`تم إزالة "${channel.name}" من المفضلة`);
+        } else {
+            // Add to favorites
+            this.favorites.push(channelId);
+            this.notifySuccess(`تم إضافة "${channel.name}" إلى المفضلة`);
+        }
+
+        this.saveFavorites();
+        
+        // Update the heart icon
+        const heartIcon = event ? event.target.closest('.favorite-btn') : null;
+        if (heartIcon) {
+            heartIcon.classList.toggle('active');
+        }
+        
+        // If we're viewing favorites, re-render
+        if (this.currentCategory === 'favorites') {
+            this.filterChannels('favorites');
+        }
+        
+        // Update sidebar count
+        this.updateSidebarCounts();
+    }
+
+    isFavorite(channelId) {
+        return this.favorites.includes(channelId);
+    }
+
+    getFavoritesCount() {
+        return this.favorites.length;
+    }
+
     // Update auto update button appearance
     updateAutoUpdateButton() {
         const toggleBtn = document.getElementById('toggleAutoUpdateBtn');
@@ -7864,6 +7962,16 @@ class ArabicTVApp {
     updateSidebarCounts() {
         console.log('بدء تحديث عداد القنوات - عدد القنوات الإجمالي:', this.channels.length);
         
+        // Update favorites count
+        const favoritesCountElements = document.querySelectorAll('#favoritesCount, #headerFavoritesCount');
+        const favoritesCount = this.getFavoritesCount();
+        favoritesCountElements.forEach(element => {
+            element.textContent = favoritesCount;
+        });
+        if (favoritesCountElements.length > 0) {
+            console.log(`تحديث عداد المفضلة:`, favoritesCount);
+        }
+        
         // Use dynamic categories instead of hardcoded list
         const categories = this.categories.map(cat => cat.key);
         
@@ -8700,8 +8808,14 @@ class ArabicTVApp {
         const channelIndex = this.channels.findIndex(ch => ch.id === channel.id);
         const channelNumber = channelIndex + 1;
         
+        // Check if channel is favorite
+        const isFavorite = this.isFavorite(channel.id);
+        
         card.innerHTML = `
             <div class="channel-number">${channelNumber}</div>
+            <button class="favorite-btn ${isFavorite ? 'active' : ''}" onclick="app.toggleFavorite(${channel.id}, event)" title="${isFavorite ? 'إزالة من المفضلة' : 'إضافة للمفضلة'}">
+                <i class="${isFavorite ? 'fas' : 'far'} fa-heart"></i>
+            </button>
             <img src="${channel.logo}" alt="${channel.name}" class="channel-logo" 
                  onerror="this.src='${logoPlaceholder}'; this.classList.add('placeholder-logo');">
             <div class="channel-info">
@@ -9491,13 +9605,16 @@ function loadChannelBarContent() {
 
 function getCategoryName(category) {
     const categoryNames = {
+        'all': 'جميع القنوات',
+        'favorites': 'المفضلة',
         'news': 'أخبار',
         'entertainment': 'منوعة',
         'sports': 'رياضة',
         'religious': 'دينية',
         'music': 'موسيقى',
         'movies': 'أفلام',
-        'documentary': 'وثائقية'
+        'documentary': 'وثائقية',
+        'kids': 'الأطفال'
     };
     return categoryNames[category] || category;
 }
