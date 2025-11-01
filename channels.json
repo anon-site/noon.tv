@@ -1691,30 +1691,6 @@
       "lastModified": "2025-10-06T11:57:36.918Z"
     },
     {
-      "id": 197,
-      "name": "Fox Movies Action",
-      "url": "https://shls-live-enc.edgenextcdn.net/out/v1/46079e838e65490c8299f902a7731168/index_1.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Fox_Action_Movies_2022.svg/2560px-Fox_Action_Movies_2022.svg.png",
-      "category": "movies",
-      "country": "عالمية",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-10-06T17:44:40.407Z"
-    },
-    {
-      "id": 198,
-      "name": "Movies Thrille",
-      "url": "https://shls-live-enc.edgenextcdn.net/out/v1/f6d718e841f8442f8374de47f18c93a7/index_1.m3u8",
-      "logo": "https://images.squarespace-cdn.com/content/v1/63dda050707d230d4aa878ee/55328e00-b65a-43ab-b4c2-5eee65ac0221/ThrillerTV-logo-red-1920x640.png",
-      "category": "movies",
-      "country": "عالمية",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-10-07T00:14:48.108Z"
-    },
-    {
       "id": 199,
       "name": "Z الوان",
       "url": "https://direct.aflam4you.net/zremb472.php?vid=79&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
@@ -1795,7 +1771,8 @@
       "country": "السعودية",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-11-01T01:48:48.382Z"
     }
   ],
   "settings": {
@@ -1867,6 +1844,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-11-01T01:48:48.515Z",
+  "lastModified": "2025-11-01T02:19:14.576Z",
   "version": "1.0"
 }
