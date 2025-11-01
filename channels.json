@@ -1771,8 +1771,7 @@
       "country": "السعودية",
       "type": "hls",
       "status": "active",
-      "vpn": false,
-      "lastModified": "2025-11-01T01:48:48.382Z"
+      "vpn": false
     }
   ],
   "settings": {
@@ -1844,6 +1843,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-11-01T02:19:14.576Z",
+  "lastModified": "2025-11-01T02:21:42.782Z",
   "version": "1.0"
 }
