@@ -1785,6 +1785,17 @@
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-10T19:32:08.992Z"
+    },
+    {
+      "id": 212,
+      "name": "ذدكريات",
+      "url": "https://www.elahmad.com/tv/watchtv.php?id=thikrayat_tv",
+      "logo": "https://media0087.elcinema.com/tvguide/1366_1.png",
+      "category": "entertainment",
+      "country": "السعودية",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
     }
   ],
   "settings": {
@@ -1856,6 +1867,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-10-27T22:30:38.691Z",
+  "lastModified": "2025-11-01T01:48:48.515Z",
   "version": "1.0"
 }
