@@ -1845,6 +1845,18 @@
       "status": "active",
       "vpn": false,
       "lastModified": "2025-11-06T07:20:56.917Z"
+    },
+    {
+      "id": 220,
+      "name": "Fairuz",
+      "url": "https://shls-live-enc.edgenextcdn.net/out/v1/bba3ef00b71b470fa955d93a9ca8c277/index.m3u8",
+      "logo": "https://i.pinimg.com/736x/d7/74/91/d774911352f7a7bb32ee95ffc36a0af5.jpg",
+      "category": "music",
+      "country": "لبنان",
+      "type": "shls",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-11-06T19:09:33.497Z"
     }
   ],
   "settings": {
@@ -1916,6 +1928,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-11-06T07:28:59.351Z",
+  "lastModified": "2025-11-06T19:11:18.313Z",
   "version": "1.0"
 }
