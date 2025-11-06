@@ -1850,10 +1850,10 @@
       "id": 220,
       "name": "Fairuz",
       "url": "https://shls-live-enc.edgenextcdn.net/out/v1/bba3ef00b71b470fa955d93a9ca8c277/index.m3u8",
-      "logo": "https://i.pinimg.com/736x/d7/74/91/d774911352f7a7bb32ee95ffc36a0af5.jpg",
+      "logo": "https://logos.textgiraffe.com/logos/logo-name/Fairouz-designstyle-friday-m.png",
       "category": "music",
       "country": "لبنان",
-      "type": "shls",
+      "type": "hls",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-11-06T19:09:33.497Z"
@@ -1928,6 +1928,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-11-06T19:15:18.146Z",
+  "lastModified": "2025-11-06T19:17:23.636Z",
   "version": "1.0"
 }
