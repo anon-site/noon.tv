@@ -52,6 +52,94 @@
       "vpn": false
     },
     {
+      "id": 151,
+      "name": "الجزيرة الوثائقية",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=aljazeeradoc2",
+      "logo": "https://upload.wikimedia.org/wikipedia/ar/e/e6/Al_Jazeera_Doc.png",
+      "category": "documentary",
+      "country": "قطر",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-04T05:53:52.119Z"
+    },
+    {
+      "id": 117,
+      "name": "الخليج",
+      "url": "https://mn-nl.mncdn.com/khalij/khalij/playlist.m3u8",
+      "logo": "https://iili.io/KAv9q7V.png",
+      "category": "entertainment",
+      "country": "السعودية",
+      "type": "hls",
+      "status": "active",
+      "lastModified": "2025-09-25T04:37:10.393Z",
+      "vpn": false
+    },
+    {
+      "id": 99,
+      "name": "National G A",
+      "url": "https://streamer1.qna.org.qa/148133202_live/148133202_63.sdp/playlist.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/National_Geographic_Abu_Dhabi.svg/2560px-National_Geographic_Abu_Dhabi.svg.png",
+      "category": "documentary",
+      "country": "الإمارات",
+      "type": "hls",
+      "status": "active",
+      "isLocal": false,
+      "lastModified": "2025-09-24T23:40:56.300Z",
+      "vpn": false
+    },
+    {
+      "id": 50,
+      "name": "Asharq Discovery",
+      "url": "https://svs.itworkscdn.net/asharqdiscoverylive/asharqd.smil/playlist_dvr.m3u8",
+      "logo": "https://iili.io/KAkXaGp.png",
+      "category": "documentary",
+      "country": "السعودية",
+      "type": "hls",
+      "status": "active",
+      "isLocal": false,
+      "lastModified": "2025-09-24T23:40:56.300Z",
+      "vpn": false
+    },
+    {
+      "id": 51,
+      "name": "Asharq Documentary",
+      "url": "https://svs.itworkscdn.net/asharqdocumentarylive/asharqdocumentary.smil/playlist_dvr.m3u8",
+      "logo": "https://iili.io/KAkX0FI.png",
+      "category": "documentary",
+      "country": "السعودية",
+      "type": "hls",
+      "status": "active",
+      "isLocal": false,
+      "lastModified": "2025-09-24T23:40:56.300Z",
+      "vpn": false
+    },
+    {
+      "id": 192,
+      "name": "الثقافية",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=saudi_thaqafiya",
+      "logo": "https://iili.io/KjxlNvs.png",
+      "category": "entertainment",
+      "country": "السعودية",
+      "type": "hls",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-06T11:57:36.918Z"
+    },
+    {
+      "id": 48,
+      "name": "عُمان",
+      "url": "https://partneta.cdn.mgmlcdn.com/omantv/smil:omantv.stream.smil/chunklist.m3u8",
+      "logo": "https://iili.io/KAkgPVt.png",
+      "category": "entertainment",
+      "country": "عُمان",
+      "type": "hls",
+      "status": "active",
+      "isLocal": false,
+      "lastModified": "2025-09-24T23:40:56.300Z",
+      "vpn": false
+    },
+    {
       "id": 116,
       "name": "روتانا كلاسيك",
       "url": "https://uvotv-aniview.global.ssl.fastly.net/10010/dvr/hls/rotanazaman/playlist.m3u8",
@@ -134,18 +222,6 @@
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-10T19:32:08.992Z"
-    },
-    {
-      "id": 117,
-      "name": "الخليج",
-      "url": "https://mn-nl.mncdn.com/khalij/khalij/playlist.m3u8",
-      "logo": "https://iili.io/KAv9q7V.png",
-      "category": "entertainment",
-      "country": "السعودية",
-      "type": "hls",
-      "status": "active",
-      "lastModified": "2025-09-25T04:37:10.393Z",
-      "vpn": false
     },
     {
       "id": 111,
@@ -565,51 +641,12 @@
       "vpn": false
     },
     {
-      "id": 48,
-      "name": "عُمان",
-      "url": "https://partneta.cdn.mgmlcdn.com/omantv/smil:omantv.stream.smil/chunklist.m3u8",
-      "logo": "https://iili.io/KAkgPVt.png",
-      "category": "entertainment",
-      "country": "عُمان",
-      "type": "hls",
-      "status": "active",
-      "isLocal": false,
-      "lastModified": "2025-09-24T23:40:56.300Z",
-      "vpn": false
-    },
-    {
       "id": 49,
       "name": "عُمان الثقافية",
       "url": "https://partwota.cdn.mgmlcdn.com/omcultural/smil:omcultural.stream.smil/chunklist.m3u8",
       "logo": "https://iili.io/KAkrabp.png",
       "category": "documentary",
       "country": "عُمان",
-      "type": "hls",
-      "status": "active",
-      "isLocal": false,
-      "lastModified": "2025-09-24T23:40:56.300Z",
-      "vpn": false
-    },
-    {
-      "id": 50,
-      "name": "Asharq Discovery",
-      "url": "https://svs.itworkscdn.net/asharqdiscoverylive/asharqd.smil/playlist_dvr.m3u8",
-      "logo": "https://iili.io/KAkXaGp.png",
-      "category": "documentary",
-      "country": "السعودية",
-      "type": "hls",
-      "status": "active",
-      "isLocal": false,
-      "lastModified": "2025-09-24T23:40:56.300Z",
-      "vpn": false
-    },
-    {
-      "id": 51,
-      "name": "Asharq Documentary",
-      "url": "https://svs.itworkscdn.net/asharqdocumentarylive/asharqdocumentary.smil/playlist_dvr.m3u8",
-      "logo": "https://iili.io/KAkX0FI.png",
-      "category": "documentary",
-      "country": "السعودية",
       "type": "hls",
       "status": "active",
       "isLocal": false,
@@ -871,19 +908,6 @@
       "category": "entertainment",
       "country": "عالمية",
       "type": "youtube",
-      "status": "active",
-      "isLocal": false,
-      "lastModified": "2025-09-24T23:40:56.300Z",
-      "vpn": false
-    },
-    {
-      "id": 99,
-      "name": "National G A",
-      "url": "https://streamer1.qna.org.qa/148133202_live/148133202_63.sdp/playlist.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/National_Geographic_Abu_Dhabi.svg/2560px-National_Geographic_Abu_Dhabi.svg.png",
-      "category": "documentary",
-      "country": "الإمارات",
-      "type": "hls",
       "status": "active",
       "isLocal": false,
       "lastModified": "2025-09-24T23:40:56.300Z",
@@ -1283,18 +1307,6 @@
       "lastModified": "2025-10-04T05:21:29.734Z"
     },
     {
-      "id": 151,
-      "name": "الجزيرة الوثائقية",
-      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=aljazeeradoc2",
-      "logo": "https://upload.wikimedia.org/wikipedia/ar/e/e6/Al_Jazeera_Doc.png",
-      "category": "documentary",
-      "country": "قطر",
-      "type": "elahmad",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-10-04T05:53:52.119Z"
-    },
-    {
       "id": 152,
       "name": "Bein 1",
       "url": "https://direct.aflam4you.net/zremb472.php?vid=68&aflam_s=1&aflam_w=360&aflam_h=250&aflam_k=1831551111111",
@@ -1643,18 +1655,6 @@
       "lastModified": "2025-10-06T09:40:26.829Z"
     },
     {
-      "id": 192,
-      "name": "الثقافية",
-      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=saudi_thaqafiya",
-      "logo": "https://iili.io/KjxlNvs.png",
-      "category": "entertainment",
-      "country": "السعودية",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-10-06T11:57:36.918Z"
-    },
-    {
       "id": 193,
       "name": "فلسطين التعليمية",
       "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=qouchannel",
@@ -1771,7 +1771,8 @@
       "country": "السعودية",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-11-06T05:49:21.943Z"
     }
   ],
   "settings": {
@@ -1843,6 +1844,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-11-01T02:21:42.782Z",
+  "lastModified": "2025-11-06T05:55:38.958Z",
   "version": "1.0"
 }
