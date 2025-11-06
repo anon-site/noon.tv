@@ -968,7 +968,7 @@
     {
       "id": 105,
       "name": "TeenNick",
-      "url": "https://nonprod-sports-cohort.jiocinema.com/bpk-tv/JC_NickHD/JCHLS/index.m3u8",
+      "url": "http://195.64.140.147:10121/121",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/f/f7/TeenNick_2023_Alternative_Logo.png",
       "category": "kids",
       "country": "USA",
@@ -1928,6 +1928,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-11-06T19:11:18.313Z",
+  "lastModified": "2025-11-06T19:15:18.146Z",
   "version": "1.0"
 }
