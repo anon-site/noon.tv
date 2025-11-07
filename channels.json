@@ -142,7 +142,7 @@
     {
       "id": 116,
       "name": "روتانا كلاسيك",
-      "url": "https://www.web24iptv.online/rotana/rotanaklasik",
+      "url": "https://uvotv-aniview.global.ssl.fastly.net/10010/dvr/hls/rotanazaman/playlist.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Rotana_Classic.png",
       "category": "movies",
       "country": "السعودية",
@@ -190,7 +190,7 @@
     {
       "id": 180,
       "name": "روتانا دراما",
-      "url": "https://www.elahmad.com/tv/watchtv.php?id=rotana_drama",
+      "url": "https://www.elahmad.com/tv/live/channels.php?id=1051",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/4/4f/Rotana_Drama.png",
       "category": "entertainment",
       "country": "السعودية",
@@ -198,6 +198,18 @@
       "status": "active",
       "vpn": false,
       "lastModified": "2025-10-06T08:35:42.747Z"
+    },
+    {
+      "id": 211,
+      "name": "روتانا مصر",
+      "url": "https://www.elahmad.com/tv/live/channels.php?id=1108",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Rotana_Cinema_Egy.png/250px-Rotana_Cinema_Egy.png",
+      "category": "movies",
+      "country": "مصر",
+      "type": "hls",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-10-23T14:36:24.077Z"
     },
     {
       "id": 208,
@@ -968,7 +980,7 @@
     {
       "id": 105,
       "name": "TeenNick",
-      "url": "http://195.64.140.147:10121/121",
+      "url": "https://nonprod-sports-cohort.jiocinema.com/bpk-tv/JC_NickHD/JCHLS/index.m3u8",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/f/f7/TeenNick_2023_Alternative_Logo.png",
       "category": "kids",
       "country": "USA",
@@ -1761,102 +1773,6 @@
       "status": "active",
       "vpn": false,
       "lastModified": "2025-11-06T05:49:21.943Z"
-    },
-    {
-      "id": 213,
-      "name": "Bollywood",
-      "url": "https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/bollywood-hd/manifest.m3u8",
-      "logo": "https://img.freepik.com/free-vector/bollywood-cinema-sign-realistic-design_23-2148462827.jpg",
-      "category": "movies",
-      "country": "India",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-11-06T07:15:38.048Z"
-    },
-    {
-      "id": 214,
-      "name": "Bollywood Classic",
-      "url": "https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/bollywood-classic/manifest.m3u8",
-      "logo": "https://media.istockphoto.com/id/2037069409/vector/bollywood-indian-cinema-film-banner-indian-cinema-bollywood-logo-sign-design-glowing-element.jpg?s=612x612&w=0&k=20&c=UZImS3QUdGGs8tb9ygJodHEGbCwPVEhzEGuWVKxw46o=",
-      "category": "movies",
-      "country": "India",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-11-06T07:15:38.048Z"
-    },
-    {
-      "id": 215,
-      "name": "FXM East",
-      "url": "https://fl1.moveonjoy.com/FX_MOVIE/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e7/FXM_Logo.svg",
-      "category": "movies",
-      "country": "USA",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-11-06T07:15:38.048Z"
-    },
-    {
-      "id": 216,
-      "name": "Movies Action",
-      "url": "https://shls-live-enc.edgenextcdn.net/out/v1/46079e838e65490c8299f902a7731168/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Fox_Action_Movies_logo.svg/2560px-Fox_Action_Movies_logo.svg.png",
-      "category": "movies",
-      "country": "USA",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-11-06T07:20:56.917Z"
-    },
-    {
-      "id": 217,
-      "name": "Movies Now",
-      "url": "http://87.255.35.150:18935",
-      "logo": "https://upload.wikimedia.org/wikipedia/bn/1/11/%E0%A6%AE%E0%A7%81%E0%A6%AD%E0%A6%BF%E0%A6%9C_%E0%A6%A8%E0%A6%BE%E0%A6%89_%E0%A6%B2%E0%A7%8B%E0%A6%97%E0%A7%8B.png",
-      "category": "movies",
-      "country": "USA",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-11-06T07:20:56.917Z"
-    },
-    {
-      "id": 218,
-      "name": "Movies Thriller",
-      "url": "https://shls-live-enc.edgenextcdn.net/out/v1/f6d718e841f8442f8374de47f18c93a7/index.m3u8",
-      "logo": "https://vectorseek.com/wp-content/uploads/2023/12/Thriller-new-Logo-Vector.svg-.png",
-      "category": "movies",
-      "country": "USA",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-11-06T07:20:56.917Z"
-    },
-    {
-      "id": 219,
-      "name": "MNX",
-      "url": "http://87.255.35.150:18936",
-      "logo": "https://t3.ftcdn.net/jpg/05/29/34/76/360_F_529347629_5wnLamYEfdJYWNEk4C8CRbhuxwz036DG.jpg",
-      "category": "movies",
-      "country": "USA",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-11-06T07:20:56.917Z"
-    },
-    {
-      "id": 220,
-      "name": "Fairuz",
-      "url": "https://shls-live-enc.edgenextcdn.net/out/v1/bba3ef00b71b470fa955d93a9ca8c277/index.m3u8",
-      "logo": "https://logos.textgiraffe.com/logos/logo-name/Fairouz-designstyle-friday-m.png",
-      "category": "music",
-      "country": "لبنان",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-11-06T19:09:33.497Z"
     }
   ],
   "settings": {
@@ -1928,6 +1844,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-11-06T19:17:23.636Z",
+  "lastModified": "2025-11-06T05:55:38.958Z",
   "version": "1.0"
 }

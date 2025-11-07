@@ -1648,11 +1648,6 @@ class ArabicTVApp {
                     await this.loadDirectVideo(url);
                     return;
 
-                case 'iptv-direct':
-                    // Try to load IPTV direct link (could be HLS without .m3u8 extension)
-                    await this.loadIptvDirectVideo(url);
-                    return;
-
                 case 'hls':
                 default:
                     // Continue with HLS processing below
@@ -2132,7 +2127,6 @@ class ArabicTVApp {
             'elahmad': { icon: 'fas fa-tv', color: '#8e44ad' },
             'aflam': { icon: 'fas fa-film', color: '#e74c3c' },
             'shls': { icon: 'fas fa-server', color: '#3498db' },
-            'iptv-direct': { icon: 'fas fa-signal', color: '#16a085' },
             'unknown': { icon: 'fas fa-question-circle', color: '#666' }
         };
         
@@ -2283,14 +2277,6 @@ class ArabicTVApp {
         // Generic direct video
         if (this.isDirectVideoUrl(url)) return 'direct';
         
-        // Check if URL is an IP address with port (IPTV direct link)
-        // Example: http://87.255.35.150:18936
-        const iptvRegex = /^https?:\/\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(:\d+)?(\/|$)/;
-        if (iptvRegex.test(url)) {
-            console.log('🔍 تم اكتشاف رابط IPTV مباشر:', url);
-            return 'iptv-direct';
-        }
-        
         // Default to HLS for unknown streaming URLs
         return 'hls';
     }
@@ -2311,7 +2297,6 @@ class ArabicTVApp {
             'dash': 'DASH بث',
             'webrtc': 'WebRTC بث',
             'direct': 'فيديو مباشر',
-            'iptv-direct': 'IPTV مباشر',
             'unknown': 'غير معروف'
         };
         return typeNames[type] || 'غير معروف';
@@ -2768,145 +2753,6 @@ class ArabicTVApp {
             
             // Show specific error message for GitHub Pages
             this.showVideoError('مشكلة في الوصول للبث على GitHub Pages - جرب استخدام VPN أو تحديث الصفحة');
-        }
-    }
-
-    // Load IPTV direct link (IP:PORT format - usually HLS without extension)
-    async loadIptvDirectVideo(url) {
-        const video = document.getElementById('videoPlayer');
-        const loading = document.getElementById('videoLoading');
-        
-        try {
-            console.log('📡 تحميل رابط IPTV مباشر:', url);
-            
-            // Show loading
-            loading.style.display = 'flex';
-            loading.innerHTML = `
-                <div class="spinner"></div>
-                <p>جارٍ تحميل البث المباشر...</p>
-            `;
-            
-            // Hide loading and show video
-            loading.style.display = 'none';
-            video.style.display = 'block';
-            
-            // IPTV direct links are usually HLS streams without .m3u8 extension
-            // Try HLS.js first
-            if (typeof Hls !== 'undefined' && Hls.isSupported()) {
-                console.log('🔄 استخدام HLS.js لتحميل رابط IPTV المباشر...');
-                
-                // Destroy previous HLS instance if exists
-                if (this.hls) {
-                    this.hls.destroy();
-                    this.hls = null;
-                }
-                
-                // Create new HLS instance with IPTV-specific config
-                this.hls = new Hls({
-                    enableWorker: true,
-                    lowLatencyMode: true,
-                    backBufferLength: 90,
-                    maxBufferLength: 30,
-                    maxMaxBufferLength: 600,
-                    maxBufferSize: 60 * 1000 * 1000,
-                    maxBufferHole: 0.5,
-                    highBufferWatchdogPeriod: 2,
-                    nudgeOffset: 0.1,
-                    nudgeMaxRetry: 5,
-                    maxFragLookUpTolerance: 0.25,
-                    liveSyncDurationCount: 3,
-                    liveMaxLatencyDurationCount: Infinity,
-                    liveDurationInfinity: true,
-                    enableSoftwareAES: true,
-                    manifestLoadingTimeOut: 20000,
-                    manifestLoadingMaxRetry: 3,
-                    manifestLoadingRetryDelay: 2000,
-                    fragLoadingTimeOut: 30000,
-                    fragLoadingMaxRetry: 10,
-                    fragLoadingRetryDelay: 2000,
-                    startFragPrefetch: true,
-                    // Add CORS config for IPTV servers
-                    xhrSetup: function(xhr, url) {
-                        xhr.withCredentials = false;
-                        xhr.setRequestHeader('Accept', 'application/vnd.apple.mpegurl, application/x-mpegurl, */*');
-                    }
-                });
-                
-                // Load the source
-                this.hls.loadSource(url);
-                this.hls.attachMedia(video);
-                
-                // Add HLS event listeners
-                this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    console.log('✅ تم تحليل IPTV stream بنجاح');
-                    loading.style.display = 'none';
-                    
-                    if (this.settings.autoplay) {
-                        this.enhancedAutoplay(video);
-                    }
-                    
-                    this.updateQualityDisplayFromHLS();
-                    setupMediaSession();
-                });
-                
-                this.hls.on(Hls.Events.ERROR, (event, data) => {
-                    console.error('❌ خطأ في IPTV HLS:', data);
-                    
-                    if (data.fatal) {
-                        loading.style.display = 'flex';
-                        loading.innerHTML = `
-                            <div class="loading-spinner">
-                                <div class="spinner"></div>
-                                <p>جارٍ تحميل البث...</p>
-                            </div>
-                        `;
-                    }
-                });
-                
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                console.log('🔄 استخدام دعم المتصفح الأصلي لـ IPTV...');
-                // Set video source directly for Safari/native HLS support
-                video.src = url;
-                video.load();
-                
-                video.addEventListener('loadedmetadata', () => {
-                    loading.style.display = 'none';
-                    
-                    if (this.settings.autoplay) {
-                        this.enhancedAutoplay(video);
-                    }
-                    
-                    this.updateQualityDisplayFromNativeHLS();
-                    setupMediaSession();
-                }, { once: true });
-                
-            } else {
-                throw new Error('المتصفح لا يدعم تشغيل روابط IPTV المباشرة');
-            }
-            
-            // Enhanced error handling for IPTV streams
-            video.addEventListener('error', (e) => {
-                console.error('❌ خطأ في تشغيل IPTV:', e);
-                loading.style.display = 'flex';
-                loading.innerHTML = `
-                    <div class="loading-spinner">
-                        <div class="spinner"></div>
-                        <p>جارٍ إعادة الاتصال بالخادم...</p>
-                    </div>
-                `;
-            });
-            
-            console.log('✅ تم تحميل رابط IPTV المباشر بنجاح');
-            
-        } catch (error) {
-            console.error('❌ خطأ في تحميل رابط IPTV المباشر:', error);
-            loading.innerHTML = `
-                <div class="loading-spinner">
-                    <div class="spinner"></div>
-                    <p>تعذر الاتصال بخادم IPTV</p>
-                </div>
-            `;
-            this.showVideoError('تعذر الاتصال بخادم IPTV - تحقق من الرابط أو جرب استخدام VPN');
         }
     }
 
