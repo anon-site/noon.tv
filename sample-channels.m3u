@@ -1,0 +1,46 @@
+#EXTM3U
+#EXTINF:-1 tvg-id="" tvg-name="قناة تجريبية HLS 1" tvg-logo="https://via.placeholder.com/150" group-title="تجريبي",قناة تجريبية HLS 1
+https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="قناة تجريبية HLS 2" tvg-logo="https://via.placeholder.com/150" group-title="تجريبي",قناة تجريبية HLS 2
+https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-name="فيديو تجريبي MP4" tvg-logo="https://via.placeholder.com/150" group-title="فيديو",فيديو تجريبي MP4
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+
+#EXTINF:-1 tvg-id="" tvg-name="Sintel - فيلم قصير" tvg-logo="https://via.placeholder.com/150" group-title="أفلام",Sintel - فيلم قصير
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4
+
+#EXTINF:-1 tvg-id="" tvg-name="Elephants Dream" tvg-logo="https://via.placeholder.com/150" group-title="أفلام",Elephants Dream
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4
+
+#EXTINF:-1 tvg-id="" tvg-name="For Bigger Blazes" tvg-logo="https://via.placeholder.com/150" group-title="فيديو",For Bigger Blazes
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4
+
+#EXTINF:-1 tvg-id="" tvg-name="For Bigger Escape" tvg-logo="https://via.placeholder.com/150" group-title="فيديو",For Bigger Escape
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4
+
+#EXTINF:-1 tvg-id="" tvg-name="For Bigger Fun" tvg-logo="https://via.placeholder.com/150" group-title="فيديو",For Bigger Fun
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4
+
+#EXTINF:-1 tvg-id="" tvg-name="For Bigger Joyrides" tvg-logo="https://via.placeholder.com/150" group-title="فيديو",For Bigger Joyrides
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4
+
+#EXTINF:-1 tvg-id="" tvg-name="For Bigger Meltdowns" tvg-logo="https://via.placeholder.com/150" group-title="فيديو",For Bigger Meltdowns
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4
+
+#EXTINF:-1 tvg-id="" tvg-name="Subaru Outback On Street" tvg-logo="https://via.placeholder.com/150" group-title="سيارات",Subaru Outback On Street
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4
+
+#EXTINF:-1 tvg-id="" tvg-name="Tears of Steel" tvg-logo="https://via.placeholder.com/150" group-title="أفلام",Tears of Steel
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4
+
+#EXTINF:-1 tvg-id="" tvg-name="Volkswagen GTI Review" tvg-logo="https://via.placeholder.com/150" group-title="سيارات",Volkswagen GTI Review
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4
+
+#EXTINF:-1 tvg-id="" tvg-name="We Are Going On Bullrun" tvg-logo="https://via.placeholder.com/150" group-title="سيارات",We Are Going On Bullrun
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4
+
+#EXTINF:-1 tvg-id="" tvg-name="What care can you get" tvg-logo="https://via.placeholder.com/150" group-title="سيارات",What care can you get
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4
+
