@@ -1006,6 +1006,7 @@ class ArabicTVApp {
         card.innerHTML = `
             <div class="channel-number">${channelNumber}</div>
             <img src="${channel.logo}" alt="${channel.name}" class="channel-logo" 
+                 loading="lazy" decoding="async"
                  onerror="this.src='${logoPlaceholder}'; this.classList.add('placeholder-logo');">
             <div class="channel-info">
                 <h3 class="channel-name">${channel.name}</h3>
@@ -1016,6 +1017,10 @@ class ArabicTVApp {
                 </div>
             </div>
         `;
+
+        // حاول استخدام WebP إن توفر
+        const imgEl = card.querySelector('.channel-logo');
+        this.applyWebpLogo(imgEl, channel.logo);
 
         card.addEventListener('click', () => this.playChannel(channel));
         return card;
@@ -1076,6 +1081,61 @@ class ArabicTVApp {
             return words[0].substring(0, 3) + ' ' + words[1].substring(0, 3);
         } else {
             return words[0].substring(0, 3) + ' ' + words[1].substring(0, 2);
+        }
+    }
+
+    // محاولة استخدام WebP للشعارات إن كان المتصفح يدعم والصورة متوفرة
+    applyWebpLogo(imgEl, originalUrl) {
+        try {
+            if (!imgEl || !originalUrl) return;
+            // إذا كان الرابط بالفعل WebP، لا حاجة للتبديل
+            if (/\.webp(\?|$|#)/i.test(originalUrl)) return;
+            
+            if (!this.browserSupportsWebp()) return;
+            
+            const candidate = this.toWebpUrl(originalUrl);
+            if (!candidate || candidate === originalUrl) return;
+            
+            const testImg = new Image();
+            testImg.onload = () => {
+                // الصورة WebP موجودة وتعمل
+                imgEl.src = candidate;
+                imgEl.dataset.fallback = originalUrl;
+            };
+            testImg.onerror = () => {
+                // تجاهل، سيبقى على النسخة الأصلية أو يتجه للـ placeholder عبر onerror
+            };
+            testImg.decoding = 'async';
+            testImg.loading = 'eager';
+            testImg.src = candidate;
+        } catch (e) {
+            console.log('WEBP apply error:', e);
+        }
+    }
+
+    browserSupportsWebp() {
+        try {
+            const elem = document.createElement('canvas');
+            if (!!(elem.getContext && elem.getContext('2d'))) {
+                // was able or not to get WebP representation
+                return elem.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+            }
+            return false;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    toWebpUrl(url) {
+        try {
+            // يحافظ على الاستعلام إن وجد
+            const match = url.match(/^(.*)\.(png|jpg|jpeg)(\?.*)?$/i);
+            if (!match) return url;
+            const base = match[1];
+            const query = match[3] || '';
+            return `${base}.webp${query}`;
+        } catch (e) {
+            return url;
         }
     }
 
