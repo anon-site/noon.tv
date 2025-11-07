@@ -1807,7 +1807,8 @@
       "country": "USA",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-11-07T14:30:33.407Z"
     },
     {
       "id": 222,
@@ -1818,7 +1819,8 @@
       "country": "India",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-11-07T14:30:33.407Z"
     },
     {
       "id": 223,
@@ -1829,7 +1831,20 @@
       "country": "India",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-11-07T14:30:33.407Z"
+    },
+    {
+      "id": 224,
+      "name": "Toon Googgles",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=toon_goggles",
+      "logo": "https://static.wikia.nocookie.net/logopedia/images/e/e1/Toon_Goggles_logo_2011.png/revision/latest?cb=20250528000708",
+      "category": "kids",
+      "country": "عالمية",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-11-07T14:31:30.587Z"
     }
   ],
   "settings": {
@@ -1901,6 +1916,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-11-07T14:18:18.086Z",
+  "lastModified": "2025-11-07T14:33:39.787Z",
   "version": "1.0"
 }
