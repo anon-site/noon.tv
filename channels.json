@@ -967,9 +967,9 @@
     },
     {
       "id": 105,
-      "name": "TeenNick",
-      "url": "http://195.64.140.147:10121/121",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/f/f7/TeenNick_2023_Alternative_Logo.png",
+      "name": "TeenToons",
+      "url": "https://fl1.moveonjoy.com/NICKTOONS/index.m3u8",
+      "logo": "https://iili.io/KDorYjp.png",
       "category": "kids",
       "country": "USA",
       "type": "hls",
@@ -979,51 +979,15 @@
       "vpn": false
     },
     {
-      "id": 109,
-      "name": "Disney International",
-      "url": "https://live.dinesh29.com.np/stream/jiotvplus/disneyinternationalhd/master.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c7/DIHDlogo.png",
-      "category": "kids",
-      "country": "USA",
-      "type": "hls",
-      "status": "active",
-      "lastModified": "2025-09-24T23:40:56.300Z",
-      "vpn": false
-    },
-    {
       "id": 110,
       "name": "Disney Channel",
-      "url": "https://e5.thetvapp.to/hls/DisneyChannelEast/tracks-v2a1/mono.m3u8?",
+      "url": "https://fl31.moveonjoy.com/DISNEY/index.m3u8",
       "logo": "https://iili.io/KcdkPON.png",
       "category": "kids",
       "country": "USA",
       "type": "hls",
       "status": "active",
       "lastModified": "2025-09-24T23:40:56.300Z",
-      "vpn": false
-    },
-    {
-      "id": 108,
-      "name": "Disney Junior East",
-      "url": "http://116.90.120.149:8000/play/a0b3/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/2024_Disney_Jr._Logo.svg/1280px-2024_Disney_Jr._Logo.svg.png",
-      "category": "kids",
-      "country": "USA",
-      "type": "hls",
-      "status": "active",
-      "lastModified": "2025-09-24T23:40:56.300Z",
-      "vpn": false
-    },
-    {
-      "id": 128,
-      "name": "Disney XD",
-      "url": "https://fl25.moveonjoy.com/DISNEY_XD/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c2/2009_Disney_XD_logo.png",
-      "category": "kids",
-      "country": "USA",
-      "type": "hls",
-      "status": "active",
-      "lastModified": "2025-10-01T20:08:15.639Z",
       "vpn": false
     },
     {
@@ -1799,36 +1763,12 @@
       "lastModified": "2025-11-06T07:15:38.048Z"
     },
     {
-      "id": 216,
-      "name": "Movies Action",
-      "url": "https://shls-live-enc.edgenextcdn.net/out/v1/46079e838e65490c8299f902a7731168/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Fox_Action_Movies_logo.svg/2560px-Fox_Action_Movies_logo.svg.png",
-      "category": "movies",
-      "country": "USA",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-11-06T07:20:56.917Z"
-    },
-    {
-      "id": 217,
-      "name": "Movies Now",
-      "url": "http://87.255.35.150:18935",
-      "logo": "https://upload.wikimedia.org/wikipedia/bn/1/11/%E0%A6%AE%E0%A7%81%E0%A6%AD%E0%A6%BF%E0%A6%9C_%E0%A6%A8%E0%A6%BE%E0%A6%89_%E0%A6%B2%E0%A7%8B%E0%A6%97%E0%A7%8B.png",
-      "category": "movies",
-      "country": "USA",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-11-06T07:20:56.917Z"
-    },
-    {
       "id": 218,
-      "name": "Movies Thriller",
-      "url": "https://shls-live-enc.edgenextcdn.net/out/v1/f6d718e841f8442f8374de47f18c93a7/index.m3u8",
-      "logo": "https://vectorseek.com/wp-content/uploads/2023/12/Thriller-new-Logo-Vector.svg-.png",
-      "category": "movies",
-      "country": "USA",
+      "name": "Avar",
+      "url": "https://avr.host247.net/live/AvarTv/playlist.m3u8",
+      "logo": "https://iili.io/KDoGq8u.png",
+      "category": "entertainment",
+      "country": "العراق",
       "type": "hls",
       "status": "active",
       "vpn": false,
@@ -1836,11 +1776,11 @@
     },
     {
       "id": 219,
-      "name": "Zee Alwan",
-      "url": "http://213.57.91.138:8000/play/a05u",
-      "logo": "https://t3.ftcdn.net/jpg/05/29/34/76/360_F_529347629_5wnLamYEfdJYWNEk4C8CRbhuxwz036DG.jpg",
-      "category": "entertainment",
-      "country": "مصر",
+      "name": "طرب",
+      "url": "https://shls-live-mood-ak.akamaized.net/out/v1/90143f040feb40589d18c57863d9e829/index.m3u8",
+      "logo": "https://tarab.vercel.app/logo-2.png",
+      "category": "music",
+      "country": "السعودية",
       "type": "hls",
       "status": "active",
       "vpn": false,
@@ -1850,13 +1790,46 @@
       "id": 220,
       "name": "Fairuz",
       "url": "https://shls-live-enc.edgenextcdn.net/out/v1/bba3ef00b71b470fa955d93a9ca8c277/index.m3u8",
-      "logo": "https://logos.textgiraffe.com/logos/logo-name/Fairouz-designstyle-friday-m.png",
+      "logo": "https://www.pngkey.com/png/full/36-368004_singer-name-in-calligraphy-fairouz-calligraphy.png",
       "category": "music",
       "country": "لبنان",
       "type": "hls",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-11-06T19:09:33.497Z"
+    },
+    {
+      "id": 221,
+      "name": "Tiny Pop",
+      "url": "https://amg01753-narrativeuk-amg01753c1-rakuten-uk-2339.playouts.now.amagi.tv/playlist.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Tiny_Pop-2004_logo.svg/2560px-Tiny_Pop-2004_logo.svg.png",
+      "category": "kids",
+      "country": "USA",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 222,
+      "name": "B4U Music",
+      "url": "https://cdnb4u.wiseplayout.com/B4U_Music/master.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/B4U_Logo.png/1200px-B4U_Logo.png",
+      "category": "music",
+      "country": "India",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 223,
+      "name": "9XM",
+      "url": "https://d35j504z0x2vu2.cloudfront.net/v1/manifest/0bc8e8376bd8417a1b6761138aa41c26c7309312/9xm/23886666-8fc5-470f-aab1-bd637ed607b1/3.m3u8",
+      "logo": "https://iili.io/KDxaHW7.png",
+      "category": "music",
+      "country": "India",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
     }
   ],
   "settings": {
@@ -1928,6 +1901,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-11-07T06:45:24.531Z",
+  "lastModified": "2025-11-07T14:18:18.086Z",
   "version": "1.0"
 }
