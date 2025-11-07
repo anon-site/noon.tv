@@ -1763,35 +1763,11 @@
       "lastModified": "2025-11-06T07:15:38.048Z"
     },
     {
-      "id": 216,
-      "name": "Movies Action",
-      "url": "https://shls-live-enc.edgenextcdn.net/out/v1/46079e838e65490c8299f902a7731168/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Fox_Action_Movies_logo.svg/2560px-Fox_Action_Movies_logo.svg.png",
-      "category": "movies",
-      "country": "USA",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-11-06T07:20:56.917Z"
-    },
-    {
-      "id": 217,
-      "name": "Movies Now",
-      "url": "http://87.255.35.150:18935",
-      "logo": "https://upload.wikimedia.org/wikipedia/bn/1/11/%E0%A6%AE%E0%A7%81%E0%A6%AD%E0%A6%BF%E0%A6%9C_%E0%A6%A8%E0%A6%BE%E0%A6%89_%E0%A6%B2%E0%A7%8B%E0%A6%97%E0%A7%8B.png",
-      "category": "movies",
-      "country": "USA",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-11-06T07:20:56.917Z"
-    },
-    {
       "id": 218,
       "name": "Avar",
       "url": "https://avr.host247.net/live/AvarTv/playlist.m3u8",
       "logo": "https://iili.io/KDoGq8u.png",
-      "category": "religious",
+      "category": "entertainment",
       "country": "العراق",
       "type": "hls",
       "status": "active",
@@ -1925,6 +1901,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-11-07T14:12:43.226Z",
+  "lastModified": "2025-11-07T14:16:40.959Z",
   "version": "1.0"
 }
