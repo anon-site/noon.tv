@@ -1,459 +1,0 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دليل الاستخدام - مشغل IPTV</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .guide-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        
-        .guide-section {
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 20px;
-            margin-bottom: 30px;
-            box-shadow: var(--shadow);
-        }
-        
-        .guide-section h2 {
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .guide-section h3 {
-            color: var(--text-primary);
-            margin: 20px 0 10px;
-        }
-        
-        .guide-section p {
-            line-height: 1.8;
-            color: var(--text-secondary);
-            margin-bottom: 15px;
-        }
-        
-        .guide-section ul, .guide-section ol {
-            margin: 15px 0;
-            padding-right: 25px;
-        }
-        
-        .guide-section li {
-            margin-bottom: 10px;
-            color: var(--text-secondary);
-            line-height: 1.8;
-        }
-        
-        .code-block {
-            background: var(--dark-bg);
-            padding: 15px;
-            border-radius: 10px;
-            border-right: 4px solid var(--primary-color);
-            margin: 15px 0;
-            font-family: 'Courier New', monospace;
-            color: var(--text-primary);
-            direction: ltr;
-            text-align: left;
-            overflow-x: auto;
-        }
-        
-        .tip-box {
-            background: rgba(99, 102, 241, 0.1);
-            border: 2px solid var(--primary-color);
-            padding: 20px;
-            border-radius: 12px;
-            margin: 20px 0;
-        }
-        
-        .tip-box h4 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .warning-box {
-            background: rgba(239, 68, 68, 0.1);
-            border: 2px solid var(--danger-color);
-            padding: 20px;
-            border-radius: 12px;
-            margin: 20px 0;
-        }
-        
-        .warning-box h4 {
-            color: var(--danger-color);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-        
-        .feature-card {
-            background: var(--dark-bg);
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-        }
-        
-        .feature-card i {
-            font-size: 3rem;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-        }
-        
-        .feature-card h4 {
-            margin-bottom: 10px;
-            color: var(--text-primary);
-        }
-        
-        .feature-card p {
-            font-size: 0.9rem;
-            margin: 0;
-        }
-        
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 25px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .back-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .keyboard-shortcuts {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-        
-        .shortcut-item {
-            background: var(--dark-bg);
-            padding: 15px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .key {
-            background: var(--primary-color);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            min-width: 40px;
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-    <div class="guide-container">
-        <div class="guide-section" style="text-align: center; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
-            <i class="fas fa-book" style="font-size: 4rem; margin-bottom: 20px;"></i>
-            <h1>دليل استخدام مشغل IPTV المتقدم</h1>
-            <p style="color: rgba(255,255,255,0.9); font-size: 1.1rem;">دليل شامل لاستخدام جميع ميزات المشغل</p>
-        </div>
-
-        <div class="guide-section">
-            <h2><i class="fas fa-rocket"></i> البدء السريع</h2>
-            <p>مشغل IPTV هو أداة قوية لتشغيل جميع أنواع روابط البث المباشر والفيديو. اتبع الخطوات التالية للبدء:</p>
-            
-            <h3>الطريقة الأولى: تشغيل مباشر</h3>
-            <ol>
-                <li>افتح الصفحة الرئيسية</li>
-                <li>الصق رابط القناة أو الفيديو في حقل الإدخال</li>
-                <li>اضغط على زر "تشغيل"</li>
-                <li>استمتع بالمشاهدة!</li>
-            </ol>
-
-            <h3>الطريقة الثانية: استيراد قائمة M3U</h3>
-            <ol>
-                <li>اضغط على زر "استيراد M3U"</li>
-                <li>اختر ملف M3U أو M3U8 من جهازك</li>
-                <li>سيتم إضافة جميع القنوات تلقائياً</li>
-                <li>اختر قناة من القائمة للتشغيل</li>
-            </ol>
-        </div>
-
-        <div class="guide-section">
-            <h2><i class="fas fa-star"></i> المميزات الرئيسية</h2>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <i class="fas fa-video"></i>
-                    <h4>دعم شامل</h4>
-                    <p>يدعم HLS، DASH، MP4، WEBM، وجميع صيغ الفيديو</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-list"></i>
-                    <h4>إدارة القوائم</h4>
-                    <p>أضف وحذف وابحث في القنوات بسهولة</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-save"></i>
-                    <h4>حفظ تلقائي</h4>
-                    <p>تحفظ قوائمك تلقائياً في المتصفح</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-search"></i>
-                    <h4>بحث سريع</h4>
-                    <p>ابحث عن قنواتك المفضلة بسرعة</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="guide-section">
-            <h2><i class="fas fa-file-code"></i> صيغ الروابط المدعومة</h2>
-            <p>المشغل يدعم جميع أنواع روابط البث والفيديو:</p>
-            
-            <h3>1. HLS (HTTP Live Streaming)</h3>
-            <p>الصيغة الأكثر شيوعاً للبث المباشر</p>
-            <div class="code-block">
-https://example.com/stream.m3u8
-https://example.com/live/channel.m3u8
-            </div>
-
-            <h3>2. DASH (Dynamic Adaptive Streaming)</h3>
-            <p>صيغة بث متقدمة للجودة التكيفية</p>
-            <div class="code-block">
-https://example.com/video.mpd
-https://example.com/live/stream.mpd
-            </div>
-
-            <h3>3. روابط مباشرة</h3>
-            <p>ملفات فيديو مباشرة بجميع الصيغ</p>
-            <div class="code-block">
-https://example.com/video.mp4
-https://example.com/movie.webm
-https://example.com/stream.ts
-            </div>
-
-            <div class="tip-box">
-                <h4><i class="fas fa-lightbulb"></i> نصيحة</h4>
-                <p>يمكنك تجربة القنوات التجريبية المضمنة في الموقع للتأكد من عمل المشغل بشكل صحيح.</p>
-            </div>
-        </div>
-
-        <div class="guide-section">
-            <h2><i class="fas fa-file-import"></i> كيفية إنشاء ملف M3U</h2>
-            <p>يمكنك إنشاء ملف M3U خاص بك باستخدام أي محرر نصوص:</p>
-            
-            <h3>البنية الأساسية:</h3>
-            <div class="code-block">
-#EXTM3U
-#EXTINF:-1 tvg-logo="رابط_الشعار" group-title="التصنيف",اسم القناة
-رابط_القناة
-            </div>
-
-            <h3>مثال كامل:</h3>
-            <div class="code-block">
-#EXTM3U
-
-#EXTINF:-1 tvg-logo="https://example.com/logo1.png" group-title="أخبار",قناة الأخبار
-https://news-channel.com/live.m3u8
-
-#EXTINF:-1 tvg-logo="https://example.com/logo2.png" group-title="رياضة",قناة الرياضة
-https://sports-channel.com/live.m3u8
-
-#EXTINF:-1 tvg-logo="https://example.com/logo3.png" group-title="أفلام",قناة الأفلام
-https://movies-channel.com/stream.m3u8
-            </div>
-
-            <h3>خطوات الإنشاء:</h3>
-            <ol>
-                <li>افتح برنامج Notepad أو أي محرر نصوص</li>
-                <li>ابدأ الملف بـ <code>#EXTM3U</code></li>
-                <li>لكل قناة، أضف سطرين:
-                    <ul>
-                        <li>السطر الأول: معلومات القناة (#EXTINF)</li>
-                        <li>السطر الثاني: رابط القناة</li>
-                    </ul>
-                </li>
-                <li>احفظ الملف بامتداد <code>.m3u</code> أو <code>.m3u8</code></li>
-                <li>استورد الملف في المشغل</li>
-            </ol>
-        </div>
-
-        <div class="guide-section">
-            <h2><i class="fas fa-keyboard"></i> اختصارات لوحة المفاتيح</h2>
-            <p>استخدم هذه الاختصارات للتحكم السريع في المشغل:</p>
-            
-            <div class="keyboard-shortcuts">
-                <div class="shortcut-item">
-                    <div class="key">Space</div>
-                    <div>تشغيل / إيقاف</div>
-                </div>
-                <div class="shortcut-item">
-                    <div class="key">→</div>
-                    <div>تقديم 10 ثواني</div>
-                </div>
-                <div class="shortcut-item">
-                    <div class="key">←</div>
-                    <div>ترجيع 10 ثواني</div>
-                </div>
-                <div class="shortcut-item">
-                    <div class="key">↑</div>
-                    <div>رفع الصوت</div>
-                </div>
-                <div class="shortcut-item">
-                    <div class="key">↓</div>
-                    <div>خفض الصوت</div>
-                </div>
-                <div class="shortcut-item">
-                    <div class="key">F</div>
-                    <div>ملء الشاشة</div>
-                </div>
-                <div class="shortcut-item">
-                    <div class="key">M</div>
-                    <div>كتم الصوت</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="guide-section">
-            <h2><i class="fas fa-tools"></i> استكشاف الأخطاء وإصلاحها</h2>
-            
-            <h3>❌ المشكلة: البث لا يعمل</h3>
-            <p><strong>الحلول:</strong></p>
-            <ul>
-                <li>تأكد من صحة رابط البث</li>
-                <li>تحقق من اتصال الإنترنت</li>
-                <li>جرب رابط آخر للتأكد من عمل المشغل</li>
-                <li>افتح Console (F12) وتحقق من وجود أخطاء</li>
-                <li>جرب متصفح آخر</li>
-            </ul>
-
-            <h3>❌ المشكلة: البث بطيء أو يتقطع</h3>
-            <p><strong>الحلول:</strong></p>
-            <ul>
-                <li>تحقق من سرعة الإنترنت (يفضل 5 Mbps على الأقل)</li>
-                <li>أغلق التطبيقات الأخرى التي تستهلك النطاق</li>
-                <li>جرب جودة أقل إن كانت متاحة</li>
-                <li>قرب من نقطة الواي فاي</li>
-            </ul>
-
-            <h3>❌ المشكلة: الفيديو يظهر أسود</h3>
-            <p><strong>الحلول:</strong></p>
-            <ul>
-                <li>حدث الصفحة (F5)</li>
-                <li>امسح الكاش (Ctrl + Shift + Delete)</li>
-                <li>تأكد من تفعيل JavaScript</li>
-                <li>حدث المتصفح لأحدث إصدار</li>
-            </ul>
-
-            <h3>❌ المشكلة: لا يمكن استيراد ملف M3U</h3>
-            <p><strong>الحلول:</strong></p>
-            <ul>
-                <li>تأكد من أن الملف بصيغة .m3u أو .m3u8</li>
-                <li>تحقق من صحة بنية الملف</li>
-                <li>تأكد من عدم وجود أخطاء في الروابط</li>
-                <li>جرب فتح الملف في محرر نصوص أولاً</li>
-            </ul>
-        </div>
-
-        <div class="guide-section">
-            <h2><i class="fas fa-shield-alt"></i> نصائح الأمان والخصوصية</h2>
-            
-            <div class="tip-box">
-                <h4><i class="fas fa-check-circle"></i> ما يفعله المشغل</h4>
-                <ul>
-                    <li>يحفظ قوائمك محلياً في المتصفح فقط</li>
-                    <li>لا يرسل أي بيانات لخوادم خارجية</li>
-                    <li>لا يجمع أي معلومات شخصية</li>
-                    <li>مفتوح المصدر بالكامل</li>
-                </ul>
-            </div>
-
-            <div class="warning-box">
-                <h4><i class="fas fa-exclamation-triangle"></i> تحذيرات مهمة</h4>
-                <ul>
-                    <li>تأكد من امتلاك الحقوق القانونية للمحتوى الذي تشاهده</li>
-                    <li>لا تشارك روابط محمية بحقوق الملكية</li>
-                    <li>استخدم VPN إذا لزم الأمر في بلدك</li>
-                    <li>احذر من الروابط المشبوهة</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="guide-section">
-            <h2><i class="fas fa-graduation-cap"></i> نصائح متقدمة</h2>
-            
-            <h3>🔥 للحصول على أفضل تجربة:</h3>
-            <ul>
-                <li><strong>استخدم Google Chrome:</strong> أفضل متصفح للتوافق</li>
-                <li><strong>اتصال سلكي:</strong> يفضل استخدام كابل Ethernet بدلاً من Wi-Fi</li>
-                <li><strong>نظم قوائمك:</strong> استخدم ملفات M3U منفصلة لكل تصنيف</li>
-                <li><strong>احفظ نسخة احتياطية:</strong> احفظ ملف M3U الخاص بك في مكان آمن</li>
-                <li><strong>جرب الروابط:</strong> بعض الروابط قد تكون مؤقتة</li>
-            </ul>
-
-            <h3>🎯 لتحسين الأداء:</h3>
-            <ul>
-                <li>أغلق التبويبات غير المستخدمة</li>
-                <li>عطل الإضافات غير الضرورية</li>
-                <li>نظف الكاش بانتظام</li>
-                <li>حدث المتصفح دائماً</li>
-            </ul>
-        </div>
-
-        <div class="guide-section">
-            <h2><i class="fas fa-question-circle"></i> الأسئلة الشائعة</h2>
-            
-            <h3>هل المشغل مجاني؟</h3>
-            <p>نعم، المشغل مجاني تماماً ومفتوح المصدر.</p>
-
-            <h3>هل أحتاج إلى اتصال إنترنت؟</h3>
-            <p>نعم، تحتاج اتصال إنترنت لتحميل المكتبات وللبث المباشر.</p>
-
-            <h3>هل يمكنني استخدامه على الهاتف؟</h3>
-            <p>نعم، الموقع متجاوب ويعمل على جميع الأجهزة.</p>
-
-            <h3>أين تحفظ قوائمي؟</h3>
-            <p>تحفظ في LocalStorage الخاص بمتصفحك. لن تضيع إلا إذا مسحت بيانات المتصفح.</p>
-
-            <h3>هل يدعم التحميل؟</h3>
-            <p>لا، المشغل للبث المباشر فقط. يمكنك استخدام أدوات أخرى للتحميل.</p>
-
-            <h3>كيف أحصل على روابط IPTV؟</h3>
-            <p>يمكنك البحث على الإنترنت عن "free IPTV M3U" أو الاشتراك في خدمات IPTV المدفوعة.</p>
-        </div>
-
-        <div class="guide-section" style="text-align: center;">
-            <h2><i class="fas fa-heart"></i> الدعم والتطوير</h2>
-            <p>هذا المشروع مفتوح المصدر ومجاني. إذا أعجبك، شاركه مع أصدقائك!</p>
-            <p style="margin-top: 20px;">صُنع بـ ❤️ لعشاق IPTV</p>
-            <a href="index.html" class="back-btn" style="margin-top: 20px;">
-                <i class="fas fa-arrow-left"></i>
-                العودة للمشغل
-            </a>
-        </div>
-    </div>
-</body>
-</html>
-
