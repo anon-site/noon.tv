@@ -2566,8 +2566,13 @@ class ArabicTVApp {
                 <p>جارٍ تحميل البث (GitHub Pages)...</p>
             `;
 
+            // Cloudflare Worker proxy (أفضل حل موثوق)
+            // قم بتغيير الرابط بعد نشر Cloudflare Worker الخاص بك
+            const CLOUDFLARE_WORKER_URL = 'https://your-worker.workers.dev'; // غيّر هذا الرابط!
+            
             // Enhanced proxy list specifically for GitHub Pages
             const githubProxies = [
+                `${CLOUDFLARE_WORKER_URL}?url=${encodeURIComponent(url)}`, // أولوية للـ Cloudflare Worker
                 `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
                 `https://corsproxy.io/?${encodeURIComponent(url)}`,
                 `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
