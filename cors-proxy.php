@@ -2,8 +2,10 @@
 /**
  * CORS Proxy for SHLS Streams
  * 
+ * Usage: cors-proxy.php?url=http://shls-live-enc.edgenextcdn.net/...
  * Usage: cors-proxy.php?url=https://shls-live-enc.edgenextcdn.net/...
  * 
+ * يدعم HTTP و HTTPS
  * يجب رفع هذا الملف على سيرفر يدعم PHP (مثل: Hostinger, 000webhost, InfinityFree)
  */
 
@@ -72,8 +74,8 @@ curl_setopt_array($ch, [
     CURLOPT_HTTPHEADER => [
         'Accept: application/vnd.apple.mpegurl, application/x-mpegurl, */*',
         'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Referer: https://www.google.com/',
-        'Origin: https://www.google.com'
+        'Referer: ' . (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'https://www.google.com/'),
+        'Origin: ' . (isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : 'https://www.google.com')
     ]
 ]);
 

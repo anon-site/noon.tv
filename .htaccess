@@ -1,10 +1,12 @@
 # ANON TV - Apache Configuration
 # Ensure proper PWA functionality
+# Support both HTTP and HTTPS
 
-# Enable CORS for PWA
+# Enable CORS for PWA (HTTP and HTTPS)
 Header always set Access-Control-Allow-Origin "*"
 Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
 Header always set Access-Control-Allow-Headers "Content-Type, Authorization"
+Header always set Access-Control-Allow-Credentials "true"
 
 # Cache control for PWA files
 <FilesMatch "\.(manifest|json)$">
@@ -32,8 +34,13 @@ Header always set Access-Control-Allow-Headers "Content-Type, Authorization"
     Header set Expires "0"
 </FilesMatch>
 
-# Redirect root to TV-AR if accessing from PWA
+# Allow HTTP and HTTPS protocols
 RewriteEngine On
+
+# Remove HSTS header to allow HTTP
+Header unset Strict-Transport-Security
+
+# Redirect root to TV-AR if accessing from PWA
 RewriteCond %{HTTP_USER_AGENT} ".*Mobile.*" [NC]
 RewriteCond %{QUERY_STRING} "source=pwa"
 RewriteRule ^$ /TV-AR/ [R=301,L]
