@@ -8,8 +8,13 @@ class ArabicTVApp {
 
         this.currentChannel = null;
         this.hls = null;
+        this.flvPlayer = null;
+        this.dashPlayer = null;
+        this.mpegtsPlayer = null;
         this.isPictureInPicture = false;
         this.isLoggedIn = false;
+        this.loadAttempts = 0;
+        this.maxLoadAttempts = 3;
         
         // Unified toggle function for all toggle operations
         this.toggleElement = (elementId, options = {}) => {
@@ -1228,6 +1233,10 @@ class ArabicTVApp {
         
         this.isLoadingChannel = true;
         this.currentChannel = channel;
+        
+        // Reset load attempts counter for new channel
+        this.loadAttempts = 0;
+        
         this.showVideoModal(channel);
         
         // Auto-detect stream type using the new detection system
@@ -1236,11 +1245,69 @@ class ArabicTVApp {
         
         try {
             await this.loadVideoStream(channel.url, streamType);
+            
+            // Preload next channel for faster switching
+            this.preloadNextChannel(channel);
+            
         } finally {
             this.isLoadingChannel = false;
         }
         
         // Channel bar remains visible when playing a channel for better navigation
+    }
+    
+    // Preload next channel for faster switching
+    preloadNextChannel(currentChannel) {
+        try {
+            // Find current channel index
+            const currentIndex = this.filteredChannels.findIndex(ch => ch.id === currentChannel.id);
+            
+            if (currentIndex === -1 || currentIndex >= this.filteredChannels.length - 1) {
+                return; // No next channel
+            }
+            
+            const nextChannel = this.filteredChannels[currentIndex + 1];
+            
+            // Skip if next channel is inactive
+            if (nextChannel.status === 'inactive') {
+                return;
+            }
+            
+            console.log('📥 Preloading next channel:', nextChannel.name);
+            
+            // Preload using DNS prefetch and link preconnect
+            const url = new URL(nextChannel.url);
+            
+            // Create DNS prefetch
+            const dnsPrefetch = document.createElement('link');
+            dnsPrefetch.rel = 'dns-prefetch';
+            dnsPrefetch.href = url.origin;
+            dnsPrefetch.id = 'preload-dns';
+            
+            // Remove old prefetch if exists
+            const oldDns = document.getElementById('preload-dns');
+            if (oldDns) oldDns.remove();
+            
+            document.head.appendChild(dnsPrefetch);
+            
+            // Create preconnect
+            const preconnect = document.createElement('link');
+            preconnect.rel = 'preconnect';
+            preconnect.href = url.origin;
+            preconnect.crossOrigin = 'anonymous';
+            preconnect.id = 'preload-connect';
+            
+            // Remove old preconnect if exists
+            const oldConnect = document.getElementById('preload-connect');
+            if (oldConnect) oldConnect.remove();
+            
+            document.head.appendChild(preconnect);
+            
+            console.log('✅ Preloaded next channel DNS/connection');
+            
+        } catch (error) {
+            console.warn('Error preloading next channel:', error);
+        }
     }
 
     showVideoModal(channel) {
@@ -1470,8 +1537,55 @@ class ArabicTVApp {
         // تنظيف HLS instance للـ SHLS streams
         if (this.hls) {
             console.log('🛑 تنظيف HLS instance...');
-            this.hls.destroy();
-            this.hls = null;
+            try {
+                this.hls.destroy();
+                this.hls = null;
+                console.log('✅ تم تنظيف HLS player');
+            } catch (e) {
+                console.log('Error destroying HLS:', e);
+            }
+        }
+        
+        // تنظيف FLV player
+        if (this.flvPlayer) {
+            console.log('🛑 تنظيف FLV player...');
+            try {
+                this.flvPlayer.pause();
+                this.flvPlayer.unload();
+                this.flvPlayer.detachMediaElement();
+                this.flvPlayer.destroy();
+                this.flvPlayer = null;
+                console.log('✅ تم تنظيف FLV player');
+            } catch (e) {
+                console.log('Error destroying FLV player:', e);
+            }
+        }
+        
+        // تنظيف DASH player
+        if (this.dashPlayer) {
+            console.log('🛑 تنظيف DASH player...');
+            try {
+                this.dashPlayer.reset();
+                this.dashPlayer = null;
+                console.log('✅ تم تنظيف DASH player');
+            } catch (e) {
+                console.log('Error destroying DASH player:', e);
+            }
+        }
+        
+        // تنظيف mpegts player
+        if (this.mpegtsPlayer) {
+            console.log('🛑 تنظيف mpegts player...');
+            try {
+                this.mpegtsPlayer.pause();
+                this.mpegtsPlayer.unload();
+                this.mpegtsPlayer.detachMediaElement();
+                this.mpegtsPlayer.destroy();
+                this.mpegtsPlayer = null;
+                console.log('✅ تم تنظيف mpegts player');
+            } catch (e) {
+                console.log('Error destroying mpegts player:', e);
+            }
         }
         
         // تنظيف YouTube iframe - بدون حذف العنصر، فقط إيقاف وإخفاء
@@ -2238,47 +2352,59 @@ class ArabicTVApp {
         return streamingRegex.test(url);
     }
 
-    // Universal URL type detection
+    // Universal URL type detection (enhanced)
     detectStreamType(url) {
         if (!url) return 'unknown';
         
-        // YouTube
+        // Normalize URL for better detection
+        const normalizedUrl = url.toLowerCase().trim();
+        
+        // Priority 1: Special platforms
         if (this.isYouTubeUrl(url)) return 'youtube';
-        
-        // ElAhmad
         if (this.isElahmadUrl(url)) return 'elahmad';
-        
-        // Aflam4You
         if (this.isAflamUrl(url)) return 'aflam';
-        
-        // SHLS
         if (this.isShlsUrl(url)) return 'shls';
         
-        // RTMP
+        // Priority 2: Streaming protocols
         if (this.isRtmpUrl(url)) return 'rtmp';
-        
-        // RTSP
         if (this.isRtspUrl(url)) return 'rtsp';
-        
-        // DASH
-        if (this.isDashUrl(url)) return 'dash';
-        
-        // WebRTC
         if (this.isWebRtcUrl(url)) return 'webrtc';
         
-        // M3U8 (HLS)
+        // Priority 3: Adaptive streaming formats
         if (this.isM3u8Url(url)) return 'hls';
+        if (this.isDashUrl(url)) return 'dash';
         
-        // Direct video files
+        // Priority 4: Container formats
+        if (this.isFlvUrl(url)) return 'flv';
         if (this.isMp4Url(url)) return 'mp4';
         if (this.isWebMUrl(url)) return 'webm';
-        if (this.isFlvUrl(url)) return 'flv';
         
-        // Generic direct video
+        // Priority 5: Check for TS segments (often used in HLS)
+        if (normalizedUrl.includes('.ts')) return 'hls';
+        
+        // Priority 6: Check for common streaming patterns
+        if (normalizedUrl.includes('/live/') || normalizedUrl.includes('/stream/')) {
+            // Likely a streaming URL, default to HLS
+            return 'hls';
+        }
+        
+        // Priority 7: Check file extensions in URL parameters
+        const urlParams = new URLSearchParams(url.split('?')[1] || '');
+        const fileParam = urlParams.get('file') || urlParams.get('url') || urlParams.get('src');
+        if (fileParam) {
+            return this.detectStreamType(fileParam);
+        }
+        
+        // Priority 8: Generic direct video by extension
         if (this.isDirectVideoUrl(url)) return 'direct';
         
-        // Default to HLS for unknown streaming URLs
-        return 'hls';
+        // Priority 9: Content-Type based detection (for blob URLs)
+        if (normalizedUrl.startsWith('blob:')) return 'direct';
+        
+        // Default: Try HLS for unknown streaming URLs
+        if (normalizedUrl.startsWith('http')) return 'hls';
+        
+        return 'unknown';
     }
 
     // Get stream type display name
@@ -2864,7 +2990,7 @@ class ArabicTVApp {
         }
     }
 
-    // Load FLV video (requires conversion or special handling)
+    // Load FLV video with FLV.js or mpegts.js support
     async loadFlvVideo(url) {
         const video = document.getElementById('videoPlayer');
         const loading = document.getElementById('videoLoading');
@@ -2876,47 +3002,123 @@ class ArabicTVApp {
             loading.style.display = 'flex';
             loading.innerHTML = `
                 <div class="spinner"></div>
-                <p>جارٍ تحميل FLV...</p>
+                <p>جارِ تحميل FLV...</p>
             `;
 
-            // FLV is not natively supported by HTML5 video
-            // We'll try to load it as a generic video and let the browser handle it
-            // or show a message that FLV requires conversion
+            // Ensure video player is visible
+            video.style.display = 'block';
             
-            const source = document.getElementById('videoSource');
-            source.src = url;
-            source.type = 'video/x-flv';
-            video.load();
-
-            // Wait for video to be ready
-            await new Promise((resolve, reject) => {
-                const timeout = setTimeout(() => {
-                    reject(new Error('FLV غير مدعوم بشكل مباشر - يرجى تحويله إلى MP4'));
-                }, 10000);
-
-                video.addEventListener('loadedmetadata', () => {
-                    clearTimeout(timeout);
+            // Try FLV.js first
+            if (typeof flvjs !== 'undefined' && flvjs.isSupported()) {
+                console.log('✅ استخدام FLV.js');
+                
+                // Clean up previous player
+                if (this.flvPlayer) {
+                    this.flvPlayer.destroy();
+                    this.flvPlayer = null;
+                }
+                
+                this.flvPlayer = flvjs.createPlayer({
+                    type: 'flv',
+                    url: url,
+                    isLive: true,
+                    hasAudio: true,
+                    hasVideo: true
+                }, {
+                    enableWorker: true,
+                    enableStashBuffer: true,
+                    stashInitialSize: 128,
+                    autoCleanupSourceBuffer: true
+                });
+                
+                this.flvPlayer.attachMediaElement(video);
+                this.flvPlayer.load();
+                
+                // Handle events
+                this.flvPlayer.on(flvjs.Events.LOADING_COMPLETE, () => {
                     loading.style.display = 'none';
-                    
                     if (this.settings.autoplay) {
                         this.enhancedAutoplay(video);
                     }
-                    
-                    this.updateQualityDisplayForDirectVideo('FLV');
+                    this.updateQualityDisplayForDirectVideo('FLV (FLV.js)');
                     setupMediaSession();
-                    resolve();
-                }, { once: true });
-
-                video.addEventListener('error', (e) => {
-                    clearTimeout(timeout);
-                    reject(new Error('FLV غير مدعوم - يرجى تحويله إلى MP4 أو WebM'));
-                }, { once: true });
-            });
+                });
+                
+                this.flvPlayer.on(flvjs.Events.ERROR, (errorType, errorDetail) => {
+                    console.error('FLV.js Error:', errorType, errorDetail);
+                    // Try fallback to mpegts.js
+                    this.loadFlvWithMpegts(url);
+                });
+                
+                return;
+            }
+            
+            // Try mpegts.js as fallback
+            if (typeof mpegts !== 'undefined' && mpegts.getFeatureList().mseLiveFlvPlayback) {
+                console.log('✅ استخدام mpegts.js لـ FLV');
+                await this.loadFlvWithMpegts(url);
+                return;
+            }
+            
+            // No library available
+            throw new Error('FLV غير مدعوم - يرجى تحويله إلى HLS أو MP4');
 
         } catch (error) {
             console.error('خطأ في تحميل FLV:', error);
-            this.showVideoError('FLV غير مدعوم - يرجى تحويله إلى MP4');
-            this.handleVideoError();
+            this.showVideoError('جارِ تحميل البث...');
+            // Try fallback loading method
+            if (this.loadAttempts < this.maxLoadAttempts) {
+                this.loadAttempts++;
+                setTimeout(() => this.loadVideoWithFallback(url, 'mp4'), 2000);
+            } else {
+                this.handleVideoError();
+            }
+        }
+    }
+    
+    // Load FLV with mpegts.js
+    async loadFlvWithMpegts(url) {
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('videoLoading');
+        
+        try {
+            // Clean up previous player
+            if (this.mpegtsPlayer) {
+                this.mpegtsPlayer.destroy();
+                this.mpegtsPlayer = null;
+            }
+            
+            this.mpegtsPlayer = mpegts.createPlayer({
+                type: 'flv',
+                url: url,
+                isLive: true
+            }, {
+                enableWorker: true,
+                enableStashBuffer: true,
+                stashInitialSize: 128
+            });
+            
+            this.mpegtsPlayer.attachMediaElement(video);
+            this.mpegtsPlayer.load();
+            
+            // Handle events
+            this.mpegtsPlayer.on(mpegts.Events.LOADING_COMPLETE, () => {
+                loading.style.display = 'none';
+                if (this.settings.autoplay) {
+                    this.enhancedAutoplay(video);
+                }
+                this.updateQualityDisplayForDirectVideo('FLV (mpegts.js)');
+                setupMediaSession();
+            });
+            
+            this.mpegtsPlayer.on(mpegts.Events.ERROR, (errorType, errorDetail) => {
+                console.error('mpegts.js Error:', errorType, errorDetail);
+                throw new Error('FLV playback failed');
+            });
+            
+        } catch (error) {
+            console.error('Error loading FLV with mpegts.js:', error);
+            throw error;
         }
     }
 
@@ -2970,7 +3172,7 @@ class ArabicTVApp {
         }
     }
 
-    // Load DASH stream
+    // Load DASH stream with DASH.js
     async loadDashVideo(url) {
         const video = document.getElementById('videoPlayer');
         const loading = document.getElementById('videoLoading');
@@ -2982,11 +3184,66 @@ class ArabicTVApp {
             loading.style.display = 'flex';
             loading.innerHTML = `
                 <div class="spinner"></div>
-                <p>جارٍ تحميل DASH...</p>
+                <p>جارِ تحميل DASH...</p>
             `;
+
+            // Ensure video player is visible
+            video.style.display = 'block';
+            
+            // Try DASH.js first
+            if (typeof dashjs !== 'undefined') {
+                console.log('✅ استخدام DASH.js');
+                
+                // Clean up previous player
+                if (this.dashPlayer) {
+                    this.dashPlayer.reset();
+                    this.dashPlayer = null;
+                }
+                
+                this.dashPlayer = dashjs.MediaPlayer().create();
+                this.dashPlayer.initialize(video, url, this.settings.autoplay);
+                
+                // Configure DASH player for better performance
+                this.dashPlayer.updateSettings({
+                    streaming: {
+                        buffer: {
+                            fastSwitchEnabled: true,
+                            bufferTimeAtTopQuality: 30,
+                            bufferTimeAtTopQualityLongForm: 60
+                        },
+                        abr: {
+                            autoSwitchBitrate: {
+                                video: this.settings.autoQuality
+                            }
+                        },
+                        lowLatencyEnabled: true
+                    }
+                });
+                
+                // Handle events
+                this.dashPlayer.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, () => {
+                    console.log('✅ DASH stream initialized');
+                    loading.style.display = 'none';
+                    this.updateQualityDisplayForDirectVideo('DASH (DASH.js)');
+                    setupMediaSession();
+                });
+                
+                this.dashPlayer.on(dashjs.MediaPlayer.events.ERROR, (e) => {
+                    console.error('DASH.js Error:', e);
+                    this.showVideoError('جارِ تحميل البث...');
+                    // Try fallback
+                    if (this.loadAttempts < this.maxLoadAttempts) {
+                        this.loadAttempts++;
+                        setTimeout(() => this.loadVideoWithFallback(url, 'hls'), 2000);
+                    }
+                });
+                
+                return;
+            }
 
             // Check if browser supports DASH natively
             if (video.canPlayType('application/dash+xml')) {
+                console.log('✅ استخدام DASH native');
                 const source = document.getElementById('videoSource');
                 source.src = url;
                 source.type = 'application/dash+xml';
@@ -3005,7 +3262,7 @@ class ArabicTVApp {
                             this.enhancedAutoplay(video);
                         }
                         
-                        this.updateQualityDisplayForDirectVideo('DASH');
+                        this.updateQualityDisplayForDirectVideo('DASH (Native)');
                         setupMediaSession();
                         resolve();
                     }, { once: true });
@@ -3021,8 +3278,14 @@ class ArabicTVApp {
 
         } catch (error) {
             console.error('خطأ في تحميل DASH:', error);
-            this.showVideoError('DASH غير مدعوم في هذا المتصفح');
-            this.handleVideoError();
+            this.showVideoError('جارِ تحميل البث...');
+            // Try fallback
+            if (this.loadAttempts < this.maxLoadAttempts) {
+                this.loadAttempts++;
+                setTimeout(() => this.loadVideoWithFallback(url, 'hls'), 2000);
+            } else {
+                this.handleVideoError();
+            }
         }
     }
 
@@ -3060,6 +3323,51 @@ class ArabicTVApp {
         }
     }
 
+    // Smart fallback system - tries alternative formats if loading fails
+    async loadVideoWithFallback(url, fallbackType = 'auto') {
+        console.log(`🔄 محاولة تحميل بديل: ${fallbackType}`);
+        
+        try {
+            // Reset load attempts for new fallback
+            this.loadAttempts = 0;
+            
+            // Define fallback chain based on original type
+            const fallbackChain = {
+                'flv': ['mp4', 'hls', 'direct'],
+                'dash': ['hls', 'mp4', 'direct'],
+                'rtmp': ['hls', 'mp4'],
+                'rtsp': ['hls', 'mp4'],
+                'webrtc': ['hls', 'mp4'],
+                'mp4': ['webm', 'hls'],
+                'webm': ['mp4', 'hls'],
+                'hls': ['mp4', 'webm', 'direct'],
+                'auto': ['hls', 'mp4', 'webm', 'direct']
+            };
+            
+            const chain = fallbackChain[fallbackType] || fallbackChain['auto'];
+            
+            for (const type of chain) {
+                try {
+                    console.log(`➡️ تجربة تحميل بصيغة: ${type}`);
+                    await this.loadVideoStream(url, type);
+                    console.log(`✅ نجح التحميل بصيغة: ${type}`);
+                    return; // Success
+                } catch (error) {
+                    console.warn(`⚠️ فشل التحميل بصيغة ${type}:`, error.message);
+                    // Continue to next fallback
+                }
+            }
+            
+            // All fallbacks failed
+            throw new Error('فشلت جميع محاولات التحميل');
+            
+        } catch (error) {
+            console.error('خطأ في نظام Fallback:', error);
+            this.showVideoError('جارِ تحميل البث...');
+            this.handleVideoError();
+        }
+    }
+    
     // Load direct video (generic fallback)
     async loadDirectVideo(url) {
         const video = document.getElementById('videoPlayer');

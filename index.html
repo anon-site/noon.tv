@@ -1532,19 +1532,43 @@
     <!-- Performance Optimizer - Load First -->
     <script src="performance-optimizer.js"></script>
     
-    <!-- HLS.js Library for video streaming -->
+    <!-- Video Streaming Libraries -->
+    <!-- HLS.js Library for HLS streaming -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    
+    <!-- FLV.js Library for FLV streaming -->
+    <script src="https://cdn.jsdelivr.net/npm/flv.js@latest"></script>
+    
+    <!-- DASH.js Library for DASH streaming -->
+    <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
+    
+    <!-- mpegts.js Library for MPEG-TS and FLV streaming -->
+    <script src="https://cdn.jsdelivr.net/npm/mpegts.js@latest"></script>
+    
     <script>
-        // Check if HLS.js loaded successfully
+        // Check if all libraries loaded successfully
         window.addEventListener('load', function() {
+            const libraries = [
+                { name: 'HLS.js', check: typeof Hls !== 'undefined', icon: '📡' },
+                { name: 'FLV.js', check: typeof flvjs !== 'undefined', icon: '🎬' },
+                { name: 'DASH.js', check: typeof dashjs !== 'undefined', icon: '⚡' },
+                { name: 'mpegts.js', check: typeof mpegts !== 'undefined', icon: '📺' }
+            ];
+            
+            libraries.forEach(lib => {
+                if (!lib.check) {
+                    console.warn(`⚠️ ${lib.icon} ${lib.name} لم يتم تحميلها`);
+                } else {
+                    console.log(`✅ ${lib.icon} تم تحميل ${lib.name} بنجاح`);
+                }
+            });
+            
+            // Show notification if critical library failed
             if (typeof Hls === 'undefined') {
                 console.error('❌ فشل في تحميل مكتبة HLS.js');
-                // Show notification to user
                 if (window.app && window.app.notifyError) {
                     window.app.notifyError('فشل في تحميل مكتبة تشغيل الفيديو - تحقق من اتصال الإنترنت');
                 }
-            } else {
-                console.log('✅ تم تحميل مكتبة HLS.js بنجاح');
             }
         });
 
