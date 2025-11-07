@@ -1838,10 +1838,10 @@
       "id": 224,
       "name": "Toon Googgles",
       "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=toon_goggles",
-      "logo": "https://static.wikia.nocookie.net/logopedia/images/e/e1/Toon_Goggles_logo_2011.png/revision/latest?cb=20250528000708",
+      "logo": "https://iili.io/KDz7Us1.png",
       "category": "kids",
       "country": "عالمية",
-      "type": "elahmad",
+      "type": "hls",
       "status": "active",
       "vpn": false,
       "lastModified": "2025-11-07T14:31:30.587Z"
@@ -1916,6 +1916,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-11-07T14:33:39.787Z",
+  "lastModified": "2025-11-07T14:34:50.053Z",
   "version": "1.0"
 }
