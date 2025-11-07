@@ -2568,7 +2568,7 @@ class ArabicTVApp {
 
             // Cloudflare Worker proxy (أفضل حل موثوق)
             // قم بتغيير الرابط بعد نشر Cloudflare Worker الخاص بك
-            const CLOUDFLARE_WORKER_URL = 'https://your-worker.workers.dev'; // غيّر هذا الرابط!
+            const CLOUDFLARE_WORKER_URL = 'https://workers-playground-throbbing-term-afb6.anon-design88.workers.dev/'; // غيّر هذا الرابط!
             
             // Enhanced proxy list specifically for GitHub Pages
             const githubProxies = [
