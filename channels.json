@@ -1845,6 +1845,17 @@
       "status": "active",
       "vpn": false,
       "lastModified": "2025-11-07T14:31:30.587Z"
+    },
+    {
+      "id": 225,
+      "name": "Disney Junior East",
+      "url": "https://fl1.moveonjoy.com/DISNEY_JR/index.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/2024_Disney_Jr._Logo.svg/1280px-2024_Disney_Jr._Logo.svg.png",
+      "category": "kids",
+      "country": "USA",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
     }
   ],
   "settings": {
@@ -1916,6 +1927,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-11-07T14:34:50.053Z",
+  "lastModified": "2025-11-08T01:56:04.324Z",
   "version": "1.0"
 }
