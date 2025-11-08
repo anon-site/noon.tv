@@ -1787,18 +1787,6 @@
       "lastModified": "2025-11-06T07:20:56.917Z"
     },
     {
-      "id": 220,
-      "name": "Fairuz",
-      "url": "https://shls-live-enc.edgenextcdn.net/out/v1/bba3ef00b71b470fa955d93a9ca8c277/index.m3u8",
-      "logo": "https://shahid.mbc.net/mediaObject/f809d51c-e83d-43c9-8236-78731c2216ad?type=png",
-      "category": "music",
-      "country": "لبنان",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-11-06T19:09:33.497Z"
-    },
-    {
       "id": 221,
       "name": "Tiny Pop",
       "url": "https://amg01753-narrativeuk-amg01753c1-rakuten-uk-2339.playouts.now.amagi.tv/playlist.m3u8",
@@ -1967,18 +1955,6 @@
       "lastModified": "2025-11-08T02:58:16.471Z"
     },
     {
-      "id": 235,
-      "name": "محمد عبده",
-      "url": "https://d2ow8h651gs7dx.cloudfront.net/out/v1/371fb663da604e659a2fb99bf89d92d4/index.m3u8",
-      "logo": "https://assets.mbcmood.com/channels/1720184012Mohammed%20Abdo%20banner.png",
-      "category": "music",
-      "country": "السعودية",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-11-08T02:58:16.471Z"
-    },
-    {
       "id": 236,
       "name": "Panorama FM",
       "url": "https://d6izdil55uftn.cloudfront.net/out/v1/0a06d1d6377c47edbd48721ed724bd08/index.m3u8",
@@ -2139,6 +2115,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-11-08T09:16:45.048Z",
+  "lastModified": "2025-11-08T09:25:21.678Z",
   "version": "1.0"
 }
