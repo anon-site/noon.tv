@@ -643,7 +643,7 @@
     },
     {
       "id": 53,
-      "name": "LTV",
+      "name": "لنا",
       "url": "https://p-ltv.akamaized.net/ltv/ltv.m3u8",
       "logo": "https://tlfaz.com/wp-content/uploads/2023/03/Lana-Tv.png",
       "category": "entertainment",
@@ -1867,7 +1867,8 @@
       "country": "USA",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-11-08T02:58:16.471Z"
     },
     {
       "id": 227,
@@ -1878,7 +1879,8 @@
       "country": "USA",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-11-08T02:58:16.471Z"
     },
     {
       "id": 228,
@@ -1889,7 +1891,8 @@
       "country": "USA",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-11-08T02:58:16.471Z"
     },
     {
       "id": 229,
@@ -1900,7 +1903,8 @@
       "country": "USA",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-11-08T02:58:16.471Z"
     },
     {
       "id": 230,
@@ -1911,7 +1915,8 @@
       "country": "USA",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-11-08T02:58:16.471Z"
     },
     {
       "id": 231,
@@ -1922,7 +1927,8 @@
       "country": "USA",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-11-08T02:58:16.471Z"
     },
     {
       "id": 232,
@@ -1933,7 +1939,8 @@
       "country": "عالمية",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-11-08T02:58:16.471Z"
     },
     {
       "id": 233,
@@ -1944,7 +1951,8 @@
       "country": "عالمية",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-11-08T02:58:16.471Z"
     },
     {
       "id": 234,
@@ -1955,7 +1963,8 @@
       "country": "الاردن",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-11-08T02:58:16.471Z"
     },
     {
       "id": 235,
@@ -1966,7 +1975,8 @@
       "country": "السعودية",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-11-08T02:58:16.471Z"
     },
     {
       "id": 236,
@@ -1977,7 +1987,8 @@
       "country": "عالمية",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-11-08T02:58:16.471Z"
     },
     {
       "id": 237,
@@ -1988,7 +1999,8 @@
       "country": "السعودية",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-11-08T02:58:16.471Z"
     },
     {
       "id": 238,
@@ -1997,6 +2009,62 @@
       "logo": "https://i.imgur.com/bWwY885.png",
       "category": "entertainment",
       "country": "لبنان",
+      "type": "hls",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2025-11-08T02:58:16.471Z"
+    },
+    {
+      "id": 239,
+      "name": "الفلوجة",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=alfallujah_tv",
+      "logo": "https://alfallujah.tv/wp-content/themes/fallujah/assets/logo-dark.png",
+      "category": "entertainment",
+      "country": "العراق",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 240,
+      "name": "سامراء",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=samarratv1",
+      "logo": "https://www.samarra.tv/wp-content/uploads/2024/09/logo-2-1.png.webp",
+      "category": "entertainment",
+      "country": "العراق",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 241,
+      "name": "الموصيلية",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=almawsleya",
+      "logo": "https://iili.io/KDrzpuR.png",
+      "category": "entertainment",
+      "country": "العراق",
+      "type": "elahmad",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 242,
+      "name": "المسرى",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=almasra",
+      "logo": "https://almasra.iq/wp-content/uploads/2023/03/almasra-logo2x.png",
+      "category": "entertainment",
+      "country": "العراق",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
+      "id": 243,
+      "name": "UTV",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=utv_iraq",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/7/76/UTV_logo_ITV.svg",
+      "category": "entertainment",
+      "country": "العراق",
       "type": "hls",
       "status": "active",
       "vpn": false
@@ -2071,6 +2139,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-11-08T03:06:29.746Z",
+  "lastModified": "2025-11-08T09:16:45.048Z",
   "version": "1.0"
 }
