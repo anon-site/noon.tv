@@ -1139,18 +1139,6 @@
       "vpn": false
     },
     {
-      "id": 131,
-      "name": "Senses TV",
-      "url": "https://sensestv.com:4433/hls/sensesonline/index.m3u8",
-      "logo": "https://sense.tv/wp-content/uploads/2020/03/sense_white.png",
-      "category": "entertainment",
-      "country": "لبنان",
-      "type": "hls",
-      "status": "active",
-      "lastModified": "2025-10-02T00:50:06.463Z",
-      "vpn": false
-    },
-    {
       "id": 132,
       "name": "المسار",
       "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=almasartvlibya",
@@ -1847,78 +1835,6 @@
       "lastModified": "2025-11-08T01:55:57.022Z"
     },
     {
-      "id": 226,
-      "name": "AMC East",
-      "url": "https://fl1.moveonjoy.com/AMC_NETWORK/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/AMC_logo_2019.svg/512px-AMC_logo_2019.svg.png",
-      "category": "movies",
-      "country": "USA",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-11-08T02:58:16.471Z"
-    },
-    {
-      "id": 227,
-      "name": "Hallmark Movies Mysteries East",
-      "url": "https://fl1.moveonjoy.com/HALLMARK_MOVIES_MYSTERIES/index.m3u8",
-      "logo": "https://i.imgur.com/GPRGA9C.png",
-      "category": "movies",
-      "country": "USA",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-11-08T02:58:16.471Z"
-    },
-    {
-      "id": 228,
-      "name": "Lifetime Movies East",
-      "url": "https://fl1.moveonjoy.com/LIFETIME_MOVIE_NETWORK/index.m3u8",
-      "logo": "https://i.postimg.cc/RZGmYyTt/lifetimemovies.png",
-      "category": "movies",
-      "country": "USA",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-11-08T02:58:16.471Z"
-    },
-    {
-      "id": 229,
-      "name": "MGM+ East",
-      "url": "https://fl1.moveonjoy.com/EPIX/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/MGM%2B_logo.svg/512px-MGM%2B_logo.svg.png",
-      "category": "movies",
-      "country": "USA",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-11-08T02:58:16.471Z"
-    },
-    {
-      "id": 230,
-      "name": "Paramount Channel",
-      "url": "https://viamotionhsi.netplus.ch/live/eds/paramount/browser-HLS8/paramount.m3u8",
-      "logo": "https://i.imgur.com/BqmDlC2.png",
-      "category": "movies",
-      "country": "USA",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-11-08T02:58:16.471Z"
-    },
-    {
-      "id": 231,
-      "name": "Paramount Network East",
-      "url": "https://fl1.moveonjoy.com/PARAMOUNT_NETWORK/index.m3u8",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Paramount_Network.svg/512px-Paramount_Network.svg.png",
-      "category": "movies",
-      "country": "USA",
-      "type": "hls",
-      "status": "active",
-      "vpn": false,
-      "lastModified": "2025-11-08T02:58:16.471Z"
-    },
-    {
       "id": 232,
       "name": "الكوثر",
       "url": "https://lenz.splus.ir/PLTV/88888888/224/3221226158/index.m3u8",
@@ -1999,7 +1915,8 @@
       "country": "العراق",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-11-08T09:25:08.325Z"
     },
     {
       "id": 240,
@@ -2010,7 +1927,8 @@
       "country": "العراق",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-11-08T09:25:08.325Z"
     },
     {
       "id": 241,
@@ -2021,7 +1939,8 @@
       "country": "العراق",
       "type": "elahmad",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-11-08T09:25:08.325Z"
     },
     {
       "id": 242,
@@ -2032,7 +1951,8 @@
       "country": "العراق",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-11-08T09:25:08.325Z"
     },
     {
       "id": 243,
@@ -2043,7 +1963,8 @@
       "country": "العراق",
       "type": "hls",
       "status": "active",
-      "vpn": false
+      "vpn": false,
+      "lastModified": "2025-11-08T09:25:08.325Z"
     }
   ],
   "settings": {
@@ -2115,6 +2036,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-11-08T09:25:21.678Z",
+  "lastModified": "2025-11-09T09:20:19.092Z",
   "version": "1.0"
 }
