@@ -81,8 +81,6 @@ html {
 
     scroll-behavior: smooth;
 
-    overscroll-behavior: none;
-
     background: var(--background-dark);
 
 }
@@ -147,8 +145,6 @@ body {
 
     /* منع الترميش الأبيض عند التمرير */
 
-    overscroll-behavior: none;
-
     -webkit-overflow-scrolling: touch;
 
     scroll-behavior: smooth;
@@ -184,8 +180,6 @@ body[data-theme="light"] {
     background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 50%, #f8fafc 100%);
 
     /* منع الترميش الأبيض في الوضع الفاتح */
-
-    overscroll-behavior: none;
 
     -webkit-overflow-scrolling: touch;
 
@@ -1675,8 +1669,7 @@ body[data-theme="light"] .admin-badge i {
 
     background: transparent;
 
-    overscroll-behavior: none;
-
+    
 }
 
 
@@ -2373,6 +2366,8 @@ body[data-theme="light"] .admin-badge i {
 
     top: 0;
 
+    bottom: 0;
+
     right: -280px;
 
     width: 280px;
@@ -2381,21 +2376,15 @@ body[data-theme="light"] .admin-badge i {
 
     background: var(--primary-color);
 
-    border-left: 1px solid var(--border-color);
-
     z-index: 1000;
+
+    transform: translateX(0);
 
     transition: right 0.2s ease-out;
 
     overflow-y: auto;
 
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
-
-    will-change: right;
-
-    /* منع الترميش الأبيض */
-
-    overscroll-behavior: none;
 
     -webkit-overflow-scrolling: touch;
 
@@ -2410,10 +2399,6 @@ body[data-theme="light"] .admin-badge i {
     scrollbar-width: thin;
 
     scrollbar-color: var(--highlight-color) rgba(255, 255, 255, 0.1);
-
-    /* منع الترميش الأبيض */
-
-    overscroll-behavior: none;
 
 }
 
@@ -4384,8 +4369,7 @@ body[data-theme="light"] .sidebar-action-btn:hover {
 
     /* منع الترميش الأبيض */
 
-    overscroll-behavior: none;
-
+    
     -webkit-overflow-scrolling: touch;
 
 }
@@ -4866,8 +4850,7 @@ body[data-theme="light"] .sidebar-action-btn:hover {
 
     background: transparent;
 
-    overscroll-behavior: none;
-
+    
 }
 
 
@@ -4886,8 +4869,7 @@ body[data-theme="light"] .sidebar-action-btn:hover {
 
     background: transparent;
 
-    overscroll-behavior: none;
-
+    
 }
 
 
@@ -6881,8 +6863,7 @@ body[data-theme="light"] .password-input-wrapper input::placeholder {
 
     /* منع الترميش الأبيض */
 
-    overscroll-behavior: none;
-
+    
 }
 
 
@@ -8603,8 +8584,7 @@ body[data-theme="light"] .logout-btn:hover {
 
     /* منع الترميش الأبيض */
 
-    overscroll-behavior: none;
-
+    
     -webkit-overflow-scrolling: touch;
 
 }
@@ -9040,8 +9020,7 @@ input:checked + .slider:before {
 
     /* منع الترميش الأبيض */
 
-    overscroll-behavior: none;
-
+    
     -webkit-overflow-scrolling: touch;
 
 }
@@ -10567,8 +10546,7 @@ body[data-theme="light"] .password-requirements {
 
     /* منع الترميش الأبيض */
 
-    overscroll-behavior: none;
-
+    
     -webkit-overflow-scrolling: touch;
 
 }
@@ -15187,8 +15165,6 @@ body[data-theme="light"] * {
     scrollbar-color: #3b82f6 rgba(0, 0, 0, 0.05);
 
     /* منع الترميش الأبيض في الوضع الفاتح */
-
-    overscroll-behavior: none;
 
 }
 
@@ -19862,8 +19838,7 @@ body[data-theme="light"] .feature-badge {
 
         /* Prevent overscroll */
 
-        overscroll-behavior-y: none;
-
+        
         /* Better touch control */
 
         touch-action: pan-x;
@@ -19913,8 +19888,7 @@ body[data-theme="light"] .feature-badge {
 
         overscroll-behavior-x: contain;
 
-        overscroll-behavior-y: none;
-
+        
         
 
         /* Better desktop touch response */
