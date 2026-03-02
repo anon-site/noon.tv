@@ -64,6 +64,29 @@
       "lastModified": "2025-10-04T05:53:52.119Z"
     },
     {
+      "id": 244,
+      "name": "الحدث",
+      "url": "https://live.alarabiya.net/alarabiapublish/alhadath.smil/playlist.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Al_Hadath_TV_logo_2023.svg/960px-Al_Hadath_TV_logo_2023.svg.png",
+      "category": "news",
+      "country": "الإمارات",
+      "type": "hls",
+      "status": "active",
+      "vpn": false,
+      "lastModified": "2026-03-02T17:57:28.153Z"
+    },
+    {
+      "id": 245,
+      "name": "العربية",
+      "url": "https://live.alarabiya.net/alarabiapublish/alarabiya.smil/playlist.m3u8",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Al-Arabiya_new_logo.svg/1280px-Al-Arabiya_new_logo.svg.png",
+      "category": "news",
+      "country": "الإمارات",
+      "type": "hls",
+      "status": "active",
+      "vpn": false
+    },
+    {
       "id": 117,
       "name": "الخليج",
       "url": "https://mn-nl.mncdn.com/khalij/khalij/playlist.m3u8",
@@ -2036,6 +2059,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2025-11-09T09:20:19.092Z",
+  "lastModified": "2026-03-02T18:02:26.782Z",
   "version": "1.0"
 }
