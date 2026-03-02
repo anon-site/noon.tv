@@ -54,7 +54,7 @@
     {
       "id": 151,
       "name": "الجزيرة الوثائقية",
-      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=aljazeeradoc2",
+      "url": "https://www.elahmad.com/tv/mobiletv/glarb.php?id=aljazeeradoc1",
       "logo": "https://upload.wikimedia.org/wikipedia/ar/e/e6/Al_Jazeera_Doc.png",
       "category": "documentary",
       "country": "قطر",
@@ -2059,6 +2059,6 @@
     }
   ],
   "adminPassword": "3129ccfbd7c678b625faa7779878bda416afa77071c0867126e7f68b0b8ed657",
-  "lastModified": "2026-03-02T18:02:26.782Z",
+  "lastModified": "2026-03-02T18:10:16.765Z",
   "version": "1.0"
 }
