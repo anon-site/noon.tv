@@ -1,8 +1,8 @@
 // Service Worker for background audio support and performance optimization
-const CACHE_NAME = 'anon-tv-v2.0';
-const STATIC_CACHE = 'static-v2.0';
-const DYNAMIC_CACHE = 'dynamic-v2.0';
-const FONTS_CACHE = 'fonts-v2.0';
+const CACHE_NAME = 'anon-tv-v2.1';
+const STATIC_CACHE = 'static-v2.1';
+const DYNAMIC_CACHE = 'dynamic-v2.1';
+const FONTS_CACHE = 'fonts-v2.1';
 
 const urlsToCache = [
     '/',
@@ -10,7 +10,8 @@ const urlsToCache = [
     '/style.css',
     '/script.js',
     '/performance-optimizer.js',
-    '/favicon.svg'
+    '/favicon.svg',
+    '/manifest.json'
 ];
 
 // تحديد الموارد التي يجب تخزينها مؤقتاً
@@ -19,7 +20,7 @@ const MAX_CACHE_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 // Install event - تحسين التخزين المؤقت
 self.addEventListener('install', event => {
-    console.log('[SW] Installing Service Worker v2.0');
+    console.log('[SW] Installing Service Worker v2.1');
     event.waitUntil(
         caches.open(STATIC_CACHE)
             .then(cache => {
@@ -32,7 +33,7 @@ self.addEventListener('install', event => {
 
 // Activate event - تنظيف الكاش القديم
 self.addEventListener('activate', event => {
-    console.log('[SW] Activating Service Worker v2.0');
+    console.log('[SW] Activating Service Worker v2.1');
     const currentCaches = [STATIC_CACHE, DYNAMIC_CACHE, FONTS_CACHE];
     
     event.waitUntil(
@@ -214,4 +215,26 @@ self.addEventListener('notificationclick', event => {
             self.clients.openWindow('/')
         );
     }
+});
+
+// PWA Installation Event
+self.addEventListener('beforeinstallprompt', event => {
+    console.log('[SW] Before install prompt fired');
+    // Prevent the mini-infobar from appearing on mobile
+    event.preventDefault();
+    // Stash the event so it can be triggered later
+    self.beforeInstallPromptEvent = event;
+    // Show install banner or custom UI
+    return false;
+});
+
+// PWA Installation Success
+self.addEventListener('appinstalled', event => {
+    console.log('[SW] NOON TV was installed');
+    // Send analytics or update UI
+    self.clients.matchAll().then(clients => {
+        clients.forEach(client => {
+            client.postMessage({ action: 'appinstalled' });
+        });
+    });
 });

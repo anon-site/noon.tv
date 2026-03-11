@@ -11390,6 +11390,198 @@ function initializeMobileBottomNav() {
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new ArabicTVApp();
 
+    // ===== PWA INSTALLATION FUNCTIONALITY =====
+    
+    // PWA Installation variables
+    let deferredPrompt = null;
+    let installButton = null;
+    
+    // Create install button if it doesn't exist
+    function createInstallButton() {
+        if (document.getElementById('pwa-install-button')) return;
+        
+        const installBtn = document.createElement('button');
+        installBtn.id = 'pwa-install-button';
+        installBtn.innerHTML = '<i class="fas fa-download"></i> تثبيت التطبيق';
+        installBtn.className = 'pwa-install-btn';
+        installBtn.style.cssText = `
+            position: fixed;
+            bottom: 80px;
+            left: 20px;
+            background: linear-gradient(135deg, #ff6b35, #ff8c42);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: none;
+        `;
+        
+        // Add hover effects
+        installBtn.addEventListener('mouseenter', () => {
+            installBtn.style.transform = 'translateY(-2px)';
+            installBtn.style.boxShadow = '0 6px 20px rgba(255, 107, 53, 0.4)';
+        });
+        
+        installBtn.addEventListener('mouseleave', () => {
+            installBtn.style.transform = 'translateY(0)';
+            installBtn.style.boxShadow = '0 4px 15px rgba(255, 107, 53, 0.3)';
+        });
+        
+        // Add click handler
+        installBtn.addEventListener('click', () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the PWA installation prompt');
+                        // Hide button after installation
+                        installBtn.style.display = 'none';
+                        // Show success message
+                        showInstallMessage('تم تثبيت التطبيق بنجاح! يمكنك الوصول إليه من شاشة الرئيسية.', 'success');
+                    } else {
+                        console.log('User dismissed the PWA installation prompt');
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        });
+        
+        document.body.appendChild(installBtn);
+        installButton = installBtn;
+    }
+    
+    // Show installation message
+    function showInstallMessage(message, type = 'info') {
+        const messageDiv = document.createElement('div');
+        messageDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${type === 'success' ? '#4caf50' : '#2196f3'};
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px;
+            z-index: 10000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.3s ease;
+        `;
+        messageDiv.textContent = message;
+        
+        document.body.appendChild(messageDiv);
+        
+        setTimeout(() => {
+            messageDiv.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.parentNode.removeChild(messageDiv);
+                }
+            }, 300);
+        }, 3000);
+    }
+    
+    // Listen for beforeinstallprompt event
+    window.addEventListener('beforeinstallprompt', (e) => {
+        console.log('PWA installation prompt available');
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        // Create and show install button
+        createInstallButton();
+        
+        // Show install button after a delay
+        setTimeout(() => {
+            if (installButton && deferredPrompt) {
+                installButton.style.display = 'block';
+            }
+        }, 3000);
+    });
+    
+    // Listen for appinstalled event
+    window.addEventListener('appinstalled', (e) => {
+        console.log('PWA was installed');
+        deferredPrompt = null;
+        
+        // Hide install button
+        if (installButton) {
+            installButton.style.display = 'none';
+        }
+        
+        // Show success message
+        showInstallMessage('شكراً لتثبيت تطبيق NOON TV!', 'success');
+        
+        // Save installation status
+        localStorage.setItem('pwa-installed', 'true');
+    });
+    
+    // Check if app is already installed
+    if (localStorage.getItem('pwa-installed') === 'true') {
+        console.log('PWA is already installed');
+    }
+    
+    // Check if running as standalone PWA
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+        console.log('Running as standalone PWA');
+        document.body.classList.add('pwa-standalone');
+    }
+    
+    // Service Worker messaging for PWA events
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.addEventListener('message', event => {
+            if (event.data && event.data.action === 'appinstalled') {
+                console.log('Service worker reported app installation');
+                showInstallMessage('تم تثبيت التطبيق بنجاح!', 'success');
+            }
+        });
+    }
+    
+    // Add CSS animations for install messages
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+        
+        .pwa-standalone {
+            padding-top: env(safe-area-inset-top);
+        }
+        
+        @media (max-width: 768px) {
+            #pwa-install-button {
+                bottom: 100px !important;
+                left: 50% !important;
+                transform: translateX(-50%);
+            }
+        }
+    `;
+    document.head.appendChild(style);
+
     // ===== NEW MOBILE BOTTOM NAVIGATION FUNCTIONS =====
 
     // Show home page
