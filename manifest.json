@@ -2,8 +2,7 @@
   "name": "NOON TV - القنوات الفضائية العربية",
   "short_name": "NOON TV",
   "description": "منصة شاملة لمشاهدة القنوات الفضائية العربية المباشرة بأفضل جودة وأحدث التقنيات",
-  "start_url": "/noon.tv/",
-  "scope": "/noon.tv/",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#1a1a1a",
   "theme_color": "#2563eb",
@@ -24,7 +23,7 @@
       "name": "جميع القنوات",
       "short_name": "جميع القنوات",
       "description": "عرض جميع القنوات المتاحة",
-      "url": "/noon.tv/?category=all",
+      "url": "?category=all",
       "icons": [
         {
           "src": "favicon.svg",
@@ -36,7 +35,7 @@
       "name": "الأخبار",
       "short_name": "الأخبار",
       "description": "عرض قنوات الأخبار",
-      "url": "/noon.tv/?category=news",
+      "url": "?category=news",
       "icons": [
         {
           "src": "favicon.svg",
@@ -48,7 +47,7 @@
       "name": "الرياضة",
       "short_name": "الرياضة",
       "description": "عرض قنوات الرياضة",
-      "url": "/noon.tv/?category=sports",
+      "url": "?category=sports",
       "icons": [
         {
           "src": "favicon.svg",
